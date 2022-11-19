@@ -1,9 +1,3 @@
-// App.post(`${redirectPath}/test/`, (req, res) => {
-//   let data = req.body; // your JSON
-//   res.send(data); // echo the result back
-//   data["neu"] = "zwo"
-// });
-
 const howaData = {
   URLGeocoding: `http://api.openweathermap.org/geo/1.0/direct?q=`,
   URLCurrent: 'https://api.openweathermap.org/data/2.5/weather?',
