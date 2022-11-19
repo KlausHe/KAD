@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="de">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="KAD-Universe stellt nützliche kleine Javascript-Apps bereit, die eine Vielzahl von Bereichen erfassen." />
+  <meta name="page-topic" content="Information" />
+  <meta name="audience" content="all" />
+  <meta name="language" content="de" />
+  <meta name=“robots“ content=“all“ />
+  <meta name="copyright" content="" />
+
+  <title>KAD-Universe</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="hsl(240, 52%, 54%)">
+  <meta name="msapplication-TileColor" content="hsl(240, 52%, 54%)">
+  <meta name="theme-color" id="idTest1" content="hsl(240, 52%, 54%)" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" id="idTest2" content="hsl(223, 11%, 18%)" media="(prefers-color-scheme: dark)">
+  <!-- #4d4dc7  -->
+
+  <link href="KADUniDesign/CSSbodyLayout.css" rel="stylesheet" type="text/css">
+  <link href="KADUniDesign/CSSgridLayout.css" rel="stylesheet" type="text/css">
+  <link href="KADUniDesign/CSSinputLayout.css" rel="stylesheet" type="text/css">
+  <link href="KADUniDesign/CSSpikaday.css" rel="stylesheet" type="text/css">
+  <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.0.4/abcjs-basic-min.min.js"
+    integrity="sha512-/Fag4ASUiXTYi8XYcH3p6XfiNJWKtrJ0/WPQVGZ7dZiYmsHnEW9uUnxfM/Etoq0/cGsYCVa4jcjgag1Bc6S5ng=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="Data/p5.min.js"></script>
+  <!-- <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+    integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous">
+  </script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js"
+    integrity="sha512-0k6FXllQktdobw8Nc8KQN2WtZrOuxpMn7jC2RKCF6LR7EdOhhrg3H5cBPxhs3CFzQVlO6ni1B9SDLUPhBs0Alg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script async src="Data/pikadayClock.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+
+  <script src="Main.js" type="text/javascript"></script>
+  <!-- <script src="MainModule.js" type="module"></script> -->
+  <script src="MainContent.js" type="text/javascript"></script>
+  <script src="MainData.js" type="text/javascript"></script>
+  <script src="MainUtils.js" type="text/javascript"></script>
+
+  <script src="KADUniDesign/AccountBasics.js"></script>
+  <script src="KADUniDesign/SettingsBasics.js"></script>
+  <script src="KADUniDesign/SettingsPropertyfilter.js"></script>
+  <script src="KADUniDesign/SettingsUsergridlayout.js"></script>
+  <script src="KADUniDesign/Layout.js"></script>
+  <script src="KADUniDesign/Colorconversions.js"></script>
+  <script src="KADUniDesign/BackgroundAnimation.js"></script>
+
+  <script src="News/Howa.js"></script>
+  <script src="News/News.js"></script>
+  <script src="News/Sepakbola.js"></script>
+  <script src="News/PostillonTicker.js"></script>
+  <script src="News/Covid.js"></script>
+  <script src="Benkyou/SpeechTranslate.js"></script>
+  <script src="Benkyou/Analysis.js"></script>
+  <script src="Benkyou/Synonym.js"></script>
+  <script src="Benkyou/WikiSearch.js"></script>
+  <script src="Utility/BiktadA.js"></script>
+  <script src="Utility/Boredom.js"></script>
+  <script src="Utility/Kounselor.js"></script>
+  <script src="Utility/Hverertu.js"></script>
+  <script src="Utility/Netsaona.js"></script>
+  <script src="Utility/Tugas.js"></script>
+  <script src="Utility/Kadar.js"></script>
+  <script src="Utility/Thiontu.js"></script>
+  <script src="Utility/Egg.js"></script>
+  <script src="Utility/Foody.js"></script>
+  <script src="Utility/Kaihanga.js"></script>
+  <script src="Utility/Botanicals.js"></script>
+  <script src="Utility/Iomlaid.js"></script>
+  <script src="Utility/PlatLesen.js"></script>
+  <script src="Utility/Pelvelea.js"></script>
+  <script src="Tools/Middle.js"></script>
+  <script src="Tools/Ranje.js"></script>
+  <script src="Tools/Niska.js"></script>
+  <script src="Tools/Quickmath.js"></script>
+  <script src="Tools/Pythagoras.js"></script>
+  <script src="Tools/Luas.js"></script>
+  <script src="Tools/Pattern.js"></script>
+  <script src="Tools/Geometrie.js"></script>
+  <script src="Tools/Material.js"></script>
+  <script src="Tools/Expansion.js"></script>
+  <script src="Tools/Pormula.js"></script>
+  <script src="Tools/Blech.js"></script>
+  <script src="Games/Linaha.js"></script>
+  <script src="Games/Ibhaluni.js"></script>
+  <script src="Games/RayCaster.js"></script>
+  <script src="Games/Sudoku.js"></script>
+  <script src="Games/Empat.js"></script>
+  <script src="Games/Lotto.js"></script>
+  <script src="Games/Sweeper.js"></script>
+  <script src="Games/Numbery.js"></script>
+  <script defer src="Games/Ocjene.js"></script>
+</head>
+
+<body>
+  <nav id="idNav_navElements">
+    <input type="text" id="idVin_globalValue" class="cl_centeredPH" placeholder="Mastervalue"
+      oninput="globalValueChanged(this)" autofocus></input>
+    <button id="idBtn_navBar_KW" type="button" uiSize="medium"></button>
+    <div class="cl_navUser" id="idDiv_navBar_AccountSettingsA" data-type="login" onclick="openUserNav(this)"><img
+        id="idImg_userNav_A" uiFilter="invNavbar" src="Data/Images/SVG/uBasic.svg"></img></div>
+    <div class="cl_navUser" id="idDiv_navBar_AccountSettingsB" data-type="register" onclick="openUserNav(this)"><img
+        id="idImg_userNav_B" uiFilter="invNavbar" src="Data/Images/SVG/uPlus.svg"></img></div>
+    <div class="cl_navUser" id="idDiv_navBar_GlobalSettings" onclick="layoutNavClick('GlobalSettings')"><img
+        uiFilter="invNavbar" src="Data/Images/SVG/sliders.svg"></img></div>
+    <div class="cl_navUser" id="idDiv_navBar_Colormode" onclick="colToggleColormode(this)"><img
+        id="idImg_userNav_colormode" uiFilter="invNavbar" src="Data/Images/SVG/sun.svg"></img></div>
+    <div class="cl_navUser" id="idDiv_navBar_Trash" onclick="resetAll()"><img class="img_trash"
+        uiFilter="invNavbar"></img></div>
+  </nav>
+  <div class="cl_Loading">KAD-UNIVERSE<br>LOADING...</div>
+  <div class="cl_backgroundAnimation" id="idCanv_backgroundAnimation"></div>
+  <main id="id_contentGrid">
+    <div class="cl_Howa" style="display:none;">
+      <div class="cl_subGrid_Howa cl_subGrid">
+        <div class="cl_HowaGraph">
+          <div id="idDiv_howaGraph"
+            style="width: calc(var(--UIWidthWide)* 3); height: calc(var(--gridHeightChartCanvas)*0.5);">
+            <canvas id="idCanv_howaGraph"></canvas>
+          </div>
+        </div>
+        <div class="cl_HowaInput">
+          <input type="text" name="location" id="idVin_howaEntry" uiRadius="left" onchange="howaGetLocation()"
+            placeholder="Wettervorhersage" list="idDlist_howaPlaces"
+            onfocus="howaPopulateDatalist(this)"></input><button id="idBtn_getGeoLocation" type="button" tabindex="-1"
+            uiSize="square" uiRadius="none" onclick="howaGetCoordinates()">
+            <img src="Data/Images/SVG/location.svg"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right" onclick="howaGetLocation()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+          <datalist id="idDlist_howaPlaces">
+          </datalist>
+        </div>
+        <div class="cl_HowaOptionsA" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_howaTemperature" onclick="howaOptionChange()" data-id="temperature" checked>
+            </input>
+          </button><label class="cl_info" for="idCb_howaTemperature" uiSize="wide" uiRadius="right">Temperatur</label>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_howaPressure"
+              onclick="howaOptionChange()" data-id="pressure" checked></input>
+          </button><label class="cl_info" for="idCb_howaPressure" uiSize="wide" uiRadius="right">Luftdruck</label>
+        </div>
+        <div class="cl_HowaOptionsB" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_howaRain"
+              onclick="howaOptionChange()" data-id="rain" checked>
+            </input>
+          </button><label class="cl_info" for="idCb_howaRain" uiSize="wide" uiRadius="right">Regen</label>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_howaWindSpeed"
+              onclick="howaOptionChange()" data-id="windSpeed" checked></input>
+          </button><label class="cl_info" for="idCb_howaWindSpeed" uiSize="wide"
+            uiRadius="right">Windgeschwindigkeit</label>
+        </div>
+        <div class="cl_HowaOptionsC" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_howaHumidity"
+              onclick="howaOptionChange()" data-id="humidity" checked></input>
+          </button><label class="cl_info" for="idCb_howaHumidity" uiSize="wide"
+            uiRadius="right">Luftfeuchtigkeit</label>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_howaWindDirection" onclick="howaOptionChange()" data-id="windDirection" checked></input>
+          </button><label class="cl_info" for="idCb_howaWindDirection" uiSize="wide"
+            uiRadius="right">Windrichtung</label>
+        </div>
+        <div class="cl_HowaNow">
+          <label class="cl_outputLbl" id="idLbl_howaNow" onclick="copyFromLabel(this)">...</label>
+        </div>
+        <div class="cl_HowaZoom">
+          <button id="idBtn_howaZoom" onclick="howaZoom(this)">Zoom</button>
+        </div>
+        <div class="cl_HowaMapsExpand">
+          <button id="idBtn_howaMapsExpand" onclick="howaMapsExpand()" uiSize="norm">Warnkarten</button>
+        </div>
+        <div class="cl_HowaMapsSelectCriteria">
+          <select id="idSel_howaMapsCriteria" uiSize="norm" onchange="howaChangeMap()"></select>
+        </div>
+        <div class="cl_HowaMapsSelectCountry">
+          <select id="idSel_howaMapsCountry" uiSize="norm" onchange="howaChangeMap()"></select>
+        </div>
+        <div class="cl_HowaMapsImg">
+          <div id="idDiv_howaMapsImg">
+            <img imgSize="howaImg" id="idImg_howaMapsImg"></img>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_News" style="display:none;">
+      <div class="cl_subGrid_News cl_subGrid">
+        <div class="cl_NewsNav">
+          <button type="button" id="idBtn_tickerNewsToggle" onclick="newsToggleTicker()"></button>
+        </div>
+        <div class="cl_NewsSearch">
+          <input type="text" name="newsAPI" id="idVin_newsKeyword" onChange="newsUpdateOptions()"></input>
+        </div>
+        <div class="cl_NewsCategory">
+          <select uiSize="norm" id="idSel_newsCategory" onChange="newsUpdateOptions()"></select>
+        </div>
+        <div class="cl_NewsCountry">
+          <select uiSize="norm" id="idSel_newsCountry" onChange="newsUpdateOptions()"></select>
+        </div>
+        <div class="cl_NewsTable clDiv_overviewTablesInput">
+          <table id="idTab_newsTitleTable">
+            <theader id="idTabHeader_newsTitleTable">
+            </theader>
+            <tbody id="idTabBody_newsTitleTable">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_NewsResultImage">
+          <img id="idImg_News_Image">
+        </div>
+        <div class="cl_NewsResultTitle" id="idDiv_News_Title" uiSize="outputTitle" onclick="news_URL()">
+        </div>
+        <div class="cl_NewsResultText cl_outputText" id="idDiv_News_Text" uiSize="outputText" onclick="newsShowNext(0)">
+        </div>
+      </div>
+    </div>
+    <div class="cl_Covid" style="display:none;">
+      <div class="cl_subGrid_Covid cl_subGrid">
+        <div class="cl_CovidTable clDiv_overviewTablesAuto">
+          <table id="idTab_covidTable">
+            <thead id="idTabHeader_covidTable" class="scrollTable">
+            </thead>
+            <tbody id="idTabBody_covidTable">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_covidConfirmed">
+          <label class="cl_outputLbl" id="idLbl_covidConfirmedOutput" onclick="copyFromLabel(this)">...</label>
+        </div>
+        <div class="cl_covidDeaths">
+          <label class="cl_outputLbl" id="idLbl_covidDeathsOutput" onclick="copyFromLabel(this)">...</label>
+        </div>
+        <div class="cl_CovidGraph" id="idDiv_covidGraph"
+          style="width: var(--gridWidthGameCanvas); height: var(--gridHeightChartCanvas);">
+          <canvas id="idCanv_covidGraph"></canvas>
+        </div>
+        <div class="cl_CovidGraphDate" uiWrap="nowrap">
+          <button type="button" tabindex="-1" uiSize="square" uiRadius="left" onclick="covidChangeDay(-1)">
+            <img src="Data/Images/SVG/left.svg"></img>
+          </button><button type="button" id="idLbl_covidDay" tabindex="-1" uiSize="small" uiRadius="none"
+            onclick="covidChangeDay(0)">
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right" onclick="covidChangeDay(1)">
+            <img src="Data/Images/SVG/right.svg"></img>
+          </button>
+        </div>
+        <div class="cl_CovidGraphDateA" uiWrap="nowrap">
+          <button type="button" id="idBtn_covidGraphDateA" uiSize="medium" uiRadius="left">Start
+            Datum</button><button type="button" tabindex="1" uiSize="square" uiRadius="right"
+            onclick="covidSetDates('A')">
+            <img class="img_trash"></button>
+        </div>
+        <div class="cl_CovidGraphDateB" uiWrap="nowrap">
+          <button type="button" id="idBtn_covidGraphDateB" uiSize="medium" uiRadius="left">End
+            Datum</button><button type="button" tabindex="1" uiSize="square" uiRadius="right"
+            onclick="covidSetDates('B')">
+            <img class="img_trash"></button>
+        </div>
+        <div class="cl_CovidTableShow">
+          <button type="button" id="idBtn_covidTableShow" uiSize="medium" onclick="covidShowTable()">Show
+            Table</button>
+        </div>
+        <div class="cl_CovidGraphOptionsA" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_covidConfirmedDaily" onclick="covidOptionChange()" checked></input></button><label
+            class="cl_info" id="idLbl_covidConfirmedDaily" for="idCb_covidConfirmedDaily" uiRadius="right"></label>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_covidConfirmed"
+              onclick="covidOptionChange()" checked></input></button><label class="cl_info" id="idLbl_covidConfirmed"
+            for="idCb_covidConfirmed" uiRadius="right"></label>
+        </div>
+        <div class="cl_CovidGraphOptionsB" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_covidDeathsDaily" onclick="covidOptionChange()" checked></input></button><label class="cl_info"
+            id="idLbl_covidDeathsDaily" for="idCb_covidDeathsDaily" uiRadius="right"></label>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_covidDeaths"
+              onclick="covidOptionChange()" checked></input></button><label class="cl_info" id="idLbl_covidDeaths"
+            for="idCb_covidDeaths" uiRadius="right"></label>
+        </div>
+        <div class="cl_CovidGraphOptionsC" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_covidDeathsRate" onclick="covidOptionChange()" checked></button></input><label class="cl_info"
+            id="idLbl_covidDeathsRate" for="idCb_covidDeathsRate" uiRadius="right"></label>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_covidDeahtsWorld" onclick="covidOptionChange()" checked></button></input><label class="cl_info"
+            id="idLbl_covidDeahtsWorld" for="idCb_covidDeahtsWorld" uiRadius="right"></label>
+        </div>
+      </div>
+    </div>
+    <div class="cl_PostillonTicker" style="display:none;">
+      <div class="cl_subGrid_PostillonTicker cl_subGrid">
+        <div class="cl_PostillionNumber">
+          <button type="button" id="idLbl_newsTickerNumber" tabindex="-1" uiRadius="left" style="cursor:auto;">
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right" onclick="newsTickerNext()">
+            <img src="Data/Images/SVG/right.svg"></img>
+          </button>
+        </div>
+        <div class="cl_PostillionTable">
+          <table id="idTab_postillionTable" uiSize="outputTable">
+            <thead id="idTabHeader_postillionTable">
+            </thead>
+            <tbody id="idTabBody_postillionTable">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Sepakbola" style="display:none;">
+      <div class="cl_subGrid_Sepakbola cl_subGrid">
+        <div class="cl_SepakbolaInputLigaLbl">
+          <label>Liga:</label>
+        </div>
+        <div class="cl_SepakbolaInputLigaSel">
+          <select id="idSel_sepakbolaLiga" onchange="sepakbolaLigaChange(this)"></select>
+        </div>
+        <div class="cl_SepakbolaInputSeasonLbl">
+          <label>Saison:</label>
+        </div>
+        <div class="cl_SepakbolaInputSeasonSel">
+          <select id="idSel_sepakbolaSeason" onchange="sepakbolaSeasonChange(this)"></select>
+        </div>
+        <div class="cl_SepakbolaInputDayLbl">
+          <label>Spieltag:</label>
+        </div>
+        <div class="cl_SepakbolaInputDaySel">
+          <select id="idSel_sepakbolaMatchday" onchange="sepakbolaMatchdayChange(this)"></select>
+        </div>
+        <div class="cl_SepakbolaTable">
+          <table id="idTab_SepakbolaTable">
+            <thead id="idTabHeader_SepakbolaTable">
+            </thead>
+            <tbody id="idTabBody_SepakbolaTable">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_SepakbolaMatches">
+          <table id="idTab_SepakbolaMatches">
+            <thead>
+              <tr>
+                <th id="idTabHeader_SepakbolaMatches" colspan="100%"></th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_SepakbolaMatches">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Netsaona" style="display:none;">
+      <div class="cl_subGrid_Netsaona cl_subGrid">
+        <div class="cl_NetsaonaOptionsA" uiWrap="nowrap">
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+        </div>
+        <div class="cl_NetsaonaOptionsB" uiWrap="nowrap">
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+        </div>
+        <div class="cl_NetsaonaOptionsC" uiWrap="nowrap">
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+        </div>
+        <div class="cl_NetsaonaOptionsD" uiWrap="nowrap">
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+        </div>
+        <div class="cl_NetsaonaOptionsE" uiWrap="nowrap">
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+        </div>
+        <div class="cl_NetsaonaOptionsF" uiWrap="nowrap">
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+        </div>
+        <div class="cl_NetsaonaOptionsG" uiWrap="nowrap">
+          <button class="cl_NetsaonaOption"></button>
+          <button class="cl_NetsaonaOption"></button>
+        </div>
+        <div class="cl_NetsaonaOutput">
+          <label class="cl_outputLbl" id="idLbl_netsaonaOutput" onclick="copyFromLabel(this)">...</label>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Tugas" style="display:none;">
+      <div class="cl_subGrid_Tugas cl_subGrid">
+        <div class="cl_TugasInput">
+          <textarea id="idArea_tugasEntry" onchange="newTugas()"></textarea>
+        </div>
+        <div class="cl_TugasEnter">
+          <button type="button" tabindex="-1" uiSize="wide" onclick="newTugas()">
+            <img src="Data/Images/SVG/right.svg"></img>
+          </button>
+        </div>
+        <div class="cl_TugasList">
+          <table>
+            <theader id="idTabHeader_tugas">
+            </theader>
+            <tbody id="idTabBody_tugas">
+              <tr>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Kadar" style="display:none;">
+      <div class="cl_subGrid_Kadar cl_subGrid">
+        <div class="cl_KadarSelA">
+          <button type="button" id="idBtn_kadarDateA" uiSize="medium" uiRadius="left">Start
+            Datum</button><button type="button" tabindex="1" uiSize="square" uiRadius="right"
+            onclick="clearKadarTableAnow();">
+            <img class="img_trash"></button>
+        </div>
+        <div class="cl_KadarLblNow">
+          <button type="button" id="idBtn_kadarDateNow" uiSize="medium" uiRadius="left"></button><button type="button"
+            tabindex="1" uiSize="square" uiRadius="right" onclick="kadarCalculate()">
+            <img src="Data/Images/SVG/refresh2.svg"></button>
+        </div>
+        <div class="cl_KadarSelB">
+          <button type="button" id="idBtn_kadarDateB" uiSize="medium" uiRadius="left">End
+            Datum</button><button type="button" tabindex="1" uiSize="square" uiRadius="right"
+            onclick="clearKadarTableBnow();">
+            <img class="img_trash"></button>
+        </div>
+        <div class="cl_KadarResultTable_Anow clDiv_overviewTablesWide ">
+          <table id="idTab_Kadar_Anow">
+            <thead id="idTabHeader_Kadar_Anow">
+              <tr>
+                <th colspan=100%>
+                  Date A (to now)
+                </th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_Kadar_Anow">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_KadarResultTable_AB clDiv_overviewTablesWide">
+          <table id="idTab_Kadar_AB">
+            <thead id="idTabHeader_Kadar_AB">
+              <tr>
+                <th colspan=100%>
+                  Difference A - B
+                </th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_Kadar_AB">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_KadarResultTable_Bnow clDiv_overviewTablesWide">
+          <table id="idTab_Kadar_Bnow">
+            <thead id="idTabHeader_Kadar_Bnow">
+              <tr>
+                <th colspan=100%>
+                  Date B (to now)
+                </th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_Kadar_Bnow">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Thiontu" style="display:none;">
+      <div class="cl_subGrid_Thiontu cl_subGrid">
+        <div class="cl_ThiontuInputArea">
+          <textarea id="idArea_thiontuInputEntry" oninput="thiontuUpdate()"></textarea>
+        </div>
+        <div class="cl_ThiontuOutputArea">
+          <textarea id="idArea_thiontuOutputArea" onclick="copyToClipboard(value, id)" readonly></textarea>
+        </div>
+        <div class="cl_ThiontuOptions_A" name="naBtn_ThiontuOptions" uiWrap="nowrap">
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+        </div>
+        <div class="cl_ThiontuOptions_B" name="naBtn_ThiontuOptions" uiWrap="nowrap">
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+        </div>
+        <div class="cl_ThiontuOptions_C" name="naBtn_ThiontuOptions" uiWrap="nowrap">
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+        </div>
+        <div class="cl_ThiontuOptions_D" name="naBtn_ThiontuOptions" uiWrap="nowrap">
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+        </div>
+        <div class="cl_ThiontuOptions_E" name="naBtn_ThiontuOptions" uiWrap="nowrap">
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+          <button type="button" class="clBtn_ThiontuOptions"></button>
+        </div>
+      </div>
+    </div>
+    <div class="cl_WikiSearch" style="display:none;">
+      <div class="cl_subGrid_WikiSearch cl_subGrid">
+        <div class="cl_WikiInput" uiWrap="nowrap">
+          <input type="text" id="idVin_wikiInput" uiRadius="left" onchange="wikiSearchInput()"></input><button
+            type="button" tabindex="-1" uiSize="square" uiRadius="right" onclick="wikiSearchInput()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+        </div>
+        <div class="cl_WikiLanguage" uiWrap="nowrap">
+          <select id="idSel_wikiLanguage" uiSize="normal" onchange="wikiSearchLanguage(this)"></select>
+        </div>
+        <div class="cl_WikiTable clDiv_overviewTablesWide">
+          <table>
+            <thead id="idTabHeader_wikiTitleTable">
+            </thead>
+            <tbody id="idTabBody_wikiTitleTable">
+              <tr>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_WikiResultImage" id="idDiv_Wiki_Image">
+          <img id="idImg_Wiki_Image">
+        </div>
+        <div class="cl_WikiResultTitle" id="idDiv_wiki_Title" uiSize="outputTitle" onclick="news_URL()">
+        </div>
+        <div class="cl_WikiResultText cl_outputText" id="idDiv_wiki_Text" uiSize="outputText" onclick="newsShowNext(0)">
+        </div>
+      </div>
+    </div>
+    <div class="cl_Egg" style="display:none;">
+      <div class="cl_subGrid_Egg cl_subGrid">
+        <div class="cl_EggMassValue">
+          <label class="cl_info" uiRadius="left">Eigröße</label><button type="button" uiRadius="none" disabled>
+            <input type="range" min="40" max="90" step="1" id="idRange_EggMass" oninput="eggMassChange(this)"></input>
+          </button><label class="cl_info" id="idLbl_EggMass" uiRadius="right"></label>
+        </div>
+        <div class="cl_EggTempValue">
+          <label class="cl_info" uiRadius="left">Ei Temp.</label><button type="button" uiRadius="none" disabled>
+            <input type="range" min="4" max="22" step="1" id="idRange_EggTemp" oninput="eggTempChange(this)"></input>
+          </button><label class="cl_info" id="idLbl_EggTemp" uiRadius="right"></label>
+        </div>
+        <div class="cl_EggYolkValue">
+          <label class="cl_info" uiRadius="left">Zielfestigkeit</label><button type="button" uiRadius="none" disabled>
+            <input type="range" min="45" max="90" step="1" id="idRange_EggYolk" oninput="eggYolkChange(this)"></input>
+          </button><label class="cl_info" id="idLbl_EggYolk" uiRadius="right"></label>
+        </div>
+        <div class="cl_EggStart">
+          <button type="button" id="idBtn_EggStart" onclick="eggStartChange()">Start</button>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_eggVoiceOutput"
+              checked></input></button><label class="cl_info" for="idCb_eggVoiceOutput" uiSize="small"
+            uiRadius="right">Call me!</label>
+        </div>
+        <div class="cl_EggTime">
+          <label class="cl_outputLbl" id="idLbl_EggTime" name="eggTimer">...</label>
+        </div>
+        <div class="cl_EggTimeProgress">
+          <progress id="idProg_eggProgress" value="100" max="100"></progress>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Foody" style="display:none;">
+      <div class="cl_subGrid_Foody cl_subGrid">
+        <div class="cl_FoodyType">
+          <label class="cl_info" uiSize="wide" uiRadius="left">Was gibts zu essen?</label><select id="idSel_foodyType"
+            uiRadius="right"></select>
+        </div>
+        <div class="cl_FoodyPreheat">
+          <label class="cl_info" uiRadius="left">Vorheizen</label><button type="button" uiRadius="none" disabled>
+            <input type="range" min="0" max="15" step="1" id="idRange_foodyPreheat"
+              oninput="foodyPreheatChange()"></input>
+          </button><label class="cl_info" id="idLbl_foodyPreheat" uiSize="small" uiRadius="right"></label>
+        </div>
+        <div class="cl_FoodyStart">
+          <button type="button" id="idBtn_foodyStart" onclick="foodyStartChange()">Start</button>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_foodyVoiceOutput" checked></input></button><label class="cl_info" for="idCb_foodyVoiceOutput"
+            uiSize="small" uiRadius="right">Call me!</label>
+        </div>
+        <div class="cl_FoodyTime">
+          <label class="cl_outputLbl" id="idLbl_foodyTime" name="foodyTimer">...</label>
+        </div>
+        <div class="cl_FoodyTimeProgress">
+          <progress id="idProg_foodyProgress" value="100" max="100"></progress>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Kounselor" style="display:none;">
+      <div class="cl_subGrid_Kounselor cl_subGrid">
+        <div class="cl_KounselorOptionsA">
+          <label class="cl_info" uiRadius="left">RAL Nummer</label><input type="text" id="idVin_kounselorRAL"
+            list="idDlist_kounselorRAL" onfocus="kounselorPopulateDatalists(this)" onchange="kounselorInput(this)"
+            data-type="RAL" uiRadius="right"></input>
+          <datalist id="idDlist_kounselorRAL">
+          </datalist>
+        </div>
+        <div class="cl_KounselorOptionsB">
+          <label class="cl_info" uiRadius="left">RAL Name</label><input type="text" id="idVin_kounselorName"
+            list="idDlist_kounselorName" onfocus="kounselorPopulateDatalists(this)" onchange="kounselorInput(this)"
+            data-type="Name" uiRadius="right"></input>
+          <datalist id="idDlist_kounselorName">
+          </datalist>
+        </div>
+        <div class="cl_KounselorOptionsC">
+          <label class="cl_info" uiRadius="left">HSL</label><input type="text" id="idVin_kounselorHSL"
+            list="idDlist_kounselorHSL" onfocus="kounselorPopulateDatalists(this)" onchange="kounselorInput(this)"
+            data-type="HSL" uiRadius="right"></input>
+          <datalist id="idDlist_kounselorHSL">
+          </datalist>
+        </div>
+        <div class="cl_KounselorOptionsD">
+          <label class="cl_info" uiRadius="left">RGB</label><input type="text" id="idVin_kounselorRGB"
+            list="idDlist_kounselorRGB" onfocus="kounselorPopulateDatalists(this)" onchange="kounselorInput(this)"
+            data-type="RGB" uiRadius="right"></input>
+          <datalist id="idDlist_kounselorRGB">
+          </datalist>
+        </div>
+        <div class="cl_KounselorOptionsE">
+          <label class="cl_info" uiRadius="left">Hex</label><input type="text" id="idVin_kounselorHEX"
+            list="idDlist_kounselorHEX" onfocus="kounselorPopulateDatalists(this)" onchange="kounselorInput(this)"
+            data-type="HEX" uiRadius="right"></input>
+          <datalist id="idDlist_kounselorHEX">
+          </datalist>
+        </div>
+        <div class="cl_KounselorOutputA">
+          <label class="cl_outputLbl" id="idLbl_kounselorOutputA">guter Kontrast</label>
+        </div>
+        <div class="cl_KounselorOutputB">
+          <label class="cl_outputLbl" id="idLbl_kounselorOutputB">schlechter Kontrast</label>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Kaihanga" style="display:none;">
+      <div class="cl_subGrid_Kaihanga cl_subGrid">
+        <div class="cl_KaihangaInput">
+          <input type="text" id="idVin_kaihangaEntry" uiSize="norm" uiRadius="left"
+            onchange="kaihangaAddOption()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="kaihangaEntrySubmit()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+        </div>
+        <div class="cl_KaihangaSegments">
+          <table>
+            <thead id="idTabHeader_Kaihanga">
+            </thead>
+            <tbody id="idTabBody_Kaihanga">
+              <tr>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_KaihangaResult">
+          <label class="cl_outputLbl" id="idLbl_kaihangaResult">...</label>
+        </div>
+        <div class="cl_KaihangaCanvas">
+          <div style="display:block;" id="idCanv_kaihanga"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Botanicals" style="display:none;">
+      <div class="cl_subGrid_Botanicals cl_subGrid">
+        <div class="cl_botanicalsLblTitlePlant">
+          <label class="cl_outputLbl" id="idLbl_botanicalsTitlePlant">Wogegen hilfts:</label>
+        </div>
+        <div class="cl_botanicalsVinPlant">
+          <select uiSize="wide" id="idSel_botanicalsPlant" onchange="botanicalsPlantChange(this)"
+            onfocus="botanicalsPopulateOptions(this)"></select>
+        </div>
+        <div class="cl_botanicalsLblTitleDiscomfort">
+          <label class="cl_outputLbl" id="idLbl_botanicalsTitleDiscomfort">Was hilft:</label>
+        </div>
+        <div class="cl_botanicalsVinDiscomfort">
+          <select uiSize="wide" id="idSel_botanicalsDiscomfort" onchange="botanicalsDiscomfortChange(this)"
+            onfocus="botanicalsPopulateOptions(this)"></select>
+        </div>
+        <div class="cl_botanicalsTabResultPlant">
+          <table id="idTab_botanicalsResultPlant">
+            <thead>
+              <tr>
+                <th id="idTabHeader_BotanicalPlantDiscomfort"></th>
+                <th id="idTabHeader_BotanicalPlantEffect"></th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_botanicalsResultPlant">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_botanicalsTabResultDiscomfort">
+          <table id="idTab_botanicalsResultDiscomfort">
+            <thead>
+              <tr>
+                <th id="idTabHeader_BotanicalPlants" colspan="100%"></th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_botanicalsResultDiscomfort">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_PlatLesen" style="display:none;">
+      <div class="cl_subGrid_PlatLesen cl_subGrid">
+        <div class="cl_platLesenNumInput">
+          <select id="idSel_platLesenNum" uiSize="wide" onchange="platLesenNum(this)"
+            onfocus="platLesenPopulateOptions()"></select>
+        </div>
+        <div class="cl_platLesenNumResult ">
+          <label class="cl_outputLbl" id="idLbl_platLesenNumResult">Nummernschild</label>
+        </div>
+        <div class="cl_platLesenRegInput">
+          <select id="idSel_platLesenReg" uiSize="wide" onchange="platLesenReg(this)"
+            onfocus="platLesenPopulateOptions()"></select>
+        </div>
+        <div class="cl_platLesenRegResult">
+          <label class="cl_outputLbl" id="idLbl_platLesenRegResult">Region</label>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Iomlaid" style="display:none;">
+      <div class="cl_subGrid_Iomlaid cl_subGrid">
+        <div class="cl_iomlaidVinCur" uiWrap="nowrap">
+          <input type="number" id="idVin_IomlaidCur" uiSize="norm" uiRadius="left" min="0" step="0.01"
+            oninput="iomlaidVinSet(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_iomlaidSelCur">
+          <select name="idSel_IomlaidCur" id="idSel_IomlaidCur" onchange="iomlaidSelSet(this)"></select>
+        </div>
+        <div class="cl_iomlaidSelDate">
+          <button type="button" id="idBtn_iomlaidDate" uiSize="medium"></button>
+        </div>
+        <div class="cl_iomlaidTab clDiv_overviewTablesAuto">
+          <table id="idTab_Iomlaid">
+            <thead id="idTabHeader_Iomlaid" class="scrollTable">
+              <tr>
+                <th id="idTabHeader_iomlaidRequestedAmount" rowspan="2" colspan="1"></th>
+                <th id="idTabHeader_iomlaidLatestDate" colspan="2"> Heute</th>
+                <th id="idTabHeader_iomlaidDatedDate" colspan="2"></th>
+              </tr>
+              <tr>
+                <th>Kurs</th>
+                <th>Betrag</th>
+                <th>Kurs</th>
+                <th>Betrag</th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_Iomlaid">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_SpeechTranslate" style="display:none;">
+      <div class="cl_subGrid_SpeechTranslate cl_subGrid">
+        <div class="cl_speechLangSelect" uiWrap="nowrap">
+          <select id="idSel_translateSelectorFrom" uiSize="normal" uiRadius="left"
+            onchange="speechTranslatePopulateSpeech()"></select><label class="cl_info" uiSize="small"
+            uiRadius="right">from</label>
+          <button type="button" uiSize="square" onclick="translateSwitch()">
+            <img src="Data/Images/SVG/code.svg"></img>
+          </button>
+          <label class="cl_info" uiSize="small" uiRadius="left">to</label><select id="idSel_translateSelectorTo"
+            uiSize="normal" uiRadius="right" onchange="speechTranslatePopulateSpeech()"></select>
+        </div>
+        <div class="cl_speechVoiceSelect" uiWrap="nowrap">
+          <select id="idSel_speechSelectorFrom" uiSize="normal" uiRadius="left"></select><label class="cl_info"
+            uiSize="medium" uiRadius="none">Voices</label><select id="idSel_speechSelectorTo" uiSize="normal"
+            uiRadius="right"></select>
+        </div>
+        <div class="cl_speechOptions" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiType="transparent"
+            onclick="speechSpeakOnly(idArea_speechFromText, idSel_speechSelectorFrom)">
+            <img class="img_OptRadio" src="Data/Images/SVG/radio.svg"
+              style="filter:invert(var(--invBackground));"></img>
+          </button>
+          <button type="button" id="idBtn_speechTranslateOnly" onclick="speechSpeak(0)">Translate
+            only</button>
+          <button type="button" id="idBtn_speechTranslateSpeak" onclick="speechSpeak(1)">Translate&Speak</button>
+          <button type="button" uiSize="square" uiType="transparent"
+            onclick="speechSpeakOnly(idArea_speechToText, idSel_speechSelectorTo)">
+            <img class="img_OptRadio" src="Data/Images/SVG/radio.svg"
+              style="filter:invert(var(--invBackground));"></img>
+          </button>
+        </div>
+        <div class="cl_speechOutputArea" uiWrap="nowrap">
+          <textarea id="idArea_speechFromText"></textarea>
+          <textarea id="idArea_speechToText" onclick="copyToClipboard(value, id)" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Afinn" style="display:none;">
+      <div class="cl_subGrid_Afinn cl_subGrid">
+        <div class="cl_AfinnInput">
+          <textarea id="idVin_analysisEntry" oninput="afinnInput()"></textarea>
+        </div>
+        <div class="cl_AfinnResult">
+          <label class="cl_outputLbl" id="idLbl_analysisResult">...</label>
+        </div>
+        <div class="cl_AfinnProgress">
+          <progress id="idProg_analysisProgress" value="10" max="20"></progress>
+        </div>
+        <div class="cl_AfinnNews">
+          <button type="button" id="idBtn_analyseNews" onclick="analysisNews()">Check News</button>
+        </div>
+        <div class="cl_AfinnWiki">
+          <button type="button" id="idBtn_analyseWiki" onclick="analysisWiki()">Check Wiki</button>
+        </div>
+        <div class="cl_AfinnTabResult">
+          <table id="idTab_analysisResult">
+            <thead id="idTabHeader_analysisResult">
+              <tr>
+                <th colspan=2>positve</th>
+                <th colspan=2>negative</th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_analysisResult">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Synonym" style="display:none;">
+      <div class="cl_subGrid_Synonym cl_subGrid">
+        <div class="cl_SynonymInput">
+          <input type="text" id="idVin_synonymEntry" uiSize="wide" uiRadius="left"
+            onchange="newSynonym()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="newSynonym()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+        </div>
+        <div class="cl_SynonymSearchword" uiWrap="nowrap">
+          <label class="cl_info" uiSize="medium" uiRadius="left">Suche:</label><label class="cl_info"
+            id="idLbl_synonymSearchWord" uiRadius="right">...</label>
+        </div>
+        <div class="cl_SynonymTable">
+          <table>
+            <theader>
+            </theader>
+            <tbody id="idTabBody_synonym">
+              <tr>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_BiktadA" style="display:none;">
+      <div class="cl_subGrid_BiktadA cl_subGrid">
+        <div class="cl_BiktadATable" uiSize="outputTable">
+          <table id="idTab_BiktadA">
+            <thead id="idTabHeader_BiktadA">
+            </thead>
+            <tbody id="idTabBody_BiktadA">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Hverertu" style="display:none;">
+      <div class="cl_subGrid_Hverertu cl_subGrid">
+        <div class="cl_HverertuInput">
+          <input type="text" id="idVin_hverertuEntry" uiSize="norm" uiRadius="left"
+            onchange="hverertuGetData()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="hverertuGetData()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+        </div>
+        <div class="cl_HverertuTable" uiSize="outputTable">
+          <table id="idTab_Hverertu">
+            <thead id="idTabHeader_Hverertu">
+            </thead>
+            <tbody id="idTabBody_Hverertu">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl_Boredom" style="display:none;">
+      <div class="cl_subGrid_Boredom cl_subGrid">
+        <div class="cl_BoredomStart">
+          <button type="button" id="idBtn_boredomStart" onclick="boredomStart()">Was tun?</button>
+        </div>
+        <div class="cl_BoredomAnswer" uiWrap="nowrap">
+          <textarea id="idArea_boredomAnswer"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Geometrie" style="display:none;">
+      <div class="cl_subGrid_Geometrie cl_subGrid">
+        <div class="cl_GeometrieAreaSelect" uiFlex="vertical" id="idDiv_GeometrieAreaSelect">
+        </div>
+        <div class="cl_GeometrieAreaInputA" name="naDiv_Area" id="idDiv_Area_0" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_Vin_Area_0" uiSize="square" uiRadius="left"></label><input type="number"
+            id="idVin_Area_0" uiRadius="none" step="any" min="0" oninput="geoBerechnung()"></input><button type="button"
+            tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_GeometrieAreaInputB" name="naDiv_Area" id="idDiv_Area_1" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_Vin_Area_1" uiSize="square" uiRadius="left"></label><input type="number"
+            id="idVin_Area_1" uiRadius="none" step="any" min="0" oninput="geoBerechnung()"></input><button type="button"
+            tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_GeometrieAreaInputC" name="naDiv_Area" id="idDiv_Area_2" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_Vin_Area_2" uiSize="square" uiRadius="left"></label><input type="number"
+            id="idVin_Area_2" uiRadius="none" step="any" min="0" oninput="geoBerechnung()"></input><button type="button"
+            tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_GeometrieOptions" id="idDiv_GeometrieOptions">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_geoRadius"
+              onclick="geoChangeDiameter()"></input>
+          </button><label class="cl_info" uiRadius="right">Radius verwenden</label>
+        </div>
+        <div class="cl_GeometrieTable">
+          <table id="idTab_geometrieResults">
+            <thead id="idTabHead_geometrieResults">
+            </thead>
+            <tbody id="idTabBody_geometrieResults">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_GeometrieCanvas">
+          <div id="idCanv_geometire">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Material" style="display:none;">
+      <div class="cl_subGrid_Material cl_subGrid">
+        <div class="cl_MaterialPropertyCb clDropdownParent">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_materialListFilter" onclick="materialPropertyfilter()" checked>
+            </input></button><label class="cl_info" for="idCb_materialListFilter"
+            uiRadius="right">Propertyfilter</label>
+          <label class="clDropdown clDropdownInfo">Login um Filter zu ändern</label>
+        </div>
+        <div class="cl_MaterialAdd">
+          <button type="button" onclick="openMaterialSearch()">Add Material</button>
+        </div>
+        <div class="cl_MaterialList">
+          <table id="idTab_Materiallisted">
+            <thead id="idTabHeader_Materiallisted" class="scrollTable">
+            </thead>
+            <tbody id="idTabBody_Materiallisted">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_MaterialSearchVin" id="idDiv_MaterialSearchVin">
+          <input type="text" id="idVin_materialFilter" oninput="materialSearchInput()"></input>
+        </div>
+        <div class="cl_MaterialSearchSel" id="idDiv_MaterialSearchSel">
+          <select id="idSel_materialFilter" onchange="materialSearchSelectChange(this)"></select>
+        </div>
+        <div class="cl_MaterialSearchClose" id="idDiv_MaterialSearchClose">
+          <button type="button" onclick="closeMaterialSearch()">Close</button>
+        </div>
+        <div class="cl_MaterialSearchList clDiv_overviewTablesMaterial" id="idDiv_MaterialSearchList"
+          style="display:none;">
+          <table id="idTab_MaterialSearchList">
+            <thead id="idTabHeader_MaterialSearchList" class="scrollTable">
+            </thead>
+            <tbody id="idTabBody_MaterialSearchList">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Expansion" style="display:none;">
+      <div class="cl_subGrid_Expansion cl_subGrid">
+        <div class="cl_ExpansionMaterialsA" uiWrap="nowrap">
+          <select id="idSel_expansionMaterialA" onclick="expansionEntryMaterial()"
+            onfocus="expansionUpdateOptions()"></select>
+        </div>
+        <div class="cl_ExpansionMaterialSwitch" uiWrap="nowrap">
+          <button type="button" uiSize="square" onclick="expansionSwitch()">
+            <img src="Data/Images/SVG/code.svg"></img>
+          </button>
+        </div>
+        <div class="cl_ExpansionMaterialsB" uiWrap="nowrap">
+          <select id="idSel_expansionMaterialB" onclick="expansionEntryMaterial()"
+            onfocus="expansionUpdateOptions()"></select>
+        </div>
+        <div class="cl_ExpansionVinLength" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Länge
+          </label><input type="number" id="idVin_expansionLength" uiRadius="none"></input><button type="button"
+            tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="expansionEntryLength()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+        </div>
+        <div class="cl_ExpansionCBDifference" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_expansionDifference" onclick="expansionDifference()"></input>
+          </button><label class="cl_info" id="idLbl_expansionDifference" for="idCb_expansionDifference"
+            uiRadius="right">Show &#x0394;l [mm]</label>
+        </div>
+        <div class="cl_ExpansionVinBaseTemperature" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Bezugstemp.
+          </label><input type="number" id="idVin_expansionBaseTemperature" uiRadius="none"></input><button type="button"
+            tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="expansionEntryBaseTemperature()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+        </div>
+        <div class="cl_ExpansionVinTemperature" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Temperatur
+          </label><input type="number" id="idVin_expansionTemperature" uiRadius="none"></input><button type="button"
+            uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="expansionEntryTemperature()">
+            <img src="Data/Images/SVG/down.svg"></img>
+          </button>
+        </div>
+        <div class="cl_ExpansionCBCoefficient" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_expansionCoefficient" onclick="expansionCoefficient()"></input>
+          </button><label class="cl_info" for="idCb_expansionCoefficient" uiRadius="right">Show &#x03B1;
+            <sub>T</sub> [K<sup>-1</sup>]</label>
+        </div>
+        <div class="cl_ExpansionList">
+          <table id="idTab_ExpansionList">
+            <thead id="idTabHeader_ExpansionList">
+            </thead>
+            <tbody id="idTabBody_ExpansionList">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Pattern" style="display:none;">
+      <div class="cl_subGrid_Pattern cl_subGrid">
+        <div class="cl_PatternInputA" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_Pattern0" uiRadius="left">
+          </label><input type="number" id="idVin_Pattern0" min="0" step="any" uiRadius="none"
+            oninput="calcPattern()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PatternInputB" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_Pattern1" uiRadius="left">
+          </label><input type="number" id="idVin_Pattern1" min="0" step="any" uiRadius="none"
+            oninput="calcPattern()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PatternInputC" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_Pattern2" uiRadius="left">
+          </label><input type="number" id="idVin_Pattern2" min="0" step="any" uiRadius="none"
+            oninput="calcPattern()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PatternInputD" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_Pattern3" uiRadius="left">
+          </label><input type="number" id="idVin_Pattern3" min="0" step="any" uiRadius="none"
+            oninput="calcPattern()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PatternInputE" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Anz. Vorschlag</label><button type="button" id="idVin_Pattern4"
+            uiRadius="right" onclick="patternProp()"></button>
+        </div>
+        <!-- <div class="cl_PatternList clDiv_overviewTablesAuto">
+					<table id="idTab_Pattern">
+						<thead id="idTabHeader_Pattern" class="scrollTable">
+							<tr>
+								<th id="id_patternInc">Inkrement: </th>
+								<th id="id_patternAbs">Absolut: </th>
+							</tr>
+						</thead>
+						<tbody id="idTabBody_Pattern">
+						</tbody>
+					</table>
+				</div> -->
+        <div class="cl_PatternCanvas">
+          <div id="idCanv_pattern"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Luas" style="display:none;">
+      <div class="cl_subGrid_Luas cl_subGrid">
+        <div class="cl_LuasVinAngularVin" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Winkelgeschw...
+          </label><input type="number" id="idVin_luasVelAngular" min="0" step="any" uiRadius="none"
+            oninput="luasInputChange()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_LuasVinLinearVin" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Durchmesser
+          </label><input type="number" id="idVin_luasDiameter" min="0" step="any" uiRadius="none"
+            oninput="luasInputChange()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_LuasOptAngularVin" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Einheit rot.
+          </label><select id="idSel_luasAngularUnit" onchange="luasInputChange()" uiRadius="none" uiSize="small">
+          </select><button type="button" id="idBtn_luasChangeDirection" tabindex="1" uiRadius="right" uiSize="square"
+            onclick="luasChangeDirection()">
+            <img id="idImg_luasDirection" src="Data/Images/SVG/refresh2.svg"></button>
+        </div>
+        <div class="cl_LuasOptLinearVin" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Einheit tran.
+          </label><select id="idSel_luasLinearUnit" onchange="luasInputChange()" uiRadius="none" uiSize="small">
+          </select><button type="button" id="idBtn_luasChecker" tabindex="-1" uiRadius="right" uiSize="square"
+            onclick="luasStart()">
+            <img id="idImg_luasChecker" src="Data/Images/SVG/tPlay.svg"></img>
+          </button>
+        </div>
+        <div class="cl_LuasResult">
+          <label class="cl_outputLbl" id="idLbl_luasResult" onclick="copyFromLabel(this)">...</label>
+        </div>
+        <div class="cl_LuasCanvas">
+          <div style="display:block;" id="idCanv_luas"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Middle" style="display:none;">
+      <div class="cl_subGrid_Middle cl_subGrid">
+        <div class="cl_MiddleInput0" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">a
+          </label><input type="number" id="idVin_middleA" step="any" uiRadius="none"
+            oninput="calcMiddle()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_MiddleInput1" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">b
+          </label><input type="number" id="idVin_middleB" step="any" uiRadius="none"
+            oninput="calcMiddle()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_MiddleMid ">
+          <label class="cl_outputLbl" id="idLbl_middleMid" onclick="copyFromLabel(this)">...</label>
+        </div>
+        <div class="cl_MiddleDiff ">
+          <label class="cl_outputLbl" id="idLbl_middleDiff" onclick="copyFromLabel(this)">...</label>
+        </div>
+        <div class="cl_MiddleCanvas">
+          <div id="idCanv_middle"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Quickmath" style="display:none;">
+      <div class="cl_subGrid_Quickmath cl_subGrid">
+        <div class="cl_quickmathInput" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Faktor
+          </label><input type="number" id="idVin_quickkmathVal" step="any" uiRadius="none"
+            oninput="calcQuickmath()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_quickmathStart" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Untere Grenze
+          </label><input type="number" id="idVin_quickkmathStart" step="any" uiRadius="none"
+            oninput="calcQuickmath()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_quickmathEnd" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Obere Grenze
+          </label><input type="number" id="idVin_quickkmathEnd" step="any" uiRadius="none"
+            oninput="calcQuickmath()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_quickmathListMultiply">
+          <table id="idTab_quickmathMultiply">
+            <thead id="idTabHeader_quickmathMultiply">
+              <tr>
+                <th colspan="100%">Multiply:</th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_quickmathMultiply">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_quickmathListDivide">
+          <table id="idTab_quickmathDivide">
+            <thead id="idTabHeader_quickmathDivide">
+              <tr>
+                <th colspan="100%">Divide:</th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_quickmathDivide">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_quickmathListPow">
+          <table id="idTab_quickmathPow">
+            <thead id="idTabHeader_quickmathPow">
+              <tr>
+                <th colspan="100%">Power:</th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_quickmathPow">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_quickmathListRoot">
+          <table id="idTab_quickmathRoot">
+            <thead id="idTabHeader_quickmathRoot">
+              <tr>
+                <th colspan="100%">Root:</th>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_quickmathRoot">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Ranje" style="display:none;">
+      <div class="cl_subGrid_Ranje cl_subGrid">
+        <div class="cl_ranjeInput" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Gesamtzahl
+          </label><input type="number" id="idVin_ranjeVal" min="1" step="1" uiRadius="none"
+            oninput="ranjeCalc()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_ranjeList">
+          <table id="idTab_ranjeList">
+            <thead id="idTabHeader_ranjeList">
+            </thead>
+            <tbody id="idTabBody_ranjeList">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Niska" style="display:none;">
+      <div class="cl_subGrid_Niska cl_subGrid">
+        <div class="cl_niskaHeaderInput">
+          <label class="cl_info" uiSize="large" , uiAlign="center">Handeingabe</label>
+        </div>
+        <div class="cl_niskaHeaderSelect">
+          <label class="cl_info" uiSize="large" , uiAlign="center">Normgewinde</label>
+        </div>
+        <div class="cl_niskaSize" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Gewindegröße
+          </label><input type="number" id="idVin_niskaSize" min="1" step="1" uiRadius="none"
+            oninput="niskaCalc()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_niskaPitch" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Steigung
+          </label><input type="number" id="idVin_niskaPitch" min="1" step="1" uiRadius="none"
+            oninput="niskaCalc()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_niskaSelect">
+          <label class="cl_info" id="idLbl_niskaRegelInfo" uiSize="norm" uiRadius="left">
+          </label><select id="idSel_niskaSelect" onchange="niskaCalc()" uiRadius="right" uiSize="norm"></select>
+        </div>
+        <div class="cl_niskaStrengthClass">
+          <label class="cl_info" id="idLbl_niskaStrengthClass" uiSize="norm" uiRadius="left">Festigkeitsklasse
+          </label><select id="idSel_niskaStrengthClass" onchange="niskaCalc()" uiRadius="right" uiSize="norm"></select>
+        </div>
+        <div class="cl_niskaList">
+          <table id="idTab_niskaList">
+            <thead id="idTabHeader_niskaList">
+            </thead>
+            <tbody id="idTabBody_niskaList">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class=" cl_Pythagoras" style="display:none;">
+      <div class="cl_subGrid_Pythagoras cl_subGrid">
+        <div class="cl_PythagorasInput0" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">a
+          </label><input type="number" id="idVin_Pytho_0" min="0" step="any" uiRadius="none"
+            oninput="pythoNewEntry(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PythagorasInput1" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">b
+          </label><input type="number" id="idVin_Pytho_1" min="0" step="any" uiRadius="none"
+            oninput="pythoNewEntry(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PythagorasInput2" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">c
+          </label><input type="number" id="idVin_Pytho_2" min="0" step="any" uiRadius="none"
+            oninput="pythoNewEntry(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PythagorasInput3" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">α
+          </label><input type="number" id="idVin_Pytho_3" min="0" step="any" uiRadius="none"
+            oninput="pythoNewEntry(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PythagorasInput4" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">β
+          </label><input type="number" id="idVin_Pytho_4" min="0" step="any" uiRadius="none"
+            oninput="pythoNewEntry(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PythagorasInfo" id="idDiv_pythagorasInfo">
+          <label id="idLbl_pythagorasInfo" uiSize="norm" style="display:block;"></label>
+        </div>
+        <div class="cl_PythagorasCanvas">
+          <div id="idCanv_pytho">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Pormula" style="display:none;">
+      <div class="cl_subGrid_Pormula cl_subGrid">
+        <div class="cl_PormulaBestFit">
+          <button type="button" onclick="pormulaBestFit()">Fit Best</button>
+        </div>
+        <div class="cl_PormulaTypeSelect" uiFlex="vertical" id="idDiv_PormulaTypeSelect">
+        </div>
+        <div class="cl_PormulaPolyFit">
+          <button type="button" onclick="pormulaPolyFit()">Fit Polynom</button>
+        </div>
+        <div class="cl_PormulaPrecision" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_pormulaPrecision" uiRadius="left">Genauigkeit
+          </label><input type="number" id="idVin_pormulaPrecision" min="0" max="7" step="1" uiRadius="none"
+            oninput="pormulaCalculate()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PormulaOrder" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_pormulaOrder" uiRadius="left">Polynomgrad
+          </label><input type="number" id="idVin_pormulaOrder" min="0" step="1" max="5" uiRadius="none"
+            oninput="pormulaCalculate()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PormulaAddInputs" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Datenpunkte</label><button type="button" tabindex="-1" uiSize="square"
+            uiRadius="none" onclick="pormulaAddInput(-1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right" onclick="pormulaAddInput(1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PormulaInputs" id="idDiv_pormulaInputs" uiWrap="nowrap">
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x1</label><input type="number" id="idVin_Pormula_x0"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y1</label><input type="number" id="idVin_Pormula_y0"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x2</label><input type="number" id="idVin_Pormula_x1"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y2</label><input type="number" id="idVin_Pormula_y1"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x3</label><input type="number" id="idVin_Pormula_x2"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y3</label><input type="number" id="idVin_Pormula_y2"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x4</label><input type="number" id="idVin_Pormula_x3"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y4</label><input type="number" id="idVin_Pormula_y3"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x5</label><input type="number" id="idVin_Pormula_x4"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y5</label><input type="number" id="idVin_Pormula_y4"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x6</label><input type="number" id="idVin_Pormula_x5"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y6</label><input type="number" id="idVin_Pormula_y5"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x7</label><input type="number" id="idVin_Pormula_x6"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y7</label><input type="number" id="idVin_Pormula_y6"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x8</label><input type="number" id="idVin_Pormula_x7"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y8</label><input type="number" id="idVin_Pormula_y7"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x9</label><input type="number" id="idVin_Pormula_x8"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y9</label><input type="number" id="idVin_Pormula_y8"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x10</label><input type="number" id="idVin_Pormula_x9"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y10</label><input type="number" id="idVin_Pormula_y9"
+              step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x11</label><input type="number"
+              id="idVin_Pormula_x10" step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y11</label><input type="number"
+              id="idVin_Pormula_y10" step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+          <div uiWrap="nowrap" class="clDiv_pormulaInput">
+            <label class="cl_info" uiSize="square" uiRadius="left">x12</label><input type="number"
+              id="idVin_Pormula_x11" step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+            <label class="cl_info" uiSize="square" uiRadius="left">y12</label><input type="number"
+              id="idVin_Pormula_y11" step="any" uiRadius="right" oninput="pormulaCalculate(this)"></input>
+          </div>
+        </div>
+        <div class="cl_PormulaPointEntry" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">x
+          </label><input type="number" uiSize="small" id="idVin_pormulaPointEntry" step="any" min="0" uiRadius="none"
+            oninput="pormulaCalculate()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PormulaPointResult" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left">y:</label><label class="cl_info"
+            id="idLbl_pormulaPointResult" uiSize="small" uiRadius="right"></label>
+        </div>
+        <div class="cl_PormulaInfo" id="idDiv_pormulaInfo">
+          <label id="idLbl_pormulaInfo" uiSize="wide" style="display:block;"></label>
+        </div>
+        <div class="cl_PormulaLblResult">
+          <label class="cl_outputLbl" id="idLbl_pormulaResult" onclick="copyFromLabel(this)">
+            <p class="cl_outputEquation" id="idP_pormulaResult"></p>
+          </label>
+        </div>
+        <div class="cl_PormulaAccuracy" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Bestimmtheitsmaß</label><label class="cl_info"
+            id="idLbl_pormulaAccuracy" uiRadius="right"></label>
+        </div>
+        <div class="cl_PormulaCanvas">
+          <div id="idCanv_promula">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Blechgeometrie" style="display:none;">
+      <div class="cl_subGrid_Blechgeometrie cl_subGrid">
+        <div class="cl_BlechgeoVinDicke" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Dicke
+          </label><input type="number" id="idVin_blechgeoDicke" step="any" min="0" uiRadius="none"
+            oninput="calcBlechGeo()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_BlechgeoVinRadius" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Radius
+          </label><input type="number" id="idVin_blechgeoRadius" step="any" min="0" uiRadius="left"
+            oninput="calcBlechGeo()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_BlechgeoVinForm">
+          <label class="cl_info" uiSize="small" uiRadius="left">Form
+          </label><select id="idSel_blechgeoForm" onchange="blechgeoFormChange()" uiRadius="right"
+            uiSize="norm"></select>
+        </div>
+        <div class="cl_BlechgeoVinBreite" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Breite
+          </label><input type="number" id="idVin_blechgeoBreite" step="any" min="0" uiRadius="none"
+            oninput="calcBlechGeo()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_BlechgeoLblResult">
+          <label class="cl_outputLbl" id="idLbl_blechgeoResult" onclick="copyFromLabel(this)">...</label>
+        </div>
+        <div class="cl_BlechgeoImg">
+          <img id="idImg_Blechgeometrie" imgSize="blech"></img>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Linaha" style="display:none;">
+      <div class="cl_subGrid_Linaha cl_subGrid">
+        <div class="cl_LinahaOptionsA" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Frage
+          </label><select id="idSel_linahaSelectQ" onchange="linahaSelect(this)" data-ident="Q" uiRadius="right"
+            uiSize="norm"></select>
+          <button id="idSel_linahaSelectSwitch" type="button" uiSize="square" onclick="linahaSwitchSelect()">
+            <img src="Data/Images/SVG/code.svg"></img>
+          </button>
+          <select id="idSel_linahaSelectA" onchange="linahaSelect(this)" data-ident="A" uiRadius="left" uiSize="norm">
+          </select><label class="cl_info" uiSize="small" uiRadius="right">Antwort</label>
+        </div>
+        <div class="cl_LinahaOptionsB" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Anzahl
+          </label><select id="idSel_linahaChoices" onchange="linahaChoiceChange(this)" uiRadius="right"
+            uiSize="norm"></select>
+        </div>
+        <div class="cl_LinahaOptionsC" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Runden
+          </label><input type="number" id="idVin_linahaRounds" value="5" min="1" max="10" step="1" uiRadius="none"
+            oninput="linahaRoundsChange(this)"></input><button type="button" tabindex="-1" uiSize="square"
+            uiRadius="none" onclick="utilsVinChange(this, -1)"><img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_LinahaRounds">
+          <label class="cl_info" uiSize="small" uiRadius="left">Runden
+          </label><label class="cl_info" id="idLbl_linahaCurrentRound" uiSize="small" uiRadius="right"></label>
+        </div>
+        <div class="cl_LinahaScore">
+          <label class="cl_info" uiSize="small" uiRadius="left">Punkte
+          </label><label class="cl_info" id="idLbl_linahaCurrentScore" uiSize="small" uiRadius="right"></label>
+        </div>
+        <div class="cl_LinahaMap">
+          <button id="idBtn_linahaMap" type="button" uiSize="small doubleHeight" onclick="linahaOpenMap()"><img
+              src="Data/Images/SVG/pin.svg"></img> <img src="Data/Images/SVG/map.svg"></img></button>
+        </div>
+        <div class="cl_LinahaOptionsStart">
+          <button type="button" id="idBtn_linahaStart" uiSize="doubleHeight" onclick="linahaStart()">Start</button>
+        </div>
+        <div class="cl_LinahaQuestion">
+          <label class="cl_outputLbl" id="idLbl_linahaQuestion">...</label>
+        </div>
+        <div class="cl_LinahaAnswers">
+        </div>
+      </div>
+    </div>
+
+    <div class="cl_Sudoku" style="display:none;">
+      <div class="cl_subGrid_Sudoku cl_subGrid">
+        <div class="cl_SudokuGetBoard">
+          <button type="button" id="idBtn_sudokuPuzzle" difficulty="puzzle" onclick="sudokuRequest(this)"
+            data-difficulty="puzzle">New Puzzle</button>
+          <!-- <button type="button" id="idBtn_sudokuGenerate" difficulty="generate" onclick="sudokuRequest(this)"
+            data-difficulty="generate">Generate</button> -->
+          <button type="button" id="idBtn_sudokuHCleaer" onclick="sudokuClear()">Clear</button>
+        </div>
+        <div class="cl_SudokuTimer">
+          <button type="button" id="idBtn_sudokuTimer" onclick="sudokuStopTimer()">00:00</button>
+        </div>
+        <div class="cl_SudokuInput">
+          <button type="button" name="na_Sudoku" uiSize="doubleHeight" id="idBtn_sudokuWrite"
+            onclick="sudokuInputOptionChange(1)">Write</button><br>
+          <button type="button" name="na_Sudoku" uiSize="doubleHeight" id="idBtn_sudokuPencil"
+            onclick="sudokuInputOptionChange(0)">Pencil</button>
+        </div>
+        <div class="cl_SudokuOptionsA">
+          <button type="button" id="idBtn_sudokuValidate" onclick="sudokuValidate()">Validate</button><br>
+        </div>
+        <div class="cl_SudokuOptionsB">
+          <button type="button" id="idBtn_sudokuHint" onclick="sudokuHint()">Hint</button>
+        </div>
+        <div class="cl_SudokuOptionsC">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_sudokuAutoCheck" onclick="sudokuOptionChange()" checked></input>
+          </button><label class="cl_info" uiSize="medium" uiRadius="right">Auto-Check</label><br>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_sudokuErasePencils" onclick="sudokuOptionChange()" checked></input>
+          </button><label class="cl_info" uiSize="medium" uiRadius="right">Auto-Erase</label>
+        </div>
+        <div class="cl_SudokuOverview">
+          <div class="cl_SquareButtonFlex" uiFlex="horizontal">
+            <button id="idBtn_sudokuNumOverview_1" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="1"
+              tabindex="-1"></button>
+            <button id="idBtn_sudokuNumOverview_2" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="2"
+              tabindex="-1"></button>
+            <button id="idBtn_sudokuNumOverview_3" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="3"
+              tabindex="-1"></button>
+          </div>
+          <div class="cl_SquareButtonFlex" uiFlex="horizontal">
+            <button id="idBtn_sudokuNumOverview_4" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="4"
+              tabindex="-1"></button>
+            <button id="idBtn_sudokuNumOverview_5" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="5"
+              tabindex="-1"></button>
+            <button id="idBtn_sudokuNumOverview_6" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="6"
+              tabindex="-1"></button>
+          </div>
+          <div class="cl_SquareButtonFlex" uiFlex="horizontal">
+            <button id="idBtn_sudokuNumOverview_7" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="7"
+              tabindex="-1"></button>
+            <button id="idBtn_sudokuNumOverview_8" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="8"
+              tabindex="-1"></button>
+            <button id="idBtn_sudokuNumOverview_9" uiSize="sudoku" onclick="sudokuGroupHighlight(this)" alt="9"
+              tabindex="-1"></button>
+          </div>
+        </div>
+        <div class="cl_SudokuCanvas">
+          <div style="display:block;" id="idCanv_sudoku" tabindex="0" onkeydown="sudokuKeyPressed(event)"
+            onfocus="focusSudoku()" onblur="unfocusSudoku()"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Lotto" style="display:none;">
+      <div class="cl_subGrid_Lotto cl_subGrid">
+        <div class="cl_LottoOptions" uiWrap="nowrap">
+          <button type="button" id="idBtn_lottoReset" uiSize="medium" onclick="lottoReset()">Reset</button>
+          <button type="button" id="idBtn_lottoRandom" uiSize="medium" onclick="lottoRandom()">Random</button>
+          <label class="cl_info" uiSize="small" uiRadius="left">Spiel</label><select id="idSel_lottoGame"
+            onchange="lottoGameSelect()" uiRadius="right" uiSize="norm"></select>
+        </div>
+        <div class="cl_LottoSavedGame" uiWrap="nowrap" style="display:none;">
+          <label class="cl_info" uiRadius="left">Saved Game</label><button id="idBtn_lottoShowSaved" type="button"
+            uiRadius="right" disabled onclick="lottoShowSaved()"></button>
+        </div>
+        <div class="cl_LottoGetGames" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Latest Games</label><input type="number" id="idVin_lottoNumberOfGames"
+            min="1" max="400" step="1" uiRadius="none" oninput="lottoGetGames()"></input><button type="button"
+            tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_LottoTabGames">
+          <table id="idTab_Lotto">
+            <thead id="idTabHeader_Lotto">
+            </thead>
+            <tbody id="idTabBody_Lotto">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_LottoCanvas">
+          <div style="display:block;" id="idCanv_lotto" tabindex="0"></div>
+        </div>
+        <div class="cl_LottoOverview">
+          <label class="cl_outputLbl" id="idLbl_lottoOverview">...</label>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Ibhaluni" style="display:none;">
+      <div class="cl_subGrid_Ibhaluni cl_subGrid">
+        <div class="cl_IbhaluniInputs">
+          <button type="button" id="idBtn_ibhaluniStart" onclick="ibhaluniStart()">Start</button>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_ibhaluniSoundOutput" checked></input>
+          </button><label class="cl_info" for="idCb_ibhaluniSoundOutput" uiRadius="right">Play Sound</label>
+        </div>
+        <div class="cl_IbhaluniCanvas">
+          <div style="display:block;" id="idCanv_ibhaluni" tabindex="0"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_RayCaster" style="display:none;">
+      <div class="cl_subGrid_RayCaster cl_subGrid">
+        <div class="cl_RayCasterInputs">
+          <button type="button" id="idBtn_generateRayMaze" onclick="newRayMaze()">Create Maze</button>
+        </div>
+        <div class="cl_RayCasterSize" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Size
+          </label><input type="number" id="idVin_rayMazeSize" value="8" min="4" max="20" step="1" uiRadius="none"
+            oninput="raySizeChange(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_RayCasterSpeed" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Speed
+          </label><input type="number" id="idVin_rayMazeSpeed" min="0" max="10" step="1" uiRadius="none"
+            oninput="raySpeedChange(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_RayCasterOptions" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_rayDebug"
+              onclick="rayDebugChange()" autocomplete="off"></input>
+          </button><label class="cl_info" for="idCb_rayDebug" uiSize="medium" uiRadius="right">Show
+            Maze</label><br>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_raySpider"
+              onclick="raySpiderChange()" autocomplete="off"></input>
+          </button><label class="cl_info" for="idCb_raySpider" uiSize="medium" uiRadius="right">Spider
+            Mode</label><br>
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_rayTarget"
+              onclick="rayTargetChange()" autocomplete="off"></input>
+          </button><label class="cl_info" for="idCb_rayTarget" uiSize="medium" uiRadius="right">Show
+            Target</label><br>
+        </div>
+        <div class="cl_RayCasterView" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">View</label><input type="number" id="idVin_rayMazeView"
+            min="1" max="10" step="1" uiRadius="none" oninput="rayViewChange(this)"></input><button type="button"
+            tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_RayCasterCanvas">
+          <div style="display:block;" id="idCanv_rayCaster" tabindex="0" onkeydown="keyPushedRayCaster(event)"
+            onkeyup="keyPushedRayCaster(event)" onblur="unfocusRaycaster()"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Empat" style="display:none;">
+      <div class="cl_subGrid_Empat cl_subGrid">
+        <div class="cl_EmpatInputs">
+          <button type="button" id="idBtn_empatStart" onclick="empatStart()">Start</button>
+        </div>
+        <div class="cl_EmpatCanvas">
+          <div style="display:block;" id="idCanv_empat" tabindex="0" onkeydown="keyPushedEmpat(event)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Sweeper" style="display:none;">
+      <div class="cl_subGrid_Sweeper cl_subGrid">
+        <div class="cl_SweeperInputs">
+          <button type="button" id="idBtn_startSweeper" onclick="startSweeper()">Start</button>
+        </div>
+        <div class="cl_SweeperGrid" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Size
+          </label><input type="number" id="idVin_sweeperGrid" min="5" max="40" step="1" uiRadius="none"
+            oninput="sweeperGridChange(this)"></input><button type="button" tabindex="-1" uiSize="square"
+            uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_SweeperSweeps" uiWrap="nowrap">
+          <label class="cl_info" uiSize="small" uiRadius="left">Sweeps
+          </label><input type="number" id="idVin_sweeperSweeps" min="1" max="24" step="1" uiRadius="none"
+            oninput="sweeperCellsChange(this)"></input><button type="button" tabindex="-1" uiSize="square"
+            uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_SweeperCanvas">
+          <div style="display:block;" id="idCanv_sweeper" tabindex="0"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_Numbery" style="display:none;">
+      <div class="cl_subGrid_Numbery cl_subGrid">
+        <div class="cl_NumberyInputs">
+          <button type="button" id="idBtn_startNumbery" onclick="numberyToggleStart()">Start</button>
+        </div>
+        <div class="cl_NumberyPairs">
+          <label class="cl_info" uiSize="small" uiRadius="left">Size
+          </label><input type="number" id="idVin_numberyPairs" min="2" step="1" uiRadius="none"
+            oninput="numberyPairsChange()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_NumberyPlayerNum">
+          <label class="cl_info" uiSize="small" uiRadius="left">Player
+          </label><input type="number" id="idVin_numberyPlayer" min="2" max="8" step="1" uiRadius="none"
+            oninput="numberyPlayerChange()"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_NumberyCathegory">
+          <label class="cl_info" uiSize="small" uiRadius="left">Kategorie</label><select id="idSel_numberCategory"
+            onchange="numberyGameSelect(this)" uiSize="norm" uiRadius="right"></select>
+        </div>
+        <div class="cl_NumberyPlayers">
+          <table>
+            <thead id="idTabHeader_Numbery">
+            </thead>
+            <tbody id="idTabBody_Numbery">
+              <tr></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_NumberyResult">
+          <label class="cl_outputLbl" id="idLbl_numberyResult">...</label>
+        </div>
+        <div class="cl_NumberyImages">
+        </div>
+      </div>
+    </div>
+    <div class="cl_Ocjene" style="display:none;">
+      <div class="cl_subGrid_Ocjene cl_subGrid">
+        <div class="cl_OcjeneGenerate">
+          <button type="button" id="idBtn_ocjeneGenerate" onclick="ocjeneGenerate()"
+            uiSize="large">Aktuallisieren</button>
+        </div>
+        <div class="cl_OcjeneRandomA">
+          <button type="button" id="idBtn_ocjeneRandomA" onclick="ocjeneRandom(this)" data-level="0"
+            uiSize="large">Beginner</button>
+        </div>
+        <div class="cl_OcjeneRandomB">
+          <button type="button" id="idBtn_ocjeneRandomB" onclick="ocjeneRandom(this)" data-level="1"
+            uiSize="large">Fortgeschritten</button>
+        </div>
+        <div class="cl_OcjeneRandomC">
+          <button type="button" id="idBtn_ocjeneRandomC" onclick="ocjeneRandom(this)" data-level="2"
+            uiSize="large">Experte</button>
+        </div>
+        <div class="cl_OcjeneSongHeader">
+          <label class="cl_info" uiSize="large" , uiAlign="center">Song</label>
+        </div>
+        <div class="cl_OcjeneTimeSignature">
+          <label class="cl_info" uiRadius="left">Taktart</label><select id="idSel_ocjeneTimeSignature" uiSize="norm"
+            uiRadius="right" onChange="ocjeneTimeSignature(this)"></select>
+        </div>
+        <div class="cl_OcjeneClefs">
+          <label class="cl_info" uiRadius="left">Notenschlüssel</label><select id="idSel_ocjeneClefs" uiSize="norm"
+            uiRadius="right" onChange="ocjeneClefs(this)"></select>
+        </div>
+        <div class="cl_OcjeneKeySignature">
+          <label class="cl_info" uiRadius="left">Tongeschlecht</label><select id="idSel_ocjeneKeySignature"
+            uiSize="norm" uiRadius="right" onChange="ocjeneKeySignature(this)"></select>
+        </div>
+        <div class="cl_OcjeneKey">
+          <label class="cl_info" uiRadius="left">Tonart</label><select id="idSel_ocjeneKey" uiSize="norm"
+            uiRadius="right" onChange="ocjeneKey(this)"></select>
+        </div>
+        <div class="cl_OcjeneKeyOnly" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneKeyOnly" uiSize="norm" uiAlign="center" uiRadius="left">nur Tonart
+          </label><button type="button" uiSize="norm" uiRadius="right" disabled><input type="checkbox"
+              id="idCb_ocjeneKeyOnly" onclick="ocjeneKeyOnly(this)"></input>
+          </button>
+        </div>
+        <div class="cl_OcjeneTempo">
+          <label class="cl_info" uiSize="norm" uiRadius="left">Tempo
+          </label><input type="number" id="idVin_ocjeneTempo" step="1" uiRadius="none"
+            oninput="ocjeneTempo(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_OcjeneBars">
+          <label class="cl_info" uiSize="norm" uiRadius="left">Takte
+          </label><input type="number" id="idVin_ocjeneBars" min="1" step="1" uiRadius="none"
+            oninput="ocjeneBars(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_OcjeneShowText" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneShowText" uiSize="norm" uiAlign="center" uiRadius="left">Notennamen
+            zeigen
+          </label><button type="button" uiSize="norm" uiRadius="right" disabled><input type="checkbox"
+              id="idCb_ocjeneShowText" onclick="ocjeneShowText(this)"></input>
+          </button>
+        </div>
+        <div class="cl_OcjeneGermanText" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneGermanText" uiSize="norm" uiAlign="center" uiRadius="left">Deutsche
+            schreibw.
+          </label><button type="button" uiSize="norm" uiRadius="right" disabled><input type="checkbox"
+              id="idCb_ocjeneGermanText" onclick="ocjeneGermanText(this)"></input>
+          </button>
+        </div>
+        <div class="cl_OcjeneRhytmusHeader">
+          <label class="cl_info" uiSize="large" , uiAlign="center">Rhytmus</label>
+        </div>
+        <div class="cl_OcjeneNotenwert1" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              class="cl_ocjeneNotenwerte" id="idCb_ocjeneNotenwert1" onclick="ocjeneNotenwert(this)"></input>
+          </button><label class="cl_info" for="idCb_ocjeneNotenwert1" uiSize="small" uiAlign="center"
+            uiRadius="right">1/1</label>
+        </div>
+        <div class="cl_OcjeneNotenwert2" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              class="cl_ocjeneNotenwerte" id="idCb_ocjeneNotenwert2" onclick="ocjeneNotenwert(this)"></input>
+          </button><label class="cl_info" for="idCb_ocjeneNotenwert2" uiSize="small" uiAlign="center"
+            uiRadius="right">1/2</label>
+        </div>
+        <div class="cl_OcjeneNotenwert4" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              class="cl_ocjeneNotenwerte" id="idCb_ocjeneNotenwert4" onclick="ocjeneNotenwert(this)"></input>
+          </button><label class="cl_info" for="idCb_ocjeneNotenwert4" uiSize="small" uiAlign="center"
+            uiRadius="right">1/4</label>
+        </div>
+        <div class="cl_OcjeneNotenwert8" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              class="cl_ocjeneNotenwerte" id="idCb_ocjeneNotenwert8" onclick="ocjeneNotenwert(this)"></input>
+          </button><label class="cl_info" for="idCb_ocjeneNotenwert8" uiSize="small" uiAlign="center"
+            uiRadius="right">1/8</label>
+        </div>
+        <div class="cl_OcjeneNotenwert16" uiWrap="nowrap">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              class="cl_ocjeneNotenwerte" id="idCb_ocjeneNotenwert16" onclick="ocjeneNotenwert(this)"></input>
+          </button><label class="cl_info" for="idCb_ocjeneNotenwert16" uiSize="small" uiAlign="center"
+            uiRadius="right">1/16</label>
+        </div>
+        <div class="cl_OcjeneDotted" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneDotted" uiSize="norm" uiAlign="center" uiRadius="left">punktierte
+          </label><button type="button" uiSize="norm" uiRadius="right" disabled><input type="checkbox"
+              id="idCb_ocjeneDotted" onclick="ocjeneDotted(this)"></input>
+          </button>
+        </div>
+        <div class="cl_OcjeneTriplet" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneTriple" uiSize="norm" uiAlign="center" uiRadius="left">Triolen
+          </label><button type="button" uiSize="norm" uiRadius="right" disabled><input type="checkbox"
+              id="idCb_ocjeneTriplet" onclick="ocjeneTriplet(this)"></input>
+          </button>
+        </div>
+        <div class="cl_OcjeneRestsProbability">
+          <label class="cl_info" uiSize="small" uiRadius="left">Pausen</label><button type="button" uiRadius="none"
+            disabled>
+            <input type="range" min="0" max="0.5" step="0.02" id="idRange_ocjeneRestsProbability"
+              oninput="ocjeneRestsProbability(this)"></input>
+          </button><label class="cl_info" id="idLbl_ocjeneRestsProbability" uiSize="small" uiRadius="right"></label>
+        </div>
+        <div class="cl_OcjeneInstrumentHeader">
+          <label class="cl_info" uiSize="large" , uiAlign="center">Instrument</label>
+        </div>
+        <div class="cl_OcjeneInstrument">
+          <label class="cl_info" uiRadius="left">Instrument</label><select id="idSel_ocjeneInstrument" uiSize="norm"
+            uiRadius="right" onChange="ocjeneInstrument(this)"></select>
+        </div>
+        <div class="cl_OcjeneMelodieHeader">
+          <label class="cl_info" uiSize="large" , uiAlign="center">Melodie</label>
+        </div>
+        <div class="cl_OcjeneInterval">
+          <label class="cl_info" uiSize="norm" uiRadius="left">max. Interval
+          </label><input type="number" id="idVin_ocjeneInterval" step="1" min="0" uiRadius="none"
+            oninput="ocjeneInterval(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_OcjeneLimitRange" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneLimitRange" uiSize="norm" uiAlign="center" uiRadius="left">limit Range
+          </label><button type="button" uiSize="norm" uiRadius="right" disabled><input type="checkbox"
+              id="idCb_ocjeneLimitRange" onclick="ocjeneLimitRange(this)"></input>
+          </button>
+        </div>
+        <div class="cl_OcjeneOctave">
+          <label class="cl_info" uiSize="norm" uiRadius="left">oktavieren
+          </label><button type="button" tabindex="-1" uiSize="square" uiRadius="none" onclick="ocjeneOctave(-1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right" onclick="ocjeneOctave(1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_OcjeneSheet">
+          <div id="idCanv_ocjeneSheet"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl_Pelvelea" style="display:none;">
+      <div class="cl_subGrid_Pelvelea cl_subGrid">
+        <div class="cl_PelveleaStarttime">
+          <label class="cl_info" uiSize="norm" uiRadius="left">Startzeit
+          </label><input type="time" id="idVin_pelveleaStarttime" min="00:00" max="23:59" step="60" uiSize="small"
+            uiRadius="none" oninput="pelveleaStarttime(this)"></input><button type="button" tabindex="-1"
+            uiSize="square" uiRadius="none" onclick="utilsVinChange(this,-1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PelveleaBreaks">
+          <label class="cl_info" uiSize="norm" uiRadius="left">Pausenlänge
+          </label><input type="time" id="idVin_pelveleaBreaks" min="00:00" max="03:00" step="60" uiSize="small"
+            uiRadius="none" oninput="pelveleaBreaks(this)"></input><button type="button" tabindex="-1" uiSize="square"
+            uiRadius="none" onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this,1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PelveleaWorktime">
+          <label class="cl_info" uiSize="norm" uiRadius="left">Arbeitszeit
+          </label><input type="time" id="idVin_pelveleaWorktime" min="00:00" max="12:00" step="60" uiSize="small"
+            uiRadius="none" oninput="pelveleaWorktime(this)"></input><button type="button" tabindex="-1" uiSize="square"
+            uiRadius="none" onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_PelveleaResult">
+          <label class="cl_outputLbl" id="idLbl_pelveleaResult"></label>
+        </div>
+        <div class="cl_PelveleaProgress">
+          <progress id="idProg_pelveleaProgress" value="100" max="100"></progress>
+        </div>
+        <div class="cl_PelveleaBreaktime" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">gesetzl. Pausenzeit:</label><label class="cl_info"
+            id="idLbl_pelveleaBreaktime" uiRadius="right">00:00</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl_GeneralSettings" style="display:none;">
+      <div class="cl_subGrid_GeneralSettings cl_subGrid">
+        <div class="cl_SettingsCopyClick">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_settingsCopyClick" onclick="settingsCopyClick(this)" checked></input>
+          </button><label class="cl_info" for="idCb_settingsCopyClick" uiRadius="right">CopyClick</label>
+        </div>
+        <div class="cl_SettingsCopySeparator">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_settingsCopySeparator" onclick="settingsCopySeparator(this)"></input>
+          </button><label class="cl_info" id="idLbl_settingsCopySeparator" for="idCb_settingsCopySeparator"
+            uiRadius="right"></label>
+        </div>
+        <div class="cl_SettingsFontsize">
+          <label class="cl_info" uiRadius="left">Text size</label><select id="idSel_settingsFontsize" uiRadius="right"
+            onChange="settingsFontsize(this)"></select>
+        </div>
+        <div class="cl_SettingsDecimals">
+          <label class="cl_info" uiRadius="left">Dezimalstellen</label><select id="idSel_settingsDecimals"
+            uiRadius="right" onChange="settingsDecimals(this)"></select>
+        </div>
+      </div>
+    </div>
+    <div class="cl_ColorSettings" style="display:none;">
+      <div class="cl_subGrid_ColorSettings cl_subGrid">
+        <div class="cl_colourSettings_0">
+          <label class="cl_info" id="idLbl_colorSetting_Navbar" uiRadius="left">
+          </label><input id="idVin_colorSetting_Navbar" type="color" data-name="Navbar" uiRadius="right" uiSize="square"
+            onchange="colorChange(this)"></input>
+        </div>
+        <div class="cl_colourSettings_1">
+          <label class="cl_info" id="idLbl_colorSetting_Gridtitle" uiRadius="left">
+          </label></select><input id="idVin_colorSetting_Gridtitle" type="color" data-name="Gridtitle" uiRadius="right"
+            uiSize="square" onchange="colorChange(this)"></input>
+        </div>
+        <div class="cl_colourSettings_2">
+          <label class="cl_info" id="idLbl_colorSetting_Background" uiRadius="left">
+          </label><input id="idVin_colorSetting_Background" type="color" data-name="Background" uiRadius="right"
+            uiSize="square" onchange="colorChange(this)"></input>
+        </div>
+      </div>
+    </div>
+    <div class="cl_UserGridLayout" style="display:none;">
+      <div class="cl_subGrid_UserGridLayout cl_subGrid">
+        <div class="cl_UserGridTable">
+          <table id="idTab_DisableUserGrid">
+            <thead id="idTabHeader_DisableUserGrid">
+            </thead>
+            <tbody id="idTabBody_DisableUserGrid">
+            </tbody>
+          </table>
+        </div>
+        <div class="cl_UserGridBtnToggle">
+          <button type="button" id="idBtn_toggleUserGrid" onclick="usergridData.toggleAllGridDisable()">Toggle
+            all</button>
+        </div>
+        <div class="cl_UserGridBtnSave">
+          <button type="button" id="idBtn_loaduserGridLayout" onclick="saveUsergridLayout()">Save</button>
+        </div>
+        <div class="cl_UserGridCanvas">
+          <div style="display:none;" id="idCanv_userGrid" tabindex="0"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cl_MaterialFilterSettings" style="display:none;">
+      <div class="cl_subGrid_MaterialFilterSettings cl_subGrid">
+        <div class="cl_MaterialFilterTable">
+          <table id="idTab_MaterialFilterTable">
+            <thead id="idTabHeader_MaterialFilterTable">
+            </thead>
+            <tbody id="idTabBody_MaterialFilterTable">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="cl_userAcc" style="display:none;">
+      <div class="cl_subGrid_userAcc cl_subGrid">
+        <div class="cl_userAcc_infos" uiFlex="vertical">
+        </div>
+        <div class="cl_userAcc_mail">
+          <label class="cl_info" uiRadius="left">Mail
+          </label><input type="email" id="idVin_userAcc_mail" uiRadius="right" uiSize="wide" placeholder="Mail"
+            required>
+        </div>
+        <div class="cl_userAcc_pass">
+          <label class="cl_info" uiRadius="left">Passwort
+          </label><input type="password" id="idVin_userAcc_pass" uiRadius="right" uiSize="wide" placeholder="Passwort"
+            required>
+        </div>
+        <div class="cl_userAcc_submit">
+          <button type="button" id="idBtn_userAcc_submit" onclick="submitUser(this)"></button>
+          <button type="button" onclick="cancelAccount()">Cancel</button>
+        </div>
+        <div class="cl_userAcc_check">
+          <button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox"
+              id="idCb_userAcc_check"></input>
+          </button><label class="cl_info" for="idCb_userAcc_check" uiRadius="right">Keep me logged in!</label>
+        </div>
+        <div class="cl_userAcc_alert">
+          <label id="idLbl_userAcc_alert"></label>
+        </div>
+      </div>
+
+      <!-- <div class="cl_Kikker" style="display:none;">
+	<div class="cl_subGrid_Kikker cl_subGrid">
+		<div class="cl_KikkerInputs">
+			<button type="button" id="idBtn_kikkerStart" onclick="kikkerStart()">Start</button>
+		</div>
+		<div class="cl_KikkerCanvas">
+			<div style="display:block;" id="idCanv_kikker" tabindex="0" onkeydown="keyPushedKikker(event)"></div>
+		</div>
+	</div>
+	</div> -->
+      <!-- <div class="cl_Robotics" style="display:none;">
+				<div class="cl_subGrid_Robotics cl_subGrid">
+				<div class="cl_RoboticsKinematicTable">
+				<table id="idTab_roboticsKinematicTable">
+				<thead id="idTabHead_roboticsKinematicTable">
+					<tr>
+						<th colspan="100%">Robot Kinematic</th>
+					</tr>
+				</thead>
+				<tbody id="idTabBody_roboticsKinematicTable">
+				</tbody>
+				</table>
+				</div>
+				<div class="cl_RoboticsTargetTable">
+				<table id="idTab_roboticsTargetTable">
+				<thead id="idTabHead_roboticsTargetTable">
+					<tr>
+						<th colspan="100%">Robot Target</th>
+					</tr>
+				</thead>
+				<tbody id="idTabBody_roboticsTargetTable">
+				</tbody>
+				</table>
+				</div>
+				<div class="cl_RoboticsOptions" id="idDiv_RoboticsOptions">
+				<button type="button" id="idBtn_roboticsCalculate" onclick="roboticsGetPose()" uiSize="wide">Calculate Angles</button>
+				<button type="button" id="idBtn_roboticsPose" onclick="roboticsGetTarget()">Get Pose</button>
+				</div>
+				<div class="cl_RoboticsResultTable">
+				<table id="idTab_roboticsResultTable">
+				<thead id="idTabHead_roboticsResultTable">
+					<tr>
+						<th colspan="100%">Results</th>
+					</tr>
+				</thead>
+				<tbody id="idTabBody_roboticsResultTable">
+				</tbody>
+				</table>
+				</div>
+				<div class="cl_RoboticsCanvas">
+				<div id="idCanv_robotics">
+				</div>
+				</div>
+				</div>
+				</div> -->
+  </main>
+  <footer id="idFoo_footer" style="z-index:200">
+    <div class="cl_footerElements">&#169;Klaus He 2022</div>
+    <div id="idDiv_footerCredits"></div>
+    <div style="text-align:right;flex-grow:1;">|||</div>
+    <select id="idSel_bgaSelect" onchange="bgaSelectAnimation(this)"></select>
+    <div onclick="bgaToggle()"><img id="idImg_bgaToggle" uiFilter="invNavbar" src="Data/Images/SVG/tPlay.svg"></img>
+    </div>
+    <div onclick="bgaClearGrid()"><img id="idImg_bgaClearGrid" uiFilter="invNavbar"
+        src="Data/Images/SVG/fullscreen.svg"></img></div>
+    <div onclick="bgaClearBackground()"><img id="idImg_bgaClearBG" uiFilter="invNavbar" class="img_trash"></img>
+    </div>
+    <div><button type="button" uiSize="square" uiRadius="left" disabled><input type="checkbox" id="idCb_bgaReset"
+          onclick="bgaToggleReset(this)" checked></input>
+      </button><label class="cl_infos" for="idCb_bgaReset" uiSize="small" uiRadius="right">Repeat</label>
+    </div>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,621 @@
+const sudokuOptions = {
+  width: 402,
+  height: 402,
+  cells: [],
+  data: null,
+  nums: [],
+  usedNums: [],
+  get availiableNums() {
+    return this.nums.filter((obj) => {
+      return !this.usedNums.includes(obj)
+    })
+  },
+  curIndex: null,
+  get board() {
+    return this.data[this.curIndex]
+  },
+  selCells: [{
+    i: 0, //Cols left-right, outer Loop
+    j: 0 //rows up-down, inner Loops
+  }],
+  cellWidth: 10,
+  timerInstance: null,
+  timerStart: null,
+  timerStop: null,
+  curHighlight: null,
+  mode: 1,
+  errorCheck: false,
+  pencilErase: false
+};
+
+function clear_cl_Sudoku() {
+  sudokuOptions.curHighlight = null;
+  sudokuOptions.usedNums = [];
+  sudokuOptions.cells = [];
+  sudokuOptions.cellWidth = Math.floor(sudokuOptions.width / 9);
+  sudokuOptions.selCells = [{
+    i: 0,
+    j: 0
+  }];
+  dbID("idCb_sudokuAutoCheck").checked = sudokuOptions.errorCheck;
+  dbID("idCb_sudokuErasePencils").checked = sudokuOptions.pencilErase;
+  //print empty cells
+  for (let i = 0; i < 9; i++) {
+    sudokuOptions.cells[i] = [];
+    for (let j = 0; j < 9; j++) {
+      sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, "", "");
+    };
+  };
+  sudokuSetBtnColor("");
+  sudokuSetDoneNumbers();
+  sudokuStartTimer(false);
+  caSU.clear();
+  caSU.redraw();
+  caSU.noLoop();
+  unfocusSudoku();
+  sudokuOptions.mode = 1;
+  sudokuInputOptionChange();
+  sudokuOptionChange();
+};
+
+function sudokuClear() {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (sudokuOptions.cells[i][j].solution === false) {
+        sudokuOptions.cells[i][j].clearCell();
+        sudokuOptions.cells[i][j].clearPencils();
+      }
+    };
+  };
+  sudokuOptions.curHighlight = null;
+  sudokuStartTimer(false);
+  caSU.redraw();
+}
+
+function sudokuLoadData(data) {
+  sudokuOptions.nums = [];
+  sudokuOptions.data = data;
+  sudokuOptions.nums = Object.keys(data).map((n) => Number(n));
+  sudokuRequest();
+}
+
+function sudokuRequest(req) {
+  if (sudokuOptions.data === null) {
+    globalP5.loadJSON("./Data/DataLists/Sudoku1000.json", sudokuLoadData, 'json');
+    return null
+  }
+  sudokuOptions.curIndex = randomObject(sudokuOptions.availiableNums);
+  sudokuOptions.usedNums.push(sudokuOptions.curIndex);
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      let index = 9 * i + j;
+      const puzzle = sudokuOptions.board.puzzle[index].replace(0, "");
+      const solution = sudokuOptions.board.solution[index];
+      sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, puzzle, solution);
+    };
+  };
+
+  sudokuStartTimer(true);
+  sudokuSetDoneNumbers();
+  focusSudoku();
+};
+
+function sudokuInputOptionChange(val = null) {
+  if (val != null) {
+    sudokuOptions.mode = val;
+  }
+  btnColor("idBtn_sudokuWrite", (sudokuOptions.mode == 1) ? "positive" : null);
+  btnColor("idBtn_sudokuPencil", (sudokuOptions.mode != 1) ? "negative" : null);
+  focusSudoku();
+};
+
+function sudokuOptionChange() {
+  sudokuOptions.errorCheck = dbID("idCb_sudokuAutoCheck").checked;
+  sudokuOptions.pencilErase = dbID("idCb_sudokuErasePencils").checked;
+  if (!sudokuOptions.errorCheck) {
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        sudokuOptions.cells[i][j].error = false;
+      };
+    };
+  } else {
+    sudokuErrors()
+  }
+  caSU.redraw();
+  focusSudoku();
+};
+
+function sudokuValidate() {
+  let errFlag = false;
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (sudokuOptions.cells[i][j].solved && sudokuOptions.cells[i][j].num != sudokuOptions.cells[i][j].solutionNum) {
+        sudokuOptions.cells[i][j].error = true;
+        errFlag = true;
+      };
+    };
+  };
+  if (!errFlag) {
+    alert("Everything looks good!");
+  } else {
+    dbID("idCb_sudokuAutoCheck").checked = true;
+    sudokuOptions.errorCheck = true;
+  };
+  focusSudoku();
+};
+
+function sudokuHint() {
+  if (!sudokuCheckFinished()) {
+    let possibilitiesA = [];
+    let possibilitiesB = [];
+    let possibilitiesC = [];
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (!sudokuOptions.cells[i][j].solution && sudokuOptions.cells[i][j].num == "") {
+          possibilitiesC.push([i, j]);
+          let pencilCount = 0;
+          for (let n = 0; n < sudokuOptions.cells[i][j].pencils.length; n++) {
+            if (sudokuOptions.cells[i][j].pencils[n].selected) {
+              pencilCount++;
+            };
+          };
+          if (pencilCount === 3) {
+            possibilitiesA.push([i, j]);
+          } else if (pencilCount > 0) {
+            possibilitiesB.push([i, j]);
+          };
+        };
+      };
+    };
+    let pt;
+    if (possibilitiesA.length > 0) { // choose from Array A
+      pt = caSU.random(possibilitiesA);
+    } else if (possibilitiesB.length > 0) { // choose from Array B
+      pt = caSU.random(possibilitiesB);
+    } else { // choose a random one, that is not solved!
+      pt = caSU.random(possibilitiesC);
+    };
+    let cell = sudokuOptions.cells[pt[0]][pt[1]];
+    cell.num = cell.solutionNum;
+    cell.mode = 1;
+    cell.correct = true;
+    cell.solution = true;
+    cell.colNum.drawn = cell.colNum.hinted;
+  };
+  focusSudoku();
+};
+
+function sudokuKeyPressed(event) {
+  event.preventDefault(); //prevent keyinput from comming thout to the window!
+  let keyInput = event.keyCode || window.event;
+  let cell = {};
+  if (keyInput == 32) {
+    sudokuOptions.mode = !sudokuOptions.mode;
+    sudokuInputOptionChange();
+  } else if (keyInput == 8) { //delete
+    for (let n = 0; n < sudokuOptions.selCells.length; n++) {
+      sudokuOptions.cells[sudokuOptions.selCells[n].i][sudokuOptions.selCells[n].j].clearCell();
+    };
+    sudokuSetDoneNumbers();
+  } else if (keyInput == 37 || keyInput == 38 || keyInput == 39 || keyInput == 40) { //left arrow
+    const x = (keyInput == 37 || keyInput == 39) ? keyInput - 38 : 0;
+    const y = (keyInput == 38 || keyInput == 40) ? keyInput - 39 : 0;
+    sudokuOptions.selCells.unshift({
+      i: (sudokuOptions.selCells[0].i + 9 + x) % 9,
+      j: (sudokuOptions.selCells[0].j + 9 + y) % 9
+    });
+    sudokuShiftPressed();
+  } else {
+    let key = event.keyCode;
+    if (key >= 97 && key <= 105) {
+      key = key - 48;
+    };
+    key = Number(String.fromCharCode(key));
+    if (key > 0 && key <= 9) {
+      // loop here over all the Array ofthe "current Cells"
+      for (let n = 0; n < sudokuOptions.selCells.length; n++) {
+        let cell = sudokuOptions.selCells[n];
+        sudokuOptions.cells[cell.i][cell.j].writeSudCell(key);
+      };
+      sudokuSetDoneNumbers();
+    };
+  };
+  caSU.redraw();
+};
+
+function sudokuMousePressed() {
+  sudokuOptions.selCells.unshift({
+    i: Math.floor(caSU.mouseX / (sudokuOptions.width / 9)),
+    j: Math.floor(caSU.mouseY / (sudokuOptions.height / 9))
+  });
+  sudokuShiftPressed();
+  caSU.redraw();
+};
+
+function sudokuShiftPressed() {
+  if (!window.event.shiftKey) {
+    sudokuOptions.selCells.splice(1);
+    return
+  };
+
+  const x = sudokuOptions.selCells[0].i;
+  const y = sudokuOptions.selCells[0].j;
+  if (sudokuOptions.selCells.length > 2) {
+    for (let i = sudokuOptions.selCells.length - 1; i > 0; i--) {
+      if (sudokuOptions.selCells[i].i == x && sudokuOptions.selCells[i].j == y) {
+        sudokuOptions.selCells.splice(i, 1);
+        sudokuOptions.selCells.splice(0, 1);
+        return
+      }
+    }
+  }
+};
+
+function sudokuGroupHighlight(obj) {
+  sudokuOptions.curHighlight = (sudokuOptions.curHighlight == obj.getAttribute("alt")) ? null : obj.getAttribute("alt");
+  caSU.redraw();
+  focusSudoku();
+};
+
+function focusSudoku() {
+  dbID("idCanv_sudoku").focus();
+  caSU.redraw();
+}
+
+function unfocusSudoku() {
+  dbID("idCanv_sudoku").blur();
+  caSU.noLoop();
+}
+
+function sudokuSetBtnColor(diff) {
+  btnColor("idBtn_sudokuWrite", (sudokuOptions.mode == 1) ? "positive" : null);
+  btnColor("idBtn_sudokuPuzzle", (diff == "puzzle") ? "positive" : null);
+}
+
+function sudokuSetDoneNumbers() {
+  let numCount = {};
+  for (let i = 1; i <= 9; i++) {
+    numCount[i] = 0;
+  };
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (sudokuOptions.cells[i][j].num != "" && sudokuOptions.cells[i][j].mode == 1) {
+        numCount[sudokuOptions.cells[i][j].num]++;
+      };
+    };
+  };
+
+  for (let i = 1; i <= 9; i++) {
+    let btnObj = dbID(`idBtn_sudokuNumOverview_${i}`);
+    let col = null;
+    if (numCount[i] == 9) col = "positive";
+    if (numCount[i] > 9) col = "negative";
+    btnColor(btnObj, col);
+    btnObj.innerHTML = i + "<sup>" + numCount[i] + "</sup>";
+  };
+};
+const caSU = new p5((c) => {
+  c.setup = function () {
+    c.canv = c.createCanvas(sudokuOptions.width + 4, sudokuOptions.height + 5);
+    c.canv.id("canvasSudoku");
+    c.canv.parent('#idCanv_sudoku');
+    c.canv.mousePressed(sudokuMousePressed);
+    c.colorMode(c.HSL);
+    c.noLoop();
+    c.background(globalValues.colors.elements.background);
+  };
+  c.draw = function () {
+    if (sudokuOptions.cells.length > 0) {
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          sudokuOptions.cells[i][j].show();
+        };
+      };
+    };
+    //draw Quadrants
+    let quadSud = sudokuOptions.cellWidth * 3;
+    caSU.noFill();
+    caSU.stroke(0);
+    caSU.strokeWeight(3);
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        caSU.square(i * quadSud, j * quadSud, quadSud);
+      };
+    };
+  };
+}, '#idCanv_sudoku');
+
+function sudokuCheckFinished() {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (!sudokuOptions.cells[i][j].correct) {
+        return false;
+      };
+    };
+  };
+  let time = dbID("idBtn_sudokuTimer").textContent;
+  sudokuStartTimer(false);
+  timeoutCanvasFinished(caSU, {
+    text1: "You finished",
+    text2: `in ${time}!`
+  })
+  return true;
+};
+
+function sudokuCheckArray(cellArr) {
+  let counterObj = {};
+  for (let c of cellArr) {
+    if (c.num == "") continue;
+    if (!counterObj.hasOwnProperty(c.num)) {
+      counterObj[c.num] = 1;
+      continue;
+    }
+    counterObj[c.num]++;
+  }
+  const counterFiltered = Object.entries(counterObj).filter(([key, value]) => value > 1);
+  if (counterFiltered.length == 0) return
+  counterObj = Object.fromEntries(counterFiltered);
+
+  for (let cell of cellArr) {
+    if (counterObj.hasOwnProperty(cell.num)) {
+      sudokuOptions.cells[cell.pos.i][cell.pos.j].error = true;
+    };
+  };
+};
+
+function sudokuErrors() {
+  //clear cells
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      sudokuOptions.cells[i][j].error = false;
+    };
+  };
+  //check Spalten
+  for (let i = 0; i < 9; i++) {
+    sudokuCheckArray(sudokuOptions.cells[i]);
+  };
+  //check Reihe
+  for (let j = 0; j < 9; j++) {
+    let tempSudRow = [];
+    for (let i = 0; i < 9; i++) {
+      tempSudRow.push(sudokuOptions.cells[i][j])
+    };
+    sudokuCheckArray(tempSudRow);
+  };
+  //check Quads
+  let tempSudQuad = [];
+  let x, y;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      tempSudQuad = [];
+      for (let n = 0; n < 3; n++) {
+        for (let m = 0; m < 3; m++) {
+          x = m + i * 3;
+          y = n + j * 3;
+          tempSudQuad.push(sudokuOptions.cells[x][y]);
+        };
+      };
+      sudokuCheckArray(tempSudQuad);
+    };
+  };
+};
+
+class SudokuCell {
+  constructor(i, j, w, quest, sol) {
+    this.pos = {
+      i: i,
+      j: j
+    };
+    this.w = w;
+    this.x = i * w;
+    this.y = j * w;
+    this.solution = (quest != "");
+    this.solutionNum = sol;
+    this.num = (quest == "") ? "" : sol;
+    this.selected = false;
+    this.solved = false;
+    this.mode = 1; //1 ==  big letters, 0 = pencilmarks!
+    this.correct = (quest != "");
+    this.error = false;
+    this.highlighted = false;
+    this.colCell = {
+      drawn: [0, 0, 100],
+      correct: [0, 0, 100],
+      get error() {
+        return [...globalValues.colors.elements.btnNegative, 0.5]
+      },
+      selected: [60, 100, 60],
+      get highlight() {
+        return [...globalValues.colors.elements.baseColor, 0.3]
+      }
+    };
+    this.colNum = {
+      drawnCol: null,
+      get drawn() {
+        return this.drawnCol;
+      },
+      set drawn(col) {
+        this.drawnCol = col;
+      },
+      solved: [240, 100, 50],
+      get solution() {
+        return globalValues.colors.elements.baseColor
+      },
+      get hinted() {
+        return globalValues.colors.elements.btnPositive
+      }
+    };
+    this.colNum.drawn = (quest == "") ? this.colNum.solved : this.colNum.solution;
+    this.createPencils();
+  };
+
+  createPencils() {
+    this.pencils = [];
+    this.clearPencils();
+  };
+  clearPencils() {
+    for (let n = 0; n < 9; n++) {
+      this.pencils[n] = new SudokuCell.Pencil(n, caSU.floor(this.w / 3), this.x, this.y);
+    };
+  }
+  show() {
+    caSU.fill(255);
+    caSU.square(this.x, this.y, this.w);
+    caSU.strokeWeight(1);
+    caSU.stroke(0);
+    this.chooseCellColor();
+    caSU.fill(this.colCell.drawn);
+    caSU.square(this.x, this.y, this.w);
+    caSU.noStroke();
+    caSU.textAlign(caSU.CENTER, caSU.CENTER);
+    if (this.mode == 1) {
+      caSU.fill(this.colNum.drawn);
+      caSU.textSize(this.w * 0.7);
+      caSU.text(this.num, this.x + this.w / 2, this.y + this.w / 2);
+    } else if (this.mode == 0) {
+      this.showAllPencils();
+    };
+  };
+
+  chooseCellColor() {
+    if (this.error) {
+      this.colCell.drawn = this.colCell.error;
+    } else if (this.num == sudokuOptions.curHighlight) {
+      this.colCell.drawn = this.colCell.highlight;
+    } else {
+      this.colCell.drawn = this.colCell.correct;
+    };
+    if (sudokuOptions.selCells.some(arrObj => JSON.stringify(arrObj) === JSON.stringify(this.pos))) {
+      this.colCell.drawn = this.colCell.selected;
+    };
+  };
+
+  clearCell() {
+    if (!this.solution) {
+      this.num = "";
+      this.solved = false;
+      this.correct = false;
+      this.error = false;
+      this.colNum.drawn = this.colNum.solved;
+      if (this.mode == 0) {
+        this.createPencils();
+      };
+      this.mode = !sudokuOptions.mode;
+      //after changing to a cell check for errors!
+      if (sudokuOptions.errorCheck) {
+        sudokuErrors();
+      };
+    };
+  };
+
+  writeSudCell(val) {
+    if (this.solution) return
+    if (this.num === val && sudokuOptions.mode == 1) {
+      this.clearCell();
+      return
+    }
+    if (sudokuOptions.mode == 1) {
+      this.mode = sudokuOptions.mode;
+      this.solved = true;
+      this.num = val;
+      this.correct = (this.num == this.solutionNum);
+    } else if (!this.solved && sudokuOptions.mode == 0) {
+      this.mode = sudokuOptions.mode;
+      this.pencils[val - 1].selected = !this.pencils[val - 1].selected;
+    };
+    let finished = sudokuCheckFinished();
+    if (!finished && sudokuOptions.errorCheck) {
+      sudokuErrors();
+    };
+    if (sudokuOptions.pencilErase && this.num != "") {
+      this.erasePencil();
+    };
+  };
+
+  showAllPencils() {
+    this.pencils.forEach((p) => p.showPencil())
+  };
+  erasePencil() {
+    this.eraseSudokuPencil(sudokuOptions.cells[this.pos.i]);
+    let tempSudRow = [];
+    for (let i = 0; i < 9; i++) {
+      tempSudRow.push(sudokuOptions.cells[i][this.pos.j])
+    };
+    this.eraseSudokuPencil(tempSudRow);
+    let tempSudQuad = [];
+    let x, y;
+    let i = caSU.floor(this.pos.i / 3);
+    let j = caSU.floor(this.pos.j / 3);
+    for (let n = 0; n < 3; n++) {
+      for (let m = 0; m < 3; m++) {
+        let x = m + i * 3;
+        let y = n + j * 3;
+        tempSudQuad.push(sudokuOptions.cells[x][y]);
+      };
+    };
+    this.eraseSudokuPencil(tempSudQuad);
+  };
+
+  eraseSudokuPencil(cellArr) {
+    let num = sudokuOptions.cells[this.pos.i][this.pos.j].num
+    for (let c of cellArr) {
+      sudokuOptions.cells[c.pos.i][c.pos.j].pencils[num - 1].selected = false;
+    };
+  };
+};
+
+SudokuCell.Pencil = class {
+  constructor(id, pw, cx, cy) {
+    this.pid = id;
+    this.pw = pw;
+    this.px = cx + (id % 3) * pw;
+    this.py = cy + caSU.floor(id / 3) * pw;
+    this.selected = false;
+    this.sColNum = [240, 100, 50];
+  };
+
+  showPencil() {
+    caSU.textSize(this.pw * 0.8);
+    if (this.selected) {
+      caSU.noStroke();
+      caSU.fill(this.sColNum);
+      caSU.text(this.pid + 1, this.px + this.pw / 2, this.py + this.pw / 2);
+    };
+  };
+};
+
+function sudokuStopTimer() {
+  if (sudokuOptions.timerInstance != null) {
+    sudokuOptions.timerStop = new Date();
+    clearInterval(sudokuOptions.timerInstance);
+    sudokuOptions.timerInstance = null;
+  } else {
+    const now = new Date();
+    sudokuOptions.timerStart = now - (now - sudokuOptions.timerStop);
+    sudokuOptions.timerInstance = setInterval(sudokuTimer, 1000);
+  }
+};
+
+function sudokuStartTimer(start) {
+  if (start) {
+    clearInterval(sudokuOptions.timerInstance);
+    sudokuOptions.timerStart = new Date(Date.now());
+    sudokuTimer();
+    sudokuOptions.timerInstance = setInterval(sudokuTimer, 1000);
+  } else {
+    sudokuOptions.timerStop = new Date();
+    clearInterval(sudokuOptions.timerInstance);
+    sudokuOptions.timerInstance = null;
+  };
+};
+
+function sudokuTimer() {
+  let now = new Date();
+  let distance = (now - sudokuOptions.timerStart) / 1000;
+  let minutes = Math.floor(distance / 60);
+  let seconds = Math.floor(distance % 60);
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+  let text = minutes + ":" + seconds;
+  dbID("idBtn_sudokuTimer").textContent = text;
+};
