@@ -19,8 +19,7 @@
     "npm": "^7.15.0",
     "npm-update-all": "^1.0.1",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6",
-    "socket.io": "^4.4.1"
+    "request-promise": "^4.2.6"
   },
   "scripts": {
     "start": "node server.js"
