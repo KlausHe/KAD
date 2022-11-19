@@ -15,8 +15,6 @@
     "mem": "8.0.0",
     "newsapi": "^2.4.1",
     "node-where": "^1.1.0",
-    "npm": "^7.15.0",
-    "npm-update-all": "^1.0.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   },
