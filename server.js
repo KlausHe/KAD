@@ -17,7 +17,7 @@ class User {
 };
 let users = {};
 
-require('dotenv').config();
+// require('dotenv').config();
 //set up the Server
 const redirectPath = "/K-Universe";
 const Compression = require('compression');
