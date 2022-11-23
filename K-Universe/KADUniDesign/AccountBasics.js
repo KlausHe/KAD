@@ -620,8 +620,6 @@ function saveDiscipuliRequest(category = null) {
     [category]: nuncDiscipuli.saves[category],
     uid: nuncDiscipuli.cred.uid
   }
-  console.log("savedata:", category, data);
-
   utilsSocketPost("SaveDiscipuli", data);
 };
 

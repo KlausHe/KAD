@@ -6,9 +6,9 @@ const howaData = {
 };
 
 if (process.env.NODE_ENV != "production") {
-  require('dotenv').config();
+  require("dotenv").config();
 }
-
+const port = process.env.PORT || 3000
 const Axios = require('axios');
 //set up the Server
 const Compression = require('compression');
@@ -19,18 +19,13 @@ App.use(Express.json());
 // compress all responses
 App.use(Compression());
 App.use(Express.static(__dirname));
+App.listen(process.env.PORT);
 App.get('/', (req, res) => res.redirect(redirectPath));
-
-const {
-  createServer
-} = require("http");
-const HttpServer = createServer(App);
-const https = require('https');
-HttpServer.listen(process.env.PORT);
-console.log(`Started @ Port: ${HttpServer.address().port}`)
-
+if (process.env.NODE_ENV != "production") {
+  console.log(`Started @ Port: ${port}`)
+}
 const ServiceAccount = require("./serviceAccountKey.json");
-const Admin = require('firebase-admin');
+const Admin = require("firebase-admin");
 Admin.initializeApp({
   credential: Admin.credential.cert(ServiceAccount),
   databaseURL: "https://kad-universe.firebaseio.com"
@@ -39,12 +34,12 @@ let FBData = Admin.firestore();
 const FBUserSettings = FBData.collection("User_Settings");
 const FieldValue = Admin.firestore.FieldValue;
 
-const News_API = require('newsapi');
+const News_API = require("newsapi");
 const NewsApi = new News_API(process.env.API_NEWS_KEY);
 const {
   generateRequestUrl,
   normaliseResponse
-} = require('google-translate-api-browser');
+} = require("google-translate-api-browser");
 
 // -----------  Server/Client - Communication ---------------------
 App.post(`${redirectPath}/UserAccLogin/`, (req, res) => {
@@ -109,7 +104,6 @@ App.post(`${redirectPath}/SaveDiscipuli/`, (req, res) => {
   const uid = data.uid;
   delete data.uid
   const key = Object.keys(data)[0];
-  const value = data[key];
   const saveDoc = FBUserSettings.doc(uid);
   //delete this Dataset with its Values
   saveDoc.update({
