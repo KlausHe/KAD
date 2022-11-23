@@ -54,29 +54,24 @@ function clear_cl_Lotto() {
   resetInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig)
   lottoOptions.selGame = Object.keys(lottoOptions.games)[0]
   lottoOptions.randomiziation = 0;
-
   clearTimeout(lottoOptions.randomTimeout);
   createLotto(true);
   dbID("idLbl_lottoOverview").textContent = `...`;
-
-  enableBtn("idBtn_lottoShowSaved", nuncDiscipuli.checkLogin);
-  dbID("idBtn_lottoShowSaved").textContent = "...";
+  lottoUpdateSavegames();
   lottoGetGames();
 };
 
 // UserSaves----------------------------------------------------------------------------------------------------------------------
 
-function lottoShowSaved() {
-  console.log("show saved");
-};
-
 function lottoUpdateSavegames() {
-  console.log("update");
-  enableBtn("idBtn_lottoShowSaved", nuncDiscipuli.checkLogin);
-  if ((lottoOptions.games[lottoOptions.selGame].savedSet.length > 0) && lottoOptions.games[lottoOptions.selGame].savedSet.date != null) {
-    dbID("idBtn_lottoShowSaved").textContent = convertDate(lottoOptions.games[lottoOptions.selGame].savedSet.date);
+  if (lottoOptions.games[lottoOptions.selGame].savedSet.date == null) {
+    dbID("idLbl_lottoShowSaved").textContent = "Nichts gespeichert";
   } else {
-    dbID("idBtn_lottoShowSaved").textContent = "Nichts gespeichert";
+
+    dbID("idLbl_lottoShowSaved").textContent = convertDate(lottoOptions.games[lottoOptions.selGame].savedSet.date, {
+      fullYear: true,
+      sep: "."
+    });
   }
 }
 
@@ -108,12 +103,17 @@ function lottoRandom() {
     };
   };
   printRandom();
+
+
+
+  //----
 };
 
 function lottoReset() {
   lottoOptions.randomiziation = 0;
   clearTimeout(lottoOptions.randomTimeout);
   createLotto(true);
+  lottoUpdateSavegames()
 }
 
 function lottoGameSelect() {
@@ -149,7 +149,6 @@ function createLotto(clear = false) {
   for (let i = 0; i < colsStar; i++) {
     lottoOptions.cells.push(new LottoCell(i + lottoOptions.games[lottoOptions.selGame].starStart, i, rows, wStar, "star", wCell));
   }
-  // dbID("idBtn_lottoShowSaved").textContent = `Latest: ${convertDate(lottoOptions.games[lottoOptions.selGame].savedSet.date)}`;
   caLO.redraw();
 };
 

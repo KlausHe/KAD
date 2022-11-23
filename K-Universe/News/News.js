@@ -67,9 +67,9 @@ function newsError(errMsg) {
 }
 
 function newsReturn(data) {
-  if (data.err !== undefined) {
-    console.log(data.err);
-    newsError(data.err);
+  if (data.error) {
+    console.log(data.error);
+    newsError(data.error);
   } else if (data.status != "ok" || data.articles.length == 0) {
     newsError("No NEWS found for this Topic!");
   } else {

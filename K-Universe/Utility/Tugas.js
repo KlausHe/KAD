@@ -1,53 +1,50 @@
-let tugasData = {};
+let tugasOptions = {}
 
 function clear_cl_Tugas() {
-  tugasData = {};
+  tugasOptions = {};
   createTugas();
   resetInput("idArea_tugasEntry", "Paste to Tugas")
 };
 
 function clearRowTugas(name) {
-  delete tugasData[name];
+  delete tugasOptions[name];
   createTugas();
 };
 
 function editRowTugas(name) {
-  delete tugasData[name];
+  delete tugasOptions[name];
   dbID("idArea_tugasEntry").value = name;
 };
 
 function newTugas() {
   const value = dbID("idArea_tugasEntry").value.toString().trim();
-  if (value != false) return
-  tugasData[value] = false;
+  if (value == "") return
+
+  tugasOptions[value] = false;
   dbID("idArea_tugasEntry").value = "";
   createTugas();
-  if (nuncDiscipuli.checkLogin) {
-    saveDiscipuliRequest(contentGrid.cl_Tugas.userStoreDB);
-  };
+  saveDiscipuliRequest(nuncDiscipuli.saves.Tugas);
 }
 
 function createTugas() {
   //clear list
   clearTable(idTabBody_tugas);
-  // sort tugasList
-  let TugasTemp = [];
-  for (let i = 0; i < Object.keys(tugasData).length; i++) {
-    TugasTemp.push({
-      name: Object.keys(tugasData)[i],
-      state: Object.values(tugasData)[i]
+  let tempList = [];
+  for (let i = 0; i < Object.keys(tugasOptions).length; i++) {
+    tempList.push({
+      name: Object.keys(tugasOptions)[i],
+      state: Object.values(tugasOptions)[i]
     });
   };
-
-  const TugasSorted = sortArrayByKey(TugasTemp, "name", false, true);
+  const sortedList = sortArrayByKey(tempList, "name", false, true);
 
   //create list
-  for (let i = 0; i < TugasSorted.length; i++) {
+  for (let i = 0; i < sortedList.length; i++) {
     let row = idTabBody_tugas.insertRow(idTabBody_tugas.rows.length);
 
     // get the data from the array
-    const entryValue = TugasSorted[i].name;
-    const entryState = TugasSorted[i].state;
+    const entryValue = sortedList[i].name;
+    const entryState = sortedList[i].state;
 
     //clearButton
     tableAddCell(row, {
@@ -102,10 +99,10 @@ function createTugas() {
         let entry = curRow.cells[3].textContent;
         if (curRow.cells[2].childNodes[0].checked) {
           label.innerHTML = `<del>${entry}</del>`;
-          tugasData[entry] = true;
+          tugasOptions[entry] = true;
         } else {
           label.textContent = entry;
-          tugasData[entry] = false;
+          tugasOptions[entry] = false;
         }
       }
     });

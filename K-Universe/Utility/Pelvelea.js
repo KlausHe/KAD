@@ -46,15 +46,14 @@ const pelveleaOptions = {
     val: null,
     valOrig: "00:00",
   },
-  progress: {
-    // timer: null,
-    // overtimer: null
-  },
-  timer: null
+  progress: {},
+  timer: null,
+  maxWorktime: false,
 };
 
 function clear_cl_Pelvelea() {
   clearTimeout(pelveleaOptions.timer);
+  pelveleaOptions.maxWorktime = false;
   pelveleaOptions.timer = null;
   pelveleaOptions.starttime.val = pelveleaOptions.starttime.valOrig;
   dbID("idVin_pelveleaStarttime").value = pelveleaOptions.starttime.val;
@@ -119,11 +118,17 @@ function pelveleaBreaktime() {
   const distance = (new Date() - pelveleaOptions.starttime.date) / 60000;
 
   function breaks(mins) {
-    dbID("idLbl_pelveleaBreaktime").textContent = `${utilsMinutesToObj(mins).h}:${utilsMinutesToObj(mins).m}`
+    const obj = utilsMinutesToObj(mins);
+    dbID("idLbl_pelveleaBreaktime").textContent = `${obj.h}:${obj.m}`
   }
-  if (distance > 540) { // 9 Stunden
+  if (distance >= 600) { // 10 Stunden
+    if (!pelveleaOptions.maxWorktime) {
+      confirm("Maximale Arbeitszeit überschritten!!!");
+      pelveleaOptions.maxWorktime = !pelveleaOptions.maxWorktime
+    }
+  } else if (distance >= 540) { // 9 Stunden
     breaks(45)
-  } else if (distance > 360) {  // 6 Stunden
+  } else if (distance >= 360) { // 6 Stunden
     breaks(30)
   } else {
     breaks(0)

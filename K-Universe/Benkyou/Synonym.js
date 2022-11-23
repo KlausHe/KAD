@@ -7,7 +7,11 @@ const synonymOptions = {
 
 function clear_cl_Synonym() {
   resetInput("idVin_synonymEntry", "Search for synonyms")
-  clearTable("idTabBody_synonym");
+  clearTable("idTabHeader_synonym_baseform");
+  clearTable("idTabHeader_synonym1");
+  clearTable("idTabHeader_synonym2");
+  clearTable("idTabBody_synonym1");
+  clearTable("idTabBody_synonym2");
 };
 
 function newSynonym() {
@@ -31,15 +35,28 @@ async function synonymGetData() {
 };
 
 function synonymCreateTable() {
-  clearTable("idTabBody_synonym");
-  let row = insertTableRow("idTabBody_synonym");
+  clearTable("idTabHeader_synonym_baseform");
+  clearTable("idTabHeader_synonym1");
+  clearTable("idTabHeader_synonym2");
+  clearTable("idTabBody_synonym1");
+  clearTable("idTabBody_synonym2");
+
+
   if (synonymOptions.data.hasOwnProperty("baseforms")) {
-    row = insertTableRow("idTabBody_synonym");
+    let row = insertTableRow("idTabHeader_synonym_baseform");
     tableAddCellHeader(row, {
-      names: ["synonym", "SubstringTitle"],
+      names: ["synonym", "BaseformTitle"],
       type: "Lbl",
-      text: `Grundform: "${synonymOptions.data.baseforms[0]}"`,
-      colSpan: 3,
+      text: "Grundform",
+      cellStyle: {
+        textAlign: "left"
+      }
+    });
+    tableAddCellHeader(row, {
+      names: ["synonym", "BaseformWord"],
+      type: "Lbl",
+      text: synonymOptions.data.baseforms[0],
+      colSpan: 2,
       cellStyle: {
         textAlign: "left"
       }
@@ -50,7 +67,7 @@ function synonymCreateTable() {
     sets = [...sets, ...synonymOptions.data.synsets[i].terms.map(index => index.term)];
   };
   if (sets.length > 0) {
-    row = insertTableRow("idTabBody_synonym");
+    row = insertTableRow("idTabHeader_synonym1");
     tableAddCellHeader(row, {
       names: ["synonym", "synonymTitle"],
       type: "Lbl",
@@ -61,7 +78,7 @@ function synonymCreateTable() {
       }
     });
     for (let i = 0; i < sets.length; i++) {
-      row = insertTableRow("idTabBody_synonym");
+      row = insertTableRow("idTabBody_synonym1");
       tableAddCell(row, {
         names: ["synonym", "synset", i],
         type: "Lbl",
@@ -97,8 +114,10 @@ function synonymCreateTable() {
       };
     };
   };
+
+
   if (synonymOptions.data.hasOwnProperty("similarterms")) {
-    row = insertTableRow("idTabBody_synonym");
+    row = insertTableRow("idTabHeader_synonym2");
     tableAddCellHeader(row, {
       names: ["synonym", "similar", "title"],
       type: "Lbl",
@@ -109,7 +128,7 @@ function synonymCreateTable() {
       }
     });
     for (let i = 0; i < Object.keys(synonymOptions.data.similarterms).length; i++) {
-      row = insertTableRow("idTabBody_synonym");
+      row = insertTableRow("idTabBody_synonym2");
       tableAddCell(row, {
         names: ["synonym", "similarterms", i],
         type: "Lbl",

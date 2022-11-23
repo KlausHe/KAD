@@ -1,14 +1,16 @@
 const speechTranslateOptions = {
   synthObj: window.speechSynthesis,
   output: false,
-  resetCouner: 0
+  resetCouner: 0,
+  textDE: "Text übersetzen",
+  textEN: "Translate Text",
 }
 
 function clear_cl_SpeechTranslate() {
   speechTranslateOptions.output = false;
   speechTranslateOptions.synthObj.cancel();
-  resetInput("idArea_speechFromText", "Write Text to translate!")
-  resetInput("idArea_speechToText", "The translation comes here by itself!")
+  resetInput("idArea_speechFromText", speechTranslateOptions.textDE)
+  resetInput("idArea_speechToText", speechTranslateOptions.textEN)
   let voicesUnsorted = speechTranslateOptions.synthObj.getVoices();
   if (voicesUnsorted.length == 0 && speechTranslateOptions.resetCouner < 20) {
     speechTranslateOptions.resetCouner++;
@@ -91,6 +93,18 @@ function translateSwitch() {
   speechTranslatePopulateSpeech();
 };
 
+function speechLanguageChange() {
+  let objFrom = dbID("idSel_translateSelectorFrom");
+  let objTo = dbID("idSel_translateSelectorTo");
+  let language = {
+    from: objFrom.options[objFrom.selectedIndex].dataset.code,
+    fromSplit: objFrom.options[objFrom.selectedIndex].dataset.code.split("-")[0],
+    to: objTo.options[objTo.selectedIndex].dataset.code,
+    toSplit: objTo.options[objTo.selectedIndex].dataset.code.split("-")[0]
+  };
+  return language;
+};
+
 function speechSpeak(out) {
   speechTranslateOptions.output = (out == 1) ? true : false;
   dbID("idArea_speechToText").value = "...";
@@ -99,7 +113,8 @@ function speechSpeak(out) {
 
 function speechTranslateRequest(text) {
   if (text === undefined || text == "") {
-    text = "I have nothing to say!";
+    dbID("idArea_speechToText").value = "";
+    return;
   };
   let languages = speechLanguageChange();
   let data = {
@@ -111,18 +126,13 @@ function speechTranslateRequest(text) {
 };
 
 function speechTranslateReturn(data) {
-  if (Object.keys(data).length > 1) {
-    let text = data.text;
-    let pronunciation = "";
-    if (data.pronunciation !== undefined && data.pronunciation != "") {
-      pronunciation = "\n(" + data.pronunciation + ")"
-    };
-    dbID("idArea_speechToText").value = data.text + pronunciation;
-    if (speechTranslateOptions.output) {
-      speechSpeakOnly(idArea_speechToText, idSel_speechSelectorTo);
-    };
-  } else {
+  if (data.error) {
     alert("Sorry, hat nicht geklappt.\nVersuchs nochmal!");
+  }
+  const pronunciation = (data.pronunciation == null) ? "" : `\n(${data.pronunciation})`;
+  dbID("idArea_speechToText").value = `${data.text}${pronunciation}`;
+  if (speechTranslateOptions.output) {
+    speechSpeakOnly(idArea_speechToText, idSel_speechSelectorTo);
   };
 };
 
@@ -143,16 +153,4 @@ function speechSpeakOutput(dataText, lang) {
     return voice.lang == lang;
   })[0];
   speechTranslateOptions.synthObj.speak(output);
-};
-
-function speechLanguageChange() {
-  let objFrom = dbID("idSel_translateSelectorFrom");
-  let objTo = dbID("idSel_translateSelectorTo");
-  let language = {
-    from: objFrom.options[objFrom.selectedIndex].dataset.code,
-    fromSplit: objFrom.options[objFrom.selectedIndex].dataset.code.split("-")[0],
-    to: objTo.options[objTo.selectedIndex].dataset.code,
-    toSplit: objTo.options[objTo.selectedIndex].dataset.code.split("-")[0]
-  };
-  return language;
 };

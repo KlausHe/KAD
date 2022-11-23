@@ -862,11 +862,15 @@
         </div>
         <div class="cl_SynonymTable">
           <table>
-            <theader>
-            </theader>
-            <tbody id="idTabBody_synonym">
-              <tr>
-              </tr>
+            <thead id="idTabHeader_synonym_baseform">
+            </thead>
+            <thead id="idTabHeader_synonym1">
+            </thead>
+            <tbody id="idTabBody_synonym1">
+            </tbody>
+            <thead id="idTabHeader_synonym2">
+            </thead>
+            <tbody id="idTabBody_synonym2">
             </tbody>
           </table>
         </div>
@@ -1858,8 +1862,7 @@
             onchange="lottoGameSelect()" uiRadius="right" uiSize="norm"></select>
         </div>
         <div class="cl_LottoSavedGame" uiWrap="nowrap" style="display:none;">
-          <label class="cl_info" uiRadius="left">Saved Game</label><button id="idBtn_lottoShowSaved" type="button"
-            uiRadius="right" disabled onclick="lottoShowSaved()"></button>
+          <label class="cl_info" uiRadius="left">Saved Game</label><label class="cl_info" id="idLbl_lottoShowSaved" uiRadius="right">...</label>
         </div>
         <div class="cl_LottoGetGames" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Latest Games</label><input type="number" id="idVin_lottoNumberOfGames"

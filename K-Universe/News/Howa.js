@@ -193,14 +193,6 @@ async function howaGetLocation() {
   if (input == "") return
   howaData.pos.location = input;
   howaReqestData();
-  //   const url = `https://www.7timer.info/bin/api.pl?lat=${howaData.latOrig}&lon=${howaData.lonOrig}&product=civil&output=json`
-  //   try {
-  //     let response = await fetch(url);
-  //     let d = await response.json();
-  //     console.log(d);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
 }
 
 function howaReqestData() {
@@ -226,7 +218,7 @@ function howaReqestData() {
 // }
 
 function howaReturn(data) {
-  if (data.statusCode != undefined && data.statusCode != 200) {
+  if (data.error) {
     dbID('idLbl_howaNow').textContent = "Stadt nicht gefunden";
     return;
   };

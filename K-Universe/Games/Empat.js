@@ -226,7 +226,6 @@
    if (nextPos == null) {
      const randPos = Math.floor(valueConstrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
      nextPos = getNearestValueInArray(opts.arr, randPos);
-     console.log(nextPos);
    }
    empatOptions.players[empatOptions.curPlayer].setPosition(nextPos)
    setTimeout(() => {

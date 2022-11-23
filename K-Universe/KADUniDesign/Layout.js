@@ -15,7 +15,7 @@ const contentLayout = {
   contentLength: 0,
   prevNavContent: null,
   prevNavFullscreen: null,
-  defaultPage: globalValues.hostDebug ? "cl_Howa" : "Universe"
+  defaultPage: globalValues.hostDebug ? "cl_Lotto" : "Universe"
 }
 
 function layoutHideLoadingscreen() {

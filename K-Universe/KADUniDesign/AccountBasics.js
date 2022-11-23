@@ -22,7 +22,7 @@ let nuncDiscipuli = {
     };
     nuncDiscipuli.saves.MaterialFilterSettings = [...materialFilterOptions.orig];
     nuncDiscipuli.saves.Material = [...materialOptions.matListOrig];
-    nuncDiscipuli.saves.Tugas = [];
+    nuncDiscipuli.saves.Tugas = {};
     nuncDiscipuli.saves.Howa = "Berlin";
     nuncDiscipuli.saves.Covid = "World";
     nuncDiscipuli.saves.WikiSearch = {
@@ -30,6 +30,7 @@ let nuncDiscipuli = {
       content: null
     };
     nuncDiscipuli.saves.Lotto = {
+      startup: true,
       "Eurojackpot": {
         tips: [],
         star: [],
@@ -142,10 +143,10 @@ let nuncDiscipuli = {
       // materialSelectedTable();
     },
     get Tugas() {
-      return tugasData;
+      return tugasOptions;
     },
     set Tugas(data) {
-      tugasData = deepClone(data);
+      tugasOptions = deepClone(data);
       createTugas();
     },
     get WikiSearch() {
@@ -174,13 +175,13 @@ let nuncDiscipuli = {
         clearTable("idTabBody_wikiTitleTable");
       };
     },
-
     get Lotto() {
       let retData = {};
       for (const [key, values] of Object.entries(lottoOptions.games)) {
-        retData[key] = values.savedSet.tips;
-        retData[key] = values.savedSet.star;
-        retData[key] = values.savedSet.date;
+        retData[key] = {}
+        retData[key]["tips"] = values.savedSet.tips;
+        retData[key]["star"] = values.savedSet.star;
+        retData[key]["date"] = values.savedSet.date;
       }
       return retData
     },
@@ -190,8 +191,11 @@ let nuncDiscipuli = {
         if (data[key] != null && data[key] != "") {
           lottoOptions.games[key].savedSet["tips"] = (data[key].date != null) ? [...data[key].tips] : [];
           lottoOptions.games[key].savedSet["star"] = (data[key].date != null) ? [...data[key].star] : [];
-          lottoOptions.games[key].savedSet["date"] = (data[key].date != null) ? data[key].date : "";
+          lottoOptions.games[key].savedSet["date"] = (data[key].date != null) ? data[key].date : null;
         }
+      }
+      if (!data.startup) {
+        lottoUpdateSavegames();
       }
       lottoOptions.randomiziation = 0;
       clearTimeout(lottoOptions.randomTimeout);
@@ -314,8 +318,7 @@ function toggleLayout() {
   }
   if (nuncDiscipuli.checkLogin) {
     // logged in
-    utilsSocketPost("UserAcc", {
-      updateType: "login",
+    utilsSocketPost("UserAccLogin", {
       uid: nuncDiscipuli.cred.uid
     })
     //logged in
@@ -515,7 +518,7 @@ function submitUser(btn) {
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence[keepLogin]).then(() => {
           return firebase.auth().signInWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim()).then(
             (response) => {
-              userAccGet(response.user.uid, nuncDiscipuli.cred.email);
+              userAccLogin(response.user.uid);
             }).catch((error) => { //   userAccError(error);    
           })
         })
@@ -528,7 +531,7 @@ function submitUser(btn) {
         .then(() => {
           return firebase.auth().createUserWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim()).then(
             (response) => {
-              userAccGet(response.user.uid, nuncDiscipuli.cred.email);
+              userAccRegister(response.user.uid, nuncDiscipuli.cred.email);
             })
         })
         .catch((error) => {
@@ -543,13 +546,19 @@ function submitUser(btn) {
   };
 };
 
-function userAccGet(uid, mail) {
+function userAccLogin(uid) {
   nuncDiscipuli.cred.uid = uid;
-  utilsSocketPost("UserAcc", {
-    updateType: nuncDiscipuli.updateType,
+  utilsSocketPost("UserAccLogin", {
+    uid
+  });
+};
+
+function userAccRegister(uid, mail) {
+  nuncDiscipuli.cred.uid = uid;
+  utilsSocketPost("UserAccRegister", {
     uid: uid,
     email: mail,
-    saves: nuncDiscipuli.saves || null
+    saves: nuncDiscipuli.saves
   });
 };
 
@@ -559,12 +568,22 @@ function userAccError(error) {
 };
 
 //---------------NODE RETURNS--------------------------
-function userAccReturn(data) {
-  if (data.err != null) {
-    console.error(err);
-    return
+function userAccLoginReturn(data) {
+  userAccReturn(data)
+}
+
+function userAccRegisterReturn(data) {
+  userAccReturn(data)
+}
+
+function userAccReturn(data = null) {
+  if (data != null) {
+    if (data.error) {
+      console.error(data.error);
+      return
+    }
+    loadDiscipuliReturn(data.saves)
   }
-  loadDiscipuliReturn(data.saves)
   dbIDStyle("idDiv_navBar_User").display = "initial";
   dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
   layoutNavTitle();
@@ -574,19 +593,12 @@ function userAccReturn(data) {
 
 //--------------Load Single DATA-------------
 function loadDiscipuliRequest(category = null) {
-  if (category) {
-    console.log("single");
-    utilsSocketPost("LoadDiscipuli", {
-      category: category,
-      uid: nuncDiscipuli.cred.uid
-    });
-  } else if (category === null) {
-    console.log("all");
-    utilsSocketPost("LoadDiscipuli", {
-      category: Object.keys(nuncDiscipuli.saves),
-      uid: nuncDiscipuli.cred.uid
-    });
-  };
+  if (!nuncDiscipuli.checkLogin) return
+  if (category === null) return
+  utilsSocketPost("LoadDiscipuli", {
+    category: category,
+    uid: nuncDiscipuli.cred.uid
+  });
 };
 
 function loadDiscipuliReturn(data) {
@@ -600,22 +612,25 @@ function loadDiscipuliReturn(data) {
 };
 
 //--------------Save/Update Single DATA-------------
-function saveDiscipuliRequest(category) {
-  if (category) {
-    utilsSocketPost("SaveDiscipuli", {
-      [category]: nuncDiscipuli.saves[category],
-      uid: nuncDiscipuli.cred.uid
-    });
-  };
+function saveDiscipuliRequest(category = null) {
+  if (!nuncDiscipuli.checkLogin) return
+  if (category == null) return
+
+  const data = {
+    [category]: nuncDiscipuli.saves[category],
+    uid: nuncDiscipuli.cred.uid
+  }
+  console.log("savedata:", category, data);
+
+  utilsSocketPost("SaveDiscipuli", data);
 };
 
 function saveDiscipuliReturn(data) {
-  if (data == "Lotto") {
-    setTimeout(() => {
-      enableBtn("idBtn_lottoSave", true); //enable Button
-    }, 500);
-  };
+  if (data.error != null) {
+    console.error(error)
+    return
+  }
   setTimeout(() => {
-    dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${data}`).filter = "invert(0)";
+    dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${data.key}`).filter = "invert(0)";
   }, 500);
 };

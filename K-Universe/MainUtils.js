@@ -2,9 +2,10 @@
  *  @param {String} app Name of *.js File, used in Rest-Endpoint
  *  @param {Object} data data-Object
  */
-async function utilsSocketPost(app, data) {
+async function utilsSocketPost(app = null, data) {
+  if (app == null) return
   if (typeof data != "object") {
-    console.log("NO OBJECT", data);
+    console.error("NO OBJECT", data);
     return
   }
   const request = new Request(`${app}/`, {
@@ -385,10 +386,10 @@ function convertDate(d = null, opts = {
   const day = (opts.leading) ? ("0" + date.getDate()).slice(-2) : `${date.getDate()}`;
   const month = (opts.leading) ? ("0" + (date.getMonth() + 1)).slice(-2) : `${date.getMonth()+1}`;
   const year = (opts.fullYear) ? date.getFullYear() : parseInt(date.getFullYear().toString().slice(2, 4), 10);
-  if (opts.reversed === false) {
-    return `${day}${opts.sep}${month}${opts.sep}${year}`;
+  if (opts.reversed) {
+    return `${year}${opts.sep}${month}${opts.sep}${day}`;
   }
-  return `${year}${opts.sep}${month}${opts.sep}${day}`;
+  return `${day}${opts.sep}${month}${opts.sep}${year}`;
 }
 
 function utilsMinutesToObj(mins) {

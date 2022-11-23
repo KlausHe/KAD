@@ -194,7 +194,6 @@ function usergridCreateTable() {
 };
 
 function saveUsergridLayout() {
-  // click button
   dbID("idBtn_child_gridtitle_dbUpload_cl_UserGridLayout").click();
 };
 /*
