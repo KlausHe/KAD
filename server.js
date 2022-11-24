@@ -42,8 +42,6 @@ let FBData = Admin.firestore();
 const FBUserSettings = FBData.collection("User_Settings");
 const FieldValue = Admin.firestore.FieldValue;
 
-const News_API = require("newsapi");
-const NewsApi = new News_API(process.env.API_NEWS_KEY);
 const {
   generateRequestUrl,
   normaliseResponse
@@ -172,27 +170,25 @@ App.post(`${redirectPath}/Howa/`, (req, res) => {
 });
 
 App.post(`${redirectPath}/News/`, (req, res) => {
-  const data = req.body;
-  let options = {
-    q: replaceUmlaute(data.q, data.language),
-    category: data.category,
-    language: data.language,
-    country: data.country,
-    pageSize: (data.q === "") ? 20 : 40,
-  }
-
-  NewsApi.v2.topHeadlines(options)
-    .then(response => {
-      res.send(JSON.stringify(response)); // echo the result back
-    })
-    .catch(error => {
+  const urlStart = "https://newsapi.org/v2/top-headlines?"
+  const category = `category=${req.body.category}&`
+  const country = `country=${req.body.country}&`
+  const num = `pageSize=${req.body.num}&`
+  async function NewsAsync() {
+    try {
+      let response = await Axios.get(`${urlStart}${country}${category}${num}apiKey=${process.env.API_NEWS_KEY}`);
+      let data = response.data.articles
+      res.send(JSON.stringify(data))
+    } catch (error) {
+      console.log("error: ", error)
       res.send(JSON.stringify({
         error
       }));
-    });
+      return
+    };
+  }
+  NewsAsync();
 });
-
-
 
 App.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
   const data = req.body;

@@ -4,9 +4,7 @@ const newsData = {
   intervalTicker: null,
   currIndex: 0,
   articles: [],
-  searchOpt: {},
   categories: {
-    category: "Kategorie",
     general: "Allgemeines",
     business: "Business",
     entertainment: "Unterhaltung",
@@ -14,44 +12,68 @@ const newsData = {
     science: "Wissenschaft",
     sports: "Sport",
     technology: "Technologie"
+  },
+  num: 10,
+  default: {
+    category: "general",
+    country: "de",
+    num: 1
   }
 }
 
 function clear_cl_News() {
   newsData.currIndex = 0;
-  newsData.searchOpt = {
-    q: "",
-    category: "",
-    language: "de",
-    country: "de"
-  };
-  resetInput("idVin_newsKeyword", "Search")
-  for (let i = 0; i < Object.keys(newsData.categories).length; i++) {
-    dbID("idSel_newsCategory").options[i] = new Option(Object.values(newsData.categories)[i]);
-  };
-  dbID("idSel_newsCountry").options[0] = new Option("Land");
-  for (let i = 0; i < Data_NewsCountries.length; i++) {
-    dbID("idSel_newsCountry").options[i + 1] = new Option(Data_Country_CodesIso3166.get(Data_NewsCountries[i].toUpperCase()));
-  };
+  let optGroup = document.createElement("optgroup");
+  optGroup.label = "Kategorie";
+  for (const [key, value] of Object.entries(newsData.categories)) {
+    const option = document.createElement("OPTION");
+    option.textContent = value;
+    option.value = key;
+    if (key == newsData.default.category) {
+      option.selected = true;
+    }
+    optGroup.appendChild(option);
+  }
+  dbID("idSel_newsCategory").appendChild(optGroup);
+
+  optGroup = document.createElement("optgroup");
+  optGroup.label = "Land";
+  for (const value of Data_NewsCountries) {
+    const option = document.createElement("OPTION");
+    option.textContent = Data_Country_CodesIso3166.get(value.toUpperCase());
+    option.value = value;
+    if (value == newsData.default.country) {
+      option.selected = true;
+    }
+    optGroup.appendChild(option);
+  }
+  dbID("idSel_newsCountry").appendChild(optGroup);
+
+  optGroup = document.createElement("optgroup");
+  optGroup.label = "Anzahl";
+  for (let i = 0; i < newsData.num; i++) {
+    const option = document.createElement("OPTION");
+    option.textContent = (i + 1) * 10;
+    option.value = (i + 1) * 10;
+    if (i == newsData.default.num) {
+      option.selected = true;
+    }
+    optGroup.appendChild(option);
+  }
+  dbID("idSel_newsNum").appendChild(optGroup);
+
   dbID("idBtn_tickerNewsToggle").textContent = "Start Ticker";
   btnColor("idBtn_tickerNewsToggle")
-  newsRequestNewsset();
+  newsUpdateOptions();
 };
 
 function newsUpdateOptions() {
-  let categoryIndex = dbID("idSel_newsCategory").selectedIndex;
-  let countryIndex = dbID("idSel_newsCountry").selectedIndex - 1;
-  newsData.searchOpt = {
-    q: dbID("idVin_newsKeyword").value.trim(),
-    category: (categoryIndex > 0) ? Object.keys(newsData.categories)[categoryIndex] : "",
-    language: "de",
-    country: (countryIndex > 0) ? Data_NewsCountries[countryIndex] : "de"
+  const searchOpt = {
+    category: dbID("idSel_newsCategory").value,
+    country: dbID("idSel_newsCountry").value,
+    num: Number(dbID("idSel_newsNum").value),
   };
-  newsRequestNewsset();
-};
-
-function newsRequestNewsset() {
-  utilsSocketPost("News", newsData.searchOpt);
+  utilsSocketPost("News", searchOpt);
 };
 
 function newsError(errMsg) {
@@ -93,7 +115,6 @@ function newsReturn(data) {
     newsData.currIndex = 0;
   };
   showNews();
-  resetInput("idVin_newsKeyword", newsData.searchOpt.q || "Search News")
 };
 
 function showNews() {

@@ -61,9 +61,9 @@
 .cl_subGrid_News {
   grid-template-areas:
     ". NewsNav NewsResultImage NewsResultTitle ."
-    ". NewsSearch NewsResultImage NewsResultTitle ."
     ". NewsCountry NewsResultImage NewsResultTitle ."
     ". NewsCategory NewsResultImage NewsResultTitle ."
+    ". NewsNum NewsResultImage NewsResultTitle ."
     ". NewsTable NewsResultText NewsResultText .";
   grid-template-columns: 1fr auto auto auto 1fr;
   grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;

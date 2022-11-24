@@ -92,7 +92,7 @@ const contentGrid = {
     },
     subgrid: [
       ["cl_NewsNav", "left"],
-      ["cl_NewsSearch", "left"],
+      ["cl_NewsNum", "left"],
       ["cl_NewsCategory", "left"],
       ["cl_NewsCountry", "left"],
       ["cl_NewsTable", "left"],

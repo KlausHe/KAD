@@ -12,7 +12,6 @@
     "firebase": "^8.10.0",
     "firebase-admin": "^10.0.2",
     "google-translate-api-browser": "^3.0.0",
-    "newsapi": "^2.4.1",
     "npm": "^9.1.2"
   },
   "scripts": {

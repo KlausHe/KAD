@@ -204,15 +204,15 @@
         <div class="cl_NewsNav">
           <button type="button" id="idBtn_tickerNewsToggle" onclick="newsToggleTicker()"></button>
         </div>
-        <div class="cl_NewsSearch">
-          <input type="text" name="newsAPI" id="idVin_newsKeyword" onChange="newsUpdateOptions()"></input>
-        </div>
         <div class="cl_NewsCategory">
           <select uiSize="norm" id="idSel_newsCategory" onChange="newsUpdateOptions()"></select>
         </div>
         <div class="cl_NewsCountry">
           <select uiSize="norm" id="idSel_newsCountry" onChange="newsUpdateOptions()"></select>
         </div>
+        <div class="cl_NewsNum">
+          <select uiSize="norm" id="idSel_newsNum" onChange="newsUpdateOptions()"></select>
+       </div>
         <div class="cl_NewsTable clDiv_overviewTablesInput">
           <table id="idTab_newsTitleTable">
             <theader id="idTabHeader_newsTitleTable">
@@ -1862,7 +1862,8 @@
             onchange="lottoGameSelect()" uiRadius="right" uiSize="norm"></select>
         </div>
         <div class="cl_LottoSavedGame" uiWrap="nowrap" style="display:none;">
-          <label class="cl_info" uiRadius="left">Saved Game</label><label class="cl_info" id="idLbl_lottoShowSaved" uiRadius="right">...</label>
+          <label class="cl_info" uiRadius="left">Saved Game</label><label class="cl_info" id="idLbl_lottoShowSaved"
+            uiRadius="right">...</label>
         </div>
         <div class="cl_LottoGetGames" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Latest Games</label><input type="number" id="idVin_lottoNumberOfGames"
