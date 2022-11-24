@@ -8,7 +8,6 @@ const howaData = {
 if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
-const port = process.env.PORT || 3000
 const Axios = require('axios');
 //set up the Server
 const Compression = require('compression');
@@ -21,9 +20,8 @@ App.use(Compression());
 App.use(Express.static(__dirname));
 App.listen(process.env.PORT);
 App.get('/', (req, res) => res.redirect(redirectPath));
-if (process.env.NODE_ENV != "production") {
-  console.log(`Started @ Port: ${port}`)
-}
+console.log(`Started @ Port: ${process.env.PORT}`)
+
 const ServiceAccount = require("./serviceAccountKey.json");
 const Admin = require("firebase-admin");
 Admin.initializeApp({
