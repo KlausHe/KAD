@@ -16,7 +16,7 @@
     "npm": "^9.1.2"
   },
   "scripts": {
-    "start": "npm run start"
+    "start": "node server.js"
   },
   "engines": {
     "node": "18.12.1"
