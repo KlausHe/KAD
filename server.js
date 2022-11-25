@@ -1,3 +1,4 @@
+const redPath = "/K-Universe";
 const redirectPath = "/K-Universe";
 const howaData = {
   URLGeocoding: `http://api.openweathermap.org/geo/1.0/direct?q=`,
@@ -19,7 +20,7 @@ App.use(Express.json());
 App.use(Compression());
 App.use(Express.static(__dirname));
 App.listen(process.env.PORT);
-App.get('/', (req, res) => res.redirect(redirectPath));
+App.get('/', (req, res) => res.redirect(redPath));
 console.log(`Started @ Port: ${process.env.PORT}`)
 
 const Admin = require("firebase-admin");

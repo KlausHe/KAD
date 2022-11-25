@@ -22,7 +22,6 @@ async function utilsSocketPost(app = null, data) {
   window[`${firstLetterLow(app)}Return`](obj);
 }
 
-
 function getWeekNumber(d) {
   const date = (d) ? new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())) : new Date();
   const curThu = new Date(date.getTime() + (3 - ((date.getDay() + 6) % 7)) * 86400000);
