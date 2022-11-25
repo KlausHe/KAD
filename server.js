@@ -1,4 +1,3 @@
-const redPath = "/K-Universe";
 const redirectPath = "/K-Universe";
 const howaData = {
   URLGeocoding: `http://api.openweathermap.org/geo/1.0/direct?q=`,
@@ -14,13 +13,11 @@ const Axios = require('axios');
 const Compression = require('compression');
 const Express = require('express');
 const App = Express();
+App.use(Compression());
 App.use(Express.json());
 
-// compress all responses
-App.use(Compression());
-App.use(Express.static(__dirname));
+App.get('./', (req, res) => res.redirect("/K-Universe"));
 App.listen(process.env.PORT);
-App.get('/', (req, res) => res.redirect(redPath));
 console.log(`Started @ Port: ${process.env.PORT}`)
 
 const Admin = require("firebase-admin");
