@@ -8,7 +8,7 @@ async function utilsSocketPost(app = null, data) {
     console.error("NO OBJECT", data);
     return
   }
-  const path = ""; //"K-Universe/";
+  const path = "/api/"; //"K-Universe/";
   const request = new Request(`${path}/${app}/`, {
     method: 'POST',
     body: JSON.stringify(data),
