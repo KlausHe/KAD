@@ -1,4 +1,5 @@
-const redirectPath = "/K-Universe";
+const redPath = "K-Universe";
+const redirectPath = ""; //"/K-Universe";
 const howaData = {
   URLGeocoding: `http://api.openweathermap.org/geo/1.0/direct?q=`,
   URLCurrent: 'https://api.openweathermap.org/data/2.5/weather?',
@@ -15,8 +16,9 @@ const Express = require('express');
 const App = Express();
 App.use(Compression());
 App.use(Express.json());
+App.use(Express.static(redPath))
 
-App.get('./', (req, res) => res.redirect("/K-Universe"));
+// App.get('/', (req, res) => res.redirect(redPath));
 App.listen(process.env.PORT);
 console.log(`Started @ Port: ${process.env.PORT}`)
 
