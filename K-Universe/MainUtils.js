@@ -9,7 +9,7 @@ async function utilsSocketPost(app = null, data) {
     return
   }
   const path = ""; //"K-Universe/";
-  const request = new Request(`${path}${app}/`, {
+  const request = new Request(`${path}/${app}/`, {
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
