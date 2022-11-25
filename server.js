@@ -16,7 +16,7 @@ const Express = require('express');
 const App = Express();
 App.use(Compression());
 App.use(Express.json());
-App.use(Express.static(redPath))
+// App.use(Express.static(redPath))
 
 // App.get('/', (req, res) => res.redirect(redPath));
 App.listen(process.env.PORT);
