@@ -17,6 +17,10 @@ app.use(Compression());
 app.use(express.json());
 app.use(express.static("K-Universe"))
 
+app.get('/', (req, res) => {
+  res.sendFile('index.html', {root: path.join(__dirname, 'K-Universe')});
+})
+
 app.listen(process.env.PORT);
 console.log(`Started @ Port: ${process.env.PORT}`)
 
