@@ -1,5 +1,4 @@
-
-const redirectPath = ""; //"/K-Universe";
+const redirectPath = "/K-Universe";
 const howaData = {
   URLGeocoding: `http://api.openweathermap.org/geo/1.0/direct?q=`,
   URLCurrent: 'https://api.openweathermap.org/data/2.5/weather?',
@@ -9,21 +8,21 @@ const howaData = {
 if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
-const Axios = require('axios');
+const axios = require('axios');
 //set up the Server
 const Compression = require('compression');
-const Express = require('express');
-const App = Express();
-App.use(Compression());
-App.use(Express.json());
-App.use(Express.static("K-Universe"))
+const express = require('express');
+const app = express();
+app.use(Compression());
+app.use(express.json());
+app.use(express.static("K-Universe"))
 
-App.listen(process.env.PORT);
+app.listen(process.env.PORT);
 console.log(`Started @ Port: ${process.env.PORT}`)
 
-const Admin = require("firebase-admin");
-Admin.initializeApp({
-  credential: Admin.credential.cert({
+const admin = require("firebase-admin");
+admin.initializeApp({
+  credential: admin.credential.cert({
     "type": "service_account",
     "project_id": "kad-universe",
     "private_key_id": "3d196bf43855666f27a8ffa189798a89a9dc9e75",
@@ -37,9 +36,9 @@ Admin.initializeApp({
   }),
   databaseURL: "https://kad-universe.firebaseio.com"
 });
-let FBData = Admin.firestore();
+let FBData = admin.firestore();
 const FBUserSettings = FBData.collection("User_Settings");
-const FieldValue = Admin.firestore.FieldValue;
+const FieldValue = admin.firestore.FieldValue;
 
 const {
   generateRequestUrl,
@@ -47,7 +46,7 @@ const {
 } = require("google-translate-api-browser");
 
 // -----------  Server/Client - Communication ---------------------
-App.post(`${redirectPath}/UserAccLogin/`, (req, res) => {
+app.post(`${redirectPath}/UserAccLogin/`, (req, res) => {
   const loginData = req.body;
   FBUserSettings.doc(loginData.uid).get()
     .then((doc) => {
@@ -66,7 +65,7 @@ App.post(`${redirectPath}/UserAccLogin/`, (req, res) => {
     })
 });
 
-App.post(`${redirectPath}/UserAccRegister/`, (req, res) => {
+app.post(`${redirectPath}/UserAccRegister/`, (req, res) => {
   let saves = loginData.saves;
   saves.uid = loginData.uid;
   saves.email = loginData.email;
@@ -87,7 +86,7 @@ App.post(`${redirectPath}/UserAccRegister/`, (req, res) => {
     })
 });
 
-App.post(`${redirectPath}/LoadDiscipuli/`, (req, res) => {
+app.post(`${redirectPath}/LoadDiscipuli/`, (req, res) => {
   const uid = req.body.uid;
   const category = req.body.category;
   FBUserSettings.doc(uid).get()
@@ -104,7 +103,7 @@ App.post(`${redirectPath}/LoadDiscipuli/`, (req, res) => {
     });
 });
 
-App.post(`${redirectPath}/SaveDiscipuli/`, (req, res) => {
+app.post(`${redirectPath}/SaveDiscipuli/`, (req, res) => {
   const data = req.body;
   const uid = data.uid;
   delete data.uid
@@ -133,14 +132,14 @@ App.post(`${redirectPath}/SaveDiscipuli/`, (req, res) => {
 });
 
 //----------------------------------Data----------------------------
-App.post(`${redirectPath}/Howa/`, (req, res) => {
+app.post(`${redirectPath}/Howa/`, (req, res) => {
   let data = req.body; // your JSON
   if (data.location != null) data.location = replaceUmlaute(data.location)
   async function HowaAsync() {
     //get coordinates from location through API
     if (data.location != null) {
       try {
-        const axiosReturn = await Axios.get(`${howaData.URLGeocoding}${data.location}&limit=1&appid=${process.env.API_WEATHER_KEY}`);
+        const axiosReturn = await axios.get(`${howaData.URLGeocoding}${data.location}&limit=1&appid=${process.env.API_WEATHER_KEY}`);
         data.lat = axiosReturn.data[0].lat
         data.lon = axiosReturn.data[0].lon
       } catch (error) {
@@ -152,9 +151,9 @@ App.post(`${redirectPath}/Howa/`, (req, res) => {
     }
 
     try {
-      const currentReturn = await Axios.get(`${howaData.URLCurrent}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`);
+      const currentReturn = await axios.get(`${howaData.URLCurrent}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`);
       data.currentData = currentReturn.data;
-      const forecastReturn = await Axios.get(`${howaData.URLForecast}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`);
+      const forecastReturn = await axios.get(`${howaData.URLForecast}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`);
       data.forecastData = forecastReturn.data
       data.currentData.pop = (data.currentData.rain == undefined) ? 0 : 1;
     } catch (error) {
@@ -168,14 +167,14 @@ App.post(`${redirectPath}/Howa/`, (req, res) => {
   HowaAsync();
 });
 
-App.post(`${redirectPath}/News/`, (req, res) => {
+app.post(`${redirectPath}/News/`, (req, res) => {
   const urlStart = "https://newsapi.org/v2/top-headlines?"
   const category = `category=${req.body.category}&`
   const country = `country=${req.body.country}&`
   const num = `pageSize=${req.body.num}&`
   async function NewsAsync() {
     try {
-      let response = await Axios.get(`${urlStart}${country}${category}${num}apiKey=${process.env.API_NEWS_KEY}`);
+      let response = await axios.get(`${urlStart}${country}${category}${num}apiKey=${process.env.API_NEWS_KEY}`);
       let data = response.data.articles
       res.send(JSON.stringify(data))
     } catch (error) {
@@ -189,7 +188,7 @@ App.post(`${redirectPath}/News/`, (req, res) => {
   NewsAsync();
 });
 
-App.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
+app.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
   const data = req.body;
   async function SpeechAsync() {
     try {
@@ -198,7 +197,7 @@ App.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
         to: (data.langTo == "ja") ? "jpn" : data.langTo,
         raw: false
       });
-      const response = await Axios.get(url);
+      const response = await axios.get(url);
       let returnData = normaliseResponse(response.data)
       returnData.pronunciation = (returnData.pronunciation == undefined || returnData.pronunciation == "") ? null : returnData.pronunciation
       res.send(JSON.stringify(returnData));
@@ -238,3 +237,6 @@ function replaceUmlaute(word, language = "de") {
   };
   return word;
 };
+
+// Export the express API
+module.exports = app;
