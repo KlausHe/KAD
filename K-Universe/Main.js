@@ -143,11 +143,6 @@ function globalValueChanged(obj) {
   globalValues.globalInput.value = obj.value;
 };
 
-function utilsGetFavicon(url) {
-  const size = globalValues.mediaSizes.imgSize;
-  return `https://www.google.com/s2/favicons?domain=${url}&sz=${size}`
-}
-
 function layoutCreateNavbarPikaday() {
   new Pikaday({
     field: dbID('idBtn_navBar_KW'),

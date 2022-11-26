@@ -1,4 +1,3 @@
-//News
 const newsData = {
   intervalTimeTicker: 1000 * 20, //20 sec
   intervalTicker: null,
