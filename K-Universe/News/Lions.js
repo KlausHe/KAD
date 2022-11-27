@@ -22,26 +22,21 @@ function lionsRequestNumber() {
 	}
 	lionsOptions.num = Number(inputDIV);
 	let id = null;
-
 	for (const [key, value] of Object.entries(lionsOptions.data)) {
 		if (value[1].includes(lionsOptions.num)) {
 			id = key;
 			break;
 		}
 	}
-
-	if (id != null) {
-		infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[id]["0"]}`;
-
-		dbID(idTabBody_Lions).rows[id].scrollIntoView({
-			behavior: "smooth",
-			block: "end",
-			inline: "start", //start
-			// block: "nearest",
-		});
-	} else {
+	if (id == null) {
 		infoLbl.innerHTML = `- ${lionsOptions.num} -<br>leider kein Gewinn`;
+		return;
 	}
+	infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[id]["0"]}`;
+	dbID(idTabBody_Lions).rows[id].scrollIntoView({
+		behavior: "smooth",
+		block: "center",
+	});
 }
 
 function lionsRequestData() {
