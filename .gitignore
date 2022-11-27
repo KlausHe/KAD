@@ -2,7 +2,7 @@ Collections
 node_modules
 .env
 .DS_Store
-serviceAccountKey.json
+test.js
 K-Universe/.atom-live-server.json
 K-Universe/Data/DataLists/Sudoku2000.json
 K-Universe/Data/Howa/css/weather-icons.css

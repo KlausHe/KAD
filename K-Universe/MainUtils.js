@@ -11,7 +11,7 @@ async function utilsSocketPost(app = null, data) {
 	const path = "K-Universe/";
 	const request = new Request(`${path}${app}/`, {
 		method: "POST",
-		body: JSON.stringify(data),
+		body: data == null ? "" : JSON.stringify(data),
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
@@ -254,7 +254,7 @@ function clearFirstChild(id) {
 	while (obj.firstChild) {
 		obj.removeChild(obj.firstChild);
 	}
-  return obj
+	return obj;
 }
 
 function clearTable(id) {

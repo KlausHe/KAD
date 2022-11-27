@@ -67,6 +67,15 @@
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
 }
+
+.cl_subGrid_Lions {
+	grid-template-areas:
+		". LionsInput LionsOutput ."
+		". LionsTable LionsTable .";
+	grid-template-columns: 1fr auto auto 1fr;
+	grid-template-rows: var(--UIHeightDouble) auto;
+}
+
 .cl_subGrid_Sepakbola {
 	grid-template-areas:
 		". SepakbolaInputLigaLbl SepakbolaInputSeasonLbl SepakbolaInputDayLbl ."

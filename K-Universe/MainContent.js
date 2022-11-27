@@ -101,6 +101,26 @@ const contentGrid = {
 			["cl_NewsResultImage", "center"],
 		],
 	},
+
+  // cl_Lions: {
+  //   enableUser: true,
+  //   userStoreDB: "Lions",
+  //   canvas: () => {
+  //     return
+  //   },
+  //   contentGroup: "News",
+  //   name: "Lions",
+  //   heritage: ["englisch", "Löwen"],
+  //   source: {
+  //     Daten: "https://hirsau.lions.de/edition-nagold"
+  //   },
+  //   info: "Gewinner des Lions-Advendskalender 2021 - Edition Nagold",
+  //   subgrid: [
+  //     ["cl_LionsInput", "right", "center"],
+  //     ["cl_LionsOutput", "left"],
+  //     ["cl_LionsTable", "center"]
+  //   ]
+  // },
 	cl_PostillonTicker: {
 		enableUser: true,
 		canvas: () => {

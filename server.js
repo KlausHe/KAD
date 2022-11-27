@@ -47,6 +47,7 @@ const FieldValue = admin.firestore.FieldValue;
 
 const news = require("newsapi");
 const newsAPI = new news(process.env.API_NEWS_KEY);
+const tableToJson = require("tabletojson").Tabletojson;
 
 const { generateRequestUrl, normaliseResponse } = require("google-translate-api-browser");
 
@@ -65,11 +66,7 @@ app.post(`${redirectPath}/UserAccLogin/`, (req, res) => {
 			res.send(JSON.stringify(data));
 		})
 		.catch((error) => {
-			res.send(
-				JSON.stringify({
-					error,
-				})
-			);
+			res.send(JSON.stringify({ error }));
 		});
 });
 
@@ -89,11 +86,7 @@ app.post(`${redirectPath}/UserAccRegister/`, (req, res) => {
 			res.send(JSON.stringify(data));
 		})
 		.catch((error) => {
-			res.send(
-				JSON.stringify({
-					err: error,
-				})
-			);
+			res.send(JSON.stringify({ error }));
 		});
 });
 
@@ -109,11 +102,7 @@ app.post(`${redirectPath}/LoadDiscipuli/`, (req, res) => {
 			res.send(JSON.stringify(returnData));
 		})
 		.catch((error) => {
-			res.send(
-				JSON.stringify({
-					error,
-				})
-			);
+			res.send(JSON.stringify({ error }));
 		});
 });
 
@@ -135,19 +124,10 @@ app.post(`${redirectPath}/SaveDiscipuli/`, (req, res) => {
 			});
 		})
 		.then(() => {
-			res.send(
-				JSON.stringify({
-					key: key,
-					error: null,
-				})
-			);
+			res.send(JSON.stringify({ key: key, error: null }));
 		})
 		.catch((error) => {
-			res.send(
-				JSON.stringify({
-					error,
-				})
-			);
+			res.send(JSON.stringify({ error }));
 		});
 });
 
@@ -162,11 +142,7 @@ app.post(`${redirectPath}/Howa/`, (req, res) => {
 				data.lat = axiosReturn.data[0].lat;
 				data.lon = axiosReturn.data[0].lon;
 			} catch (error) {
-				res.send(
-					JSON.stringify({
-						error,
-					})
-				);
+				res.send(JSON.stringify({ error }));
 				return;
 			}
 		}
@@ -181,11 +157,7 @@ app.post(`${redirectPath}/Howa/`, (req, res) => {
 			data.forecastData = forecastReturn.data;
 			data.currentData.pop = data.currentData.rain == undefined ? 0 : 1;
 		} catch (error) {
-			res.send(
-				JSON.stringify({
-					error,
-				})
-			);
+			res.send(JSON.stringify({ error }));
 			return;
 		}
 		res.send(JSON.stringify(data));
@@ -194,11 +166,6 @@ app.post(`${redirectPath}/Howa/`, (req, res) => {
 });
 
 app.post(`${redirectPath}/News/`, (req, res) => {
-	const urlStart = "https://newsapi.org/v2/top-headlines?";
-	const category = `category=${req.body.category}&`;
-	const country = `country=${req.body.country}&`;
-	const num = `pageSize=${req.body.num}&`;
-
 	let options = {
 		category: req.body.category,
 		country: req.body.country,
@@ -211,12 +178,25 @@ app.post(`${redirectPath}/News/`, (req, res) => {
 			res.send(JSON.stringify(response)); // echo the result back
 		})
 		.catch((error) => {
-			res.send(
-				JSON.stringify({
-					err: error,
-				})
-			);
+			res.send(JSON.stringify({ error }));
 		});
+});
+
+app.post(`${redirectPath}/Lions/`, (req, res) => {
+	const url = "https://hirsau.lions.de/edition-nagold";
+	const options = {
+		ignoreColumns: [3],
+		forceIndexAsNumber: true,
+	};
+	async function lionsAsync() {
+		try {
+			const data = await tableToJson.convertUrl(url, options);
+			res.send(JSON.stringify(data[0]));
+		} catch (error) {
+			res.send(JSON.stringify({ error }));
+		}
+	}
+	lionsAsync();
 });
 
 app.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
@@ -233,11 +213,7 @@ app.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
 			returnData.pronunciation = returnData.pronunciation == undefined || returnData.pronunciation == "" ? null : returnData.pronunciation;
 			res.send(JSON.stringify(returnData));
 		} catch (error) {
-			res.send(
-				JSON.stringify({
-					error,
-				})
-			);
+			res.send(JSON.stringify({ error }));
 			return;
 		}
 	}
@@ -245,28 +221,24 @@ app.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
 });
 
 // --------------allgemeine Funktionen---------------------------------------------------
-function replaceUmlaute(word, language = "de") {
-	if (word) {
-		const umlaute = {
-			de: [
-				["ä", "ae"],
-				["ö", "oe"],
-				["ü", "ue"],
-				["Ä", "Ae"],
-				["Ö", "Oe"],
-				["Ü", "Ue"],
-			],
-			ja: [
-				["oo", "ō"],
-				["uu", "ū"],
-			],
-		};
-		for (let i = 0; i < umlaute[language].length; i++) {
-			const umlaut = umlaute[language][i];
-			if (word.includes(umlaut[0])) {
-				word = word.replace(umlaut[0], umlaut[1]);
-			}
-		}
+function replaceUmlaute(word = null, language = "de") {
+	if (word == null || word.trim() == "") return;
+	const umlaute = {
+		de: new Map([
+			["ä", "ae"],
+			["ö", "oe"],
+			["ü", "ue"],
+			["Ä", "Ae"],
+			["Ö", "Oe"],
+			["Ü", "Ue"],
+		]),
+		ja: new Map([
+			["oo", "ō"],
+			["uu", "ū"],
+		]),
+	};
+	for (const [key, val] of umlaute[language]) {
+		word = word.replaceAll(key, val);
 	}
 	return word;
 }

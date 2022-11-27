@@ -64,6 +64,7 @@
 
   <script src="News/Howa.js"></script>
   <script src="News/News.js"></script>
+  <script src="News/Lions.js"></script>
   <script src="News/Sepakbola.js"></script>
   <script src="News/PostillonTicker.js"></script>
   <script src="News/Covid.js"></script>
@@ -227,6 +228,24 @@
         <div class="cl_NewsResultTitle" id="idDiv_News_Title" uiSize="outputTitle" onclick="news_URL()">
         </div>
         <div class="cl_NewsResultText cl_outputText" id="idDiv_News_Text" uiSize="outputText" onclick="newsShowNext(0)">
+        </div>
+      </div>
+    </div>
+    <div class="cl_Lions" style="display:none;">
+      <div class="cl_subGrid_Lions cl_subGrid">
+        <div class="cl_LionsInput">
+          <input type="number" id="idVin_lionsInput" placeholder="1234" oninput="lionsRequestNumber(this)"></input>
+        </div>
+        <div class="cl_LionsOutput">
+          <label class="cl_outputLbl" id="idLbl_lionsOutput">...</label>
+        </div>
+        <div class="cl_LionsTable clDiv_overviewTablesAuto" uiSize="outputTable">
+          <table id="idTab_Lions">
+            <thead id="idTabHeader_Lions" class="scrollTable">
+            </thead>
+            <tbody id="idTabBody_Lions">
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
