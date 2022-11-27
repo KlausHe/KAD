@@ -20,7 +20,7 @@
     "start": "node server.js"
   },
   "engines": {
-    "node": ">=18.12.1"
+    "node": ">=18.12.1 <19.1.0"
   },
   "repository": {
     "type": "git",
