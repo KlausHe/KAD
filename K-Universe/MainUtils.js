@@ -240,12 +240,14 @@ function numberFromInput(id, failSafeVal = null, noPlaceholder = null) {
 }
 
 function firstLetterCap(s) {
+  if(s == "") return s
 	if (typeof s != "string") return s;
 	return s[0].toUpperCase() + s.slice(1);
 }
 
 function firstLetterLow(s) {
-	if (typeof s != "string") return s;
+  if(s == "") return s
+  if (typeof s != "string") return s;
 	return s[0].toLowerCase() + s.slice(1);
 }
 

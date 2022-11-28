@@ -210,7 +210,7 @@ let nuncDiscipuli = {
 			howaGetLocation();
 		},
 		get Lions() {
-			return lionsData.num;
+			return lionsOptions.num;
 		},
 		set Lions(data) {
 			dbID("idVin_lionsInput").value = data;
@@ -435,6 +435,7 @@ function openUserNav(btn) {
 	clear_cl_userAcc();
 }
 
+
 function accountLogout() {
 	firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 	firebase
@@ -454,7 +455,7 @@ function createUserInfos(type) {
 	clearFirstChild(parent);
 	for (const [key, subObj] of Object.entries(accData.infos)) {
 		const uInfoParent = cellDiv({
-			names: ["uInfo", key],
+			names: ["uInfoParent", key],
 			type: "Div",
 			style: {
 				whiteSpace: "nowrap",
@@ -463,7 +464,7 @@ function createUserInfos(type) {
 		parent.appendChild(uInfoParent);
 
 		const uInfoBtn = cellLbl({
-			names: ["uInfo", key],
+			names: ["uInfoLbl", key],
 			type: "Lbl",
 			createClass: ["cl_info"],
 			ui: {
@@ -474,18 +475,38 @@ function createUserInfos(type) {
 		uInfoParent.appendChild(uInfoBtn);
 
 		const uInfoVin = cellVin({
-			names: ["uInfo", key],
+			names: ["uInfoVin", key],
 			type: "Vin",
 			subGroup: "text",
 			ui: {
-				uiRadius: "right",
+				uiRadius: "none",
 				uiSize: "wide",
 				list: `dList_uInfo_${key}`,
 				maxLength: subObj.maxlength ? subObj.maxlength : 50,
 			},
-			placeholder: type == "register" ? subObj.description : accData.infos[key].data != null ? accData.infos[key].data : "...",
+			placeholder:
+				type == "register" ? subObj.description : accData.infos[key].data == null || accData.infos[key].data == "" ? "..." : accData.infos[key].data,
 		});
 		uInfoParent.appendChild(uInfoVin);
+		const uInfoDel = cellBtn({
+			names: ["uInfoDel", key],
+			type: "Btn",
+			subGroup: "button",
+			img: "trash",
+			ui: {
+				uiRadius: "right",
+				uiSize: "square",
+			},
+			style: {
+				textAlign: "center",
+			},
+			onclick: () => {
+				accData.infos[key].data = null;
+				uInfoVin.value = "";
+				uInfoVin.placeholder = "...";
+			},
+		});
+		uInfoParent.appendChild(uInfoDel);
 
 		if (subObj.suggestions != null) {
 			const dList = document.createElement("datalist");
@@ -513,18 +534,18 @@ function submitUser(btn) {
 	nuncDiscipuli.updateType = type;
 	nuncDiscipuli.cred.email = dbID("idVin_userAcc_mail").value.trim();
 	if (type == "register" || type == "change") {
-		for (let i = 0; i < Object.keys(accData.infos).length; i++) {
-			const id = `idVin_child_uInfo_${Object.keys(accData.infos)[i]}`;
+		for (let [key, val] of Object.entries(accData.infos)) {
+			const id = `idVin_child_uInfoVin_${key}`;
 			const vinUser = dbID(id).value.trim();
 			if (vinUser != "") {
-				accData.infos[Object.keys(accData.infos)[i]].data = vinUser;
+				accData.infos[key].data = vinUser;
 			}
 		}
 		if (nuncDiscipuli.short === null) {
 			const newShort = {
-				first: firstLetterCap(accData.infos.firstName),
-				sur: firstLetterCap(accData.infos.surname),
-				email: firstLetterCap(nuncDiscipuli.cred.email),
+				first: accData.infos.firstName.slice(0, 2),
+				sur: accData.infos.surname.slice(0, 2),
+				email: nuncDiscipuli.cred.email.slice(0, 2),
 			};
 			nuncDiscipuli.short = newShort.first || newShort.sur || newShort.email;
 		}
@@ -545,7 +566,7 @@ function submitUser(btn) {
 							userAccLogin(response.user.uid);
 						})
 						.catch((error) => {
-							//   userAccError(error);
+							userAccError(error);
 						});
 				})
 				.catch((error) => {
@@ -570,7 +591,7 @@ function submitUser(btn) {
 			break;
 		case "change":
 			saveDiscipuliRequest("userAcc");
-			userAccReturn(null); //call RETURNfunction from here, only errors are passed!
+			userAccReturn(null);
 			layoutNavClick();
 			break;
 	}
@@ -658,7 +679,8 @@ function saveDiscipuliReturn(data) {
 		console.error(error);
 		return;
 	}
+	const key = data.key;
 	setTimeout(() => {
-		dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${data.key}`).filter = "invert(0)";
+		dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${key}`).filter = "invert(0)";
 	}, 500);
 }

@@ -20,7 +20,7 @@ function lionsRequestNumber() {
 		infoLbl.textContent = `...`;
 		return;
 	}
-	lionsOptions.num = Number(inputDIV);
+	lionsOptions.num = inputDIV;
 	let id = null;
 	for (const [key, value] of Object.entries(lionsOptions.data)) {
 		if (value[1].includes(lionsOptions.num)) {
@@ -30,9 +30,11 @@ function lionsRequestNumber() {
 	}
 	if (id == null) {
 		infoLbl.innerHTML = `- ${lionsOptions.num} -<br>leider kein Gewinn`;
+		infoLbl.classList.remove("cl_outputHighlighted");
 		return;
 	}
 	infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[id]["0"]}`;
+	infoLbl.classList.add("cl_outputHighlighted");
 	dbID(idTabBody_Lions).rows[id].scrollIntoView({
 		behavior: "smooth",
 		block: "center",

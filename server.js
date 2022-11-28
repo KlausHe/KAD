@@ -43,7 +43,7 @@ admin.initializeApp({
 });
 let FBData = admin.firestore();
 const FBUserSettings = FBData.collection("User_Settings");
-const FieldValue = admin.firestore.FieldValue;
+// const FieldValue = admin.firestore.FieldValue;
 
 const news = require("newsapi");
 const newsAPI = new news(process.env.API_NEWS_KEY);
@@ -113,16 +113,19 @@ app.post(`${redirectPath}/SaveDiscipuli/`, (req, res) => {
 	const key = Object.keys(data)[0];
 	const saveDoc = FBUserSettings.doc(uid);
 	//delete this Dataset with its Values
+	// saveDoc
+	// 	.update({
+	// 		[key]: FieldValue.delete(),
+	// 	})
+	// 	.then(() => {
+	// 		//set this Dataset with its Values
+	// 		saveDoc.set(data, {
+	// 			merge: true,
+	// 		});
+	// 	})
+
 	saveDoc
-		.update({
-			[key]: FieldValue.delete(),
-		})
-		.then(() => {
-			//set this Dataset with its Values
-			saveDoc.set(data, {
-				merge: true,
-			});
-		})
+		.update(data)
 		.then(() => {
 			res.send(JSON.stringify({ key: key, error: null }));
 		})

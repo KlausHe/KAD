@@ -23,7 +23,7 @@ function newTugas() {
   tugasOptions[value] = false;
   dbID("idArea_tugasEntry").value = "";
   createTugas();
-  saveDiscipuliRequest(nuncDiscipuli.saves.Tugas);
+  saveDiscipuliRequest("Tugas");
 }
 
 function createTugas() {

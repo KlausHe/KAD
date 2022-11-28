@@ -17,7 +17,10 @@
     "tabletojson": "^2.0.7"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "serverTest": "open -a /Applications/Firefox.app; nodemon server.js",
+    "dev": "nodemon test.js"
+
   },
   "engines": {
     "node": ">=18.12.1 <19.1.0"

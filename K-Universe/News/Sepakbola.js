@@ -13,7 +13,7 @@ const sepakbolaOptions = {
   selected: {},
   selectedOrig: {
     matchday: 1,
-    ligaIndex: 0,
+    ligaIndex: 3,
     seasonIndex: 0
   },
   images: {},
