@@ -30,11 +30,11 @@ function lionsRequestNumber() {
 	}
 	if (id == null) {
 		infoLbl.innerHTML = `- ${lionsOptions.num} -<br>leider kein Gewinn`;
-		infoLbl.classList.remove("cl_outputHighlighted");
+		infoLbl.classList.remove("cl_highlighted");
 		return;
 	}
 	infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[id]["0"]}`;
-	infoLbl.classList.add("cl_outputHighlighted");
+	infoLbl.classList.add("cl_highlighted");
 	dbID(idTabBody_Lions).rows[id].scrollIntoView({
 		behavior: "smooth",
 		block: "center",

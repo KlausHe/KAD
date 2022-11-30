@@ -112,8 +112,10 @@
 
 <body>
   <nav id="idNav_navElements">
-    <input type="text" id="idVin_globalValue" class="cl_centeredPH" placeholder="Mastervalue"
-      oninput="globalValueChanged(this)" autofocus></input>
+    <input type="text" id="idVin_globalValue" class="cl_centeredPH" placeholder="Mastervalue" list="idDlist_globalValue"
+      oninput="globalValueChanged(this)" autofocus onfocus="globalValuePopulateDatalist(this)"></input>
+    <datalist id="idDlist_globalValue">
+    </datalist>
     <button id="idBtn_navBar_KW" type="button" uiSize="medium"></button>
     <div class="cl_navUser" id="idDiv_navBar_AccountSettingsA" data-type="login" onclick="openUserNav(this)"><img
         id="idImg_userNav_A" uiFilter="invNavbar" src="Data/Images/SVG/uBasic.svg"></img></div>
@@ -125,6 +127,7 @@
         id="idImg_userNav_colormode" uiFilter="invNavbar" src="Data/Images/SVG/sun.svg"></img></div>
     <div class="cl_navUser" id="idDiv_navBar_Trash" onclick="resetAll()"><img class="img_trash"
         uiFilter="invNavbar"></img></div>
+
   </nav>
   <div class="cl_Loading">KAD-UNIVERSE<br>LOADING...</div>
   <div class="cl_backgroundAnimation" id="idCanv_backgroundAnimation"></div>
@@ -213,7 +216,7 @@
         </div>
         <div class="cl_NewsNum">
           <select uiSize="norm" id="idSel_newsNum" onChange="newsUpdateOptions()"></select>
-       </div>
+        </div>
         <div class="cl_NewsTable clDiv_overviewTablesInput">
           <table id="idTab_newsTitleTable">
             <theader id="idTabHeader_newsTitleTable">

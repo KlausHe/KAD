@@ -43,7 +43,6 @@ admin.initializeApp({
 });
 let FBData = admin.firestore();
 const FBUserSettings = FBData.collection("User_Settings");
-// const FieldValue = admin.firestore.FieldValue;
 
 const news = require("newsapi");
 const newsAPI = new news(process.env.API_NEWS_KEY);
@@ -186,7 +185,7 @@ app.post(`${redirectPath}/News/`, (req, res) => {
 });
 
 app.post(`${redirectPath}/Lions/`, (req, res) => {
-	const url = "https://hirsau.lions.de/edition-nagold";
+	const url = "https://hirsau.lions.de/";
 	const options = {
 		ignoreColumns: [3],
 		forceIndexAsNumber: true,

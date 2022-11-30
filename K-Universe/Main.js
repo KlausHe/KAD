@@ -75,41 +75,22 @@ function mainSetup() {
 		clearAllTiles();
 		setTimeout(() => {
 			layoutHideLoadingscreen();
+			clearGlobalValue();
 		}, 1000);
 	});
 }
 
 function resetAll() {
 	createNewNuncDiscipuli();
-	// socket.disconnect();
-	// utilsSocketStart();
 	displayColorSystem();
 	clearGlobalValue();
-	layoutNavClick(contentLayout.defaultPage);
+	layoutNavClick();
 }
 
 function clearAllTiles() {
 	for (const obj in contentGrid) {
 		window[`clear_${obj}`]();
 	}
-}
-
-function utilsSocketStart() {
-	// socket.on('reconnect', () => {
-	//   if (nuncDiscipuli.checkLogin) {
-	//     utilsSocketPost("UserAcc", {
-	//       updateType: "login",
-	//       uid: nuncDiscipuli.cred.uid,
-	//       email: nuncDiscipuli.cred.email || null
-	//     });
-	//   };
-	// });
-	// socket.on('UserAccReturn', userAccReturn); //get all Data/error and then restore all Canvases/Saves
-	// socket.on('SaveDiscipuliReturn', saveDiscipuliReturn);
-	// socket.on('LoadDiscipuliReturn', loadDiscipuliReturn);
-	// socket.on('HowaReturn', howaReturn); //
-	// socket.on('NewsReturn', newsReturn);
-	// socket.on('SpeechTranslateReturn', speechTranslateReturn);
 }
 
 function redrawCanvases() {
@@ -155,10 +136,35 @@ function timeoutCanvasFinished(
 function clearGlobalValue() {
 	globalValues.globalInput.value = "";
 	dbID("idVin_globalValue").value = "";
+	dbID("idVin_globalValue").addEventListener("keyup", (event) => {
+		if (event.keyCode === 13) {
+			globalValueChanged(dbID("idVin_globalValue"), true);
+		}
+	});
 }
 
-function globalValueChanged(obj) {
+function globalValueChanged(obj, enter = null) {
+	dbID("idVin_globalValue").classList.remove("cl_highlighted");
+	const arr = contentLayout.nameList;
+	if (arr.includes(obj.value)) {
+		dbID("idVin_globalValue").classList.add("cl_highlighted");
+		if (enter === true) {
+			let key = Object.entries(contentGrid).filter((arr) => {
+				return arr[1].name == obj.value;
+			})[0][0];
+			layoutToggelFullscreen(key);
+		}
+	}
 	globalValues.globalInput.value = obj.value;
+}
+
+function globalValuePopulateDatalist() {
+	if (dbID("idDlist_globalValue").childNodes.length > 1) return;
+	for (const name of contentLayout.nameList) {
+		const opt = document.createElement("OPTION");
+		opt.textContent = name;
+		dbID("idDlist_globalValue").appendChild(opt);
+	}
 }
 
 function layoutCreateNavbarPikaday() {

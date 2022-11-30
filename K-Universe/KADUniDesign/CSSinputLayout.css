@@ -421,7 +421,7 @@ input[imgBtn="subgrid"] {
 	font-size: var(--fontSizeLarge);
 }
 
-.cl_outputHighlighted {
+.cl_highlighted {
 	background-color: hsl(var(--bgcButtonPositive));
 	color: hsl(var(--txtButtonPositive));
 }

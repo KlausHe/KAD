@@ -115,7 +115,7 @@ const globalValues = {
     },
     spreadVal() {
       const idArrays = {
-        strings: ["idVin_howaEntry", "idArea_tugasEntry", "idVin_newsKeyword", "idVin_wikiInput", "idArea_thiontuInputEntry", "idVin_kaihangaEntry", "idVin_analysisEntry", "idVin_synonymEntry"],
+        strings: ["idVin_howaEntry", "idArea_tugasEntry", "idVin_wikiInput", "idArea_thiontuInputEntry", "idVin_kaihangaEntry", "idVin_analysisEntry", "idVin_synonymEntry"],
         numerical: ["idVin_IomlaidCur", "idVin_Area_0", "idVin_expansionLength", "idVin_Pattern0", "idVin_luasDiameter", "idVin_middleA", "idVin_Pytho_0", "idVin_quickkmathVal", "idVin_ranjeVal"]
       };
       const val = this.value;
