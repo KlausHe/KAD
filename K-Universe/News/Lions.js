@@ -1,5 +1,4 @@
 const lionsOptions = {
-	url: "https://hirsau.lions.de/edition-nagold",
 	data: [],
 	num: null,
 };
@@ -7,7 +6,7 @@ const lionsOptions = {
 function clear_cl_Lions() {
 	resetInput("idVin_lionsInput", "1234");
 	dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
-	lionsOptions.data = {};
+	lionsOptions.data = [];
 	if (Object.keys(lionsOptions.data).length === 0) {
 		lionsRequestData();
 	}
@@ -15,27 +14,26 @@ function clear_cl_Lions() {
 
 function lionsRequestNumber() {
 	const infoLbl = dbID("idLbl_lionsOutput");
-	const inputDIV = dbID("idVin_lionsInput").value.trim();
-	if (inputDIV == "" || isNaN(inputDIV) || inputDIV.length != 4) {
+	lionsOptions.num = dbID("idVin_lionsInput").value.trim();
+	if (lionsOptions.num == "" || isNaN(lionsOptions.num) || lionsOptions.num.length != 4) {
 		infoLbl.textContent = `...`;
 		return;
 	}
-	lionsOptions.num = inputDIV;
-	let id = null;
-	for (const [key, value] of Object.entries(lionsOptions.data)) {
-		if (value[1].includes(lionsOptions.num)) {
-			id = key;
+	let index = null;
+	for (const [i, obj] of lionsOptions.data.entries()) {
+		if (obj.num.includes(lionsOptions.num)) {
+			index = i;
 			break;
 		}
 	}
-	if (id == null) {
+	if (index == null) {
 		infoLbl.innerHTML = `- ${lionsOptions.num} -<br>leider kein Gewinn`;
 		infoLbl.classList.remove("cl_highlighted");
 		return;
 	}
-	infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[id]["0"]}`;
+	infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[index].date}`;
 	infoLbl.classList.add("cl_highlighted");
-	dbID(idTabBody_Lions).rows[id].scrollIntoView({
+	dbID("idTabBody_Lions").rows[index].scrollIntoView({
 		behavior: "smooth",
 		block: "center",
 	});
@@ -50,7 +48,25 @@ function lionsReturn(data) {
 		console.error(data.error);
 		return;
 	}
-	lionsOptions.data = data;
+	lionsOptions.data = [];
+	for (let i = 0; i < data.length; i++) {
+		const obj = data[i];
+		const date = obj["0"];
+		const priceWinners = obj["1"].split(",");
+		const num = priceWinners[0].replace("Losnummer: ", "");
+		const price = `${priceWinners[2].replace("Gewinn: ", "")}<br>${priceWinners[1].replace("Sponsor: ", "")}`;
+
+		const index = lionsOptions.data.findIndex((obj) => obj.date == date && obj.price == price);
+		if (index < 0) {
+			lionsOptions.data.push({
+				date,
+				price,
+				num: [num],
+			});
+		} else {
+			lionsOptions.data[index].num.push(num);
+		}
+	}
 	createLionsTable();
 }
 
@@ -84,12 +100,12 @@ function createLionsTable() {
 	});
 
 	clearTable("idTabBody_Lions");
-	for (const [index, value] of lionsOptions.data.entries()) {
+	for (const [index, obj] of lionsOptions.data.entries()) {
 		const row = insertTableRow("idTabBody_Lions");
 		tableAddCell(row, {
 			names: ["lions", "date", index],
 			type: "Lbl",
-			text: value["0"],
+			text: obj.date,
 			cellStyle: {
 				textAlign: "left",
 			},
@@ -97,7 +113,7 @@ function createLionsTable() {
 		tableAddCell(row, {
 			names: ["lions", "winner", index],
 			type: "Lbl",
-			text: value["1"],
+			text: obj.num.join(", "),
 			cellStyle: {
 				textAlign: "left",
 			},
@@ -105,7 +121,7 @@ function createLionsTable() {
 		tableAddCell(row, {
 			names: ["lions", "price", index],
 			type: "Lbl",
-			text: `${value["4"]}<br>(${value["2"]})`,
+			text: obj.price,
 			onclick: () => {
 				window.open(lionsOptions.url);
 			},

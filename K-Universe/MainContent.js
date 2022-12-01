@@ -112,7 +112,7 @@ const contentGrid = {
     name: "Lions",
     heritage: ["englisch", "Löwen"],
     source: {
-      Daten: "https://hirsau.lions.de/edition-nagold"
+      Daten: "https://hirsau.lions.de/"
     },
     info: "Gewinner des Lions-Advendskalender 2021 - Edition Nagold",
     subgrid: [

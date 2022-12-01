@@ -187,7 +187,6 @@ app.post(`${redirectPath}/News/`, (req, res) => {
 app.post(`${redirectPath}/Lions/`, (req, res) => {
 	const url = "https://hirsau.lions.de/";
 	const options = {
-		ignoreColumns: [3],
 		forceIndexAsNumber: true,
 	};
 	async function lionsAsync() {
