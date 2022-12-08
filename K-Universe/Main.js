@@ -11,19 +11,6 @@ function initCssMediaSizes() {
 		globalValues.mediaSizes[key] = getCssRoot(key, true, true);
 	}
 }
-// let FBUserSettings = null;
-
-// function test() {
-// 	FBUserSettings.doc(nuncDiscipuli.cred.uid)
-// 		.get()
-// 		.then((doc) => {
-// 			console.log(doc);
-// 		})
-// 		.catch((error) => {
-// 			console.log(error);
-// 		});
-// }
-
 function mainSetup() {
 	if (globalValues.hostDebug) {
 		dbCLStyle("cl_Loading").display = "none";
@@ -31,7 +18,6 @@ function mainSetup() {
 	htmlAltTag();
 	initCssMediaSizes();
 	globalValues.colors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-	// socketStart();
 	createNewNuncDiscipuli();
 	firebase.initializeApp({
 		apiKey: "AIzaSyDHgM7J-2Q_W1Swp0Ozx6nY1QDoFcwEFwQ",
@@ -42,8 +28,8 @@ function mainSetup() {
 		messagingSenderId: "874702902059",
 		appId: "1:874702902059:web:cbe47b5a31e8f57d",
 	});
-	// const FBData = firebase.firestore();
-	// FBUserSettings = FBData.collection("xxxx");
+	const FBData = firebase.firestore();
+	FBUserSettings = FBData.collection("User_Settings");
 
 	layoutCreateSubgrid(); // FIRST:  CREATE THE SUBGRIDS
 	layoutCreateContentlayoutList(); // SECOND: create the LayoutLists

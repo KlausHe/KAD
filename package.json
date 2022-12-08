@@ -9,8 +9,6 @@
     "dotenv": "^16.0.3",
     "eiows": "^4.0.1",
     "express": "^4.17.1",
-    "firebase": "^8.10.0",
-    "firebase-admin": "^10.0.2",
     "google-translate-api-browser": "^3.0.0",
     "newsapi": "^2.4.1",
     "npm": "^9.1.2",
@@ -18,9 +16,9 @@
   },
   "scripts": {
     "start": "node server.js",
+    "siteTest": "open -a /Applications/Firefox.app; node server.js",
     "serverTest": "open -a /Applications/Firefox.app; nodemon server.js",
     "dev": "nodemon test.js"
-
   },
   "engines": {
     "node": ">=18.12.1 <19.1.0"

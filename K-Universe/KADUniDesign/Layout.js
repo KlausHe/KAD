@@ -28,7 +28,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Lions" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_SpeechTranslate" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -426,7 +426,7 @@ function layoutCreateSubgrid() {
 				uiType: "transparent",
 			},
 			onclick: () => {
-				saveDiscipuliRequest(contentGrid[gridKey].userStoreDB);
+				saveDiscipuli(contentGrid[gridKey].userStoreDB);
 			},
 		});
 		titleUploadParent.appendChild(titleUploadBtn);
@@ -451,7 +451,7 @@ function layoutCreateSubgrid() {
 				uiType: "transparent",
 			},
 			onclick: () => {
-				loadDiscipuliRequest(contentGrid[gridKey].userStoreDB);
+				loadDiscipuli(contentGrid[gridKey].userStoreDB);
 			},
 		});
 		titleDownloadParent.appendChild(titleDownloadBtn);

@@ -20,7 +20,6 @@ function clear_cl_PostillonTicker() {
 function tickerLoadData(data) {
 	postillonTickerOptions.data = data.arr;
 	postillonTickerOptions.tickerNums = new Array(postillonTickerOptions.data.length).fill(0).map((n, i) => i);
-	console.log(postillonTickerOptions.tickerNums, postillonTickerOptions.data);
 	newsTickerNext();
 }
 

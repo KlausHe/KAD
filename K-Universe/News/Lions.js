@@ -17,6 +17,7 @@ function lionsRequestNumber() {
 	lionsOptions.num = dbID("idVin_lionsInput").value.trim();
 	if (lionsOptions.num == "" || isNaN(lionsOptions.num) || lionsOptions.num.length != 4) {
 		infoLbl.textContent = `...`;
+		infoLbl.classList.remove("cl_highlighted");
 		return;
 	}
 	let index = null;
@@ -49,12 +50,17 @@ function lionsReturn(data) {
 		return;
 	}
 	lionsOptions.data = [];
-	for (let i = 0; i < data.length; i++) {
+	for (let i = 1; i < data.length; i++) {
 		const obj = data[i];
-		const date = obj["0"];
-		const priceWinners = obj["1"].split(",");
-		const num = priceWinners[0].replace("Losnummer: ", "");
-		const price = `${priceWinners[2].replace("Gewinn: ", "")}<br>${priceWinners[1].replace("Sponsor: ", "")}`;
+		const date = obj["Datum"];
+		let num = obj["Los-Nr."];
+		let save = 0;
+		while (num.length < 4 || save > 4) {
+			num = "0" + num;
+			save++;
+		}
+
+		const price = `${obj["Spende/Gutschein-Beschreibung"]}<br>${obj["Sponsor"]}`;
 
 		const index = lionsOptions.data.findIndex((obj) => obj.date == date && obj.price == price);
 		if (index < 0) {

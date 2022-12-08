@@ -2,6 +2,7 @@ let nuncDiscipuli = {
 	cred: {
 		email: null,
 		uid: null,
+		keepLogin: "SESSION",
 	},
 	get checkLogin() {
 		return firebase.auth().currentUser != null;
@@ -334,10 +335,7 @@ function toggleLayout() {
 	}
 	if (nuncDiscipuli.checkLogin) {
 		// logged in
-		utilsSocketPost("UserAccLogin", {
-			uid: nuncDiscipuli.cred.uid,
-		});
-		//logged in
+		loadDiscipuli();
 		dbID("idImg_userNav_A").src = imgPath("uCheck");
 		dbID("idImg_userNav_B").src = imgPath("uX");
 		dbID("idDiv_navBar_AccountSettingsA").setAttribute("data-type", "change");
@@ -435,7 +433,6 @@ function openUserNav(btn) {
 	clear_cl_userAcc();
 }
 
-
 function accountLogout() {
 	firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 	firebase
@@ -444,8 +441,8 @@ function accountLogout() {
 		.then(() => {
 			resetAll();
 		})
-		.catch((err) => {
-			alert(`ERROR, could not log out: ${err}`);
+		.catch((error) => {
+			alert(`ERROR, could not log out: ${error}`);
 		});
 }
 
@@ -527,11 +524,9 @@ function cancelAccount() {
 	layoutNavClick(contentLayout.defaultPage);
 }
 
-function submitUser(btn) {
+function submitUser() {
 	enableBtn("idBtn_userAcc_submit", false); //disable Button
-	const type = btn.dataset.type;
-	// daten in nuncDiscipuli schreiben
-	nuncDiscipuli.updateType = type;
+	const type = dbID("idBtn_userAcc_submit").dataset.type;
 	nuncDiscipuli.cred.email = dbID("idVin_userAcc_mail").value.trim();
 	if (type == "register" || type == "change") {
 		for (let [key, val] of Object.entries(accData.infos)) {
@@ -550,67 +545,74 @@ function submitUser(btn) {
 			nuncDiscipuli.short = newShort.first || newShort.sur || newShort.email;
 		}
 	}
-
 	//just login
-	const keepLogin = dbID("idCb_userAcc_check").checked ? "LOCAL" : "SESSION"; // "NONE";
+	nuncDiscipuli.cred.keepLogin = dbID("idCb_userAcc_check").checked ? "LOCAL" : "SESSION"; // "NONE";
 	switch (type) {
 		case "login":
-			firebase
-				.auth()
-				.setPersistence(firebase.auth.Auth.Persistence[keepLogin])
-				.then(() => {
-					return firebase
-						.auth()
-						.signInWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim())
-						.then((response) => {
-							userAccLogin(response.user.uid);
-						})
-						.catch((error) => {
-							userAccError(error);
-						});
-				})
-				.catch((error) => {
-					userAccError(error);
-				});
+			userAccLogin();
 			break;
 		case "register":
-			firebase
-				.auth()
-				.setPersistence(firebase.auth.Auth.Persistence[keepLogin])
-				.then(() => {
-					return firebase
-						.auth()
-						.createUserWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim())
-						.then((response) => {
-							userAccRegister(response.user.uid, nuncDiscipuli.cred.email);
-						});
-				})
-				.catch((error) => {
-					userAccError(error);
-				});
+			userAccRegister();
 			break;
 		case "change":
-			saveDiscipuliRequest("userAcc");
-			userAccReturn(null);
+			saveDiscipuli("userAcc");
 			layoutNavClick();
 			break;
 	}
 }
 
-function userAccLogin(uid) {
-	nuncDiscipuli.cred.uid = uid;
-	utilsSocketPost("UserAccLogin", {
-		uid,
-	});
+function userAccLogin() {
+	firebase
+		.auth()
+		.setPersistence(firebase.auth.Auth.Persistence[nuncDiscipuli.cred.keepLogin])
+		.then(() => {
+			return firebase
+				.auth()
+				.signInWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim())
+				.then((response) => {
+					console.log("loggin OK", response.user.uid);
+					nuncDiscipuli.cred.uid = response.user.uid;
+					loadDiscipuli();
+				});
+		})
+		.catch((error) => {
+			userAccError(error);
+		});
 }
 
-function userAccRegister(uid, mail) {
-	nuncDiscipuli.cred.uid = uid;
-	utilsSocketPost("UserAccRegister", {
-		uid: uid,
-		email: mail,
-		saves: nuncDiscipuli.saves,
-	});
+function userAccRegister() {
+	firebase
+		.auth()
+		.setPersistence(firebase.auth.Auth.Persistence[keepLogin])
+		.then(() => {
+			return firebase
+				.auth()
+				.createUserWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim())
+				.then((response) => {
+					nuncDiscipuli.cred.uid = response.user.uid;
+				});
+		})
+		.then(() => {
+			let saves = nuncDiscipuli.saves;
+			saves.uid = nuncDiscipuli.cred.uid;
+			saves.email = nuncDiscipuli.cred.email;
+			FBUserSettings.doc(nuncDiscipuli.cred.uid)
+				.set(saves)
+				.then(() => {
+					userAccSetUserBtn();
+				});
+		})
+		.catch((error) => {
+			userAccError(error);
+		});
+}
+
+function userAccSetUserBtn() {
+	dbIDStyle("idDiv_navBar_User").display = "initial";
+	dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
+	enableBtn("idBtn_userAcc_submit", true);
+	layoutNavTitle();
+	layoutNavClick("User");
 }
 
 function userAccError(error) {
@@ -618,69 +620,53 @@ function userAccError(error) {
 	dbID("idLbl_userAcc_alert").textContent = "E-Mail oder Passwort falsch!";
 }
 
-//---------------NODE RETURNS--------------------------
-function userAccLoginReturn(data) {
-	userAccReturn(data);
-}
-
-function userAccRegisterReturn(data) {
-	userAccReturn(data);
-}
-
-function userAccReturn(data = null) {
-	if (data != null) {
-		if (data.error) {
-			console.error(data.error);
-			return;
-		}
-		loadDiscipuliReturn(data.saves);
-	}
-	dbIDStyle("idDiv_navBar_User").display = "initial";
-	dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
-	layoutNavTitle();
-	enableBtn("idBtn_userAcc_submit", true);
-	layoutNavClick("User");
-}
-
 //--------------Load Single DATA-------------
-function loadDiscipuliRequest(category = null) {
+function loadDiscipuli(category = null) {
 	if (!nuncDiscipuli.checkLogin) return;
-	if (category === null) return;
-	utilsSocketPost("LoadDiscipuli", {
-		category: category,
-		uid: nuncDiscipuli.cred.uid,
-	});
-}
-
-function loadDiscipuliReturn(data) {
-	for (const [key, value] of Object.entries(data)) {
-		if (!Object.keys(contentGrid).includes(`cl_${key}`) || contentGrid[`cl_${key}`].userStoreDB != key) {
-			console.log("Currently not sopported:", key);
-		} else {
-			nuncDiscipuli.saves[key] = value;
-		}
-	}
+	FBUserSettings.doc(nuncDiscipuli.cred.uid)
+		.get()
+		.then((doc) => {
+			const savedData = doc.data();
+			if (category == null) {
+				for (const [key, value] of Object.entries(savedData)) {
+					if (key == "uid" || key == "email" || !Object.keys(contentGrid).includes(`cl_${key}`) || contentGrid[`cl_${key}`].userStoreDB != key) {
+						console.log("Currently not sopported:", key);
+					} else {
+						nuncDiscipuli.saves[key] = value;
+					}
+				}
+				userAccSetUserBtn();
+			} else {
+				nuncDiscipuli.saves[category] = savedData[category];
+			}
+		})
+		.catch((error) => {
+			console.error("Error", error);
+		});
 }
 
 //--------------Save/Update Single DATA-------------
-function saveDiscipuliRequest(category = null) {
+function saveDiscipuli(category = null) {
 	if (!nuncDiscipuli.checkLogin) return;
-	if (category == null) return;
-
-	const data = {
-		[category]: nuncDiscipuli.saves[category],
-		uid: nuncDiscipuli.cred.uid,
-	};
-	utilsSocketPost("SaveDiscipuli", data);
-}
-
-function saveDiscipuliReturn(data) {
-	if (data.error != null) {
-		console.error(error);
-		return;
+	let data = {};
+	if (category == null) {
+		for (const keys of Object.keys(nuncDiscipuli.saves)) {
+			data = { [keys]: nuncDiscipuli.saves[keys] };
+		}
+	} else {
+		data = { [category]: nuncDiscipuli.saves[category] };
 	}
-	const key = data.key;
-	setTimeout(() => {
-		dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${key}`).filter = "invert(0)";
-	}, 500);
+	FBUserSettings.doc(nuncDiscipuli.cred.uid)
+		.update(data, { merge: true })
+		.then(() => {
+			enableBtn("idBtn_userAcc_submit", true);
+			setTimeout(() => {
+				for (const key of Object.keys(data)) {
+					dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${key}`).filter = "invert(0)";
+				}
+			}, 500);
+		})
+		.catch((error) => {
+			console.error("Error", error);
+		});
 }
