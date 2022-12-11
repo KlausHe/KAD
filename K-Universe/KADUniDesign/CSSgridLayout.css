@@ -199,9 +199,11 @@
 		". KounselorOutputA KounselorOptionsB ."
 		". KounselorOutputB KounselorOptionsC ."
 		". KounselorOutputB KounselorOptionsD ."
-		". . KounselorOptionsE .";
+		". . KounselorOptionsE ."
+		". . KounselorOptionsF ."
+		". . KounselorOptionsG .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight);
+	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight);
 }
 
 .cl_subGrid_Kaihanga {

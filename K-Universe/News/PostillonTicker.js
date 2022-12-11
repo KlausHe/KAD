@@ -8,9 +8,12 @@ let postillonTickerOptions = {
 		});
 	},
 	data: null,
+	tickerReload: null,
+	tickerInterval: 1000 * 60 * 10,
 };
 
 function clear_cl_PostillonTicker() {
+	postillonStopTicker();
 	if (postillonTickerOptions.data == null) {
 		globalP5.loadJSON("./Data/DataLists/Newsticker.json", tickerLoadData, "json");
 	}
@@ -20,16 +23,39 @@ function clear_cl_PostillonTicker() {
 function tickerLoadData(data) {
 	postillonTickerOptions.data = data.arr;
 	postillonTickerOptions.tickerNums = new Array(postillonTickerOptions.data.length).fill(0).map((n, i) => i);
-	newsTickerNext();
+	postillonToggleTicker();
 }
 
-function newsTickerNext() {
+function postillonStartTicker() {
+	postillonTickerNext();
+	postillonTickerOptions.tickerReload = setInterval(postillonTickerNext, postillonTickerOptions.tickerInterval);
+	dbID("idImg_postillonTicker").src = imgPath("tStop");
+}
+
+function postillonStopTicker() {
+	clearInterval(postillonTickerOptions.tickerReload);
+	postillonTickerOptions.tickerReload = null;
+	dbID("idImg_postillonTicker").src = imgPath("tPlay");
+}
+
+function postillonToggleTicker() {
+	if (postillonTickerOptions.tickerReload == null) {
+		postillonStartTicker();
+	} else {
+		postillonStopTicker();
+	}
+}
+
+function postillonTickerNext(obj = null) {
+	if (obj != null) {
+		postillonStopTicker();
+	}
 	postillonTickerOptions.num = randomObject(postillonTickerOptions.availiableNums);
 	postillonTickerOptions.usedNums.push(postillonTickerOptions.num);
-	createPostillion();
+	postillionCreate();
 }
 
-function createPostillion() {
+function postillionCreate() {
 	dbID("idLbl_newsTickerNumber").innerHTML = `Ticker ${postillonTickerOptions.num}`;
 	clearTable("idTabBody_postillionTable");
 	const list = postillonTickerOptions.data[postillonTickerOptions.num];

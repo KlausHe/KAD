@@ -240,14 +240,14 @@ function numberFromInput(id, failSafeVal = null, noPlaceholder = null) {
 }
 
 function firstLetterCap(s) {
-  if(s == "") return s
+	if (s == "") return s;
 	if (typeof s != "string") return s;
 	return s[0].toUpperCase() + s.slice(1);
 }
 
 function firstLetterLow(s) {
-  if(s == "") return s
-  if (typeof s != "string") return s;
+	if (s == "") return s;
+	if (typeof s != "string") return s;
 	return s[0].toLowerCase() + s.slice(1);
 }
 
@@ -349,11 +349,11 @@ function create2DArray(c, r, f = null) {
 
 /**
  *  @param {String} object Name of CssProperty
- *  @param {Boolean} number Convert to JS-Number
+ *  @param {Boolean} numberOnly Convert to JS-Number
  *  @param {Boolean} toPX Convert from REM to PX
  */
-function getCssRoot(object, number = false, RemToPX = false) {
-	//  getCssRoot("navbarHeight", return only number=true)
+function getCssRoot(object, numberOnly = false, RemToPX = false) {
+	//  getCssRoot("navbarHeight", return only numberOnly=true)
 	const obj = `--${object}`;
 	const valOrig = getComputedStyle(document.body).getPropertyValue(obj);
 	const unit = valOrig.match(/[a-zA-Z]{1,}/g);
@@ -362,7 +362,7 @@ function getCssRoot(object, number = false, RemToPX = false) {
 		const valConverted = valOrig.replace(/rem/g, "");
 		return Number(size * valConverted);
 	}
-	if (number == true) {
+	if (numberOnly == true) {
 		const valConverted = valOrig.replace(/s|px|rem/g, "");
 		return Number(valConverted);
 	}
@@ -370,19 +370,10 @@ function getCssRoot(object, number = false, RemToPX = false) {
 }
 
 function setCssRoot(object, value, dim = "") {
-	//  setCssRoot("navbarHeight", 100, "px")
 	document.styleSheets[0].cssRules[0].style.setProperty(`--${object}`, `${value}${dim}`);
 }
 
-function convertDate(
-	d = null,
-	opts = {
-		sep: ".",
-		leading: true,
-		reversed: false,
-		fullYear: false,
-	}
-) {
+function convertDate(d = null, opts = { sep: ".", leading: true, reversed: false, fullYear: false }) {
 	const date = d === null ? new Date() : new Date(d);
 	const day = opts.leading ? ("0" + date.getDate()).slice(-2) : `${date.getDate()}`;
 	const month = opts.leading ? ("0" + (date.getMonth() + 1)).slice(-2) : `${date.getMonth() + 1}`;
@@ -462,7 +453,6 @@ function tableAddCellHeader(row, opt) {
 	}
 	cell.appendChild(mainChild);
 	CellOptions(cell, opt);
-	// END
 	row.appendChild(cell);
 	return cell;
 }
@@ -479,7 +469,6 @@ function tableAddCell(row, opt = {}, prevCell = null) {
 		cell.id = `id${opt.type}_cell${opt.name}`;
 	}
 	let mainChild = null;
-	//  Call cellFUNCTION
 	switch (opt.type) {
 		case "Vin":
 			mainChild = cellVin(opt);

@@ -1,110 +1,224 @@
 const kounselorOptions = {
-  curType: null,
-  opts: ["RAL", "Name", "RGB", "HSL", "HEX"],
-  values: [null, null, null, null, null],
-  contrastGood: "#FFFFFF",
-  contrastBad: "#000000"
-}
-
-function clear_cl_Kounselor() {
-  for (const name of kounselorOptions.opts) {
-    resetInput(`idVin_kounselor${name}`, name)
-  }
-  kounselorOptions.curType = 3;
-  kounselorOptions.values = [null, null, colHSLtoRGB(globalValues.colors.elements.baseColor), globalValues.colors.elements.baseColor, `#${colHSLtoHEX(globalValues.colors.elements.baseColor).toUpperCase()}`];
-  kounselorSetResults()
+	curType: null,
+	curTypeOrig: "HSL",
+	contrastGood: "#FFFFFF",
+	contrastBad: "#000000",
+	types: {
+		RAL: {
+			value: null,
+			setValue(input) {
+				this.value = input.trim();
+			},
+		},
+		Name: {
+			value: null,
+			setValue(input) {
+				this.value = input.trim();
+			},
+		},
+		HEX: {
+			value: null,
+			setValue(input) {
+				this.value = input.charAt(0) === "#" ? input : `#${input}`;
+			},
+			convert() {
+				if (kounselorOptions.types.RGB.value == null) {
+					kounselorOptions.types.RGB.value = colHEXtoRGB(input);
+				}
+				let RGB = kounselorOptions.types.RGB.value;
+				if (this.value == null) {
+					this.value = colRGBtoHEX(input);
+				}
+			},
+		},
+		RGB: {
+			value: null,
+			setValue(input) {
+				let data = input.replace(/\s/g, "");
+				data = data.split(/,|-|\s/g);
+				this.value = data.map((n) => Number(n));
+			},
+			convert() {
+				return;
+			},
+		},
+		HSL: {
+			value: null,
+			setValue(input) {
+				let data = input.replace(/%/g, "");
+				data = data.split(/,|-|\s/g);
+				this.value = data.map((n) => Number(n));
+			},
+			convert() {
+				if (kounselorOptions.types.RGB.value == null) {
+					kounselorOptions.types.RGB.value = colHSLtoRGB(input);
+				}
+				let RGB = kounselorOptions.types.RGB.value;
+				if (this.value == null) {
+					this.value = colRGBtoHSL(input);
+				}
+			},
+		},
+		HSB: {
+			// same as HSV
+			value: null,
+			setValue(input) {
+				let data = input.replace(/%/g, "");
+				data = data.split(/,|-|\s/g);
+				this.value = data.map((n) => Number(n));
+			},
+			convert() {
+				if (kounselorOptions.types.RGB.value == null) {
+					kounselorOptions.types.RGB.value = colHSBtoRGB(input);
+				}
+				let RGB = kounselorOptions.types.RGB.value;
+				if (this.value == null) {
+					this.value = colRGBtoHSB(input);
+				}
+			},
+		},
+		CMYK: {
+			value: null,
+			setValue(input) {
+				let data = input.replace(/%/g, "");
+				data = data.split(/,|-|\s/g);
+				this.value = data.map((n) => Number(n));
+			},
+			convert() {
+				this.value = "CMYK test";
+				return;
+				if (kounselorOptions.types.RGB.value == null) {
+					kounselorOptions.types.RGB.value = colCMYKtoRGB(input);
+				}
+				let RGB = kounselorOptions.types.RGB.value;
+				if (this.value == null) {
+					this.value = colRGBtoCMYK(input);
+				}
+			},
+		},
+	},
 };
 
+function clear_cl_Kounselor() {
+	for (const name of Object.keys(kounselorOptions.types)) {
+		resetInput(`idVin_kounselor${name}`, name);
+		kounselorOptions.types[name].value = null;
+	}
+	kounselorOptions.curType = kounselorOptions.curTypeOrig;
+	kounselorOptions.types[kounselorOptions.curType].value = globalValues.colors.elements.baseColor;
+	kounselorShowResults();
+}
+
 function kounselorPopulateDatalists(obj) {
-  const type = obj.dataset.type
-  if (dbID(`idDlist_kounselor${type}`).childNodes.length > 1) return
-  for (const data of Data_Kounselor) {
-    const opt = document.createElement("OPTION");
-    if (Object.keys(Data_Kounselor[0]).includes(type)) {
-      opt.textContent = data[type];
-    } else { // not inside list
-      const text = window[`colRGBto${type}`](data.RGB, {
-        type: type.toLowerCase()
-      });
-      opt.textContent = text;
-    }
-    dbID(`idDlist_kounselor${type}`).appendChild(opt);
-  }
+	const type = obj.dataset.type;
+	if (dbID(`idDlist_kounselor${type}`).childNodes.length > 1) return;
+	for (const data of Data_Kounselor) {
+		const opt = document.createElement("OPTION");
+		opt.textContent = data[type];
+		dbID(`idDlist_kounselor${type}`).appendChild(opt);
+	}
 }
 
-function kounselorInput(obj = null) {
-  if (obj === null) {
-    kounselorSetResults()
-    return;
-  }
-  let input = obj.value.trim();
-  if (input === "") return
-  kounselorOptions.curType = kounselorOptions.opts.indexOf(obj.dataset.type);
-  let data = null;
-  let rgb = null;
-  if (kounselorOptions.curType == 0 || kounselorOptions.curType == 1) { // get Values from Data
-    data = Data_Kounselor.filter((o) => {
-      return (o[obj.dataset.type] == input)
-    })[0];
-    if (data === null) return;
-    rgb = data.RGB;
-  } else if (kounselorOptions.curType == 2) { //RGB
-    input = input.replace(/\s/g, "");
-    input = input.split(/,|-|\s/g);
-    rgb = input.map(n => Number(n))
-    data = kounselorSearchRAL(rgb);
-  } else if (kounselorOptions.curType == 3) { //HSL
-    input = input.replace(/%/g, "");
-    input = input.split(/,|-|\s/g);
-    input = input.map(n => Number(n))
-    rgb = colHSLtoRGB(input);
-    data = kounselorSearchRAL(rgb);
-  } else if (kounselorOptions.curType == 4) { //HEX
-    if (input.charAt(0) != "#") input = `#${input}`
-    rgb = colHEXtoRGB(input);
-    data = kounselorSearchRAL(rgb);
-  }
-
-  //set the Value
-  kounselorOptions.values = [(data === null) ? null : data.RAL, (data === null) ? null : data.Name, rgb, colRGBtoHSL(rgb), `#${colRGBtoHEX(rgb).toUpperCase()}`];
-  for (let i = 0; i < kounselorOptions.opts.length; i++) {
-    if (i != kounselorOptions.curType) {
-      resetInput(`idVin_kounselor${kounselorOptions.opts[i]}`, kounselorOptions.values[i])
-    };
-  }
-  kounselorSetResults();
+function kounselorInput(obj) {
+	let input = obj.value.trim();
+	if (input === "") return;
+	kounselorOptions.curType = obj.dataset.type;
+	kounselorOptions.types[kounselorOptions.curType].setValue(input);
+	const result = kounselorScanDatalist();
+	if (result != false) {
+		kounselorSetResults(result);
+		kounselorShowResults();
+		return;
+	}
+	if (kounselorOptions.curType != "RAL" || kounselorOptions.curType != "Name") return;
+	kounselorConvert();
+	kounselorSetResults(result);
+	kounselorShowResults();
 }
 
-function kounselorSearchRAL(input) {
-  const data = Data_Kounselor.filter((o) => {
-    const d = 2; // Abweichung bei der Berechnung von RGB / HSL, da dies nicht standardisiert zu sein scheint
-    return (
-      (o.RGB[0] >= input[0] - d && o.RGB[0] <= input[0] + d) &&
-      (o.RGB[0] >= input[1] - d && o.RGB[1] <= input[1] + d) &&
-      (o.RGB[0] >= input[2] - d && o.RGB[2] <= input[2] + d)
-    )
-  })[0];
-  if (data === undefined) return null; //check if data is null or undefined-->return without doing things
-  return data;
+function kounselorScanDatalist() {
+	for (let obj of Data_Kounselor) {
+		if (JSON.stringify(obj[kounselorOptions.curType]) == JSON.stringify(kounselorOptions.types[kounselorOptions.curType].value)) {
+			return obj;
+		}
+	}
+	return false;
+}
+function kounselorConvert() {
+	kounselorOptions.types[kounselorOptions.curType].convert();
+
+	const list = Object.keys(kounselorOptions.types).filter((k) => k != kounselorOptions.curType || k != "RAL" || k != "Name");
+	for (const name of list) {
+		kounselorOptions.types[name].convert();
+	}
+
+	return;
+	if (kounselorOptions.curType == 2) {
+		//RGB
+		// input = input.replace(/\s/g, "");
+		// input = input.split(/,|-|\s/g);
+		// rgb = input.map((n) => Number(n));
+	} else if (kounselorOptions.curType == 3) {
+		//HSL
+		// input = input.replace(/%/g, "");
+		// input = input.split(/,|-|\s/g);
+		// input = input.map((n) => Number(n));
+		// rgb = colHSLtoRGB(input);
+	} else if (kounselorOptions.curType == 4) {
+		//HEX
+		if (input.charAt(0) != "#") input = `#${input}`;
+		rgb = colHEXtoRGB(input);
+		data = kounselorSearchRAL(rgb);
+	}
+
+	//set the Value
+	kounselorOptions.values = [
+		data === null ? null : data.RAL,
+		data === null ? null : data.Name,
+		rgb,
+		colRGBtoHSL(rgb),
+		`#${colRGBtoHEX(rgb).toUpperCase()}`,
+	];
+}
+function kounselorSetResults(obj) {
+	for (const [key, val] of Object.entries(obj)) {
+		kounselorOptions.types[key].value = val;
+	}
 }
 
-function kounselorSetResults() {
-  kounselorOptions.contrastGood = colStateToHSL(kounselorOptions.values[3]);
-  kounselorOptions.contrastBad = colStateToHSL(kounselorOptions.values[3], true);
-  dbIDStyle("idLbl_kounselorOutputA").background = colorReturnFormat(kounselorOptions.values[3], {
-    type: "hsl",
-    text: true
-  });
-  dbIDStyle("idLbl_kounselorOutputB").background = colorReturnFormat(kounselorOptions.values[3], {
-    type: "hsl",
-    text: true
-  });
-  dbIDStyle("idLbl_kounselorOutputA").color = colorReturnFormat(kounselorOptions.contrastGood, {
-    type: "hsl",
-    text: true
-  });
-  dbIDStyle("idLbl_kounselorOutputB").color = colorReturnFormat(kounselorOptions.contrastBad, {
-    type: "hsl",
-    text: true
-  });
+function kounselorShowResults() {
+	for (const name of Object.keys(kounselorOptions.types)) {
+		if (name != kounselorOptions.curType) {
+			if (kounselorOptions.types[name].value == null) {
+				resetInput(`idVin_kounselor${name}`, name);
+				continue;
+			}
+			resetInput(
+				`idVin_kounselor${name}`,
+				colorReturnFormat(kounselorOptions.types[name].value, {
+					type: name.toLowerCase(),
+					text: true,
+				})
+			);
+		}
+	}
+	const color = kounselorOptions.types.HSL.value;
+	kounselorOptions.contrastGood = colStateToHSL(color);
+	kounselorOptions.contrastBad = colStateToHSL(color, true);
+	dbIDStyle("idLbl_kounselorOutputA").background = colorReturnFormat(color, {
+		type: "hsl",
+		text: true,
+	});
+	dbIDStyle("idLbl_kounselorOutputB").background = colorReturnFormat(color, {
+		type: "hsl",
+		text: true,
+	});
+	dbIDStyle("idLbl_kounselorOutputA").color = colorReturnFormat(kounselorOptions.contrastGood, {
+		type: "hsl",
+		text: true,
+	});
+	dbIDStyle("idLbl_kounselorOutputB").color = colorReturnFormat(kounselorOptions.contrastBad, {
+		type: "hsl",
+		text: true,
+	});
 }

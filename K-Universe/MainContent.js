@@ -296,6 +296,8 @@ const contentGrid = {
 			["cl_KounselorOptionsC", "left"],
 			["cl_KounselorOptionsD", "left"],
 			["cl_KounselorOptionsE", "left"],
+			["cl_KounselorOptionsF", "left"],
+			["cl_KounselorOptionsG", "left"],
 			["cl_KounselorOutputA", "right", "center"],
 			["cl_KounselorOutputB", "right", "center"],
 		],
