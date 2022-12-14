@@ -9,11 +9,17 @@ const kounselorOptions = {
 			setValue(input) {
 				this.value = input.trim();
 			},
+			convert() {
+				this.value = null;
+			},
 		},
 		Name: {
 			value: null,
 			setValue(input) {
 				this.value = input.trim();
+			},
+			convert() {
+				this.value = null;
 			},
 		},
 		HEX: {
@@ -23,11 +29,10 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = colHEXtoRGB(input);
+					kounselorOptions.types.RGB.value = utilsColor.get("HEX", "RGB", this.value);
 				}
-				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = colRGBtoHEX(input);
+					this.value = utilsColor.get("RGB", "HEX", kounselorOptions.types.RGB.value);
 				}
 			},
 		},
@@ -51,11 +56,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = colHSLtoRGB(input);
+					kounselorOptions.types.RGB.value = utilsColor.get("HSL", "RGB", this.value);
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = colRGBtoHSL(input);
+					this.value = utilsColor.get("RGB", "HSL", kounselorOptions.types.RGB.value);
 				}
 			},
 		},
@@ -69,11 +74,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = colHSBtoRGB(input);
+					kounselorOptions.types.RGB.value = utilsColor.get("HSB", "RGB", this.value);
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = colRGBtoHSB(input);
+					this.value = utilsColor.get("RGB", "HSB", kounselorOptions.types.RGB.value);
 				}
 			},
 		},
@@ -85,14 +90,12 @@ const kounselorOptions = {
 				this.value = data.map((n) => Number(n));
 			},
 			convert() {
-				this.value = "CMYK test";
-				return;
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = colCMYKtoRGB(input);
+					kounselorOptions.types.RGB.value = utilsColor.get("CMYK", "RGB", this.value);
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = colRGBtoCMYK(input);
+					this.value = utilsColor.get("RGB", "CMYK", kounselorOptions.types.RGB.value);
 				}
 			},
 		},
@@ -130,9 +133,8 @@ function kounselorInput(obj) {
 		kounselorShowResults();
 		return;
 	}
-	if (kounselorOptions.curType != "RAL" || kounselorOptions.curType != "Name") return;
+	if (kounselorOptions.curType == "RAL" || kounselorOptions.curType == "Name") return;
 	kounselorConvert();
-	kounselorSetResults(result);
 	kounselorShowResults();
 }
 
@@ -146,40 +148,12 @@ function kounselorScanDatalist() {
 }
 function kounselorConvert() {
 	kounselorOptions.types[kounselorOptions.curType].convert();
-
-	const list = Object.keys(kounselorOptions.types).filter((k) => k != kounselorOptions.curType || k != "RAL" || k != "Name");
+	const list = Object.keys(kounselorOptions.types).filter((k) => !(k == kounselorOptions.curType)); // || k == "RAL" || k == "Name"));
 	for (const name of list) {
 		kounselorOptions.types[name].convert();
 	}
-
-	return;
-	if (kounselorOptions.curType == 2) {
-		//RGB
-		// input = input.replace(/\s/g, "");
-		// input = input.split(/,|-|\s/g);
-		// rgb = input.map((n) => Number(n));
-	} else if (kounselorOptions.curType == 3) {
-		//HSL
-		// input = input.replace(/%/g, "");
-		// input = input.split(/,|-|\s/g);
-		// input = input.map((n) => Number(n));
-		// rgb = colHSLtoRGB(input);
-	} else if (kounselorOptions.curType == 4) {
-		//HEX
-		if (input.charAt(0) != "#") input = `#${input}`;
-		rgb = colHEXtoRGB(input);
-		data = kounselorSearchRAL(rgb);
-	}
-
-	//set the Value
-	kounselorOptions.values = [
-		data === null ? null : data.RAL,
-		data === null ? null : data.Name,
-		rgb,
-		colRGBtoHSL(rgb),
-		`#${colRGBtoHEX(rgb).toUpperCase()}`,
-	];
 }
+
 function kounselorSetResults(obj) {
 	for (const [key, val] of Object.entries(obj)) {
 		kounselorOptions.types[key].value = val;

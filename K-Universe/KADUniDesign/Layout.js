@@ -28,7 +28,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Sepakbola" : "Universe", //cl_Kounselor
+	defaultPage: globalValues.hostDebug ? "cl_Kounselor" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
