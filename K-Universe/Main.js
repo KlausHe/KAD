@@ -1,6 +1,8 @@
+// p5-Setup in Soundlibrary only!  Use Instance "globalP5" for general functionality
 const globalP5 = new p5((c) => {
 	c.setup = function () {
 		c.noCanvas();
+		c.loop();
 	};
 });
 

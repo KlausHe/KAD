@@ -13,7 +13,7 @@ const sepakbolaOptions = {
 	selected: {},
 	selectedOrig: {
 		matchday: 1,
-		ligaIndex: 3,
+		ligaIndex: 0,
 		seasonIndex: 0,
 	},
 	images: {},
@@ -113,9 +113,9 @@ function sepakbolaCreateDropdownLiga() {
 		liga.seasons = [];
 		for (let j = 0; j < liga.maxSeasons; j++) {
 			liga.setSeasonsText = j;
-		} 
+		}
 	}
-  ligaSelect.selectedIndex = sepakbolaOptions.selected.ligaIndex
+	ligaSelect.selectedIndex = sepakbolaOptions.selected.ligaIndex;
 }
 
 function sepakbolaCreateDropdownSeasons() {
@@ -201,15 +201,7 @@ function sepakbolaMatchesReturn(data = null) {
 			tableAddCellHeader(rowTh, {
 				names: ["sepakbolaMatchesHeader", i],
 				type: "Lbl",
-				text: day
-					.toLocaleString("default", {
-						weekday: "short",
-						day: "2-digit",
-						month: "2-digit",
-						hour: "2-digit",
-						minute: "2-digit",
-					})
-					.replace(/,/g, " -"),
+				text: utilsDate(day, { format: "WD - DD.MM. - HH:mm" }),
 				colSpan: 4,
 				cellStyle: {
 					textAlign: "center",

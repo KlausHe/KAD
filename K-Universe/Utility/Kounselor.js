@@ -1,8 +1,6 @@
 const kounselorOptions = {
 	curType: null,
 	curTypeOrig: "HSL",
-	contrastGood: "#FFFFFF",
-	contrastBad: "#000000",
 	types: {
 		RAL: {
 			value: null,
@@ -29,10 +27,10 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get("HEX", "RGB", this.value);
+					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "HEX", "RGB");
 				}
 				if (this.value == null) {
-					this.value = utilsColor.get("RGB", "HEX", kounselorOptions.types.RGB.value);
+					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "HEX");
 				}
 			},
 		},
@@ -56,11 +54,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get("HSL", "RGB", this.value);
+					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "HSL", "RGB");
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = utilsColor.get("RGB", "HSL", kounselorOptions.types.RGB.value);
+					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "HSL");
 				}
 			},
 		},
@@ -74,11 +72,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get("HSB", "RGB", this.value);
+					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "HSB", "RGB");
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = utilsColor.get("RGB", "HSB", kounselorOptions.types.RGB.value);
+					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "HSB");
 				}
 			},
 		},
@@ -91,11 +89,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get("CMYK", "RGB", this.value);
+					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "CMYK", "RGB");
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = utilsColor.get("RGB", "CMYK", kounselorOptions.types.RGB.value);
+					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "CMYK");
 				}
 			},
 		},
@@ -161,38 +159,18 @@ function kounselorSetResults(obj) {
 }
 
 function kounselorShowResults() {
-	for (const name of Object.keys(kounselorOptions.types)) {
-		if (name != kounselorOptions.curType) {
-			if (kounselorOptions.types[name].value == null) {
-				resetInput(`idVin_kounselor${name}`, name);
+	for (const type of Object.keys(kounselorOptions.types)) {
+		if (type != kounselorOptions.curType) {
+			if (kounselorOptions.types[type].value == null) {
+				resetInput(`idVin_kounselor${type}`, type);
 				continue;
 			}
-			resetInput(
-				`idVin_kounselor${name}`,
-				colorReturnFormat(kounselorOptions.types[name].value, {
-					type: name.toLowerCase(),
-					text: true,
-				})
-			);
+			resetInput(`idVin_kounselor${type}`, utilsColor.formatAsCSS(kounselorOptions.types[type].value, type));
 		}
 	}
-	const color = kounselorOptions.types.HSL.value;
-	kounselorOptions.contrastGood = colStateToHSL(color);
-	kounselorOptions.contrastBad = colStateToHSL(color, true);
-	dbIDStyle("idLbl_kounselorOutputA").background = colorReturnFormat(color, {
-		type: "hsl",
-		text: true,
-	});
-	dbIDStyle("idLbl_kounselorOutputB").background = colorReturnFormat(color, {
-		type: "hsl",
-		text: true,
-	});
-	dbIDStyle("idLbl_kounselorOutputA").color = colorReturnFormat(kounselorOptions.contrastGood, {
-		type: "hsl",
-		text: true,
-	});
-	dbIDStyle("idLbl_kounselorOutputB").color = colorReturnFormat(kounselorOptions.contrastBad, {
-		type: "hsl",
-		text: true,
-	});
+	const colorCSS = utilsColor.formatAsCSS(kounselorOptions.types.HSL.value, "HSL");
+	dbIDStyle("idLbl_kounselorOutputA").background = colorCSS;
+	dbIDStyle("idLbl_kounselorOutputB").background = colorCSS;
+	dbIDStyle("idLbl_kounselorOutputA").color = utilsColor.stateAsCSS(kounselorOptions.types.HSL.value, "HSL");
+	dbIDStyle("idLbl_kounselorOutputB").color = utilsColor.stateAsCSS(kounselorOptions.types.HSL.value, "HSL", true);
 }

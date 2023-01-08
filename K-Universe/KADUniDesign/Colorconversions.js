@@ -1,71 +1,85 @@
 const utilsColor = {
 	types: {
-		HEX: { postfix: ["", "", ""], stateRange: [(255).toString(16), (255).toString(16), (255).toString(16)] },
+		HEX: { postfix: ["", "", ""], stateRange: ["FF", "FF", "FF"] },
 		RGB: { postfix: ["", "", ""], stateRange: [255, 255, 255] },
 		HSL: { postfix: ["", "%", "%"], stateRange: [0, 0, 100] },
 		HSB: { postfix: ["", "%", "%"], stateRange: [0, 0, 100] },
 		CMYK: { postfix: ["%", "%", "%", "%"], stateRange: [0, 0, 0, 100] },
 	},
-	from: null,
-	to: null,
-	permutate: false,
-	chain: [],
-	get(cFrom, cTo, colArr, opts) {
+	colAsArray(colArr = [], cFrom = "", cTo = "") {
 		let colFrom = cFrom.toUpperCase();
 		const colTo = cTo.toUpperCase();
 		if (!Object.keys(this.types).includes(colFrom)) return;
 		if (!Object.keys(this.types).includes(colTo)) return;
 		let c = colArr;
 		if (colFrom != "RGB" && colTo != "RGB") {
-			c = this[`${colFrom}toRGB`](colArr, opts);
+			c = this[`${colFrom}toRGB`](colArr);
 			colFrom = "RGB";
 		}
-		c = this[`${colFrom}to${colTo}`](colArr);
-		return this.returnFormat(c, colTo, opts);
+		return this[`${colFrom}to${colTo}`](c);
 	},
-	state(COL, type = "HSL", opt = { toColor: false, invert: false }) {
-		let RGB = type == "RGB" ? COL : this[`${type}toRGB`](COL);
-		let invert = type == "CMYK" ? !opt.invert : opt.invert;
-		// conversion
+	colAsString(colArr = [], cFrom = "", cTo = "") {
+		const c = this.colAsArray(colArr, cFrom, cTo);
+		return this.formatAsString(c, cTo);
+	},
+	colAsCSS(colArr = [], cFrom = "", cTo = "") {
+		const c = this.colAsArray(colArr, cFrom, cTo);
+		return this.formatAsCSS(c, cTo);
+	},
+
+	stateAsBool(colArr = [], type = "HSL", invert = false) {
+		let RGB = type == "RGB" ? colArr : this[`${type}toRGB`](colArr);
+		let inv = type == "CMYK" ? !invert : invert;
 		let uicolors = [RGB[0] / 255, RGB[1] / 255, RGB[2] / 255];
 		let c = uicolors.map((col) => {
 			if (col <= 0.03928) return col / 12.92;
 			return Math.pow((col + 0.055) / 1.055, 2.4);
 		});
 		let L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-		const state = Number(invert ? !(L < 0.179) : L < 0.179);
-		if (opt.toColor) return this.stateToColor(state, type);
-		return state;
+		return Number(inv ? !(L < 0.179) : L < 0.179);
 	},
-	stateToColor(state, type) {
-		let colArr = [];
+	stateAsArray(colArr = [], type = "HSL", invert = false) {
+		const state = this.stateAsBool(colArr, type, invert);
+		let c = [];
 		const range = utilsColor.types[type.toUpperCase()].stateRange;
 		for (let i = 0; i < range.length; i++) {
-			colArr.push(state ? range[i] : 0);
+			c.push(state ? range[i] : 0);
 		}
-		return this.returnFormat(colArr, type, { text: true });
+		return c;
 	},
-	returnFormat(colArray, type = "HSL", opts = { alpha: null, text: false }) {
-		if (opts == undefined || opts.text == "") return colArray;
-		if (typeof arguments[0] === "string") return `${colArray.toUpperCase()}`;
-		const typePostfix = utilsColor.types[type].postfix;
-		let retString = opts.text ? `${type.toLowerCase()}(` : "";
-		for (let i = 0; i < colArray.length; i++) {
-			retString += ` ${colArray[i]}${typePostfix[i]}`;
-		}
+	stateAsString(colArr = [], type = "HSL", invert = false) {
+		let c = this.stateAsArray(colArr, type, invert);
+		return this.formatAsString(c, type);
+	},
+	stateAsCSS(colArr = [], type = "HSL", invert = false) {
+		let c = this.stateAsArray(colArr, type, invert);
+		return this.formatAsCSS(c, type);
+	},
 
-		if (opts?.alpha != null) {
-			if (type == "HEX") {
-				let tempHex = Number(opts.alpha).toString(16);
-				retString += tempHex.length < 2 ? `0${tempHex}` : tempHex;
-			} else {
-				retString += ` / ${opts.alpha}`;
-			}
+	formatAsString(colArray, type = "HSL") {
+		if (typeof colArray === "string") return `${colArray.toUpperCase()}`;
+		const typePostfix = utilsColor.types[type].postfix;
+		let retString = "";
+		for (let i = 0; i < colArray.length; i++) {
+			retString += i > typePostfix.length ? ` / ${colArray[i]}` : ` ${colArray[i]}${typePostfix[i]}`;
 		}
-		retString += opts.text ? ")" : "";
 		return retString;
 	},
-	// -----------------  TO RGB
+	formatAsCSS(colArray, type = "HSL") {
+		if (typeof colArray === "string") return `${colArray.toUpperCase()}`;
+		const typePostfix = utilsColor.types[type].postfix;
+		let retString = `${type.toLowerCase()}(`;
+		for (let i = 0; i < colArray.length; i++) {
+			if (i > typePostfix.length) {
+				retString += ` / ${colArray[i]}`;
+			} else {
+				retString += ` ${colArray[i]}${typePostfix[i]}`;
+			}
+		}
+		retString += ")";
+		return retString;
+	},
+
 	HEXtoRGB(HEX) {
 		let rgb = [];
 		const hex = HEX.charAt(0) === "#" ? HEX.substring(1, 7) : HEX;
@@ -152,10 +166,9 @@ const utilsColor = {
 		let b = 255 - Math.min(1, CMYK[2] * (1 - k) + k) * 255;
 		return [r, g, b];
 	},
-	// -----------------  FROM RGB
 	RGBtoHEX(RGB) {
 		let rgb = RGB.length === 1 ? [RGB[0], RGB[0], RGB[0]] : RGB;
-		let hex = "";
+		let hex = "#";
 		rgb.forEach((c) => {
 			let tempHex = Number(c).toString(16);
 			hex += tempHex.length < 2 ? `0${tempHex}` : tempHex;
@@ -245,228 +258,3 @@ const utilsColor = {
 		return [c, m, y, k];
 	},
 };
-
-function test() {
-	let c = [43, 80, 4];
-	let Res = utilsColor.get("HSL", "RGB", c, { text: true });
-	console.log(Res);
-}
-
-// ------------------ convert to rgb:
-function colHEXtoRGB(HEX, opts) {
-	let rgb = [];
-	const hex = HEX.charAt(0) === "#" ? HEX.substring(1, 7) : HEX;
-	rgb[0] = parseInt(hex.substring(0, 2), 16); // hexToR
-	rgb[1] = parseInt(hex.substring(2, 4), 16); // hexToG
-	rgb[2] = parseInt(hex.substring(4, 6), 16); // hexToB
-	return colorReturnFormat(rgb, opts);
-}
-function colHSLtoRGB(HSL, opts) {
-	let h = HSL[0] / 60;
-	let s = HSL[1] / 100;
-	let l = HSL[2] / 100;
-	let rgb = [0, 0, 0];
-	const C = (1 - Math.abs(2 * l - 1)) * s;
-	const X = C * (1 - Math.abs((h % 2) - 1));
-	if (h >= 0 && h < 1) {
-		rgb[0] = C;
-		rgb[1] = X;
-	} else if (h >= 1 && h < 2) {
-		rgb[0] = X;
-		rgb[1] = C;
-	} else if (h >= 2 && h < 3) {
-		rgb[1] = C;
-		rgb[2] = X;
-	} else if (h >= 3 && h < 4) {
-		rgb[1] = X;
-		rgb[2] = C;
-	} else if (h >= 4 && h < 5) {
-		rgb[0] = X;
-		rgb[2] = C;
-	} else {
-		rgb[0] = C;
-		rgb[2] = X;
-	}
-	const m = l - C / 2;
-
-	rgb[0] += m;
-	rgb[1] += m;
-	rgb[2] += m;
-	rgb[0] = Math.round(rgb[0] * 255);
-	rgb[1] = Math.round(rgb[1] * 255);
-	rgb[2] = Math.round(rgb[2] * 255);
-	return colorReturnFormat(Object.values(rgb), opts);
-}
-function colHSBtoRGB(HSB, opts) {
-	let s = HSB[0] / 360;
-	let v = HSB[1] / 100;
-	let h = HSB[2] / 100;
-	let r, g, b;
-	let i = Math.floor(h * 6);
-	let f = h * 6 - i;
-	let p = v * (1 - s);
-	let q = v * (1 - f * s);
-	let t = v * (1 - (1 - f) * s);
-	switch (i % 6) {
-		case 0:
-			(r = v), (g = t), (b = p);
-			break;
-		case 1:
-			(r = q), (g = v), (b = p);
-			break;
-		case 2:
-			(r = p), (g = v), (b = t);
-			break;
-		case 3:
-			(r = p), (g = q), (b = v);
-			break;
-		case 4:
-			(r = t), (g = p), (b = v);
-			break;
-		case 5:
-			(r = v), (g = p), (b = q);
-			break;
-	}
-	r = Math.round(r * 255);
-	g = Math.round(g * 255);
-	b = Math.round(b * 255);
-	return colorReturnFormat([r, g, b], opts);
-}
-function colCMYKtoRGB(cmyk, opts) {
-	let k = cmyk[3];
-	let r = 255 - Math.min(1, cmyk[0] * (1 - k) + k) * 255;
-	let g = 255 - Math.min(1, cmyk[1] * (1 - k) + k) * 255;
-	let b = 255 - Math.min(1, cmyk[2] * (1 - k) + k) * 255;
-	return colorReturnFormat([r, g, b], opts);
-}
-function colRGBtoHEX(RGB, opts) {
-	let rgb = RGB.length === 1 ? [RGB[0], RGB[0], RGB[0]] : RGB;
-	if (opts?.alpha != null) {
-		rgb.push(opts.alpha);
-	}
-	let hex = "";
-	rgb.forEach((c) => {
-		let tempHex = Number(c).toString(16);
-		hex += tempHex.length < 2 ? `0${tempHex}` : tempHex;
-	});
-	return colorReturnFormat(hex, opts);
-}
-function colRGBtoHSL(RGB, opts) {
-	let r = RGB[0] / 255;
-	let g = RGB[1] / 255;
-	let b = RGB[2] / 255;
-	const ma = Math.max(r, g, b);
-	const mi = Math.min(r, g, b);
-	let h = 0;
-	let s = 0;
-	let l = (ma + mi) / 2;
-	if (ma != mi) {
-		const d = ma - mi;
-		s = l > 0.5 ? d / (2 - ma - mi) : d / (ma + mi);
-		if (r == ma) {
-			h = (g - b) / d;
-		} else if (g == ma) {
-			h = 2 + (b - r) / d;
-		} else if (b == ma) {
-			h = 4 + (r - g) / d;
-		}
-		h = Math.min(h * 60, 360);
-		if (h < 0) h += 360;
-	}
-	h = Math.round(h);
-	s = Math.round(s * 100);
-	l = Math.round(l * 100);
-	return colorReturnFormat([h, s, l], opts);
-}
-function colRGBtoHSB(RGB, opts) {
-	let r = RGB[0];
-	let g = RGB[1];
-	let b = RGB[2];
-	let max = Math.max(r, g, b);
-	let min = Math.min(r, g, b);
-	let d = max - min;
-	let h;
-	let s = max === 0 ? 0 : d / max;
-	let v = max / 255;
-
-	switch (max) {
-		case min:
-			h = 0;
-			break;
-		case r:
-			h = g - b + d * (g < b ? 6 : 0);
-			h /= 6 * d;
-			break;
-		case g:
-			h = b - r + d * 2;
-			h /= 6 * d;
-			break;
-		case b:
-			h = r - g + d * 4;
-			h /= 6 * d;
-			break;
-	}
-	h *= 360;
-	s *= 100;
-	v *= 100;
-	return colorReturnFormat([h, s, v], opts);
-}
-function colRGBtoCMYK(RGB, opts) {
-	let r = RGB[0] / 255;
-	let g = RGB[1] / 255;
-	let b = RGB[2] / 255;
-	let max = Math.max(r, g, b);
-	let c, m, y;
-	let k = 1 - max;
-	if (k == 1) {
-		c = 0;
-		m = 0;
-		y = 0;
-	} else {
-		c = (1 - r - k) / (1 - k);
-		m = (1 - g - k) / (1 - k);
-		y = (1 - b - k) / (1 - k);
-	}
-	return colorReturnFormat([c, m, y, k], opts);
-}
-function colHSLtoHEX(HSL, opts) {
-	const rgb = colHSLtoRGB(HSL);
-	const hex = colRGBtoHEX(rgb);
-	return colorReturnFormat(hex, opts);
-}
-
-function colorReturnFormat(colArray, opts = { alpha: null, type: "", text: false }) {
-	if (opts == undefined || opts.text == "") return colArray;
-	if (typeof arguments[0] === "string") return `${colArray.toUpperCase()}`;
-	const typePostfix = utilsColor.types[opts.type.toUpperCase()].postfix;
-	let retString = opts.text ? `${opts.type.toLowerCase()}(` : "";
-	for (let i = 0; i < colArray.length; i++) {
-		retString += ` ${colArray[i]}${typePostfix[i]}`;
-	}
-	retString += opts.alpha != null ? ` / ${opts.alpha}` : "";
-	retString += opts.text ? ")" : "";
-	return retString;
-}
-// ------------------------------------------------------- get States from colors -------------------------------------------------------
-function colStateHSL(HSL, invert = false) {
-	const rgb = colHSLtoRGB(HSL);
-	const output = colStateRGB(rgb, invert);
-	return Number(output);
-}
-function colStateRGB(RGB, invert = false) {
-	let uicolors = [RGB[0] / 255, RGB[1] / 255, RGB[2] / 255];
-	let c = uicolors.map((col) => {
-		if (col <= 0.03928) {
-			return col / 12.92;
-		}
-		return Math.pow((col + 0.055) / 1.055, 2.4);
-	});
-	let L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-	const output = invert ? !(L < 0.179) : L < 0.179;
-	return Number(output);
-}
-
-function colStateToHSL(HSL, invert = false) {
-	let state = colStateHSL(HSL, invert);
-	return colorReturnFormat([0, 0, state * 100]);
-}

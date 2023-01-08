@@ -102,25 +102,25 @@ const contentGrid = {
 		],
 	},
 
-  cl_Lions: {
-    enableUser: true,
-    userStoreDB: "Lions",
-    canvas: () => {
-      return
-    },
-    contentGroup: "News",
-    name: "Lions",
-    heritage: ["englisch", "Löwen"],
-    source: {
-      Daten: "https://hirsau.lions.de/"
-    },
-    info: "Gewinner des Lions-Advendskalender 2021 - Edition Nagold",
-    subgrid: [
-      ["cl_LionsInput", "right", "center"],
-      ["cl_LionsOutput", "left"],
-      ["cl_LionsTable", "center"]
-    ]
-  },
+	cl_Lions: {
+		enableUser: true,
+		userStoreDB: "Lions",
+		canvas: () => {
+			return;
+		},
+		contentGroup: "News",
+		name: "Lions",
+		heritage: ["englisch", "Löwen"],
+		source: {
+			Daten: "https://hirsau.lions.de/",
+		},
+		info: "Gewinner des Lions-Advendskalender 2021 - Edition Nagold",
+		subgrid: [
+			["cl_LionsInput", "right", "center"],
+			["cl_LionsOutput", "left"],
+			["cl_LionsTable", "center"],
+		],
+	},
 	cl_PostillonTicker: {
 		enableUser: true,
 		canvas: () => {
@@ -792,6 +792,25 @@ const contentGrid = {
 			["cl_OcjeneRandomC", "left"],
 		],
 	},
+	cl_Beatmachine: {
+		enableUser: true,
+		width: 2,
+		height: 1,
+		canvas: () => {
+			return;
+		},
+		contentGroup: "Games",
+		name: "Beatmachine",
+		heritage: ["englisch", "Rhythmusmaschine"],
+		info: "Drumpattern im klassischen Stil erstellen",
+		subgrid: [
+			["cl_beatmachineOptionsA", "left"],
+			["cl_beatmachineOptionsB", "left"],
+			["cl_beatmachineOptionsC", "left"],
+			["cl_beatmachineOptionsD", "left"],
+			["cl_beatmachineTracks", "left"],
+		],
+	},
 	cl_Linaha: {
 		enableUser: true,
 		height: 2,
@@ -953,8 +972,8 @@ const contentGrid = {
 		name: "General-Settings",
 		subgrid: [
 			["cl_SettingsCopyClick", "left"],
-			["cl_SettingsCopySeparator", "left"],
 			["cl_SettingsFontsize", "left"],
+			["cl_SettingsCopySeparator", "left"],
 			["cl_SettingsDecimals", "left"],
 		],
 	},
@@ -967,9 +986,12 @@ const contentGrid = {
 		contentGroup: "GlobalSettings",
 		name: "Color-Settings",
 		subgrid: [
-			["cl_colourSettings_0", "right"],
-			["cl_colourSettings_1", "right"],
-			["cl_colourSettings_2", "right"],
+			["cl_colourSettings_light_0", "right"],
+			["cl_colourSettings_light_1", "right"],
+			["cl_colourSettings_light_2", "right"],
+			["cl_colourSettings_dark_0", "right"],
+			["cl_colourSettings_dark_1", "right"],
+			["cl_colourSettings_dark_2", "right"],
 		],
 	},
 	cl_UserGridLayout: {

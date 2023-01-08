@@ -78,7 +78,7 @@ function clear_cl_Kadar() {
   kadarOptions.valA = null;
   kadarOptions.valB = null;
   kadarOptions.valAB = null;
-  dbID("idBtn_kadarDateNow").textContent = convertDate()
+  dbID("idBtn_kadarDateNow").textContent = utilsDate()
   clearTable(kadarOptions.tableA);
   clearTable(kadarOptions.tableB);
   clearTable(kadarOptions.tableAB);
@@ -106,10 +106,9 @@ function createKadarPikaday(loc) {
     firstDay: 1,
     position: "top",
     i18n: i18nDE,
-    format: 'DD.MM.YYYY',
     onSelect: (date) => {
       kadarOptions[`val${loc}`] = date.getTime();
-      dbID(`idBtn_kadarDate${loc}`).textContent = convertDate(date);
+      dbID(`idBtn_kadarDate${loc}`).textContent = utilsDate(date);
       kadarCalculate();
     }
   });
@@ -129,7 +128,7 @@ function kadarCalculate() {
     kadarOptions.diff = Math.abs(kadarOptions.valA - kadarOptions.valB);
     kadarTable(kadarOptions.tableAB);
   } else {
-    dbID("idBtn_kadarDateNow").textContent = convertDate();
+    dbID("idBtn_kadarDateNow").textContent = utilsDate();
     clearTable(kadarOptions.tableAB);
   };
 };

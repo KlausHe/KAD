@@ -590,7 +590,6 @@ const Data_Leetspeak = new Map([
 ]);
 
 const Data_Botanicals = [
-	//no linebreak here
 	{
 		plant: "Anis",
 		"Botanische Familie": "Doldengewächse",
@@ -611,28 +610,8 @@ const Data_Botanicals = [
 	{
 		plant: "Bärlauch",
 		"Botanische Familie": "Liliengewächse",
-		discomfort: [
-			"Blähungen",
-			"Bluthochdruck",
-			"Blutniederdruck",
-			"Blutreinigung",
-			"Gefäßreinigend",
-			"Magen-Beschwerden",
-			"Immunsystemkräftigend",
-			"Gicht- / Rheumabeschwerden",
-			"Verdauungs-Probleme",
-		],
-		effect: [
-			"Appetitanregend",
-			"Blutreinigend",
-			"Blutdrucksenkend",
-			"Blähungstreibend",
-			"Cholesterinsenkend",
-			"Darmfloraaufbauend",
-			"Entgiftend",
-			"Stoffwechselanregend",
-			"Verdauungsfördernd",
-		],
+		discomfort: ["Blähungen", "Bluthochdruck", "Blutniederdruck", "Blutreinigung", "Gefäßreinigend", "Magen-Beschwerden", "Immunsystemkräftigend", "Gicht- / Rheumabeschwerden", "Verdauungs-Probleme"],
+		effect: ["Appetitanregend", "Blutreinigend", "Blutdrucksenkend", "Blähungstreibend", "Cholesterinsenkend", "Darmfloraaufbauend", "Entgiftend", "Stoffwechselanregend", "Verdauungsfördernd"],
 	},
 	{
 		plant: "Bärwurz",
@@ -649,14 +628,7 @@ const Data_Botanicals = [
 	{
 		plant: "Basilikum",
 		"Botanische Familie": "Lippenblütler",
-		discomfort: [
-			"Magen-Beschwerden",
-			"Leber- / Galle-Beschwerden",
-			"Durchfall-Erkrankung",
-			"Stoffwechsel-Beschwerden",
-			"Verdauungs-Beschwerden",
-			"Blähungen",
-		],
+		discomfort: ["Magen-Beschwerden", "Leber- / Galle-Beschwerden", "Durchfall-Erkrankung", "Stoffwechsel-Beschwerden", "Verdauungs-Beschwerden", "Blähungen"],
 		effect: ["Appetitanregend", "Ballaststoffreich", "Entgiftend", "Appetitanregend"],
 	},
 	{
@@ -697,37 +669,19 @@ const Data_Botanicals = [
 	{
 		plant: "Boretsch",
 		"Botanische Familie": "Boretschgewächse",
-		discomfort: [
-			"Magen-Beschwerden",
-			"Blasen- / Harnwegsbeschwerden",
-			"Nieren-Beschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-		],
+		discomfort: ["Magen-Beschwerden", "Blasen- / Harnwegsbeschwerden", "Nieren-Beschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden"],
 		effect: ["Ballaststoffreich", "Blutreinigend", "Entwässernd"],
 	},
 	{
 		plant: "Brennessel",
 		"Botanische Familie": "Nesselgewächse",
-		discomfort: [
-			"Magen-Beschwerden",
-			"Blasen- / Harnwegsbeschwerden",
-			"Nieren-Beschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-		],
+		discomfort: ["Magen-Beschwerden", "Blasen- / Harnwegsbeschwerden", "Nieren-Beschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden"],
 		effect: ["Blutreinigend", "Entwässernd"],
 	},
 	{
 		plant: "Brunnenkresse",
 		"Botanische Familie": "Kohlgewächse",
-		discomfort: [
-			"Magen-Beschwerden",
-			"Blasen- / Harnwegsbeschwerden",
-			"Nieren-Beschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-		],
+		discomfort: ["Magen-Beschwerden", "Blasen- / Harnwegsbeschwerden", "Nieren-Beschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden"],
 		effect: ["Entwässernd", "Appetitanregend", "Blutreinigend"],
 	},
 	{
@@ -819,13 +773,7 @@ const Data_Botanicals = [
 	{
 		plant: "Hafer grün",
 		"Botanische Familie": "Süßgräser",
-		discomfort: [
-			"Blasen- / Harnwegsbeschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Gelenk-Beschwerden",
-			"Nieren-Beschwerden",
-		],
+		discomfort: ["Blasen- / Harnwegsbeschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden", "Gelenk-Beschwerden", "Nieren-Beschwerden"],
 		effect: ["Gefäßreinigend", "Blutreinigend"],
 	},
 	{
@@ -837,13 +785,7 @@ const Data_Botanicals = [
 	{
 		plant: "Hirtentäschel",
 		"Botanische Familie": "Kohlgewächse",
-		discomfort: [
-			"Magen-Beschwerden",
-			"Blasen- / Harnwegsbeschwerden",
-			"Nieren-Beschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-		],
+		discomfort: ["Magen-Beschwerden", "Blasen- / Harnwegsbeschwerden", "Nieren-Beschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden"],
 		effect: ["Blutreinigend", "Entwässernd", "Appetitanregend", "Blutreinigend"],
 	},
 	{
@@ -872,14 +814,7 @@ const Data_Botanicals = [
 	{
 		plant: "Johanniskraut",
 		"Botanische Familie": "Johanniskrautgewächse",
-		discomfort: [
-			"Leber- / Galle-Beschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Frauenleiden",
-			"Magen-Beschwerden",
-			"Gelenk-Beschwerden",
-			"Haut-Probleme",
-		],
+		discomfort: ["Leber- / Galle-Beschwerden", "Stoffwechsel-Beschwerden", "Frauenleiden", "Magen-Beschwerden", "Gelenk-Beschwerden", "Haut-Probleme"],
 		effect: ["Nervensystemstärkend", "Immunsystemkräftigend"],
 	},
 	{
@@ -891,16 +826,7 @@ const Data_Botanicals = [
 	{
 		plant: "Kamille",
 		"Botanische Familie": "Korbblütler",
-		discomfort: [
-			"Blähungen",
-			"Frauenleiden",
-			"Haut-Probleme",
-			"Magen-Beschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Zahnfleischentzündung",
-			"Schlaf-Beschwerden",
-			"Blasen- / Harnwegsbeschwerden",
-		],
+		discomfort: ["Blähungen", "Frauenleiden", "Haut-Probleme", "Magen-Beschwerden", "Stoffwechsel-Beschwerden", "Zahnfleischentzündung", "Schlaf-Beschwerden", "Blasen- / Harnwegsbeschwerden"],
 		effect: ["Krampflösend"],
 	},
 	{
@@ -912,13 +838,7 @@ const Data_Botanicals = [
 	{
 		plant: "Kapuzinerkresse",
 		"Botanische Familie": "Kapuzinerkressengewächse",
-		discomfort: [
-			"Magen-Beschwerden",
-			"Blasen- / Harnwegsbeschwerden",
-			"Nieren-Beschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-		],
+		discomfort: ["Magen-Beschwerden", "Blasen- / Harnwegsbeschwerden", "Nieren-Beschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden"],
 		effect: ["Appetitanregend", "Blutreinigend", "Entwässernd"],
 	},
 	{
@@ -942,15 +862,7 @@ const Data_Botanicals = [
 		plant: "Knoblauch",
 		"Botanische Familie": "Liliengewächse",
 		discomfort: ["Bluthochdruck", "Immunsystemschwäche"],
-		effect: [
-			"Immunsystemkräftigend",
-			"Blut- / Gefäßreinigend",
-			"Blähungstreibend",
-			"Darmfloraaufbauend",
-			"Cholesterinsenkend",
-			"Entgiftend",
-			"Verdauungsfördernd",
-		],
+		effect: ["Immunsystemkräftigend", "Blut- / Gefäßreinigend", "Blähungstreibend", "Darmfloraaufbauend", "Cholesterinsenkend", "Entgiftend", "Verdauungsfördernd"],
 	},
 	{
 		plant: "Koriander",
@@ -961,14 +873,7 @@ const Data_Botanicals = [
 	{
 		plant: "Kresse",
 		"Botanische Familie": "Kreuzblütler",
-		discomfort: [
-			"Blähungen",
-			"Magen-Beschwerden",
-			"Leber- / Galle-Beschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Blutreinigung",
-			"Erkältungs-Beschwerden",
-		],
+		discomfort: ["Blähungen", "Magen-Beschwerden", "Leber- / Galle-Beschwerden", "Stoffwechsel-Beschwerden", "Blutreinigung", "Erkältungs-Beschwerden"],
 		effect: ["Entwässernd"],
 	},
 	{
@@ -992,15 +897,7 @@ const Data_Botanicals = [
 	{
 		plant: "Lapacho",
 		"Botanische Familie": "Trompetenbaumgewächse",
-		discomfort: [
-			"Blasen- / Harnwegsbeschwerden",
-			"Nieren-Beschwerden",
-			"Blähungen",
-			"Frauenleiden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Verdauungs-Beschwerden",
-		],
+		discomfort: ["Blasen- / Harnwegsbeschwerden", "Nieren-Beschwerden", "Blähungen", "Frauenleiden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden", "Verdauungs-Beschwerden"],
 		effect: ["Entwässernd", "Entsäuernd", "Entgiftend", "Blutreinigend", "Immunsystemkräftigend"],
 	},
 	{
@@ -1053,14 +950,7 @@ const Data_Botanicals = [
 	{
 		plant: "Meerettich",
 		"Botanische Familie": "Kohlgewächse",
-		discomfort: [
-			"Nieren-Beschwerden",
-			"Erkältungs-Beschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Verdauungs-Beschwerden",
-			"Magen-Beschwerden",
-			"Gicht- / Rheumabeschwerden",
-		],
+		discomfort: ["Nieren-Beschwerden", "Erkältungs-Beschwerden", "Stoffwechsel-Beschwerden", "Verdauungs-Beschwerden", "Magen-Beschwerden", "Gicht- / Rheumabeschwerden"],
 		effect: ["Verdauungsfördernd", "Entgiftend", "Appetitanregend", "Immunsystemkräftigend"],
 	},
 	{
@@ -1187,16 +1077,7 @@ const Data_Botanicals = [
 	{
 		plant: "Salbei",
 		"Botanische Familie": "Lippenblütler",
-		discomfort: [
-			"Erkältungs-Beschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Haut-Probleme",
-			"Magen-Beschwerden",
-			"Mund- / Zahn-Hygiene",
-			"Blähungen",
-			"Blasen- / Harnwegsbeschwerden",
-			"Frauenleiden",
-		],
+		discomfort: ["Erkältungs-Beschwerden", "Stoffwechsel-Beschwerden", "Haut-Probleme", "Magen-Beschwerden", "Mund- / Zahn-Hygiene", "Blähungen", "Blasen- / Harnwegsbeschwerden", "Frauenleiden"],
 		effect: ["Schweißhemmend", "Auswurffördernd", "Immunsystemkräftigend"],
 	},
 	{
@@ -1305,24 +1186,12 @@ const Data_Botanicals = [
 	{
 		plant: "Zinnkraut",
 		"Botanische Familie": "Schachtelhalmgewächse",
-		discomfort: [
-			"Blutreinigung",
-			"Blasen- / Harnwegsbeschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Beschwerden",
-			"Erkältungs-Beschwerden",
-		],
+		discomfort: ["Blutreinigung", "Blasen- / Harnwegsbeschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Beschwerden", "Erkältungs-Beschwerden"],
 	},
 	{
 		plant: "Zwiebel",
 		"Botanische Familie": "Liliengewächse",
-		discomfort: [
-			"Blasen- / Harnwegsbeschwerden",
-			"Erkältungs-Beschwerden",
-			"Magen-Beschwerden",
-			"Gicht- / Rheumabeschwerden",
-			"Stoffwechsel-Probleme",
-		],
+		discomfort: ["Blasen- / Harnwegsbeschwerden", "Erkältungs-Beschwerden", "Magen-Beschwerden", "Gicht- / Rheumabeschwerden", "Stoffwechsel-Probleme"],
 		effect: ["Blutreinigend", "Immunsystemkräftigend"],
 	},
 ];
@@ -9364,8 +9233,7 @@ const Data_AkademischerGrad = {
 			"Dr.rer.nat. (rerum naturalium)": "Doktor der Naturwissenschaften",
 			"Dr.rer.oec. (rerum oeconomicarum)": "Doktor der Wirtschaftswissenschaften",
 			"Dr.rer.physiol. (rerum physiologicarum)": "Doktor der Humanbiologie",
-			"Dr.rer.pol. (rerum politicarum)":
-				"Sammelbegriff für Doktoren der Politikwissenschaft, Sozialwissenschaften, Staatswissenschaften oder Wirtschaftswissenschaften",
+			"Dr.rer.pol. (rerum politicarum)": "Sammelbegriff für Doktoren der Politikwissenschaft, Sozialwissenschaften, Staatswissenschaften oder Wirtschaftswissenschaften",
 			"Dr.rer.publ. (rerum publicarum)": "Doktor der Verwaltungswissenschaften",
 			"Dr.rer.sec. (rerum securitatis)": "Doktor der Sicherheitswissenschaften",
 			"Dr.rer.silv. (rerum silvestrium bzw. rerum silvaticarum)": "Doktor der Forstwissenschaften",

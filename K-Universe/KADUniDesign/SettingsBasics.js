@@ -5,23 +5,29 @@ const globalValues = {
 		imgSize: 0,
 	},
 	settings: {
-		//for Start only
 		copyClick: true,
 		copySeparator: true,
 		decimals: 4,
 		fontSize: 12,
 	},
-	get copySeparatorText() {
-		return this.settings.copySeparator ? "." : ",";
+	get copySeparatorSign() {
+		return this.settings.copySeparator ? "," : ".";
+	},
+	get copySeparatorLocation() {
+		return this.settings.copySeparator ? "de-DE" : "en-EN";
 	},
 	fontSizeArray: [6, 8, 10, 11, 12, 14, 16, 18, 20, 24, 26, 32],
 	decimalsArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 	get hostDebug() {
+    console.log("here");
 		return ["local", "127.0.0.1"].some((s) => window.location.hostname.includes(s));
 	},
 	intervalJSON: 1000 * 60 * 60 * 1, // 1000 millis * 60 sec * 60 minutes * 2 hours
 	colors: {
 		darkmodeOn: false,
+		get modeName() {
+			return this.darkmodeOn ? "dark" : "light";
+		},
 		get mode() {
 			return this.darkmodeOn ? this.darkmode : this.lightmode;
 		},
@@ -46,7 +52,6 @@ const globalValues = {
 			[275, 52, 54],
 		],
 		colorSettingsOrig: {
-			//originalData
 			lightmode: {
 				Navbar: [240, 52, 54],
 				Gridtitle: [240, 52, 54],
@@ -59,7 +64,6 @@ const globalValues = {
 			},
 		},
 		lightmode: {
-			//for Start only
 			Navbar: [240, 52, 54],
 			Gridtitle: [240, 52, 54],
 			Background: [100, 5, 89], //[52, 53, 70]
@@ -77,13 +81,13 @@ const globalValues = {
 				return [...globalValues.colors.mode.Navbar];
 			},
 			get text() {
-				return [...colStateToHSL(globalValues.colors.mode.Background)];
+				return [...utilsColor.stateAsArray(globalValues.colors.mode.Background, "HSL")];
 			},
 			get textNavbar() {
-				return [...colStateToHSL(globalValues.colors.mode.Background)];
+				return [...utilsColor.stateAsArray(globalValues.colors.mode.Background, "HSL")];
 			},
 			get line() {
-				return [...colStateToHSL(globalValues.colors.mode.Background)];
+				return [...utilsColor.stateAsArray(globalValues.colors.mode.Background, "HSL")];
 			},
 			get btn() {
 				return [0, 0, 100];
@@ -118,26 +122,8 @@ const globalValues = {
 		},
 		spreadVal() {
 			const idArrays = {
-				strings: [
-					"idVin_howaEntry",
-					"idArea_tugasEntry",
-					"idVin_wikiInput",
-					"idArea_thiontuInputEntry",
-					"idVin_kaihangaEntry",
-					"idVin_analysisEntry",
-					"idVin_synonymEntry",
-				],
-				numerical: [
-					"idVin_IomlaidCur",
-					"idVin_Area_0",
-					"idVin_expansionLength",
-					"idVin_Pattern0",
-					"idVin_luasDiameter",
-					"idVin_middleA",
-					"idVin_Pytho_0",
-					"idVin_quickkmathVal",
-					"idVin_ranjeVal",
-				],
+				strings: ["idVin_howaEntry", "idArea_tugasEntry", "idVin_wikiInput", "idArea_thiontuInputEntry", "idVin_kaihangaEntry", "idVin_analysisEntry", "idVin_synonymEntry"],
+				numerical: ["idVin_IomlaidCur", "idVin_Area_0", "idVin_expansionLength", "idVin_Pattern0", "idVin_luasDiameter", "idVin_middleA", "idVin_Pytho_0", "idVin_quickkmathVal", "idVin_ranjeVal"],
 			};
 			const val = this.value;
 			const idDrivers = {
@@ -165,13 +151,10 @@ const globalValues = {
 
 function clear_cl_GeneralSettings() {
 	settingsCopySeparator();
-	//populate TextSize Options
 	for (let i = 0; i < globalValues.fontSizeArray.length; i++) {
 		dbID("idSel_settingsFontsize").options[i] = new Option(globalValues.fontSizeArray[i], globalValues.fontSizeArray[i]);
 	}
 	dbID("idSel_settingsFontsize").options[4].selected = "true";
-
-	//populate Decimals Options
 	for (let i = 0; i < globalValues.decimalsArray.length; i++) {
 		dbID("idSel_settingsDecimals").options[i] = new Option(globalValues.decimalsArray[i], globalValues.decimalsArray[i]);
 	}
@@ -193,7 +176,7 @@ function settingsCopySeparator(obj = null) {
 	} else {
 		globalValues.settings.copySeparator = obj.checked;
 	}
-	dbID("idLbl_settingsCopySeparator").innerHTML = `Trennzeichen: ' ${globalValues.copySeparatorText} '`;
+	dbID("idLbl_settingsCopySeparator").innerHTML = `Nummernformat: ' ${globalValues.copySeparatorSign} '`;
 }
 
 function settingsFontsize(obj = null) {
@@ -227,24 +210,25 @@ function clear_cl_ColorSettings() {
 	populateColorSelector();
 }
 
-// detect Dark/Light-Mode changes
 const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-darkModeMediaQuery.addListener((e) => {
+darkModeMediaQuery.addEventListener("change", (e) => {
 	globalValues.colors.darkmodeOn = e.matches;
 	displayColorSystem();
 });
 
-//colorFuntionality
 function displayColorSystem() {
-	for (let [name, col] of Object.entries(globalValues.colors.mode)) {
-		const selID = `idLbl_colorSetting_${name}`;
-		const colString = colorReturnFormat(col, { type: "hsl" });
-		const textString = colorReturnFormat(colStateToHSL(col), { type: "hsl" });
-		dbIDStyle(selID).background = colorReturnFormat(col, { type: "hsl", text: true });
-		dbIDStyle(selID).color = colorReturnFormat(colStateToHSL(col), { type: "hsl", text: true });
-		setCssRoot(`bgc${name}`, colString);
-		setCssRoot(`txt${name}`, textString);
-		setCssRoot(`inv${name}`, colStateHSL(col));
+	// let theme = globalValues.colors.modeName;
+	for (let theme of ["light", "dark"]) {
+		for (let [name, col] of Object.entries(globalValues.colors[`${theme}mode`])) {
+			const selID = `idLbl_colorSetting_${theme}_${name}`;
+			dbIDStyle(selID).background = utilsColor.formatAsCSS(col, "HSL");
+			dbIDStyle(selID).color = utilsColor.stateAsCSS(col, "HSL");
+			if (globalValues.colors.modeName == theme) {
+				setCssRoot(`bgc${name}`, utilsColor.formatAsString(col, "HSL"));
+				setCssRoot(`txt${name}`, utilsColor.stateAsString(col, "HSL"));
+				setCssRoot(`inv${name}`, utilsColor.stateAsBool(col, "HSL"));
+			}
+		}
 	}
 	colToggleColormode();
 	setTimeout(() => {
@@ -253,31 +237,27 @@ function displayColorSystem() {
 }
 
 function populateColorSelector() {
-	for (const [name, values] of Object.entries(globalValues.colors.mode)) {
-		// set the Buttons Text
-		dbID(`idLbl_colorSetting_${name}`).textContent = name;
-		const colString = colHSLtoHEX(values, { type: "hex" });
-		dbID(`idVin_colorSetting_${name}`).value = colString;
+	for (let theme of ["light", "dark"]) {
+		for (const [name, col] of Object.entries(globalValues.colors[`${theme}mode`])) {
+			dbID(`idLbl_colorSetting_${theme}_${name}`).textContent = name;
+			dbID(`idVin_colorSetting_${theme}_${name}`).value = utilsColor.colAsString(col, "HSL", "HEX");
+		}
 	}
 }
 
 function colorChange(obj) {
+	const theme = obj.dataset.theme;
 	const name = obj.dataset.name;
-	const colHEX = obj.value;
-	const colHSL = colHEXtoHSL(colHEX);
-	const colString = colorReturnFormat(colHSL, { type: "hsl", text: true });
-	const textString = colorReturnFormat(colStateToHSL(colHSL), { type: "hsl", text: true });
-	const invString = colStateHSL(colHSL);
+	globalValues.colors[`${theme}mode`][name] = utilsColor.colAsArray(obj.value, "HEX", "HSL");
+	const col = globalValues.colors[`${theme}mode`][name];
+	console.log(col);
+	setCssRoot(`bgc${name}`, utilsColor.formatAsString(col, "HSL"));
+	setCssRoot(`txt${name}`, utilsColor.stateAsString(col, "HSL"));
+	setCssRoot(`inv${name}`, utilsColor.stateAsBool(col, "HSL"));
 
-	setCssRoot(`bgc${name}`, colorReturnFormat(colHSL, { type: "hsl" }));
-	setCssRoot(`txt${name}`, colorReturnFormat(colStateToHSL(colHSL), { type: "hsl" }));
-	setCssRoot(`inv${name}`, invString);
-
-	globalValues.colors.mode[name] = colHSL;
-
-	dbIDStyle(`idLbl_colorSetting_${name}`).background = colString;
-	dbIDStyle(`idLbl_colorSetting_${name}`).color = textString;
-	dbID(`idVin_colorSetting_${name}`).value = colHEX;
+	dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).background = utilsColor.formatAsCSS(col, "HSL");
+	dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).color = utilsColor.stateAsCSS(col, "HSL");
+	dbID(`idVin_colorSetting_${theme}_${name}`).value = obj.value;
 	colorUpdateCanvascolors(true);
 }
 

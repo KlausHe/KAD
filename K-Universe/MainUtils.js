@@ -239,6 +239,93 @@ function numberFromInput(id, failSafeVal = null, noPlaceholder = null) {
 	return Number(obj.placeholder);
 }
 
+// https://github.com/unicode-org/cldr/blob/main/common/validity/unit.xml
+function utilsNumber(value = 1, { formating = globalValues.copySeparatorLocation, indicator = false, leadingDigits = 1, decimals = 1, currency = null, unit = null, notation = "standard" } = {}) {
+	let options = {
+		useGrouping: indicator,
+		notation,
+		minimumIntegerDigits: leadingDigits,
+		maximumFractionDigits: decimals,
+	};
+
+	if (currency) {
+		options.useGrouping = true;
+		options.style = "currency";
+		options.currency = currency;
+		options.maximumFractionDigits = 3;
+	}
+	if (unit) {
+		options.style = "unit";
+		options.unit = unit;
+		options.unitDisplay = "short";
+		options.useGrouping = true;
+	}
+	return Intl.NumberFormat(formating, options).format(value);
+}
+
+function utilsDate(date = null, { format = "DD.MM.YYYY", leadingDigit = true, reversed = false } = {}) {
+	const regexSplit = new RegExp(/([$-/:-?{-~!"^_`\ [\]])/);
+	const conversions = {
+		date: date === null ? new Date() : new Date(date),
+		get YYYY() {
+			return this.date.getFullYear();
+		},
+		get YY() {
+			return parseInt(this.date.getFullYear().toString().slice(2, 4), 10);
+		},
+		get MM() {
+			return this.date.getMonth() + 1;
+		},
+		get DD() {
+			return this.date.getDate();
+		},
+		get WD() {
+			return i18nDE.weekdaysShort[this.date.getDay()];
+		},
+		get HH() {
+			return this.date.getHours();
+		},
+		get mm() {
+			return this.date.getMinutes();
+		},
+		get ss() {
+			return this.date.getSeconds();
+		},
+		get ms() {
+			return this.date.getMilliseconds();
+		},
+	};
+	let arr = format.split(regexSplit);
+	const leadingDigits = leadingDigit ? 2 : 1;
+	for (let i = 0; i < arr.length; i++) {
+		if (Object.keys(conversions).includes(arr[i])) {
+			let str = utilsNumber(conversions[arr[i]], { leadingDigits });
+			arr[i] = !isNaN(str) ? str : conversions[arr[i]];
+		}
+	}
+	if (reversed) arr = arr.reverse();
+	return arr.join("");
+}
+
+function utilsMinutesToObj(mins) {
+	let h = Math.floor(mins / 60) < 10 ? `0${Math.floor(mins / 60)}` : Math.floor(mins / 60);
+	let m = mins % 60 < 10 ? `0${mins % 60}` : mins % 60;
+	return {
+		h,
+		m,
+	};
+}
+
+function utilsGetHour(time = null) {
+	if (time === null) {
+		return new Date().getHours();
+	} else if (time < 10000000000) {
+		return new Date(time * 1000).getHours();
+	} else {
+		return new Date(time).getHours();
+	}
+}
+
 function firstLetterCap(s) {
 	if (s == "") return s;
 	if (typeof s != "string") return s;
@@ -307,11 +394,7 @@ function sortArrayByKey(arr, key, inverse = false, caseSensitive = false) {
 	let array = Array.from(arr);
 	return array.sort(function (a, b) {
 		if (typeof a[key] == "number" && typeof b[key] == "number") {
-			if (inverse) {
-				return b[key] - a[key];
-			} else {
-				return a[key] - b[key];
-			}
+			return inverse ? b[key] - a[key] : a[key] - b[key];
 		} else {
 			const x = caseSensitive ? a[key].toLowerCase() : a[key];
 			const y = caseSensitive ? b[key].toLowerCase() : b[key];
@@ -371,36 +454,6 @@ function getCssRoot(object, numberOnly = false, RemToPX = false) {
 
 function setCssRoot(object, value, dim = "") {
 	document.styleSheets[0].cssRules[0].style.setProperty(`--${object}`, `${value}${dim}`);
-}
-
-function convertDate(d = null, opts = { sep: ".", leading: true, reversed: false, fullYear: false }) {
-	const date = d === null ? new Date() : new Date(d);
-	const day = opts.leading ? ("0" + date.getDate()).slice(-2) : `${date.getDate()}`;
-	const month = opts.leading ? ("0" + (date.getMonth() + 1)).slice(-2) : `${date.getMonth() + 1}`;
-	const year = opts.fullYear ? date.getFullYear() : parseInt(date.getFullYear().toString().slice(2, 4), 10);
-	if (opts.reversed) {
-		return `${year}${opts.sep}${month}${opts.sep}${day}`;
-	}
-	return `${day}${opts.sep}${month}${opts.sep}${year}`;
-}
-
-function utilsMinutesToObj(mins) {
-	let h = Math.floor(mins / 60) < 10 ? `0${Math.floor(mins / 60)}` : Math.floor(mins / 60);
-	let m = mins % 60 < 10 ? `0${mins % 60}` : mins % 60;
-	return {
-		h,
-		m,
-	};
-}
-
-function utilsGetHour(time = null) {
-	if (time === null) {
-		return new Date().getHours();
-	} else if (time < 10000000000) {
-		return new Date(time * 1000).getHours();
-	} else {
-		return new Date(time).getHours();
-	}
 }
 
 function utilsGetFavicon(url) {
@@ -597,10 +650,7 @@ function cellColbox(opt) {
 	const mainChild = document.createElement("div");
 	opt.type = "Colbox";
 	mainChild.classList.add("coloredBox");
-	mainChild.style.background = colorReturnFormat(opt.color, {
-		type: "hsl",
-		text: true,
-	});
+	mainChild.style.background = utilsColor.formatAsCSS(opt.color, "HSL");
 	UIOptions(mainChild, opt);
 	return mainChild;
 }

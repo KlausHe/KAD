@@ -132,8 +132,9 @@ img[imgSize="wiki"] {
 
 img[imgSize="wiki"]:hover,
 img[imgSize="wiki"]:focus {
-	-webkit-transform: scale(2);
-	transform: scale(2);
+	/* -webkit-transform: scale(2); */
+	/* transform: scale(2); */
+  scale: 2
 }
 
 .img_trash {
@@ -148,9 +149,6 @@ img[imgSize="wiki"]:focus {
 	content: url("../Data/Images/SVG/oSub.svg");
 }
 
-/*
-TEXTAREA
-*/
 textarea {
 	width: var(--UIWidthWide);
 	height: var(--UIHeightTriple);
@@ -158,9 +156,6 @@ textarea {
 	resize: none;
 }
 
-/*
-PROGRESS
-*/
 progress {
 	padding: 0;
 	width: var(--UIWidthWide);
@@ -196,9 +191,6 @@ select:disabled {
 	cursor: default;
 }
 
-/*
-BUTTON
-*/
 button {
 	position: relative;
 	width: var(--UIWidthNorm);
@@ -237,7 +229,6 @@ button:active {
 	color: hsl(var(--txtNavbar));
 }
 
-/*                                                                                                                       INPUT*/
 input {
 	width: var(--UIWidthNorm);
 	-webkit-box-align: center;
@@ -270,15 +261,6 @@ input[type="number"]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 }
 
-/* legacy
- input[type="radio"] {
-  -moz-appearance: radio;
-  -webkit-appearance: radio;
-  appearance: radio;
-  width: var(--UIHeight);
-  height: var(--UIHeight);
-  margin-right: 0.417rem;
-} */
 input[type="range"] {
 	-webkit-appearance: none;
 	padding: 0;
@@ -431,6 +413,23 @@ input[imgBtn="subgrid"] {
 	border-top: var(--borderThin);
 }
 
+.cl_BeatmachineBtn {
+	width: var(--UIHeight);
+	height: var(--UIHeight);
+	background-color: hsl(var(--bgcButton));
+	transition: all 0s;
+}
+
+.cl_BeatmachineBtnSelect {
+	background-color: hsl(var(--bgcNavbar));
+}
+
+.cl_BeatmachineBtnBorder {
+	border-left: var(--UIBorderRight);
+}
+.cl_BeatmachineBtnRow {
+	border-right: var(--UIBorderRight);
+}
 /*                                 BUTTONSIZES AND RADIUS-TYPES!!!*/
 [uiType~="transparent"] {
 	background-color: transparent;

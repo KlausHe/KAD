@@ -28,7 +28,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Kounselor" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_Iomlaid" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -41,12 +41,7 @@ function layoutShowLoadingscreen() {
 
 function layoutCreateContentlayoutList() {
 	contentLayout.navContent.Universe = contentLayout.getUniverse;
-
-	// Object.keys(contentGrid).filter((key) => {
-	// 	return contentGrid[key].contentGroup != "AccountSettings" && contentGrid[key].contentGroup != "GlobalSettings";
-	// });
 	contentLayout.origUniverse = [...contentLayout.navContent.Universe];
-
 	for (const objKey of contentLayout.navContent.Universe) {
 		const group = contentGrid[objKey].contentGroup;
 		if (contentLayout.navContent[group] === undefined) {
@@ -178,7 +173,6 @@ function layoutCreateGridLayout(layoutName) {
 		data.contentList = nuncDiscipuli.checkLogin
 			? [...contentLayout.navContent[layoutName]]
 			: [...contentLayout.navContent[layoutName]].filter((content) => {
-					// return (contentGrid[content].logReqUser == undefined);
 					return globalValues.hostDebug ? true : contentGrid[content].logReqUser == undefined;
 			  });
 	}

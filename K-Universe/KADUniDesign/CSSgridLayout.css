@@ -12,8 +12,8 @@
 .cl_subGrid_GeneralSettings {
 	grid-template-areas:
 		". SettingsCopyClick ."
-		". SettingsCopySeparator ."
 		". SettingsFontsize ."
+		". SettingsCopySeparator ."
 		". SettingsDecimals .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight);
@@ -21,10 +21,10 @@
 
 .cl_subGrid_ColorSettings {
 	grid-template-areas:
-		".  colourSettings_0 ."
-		".  colourSettings_1 ."
-		".  colourSettings_2 .";
-	grid-template-columns: 1fr auto 1fr;
+		".  colourSettings_light_0 colourSettings_dark_0 ."
+		".  colourSettings_light_1 colourSettings_dark_1 ."
+		".  colourSettings_light_2 colourSettings_dark_2 .";
+	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight);
 }
 
@@ -503,6 +503,16 @@
 			--UIHeight
 		)
 		var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) auto;
+}
+
+.cl_subGrid_Beatmachine {
+	grid-template-areas:
+		". beatmachineOptionsA beatmachineOptionsB ."
+		". beatmachineOptionsC beatmachineOptionsD ."
+		/* ". beatmachineCanvas beatmachineCanvas ." */
+		". beatmachineTracks beatmachineTracks .";
+	grid-template-columns: 1fr auto auto 1fr;
+	grid-template-rows: var(--UIHeight) var(--UIHeight) auto auto;
 }
 
 .cl_subGrid_Blechgeometrie {
