@@ -11,23 +11,24 @@ const materialOptions = {
 	selMatGroup: null,
 };
 
-function clear_cl_Material() {
-	//------clean Data
-	Data_Material.matSortList = new Set(
-		Object.entries(Data_Material.Materials).map((arr) => {
+function mat() {
+	Data_Material_BU;
+
+	Data_Material_BU.matSortList = new Set(
+		Object.entries(Data_Material_BU.Materials).map((arr) => {
 			return arr[1].matSort;
 		})
 	);
-	Data_Material.matSortList = [...Data_Material.matSortList].sort();
-	Data_Material.matZustandList = new Set(
-		Object.entries(Data_Material.Materials).map((arr) => {
+	Data_Material_BU.matSortList = [...Data_Material_BU.matSortList].sort();
+	Data_Material_BU.matZustandList = new Set(
+		Object.entries(Data_Material_BU.Materials).map((arr) => {
 			return arr[1].matZustand;
 		})
 	);
-	Data_Material.matZustandList.delete(undefined);
-	Data_Material.matZustandList = [...Data_Material.matZustandList].sort();
+	Data_Material_BU.matZustandList.delete(undefined);
+	Data_Material_BU.matZustandList = [...Data_Material_BU.matZustandList].sort();
 
-	//  remove "null"
+	globalP5.saveJSON(Data_Material_BU, "newList.json");
 	for (const [k, data] of Object.entries(Data_Material.Materials)) {
 		for (const [key, value] of Object.entries(data)) {
 			if (value == null) delete data[key];
@@ -35,7 +36,8 @@ function clear_cl_Material() {
 			if (key == "matZustand") data[key] = [...Data_Material.matZustandList].indexOf(value);
 		}
 	}
-
+}
+function clear_cl_Material() {
 	resetInput("idVin_materialFilter", "Material suchen");
 	dbID("idCb_materialListFilter").checked = true;
 
@@ -182,10 +184,11 @@ function materialSelectedTable() {
 						return {
 							title: Data_Material.matSortList[value],
 						};
-					if (listItem == "matZustand")
+					if (listItem == "matZustand") {
 						return {
 							title: Data_Material.matZustandList[value],
 						};
+					}
 					return "";
 				},
 				get copy() {

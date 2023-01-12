@@ -147,37 +147,43 @@ function layoutNavTitle() {
 	document.title = `KAD-${titleText}`;
 }
 
+function layoutCreateContentList(layoutName) {
+	if (layoutName === "Clear") {
+		// used in backgroundAnimations to clear all Tiles
+		return [];
+	}
+	if (layoutName.includes("cl_")) {
+		// fullscreen-subgrid
+		return [layoutName];
+	}
+	if (layoutName === "GlobalSettings") {
+		return contentLayout.GlobalSettings;
+	}
+	if (layoutName === "AccountSettingsA" || layoutName === "AccountSettingsB") {
+		return contentLayout[layoutName];
+	}
+	if (nuncDiscipuli.checkLogin) {
+		return [...contentLayout.navContent[layoutName]];
+	}
+	const hostDeb = globalValues.hostDebug;
+	return [...contentLayout.navContent[layoutName]].filter((content) => {
+		return hostDeb ? true : contentGrid[content].logReqUser == undefined;
+	});
+}
+
 function layoutCreateGridLayout(layoutName) {
 	// fill list with data
 	let rowLength = getCssRoot("gridRowLength", true);
-	let widthIgnore = false;
-	let heightIgnore = false;
+	const widthIgnore = layoutName.includes("cl_"); // fullscreen-subgrid
 	let data = {
 		grid: "",
 		gridArray: [],
 		contentList: [],
 	};
-	if (layoutName === "Clear") {
-		// used in backgroundAnimations to clear all Tiles
-		data.contentList = [];
-	} else if (layoutName.includes("cl_")) {
-		// fullscreen-subgrid
-		data.contentList = [layoutName];
-		widthIgnore = true;
-		heightIgnore = true;
-	} else if (layoutName === "GlobalSettings") {
-		data.contentList = contentLayout.GlobalSettings;
-	} else if (layoutName === "AccountSettingsA" || layoutName === "AccountSettingsB") {
-		data.contentList = contentLayout[layoutName];
-	} else {
-		data.contentList = nuncDiscipuli.checkLogin
-			? [...contentLayout.navContent[layoutName]]
-			: [...contentLayout.navContent[layoutName]].filter((content) => {
-					return globalValues.hostDebug ? true : contentGrid[content].logReqUser == undefined;
-			  });
-	}
+	data.contentList = layoutCreateContentList(layoutName);
+
 	if (rowLength === 1) {
-		data.gridArray = [];
+		// data.gridArray = [];
 		for (const name of data.contentList) {
 			data.gridArray.push(name);
 		}

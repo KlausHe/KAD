@@ -19,7 +19,6 @@ const globalValues = {
 	fontSizeArray: [6, 8, 10, 11, 12, 14, 16, 18, 20, 24, 26, 32],
 	decimalsArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 	get hostDebug() {
-    console.log("here");
 		return ["local", "127.0.0.1"].some((s) => window.location.hostname.includes(s));
 	},
 	intervalJSON: 1000 * 60 * 60 * 1, // 1000 millis * 60 sec * 60 minutes * 2 hours
