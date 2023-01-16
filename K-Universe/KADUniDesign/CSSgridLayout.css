@@ -278,11 +278,11 @@
 
 .cl_subGrid_Material {
 	grid-template-areas:
-		". MaterialPropertyCb MaterialAdd . ."
+		". MaterialPropertyCb . . ."
 		". MaterialList MaterialList MaterialList. "
 		". MaterialSearchVin MaterialSearchSel MaterialSearchClose ."
 		". MaterialSearchList MaterialSearchList MaterialSearchList .";
-	grid-template-columns: 1fr auto auto auto 1fr;
+	grid-template-columns: 1fr auto auto 1fr 1fr;
 	grid-template-rows: var(--UIHeight) auto var(--UIHeight) auto;
 }
 

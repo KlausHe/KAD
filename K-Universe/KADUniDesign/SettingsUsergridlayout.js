@@ -34,10 +34,10 @@ const usergridData = {
   },
   generateArray: () => {
     for (const key of contentLayout.navContent.Universe) {
-      contentGrid[key].enableUser = dbID(`idVin_child_disableUsergridSingle_CB_${key}`).checked;
+      contentGrid[key].userSelected = dbID(`idVin_child_disableUsergridSingle_CB_${key}`).checked;
     };
     return Object.keys(contentGrid).filter((key) => {
-      return (contentGrid[key].enableUser === true && contentLayout.navContent.Universe.includes(key));
+      return (contentGrid[key].userSelected === true && contentLayout.navContent.Universe.includes(key));
     });
   }
 };
@@ -121,7 +121,7 @@ function usergridCreateTable() {
           textAlign: "center"
         },
         createClass: [`clCb_disableUsergridSingle_${groupKey}`],
-        checked: contentGrid[objName].enableUser,
+        checked: contentGrid[objName].userSelected,
         onclick: () => {
           usergridToggleSingle(objName);
         }
@@ -160,7 +160,7 @@ function usergridCreateTable() {
             textAlign: "center"
           },
           createClass: [`clCb_disableUsergridSingle_${groupKey}`],
-          checked: contentGrid[objName].enableUser,
+          checked: contentGrid[objName].userSelected,
           onclick: () => {
             usergridToggleSingle(objName);
           }

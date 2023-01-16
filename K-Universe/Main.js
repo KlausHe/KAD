@@ -33,10 +33,10 @@ function mainSetup() {
 	const FBData = firebase.firestore();
 	FBUserSettings = FBData.collection("User_Settings");
 
-	layoutCreateSubgrid(); // FIRST:  CREATE THE SUBGRIDS
-	layoutCreateContentlayoutList(); // SECOND: create the LayoutLists
-	layoutCreateNavbar(); // THIRD:  Create the Navbar
+	layoutCreateContentlayoutList(); // First: create the LayoutLists
+	layoutCreateNavbar(); 
 	layoutCreateFooter();
+	layoutCreateSubgrid();
 
 	contentLayout.prevNavContent = contentLayout.defaultPage;
 	layoutResizeGrid();
@@ -72,7 +72,8 @@ function resetAll() {
 	createNewNuncDiscipuli();
 	displayColorSystem();
 	clearGlobalValue();
-	layoutNavClick();
+	// layoutNavClick();
+  layoutNavClick(contentLayout.defaultPage);
 }
 
 function clearAllTiles() {
@@ -104,8 +105,8 @@ function htmlAltTag() {
 function timeoutCanvasFinished(
 	canv,
 	txt = {
-		text1: "",
-		text2: "",
+		textTop: "",
+		textBottom: "",
 	}
 ) {
 	canv.noLoop();
@@ -115,9 +116,9 @@ function timeoutCanvasFinished(
 		canv.textSize(32);
 		canv.fill(0, 100, 60);
 		canv.textAlign(canv.CENTER, canv.BOTTOM);
-		canv.text(txt.text1, canv.width / 2, canv.height / 2);
+		canv.text(txt.textTop, canv.width / 2, canv.height / 2);
 		canv.textAlign(canv.CENTER, canv.TOP);
-		canv.text(txt.text2, canv.width / 2, canv.height / 2);
+		canv.text(txt.textBottom, canv.width / 2, canv.height / 2);
 	}, 200);
 }
 

@@ -67,7 +67,7 @@ let nuncDiscipuli = {
 				return Object.keys(contentGrid).includes(cl);
 			});
 			for (const gridName of contentLayout.navContent.Universe) {
-				contentGrid[gridName].enableUser = contentLayout.navContent.User.includes(gridName); //safety, if old things in Database!
+				contentGrid[gridName].userSelected = contentLayout.navContent.User.includes(gridName); //safety, if old things in Database!
 			}
 			usergridCreateTable();
 			usergridData.checkAllGroups();
@@ -429,17 +429,17 @@ function openUserNav(btn) {
 		case "logout":
 			accountLogout();
 			break;
-	}
-	clear_cl_userAcc();
-}
-
-function accountLogout() {
-	firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
-	firebase
+    }
+    clear_cl_userAcc();
+  }
+  
+  function accountLogout() {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+    firebase
 		.auth()
 		.signOut()
 		.then(() => {
-			resetAll();
+      resetAll();
 		})
 		.catch((error) => {
 			alert(`ERROR, could not log out: ${error}`);
@@ -570,7 +570,6 @@ function userAccLogin() {
 				.auth()
 				.signInWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim())
 				.then((response) => {
-					console.log("loggin OK", response.user.uid);
 					nuncDiscipuli.cred.uid = response.user.uid;
 					loadDiscipuli();
 				});

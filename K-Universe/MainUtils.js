@@ -390,6 +390,14 @@ function randomObject(obj, top = null) {
 	return obj[objKeys[randomIndex(objKeys)]];
 }
 
+function randomSubset(array, numSubset) {
+	let options = shuffleData(array);
+	let ret = options.slice(0, numSubset);
+
+	console.log(ret);
+	return ret;
+}
+
 function sortArrayByKey(arr, key, inverse = false, caseSensitive = false) {
 	let array = Array.from(arr);
 	return array.sort(function (a, b) {
@@ -409,25 +417,49 @@ function sortArrayByKey(arr, key, inverse = false, caseSensitive = false) {
 
 function shuffleData(obj) {
 	if (Array.isArray(obj)) {
-		return obj.sort(() => 0.5 - Math.random());
+		let shuffled = obj;
+		for (let i = 0; i < 4; i++) {
+			shuffled = shuffled.sort(() => 0.5 - Math.random());
+		}
+		return shuffled;
 	}
+
 	let newArray;
 	for (let i = 0; i < obj.length; i++) {
 		newArray[i] = JSON.stringify(obj[i]);
 	}
-	newArray = newArray.sort(() => 0.5 - Math.random());
+	for (let i = 0; i < 4; i++) {
+		newArray = newArray.sort(() => 0.5 - Math.random());
+	}
+
 	for (let i = 0; i < newArray.length; i++) {
 		newArray[i] = JSON.parse(newArray[i]);
 	}
 	return newArray;
 }
 
-function create2DArray(c, r, f = null) {
-	let arr = new Array(c);
-	for (let i = 0; i < arr.length; i++) {
-		arr[i] = f != null ? new Array(r).fill(f) : (arr[i] = new Array(r));
+function createIndexedArray(x, y = null) {
+	if (y == null) {
+		arrX = [];
+		for (let i = 0; i < x; i++) {
+			arrX.push(i);
+		}
+		return arrX;
 	}
-	return arr;
+	arrXY = [];
+	for (let i = 0; i < x; i++) {
+		for (let j = 0; j < y; j++) {
+			arrXY.push([i, j]);
+		}
+	}
+	return arrXY;
+}
+function create2DArray(x, y, fill = null) {
+	let arrX = new Array(x);
+	for (let i = 0; i < arrX.length; i++) {
+		arrX[i] = fill == null ? (arrX[i] = new Array(y)) : new Array(y).fill(f);
+	}
+	return arrX;
 }
 
 /**
@@ -458,7 +490,8 @@ function setCssRoot(object, value, dim = "") {
 
 function utilsGetFavicon(url) {
 	const size = globalValues.mediaSizes.imgSize;
-	return `https://www.google.com/s2/favicons?domain=${url}&sz=${size}`;
+	return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=${size}&url=${url}`;
+	// return `https://www.google.com/s2/favicons?domain=${url}&sz=${size}`;
 }
 
 // DESKTOP stop scrolling
@@ -660,7 +693,7 @@ function cellImg(opt) {
 	opt.type = "Img";
 	switch (opt.subGroup) {
 		case "button":
-			elImg.src = imgPath(opt.img);
+			mainChild.src = imgPath(opt.img);
 			break;
 		case "subgrid":
 			mainChild.src = imgPath(opt.img);

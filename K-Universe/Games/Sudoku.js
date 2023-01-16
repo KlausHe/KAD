@@ -336,8 +336,8 @@ function sudokuCheckFinished() {
   let time = dbID("idBtn_sudokuTimer").textContent;
   sudokuStartTimer(false);
   timeoutCanvasFinished(caSU, {
-    text1: "You finished",
-    text2: `in ${time}!`
+    textTop: "You finished",
+    textBottom: `in ${time}!`
   })
   return true;
 };

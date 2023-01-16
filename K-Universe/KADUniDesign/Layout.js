@@ -12,23 +12,25 @@ const contentLayout = {
 	},
 	get getUniverse() {
 		return Object.keys(contentGrid).filter((key) => {
-			return contentGrid[key].contentGroup != "AccountSettings" && contentGrid[key].contentGroup != "GlobalSettings";
+			return contentGrid[key].contentGroup != "AccountSettings" && contentGrid[key].contentGroup != "GlobalSettings" && contentGrid[key].active != false;
 		});
 	},
 	get nameList() {
 		let list = [];
 		Object.values(contentGrid).forEach((obj) => {
 			if (obj.contentGroup == "AccountSettings" || obj.contentGroup == "GlobalSettings") return;
+			if (obj.hasOwnProperty("active") && obj.active == false) return;
 			list.push(obj.name);
 		});
 		return list;
 	},
 	AccountSettingsA: ["cl_userAcc"],
 	AccountSettingsB: ["cl_userAcc"],
+	contentList: [],
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Iomlaid" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_Sweeper" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -56,11 +58,6 @@ function layoutCreateContentlayoutList() {
 		}
 	}
 }
-
-// const checkMediaQuery = window.matchMedia('(max-width: 42rem)')
-// checkMediaQuery.addEventListener("change", (e) => {
-//   const w = (e.matches) ? 80 : 300;
-// })
 
 window.addEventListener("resize", layoutResizeGrid);
 
@@ -90,7 +87,7 @@ function layoutResizeGrid() {
 	}
 }
 
-function layoutNavClick(layoutName = contentLayout.prevNavContent, shuffled = null) {
+function layoutNavClick(layoutName = contentLayout.prevNavContent) {
 	const scrollOptions = {
 		top: 0,
 		behavior: "smooth",
@@ -99,25 +96,20 @@ function layoutNavClick(layoutName = contentLayout.prevNavContent, shuffled = nu
 	document.documentElement.scrollTo(scrollOptions); // For Safari
 
 	if ([...Object.keys(contentLayout.navContent)].includes(layoutName)) {
-		if (shuffled != null) {
-			contentLayout.navContent[layoutName] = shuffleData(contentLayout.navContent[layoutName]);
+		if (layoutName === "Universe") {
+			contentLayout.navContent[layoutName] = [...contentLayout.origUniverse];
+		} else if (layoutName === "User") {
+			contentLayout.navContent[layoutName] = [...nuncDiscipuli.saves.UserGridLayout];
 		} else {
-			if (layoutName === "Universe") {
-				contentLayout.navContent[layoutName] = [...contentLayout.origUniverse];
-			} else if (layoutName === "User") {
-				contentLayout.navContent[layoutName] = [...nuncDiscipuli.saves.UserGridLayout];
-			} else {
-				contentLayout.navContent[layoutName] = contentLayout.navContent[layoutName].sort();
-			}
+			contentLayout.navContent[layoutName] = contentLayout.navContent[layoutName].sort();
 		}
 	}
 	contentLayout.prevNavContent = layoutName || contentLayout.defaultPage;
 	layoutNavTitle();
-	let retData = layoutCreateGridLayout(contentLayout.prevNavContent);
-	dbIDStyle("id_contentGrid").gridTemplateAreas = retData.grid;
+	layoutCreateGridLayout(contentLayout.prevNavContent);
 
 	for (let objKey in contentGrid) {
-		const state = retData.contentList.includes(objKey);
+		const state = contentLayout.contentList.includes(objKey);
 		dbCLStyle(objKey).display = state ? "initial" : "none";
 		dbCL(objKey).pointerEvents = state ? "auto" : "none";
 	}
@@ -175,25 +167,19 @@ function layoutCreateGridLayout(layoutName) {
 	// fill list with data
 	let rowLength = getCssRoot("gridRowLength", true);
 	const widthIgnore = layoutName.includes("cl_"); // fullscreen-subgrid
-	let data = {
-		grid: "",
-		gridArray: [],
-		contentList: [],
-	};
-	data.contentList = layoutCreateContentList(layoutName);
+	let gridArray = [];
+	let gridString = "";
+	contentLayout.contentList = layoutCreateContentList(layoutName);
 
 	if (rowLength === 1) {
-		// data.gridArray = [];
-		for (const name of data.contentList) {
-			data.gridArray.push(name);
+		for (const name of contentLayout.contentList) {
+			gridArray.push(name);
 		}
 	} else {
-		for (const name of data.contentList) {
-			// const contWidth = contentGrid[name].width ?? rowLength; // this is the same as below, but the Beautifyer does not like the "??"
+		for (const name of contentLayout.contentList) {
+			// let contWidth = contentGrid[name].width ?? 1; // this is the same as below, the "nullish" operator.
 			let contWidth = contentGrid[name].hasOwnProperty("width") ? contentGrid[name].width : 1;
-			if (widthIgnore || contWidth === 0 || contWidth > rowLength) {
-				contWidth = rowLength;
-			}
+			if (widthIgnore || contWidth === 0 || contWidth > rowLength) contWidth = rowLength;
 			const contHeight = contentGrid[name].hasOwnProperty("height") ? contentGrid[name].height : 1;
 			let notPlaced = true;
 			let indexRow = 0;
@@ -203,14 +189,14 @@ function layoutCreateGridLayout(layoutName) {
 					const indexR = indexRow * rowLength + r;
 					notPlaced = false;
 					//if the first spot is not free and if the row can't contain the contWidth --> do nothing!
-					if (data.gridArray[indexR] !== undefined || Math.floor((indexR + contWidth - 1) / rowLength) != indexRow) {
+					if (gridArray[indexR] !== undefined || Math.floor((indexR + contWidth - 1) / rowLength) != indexRow) {
 						notPlaced = true;
 					} else {
 						// if this place and all to the right are free(second loop) - and inside that loop,
 						for (let x = 0; x < contWidth; x++) {
 							for (let y = 0; y < contHeight; y++) {
 								const index = indexR + x + y * rowLength;
-								if (data.gridArray[index] !== undefined) {
+								if (gridArray[index] !== undefined) {
 									notPlaced = true;
 								}
 							}
@@ -220,7 +206,7 @@ function layoutCreateGridLayout(layoutName) {
 							for (let x = 0; x < contWidth; x++) {
 								for (let y = 0; y < contHeight; y++) {
 									const index = indexR + x + y * rowLength;
-									data.gridArray[index] = name; //--> not the name, the Index in the contentGrid!!!
+									gridArray[index] = name; //--> not the name, the Index in the contentGrid!!!
 								}
 							}
 							notPlaced = false;
@@ -243,28 +229,27 @@ function layoutCreateGridLayout(layoutName) {
 	} //end of "ELSE"
 
 	//fill grid
-	const fillUp = data.gridArray.length % rowLength;
+	const fillUp = gridArray.length % rowLength;
 	if (fillUp !== 0) {
 		for (let i = 0; i < rowLength - fillUp; i++) {
-			data.gridArray.push(".");
+			gridArray.push(".");
 		}
 	}
 	// turn grid array to String
-	data.grid = '"';
-	for (let i = 0; i < data.gridArray.length; i++) {
-		if (data.gridArray[i] === undefined) {
-			data.grid += " . ";
+	gridString = '"';
+	for (let i = 0; i < gridArray.length; i++) {
+		if (gridArray[i] === undefined) {
+			gridString += " . ";
 		} else {
-			data.grid += data.gridArray[i].replace("cl_", "cl_grid_") + " ";
+			gridString += gridArray[i].replace("cl_", "cl_grid_") + " ";
 		}
-		if ((i + 1) % rowLength === 0 && i != data.gridArray.length - 1) {
-			data.grid += '" "';
-		} else if ((i + 1) % rowLength === 0 && i === data.gridArray.length - 1) {
-			data.grid += '"';
+		if ((i + 1) % rowLength === 0 && i != gridArray.length - 1) {
+			gridString += '" "';
+		} else if ((i + 1) % rowLength === 0 && i === gridArray.length - 1) {
+			gridString += '"';
 		}
 	}
-	delete data.gridArray;
-	return data;
+	dbIDStyle("id_contentGrid").gridTemplateAreas = gridString;
 }
 
 function layoutCreateSubgrid() {
@@ -473,12 +458,6 @@ function layoutCreateSubgrid() {
 			},
 			onclick: () => {
 				layoutToggelFullscreen(gridKey);
-				// if (contentLayout.prevNavContent == gridKey) {
-				// 	layoutNavClick(contentLayout.prevNavFullscreen);
-				// } else {
-				// 	contentLayout.prevNavFullscreen = contentLayout.prevNavContent;
-				// 	layoutNavClick(gridKey);
-				// }
 			},
 		});
 		titleFullParent.appendChild(titleFullBtn);
@@ -538,9 +517,6 @@ function layoutCreateNavbar() {
 			onclick: () => {
 				layoutNavClick(obj);
 			},
-			// ondoubleclick: () => {
-			//   navDoubleClick(obj);
-			// }
 		});
 		parent.insertBefore(navParentDiv, parent.children[0]);
 		const navParentImg = cellImg({
@@ -560,26 +536,6 @@ function layoutCreateNavbar() {
 			},
 		});
 		navParentDiv.appendChild(navParentLbl);
-
-		//----
-		// for (const sub of contentLayout.navContent[obj]) {
-		//   console.log(sub);
-		//   const dropSourceText = cellLbl({
-		//     names: ["navSub", sub],
-		//     type: "Lbl",
-		//     text: sub,
-		//     createClass: ["clDropdown", "clDropdownInfo"],
-		//
-		//     style: {
-		//       position: "relative"
-		//     }
-		//     // onclick: () => {
-		//     //   window.open(value);
-		//     // }
-		//   });
-		//   navParentDiv.appendChild(dropSourceText);
-		// };
-		//----
 	}
 	// move User to last place!
 	parent.insertBefore(dbID("idDiv_navBar_User"), parent.children[contentLayout.contentLength]);

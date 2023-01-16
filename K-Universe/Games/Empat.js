@@ -158,8 +158,8 @@ function empatFinished() {
 	}, 50);
 	unfocusEmpat();
 	timeoutCanvasFinished(caEM, {
-		text1: `Player \"${empatOptions.players[empatOptions.curPlayer].name}\" won`,
-		text2: `in round ${Math.floor(empatOptions.turns / 2) + 1}!`,
+		textTop: `Player \"${empatOptions.players[empatOptions.curPlayer].name}\" won`,
+		textBottom: `in round ${Math.floor(empatOptions.turns / 2) + 1}!`,
 	});
 }
 

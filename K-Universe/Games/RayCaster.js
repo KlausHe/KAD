@@ -228,8 +228,8 @@ function rayCasterDrawContent() {
 
 function mazeRayFinished(data) {
   timeoutCanvasFinished(caRC, {
-    text1: "Congratulations!",
-    text2: "You finished!"
+    textTop: "Congratulations!",
+    textBottom: "You finished!"
   })
 }
 

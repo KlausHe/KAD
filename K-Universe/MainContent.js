@@ -1,6 +1,6 @@
 const contentGrid = {
 	cl_Howa: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "Howa",
 		width: 2,
 		canvas: () => {
@@ -29,7 +29,7 @@ const contentGrid = {
 		],
 	},
 	cl_Sepakbola: {
-		enableUser: false,
+		userSelected: false,
 		height: 2,
 		canvas: () => {
 			return;
@@ -52,7 +52,7 @@ const contentGrid = {
 		],
 	},
 	cl_Covid: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "Covid",
 		height: 2,
 		canvas: () => {
@@ -80,7 +80,7 @@ const contentGrid = {
 		],
 	},
 	cl_News: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -101,10 +101,10 @@ const contentGrid = {
 			["cl_NewsResultImage", "center"],
 		],
 	},
-
 	cl_Lions: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "Lions",
+		active: false,
 		canvas: () => {
 			return;
 		},
@@ -122,7 +122,7 @@ const contentGrid = {
 		],
 	},
 	cl_PostillonTicker: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -138,7 +138,7 @@ const contentGrid = {
 		],
 	},
 	cl_Netsaona: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -158,7 +158,7 @@ const contentGrid = {
 		],
 	},
 	cl_Pelvelea: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -176,7 +176,7 @@ const contentGrid = {
 		],
 	},
 	cl_Tugas: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "Tugas",
 		canvas: () => {
 			return;
@@ -192,7 +192,7 @@ const contentGrid = {
 		],
 	},
 	cl_Kadar: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -210,7 +210,7 @@ const contentGrid = {
 		],
 	},
 	cl_Thiontu: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -228,7 +228,7 @@ const contentGrid = {
 		],
 	},
 	cl_Egg: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -248,7 +248,7 @@ const contentGrid = {
 		],
 	},
 	cl_Foody: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -265,7 +265,7 @@ const contentGrid = {
 		],
 	},
 	cl_Hverertu: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -283,7 +283,7 @@ const contentGrid = {
 		],
 	},
 	cl_Kounselor: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -303,7 +303,7 @@ const contentGrid = {
 		],
 	},
 	cl_Kaihanga: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			clear_cl_Kaihanga();
 		},
@@ -322,7 +322,7 @@ const contentGrid = {
 		],
 	},
 	cl_Botanicals: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -342,7 +342,7 @@ const contentGrid = {
 		],
 	},
 	cl_PlatLesen: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -360,7 +360,7 @@ const contentGrid = {
 		],
 	},
 	cl_Iomlaid: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -378,7 +378,7 @@ const contentGrid = {
 		],
 	},
 	cl_SpeechTranslate: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -393,7 +393,7 @@ const contentGrid = {
 		],
 	},
 	cl_Afinn: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -413,7 +413,7 @@ const contentGrid = {
 		],
 	},
 	cl_Synonym: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -431,7 +431,7 @@ const contentGrid = {
 		],
 	},
 	cl_BiktadA: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -445,7 +445,7 @@ const contentGrid = {
 		subgrid: [["cl_BiktadATable", "center"]],
 	},
 	cl_Boredom: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -461,7 +461,7 @@ const contentGrid = {
 		],
 	},
 	cl_WikiSearch: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "WikiSearch",
 		canvas: () => {
 			return;
@@ -481,7 +481,7 @@ const contentGrid = {
 		],
 	},
 	cl_Geometrie: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			caGE.redraw();
 		},
@@ -498,7 +498,7 @@ const contentGrid = {
 		],
 	},
 	cl_Material: {
-		enableUser: true,
+		userSelected: true,
 		logReqUser: true,
 		userStoreDB: "Material",
 		canvas: () => {
@@ -511,7 +511,6 @@ const contentGrid = {
 		},
 		subgrid: [
 			["cl_MaterialPropertyCb", "left"],
-			["cl_MaterialAdd", "left"],
 			["cl_MaterialList", "left"],
 			["cl_MaterialSearchVin", "left"],
 			["cl_MaterialSearchSel", "left"],
@@ -520,7 +519,7 @@ const contentGrid = {
 		],
 	},
 	cl_Expansion: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -543,7 +542,7 @@ const contentGrid = {
 		],
 	},
 	cl_Pattern: {
-		enableUser: true,
+		userSelected: true,
 		logReqUser: true,
 		canvas: () => {
 			drawPattern();
@@ -562,7 +561,7 @@ const contentGrid = {
 		],
 	},
 	cl_Luas: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			luasOptions.lastAngle = 0;
 			caLU.redraw();
@@ -581,7 +580,7 @@ const contentGrid = {
 		],
 	},
 	cl_Middle: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			showMiddleCanvas();
 		},
@@ -597,7 +596,7 @@ const contentGrid = {
 		],
 	},
 	cl_Ranje: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -610,7 +609,7 @@ const contentGrid = {
 		],
 	},
 	cl_Niska: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			return;
 		},
@@ -633,7 +632,7 @@ const contentGrid = {
 		],
 	},
 	cl_Quickmath: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		canvas: () => {
 			return;
@@ -651,7 +650,7 @@ const contentGrid = {
 		],
 	},
 	cl_Pythagoras: {
-		enableUser: true,
+		userSelected: true,
 		canvas: () => {
 			calcPytho();
 		},
@@ -668,7 +667,7 @@ const contentGrid = {
 		],
 	},
 	cl_Pormula: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		canvas: () => {
 			pormulaCalculate();
@@ -697,7 +696,7 @@ const contentGrid = {
 		],
 	},
 	cl_Blechgeometrie: {
-		enableUser: true,
+		userSelected: true,
 		logReqUser: true,
 		canvas: () => {
 			return;
@@ -717,7 +716,7 @@ const contentGrid = {
 		],
 	},
 	cl_Numbery: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		height: 2,
 		canvas: () => {
@@ -746,7 +745,7 @@ const contentGrid = {
 		],
 	},
 	cl_Ocjene: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		height: 1,
 		canvas: () => {
@@ -793,7 +792,7 @@ const contentGrid = {
 		],
 	},
 	cl_Beatmachine: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		height: 1,
 		canvas: () => {
@@ -812,7 +811,7 @@ const contentGrid = {
 		],
 	},
 	cl_Linaha: {
-		enableUser: true,
+		userSelected: true,
 		height: 2,
 		canvas: () => {
 			return;
@@ -837,7 +836,7 @@ const contentGrid = {
 		],
 	},
 	cl_Ibhaluni: {
-		enableUser: true,
+		userSelected: true,
 		height: 2,
 		canvas: () => {
 			caIB.redraw();
@@ -855,7 +854,7 @@ const contentGrid = {
 		],
 	},
 	cl_Sudoku: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		height: 2,
 		canvas: () => {
@@ -880,7 +879,7 @@ const contentGrid = {
 		],
 	},
 	cl_Lotto: {
-		enableUser: true,
+		userSelected: true,
 		logReqUser: false,
 		userStoreDB: "Lotto",
 		width: 2,
@@ -904,7 +903,7 @@ const contentGrid = {
 		],
 	},
 	cl_RayCaster: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		height: 2,
 		canvas: () => {
@@ -927,7 +926,7 @@ const contentGrid = {
 		],
 	},
 	cl_Empat: {
-		enableUser: true,
+		userSelected: true,
 		height: 2,
 		canvas: () => {
 			caEM.redraw();
@@ -942,7 +941,7 @@ const contentGrid = {
 		],
 	},
 	cl_Sweeper: {
-		enableUser: true,
+		userSelected: true,
 		width: 2,
 		height: 2,
 		canvas: () => {
@@ -963,7 +962,7 @@ const contentGrid = {
 		],
 	},
 	cl_GeneralSettings: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "GeneralSettings",
 		canvas: () => {
 			return;
@@ -978,7 +977,7 @@ const contentGrid = {
 		],
 	},
 	cl_ColorSettings: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "ColorSettings",
 		canvas: () => {
 			return;
@@ -995,7 +994,7 @@ const contentGrid = {
 		],
 	},
 	cl_UserGridLayout: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "UserGridLayout",
 		height: 2,
 		canvas: () => {
@@ -1011,7 +1010,7 @@ const contentGrid = {
 		],
 	},
 	cl_MaterialFilterSettings: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "MaterialFilterSettings",
 		height: 2,
 		canvas: () => {
@@ -1022,7 +1021,7 @@ const contentGrid = {
 		subgrid: [["cl_MaterialFilterTable", "center"]],
 	},
 	cl_userAcc: {
-		enableUser: true,
+		userSelected: true,
 		userStoreDB: "userAcc",
 		width: 0,
 		canvas: () => {
@@ -1048,9 +1047,6 @@ const contentFooter = [
 	["Charts", "http://chartJS.org"],
 	["Date-Picker", "https://github.com/Pikaday/Pikaday"],
 	["Inspirations", "https://thecodingtrain.com/"],
-	[
-		"Color calculations",
-		"https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023",
-	],
+	["Color calculations", "https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023"],
 	["Color calculations", "https://www.html-code-generator.com/javascript/color-converter-script"],
 ];
