@@ -393,8 +393,6 @@ function randomObject(obj, top = null) {
 function randomSubset(array, numSubset) {
 	let options = shuffleData(array);
 	let ret = options.slice(0, numSubset);
-
-	console.log(ret);
 	return ret;
 }
 
@@ -415,27 +413,14 @@ function sortArrayByKey(arr, key, inverse = false, caseSensitive = false) {
 	});
 }
 
-function shuffleData(obj) {
-	if (Array.isArray(obj)) {
-		let shuffled = obj;
-		for (let i = 0; i < 4; i++) {
-			shuffled = shuffled.sort(() => 0.5 - Math.random());
-		}
-		return shuffled;
+function shuffleData(arr) {
+	let shuffled = deepClone(arr);
+	if (!Array.isArray(arr)) return arr;
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 	}
-
-	let newArray;
-	for (let i = 0; i < obj.length; i++) {
-		newArray[i] = JSON.stringify(obj[i]);
-	}
-	for (let i = 0; i < 4; i++) {
-		newArray = newArray.sort(() => 0.5 - Math.random());
-	}
-
-	for (let i = 0; i < newArray.length; i++) {
-		newArray[i] = JSON.parse(newArray[i]);
-	}
-	return newArray;
+	return shuffled;
 }
 
 function createIndexedArray(x, y = null) {
@@ -454,6 +439,7 @@ function createIndexedArray(x, y = null) {
 	}
 	return arrXY;
 }
+
 function create2DArray(x, y, fill = null) {
 	let arrX = new Array(x);
 	for (let i = 0; i < arrX.length; i++) {
