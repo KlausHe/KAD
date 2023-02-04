@@ -12,6 +12,9 @@ const niskaOptions = {
 		indexOrig: 8,
 		type: "",
 		typeOrig: "regel",
+		get offset() {
+			return this.type == "regel" ? 0 : niskaOptions.regel.length;
+		},
 		get size() {
 			return niskaOptions[this.type][this.index][0];
 		},
@@ -1224,7 +1227,6 @@ function clear_cl_Niska() {
 		selStrength.appendChild(opt);
 	}
 	selStrength.options[niskaOptions.strengthClass.index].selected = true;
-
 	niskaCalc();
 }
 
@@ -1234,6 +1236,7 @@ function niskaCalc() {
 	niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
 	niskaOptions.select.index = dbID("idSel_niskaSelect").selectedIndex;
 	niskaOptions.select.type = dbID("idSel_niskaSelect").options[niskaOptions.select.index].dataset.type;
+	niskaOptions.select.index -= niskaOptions.select.offset;
 	dbID("idLbl_niskaRegelInfo").textContent = niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde";
 	niskaHelpCalculation(niskaOptions.select.size, niskaOptions.select.pitch, 1);
 	niskaOptions.strengthClass.index = dbID("idSel_niskaStrengthClass").selectedIndex;

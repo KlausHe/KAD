@@ -13,7 +13,7 @@ function initCssMediaSizes() {
 		globalValues.mediaSizes[key] = getCssRoot(key, true, true);
 	}
 }
-function mainSetup() {
+function mainSetup() {  
 	if (globalValues.hostDebug) {
 		dbCLStyle("cl_Loading").display = "none";
 	}

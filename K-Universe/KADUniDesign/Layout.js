@@ -30,7 +30,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Sweeper" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_Niska" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -168,9 +168,7 @@ function layoutCreateGridLayout(layoutName) {
 	let rowLength = getCssRoot("gridRowLength", true);
 	const widthIgnore = layoutName.includes("cl_"); // fullscreen-subgrid
 	let gridArray = [];
-	let gridString = "";
 	contentLayout.contentList = layoutCreateContentList(layoutName);
-
 	if (rowLength === 1) {
 		for (const name of contentLayout.contentList) {
 			gridArray.push(name);
@@ -228,7 +226,7 @@ function layoutCreateGridLayout(layoutName) {
 		} // end Grid-Element
 	} //end of "ELSE"
 
-	//fill grid
+	//fill grid with blank spots "."
 	const fillUp = gridArray.length % rowLength;
 	if (fillUp !== 0) {
 		for (let i = 0; i < rowLength - fillUp; i++) {
@@ -236,7 +234,7 @@ function layoutCreateGridLayout(layoutName) {
 		}
 	}
 	// turn grid array to String
-	gridString = '"';
+	let gridString = '"';
 	for (let i = 0; i < gridArray.length; i++) {
 		if (gridArray[i] === undefined) {
 			gridString += " . ";

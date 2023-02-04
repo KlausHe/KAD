@@ -1,5 +1,5 @@
 {
-        "editor.fontWeight": "normal",
+        // "editor.fontWeight": "normal",
         "editor.minimap.renderCharacters": true,
         "workbench.editor.tabCloseButton": "left",
         "liveServer.settings.port": 3002,

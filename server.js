@@ -33,6 +33,22 @@ const { generateRequestUrl, normaliseResponse } = require("google-translate-api-
 //----------------------------------Data----------------------------
 app.post(`${redirectPath}/Howa/`, (req, res) => {
 	let data = req.body; // your JSON
+	function replaceUmlaute(word = null) {
+		if (word == null || word.trim() == "") return;
+		const umlaute = new Map([
+			["ä", "ae"],
+			["ö", "oe"],
+			["ü", "ue"],
+			["Ä", "Ae"],
+			["Ö", "Oe"],
+			["Ü", "Ue"],
+		]);
+		for (const [key, val] of umlaute) {
+			word = word.replaceAll(key, val);
+		}
+		return word;
+	}
+
 	if (data.location != null) data.location = replaceUmlaute(data.location);
 	async function HowaAsync() {
 		if (data.location != null) {
@@ -46,13 +62,9 @@ app.post(`${redirectPath}/Howa/`, (req, res) => {
 			}
 		}
 		try {
-			const currentReturn = await axios.get(
-				`${howaData.URLCurrent}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`
-			);
+			const currentReturn = await axios.get(`${howaData.URLCurrent}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`);
 			data.currentData = currentReturn.data;
-			const forecastReturn = await axios.get(
-				`${howaData.URLForecast}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`
-			);
+			const forecastReturn = await axios.get(`${howaData.URLForecast}lat=${data.lat}&lon=${data.lon}&units=metric&appid=${process.env.API_WEATHER_KEY}`);
 			data.forecastData = forecastReturn.data;
 			data.currentData.pop = data.currentData.rain == undefined ? 0 : 1;
 		} catch (error) {
@@ -121,26 +133,3 @@ app.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
 	}
 	SpeechAsync();
 });
-
-// --------------allgemeine Funktionen---------------------------------------------------
-function replaceUmlaute(word = null, language = "de") {
-	if (word == null || word.trim() == "") return;
-	const umlaute = {
-		de: new Map([
-			["ä", "ae"],
-			["ö", "oe"],
-			["ü", "ue"],
-			["Ä", "Ae"],
-			["Ö", "Oe"],
-			["Ü", "Ue"],
-		]),
-		ja: new Map([
-			["oo", "ō"],
-			["uu", "ū"],
-		]),
-	};
-	for (const [key, val] of umlaute[language]) {
-		word = word.replaceAll(key, val);
-	}
-	return word;
-}
