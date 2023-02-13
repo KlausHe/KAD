@@ -22,6 +22,35 @@ const niskaOptions = {
 			return niskaOptions[this.type][this.index][1];
 		},
 	},
+	headSize: {
+		// Gewinde,  Kopfdurchmesser,	Schlüsselweite
+		"M1.4": [2.6, 1.3],
+		"M1.6": [3, 1.5],
+		M2: [3.8, 1.5],
+		"M2.5": [4.5, 2],
+		M3: [5.5, 2.5],
+		M4: [7, 3],
+		M5: [8.5, 4],
+		M6: [10, 5],
+		M7: [11.5, 6],
+		M8: [13, 6],
+		M10: [16, 8],
+		M12: [18, 10],
+		M14: [21, 12],
+		M16: [24, 14],
+		M18: [27, 14],
+		M20: [30, 17],
+		M22: [33, 17],
+		M24: [36, 19],
+		M27: [41, 19],
+		M30: [45, 22],
+		M33: [51, 22],
+		M36: [54, 27],
+		M42: [63, 32],
+		M48: [72, 36],
+		M56: [84, 41],
+		M64: [96, 46],
+	},
 	regel: [
 		[1, 0.25, "DIN13-1"],
 		[1.2, 0.25, "DIN13-1"],
@@ -1126,6 +1155,21 @@ const niskaOptions = {
 	},
 
 	results: {
+		headDiameter: {
+			name: "Kopfdurchmesser",
+			unit: "mm",
+			val: [],
+		},
+		headHeight: {
+			name: "Kopfhöhe",
+			unit: "mm",
+			val: [],
+		},
+		keyWidth: {
+			name: "Schlüsselweite",
+			unit: "mm",
+			val: [],
+		},
 		boreDiameter: {
 			name: "Bohrungsdurchmesser",
 			unit: "mm",
@@ -1276,6 +1320,11 @@ function niskaHelpCalculation(d, P, index) {
 
 	const strengthAxialStatic = tensionPermitted / niskaOptions.data.safetyAxialStatic;
 	const strengthAxialDynamic = tensionPermitted / niskaOptions.data.safetyAxialDynamic;
+
+	headIndex = niskaOptions.headSize.hasOwnProperty(`M${d}`);
+	niskaOptions.results.headDiameter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][0] : "-";
+	niskaOptions.results.headHeight.val[index] = d;
+	niskaOptions.results.keyWidth.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][1] : "-";
 
 	niskaOptions.results.boreDiameter.val[index] = checkExponential(boreDiameter, niskaOptions.decimalOpts);
 	niskaOptions.results.innerCoreDiameterNut.val[index] = checkExponential(innerCoreDiameterNut, niskaOptions.decimalOpts);
