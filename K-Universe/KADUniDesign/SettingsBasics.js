@@ -180,7 +180,7 @@ function settingsCopySeparator(obj = null) {
 
 function settingsFontsize(obj = null) {
 	if (obj === null) {
-		const opt = globalValues.fontSizeArray.indexOf(globalValues.settings.fontSize);
+		const opt = globalValues.fontSizeArray.indexOf(Number(globalValues.settings.fontSize));
 		dbID("idSel_settingsFontsize").options[opt].selected = true; //set CB when loaded
 	} else {
 		globalValues.settings.fontSize = obj.value;
@@ -192,7 +192,7 @@ function settingsFontsize(obj = null) {
 
 function settingsDecimals(obj = null) {
 	if (obj === null) {
-		const opt = globalValues.decimalsArray.indexOf(globalValues.settings.decimals);
+		const opt = globalValues.decimalsArray.indexOf(Number(globalValues.settings.decimals));
 		dbID("idSel_settingsDecimals").options[opt].selected = true; //set CB when loaded
 	} else {
 		globalValues.settings.decimals = obj.value;
@@ -249,7 +249,6 @@ function colorChange(obj) {
 	const name = obj.dataset.name;
 	globalValues.colors[`${theme}mode`][name] = utilsColor.colAsArray(obj.value, "HEX", "HSL");
 	const col = globalValues.colors[`${theme}mode`][name];
-	console.log(col);
 	setCssRoot(`bgc${name}`, utilsColor.formatAsString(col, "HSL"));
 	setCssRoot(`txt${name}`, utilsColor.stateAsString(col, "HSL"));
 	setCssRoot(`inv${name}`, utilsColor.stateAsBool(col, "HSL"));

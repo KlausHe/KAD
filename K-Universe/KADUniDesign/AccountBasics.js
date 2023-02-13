@@ -140,8 +140,8 @@ let nuncDiscipuli = {
 				}
 			}
 			if (filteredWrong.length > 0) console.log("The following Filters are no longer supported:", filteredWrong);
-			materialFilterUpdateCB();
 			materialFilterBuildTable();
+			materialFilterUpdateCB();
 			// materialSelectedTable();
 		},
 		get Tugas() {
@@ -429,17 +429,17 @@ function openUserNav(btn) {
 		case "logout":
 			accountLogout();
 			break;
-    }
-    clear_cl_userAcc();
-  }
-  
-  function accountLogout() {
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
-    firebase
+	}
+	clear_cl_userAcc();
+}
+
+function accountLogout() {
+	firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+	firebase
 		.auth()
 		.signOut()
 		.then(() => {
-      resetAll();
+			resetAll();
 		})
 		.catch((error) => {
 			alert(`ERROR, could not log out: ${error}`);
@@ -481,8 +481,7 @@ function createUserInfos(type) {
 				list: `dList_uInfo_${key}`,
 				maxLength: subObj.maxlength ? subObj.maxlength : 50,
 			},
-			placeholder:
-				type == "register" ? subObj.description : accData.infos[key].data == null || accData.infos[key].data == "" ? "..." : accData.infos[key].data,
+			placeholder: type == "register" ? subObj.description : accData.infos[key].data == null || accData.infos[key].data == "" ? "..." : accData.infos[key].data,
 		});
 		uInfoParent.appendChild(uInfoVin);
 		const uInfoDel = cellBtn({
