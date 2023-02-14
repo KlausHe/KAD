@@ -23,33 +23,33 @@ const niskaOptions = {
 		},
 	},
 	headSize: {
-		// Gewinde,  Kopfdurchmesser,	Schlüsselweite
-		"M1.4": [2.6, 1.3],
-		"M1.6": [3, 1.5],
-		M2: [3.8, 1.5],
-		"M2.5": [4.5, 2],
-		M3: [5.5, 2.5],
-		M4: [7, 3],
-		M5: [8.5, 4],
-		M6: [10, 5],
-		M7: [11.5, 6],
-		M8: [13, 6],
-		M10: [16, 8],
-		M12: [18, 10],
-		M14: [21, 12],
-		M16: [24, 14],
-		M18: [27, 14],
-		M20: [30, 17],
-		M22: [33, 17],
-		M24: [36, 19],
-		M27: [41, 19],
-		M30: [45, 22],
-		M33: [51, 22],
-		M36: [54, 27],
-		M42: [63, 32],
-		M48: [72, 36],
-		M56: [84, 41],
-		M64: [96, 46],
+		// Gewinde,  Kopfdurchmesser (innen),	Schlüsselweite (innen),Kopfdurchmesser (außen), Schlüsselweite (außen)
+		"M1.4": [2.6, 1.3, 0.8, 2],
+		"M1.6": [3, 1.5, 1.1, 3.2],
+		M2: [3.8, 1.5, 1.4, 4],
+		"M2.5": [4.5, 2, 1.7, 5],
+		M3: [5.5, 2.5, 2, 5.5],
+		M4: [7, 3, 2.8, 7],
+		M5: [8.5, 4, 3.5, 8],
+		M6: [10, 5, 4, 10],
+		M7: [11.5, 6, 4.8, 11],
+		M8: [13, 6, 5.3, 13],
+		M10: [16, 8, 6.4, 17],
+		M12: [18, 10, 7.5, 19],
+		M14: [21, 12, 8.8, 22],
+		M16: [24, 14, 10, 24],
+		M18: [27, 14, 11.5, 27],
+		M20: [30, 17, 12.5, 30],
+		M22: [33, 17, 14, 32],
+		M24: [36, 19, 15, 36],
+		M27: [41, 19, 17, 41],
+		M30: [45, 22, 18.7, 46],
+		M33: [51, 22, 21, 50],
+		M36: [54, 27, 22.5, 55],
+		M42: [63, 32, 26, 65],
+		M48: [72, 36, 30, 75],
+		M56: [84, 41, 35, 85],
+		M64: [96, 46, 40, 95],
 	},
 	regel: [
 		[1, 0.25, "DIN13-1"],
@@ -1156,17 +1156,27 @@ const niskaOptions = {
 
 	results: {
 		headDiameter: {
-			name: "Kopfdurchmesser",
+			name: "Kopfdurchmesser (DIN 912)",
 			unit: "mm",
 			val: [],
 		},
-		headHeight: {
-			name: "Kopfhöhe",
+		headHeightInner: {
+			name: "Kopfhöhe (DIN 912)",
 			unit: "mm",
 			val: [],
 		},
-		keyWidth: {
-			name: "Schlüsselweite",
+		keyWidthInner: {
+			name: "Schlüsselweite (DIN 912)",
+			unit: "mm",
+			val: [],
+		},
+		headHeightOuter: {
+			name: "Kopfhöhe (DIN 933)",
+			unit: "mm",
+			val: [],
+		},
+		keyWidthOuter: {
+			name: "Schlüsselweite (DIN 933)",
 			unit: "mm",
 			val: [],
 		},
@@ -1323,8 +1333,10 @@ function niskaHelpCalculation(d, P, index) {
 
 	headIndex = niskaOptions.headSize.hasOwnProperty(`M${d}`);
 	niskaOptions.results.headDiameter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][0] : "-";
-	niskaOptions.results.headHeight.val[index] = d;
-	niskaOptions.results.keyWidth.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][1] : "-";
+	niskaOptions.results.headHeightInner.val[index] = d;
+	niskaOptions.results.keyWidthInner.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][1] : "-";
+	niskaOptions.results.headHeightOuter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][2] : "-";
+	niskaOptions.results.keyWidthOuter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][3] : "-";
 
 	niskaOptions.results.boreDiameter.val[index] = checkExponential(boreDiameter, niskaOptions.decimalOpts);
 	niskaOptions.results.innerCoreDiameterNut.val[index] = checkExponential(innerCoreDiameterNut, niskaOptions.decimalOpts);
