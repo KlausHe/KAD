@@ -30,7 +30,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Niska" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_Ocjene" : "Universe",
 };
 
 function layoutHideLoadingscreen() {

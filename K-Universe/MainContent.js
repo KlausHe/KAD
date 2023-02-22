@@ -756,6 +756,7 @@ const contentGrid = {
 		heritage: ["bosnisch", "Noten"],
 		source: {
 			Library: "https://paulrosen.github.io/abcjs/",
+      basics: "https://abcnotation.com/wiki/abc:standard:v2.1"
 		},
 		info: "Notenleseübung mit zufälligen Melodien",
 		subgrid: [
@@ -769,10 +770,12 @@ const contentGrid = {
 			["cl_OcjeneNotenwert4", "left"],
 			["cl_OcjeneNotenwert8", "left"],
 			["cl_OcjeneNotenwert16", "left"],
+			["cl_OcjeneNotenwert32", "left"],
 			["cl_OcjeneDotted", "left"],
 			["cl_OcjeneTriplet", "left"],
+			["cl_OcjeneBarOverflowStop", "left"],
 			["cl_OcjeneShowText", "left"],
-			["cl_OcjeneGermanText", "left"],
+			["cl_OcjeneTextLanguage", "left"],
 			["cl_OcjeneInstrument", "left"],
 			["cl_OcjeneInterval", "left"],
 			["cl_OcjeneOctave", "left"],
@@ -784,7 +787,7 @@ const contentGrid = {
 			["cl_OcjeneTempo", "left"],
 			["cl_OcjeneBars", "left"],
 			["cl_OcjeneLimitRange", "left"],
-			["cl_OcjeneRestsProbability", "left"],
+			["cl_ocjeneRests", "left"],
 			["cl_OcjeneGenerate", "left", "end"],
 			["cl_OcjeneRandomA", "left"],
 			["cl_OcjeneRandomB", "left"],

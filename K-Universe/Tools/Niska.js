@@ -1,3 +1,4 @@
+//https://schraube-mutter.de/bohrtabelle-fuer-zylinderschrauben/
 const niskaOptions = {
 	size: {
 		val: 0,

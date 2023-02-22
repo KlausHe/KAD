@@ -477,14 +477,15 @@
 		". OcjeneSheet OcjeneTempo OcjeneTempo ."
 		". OcjeneSheet OcjeneBars OcjeneBars ."
 		". OcjeneSheet OcjeneShowText OcjeneShowText ."
-		". OcjeneSheet OcjeneGermanText OcjeneGermanText ."
+		". OcjeneSheet OcjeneTextLanguage OcjeneTextLanguage ."
 		". OcjeneSheet OcjeneRhytmusHeader OcjeneRhytmusHeader ."
 		". OcjeneSheet OcjeneNotenwert1 OcjeneNotenwert8 ."
 		". OcjeneSheet OcjeneNotenwert2 OcjeneNotenwert16 ."
-		". OcjeneSheet OcjeneNotenwert4 . ."
+		". OcjeneSheet OcjeneNotenwert4 OcjeneNotenwert32 ."
 		". OcjeneSheet OcjeneDotted OcjeneDotted ."
 		". OcjeneSheet OcjeneTriplet OcjeneTriplet ."
-		". OcjeneSheet OcjeneRestsProbability OcjeneRestsProbability ."
+		". OcjeneSheet OcjeneBarOverflowStop OcjeneBarOverflowStop ."
+		". OcjeneSheet ocjeneRests ocjeneRests ."
 		". OcjeneSheet OcjeneInstrumentHeader OcjeneInstrumentHeader ."
 		". OcjeneSheet OcjeneInstrument OcjeneInstrument ."
 		". OcjeneSheet OcjeneMelodieHeader OcjeneMelodieHeader ."
@@ -499,9 +500,7 @@
 	grid-template-columns: 1fr auto var(--UIWidthNorm) var(--UIWidthNorm) 1fr;
 	grid-template-rows:
 		var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight)
-		var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeightDouble) var(
-			--UIHeight
-		)
+		var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeightDouble) var(--UIHeight)
 		var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) auto;
 }
 
@@ -523,7 +522,7 @@
 		". BlechgeoVinBreite BlechgeoImg ."
 		". BlechgeoLblResult BlechgeoLblResult .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
 }
 
 .cl_subGrid_SpeechTranslate {

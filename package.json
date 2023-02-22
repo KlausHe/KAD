@@ -15,10 +15,10 @@
     "tabletojson": "^2.0.7"
   },
   "scripts": {
+    "siteOpen": "open -a /Applications/Firefox.app; node server.js",
     "start": "node server.js",
-    "siteTest": "open -a /Applications/Firefox.app; node server.js",
-    "serverTest": "open -a /Applications/Firefox.app; nodemon server.js",
-    "dev": "nodemon test.js"
+    "server": "nodemon test.js",
+    "serverTest": "open -a /Applications/Firefox.app; nodemon server.js"
   },
   "engines": {
     "node": ">=18.12.1 <19.1.0"

@@ -220,8 +220,14 @@ function utilsVinChange(id, v) {
 			if (obj.validity.valid === false || Number(obj.value) === 0) obj.value = "";
 			else if (obj.value.length > 0) obj.value = obj.min || 0;
 		} else {
+			const time = new Date().getTime();
+			let skip = false;
+			if (obj.hasAttribute("data-ts")) {
+				if (time - obj.dataset.ts < 1500) skip = true;
+			}
+			obj.setAttribute("data-ts", time);
 			const actual = obj.value == "" && obj.placeholder != "" ? Number(obj.placeholder) : Number(obj.value);
-			const num = actual % 5 == 0 ? actual + dir * 5 : actual + dir;
+			const num = skip && actual % 5 == 0 ? actual + dir * 5 : actual + dir;
 			const min = obj.hasAttribute("min") && dir < 1 ? Number(obj.min) : null;
 			const max = obj.hasAttribute("max") && dir > 0 ? Number(obj.max) : null;
 			obj.value = valueConstrain(num, min, max);
@@ -388,6 +394,14 @@ function randomObject(obj, top = null) {
 	if (Array.isArray(obj)) return obj[randomIndex(obj)];
 	const objKeys = Object.keys(obj);
 	return obj[objKeys[randomIndex(objKeys)]];
+}
+
+function randomObjectCentered(obj, top = null, iterations = 1) {
+	let sum = 0;
+	for (let i = 0; i < iterations; i++) {
+		sum += randomObject(obj, top);
+	}
+	return Math.floor(sum / iterations);
 }
 
 function randomSubset(array, numSubset) {

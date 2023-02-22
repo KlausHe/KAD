@@ -10,6 +10,7 @@
   <meta name="page-topic" content="Information" />
   <meta name="audience" content="all" />
   <meta name="language" content="de" />
+  <meta name="lang" content="de" />
   <meta name=“robots“ content=“all“ />
   <meta name="copyright" content="" />
 
@@ -31,8 +32,8 @@
 
   <script src="Data/p5.min.js"></script>
   <script defer src="Data/p5.sound.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.0.4/abcjs-basic-min.min.js"
-    integrity="sha512-/Fag4ASUiXTYi8XYcH3p6XfiNJWKtrJ0/WPQVGZ7dZiYmsHnEW9uUnxfM/Etoq0/cGsYCVa4jcjgag1Bc6S5ng=="
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.1.8/abcjs-basic-min.min.js"
+    integrity="sha512-iCcP+ySC2NPfrCOshDzu+yAcKDBCWuHLD8bQpvol97zjVdoGXb2S/uAENtYRPUvrzVY/gP7ZDrr5LQHDLuLroA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js"
@@ -2184,12 +2185,9 @@
               onclick="ocjeneShowText(this)"></input>
           </label>
         </div>
-        <div class="cl_OcjeneGermanText" uiWrap="nowrap">
-          <label class="cl_info" for="idCb_ocjeneGermanText" uiSize="norm" uiAlign="center" uiRadius="left">Deutsche
-            schreibw.
-          </label><label class="cl_info" uiSize="norm" uiRadius="right"><input type="checkbox"
-              id="idCb_ocjeneGermanText" onclick="ocjeneGermanText(this)"></input>
-          </label>
+        <div class="cl_OcjeneTextLanguage" uiWrap="nowrap">
+          <label class="cl_info" uiRadius="left">Sprache</label><select id="idSel_ocjeneTextLanguage" uiSize="norm"
+            uiRadius="right" onChange="ocjeneTextLanguage(this)"></select>
         </div>
         <div class="cl_OcjeneRhytmusHeader">
           <label class="cl_info" uiSize="large" , uiAlign="center">Rhytmus</label>
@@ -2224,23 +2222,66 @@
           </label><label class="cl_info" for="idCb_ocjeneNotenwert16" uiSize="small" uiAlign="center"
             uiRadius="right">1/16</label>
         </div>
+        <div class="cl_OcjeneNotenwert32" uiWrap="nowrap">
+          <label class="cl_info" uiSize="square" uiRadius="left"><input type="checkbox" class="cl_ocjeneNotenwerte"
+              id="idCb_ocjeneNotenwert32" onclick="ocjeneNotenwert(this)"></input>
+          </label><label class="cl_info" for="idCb_ocjeneNotenwert16" uiSize="small" uiAlign="center"
+            uiRadius="right">1/32</label>
+        </div>
         <div class="cl_OcjeneDotted" uiWrap="nowrap">
-          <label class="cl_info" for="idCb_ocjeneDotted" uiSize="norm" uiAlign="center" uiRadius="left">punktierte
+          <!-- <label class="cl_info" for="idCb_ocjeneDotted" uiSize="norm" uiAlign="center" uiRadius="left">punktierte
           </label><label class="cl_info" uiSize="norm" uiRadius="right"><input type="checkbox" id="idCb_ocjeneDotted"
               onclick="ocjeneDotted(this)"></input>
-          </label>
+          </label> -->
+          <label class="cl_info" uiSize="norm" uiRadius="left">Punktierte [%]</label><input type="number"
+            id="idVin_ocjeneDotted" step="1" min="0" max="50" uiRadius="none"
+            oninput="ocjeneDotted(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
         </div>
         <div class="cl_OcjeneTriplet" uiWrap="nowrap">
-          <label class="cl_info" for="idCb_ocjeneTriple" uiSize="norm" uiAlign="center" uiRadius="left">Triolen
+          <!-- <label class="cl_info" for="idCb_ocjeneTriplet" uiSize="norm" uiAlign="center" uiRadius="left">Triolen
           </label><label class="cl_info" uiSize="norm" uiRadius="right"><input type="checkbox" id="idCb_ocjeneTriplet"
               onclick="ocjeneTriplet(this)"></input>
+          </label> -->
+          <label class="cl_info" uiSize="norm" uiRadius="left">Triolen [%]</label><input type="number"
+            id="idVin_ocjeneTriplet" step="1" min="0" max="50" uiRadius="none"
+            oninput="ocjeneTriplet(this)"></input><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
+        <div class="cl_OcjeneBarOverflowStop" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneBarOverflowStop" uiSize="norm" uiAlign="center" uiRadius="left">Am Takt
+            enden</label><label class="cl_info" uiSize="norm" uiRadius="right"><input type="checkbox"
+              id="idCb_ocjeneBarOverflowStop" onclick="ocjeneBarOverflowStop(this)"></input>
           </label>
         </div>
-        <div class="cl_OcjeneRestsProbability">
-          <label class="cl_info" uiSize="small" uiRadius="left">Pausen</label><label class="cl_info" uiRadius="none">
-            <input type="range" min="0" max="0.5" step="0.02" id="idRange_ocjeneRestsProbability"
-              oninput="ocjeneRestsProbability(this)"></input>
-          </label><label class="cl_info" id="idLbl_ocjeneRestsProbability" uiSize="small" uiRadius="right"></label>
+        <div class="cl_ocjeneRests">
+          <label class="cl_info" uiSize="norm" uiRadius="left">Pausen [%]</label><input type="number"
+            id="idVin_ocjeneRests" step="1" min="0" max="50" uiRadius="none" oninput="ocjeneRests(this)"></input><button
+            type="button" tabindex="-1" uiSize="square" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            <img class="img_trash"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="none"
+            onclick="utilsVinChange(this, -1)">
+            <img class="img_oSub"></img>
+          </button><button type="button" tabindex="-1" uiSize="square" uiRadius="right"
+            onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
         </div>
         <div class="cl_OcjeneInstrumentHeader">
           <label class="cl_info" uiSize="large" , uiAlign="center">Instrument</label>
@@ -2267,9 +2308,11 @@
           </button>
         </div>
         <div class="cl_OcjeneLimitRange" uiWrap="nowrap">
-          <label class="cl_info" for="idCb_ocjeneLimitRange" uiSize="norm" uiAlign="center" uiRadius="left">limit Range
-          </label><label class="cl_info" uiSize="norm" uiRadius="right"><input type="checkbox"
-              id="idCb_ocjeneLimitRange" onclick="ocjeneLimitRange(this)"></input>
+          <label class="cl_info" for="idCb_ocjeneLimitRange" uiSize="norm" uiAlign="center" uiRadius="left">limit
+            Range
+          </label>
+          <label class="cl_info" uiSize="norm" uiRadius="right"><input type="checkbox" id="idCb_ocjeneLimitRange"
+              onclick="ocjeneLimitRange(this)"></input>
           </label>
         </div>
         <div class="cl_OcjeneOctave">

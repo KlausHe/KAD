@@ -140,6 +140,10 @@ function beatmachineCreateBeat() {
 			}
 		}
 	}
+	if (beatmachineOptions.transportState) {
+		beatmachineStop();
+		setTimeout(beatmachinePlay, 1000);
+	}
 	beatmachineDrawAll();
 }
 
