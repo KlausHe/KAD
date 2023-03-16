@@ -110,7 +110,7 @@ const ocjeneOptions = {
 	},
 	keys: {
 		index: 0,
-		indexOrig: 2,
+		indexOrig: 4,
 		get current() {
 			return ocjeneOptions.definitions.keys[ocjeneOptions.keys.index][ocjeneOptions.keySignatures.index];
 		},
@@ -131,14 +131,9 @@ const ocjeneOptions = {
 		val: 10,
 		valOrig: 12,
 	},
-	firstToneIterations: {
+	firstPitchIterations: {
 		val: 0,
 		valOrig: 4,
-	},
-	octaved: {
-		val: 0,
-		valOrig: 0,
-		interval: 12,
 	},
 	definitions: {
 		notes: {
@@ -437,8 +432,8 @@ const ocjeneInstruments = {
 	get instrument() {
 		return this.data[this.index];
 	},
-	get firstTone() {
-		return randomObjectCentered(this.getRange.lower, this.getRange.upper, ocjeneOptions.firstToneIterations.val);
+	get firstPitch() {
+		return randomObjectCentered(this.getRange.lower, this.getRange.upper, ocjeneOptions.firstPitchIterations.val);
 	},
 	get getRange() {
 		if (!ocjeneOptions.limitRange.state) {
@@ -844,9 +839,10 @@ const ocjeneSong = {
 };
 
 class ocjeneNote {
-	constructor(type, duration, timeStamp, tripletIndex, splitIndex = null, splitMidiTone = null) {
-		this.abcJSTone = null;
-		this.midiTone = null;
+	constructor(type, duration, timeStamp, tripletIndex, splitIndex = null, splitMidiPitch = null) {
+		this.abcJSPitch = null;
+		this.midiPitch = null;
+		this.resolved = false;
 		this.type = type;
 		this.duration = duration;
 		this.timeStamp = timeStamp;
@@ -855,11 +851,10 @@ class ocjeneNote {
 		this.spaceStembar = false;
 		this.slur = null;
 		this.addToSongData();
-		this.createTone(splitMidiTone);
+		this.createPitch(splitMidiPitch);
 		this.checkSplit();
 		this.checkSpace();
-		this.translateTone();
-		this.translateText();
+		this.translatePitch();
 	}
 	addToSongData() {
 		if (this.splitIndex == null) {
@@ -899,13 +894,13 @@ class ocjeneNote {
 		this.duration = newDuration;
 		this.slur = true;
 		let ts = this.timeStamp + newDuration;
-		new ocjeneNote(this.type, addedNoteDuration, ts, 0, this.getDataIndex() + 1, this.midiTone);
+		new ocjeneNote(this.type, addedNoteDuration, ts, 0, this.getDataIndex() + 1, this.midiPitch);
 	}
 	checkSpace() {
 		const dIndex = this.getDurationIndex();
 		if (dIndex < 3) return;
 		if (this.type == "triplet") return;
-		if (this.midiTone == null) return (this.spaceStembar = true);
+		if (this.midiPitch == null) return (this.spaceStembar = true);
 
 		const num = ocjeneOptions.timeSignature.currSignature[0];
 		const den = ocjeneOptions.timeSignature.currSignature[1];
@@ -931,38 +926,38 @@ class ocjeneNote {
 		return this.timeStamp % ocjeneSong.barLength == 0;
 	}
 
-	createTone(splitMidiTone) {
-		if (splitMidiTone) {
-			this.midiTone = splitMidiTone;
+	createPitch(splitMidiPitch) {
+		if (splitMidiPitch) {
+			this.midiPitch = splitMidiPitch;
 			return;
 		}
-		const lastNoteIndex = ocjeneSong.noteData.findLastIndex((n) => n.midiTone != null);
+		const lastNoteIndex = ocjeneSong.noteData.findLastIndex((n) => n.midiPitch != null);
 		if (lastNoteIndex == -1) {
-			this.midiTone = ocjeneInstruments.firstTone;
+			this.midiPitch = ocjeneInstruments.firstPitch;
 		} else {
-			const prevTone = ocjeneSong.noteData[lastNoteIndex].midiTone;
+			const prevPitch = ocjeneSong.noteData[lastNoteIndex].midiPitch;
 			const interval = randomObject(ocjeneOptions.interval.val * -1, ocjeneOptions.interval.val);
-			const nextTone = prevTone + interval;
-			if (nextTone < ocjeneInstruments.getRange.lower) this.midiTone = prevTone + Math.abs(interval);
-			else if (nextTone > ocjeneInstruments.getRange.upper) this.midiTone = prevTone - Math.abs(interval);
-			else this.midiTone = nextTone;
+			const nextPitch = prevPitch + interval;
+			if (nextPitch < ocjeneInstruments.getRange.lower) this.midiPitch = prevPitch + Math.abs(interval);
+			else if (nextPitch > ocjeneInstruments.getRange.upper) this.midiPitch = prevPitch - Math.abs(interval);
+			else this.midiPitch = nextPitch;
 		}
-		// correct Tone if "keyOnly"
-		const accArr = ocjeneOptions.keyOnly.state ? ocjeneOptions.definitions.accidentals : ocjeneOptions.definitions.keyAccidentals;
-		if (accArr.includes(this.midiTone % 12)) {
-			this.midiTone += ocjeneOptions.keys.shiftDir;
+		// correct Pitch if "keyOnly"
+		const accArr = ocjeneOptions.keyOnly.state ? ocjeneOptions.definitions.accidentals : []; // ocjeneOptions.definitions.keyAccidentals;
+		if (accArr.includes(this.midiPitch % 12)) {
+			this.midiPitch += ocjeneOptions.keys.shiftDir;
 		}
 		this.createRest();
 	}
 	createRest() {
-		const prevTone = this.getDataIndex() == 0 ? ocjeneSong.noteData[0].midiTone : ocjeneSong.noteData[this.getDataIndex() - 1].midiTone;
-		if (prevTone == null) return;
-		if (Math.random() * 100 < ocjeneOptions.rests.val) this.midiTone = null;
+		const prevPitch = this.getDataIndex() == 0 ? ocjeneSong.noteData[0].midiPitch : ocjeneSong.noteData[this.getDataIndex() - 1].midiPitch;
+		if (prevPitch == null) return;
+		if (Math.random() * 100 < ocjeneOptions.rests.val) this.midiPitch = null;
 	}
 
-	translateTone() {
-		const midiIndex = ocjeneOptions.definitions.notes.midi.indexOf(this.midiTone);
-		const tone = this.midiTone == null ? "z" : ocjeneOptions.definitions.notes.ABCJSnotes[midiIndex];
+	translatePitch() {
+		const midiIndex = ocjeneOptions.definitions.notes.midi.indexOf(this.midiPitch);
+		let pitch = this.midiPitch == null ? "z" : ocjeneOptions.definitions.notes.ABCJSnotes[midiIndex];
 		let duration = this.duration;
 
 		let prefix = this.isOnNewBar() ? " |" : "";
@@ -974,40 +969,42 @@ class ocjeneNote {
 			postfix = this.tripletIndex == 2 ? " " : "";
 			duration = ocjeneOptions.notenwerte.noteArrays.base[durationIndex];
 		}
-		this.abcJSTone = `${prefix}${tone}${duration}${postfix}`;
+		if (this.resolved) {
+			pitch = pitch.replace(/[^_]/, "");
+			pitch = `=${pitch}`;
+		}
+
+		this.abcJSPitch = `${prefix}${pitch}${duration}${postfix}`;
 	}
 	translateText() {
-		if (this.midiTone == null) return "";
+		if (this.midiPitch == null) return "";
 		if (this.getDataIndex() > 0 && !this.isOnNewBar() && ocjeneSong.noteData[this.getDataIndex() - 1].slur == true) return "* ";
 
 		// clean Notetext
-		const midiIndex = ocjeneOptions.definitions.notes.midi.indexOf(this.midiTone);
+		const midiIndex = ocjeneOptions.definitions.notes.midi.indexOf(this.midiPitch);
 		let text = ocjeneOptions.definitions.notes.ABCJSnotes[midiIndex].toUpperCase();
 		text = text.replace(/[',]/g, "");
-
 		const index = ocjeneOptions.definitions.notes.getTextLanguageNoteIndex(text);
 		const arr = ocjeneOptions.definitions.notes.getTextLanguageArray(ocjeneOptions.textLanguage.index);
 		return `${arr[index]} `;
 	}
 }
-
+let failSafe = 10;
 function ocjeneGenerate() {
+	// console.clear();
 	btnColor("idBtn_ocjeneGenerate", null);
 	ocjeneSong.title = randomObject(netsaonaOptions.data.Random);
 	ocjeneSong.author = "Khage"; //randomObject(netsaonaOptions.data.Name);
 	ocjeneSong.noteData = [];
 	ocjeneSong.currentSongLength = 0;
-	// console.clear();
 
-	let failSafe = 100;
+	let failSafeCurr = 10;
 	while (ocjeneSong.currentSongLength < ocjeneSong.songlength) {
 		let fail = {};
 		if (Math.random() * 100 < ocjeneOptions.triplet.val) {
-			//ocjeneOptions.triplet.state &&
 			let arr = ocjeneOptions.notenwerte.noteArrays.triplet.slice();
 			fail = ocjeneCreateNote(arr, "triplet");
 		} else if (Math.random() * 100 < ocjeneOptions.dotted.val) {
-			//ocjeneOptions.dotted.state &&
 			let arr = ocjeneOptions.notenwerte.noteArrays.dotted.slice();
 			fail = ocjeneCreateNote(arr, "dotted");
 		} else {
@@ -1016,16 +1013,73 @@ function ocjeneGenerate() {
 		}
 		if (fail.error) {
 			// console.log(fail);
-			failSafe--;
-			if (failSafe <= 0) {
-
-				console.log("impossible!!!",  ocjeneSong.remainingSongLength);
-				alert("Taktart kann nicht mit gewählter Taktzahl und gewählten Notenlängen errreicht werden.");
+			failSafeCurr--;
+			if (failSafeCurr <= 0) {
+				failSafe--;
+				if (failSafe <= 0) {
+					alert("FATAL ERROR!");
+					return;
+				}
+				ocjeneGenerate();
+				console.log("impossible!!!", ocjeneSong.remainingSongLength);
+				// alert("Taktart kann nicht mit gewählter Taktzahl und gewählten Notenlängen errreicht werden.");
 				return;
 			}
 		}
 	}
+	ocjeneCleanAfterGeneration();
 	ocjeneDraw();
+	// console.log(ocjeneSong.abcJSSong);
+	failSafe = 10;
+}
+
+function ocjeneCleanAfterGeneration() {
+	if (ocjeneOptions.keyOnly.state) return;
+	let bars = [[]];
+	for (let n of ocjeneSong.noteData) {
+		let b = n.getBar();
+		if (bars[b] == undefined) bars[b] = [];
+		bars[b].push([n, 0]);
+	}
+	const dir = ocjeneOptions.keys.shiftDir;
+	// console.log(bars);
+	for (let b of bars) {
+		for (let i = 0; i < b.length; i++) {
+			const n = b[i];
+			let midiPitch = n[0].midiPitch % 12;
+			if (ocjeneOptions.definitions.keyAccidentals.includes(midiPitch)) {
+				if (ocjeneOptions.definitions.accidentals.includes(midiPitch)) {
+					n[1] = dir * -1;
+				}
+			}
+			if (ocjeneOptions.definitions.keyAccidentals.includes(midiPitch - dir)) {
+				n[0].resolved = true;
+			}
+
+		}
+	}
+
+	for (let b of bars) {
+		for (let n of b) {
+			n[0].midiPitch = n[0].midiPitch + n[1];
+			n[0].translatePitch();
+		}
+	}
+
+	return;
+
+	const accArr = ocjeneOptions.keyOnly.state ? ocjeneOptions.definitions.accidentals : []; // ocjeneOptions.definitions.keyAccidentals;
+	if (accArr.includes(this.midiPitch % 12)) {
+		this.midiPitch += ocjeneOptions.keys.shiftDir;
+	}
+
+	// correct if note is acc and is present in key (shift)
+	// correct if note is base and is present as acc in key (-1 * shift)
+
+	// for (let i = ocjeneSong.noteData.length - 1; i > 0; i--) {
+	// 	note = ocjeneSong.noteData[i];
+	// }
+	// ocjeneSong.abcJSSong = "";
 }
 
 function ocjeneCreateNote(arr, type) {
@@ -1037,18 +1091,14 @@ function ocjeneCreateNote(arr, type) {
 		possibleNotes.push(arr[i]);
 	}
 	let mult = type == "triplet" ? 3 : 1;
-	 mult = type == "dotted" ? 2 : 1;
+	mult = type == "dotted" ? 2 : 1;
 
 	possibleNotes = possibleNotes.filter((n) => n * mult <= ocjeneSong.remainingSongLength);
-	if (ocjeneOptions.barOverflowStop.state) {
-		possibleNotes = possibleNotes.filter((n) => n * mult <= ocjeneSong.remainingBarLength);
-	}
-
+	if (ocjeneOptions.barOverflowStop.state) possibleNotes = possibleNotes.filter((n) => n * mult <= ocjeneSong.remainingBarLength);
 	if (possibleNotes.length == 0) return { error: true, type: type, l: ocjeneSong.remainingBarLength };
 
 	//more doubled 1/16 and 1/32
 	ocjeneIncreasePossibilities(type, possibleNotes);
-
 	const duration = randomObject(possibleNotes);
 	new ocjeneNote(type, duration, ocjeneSong.currentSongLength, 0);
 	if (type == "triplet") {
@@ -1074,14 +1124,13 @@ function ocjeneGetSongData() {
 	let song = "";
 	let text = "";
 	for (let n of ocjeneSong.noteData) {
-		song += n.abcJSTone;
+		song += n.abcJSPitch;
 		text += n.translateText();
 	}
 	song += "|]";
 	text += "]";
 	ocjeneSong.abcJSSong = song;
 	ocjeneSong.abcJSText = text;
-	console.log(song);
 }
 
 function ocjeneDraw() {
@@ -1108,8 +1157,7 @@ function clear_cl_Ocjene(preset = null) {
 	dbIDStyle("idCanv_ocjeneSheet").backgroundColor = "#FFFFF3";
 	dbIDStyle("idCanv_ocjeneSheet").color = "#000000";
 
-	ocjeneOptions.firstToneIterations.val = preset === null ? ocjeneOptions.firstToneIterations.valOrig : ocjeneSettings.get("firstToneIterations");
-	ocjeneOptions.octaved.val = ocjeneOptions.octaved.valOrig;
+	ocjeneOptions.firstPitchIterations.val = preset === null ? ocjeneOptions.firstPitchIterations.valOrig : ocjeneSettings.get("firstPitchIterations");
 
 	ocjeneOptions.tempo.val = preset === null ? ocjeneOptions.tempo.valOrig : ocjeneSettings.get("tempo");
 	resetInput("idVin_ocjeneTempo", ocjeneOptions.tempo.val, {
@@ -1298,17 +1346,17 @@ function ocjeneClefs(obj) {
 function ocjeneKeySignature(obj) {
 	ocjeneOptions.keySignatures.index = obj.selectedIndex;
 	ocjenePopulateKeys();
-	ocjeneDraw();
+	ocjeneInputChange();
 }
 
 function ocjeneKey(obj) {
 	ocjeneOptions.keys.index = obj.selectedIndex;
-	ocjeneDraw();
+	ocjeneInputChange();
 }
 
 function ocjeneKeyOnly(obj) {
 	ocjeneOptions.keyOnly.state = obj.checked;
-	ocjeneDraw();
+	ocjeneInputChange();
 }
 
 function ocjeneDotted(obj) {
@@ -1353,11 +1401,6 @@ function ocjeneLimitRange(obj) {
 	ocjeneInputChange();
 }
 
-function ocjeneOctave(obj) {
-	ocjeneOptions.octaved.val += obj < 0 ? -ocjeneOptions.octaved.interval : ocjeneOptions.octaved.interval;
-	ocjeneDraw();
-}
-
 function ocjeneRests(obj) {
 	ocjeneOptions.rests.val = obj.value;
 	ocjeneInputChange();
@@ -1378,7 +1421,7 @@ const ocjeneSettings = {
 		return this.data[fn];
 	},
 	data: {
-		get firstToneIterations() {
+		get firstPitchIterations() {
 			if (ocjeneSettings.level == 0) return 20;
 			if (ocjeneSettings.level == 1) return 6;
 			if (ocjeneSettings.level == 2) return 4;
@@ -1410,8 +1453,8 @@ const ocjeneSettings = {
 		},
 		get interval() {
 			if (ocjeneSettings.level == 0) return 5;
-			if (ocjeneSettings.level == 1) return 8;
-			if (ocjeneSettings.level == 2) return 10;
+			if (ocjeneSettings.level == 1) return 7;
+			if (ocjeneSettings.level == 2) return 8;
 		},
 		get timeSignature() {
 			if (ocjeneSettings.level == 0) return randomObject([2, 3]);

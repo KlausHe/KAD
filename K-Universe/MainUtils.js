@@ -94,17 +94,14 @@ function dbCLStyle(id, loc = 0) {
 
 function resetInput(id, ph, opts = null) {
 	const obj = dbID(id);
-	if (["range"].includes(obj.type)) {
-		obj.value = ph;
-	} else {
-		obj.value = "";
-		obj.placeholder = ph;
-	}
+	obj.value = "";
+	obj.placeholder = ph;
 	if (opts != null) {
 		for (let [key, val] of Object.entries(opts)) {
 			obj[key] = val;
 		}
 	}
+	return Number(obj.placeholder);
 }
 
 function btnColor(id, opt = null) {
@@ -319,6 +316,18 @@ function utilsMinutesToObj(mins) {
 	return {
 		h,
 		m,
+	};
+}
+function utilsSecondsToObj(second) {
+	let sec = Math.floor(second);
+	const obj = utilsMinutesToObj(Math.floor(sec / 60));
+	const h = obj.h;
+	const m = obj.m;
+	const s = sec % 60 < 10 ? `0${sec % 60}` : sec % 60;
+	return {
+		h,
+		m,
+		s,
 	};
 }
 

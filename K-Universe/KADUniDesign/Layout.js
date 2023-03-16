@@ -30,7 +30,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Ocjene" : "Universe",
+	defaultPage: globalValues.hostDebug ? "Tools" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -405,7 +405,7 @@ function layoutCreateSubgrid() {
 			subGroup: "gridtitle",
 			img: "upload",
 			ui: {
-				uiSize: "square",
+				uiSize: "size1",
 				uiType: "transparent",
 			},
 			onclick: () => {
@@ -430,7 +430,7 @@ function layoutCreateSubgrid() {
 			subGroup: "gridtitle",
 			img: "download",
 			ui: {
-				uiSize: "square",
+				uiSize: "size1",
 				uiType: "transparent",
 			},
 			onclick: () => {
@@ -451,7 +451,7 @@ function layoutCreateSubgrid() {
 			subGroup: "gridtitle",
 			img: "fullscreen",
 			ui: {
-				uiSize: "square",
+				uiSize: "size1",
 				uiType: "transparent",
 			},
 			onclick: () => {
@@ -472,7 +472,7 @@ function layoutCreateSubgrid() {
 			subGroup: "gridtitle",
 			img: "trash",
 			ui: {
-				uiSize: "square",
+				uiSize: "size1",
 				uiType: "transparent",
 			},
 			onclick: () => {

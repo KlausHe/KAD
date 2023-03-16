@@ -1,117 +1,134 @@
 const eggOptions = {
-  timerEggCount: null,
-  eggTimeLeft: 0,
-  eggTimeOut: 0,
-  eggTimerState: false,
-  mass: {
-    XL: 73,
-    L: 63,
-    M: 53,
-    S: 40
-  },
-  temp: {
-    Wohnung: 16,
-    Keller: 9,
-    Kühlschrank: 4
-  },
-  yolk: {
-    "fest": 80,
-    "fast fest": 75,
-    "wachs": 65,
-    "leicht wachs": 55,
-    "weich": 45
-  }
-}
+	timerEggCount: null,
+	timeTotal: 0,
+	timeRemaining: 0,
+	timerState: false,
+	mass: {
+		val: 0,
+		valOrig: 60,
+		get label() {
+			for (const [key, val] of Object.entries(this.states)) {
+				if (this.val >= val) return `${this.val}g (${key})`;
+			}
+		},
+		states: {
+			XL: 73,
+			L: 63,
+			M: 53,
+			S: 40,
+		},
+	},
+	temp: {
+		val: 0,
+		valOrig: 10,
+		get label() {
+			for (const [key, val] of Object.entries(this.states)) {
+				if (this.val >= val) return `${this.val}°C (${key})`;
+			}
+		},
+		states: {
+			Wohnung: 16,
+			Keller: 9,
+			Kühlschrank: 4,
+		},
+	},
+	yolk: {
+		val: 0,
+		valOrig: 65,
+		get label() {
+			for (const [key, val] of Object.entries(this.states)) {
+				if (this.val >= val) return `${this.val}°C (${key})`;
+			}
+		},
+		states: {
+			fest: 80,
+			"fast fest": 75,
+			wachs: 65,
+			"leicht wachs": 55,
+			weich: 45,
+		},
+	},
+};
 
 function clear_cl_Egg() {
-  eggMassChange();
-  eggTempChange();
-  eggYolkChange();
-  eggOptions.eggTimerState = true;
-  eggStartChange();
-};
+	eggOptions.mass.val = resetInput("idVin_EggMass", eggOptions.mass.valOrig);
+	eggOptions.temp.val = resetInput("idVin_EggTemp", eggOptions.temp.valOrig);
+	eggOptions.yolk.val = resetInput("idVin_EggYolk", eggOptions.yolk.valOrig);
 
-function eggMassChange(obj = null) {
-  let label;
-  const mass = (obj === null) ? 60 : obj.value;
-  for (const [key, val] of Object.entries(eggOptions.mass)) {
-    if (mass >= val) {
-      label = key;
-      break;
-    }
-  }
-  dbID("idLbl_EggMass").textContent = `${mass}g (${label})`;
-};
+	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
+	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
+	dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
+	eggOptions.timerState = true;
+	eggStartChange();
+}
 
-function eggTempChange(obj = null) {
-  let label;
-  const temp = (obj === null) ? 7 : obj.value;
-  for (const [key, val] of Object.entries(eggOptions.temp)) {
-    if (temp >= val) {
-      label = key;
-      break;
-    }
-  }
-  dbID("idLbl_EggTemp").textContent = `${temp}°C (${label})`;
-};
+function eggMassChange(obj) {
+	eggOptions.mass.val = obj.value;
+	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
+	eggRefrechInput();
+}
 
-function eggYolkChange(obj = null) {
-  let label;
-  const yolk = (obj === null) ? 75 : obj.value;
-  for (const [key, val] of Object.entries(eggOptions.yolk)) {
-    if (yolk >= val) {
-      label = key;
-      break;
-    }
-  }
-  dbID("idLbl_EggYolk").textContent = `${label} (~${yolk}°C)`;
-};
+function eggTempChange(obj) {
+	eggOptions.temp.val = obj.value;
+	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
+	eggRefrechInput();
+}
 
+function eggYolkChange(obj) {
+	eggOptions.yolk.val = obj.value;
+	dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
+	eggRefrechInput();
+}
 
+function eggRefrechInput() {
+	eggOptions.timerState = false;
+	clearInterval(eggOptions.timerEggCount);
+	eggCalculate();
+}
+function eggCalculate() {
+	let mEgg = eggOptions.mass.val;
+	let tEgg = eggOptions.temp.val;
+	let yEgg = eggOptions.yolk.val;
+
+	let tempFactor = 0.76 * ((tEgg - 100) / (yEgg - 100));
+	tempFactor = Math.log(tempFactor);
+	let massFactor = 27.05089242 * Math.pow(mEgg, 2 / 3);
+	eggOptions.timeTotal = massFactor * tempFactor;
+	eggOptions.timeRemaining = eggOptions.timeTotal;
+	eggShowTime();
+}
+
+function eggShowTime() {
+	let obj = utilsSecondsToObj(eggOptions.timeRemaining);
+	dbID("idLbl_EggTime").textContent = `${obj.h}:${obj.m}:${obj.s}`;
+}
 
 function eggStartChange() {
-  eggOptions.eggTimerState = !eggOptions.eggTimerState;
-  if (eggOptions.eggTimerState) {
-    dbID("idBtn_EggStart").textContent = "Stop";
-    //calculate eggOptions.eggTimeLeft in seconds!
-    let mEgg = dbID("idRange_EggMass").value;
-    let tEgg = dbID("idRange_EggTemp").value;
-    let yEgg = dbID("idRange_EggYolk").value;
-
-    let tempFactor = 0.76 * ((tEgg - 100) / (yEgg - 100));
-    tempFactor = Math.log(tempFactor);
-    let massFactor = 27.05089242 * Math.pow(mEgg, 2 / 3)
-    eggOptions.eggTimeLeft = massFactor * tempFactor;
-    eggOptions.eggTimeOut = new Date(Date.now() + eggOptions.eggTimeLeft * 1000);
-    dbID("idProg_eggProgress").setAttribute("max", eggOptions.eggTimeLeft)
-    eggCountdown();
-    eggOptions.timerEggCount = setInterval(eggCountdown, 250);
-  } else {
-    dbID("idBtn_EggStart").textContent = "Start";
-    clearInterval(eggOptions.timerEggCount);
-    let textStart = "Eieruhr";
-    dbID("idLbl_EggTime").textContent = textStart;
-  };
-};
+	eggOptions.timerState = !eggOptions.timerState;
+	if (eggOptions.timerState) {
+		dbID("idBtn_EggStart").textContent = "Stop";
+		eggCalculate();
+		dbID("idProg_eggProgress").setAttribute("max", eggOptions.timeTotal);
+		eggCountdown();
+		eggOptions.timerEggCount = setInterval(eggCountdown, 1000);
+	} else {
+		dbID("idBtn_EggStart").textContent = "Start";
+		clearInterval(eggOptions.timerEggCount);
+		let textStart = "Eieruhr";
+		dbID("idLbl_EggTime").textContent = textStart;
+	}
+}
 
 function eggCountdown() {
-  let now = new Date();
-  let distance = (eggOptions.eggTimeOut - now) / 1000;
-  dbID("idProg_eggProgress").setAttribute("value", distance);
-  if (distance <= 0) {
-    let textDone = "Fertig!";
-    if (dbID("idCb_eggVoiceOutput").checked) {
-      speechSpeakOutput("Deine Eier sind fertig!", "de");
-    };
-    dbID("idLbl_EggTime").textContent = textDone;
-    clearInterval(eggOptions.timerEggCount);
-    setTimeout(eggStartChange, 10000);
-  } else {
-    let minutes = Math.floor(distance / 60);
-    let seconds = Math.floor(distance % 60);
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-    let text = minutes + ":" + seconds;
-    dbID("idLbl_EggTime").textContent = text;
-  };
-};
+	eggOptions.timeRemaining--;
+	dbID("idProg_eggProgress").setAttribute("value", eggOptions.timeRemaining);
+	if (eggOptions.timeRemaining <= 0) {
+		dbID("idLbl_EggTime").textContent = "Fertig!";
+		clearInterval(eggOptions.timerEggCount);
+		if (dbID("idCb_eggVoiceOutput").checked) {
+			speechSpeakOutput("Deine Eier sind fertig!", "de");
+		}
+	} else {
+		eggShowTime();
+	}
+}

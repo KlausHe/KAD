@@ -1,7 +1,11 @@
 const kaihangaOptions = {
-	width: 200,
-	height: 200,
-	maxLength: 10,
+	get width() {
+		return getCssRoot("UIHeight1", true, true) * 12;
+	},
+	get height() {
+		return getCssRoot("UIHeight1", true, true) * 12;
+	},
+	maxLength: 12,
 	entries: [],
 	wheel: null,
 	spinning: false,
@@ -18,8 +22,6 @@ function clear_cl_Kaihanga() {
 	kaihangaCreateRandomSet();
 	kaihangaUpdate();
 	resetInput("idVin_kaihangaEntry", "Enter Options");
-	dbID("idVin_kaihangaEntry").maxLength = kaihangaOptions.maxLength;
-
 	dbID("idLbl_kaihangaResult").textContent = "Gewinner: ...";
 	dataForLabel("idLbl_kaihangaResult");
 	dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
@@ -154,7 +156,7 @@ function kaihangaUpdate() {
 				subGroup: "subgrid",
 				img: "trash",
 				ui: {
-					uiSize: "square",
+					uiSize: "size1",
 					uiType: "transparent",
 				},
 				cellStyle: {
@@ -169,6 +171,9 @@ function kaihangaUpdate() {
 				names: ["kaihanga", i],
 				type: "Colbox",
 				color: kaihangaOptions.wheel.segments[i].fillStyle,
+				ui: {
+					uiSize: "size1",
+				},
 				style: {
 					textAlign: "center",
 				},
@@ -177,6 +182,9 @@ function kaihangaUpdate() {
 				names: ["kaihanga", i],
 				type: "Lbl",
 				text: kaihangaOptions.entries[i],
+				ui: {
+					uiSize: "size12",
+				},
 				copy: true,
 			});
 		}

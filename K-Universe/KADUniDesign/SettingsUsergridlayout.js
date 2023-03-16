@@ -93,7 +93,7 @@ function usergridCreateTable() {
       subGroup: "subgrid",
       img: "cCheck",
       ui: {
-        uiSize: "square",
+        uiSize: "size1",
         uiType: "transparent",
       },
       style: {

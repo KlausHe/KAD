@@ -60,7 +60,8 @@ function clear_cl_Material() {
 	materialFilterOptions.select = [...materialFilterOptions.orig];
 	materialOptions.matList = materialOptions.matListOrig;
 	materialSelectedTable();
-	closeMaterialSearch();
+	// closeMaterialSearch();
+	toggleMaterialSearch(false);
 }
 
 function materialPropertyfilter() {
@@ -94,7 +95,7 @@ function materialSelectedTable() {
 			subGroup: "subgrid",
 			img: "trash",
 			ui: {
-				uiSize: "square",
+				uiSize: "size1",
 				uiType: "transparent",
 			},
 			cellStyle: {
@@ -114,7 +115,7 @@ function materialSelectedTable() {
 		subGroup: "subgrid",
 		img: "oAdd",
 		ui: {
-			uiSize: "square",
+			uiSize: "size1",
 			uiType: "transparent",
 		},
 		cellStyle: {
@@ -122,7 +123,8 @@ function materialSelectedTable() {
 			cursor: "pointer",
 		},
 		onclick: function () {
-			openMaterialSearch();
+			// openMaterialSearch();
+			toggleMaterialSearch(true);
 		},
 	});
 
@@ -320,17 +322,9 @@ function materialSearchTable() {
 	let cell = row.insertCell(0);
 }
 
-function openMaterialSearch() {
-	dbIDStyle("idDiv_MaterialSearchVin").display = "block";
-	dbIDStyle("idDiv_MaterialSearchSel").display = "block";
-	dbIDStyle("idDiv_MaterialSearchClose").display = "block";
-	dbIDStyle("idDiv_MaterialSearchList").display = "block";
-	materialSearchTable();
-}
-
-function closeMaterialSearch() {
-	dbIDStyle("idDiv_MaterialSearchVin").display = "none";
-	dbIDStyle("idDiv_MaterialSearchSel").display = "none";
-	dbIDStyle("idDiv_MaterialSearchClose").display = "none";
-	dbIDStyle("idDiv_MaterialSearchList").display = "none";
+function toggleMaterialSearch(state) {
+	const t = state ? "block" : "none";
+	dbIDStyle("idDiv_MaterialSearchOptions").display = t;
+	dbIDStyle("idDiv_MaterialSearchList").display = t;
+	if (state) materialSearchTable();
 }

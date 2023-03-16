@@ -47,8 +47,7 @@ function mainSetup() {
 	layoutCreateNavbarPikaday();
 	createKadarPikaday("A");
 	createKadarPikaday("B");
-	createCovidPikaday("A");
-	createCovidPikaday("B");
+	createCovidPikaday();
 
 	//check if Userstate changed!
 	firebase.auth().onAuthStateChanged((user) => {

@@ -314,9 +314,7 @@ let geoObjects = {
 		},
 		basearea: {
 			get text() {
-				return geoObjects.radState
-					? `\u03C0(${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)`
-					: `\u03C0/4 (${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)`;
+				return geoObjects.radState ? `\u03C0(${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)` : `\u03C0/4 (${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)`;
 			},
 			get formula() {
 				const valA = geoObjects.valA * geoDiameter().factor;
@@ -338,9 +336,7 @@ let geoObjects = {
 		},
 		volume: {
 			get text() {
-				return geoObjects.radState
-					? `\u03C0(${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h`
-					: `\u03C0/4 (${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h`;
+				return geoObjects.radState ? `\u03C0(${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h` : `\u03C0/4 (${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h`;
 			},
 			get formula() {
 				const valA = geoObjects.valA * geoDiameter().factor;
@@ -350,9 +346,7 @@ let geoObjects = {
 		},
 		mass: {
 			get text() {
-				return geoObjects.radState
-					? `\u03C0(${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h\u03C1`
-					: `\u03C0/4 (${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h\u03C1`;
+				return geoObjects.radState ? `\u03C0(${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h\u03C1` : `\u03C0/4 (${geoDiameter().cap}\u00b2-${geoDiameter().low}\u00b2)h\u03C1`;
 			},
 			get formula() {
 				const valA = geoObjects.valA * geoDiameter().factor;
@@ -390,19 +384,9 @@ let geoObjects = {
 			caGE.ellipse(0, -geoObjects.drawDim.d, outerR.x * 2, outerR.y * 2);
 			caGE.ellipse(0, geoObjects.drawDim.d, innerR.x * 2, innerR.y * 2);
 			caGE.ellipse(0, geoObjects.drawDim.d, outerR.x * 2, outerR.y * 2);
-			caGE.line(
-				geoObjects.drawDim.b - geoObjects.drawDim.s,
-				geoObjects.drawDim.d,
-				geoObjects.drawDim.b - geoObjects.drawDim.s,
-				-geoObjects.drawDim.d + geoObjects.drawDim.s * 2
-			);
+			caGE.line(geoObjects.drawDim.b - geoObjects.drawDim.s, geoObjects.drawDim.d, geoObjects.drawDim.b - geoObjects.drawDim.s, -geoObjects.drawDim.d + geoObjects.drawDim.s * 2);
 			caGE.line(geoObjects.drawDim.b, geoObjects.drawDim.d, geoObjects.drawDim.b, -geoObjects.drawDim.d);
-			caGE.line(
-				-geoObjects.drawDim.b + geoObjects.drawDim.s,
-				geoObjects.drawDim.d,
-				-geoObjects.drawDim.b + geoObjects.drawDim.s,
-				-geoObjects.drawDim.d + geoObjects.drawDim.s * 2
-			);
+			caGE.line(-geoObjects.drawDim.b + geoObjects.drawDim.s, geoObjects.drawDim.d, -geoObjects.drawDim.b + geoObjects.drawDim.s, -geoObjects.drawDim.d + geoObjects.drawDim.s * 2);
 			caGE.line(-geoObjects.drawDim.b, geoObjects.drawDim.d, -geoObjects.drawDim.b, -geoObjects.drawDim.d);
 
 			//text
@@ -546,7 +530,11 @@ function changeGeoObject(index) {
 			dbIDStyle(`idDiv_Area_${i}`).display = "none";
 		}
 	}
-	dbIDStyle("idDiv_GeometrieOptions").display = geoObjects[geoObjects.selectedGeo].cbRadiusEnable == true ? "initial" : "none";
+
+	enableBtn(idCb_geoRadius, geoObjects[geoObjects.selectedGeo].cbRadiusEnable);
+	const cbEntry = dbID("idLbl_goeRadius").textContent;
+	dbID("idLbl_goeRadius").innerHTML = geoObjects[geoObjects.selectedGeo].cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
+
 	geoBerechnung();
 }
 

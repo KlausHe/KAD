@@ -491,7 +491,7 @@ function createUserInfos(type) {
 			img: "trash",
 			ui: {
 				uiRadius: "right",
-				uiSize: "square",
+				uiSize: "size1",
 			},
 			style: {
 				textAlign: "center",

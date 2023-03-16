@@ -6,7 +6,7 @@
 		". userAcc_check userAcc_alert ."
 		". userAcc_submit userAcc_submit .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: auto var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight);
+	grid-template-rows: auto var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_GeneralSettings {
@@ -16,7 +16,7 @@
 		". SettingsCopySeparator ."
 		". SettingsDecimals .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight);
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_ColorSettings {
@@ -25,7 +25,7 @@
 		".  colourSettings_light_1 colourSettings_dark_1 ."
 		".  colourSettings_light_2 colourSettings_dark_2 .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight);
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_UserGridLayout {
@@ -35,7 +35,7 @@
 		". UserGridTable . .";
 	/* ". UserGridCanvas . ." */
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_MaterialFilterSettings {
@@ -49,12 +49,12 @@
 		". HowaInput HowaInput HowaOptionsA HowaOptionsA ."
 		". HowaNow HowaNow HowaOptionsB HowaOptionsB ."
 		". HowaNow HowaNow HowaOptionsC HowaOptionsC."
-		". . HowaMapsExpand HowaZoom . ."
 		". HowaGraph HowaGraph HowaGraph HowaGraph ."
-		". HowaMapsSelectCountry HowaMapsSelectCriteria . . ."
+		". . HowaMapsExpand HowaZoom . ."
+		". . HowaMapsSelectCountry HowaMapsSelectCriteria . ."
 		". HowaMapsImg HowaMapsImg HowaMapsImg HowaMapsImg .";
 	grid-template-columns: 1fr auto auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_News {
@@ -62,10 +62,9 @@
 		". NewsNav NewsResultImage NewsResultTitle ."
 		". NewsCountry NewsResultImage NewsResultTitle ."
 		". NewsCategory NewsResultImage NewsResultTitle ."
-		". NewsNum NewsResultImage NewsResultTitle ."
 		". NewsTable NewsResultText NewsResultText .";
 	grid-template-columns: 1fr auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Lions {
@@ -73,16 +72,15 @@
 		". LionsInput LionsOutput ."
 		". LionsTable LionsTable .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeightDouble) auto;
+	grid-template-rows: var(--UIHeight2) auto;
 }
 
 .cl_subGrid_Sepakbola {
 	grid-template-areas:
-		". SepakbolaInputLigaLbl SepakbolaInputSeasonLbl SepakbolaInputDayLbl ."
-		". SepakbolaInputLigaSel SepakbolaInputSeasonSel SepakbolaInputDaySel ."
+		". SepakbolaInputLiga SepakbolaInputSeason SepakbolaInputDay ."
 		". SepakbolaTable SepakbolaTable SepakbolaMatches .";
 	grid-template-columns: 1fr auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_PostillonTicker {
@@ -90,20 +88,16 @@
 		". PostillionNumber ."
 		". PostillionTable .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Covid {
 	grid-template-areas:
-		". covidConfirmed covidConfirmed covidDeaths covidDeaths . "
-		". . CovidGraphOptionsA CovidGraphOptionsA . ."
-		". . CovidGraphOptionsB CovidGraphOptionsB . ."
-		". . CovidGraphOptionsC CovidGraphOptionsC . ."
-		". CovidGraph CovidGraph CovidGraph CovidGraph ."
-		". CovidGraphDate CovidGraphDateA CovidGraphDateB CovidTableShow ."
-		". CovidTable CovidTable CovidTable CovidTable .";
-	grid-template-columns: 1fr auto auto auto auto 1fr;
-	grid-template-rows: var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto var(--UIHeight) auto;
+		". covidConfirmed . "
+		". covidDeaths . "
+		". covidGraphDate . ";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight2) var(--UIHeight2) var(--UIHeight1);
 }
 
 .cl_subGrid_Tugas {
@@ -112,7 +106,7 @@
 		". TugasEnter TugasList ."
 		". . TugasList .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: auto var(--UIHeight) auto;
+	grid-template-rows: auto var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Netsaona {
@@ -126,7 +120,7 @@
 		". NetsaonaOptionsG ."
 		". NetsaonaOutput .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Afinn {
@@ -136,7 +130,7 @@
 		". AfinnNews AfinnTabResult ."
 		". AfinnWiki AfinnTabResult .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: auto auto var(--UIHeight) auto;
+	grid-template-rows: auto auto var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Synonym {
@@ -145,7 +139,7 @@
 		". SynonymSearchword ."
 		". SynonymTable .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Boredom {
@@ -153,7 +147,7 @@
 		". BoredomStart ."
 		". BoredomAnswer .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_BiktadA {
@@ -167,7 +161,7 @@
 		". HverertuInput ."
 		". HverertuTable .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Egg {
@@ -179,7 +173,7 @@
 		". EggTime ."
 		". EggTimeProgress .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Foody {
@@ -190,7 +184,7 @@
 		". FoodyTime ."
 		". FoodyTimeProgress .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Kounselor {
@@ -203,7 +197,7 @@
 		". . KounselorOptionsF ."
 		". . KounselorOptionsG .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight);
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_Kaihanga {
@@ -211,25 +205,24 @@
 		". KaihangaInput KaihangaCanvas ."
 		". KaihangaSegments KaihangaCanvas ."
 		". KaihangaSegments KaihangaResult .";
-	grid-template-columns: 1fr var(--UIWidthWide) auto 1r;
+	grid-template-columns: 1fr auto auto 1r;
 	grid-template-rows: auto auto auto;
 }
 
 .cl_subGrid_Botanicals {
 	grid-template-areas:
 		". botanicalsVinPlant botanicalsVinDiscomfort ."
-		". botanicalsLblTitlePlant botanicalsLblTitleDiscomfort ."
 		". botanicalsTabResultPlant botanicalsTabResultDiscomfort .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_PlatLesen {
 	grid-template-areas:
 		". platLesenRegInput platLesenNumInput ."
-		". platLesenNumResult platLesenRegResult .";
+		". platLesenRegResult platLesenNumResult .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Pelvelea {
@@ -241,15 +234,15 @@
 		". PelveleaProgress PelveleaProgress ."
 		". PelveleaBreaktime PelveleaBreaktime .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeightDouble) auto var(--UIHeight);
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) auto var(--UIHeight1);
 }
 
 .cl_subGrid_Iomlaid {
 	grid-template-areas:
-		". iomlaidVinCur iomlaidSelCur iomlaidSelDate ."
+		". iomlaidSelCur iomlaidVinCur . ."
 		". iomlaidTab iomlaidTab iomlaidTab .";
 	grid-template-columns: 1fr auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Thiontu {
@@ -261,7 +254,7 @@
 		". ThiontuOptions_D ThiontuOptions_D ."
 		". ThiontuOptions_E ThiontuOptions_E .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: auto var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight);
+	grid-template-rows: auto var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_Geometrie {
@@ -273,28 +266,30 @@
 		". GeometrieTable GeometrieCanvas ."
 		". GeometrieTable GeometrieCanvas .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Material {
 	grid-template-areas:
-		". MaterialPropertyCb . . ."
-		". MaterialList MaterialList MaterialList. "
-		". MaterialSearchVin MaterialSearchSel MaterialSearchClose ."
-		". MaterialSearchList MaterialSearchList MaterialSearchList .";
-	grid-template-columns: 1fr auto auto 1fr 1fr;
-	grid-template-rows: var(--UIHeight) auto var(--UIHeight) auto;
+		". MaterialPropertyCb . ."
+		". MaterialList MaterialList . "
+		". MaterialSearchOptions MaterialSearchOptions ."
+		/* ". MaterialSearchVin MaterialSearchSel MaterialSearchClose ." */
+		". MaterialSearchList MaterialSearchList .";
+	grid-template-columns: 1fr auto auto 1fr;
+	grid-template-rows: var(--UIHeight1) auto var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Expansion {
 	grid-template-areas:
 		". ExpansionMaterialsA ExpansionMaterialSwitch ExpansionMaterialsB ."
-		". ExpansionVinLength ExpansionVinLength ExpansionCBDifference ."
-		". ExpansionVinTemperature ExpansionVinTemperature ExpansionCBCoefficient ."
-		". ExpansionVinBaseTemperature ExpansionVinBaseTemperature . ."
+		". ExpansionVinLength ExpansionVinLength ExpansionVinLength ."
+		". ExpansionVinTemperature ExpansionVinTemperature ExpansionVinTemperature ."
+		". ExpansionVinBaseTemperature ExpansionVinBaseTemperature ExpansionVinBaseTemperature ."
+		". ExpansionCBOptions ExpansionCBOptions ExpansionCBOptions ."
 		". ExpansionList ExpansionList ExpansionList .";
 	grid-template-columns: 1fr auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) auto;
 }
 
 .cl_subGrid_Middle {
@@ -304,7 +299,7 @@
 		". MiddleCanvas MiddleCanvas ."
 		". MiddleMid MiddleDiff .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Luas {
@@ -316,7 +311,7 @@
 		". LuasCanvas ."
 		". LuasResult .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Quickmath {
@@ -324,7 +319,7 @@
 		". quickmathInput quickmathStart quickmathStart quickmathEnd ."
 		". quickmathListMultiply quickmathListDivide quickmathListPow quickmathListRoot .";
 	grid-template-columns: 1fr auto auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Ranje {
@@ -332,7 +327,7 @@
 		". ranjeInput ."
 		". ranjeList .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Niska {
@@ -343,19 +338,19 @@
 		". niskaStrengthClass niskaStrengthClass ."
 		". niskaList niskaList .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Pattern {
 	grid-template-areas:
-		". PatternInputA PatternList ."
-		". PatternInputB PatternList ."
-		". PatternInputC PatternList ."
-		". PatternInputD PatternList ."
-		". PatternInputE PatternList ."
-		". PatternCanvas PatternCanvas .";
-	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+		". PatternInputA ."
+		". PatternInputB ."
+		". PatternInputC ."
+		". PatternInputD ."
+		". PatternInputE ."
+		". PatternCanvas .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Pythagoras {
@@ -367,7 +362,7 @@
 		". PythagorasInput4 PythagorasCanvas ."
 		" .PythagorasInfo PythagorasInfo .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Pormula {
@@ -380,7 +375,7 @@
 		". PormulaInfo PormulaInfo PormulaPointEntry PormulaPointResult ."
 		". PormulaCanvas PormulaCanvas PormulaCanvas PormulaCanvas .";
 	grid-template-columns: 1fr auto auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) 1fr auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) 1fr auto auto;
 }
 
 .cl_subGrid_Sudoku {
@@ -392,7 +387,7 @@
 		". SudokuCanvas SudokuOptionsC ."
 		". SudokuCanvas SudokuOverview .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) calc(var(--UIHeightDouble) * 2) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) calc(var(--UIHeight2) * 2) auto auto;
 }
 
 .cl_subGrid_Linaha {
@@ -405,7 +400,7 @@
 		". LinahaQuestion LinahaQuestion  ."
 		". LinahaAnswers LinahaAnswers .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Ibhaluni {
@@ -413,7 +408,7 @@
 		". IbhaluniInputs ."
 		". IbhaluniCanvas .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_RayCaster {
@@ -424,8 +419,8 @@
 		". RayCasterCanvas RayCasterView ."
 		". RayCasterCanvas RayCasterOptions ."
 		". RayCasterCanvas . .";
-	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidthWide) 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidth13) 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Lotto {
@@ -435,7 +430,7 @@
 		". LottoCanvas LottoGetGames ."
 		". LottoCanvas LottoTabGames .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) auto 1fr;
-	grid-template-rows: var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Sweeper {
@@ -443,8 +438,8 @@
 		". SweeperCanvas SweeperInputs ."
 		". SweeperCanvas SweeperGrid ."
 		". SweeperCanvas SweeperSweeps .";
-	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidthWide) 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) auto;
+	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidth13) 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Empat {
@@ -452,7 +447,7 @@
 		". EmpatInputs ."
 		". EmpatCanvas .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Numbery {
@@ -463,8 +458,8 @@
 		". NumberyImages NumberyCathegory ."
 		". NumberyImages NumberyPlayers ."
 		". NumberyImages NumberyResult .";
-	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidthWide) 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidth13) 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Ocjene {
@@ -478,40 +473,38 @@
 		". OcjeneSheet OcjeneBars OcjeneBars ."
 		". OcjeneSheet OcjeneShowText OcjeneShowText ."
 		". OcjeneSheet OcjeneTextLanguage OcjeneTextLanguage ."
+		". OcjeneSheet OcjeneInstrumentHeader OcjeneInstrumentHeader ."
+		". OcjeneSheet OcjeneInstrument OcjeneInstrument ."
 		". OcjeneSheet OcjeneRhytmusHeader OcjeneRhytmusHeader ."
 		". OcjeneSheet OcjeneNotenwert1 OcjeneNotenwert8 ."
 		". OcjeneSheet OcjeneNotenwert2 OcjeneNotenwert16 ."
 		". OcjeneSheet OcjeneNotenwert4 OcjeneNotenwert32 ."
 		". OcjeneSheet OcjeneDotted OcjeneDotted ."
 		". OcjeneSheet OcjeneTriplet OcjeneTriplet ."
+		". OcjeneSheet OcjeneRests OcjeneRests ."
 		". OcjeneSheet OcjeneBarOverflowStop OcjeneBarOverflowStop ."
-		". OcjeneSheet ocjeneRests ocjeneRests ."
-		". OcjeneSheet OcjeneInstrumentHeader OcjeneInstrumentHeader ."
-		". OcjeneSheet OcjeneInstrument OcjeneInstrument ."
 		". OcjeneSheet OcjeneMelodieHeader OcjeneMelodieHeader ."
 		". OcjeneSheet OcjeneKeyOnly OcjeneKeyOnly ."
 		". OcjeneSheet OcjeneLimitRange OcjeneLimitRange ."
 		". OcjeneSheet OcjeneInterval OcjeneInterval ."
-		". OcjeneSheet OcjeneOctave OcjeneOctave ."
 		". OcjeneSheet OcjeneGenerate OcjeneGenerate ."
 		". OcjeneSheet OcjeneRandomA OcjeneRandomA ."
 		". OcjeneSheet OcjeneRandomB OcjeneRandomB ."
 		". OcjeneSheet OcjeneRandomC OcjeneRandomC .";
-	grid-template-columns: 1fr auto var(--UIWidthNorm) var(--UIWidthNorm) 1fr;
+	grid-template-columns: 1fr auto var(--UIWidth6) var(--UIWidth6) 1fr;
 	grid-template-rows:
-		var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight)
-		var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeightDouble) var(--UIHeight)
-		var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeightDouble) var(--UIHeight) var(--UIHeight) auto;
+		var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
+		var(--UIHeight2) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
+		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Beatmachine {
 	grid-template-areas:
 		". beatmachineOptionsA beatmachineOptionsB ."
 		". beatmachineOptionsC beatmachineOptionsD ."
-		/* ". beatmachineCanvas beatmachineCanvas ." */
 		". beatmachineTracks beatmachineTracks .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Blechgeometrie {
@@ -522,7 +515,7 @@
 		". BlechgeoVinBreite BlechgeoImg ."
 		". BlechgeoLblResult BlechgeoLblResult .";
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_SpeechTranslate {
@@ -532,7 +525,7 @@
 		". speechOptions ."
 		". speechOutputArea .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight) var(--UIHeight) var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_WikiSearch {
@@ -541,7 +534,7 @@
 		". WikiLanguage WikiResultImage WikiResultTitle ."
 		". WikiTable WikiResultText WikiResultText .";
 	grid-template-columns: 1fr auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) auto auto;
+	grid-template-rows: var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Kadar {
@@ -549,5 +542,5 @@
 		". KadarSelA KadarLblNow KadarSelB ."
 		". KadarResultTable_Anow KadarResultTable_AB KadarResultTable_Bnow .";
 	grid-template-columns: 1fr auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }

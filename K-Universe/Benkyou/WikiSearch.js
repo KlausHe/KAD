@@ -149,6 +149,6 @@ function wikiShowSelectedImage(data, loaded) {
   let pagesID = Object.keys(wikiOptions.search.image);
   if (wikiOptions.search.image[pagesID].thumbnail) {
     dbID("idImg_Wiki_Image").src = wikiOptions.search.image[pagesID].thumbnail.source;
-    dbID("idImg_Wiki_Image").setAttribute("imgSize", "wiki");
+    dbID("idImg_Wiki_Image").setAttribute("imgSize", "thumbnail");
   }
 }

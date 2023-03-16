@@ -40,14 +40,29 @@
 	--padding: 0.417rem;
 	--paddingVertical: 0.167rem;
 	--UIPadding: 0.167rem;
-	--UIHeight: 1.667rem;
-	--UIHeightDouble: 3.333rem;
-	--UIHeightTriple: 5rem;
-	--UIWidthSmall: 5rem;
-	--UIWidthMedium: 6.667rem;
-	--UIWidthNorm: 10rem;
-	--UIWidthWide: 16.667rem;
-	--UIWidthLarge: 20rem;
+
+	--UIHeight1: 1.5rem;
+	--UIHeight2: calc(var(--UIHeight1) * 2);
+	--UIHeight3: calc(var(--UIHeight1) * 3);
+
+	--UIWidth1: calc(var(--UIHeight1) * 1);
+	--UIWidth2: calc(var(--UIHeight1) * 2);
+	--UIWidth3: calc(var(--UIHeight1) * 3);
+	--UIWidth4: calc(var(--UIHeight1) * 4);
+	--UIWidth5: calc(var(--UIHeight1) * 5);
+	--UIWidth6: calc(var(--UIHeight1) * 6);
+	--UIWidth7: calc(var(--UIHeight1) * 7);
+	--UIWidth8: calc(var(--UIHeight1) * 8);
+	--UIWidth9: calc(var(--UIHeight1) * 9);
+	--UIWidth10: calc(var(--UIHeight1) * 10);
+	--UIWidth11: calc(var(--UIHeight1) * 11);
+	--UIWidth12: calc(var(--UIHeight1) * 12);
+	--UIWidth13: calc(var(--UIHeight1) * 13);
+	--UIWidth14: calc(var(--UIHeight1) * 14);
+	--UIWidth15: calc(var(--UIHeight1) * 15);
+	--UIWidth20: calc(var(--UIHeight1) * 20);
+	--UIWidth30: calc(var(--UIHeight1) * 30);
+
 	--rangeHeight: 0.833rem;
 	--rangeThumbWidth: 0.5rem;
 	--rangeThumbHeight: 1.25rem;
@@ -58,8 +73,8 @@
 	--UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
 	/* IMAGES */
 	--imgSize: 1.25rem;
-	--colBoxWidth: 1rem;
-	--colBoxHeight: 0.667rem;
+	--colBoxWidth: calc(var(--UIHeight1) * 0.75);
+	--colBoxHeight: calc(var(--UIHeight1) * 0.75);
 	--imgGifPrevWidth: 7rem;
 	--imgGifMainWidth: 24rem;
 	/* SONSTIGES */
@@ -115,8 +130,8 @@
 	font-family: "Roboto";
 	font-style: normal;
 	font-weight: 400;
-	src: local(""), url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"),
-		url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
+	src: local(""), url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"),
+		url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
 }
 
 .fullscreenFontsize {
@@ -125,7 +140,6 @@
 
 body {
 	background-color: hsl(var(--bgcBackground));
-	/* background-color: hsl(var(--bgcBackground) / 0.95); */
 	color: hsl(var(--txtBackground));
 	-webkit-transition: all var(--transitionTimeName) ease-in-out;
 	transition: all var(--transitionTimeName) ease-in-out;
@@ -154,8 +168,8 @@ body {
 	background-color: hsl(var(--bgcSubgrid) / 0);
 	visibility: hidden;
 	pointer-events: none;
-	transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out,
-		pointer-events 0s linear var(--transitionTimeHide), visibility 0s linear var(--transitionTimeHide);
+	transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out, pointer-events 0s linear var(--transitionTimeHide),
+		visibility 0s linear var(--transitionTimeHide);
 }
 
 .cl_backgroundAnimation {
@@ -198,7 +212,7 @@ table {
 thead {
 	position: -webkit-sticky;
 	position: sticky;
-	min-height: var(--UIHeight);
+	min-height: var(--UIHeight1);
 	top: 0;
 	z-index: 2;
 }
@@ -270,8 +284,8 @@ tbody tr:last-child td {
 	overflow-x: hidden;
 	overflow-y: auto;
 	scrollbar-width: none;
-	max-height: 16.667rem;
-	max-width: var(--UIWidthWide);
+	max-height: var(--UIWidth10);
+	max-width: var(--UIWidth10);
 }
 
 .clDiv_overviewTablesWide::-webkit-scrollbar {
@@ -283,7 +297,7 @@ tbody tr:last-child td {
 	overflow-y: auto;
 	scrollbar-width: none;
 	max-height: 16.667rem;
-	max-width: var(--UIWidthNorm);
+	max-width: var(--UIWidth8);
 }
 
 .clDiv_overviewTablesInput::-webkit-scrollbar {
@@ -305,7 +319,7 @@ tbody tr:last-child td {
 	overflow-y: auto;
 	max-height: 50rem;
 	max-width: 80%;
-	/* calc(var(--UIWidthWide) * 3 */
+	/* calc(var(--UIWidth13) * 3 */
 }
 
 .clDiv_overviewTablesMaterial::-webkit-scrollbar {
@@ -319,7 +333,7 @@ tbody tr:last-child td {
 	/* transform: rotate(180deg); */
 	rotate: 180deg;
 	height: auto;
-	min-width: var(--UIHeight);
+	min-width: var(--UIHeight1);
 }
 
 /* Gird Design */

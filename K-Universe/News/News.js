@@ -4,19 +4,21 @@ const newsData = {
 	currIndex: 0,
 	articles: [],
 	categories: {
-		general: "Allgemeines",
+		// world
+		top: "Allgemeines",
 		business: "Business",
 		entertainment: "Unterhaltung",
 		health: "Gesundheit",
 		science: "Wissenschaft",
+		politics: "Politik",
 		sports: "Sport",
+		food: "Ernährung",
 		technology: "Technologie",
+		environment: "Umwelt",
 	},
-	num: 10,
 	default: {
-		category: "general",
+		category: "top",
 		country: "de",
-		num: 1,
 	},
 };
 
@@ -48,19 +50,6 @@ function clear_cl_News() {
 	}
 	dbID("idSel_newsCountry").appendChild(optGroup);
 
-	optGroup = document.createElement("optgroup");
-	optGroup.label = "Anzahl";
-	for (let i = 0; i < newsData.num; i++) {
-		const option = document.createElement("OPTION");
-		option.textContent = (i + 1) * 10;
-		option.value = (i + 1) * 10;
-		if (i == newsData.default.num) {
-			option.selected = true;
-		}
-		optGroup.appendChild(option);
-	}
-	dbID("idSel_newsNum").appendChild(optGroup);
-
 	dbID("idBtn_tickerNewsToggle").textContent = "Start Ticker";
 	btnColor("idBtn_tickerNewsToggle");
 	newsUpdateOptions();
@@ -70,7 +59,6 @@ function newsUpdateOptions() {
 	const searchOpt = {
 		category: dbID("idSel_newsCategory").value,
 		country: dbID("idSel_newsCountry").value,
-		num: Number(dbID("idSel_newsNum").value),
 	};
 	utilsSocketPost("News", searchOpt);
 }
@@ -89,33 +77,34 @@ function newsError(errMsg) {
 
 function newsReturn(data) {
 	if (data.error) {
-		console.log(data.error);
 		newsError(data.error);
-	} else if (data.status != "ok" || data.articles.length == 0) {
-		newsError("No NEWS found for this Topic!");
-	} else {
-		newsData.articles = data.articles;
-		for (let i = newsData.articles.length - 1; i >= 0; i--) {
-			let title = newsData.articles[i].title;
-			let desc = newsData.articles[i].description;
-			if (desc == "" || desc === null || title == "" || title === null) {
-				data.articles.splice(i, 1);
-			} else {
-				newsData.articles[i].dateInfo = utilsDate(newsData.articles[i].publishedAt, { format: "DD.MM.YY/HH:mm"});
-			}
-		}
-		newsCreateTable();
-		newsData.currIndex = 0;
+		return;
 	}
+	if (data.results.length == 0) {
+		newsError("No NEWS found for this Topic!");
+		return;
+	}
+	newsData.articles = data.results;
+	for (let i = newsData.articles.length - 1; i >= 0; i--) {
+		newsData.articles[i].dateInfo = utilsDate(newsData.articles[i].pubDate, { format: "DD.MM.YY/HH:mm" });
+		let link = newsData.articles[i].link.replace(/https:\/\//, "");
+		link = link.replace(/http:\/\//, "");
+		link = link.replace(/www./, "");
+		newsData.articles[i].source = link.split("/")[0];
+	}
+	newsCreateTable();
+	newsData.currIndex = 0;
 	showNews();
 }
 
 function showNews() {
 	if (newsData.articles.length > 0) {
-		dbID("idDiv_News_Title").innerHTML = `${newsData.articles[newsData.currIndex].title} (${newsData.articles[newsData.currIndex].dateInfo})`;
+		dbID("idDiv_News_Title").innerHTML = `${newsData.articles[newsData.currIndex].title} (${newsData.articles[newsData.currIndex].dateInfo}, ${
+			newsData.articles[newsData.currIndex].creator || newsData.articles[newsData.currIndex].source_id
+		})`;
 		dbID("idDiv_News_Text").innerHTML = newsData.articles[newsData.currIndex].description;
-		dbID("idImg_News_Image").src = newsData.articles[newsData.currIndex].urlToImage;
-		dbID("idImg_News_Image").setAttribute("imgSize", "gfyPrev");
+		dbID("idImg_News_Image").src = newsData.articles[newsData.currIndex].image_url;
+		dbID("idImg_News_Image").setAttribute("imgSize", "thumbnail");
 		newsUpdateTableIcons();
 	}
 }
@@ -156,9 +145,8 @@ function newsCreateTable() {
 		tableAddCell(row, {
 			names: ["newsSource", i],
 			type: "Lbl",
-			text: newsData.articles[i].source.name,
+			text: newsData.articles[i].source,
 			cellStyle: {
-				maxWidth: "8.333rem",
 				overflow: "hidden",
 				textOverflow: "ellipsis",
 				whiteSpace: "nowrap",
@@ -186,7 +174,7 @@ function newsUpdateTableIcons() {
 
 function news_URL() {
 	newsStopTicker();
-	window.open(newsData.articles[newsData.currIndex].url);
+	window.open(newsData.articles[newsData.currIndex].link);
 }
 
 function newsShowNext() {

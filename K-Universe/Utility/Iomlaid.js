@@ -83,7 +83,6 @@ async function iomlaidCalculate() {
 
 function iomlaidTable() {
 	dbID("idTabHeader_iomlaidRequestedAmount").textContent = `Betrag: ${utilsNumber(iomlaidOptions.options.value, { currency: iomlaidOptions.options.base })}`;
-	dbID("idTabHeader_iomlaidDatedDate").textContent = utilsDate(iomlaidOptions.options.date);
 	clearTable("idTabBody_Iomlaid");
 	let i = 0;
 

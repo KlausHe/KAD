@@ -125,11 +125,7 @@ function linahaFinished() {
 function linahaDisableEntries(lock) {
 	const inputArr = ["idSel_linahaSelectQ", "idSel_linahaSelectSwitch", "idSel_linahaSelectA", "idSel_linahaChoices", "idVin_linahaRounds"];
 	for (const id of inputArr) {
-		if (lock) {
-			dbID(id).setAttribute("disabled", true);
-		} else {
-			dbID(id).removeAttribute("disabled");
-		}
+		enableBtn(id, !lock);
 	}
 }
 
@@ -213,7 +209,7 @@ function linahaCreateButtons() {
 					type: "Btn",
 					subGroup: "text",
 					ui: {
-						uiSize: linahaOptions.selA == 1 ? "linahaBtn" : "doubleHeight",
+						uiSize: linahaOptions.selA == 1 ? "linahaBtn" : "height2",
 						uiType: linahaOptions.selA == 1 ? "transparent" : "",
 					},
 					style: {

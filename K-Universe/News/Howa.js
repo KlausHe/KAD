@@ -278,15 +278,12 @@ function howaZoom(obj) {
 function howaMapsExpand() {
 	btnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
 	if (weaterMaps.shown) {
-		contentGrid.cl_Howa.height = 1;
 		dbIDStyle("idSel_howaMapsCriteria").display = "none";
 		dbIDStyle("idSel_howaMapsCountry").display = "none";
 		dbIDStyle("idImg_howaMapsImg").display = "none";
 	} else {
-		contentGrid.cl_Howa.height = 2;
 		howaChangeMap();
 	}
-	layoutNavClick(contentLayout.prevNavContent);
 	weaterMaps.shown = !weaterMaps.shown;
 }
 

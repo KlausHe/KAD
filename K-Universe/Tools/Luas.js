@@ -1,6 +1,7 @@
 const luasOptions = {
 	width: 200,
 	height: 200,
+	radius: 0,
 	speedVin: 10,
 	speedAngular: null,
 	diameterVin: 10,
@@ -28,6 +29,7 @@ function clear_cl_Luas() {
 	dbID("idSel_luasLinearUnit").options[3] = new Option("m", 1, false); // text, value
 	dbID("idSel_luasLinearUnit").options[4] = new Option("km", 1, false); // text, value
 	luasInputChange();
+	luasOptions.radius = (luasOptions.width / 2) * 0.9;
 	luasOptions.lastAngle = 0;
 	caLU.noLoop();
 	caLU.redraw();
@@ -41,24 +43,23 @@ const caLU = new p5((c) => {
 		c.frameRate(luasOptions.setFramerate);
 		c.angleMode(c.DEGREES);
 		c.colorMode(c.HSL);
+    c.strokeWeight(2);
 		c.noLoop();
 	};
-
+  
 	c.draw = function () {
-		const r = luasOptions.width / 2 - 10;
-		caLU.clear();
-		c.strokeWeight(2);
-		c.stroke(globalValues.colors.elements.line);
+    caLU.clear();
+    c.stroke(globalValues.colors.elements.line);
 		c.push();
 		c.translate(luasOptions.width / 2, luasOptions.height / 2);
 		c.rotate(270);
 		c.noFill();
 
-		c.circle(0, 0, r * 2);
-		c.circle(r, 0, 4);
+		c.circle(0, 0, luasOptions.radius * 2);
+		c.circle(luasOptions.radius, 0, 4);
 		c.circle(0, 0, 4);
-		c.circle(r * c.cos(luasOptions.lastAngle), r * c.sin(luasOptions.lastAngle), 3);
-		c.line(0, 0, r * c.cos(luasOptions.lastAngle), r * c.sin(luasOptions.lastAngle));
+		c.circle(luasOptions.radius * c.cos(luasOptions.lastAngle), luasOptions.radius * c.sin(luasOptions.lastAngle), 3);
+		c.line(0, 0, luasOptions.radius * c.cos(luasOptions.lastAngle), luasOptions.radius * c.sin(luasOptions.lastAngle));
 		c.pop();
 
 		if (c.frameCount - luasOptions.lastFramecount > 10) {
@@ -91,13 +92,13 @@ function luasInputChange() {
 	luasOptions.angularVin = Number(dbID("idSel_luasAngularUnit").value);
 	luasOptions.angularText = dbID("idSel_luasAngularUnit").options[dbID("idSel_luasAngularUnit").selectedIndex].textContent;
 	luasOptions.linearText = dbID("idSel_luasLinearUnit").options[dbID("idSel_luasLinearUnit").selectedIndex].textContent;
-
 	luasOptions.speedAngular = (luasOptions.speedVin * 360) / luasOptions.angularVin;
 	luasOptions.speedLinear = luasOptions.speedVin * Math.PI * luasOptions.diameterVin;
 
-	dbID("idLbl_luasResult").innerHTML = `Linear: ${checkExponential(luasOptions.speedLinear, { decimals: 3, expoThreashold: 6 })} ${
-		luasOptions.linearText
-	}/${luasOptions.angularText.replace("U/", "")}`;
+	dbID("idLbl_luasResult").innerHTML = `Linear: ${checkExponential(luasOptions.speedLinear, { decimals: 3, expoThreashold: 6 })} ${luasOptions.linearText}/${luasOptions.angularText.replace(
+		"U/",
+		""
+	)}`;
 	dataForLabel("idLbl_luasResult", luasOptions.speedLinear);
 }
 

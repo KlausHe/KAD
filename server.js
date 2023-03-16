@@ -1,4 +1,10 @@
 const redirectPath = "/K-Universe";
+const newsData = {
+	get interval() {
+		return new Date().getTime() - 1000 * 60 * 60 * 2; // 2h
+	},
+	data: {},
+};
 const howaData = {
 	URLGeocoding: `http://api.openweathermap.org/geo/1.0/direct?q=`,
 	URLCurrent: "https://api.openweathermap.org/data/2.5/weather?",
@@ -24,15 +30,12 @@ app.use(express.static("K-Universe"));
 app.listen(process.env.PORT);
 console.log(`Started @ Port: ${process.env.PORT}`);
 
-const news = require("newsapi");
-const newsAPI = new news(process.env.API_NEWS_KEY);
 const tableToJson = require("tabletojson").Tabletojson;
-
 const { generateRequestUrl, normaliseResponse } = require("google-translate-api-browser");
 
 //----------------------------------Data----------------------------
 app.post(`${redirectPath}/Howa/`, (req, res) => {
-	let data = req.body; // your JSON
+	let data = req.body;
 	function replaceUmlaute(word = null) {
 		if (word == null || word.trim() == "") return;
 		const umlaute = new Map([
@@ -77,15 +80,30 @@ app.post(`${redirectPath}/Howa/`, (req, res) => {
 });
 
 app.post(`${redirectPath}/News/`, (req, res) => {
-	let options = {
-		category: req.body.category,
-		country: req.body.country,
-		pageSize: req.body.num,
-	};
+	const country = req.body.country;
+	const category = req.body.category;
 
+	const url = `https://newsdata.io/api/1/news?apikey=${process.env.API_NEWS_KEY}&country=${country}&language=${country}&category=${category}`;
+	async function NewsAsync() {
+		try {
+			const newsReturn = await axios.get(url);
+			newsData.data[category] = { data: newsReturn.data, timestamp: new Date().getTime() };
+			res.send(JSON.stringify(newsData.data[category].data));
+		} catch (error) {
+			console.log("error", url);
+			res.send(JSON.stringify({ error }));
+		}
+	}
+	if (newsData.data[category] == undefined || newsData.data[category].timestamp < newsData.interval) {
+		NewsAsync();
+	} else {
+		res.send(JSON.stringify(newsData.data[category].data));
+	}
+	return;
 	newsAPI.v2
 		.topHeadlines(options)
 		.then((response) => {
+			console.log(response);
 			res.send(JSON.stringify(response)); // echo the result back
 		})
 		.catch((error) => {
