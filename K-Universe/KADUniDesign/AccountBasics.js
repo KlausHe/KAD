@@ -11,223 +11,32 @@ let nuncDiscipuli = {
 		return accData.data ? accData.infos.shortName.data : "";
 	},
 	clear: () => {
-		nuncDiscipuli.saves.userAcc = {};
-		accData.data = false; //reset the "Data is set" variable when clear
-		nuncDiscipuli.saves.UserGridLayout = [];
-		nuncDiscipuli.saves.ColorSettings = null;
-		nuncDiscipuli.saves.generalSettings = {
-			copyClick: true,
-			copySeparator: true,
-			decimals: 4,
-			fontSize: 12,
-		};
-		nuncDiscipuli.saves.MaterialFilterSettings = [...materialFilterOptions.orig];
-		nuncDiscipuli.saves.Material = [...materialOptions.matListOrig];
-		nuncDiscipuli.saves.Tugas = {};
-		nuncDiscipuli.saves.Howa = "Berlin";
-		nuncDiscipuli.saves.Covid = "World";
-		nuncDiscipuli.saves.Lions = 0;
-		nuncDiscipuli.saves.WikiSearch = {
-			tab: null,
-			content: null,
-		};
-		nuncDiscipuli.saves.Lotto = {
-			startup: true,
-			Eurojackpot: {
-				tips: [],
-				star: [],
-				date: null,
-			},
-			"6aus49": {
-				tips: [],
-				star: [],
-				date: null,
-			},
-		};
+		for (let obj in contentGrid) {
+			if (contentGrid[obj].hasOwnProperty("userStoreDBData")) {
+				contentGrid[obj].userStoreDBClear();
+			}
+		}
 	},
-	saves: {
-		get userAcc() {
-			let data = {};
-			for (const [key, value] of Object.entries(accData.infos)) {
-				data[key] = value.data;
+	getAllData: () => {
+		let retData = {};
+		for (let obj in contentGrid) {
+			if (contentGrid[obj].hasOwnProperty("userStoreDBData")) {
+				retData[obj] = contentGrid[obj].userStoreDBData;
 			}
-			return data;
-		},
-		set userAcc(data) {
-			accData.data = true;
-			for (const [key, value] of Object.entries(data)) {
-				accData.infos[key].data = value;
-			}
-		},
-		get UserGridLayout() {
-			return usergridData.generateArray();
-		},
-		set UserGridLayout(data) {
-			contentLayout.navContent.User = data.filter((cl) => {
-				return Object.keys(contentGrid).includes(cl);
-			});
-			for (const gridName of contentLayout.navContent.Universe) {
-				contentGrid[gridName].userSelected = contentLayout.navContent.User.includes(gridName); //safety, if old things in Database!
-			}
-			usergridCreateTable();
-			usergridData.checkAllGroups();
-		},
-		get GeneralSettings() {
-			return globalValues.settings;
-		},
-		set GeneralSettings(data) {
-			for (const key of Object.keys(globalValues.settings)) {
-				globalValues.settings[key] = data[key];
-			}
-			//call functions without arg to toggle secific functionality
-			settingsCopyClick();
-			settingsCopySeparator();
-			settingsFontsize();
-			settingsDecimals();
-		},
-		get ColorSettings() {
-			return {
-				lightmode: deepClone(globalValues.colors.lightmode),
-				darkmode: deepClone(globalValues.colors.darkmode),
-			};
-		},
-		set ColorSettings(data) {
-			if (data == null) {
-				globalValues.colors.lightmode = deepClone(globalValues.colors.colorSettingsOrig.lightmode);
-				globalValues.colors.darkmode = deepClone(globalValues.colors.colorSettingsOrig.darkmode);
-				return;
-			}
-			globalValues.colors.lightmode = deepClone(data.lightmode);
-			globalValues.colors.darkmode = deepClone(data.darkmode);
-			displayColorSystem();
-			populateColorSelector();
-		},
-		get ColorSettings() {
-			return {
-				lightmode: deepClone(globalValues.colors.lightmode),
-				darkmode: deepClone(globalValues.colors.darkmode),
-			};
-		},
-		set ColorSettings(data) {
-			if (data == null) {
-				globalValues.colors.lightmode = deepClone(globalValues.colors.colorSettingsOrig.lightmode);
-				globalValues.colors.darkmode = deepClone(globalValues.colors.colorSettingsOrig.darkmode);
-				return;
-			}
-			globalValues.colors.lightmode = deepClone(data.lightmode);
-			globalValues.colors.darkmode = deepClone(data.darkmode);
-			displayColorSystem();
-			populateColorSelector();
-		},
-		get Material() {
-			return [...materialOptions.matList];
-		},
-		set Material(data) {
-			materialOptions.matList = data;
-			materialSelectedTable();
-		},
-		get MaterialFilterSettings() {
-			return [...materialFilterOptions.select];
-		},
-		set MaterialFilterSettings(data) {
-			let filteredWrong = [];
-			materialFilterOptions.select = [];
-			for (const dataPoint of data) {
-				if (Object.keys(Data_Material.metadata).includes(dataPoint)) {
-					materialFilterOptions.select.push(dataPoint);
-				} else {
-					filteredWrong.push(dataPoint);
-				}
-			}
-			if (filteredWrong.length > 0) console.log("The following Filters are no longer supported:", filteredWrong);
-			materialFilterBuildTable();
-			materialFilterUpdateCB();
-			// materialSelectedTable();
-		},
-		get Tugas() {
-			return tugasOptions;
-		},
-		set Tugas(data) {
-			tugasOptions = deepClone(data);
-			createTugas();
-		},
-		get WikiSearch() {
-			return wikiOptions.search;
-		},
-		set WikiSearch(data) {
-			wikiOptions.search = deepClone(data);
-			if (idVin_wikiInput.value == "") {
-				if (wikiOptions.search.tab != null) {
-					dbID("idVin_wikiInput").placeholder = wikiOptions.search.tab;
-					wikiSearchInput(wikiOptions.search.tab);
-					if (wikiOptions.search.content) {
-						wikiShowSelectedText(wikiOptions.search.content, true);
-					}
-					if (wikiOptions.search.image) {
-						wikiShowSelectedImage(wikiOptions.search.image, true);
-					}
-				} else if (accData.data != false) {
-					const arr = Object.values(accData.infos).filter((obj) => {
-						return obj.data != null;
-					});
-					const autoSearch = randomObject(arr);
-					dbID("idVin_wikiInput").placeholder = autoSearch.data;
-					wikiSearchInput(autoSearch.data, true);
-				}
-				clearTable("idTabBody_wikiTitleTable");
-			}
-		},
-		get Lotto() {
-			let retData = {};
-			for (const [key, values] of Object.entries(lottoOptions.games)) {
-				retData[key] = {};
-				retData[key]["tips"] = values.savedSet.tips;
-				retData[key]["star"] = values.savedSet.star;
-				retData[key]["date"] = values.savedSet.date;
-			}
-			return retData;
-		},
-		set Lotto(data) {
-			dbCLStyle("cl_LottoSavedGame").display = "initial";
-			for (const [key, values] of Object.entries(lottoOptions.games)) {
-				if (data[key] != null && data[key] != "") {
-					lottoOptions.games[key].savedSet["tips"] = data[key].date != null ? [...data[key].tips] : [];
-					lottoOptions.games[key].savedSet["star"] = data[key].date != null ? [...data[key].star] : [];
-					lottoOptions.games[key].savedSet["date"] = data[key].date != null ? data[key].date : null;
-				}
-			}
-			if (!data.startup) {
-				lottoUpdateSavegames();
-			}
-			lottoOptions.randomiziation = 0;
-			clearTimeout(lottoOptions.randomTimeout);
-			createLotto(false);
-		},
-		get Howa() {
-			return howaData.pos.location;
-		},
-		set Howa(data) {
-			dbID("idVin_howaEntry").value = data;
-			howaGetLocation();
-		},
-		get Lions() {
-			return lionsOptions.num;
-		},
-		set Lions(data) {
-			dbID("idVin_lionsInput").value = data;
-			setTimeout(() => {
-				lionsRequestNumber();
-			}, 1000);
-		},
-		get Covid() {
-			return covidData.selectedCountry;
-		},
-		set Covid(data) {
-			covidData.selectedCountry = data;
-			if (covidGraph === null || covidData.data === null) return;
-			covidRefreshGraph();
-			covidGraph.update();
-		},
+		}
+		return retData;
+	},
+	getData(obj) {
+		let name = `cl_${obj}`;
+		if (contentGrid[name].hasOwnProperty("userStoreDBData")) {
+			return contentGrid[name].userStoreDBData;
+		}
+	},
+	saveData(obj, data) {
+		let name = `cl_${obj}`;
+		if (contentGrid[name].hasOwnProperty("userStoreDBData")) {
+			contentGrid[name].userStoreDBData = data;
+		}
 	},
 };
 
@@ -331,7 +140,7 @@ const accData = {
 function toggleLayout() {
 	let dbList = [];
 	for (let [key, value] of Object.entries(contentGrid)) {
-		if (value.hasOwnProperty("userStoreDB")) dbList.push(key);
+		if (value.hasOwnProperty("userStoreDBName")) dbList.push(key);
 	}
 	if (nuncDiscipuli.checkLogin) {
 		// logged in
@@ -591,7 +400,8 @@ function userAccRegister() {
 				});
 		})
 		.then(() => {
-			let saves = nuncDiscipuli.saves;
+			let saves = nuncDiscipuli.getAllData();
+			console.log(saves);
 			saves.uid = nuncDiscipuli.cred.uid;
 			saves.email = nuncDiscipuli.cred.email;
 			FBUserSettings.doc(nuncDiscipuli.cred.uid)
@@ -625,17 +435,17 @@ function loadDiscipuli(category = null) {
 		.get()
 		.then((doc) => {
 			const savedData = doc.data();
-			if (category == null) {
+			if (category != null) {
+				nuncDiscipuli.saveData(category, savedData[category]);
+			} else {
 				for (const [key, value] of Object.entries(savedData)) {
-					if (key == "uid" || key == "email" || !Object.keys(contentGrid).includes(`cl_${key}`) || contentGrid[`cl_${key}`].userStoreDB != key) {
+					if (key == "uid" || key == "email" || !Object.keys(contentGrid).includes(`cl_${key}`) || contentGrid[`cl_${key}`].userStoreDBName != key) {
 						console.log("Currently not sopported:", key);
 					} else {
-						nuncDiscipuli.saves[key] = value;
+						nuncDiscipuli.saveData(key, value);
 					}
 				}
 				userAccSetUserBtn();
-			} else {
-				nuncDiscipuli.saves[category] = savedData[category];
 			}
 		})
 		.catch((error) => {
@@ -648,11 +458,11 @@ function saveDiscipuli(category = null) {
 	if (!nuncDiscipuli.checkLogin) return;
 	let data = {};
 	if (category == null) {
-		for (const keys of Object.keys(nuncDiscipuli.saves)) {
-			data = { [keys]: nuncDiscipuli.saves[keys] };
+		for (const key of Object.keys(nuncDiscipuli.saves)) {
+			data = { [key]: nuncDiscipuli.getData(key) };
 		}
 	} else {
-		data = { [category]: nuncDiscipuli.saves[category] };
+		data = { [category]: nuncDiscipuli.getData(category) };
 	}
 	FBUserSettings.doc(nuncDiscipuli.cred.uid)
 		.update(data, { merge: true })

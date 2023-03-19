@@ -11,31 +11,34 @@
 
 .cl_subGrid_GeneralSettings {
 	grid-template-areas:
-		". SettingsCopyClick ."
 		". SettingsFontsize ."
-		". SettingsCopySeparator ."
-		". SettingsDecimals .";
+		". SettingsDecimals ."
+		". SettingsCopyClick ."
+		". SettingsCopySeparator .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_ColorSettings {
 	grid-template-areas:
-		".  colourSettings_light_0 colourSettings_dark_0 ."
-		".  colourSettings_light_1 colourSettings_dark_1 ."
-		".  colourSettings_light_2 colourSettings_dark_2 .";
-	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
+		". colourSettingsHeaderLight ."
+		". colourSettings_light_0 ."
+		". colourSettings_light_1 ."
+		". colourSettings_light_2 ."
+		". colourSettingsHeaderDark ."
+		". colourSettings_dark_0 ."
+		". colourSettings_dark_1 ."
+		". colourSettings_dark_2 .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_UserGridLayout {
 	grid-template-areas:
-		". UserGridTable UserGridBtnToggle ."
-		". UserGridTable UserGridBtnSave ."
+		". UserGridOptions . ."
 		". UserGridTable . .";
-	/* ". UserGridCanvas . ." */
 	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_MaterialFilterSettings {
@@ -89,15 +92,6 @@
 		". PostillionTable .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
-}
-
-.cl_subGrid_Covid {
-	grid-template-areas:
-		". covidConfirmed . "
-		". covidDeaths . "
-		". covidGraphDate . ";
-	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight2) var(--UIHeight2) var(--UIHeight1);
 }
 
 .cl_subGrid_Tugas {
@@ -227,14 +221,14 @@
 
 .cl_subGrid_Pelvelea {
 	grid-template-areas:
-		". PelveleaStarttime PelveleaStarttime ."
-		". PelveleaBreaks PelveleaBreaks ."
-		". PelveleaWorktime PelveleaWorktime ."
-		". PelveleaResult PelveleaResult ."
-		". PelveleaProgress PelveleaProgress ."
-		". PelveleaBreaktime PelveleaBreaktime .";
-	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) auto var(--UIHeight1);
+		". PelveleaStarttime ."
+		". PelveleaBreaks ."
+		". PelveleaWorktime ."
+		". PelveleaResult ."
+		". PelveleaProgress ."
+		". PelveleaBreaktime .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Iomlaid {
@@ -294,12 +288,13 @@
 
 .cl_subGrid_Middle {
 	grid-template-areas:
-		". MiddleInput0 MiddleInput0 ."
-		". MiddleInput1 MiddleInput1 ."
-		". MiddleCanvas MiddleCanvas ."
-		". MiddleMid MiddleDiff .";
-	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto auto;
+		". MiddleInput0 ."
+		". MiddleInput1 ."
+		". MiddleCanvas ."
+		". MiddleMid ."
+		". MiddleDiff .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight2) var(--UIHeight2);
 }
 
 .cl_subGrid_Luas {
@@ -316,10 +311,12 @@
 
 .cl_subGrid_Quickmath {
 	grid-template-areas:
-		". quickmathInput quickmathStart quickmathStart quickmathEnd ."
-		". quickmathListMultiply quickmathListDivide quickmathListPow quickmathListRoot .";
-	grid-template-columns: 1fr auto auto auto auto 1fr;
-	grid-template-rows: var(--UIHeight1) auto;
+		". quickmathInput quickmathInput quickmathInput ."
+		". quickmathStart quickmathStart quickmathStart ."
+		". quickmathEnd quickmathEnd quickmathEnd ."
+		". quickmathListMultiply quickmathListDivide quickmathListPow .";
+	grid-template-columns: 1fr auto auto auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Ranje {
@@ -335,7 +332,7 @@
 		". niskaHeaderInput niskaHeaderSelect ."
 		". niskaSize niskaSelect ."
 		". niskaPitch . ."
-		". niskaStrengthClass niskaStrengthClass ."
+		". niskaStrengthClassA niskaStrengthClassB ."
 		". niskaList niskaList .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
@@ -407,39 +404,42 @@
 	grid-template-areas:
 		". IbhaluniInputs ."
 		". IbhaluniCanvas .";
-	grid-template-columns: 1fr var(--gridWidthGameCanvas) 1fr;
+	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_RayCaster {
 	grid-template-areas:
-		". RayCasterInputs . ."
+		". RayCasterCanvas RayCasterInputs ."
 		". RayCasterCanvas RayCasterSize ."
 		". RayCasterCanvas RayCasterSpeed ."
 		". RayCasterCanvas RayCasterView ."
-		". RayCasterCanvas RayCasterOptions ."
+		". RayCasterCanvas RayCasterOptionsA ."
+		". RayCasterCanvas RayCasterOptionsB ."
+		". RayCasterCanvas RayCasterOptionsC ."
+		". RayCasterCanvas RayCasterOptionsD ."
 		". RayCasterCanvas . .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidth13) 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Lotto {
 	grid-template-areas:
-		". LottoOptions LottoOverview ."
+		". LottoOverview LottoOptionsA ."
+		". LottoOverview LottoOptionsB ."
 		". LottoCanvas LottoSavedGame ."
 		". LottoCanvas LottoGetGames ."
 		". LottoCanvas LottoTabGames .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) auto 1fr;
-	grid-template-rows: var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Sweeper {
 	grid-template-areas:
-		". SweeperCanvas SweeperInputs ."
-		". SweeperCanvas SweeperGrid ."
-		". SweeperCanvas SweeperSweeps .";
-	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidth13) 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
+		". SweeperInputs SweeperGrid SweeperSweeps ."
+		". SweeperCanvas SweeperCanvas SweeperCanvas .";
+	grid-template-columns: 1fr auto auto auto 1fr;
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Empat {
@@ -452,14 +452,15 @@
 
 .cl_subGrid_Numbery {
 	grid-template-areas:
-		". NumberyInputs . ."
-		". NumberyImages NumberyPairs ."
-		". NumberyImages NumberyPlayerNum ."
-		". NumberyImages NumberyCathegory ."
-		". NumberyImages NumberyPlayers ."
-		". NumberyImages NumberyResult .";
-	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidth13) 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
+		". NumberyImages . NumberyInputs ."
+		". NumberyImages . NumberyPairs ."
+		". NumberyImages . NumberyPlayerNum ."
+		". NumberyImages . NumberyCathegory ."
+		". NumberyImages . NumberyPlayers ."
+		". NumberyImages . NumberyResult ."
+		". NumberyImages . . .";
+	grid-template-columns: 1fr auto var(--UIWidth1) auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight2) auto;
 }
 
 .cl_subGrid_Ocjene {
@@ -509,13 +510,14 @@
 
 .cl_subGrid_Blechgeometrie {
 	grid-template-areas:
-		". BlechgeoVinDicke BlechgeoImg ."
-		". BlechgeoVinRadius BlechgeoImg ."
-		". BlechgeoVinForm BlechgeoImg ."
-		". BlechgeoVinBreite BlechgeoImg ."
-		". BlechgeoLblResult BlechgeoLblResult .";
-	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
+		". BlechgeoVinDicke ."
+		". BlechgeoVinRadius ."
+		". BlechgeoVinForm  ."
+		". BlechgeoVinBreite ."
+		". BlechgeoImg ."
+		". BlechgeoLblResult .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_SpeechTranslate {

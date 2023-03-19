@@ -1,11 +1,9 @@
 const materialOptions = {
-	get matListOrig() {
-		return ["S275JR", "AlSi5Cu3", "X5CrNi18-10"];
-	},
+	matListOrig: ["S275JR", "AlSi5Cu3", "X5CrNi18-10"],
 	matList: [],
 	filterList: [],
 	get headerList() {
-		return dbID("idCb_materialListFilter").checked ? [...nuncDiscipuli.saves.MaterialFilterSettings] : Object.keys(Data_Material.metadata);
+		return dbID("idCb_materialListFilter").checked ? [...nuncDiscipuli.getData("MaterialFilterSettings")] : Object.keys(Data_Material.metadata);
 	},
 	optGroup: null,
 	selMatGroup: null,
@@ -57,7 +55,7 @@ function clear_cl_Material() {
 		}
 	}
 	materialOptions.filterList = Object.keys(Data_Material.Materials);
-	materialFilterOptions.select = [...materialFilterOptions.orig];
+	materialFilterOptions.select = [...materialFilterOptions.listOrig];
 	materialOptions.matList = materialOptions.matListOrig;
 	materialSelectedTable();
 	// closeMaterialSearch();

@@ -216,11 +216,15 @@ input:disabled {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-	-moz-appearance: textfield;
 	padding: var(--padding);
 }
 
+input[type="time"] {
+	width: var(--UIWidth4);
+}
+
 input[type="number"] {
+	appearance: none;
 	-moz-appearance: textfield;
 	width: var(--UIWidth3);
 	padding: var(--padding);
@@ -233,7 +237,6 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="range"] {
-	-webkit-appearance: none;
 	padding: 0;
 	display: inline-block;
 	max-width: calc(var(--UIWidth6) - var(--padding));
@@ -334,8 +337,9 @@ input[imgBtn="subgrid"] {
 	filter: invert(var(--inv));
 }
 
+.cl_infoCB,
 .cl_info {
-	display: inline-block;
+  display: inline-block;
 	position: relative;
 	height: var(--UIHeight1);
 	background-color: hsl(var(--bgcBackground) / 0.15);
@@ -345,6 +349,9 @@ input[imgBtn="subgrid"] {
 	border: var(--borderThin);
 	border-radius: var(--UIRadius);
 	text-align: center;
+}
+.cl_infoCB{
+  width: var(--UIWidth1);
 }
 
 .cl_outputLbl {
@@ -464,11 +471,11 @@ input[imgBtn="subgrid"] {
 }
 
 [uiSize~="outputTitle"] {
-  width: var(--UIWidth13);
+	width: var(--UIWidth13);
 }
 
 [uiSize~="outputText"] {
-  width: var(--UIWidth20);
+	width: var(--UIWidth20);
 }
 
 [uiSize~="sudoku"] {
@@ -549,40 +556,33 @@ input[imgBtn="subgrid"] {
 }
 
 [uiFilter~="invNavbar"] {
-	-webkit-filter: invert(var(--invNavbar));
 	filter: invert(var(--invNavbar));
 	transition: all var(--transitionTimeInfo) linear var(--transitionTimeInfo);
 }
 
 [uiFilter~="invNavbar"]:active {
-	-webkit-filter: invert(calc((var(--invNavbar)+1) % 2));
-	filter: invert(calc((var(--invNavbar)+1) % 2));
 	transition-duration: 0s;
 	transition-delay: 0s;
 }
 
 [uiFilter~="invGridtitle"] {
-	-webkit-filter: invert(var(--invGridtitle));
 	filter: invert(var(--invGridtitle));
 	transition: all var(--transitionTimeInfo) linear var(--transitionTimeInfo);
 }
 
 [uiFilter~="invGridtitle"]:active {
-	-webkit-filter: invert(calc((var(--invGridtitle)+1) % 2));
-	filter: invert(calc((var(--invGridtitle)+1) % 2));
+	filter: var(--invGridtitle);
 	transition-duration: 0s;
 	transition-delay: 0s;
 }
 
 [uiFilter~="invBackground"] {
-	-webkit-filter: invert(var(--invBackground));
 	filter: invert(var(--invBackground));
 	transition: all var(--transitionTimeInfo) linear var(--transitionTimeInfo);
 }
 
 [uiFilter~="invBackground"]:active {
-	/* -webkit-filter: invert(calc((var(--invBackground)+1) % 2)); */
-	filter: invert(calc((var(--invBackground)+1) % 2));
+	filter: var(--invBackground);
 	transition-duration: 0s;
 	transition-delay: 0s;
 }

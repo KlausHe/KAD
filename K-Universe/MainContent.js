@@ -1,9 +1,50 @@
 const contentGrid = {
+	cl_userAcc: {
+		userSelected: true,
+		userStoreDBName: "userAcc",
+		userStoreDBClear: function () {
+			this.userStoreDBData = false;
+		},
+		get userStoreDBData() {
+			let data = {};
+			for (const [key, value] of Object.entries(accData.infos)) {
+				data[key] = value.data;
+			}
+			return data;
+		},
+		set userStoreDBData(data) {
+			accData.data = true;
+			for (const [key, value] of Object.entries(data)) {
+				accData.infos[key].data = value;
+			}
+		},
+		width: 0,
+		contentGroup: "AccountSettings",
+		name: "Account-Settings",
+		subgrid: [
+			["cl_userAcc_infos", "left"],
+			["cl_userAcc_mail", "left"],
+			["cl_userAcc_pass", "left"],
+			["cl_userAcc_submit", "left"],
+			["cl_userAcc_check", "left"],
+			["cl_userAcc_alert", "left"],
+		],
+	},
 	cl_Howa: {
 		userSelected: true,
-		userStoreDB: "Howa",
+		userStoreDBName: "Howa",
+		userStoreDBClear: function () {
+			this.userStoreDBData = "Berlin";
+		},
+		get userStoreDBData() {
+			return howaData.pos.location;
+		},
+		set userStoreDBData(data) {
+			dbID("idVin_howaEntry").value = data;
+			howaGetLocation();
+		},
 		width: 2,
-		canvas: () => {
+		canvas: function () {
 			howaRefreshGraph();
 			howaColorGraph();
 		},
@@ -31,9 +72,6 @@ const contentGrid = {
 	cl_Sepakbola: {
 		userSelected: false,
 		height: 2,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "News",
 		name: "Sepakbola",
 		heritage: ["javanisch", "Fußball"],
@@ -48,29 +86,8 @@ const contentGrid = {
 			["cl_SepakbolaMatches", "left"],
 		],
 	},
-	cl_Covid: {
-		userSelected: true,
-		userStoreDB: "Covid",
-		canvas: () => {
-			null;
-		},
-		contentGroup: "News",
-		name: "Covid-19",
-		source: {
-			Daten: "https://github.com/pomber/covid19",
-		},
-		info: "Aktuelle Infos zur Covid-19-Ausbreitung",
-		subgrid: [
-			["cl_covidConfirmed", "right"],
-			["cl_covidDeaths", "left"],
-			["cl_covidGraphDate", "center"],
-		],
-	},
 	cl_News: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "News",
 		name: "News",
 		heritage: ["englisch", "Nachrichten"],
@@ -89,11 +106,20 @@ const contentGrid = {
 	},
 	cl_Lions: {
 		userSelected: true,
-		userStoreDB: "Lions",
-		active: false,
-		canvas: () => {
-			return;
+		userStoreDBName: "Lions",
+		userStoreDBClear: function () {
+			this.userStoreDBData = 0;
 		},
+		get userStoreDBData() {
+			return lionsOptions.num;
+		},
+		set userStoreDBData(data) {
+			dbID("idVin_lionsInput").value = data;
+			setTimeout(() => {
+				lionsRequestNumber();
+			}, 1000);
+		},
+		active: false,
 		contentGroup: "News",
 		name: "Lions",
 		heritage: ["englisch", "Löwen"],
@@ -109,9 +135,6 @@ const contentGrid = {
 	},
 	cl_PostillonTicker: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "News",
 		name: "PostillonTicker",
 		source: {
@@ -125,9 +148,6 @@ const contentGrid = {
 	},
 	cl_Netsaona: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Netsaona",
 		heritage: ["shona", "Zufall"],
@@ -145,9 +165,6 @@ const contentGrid = {
 	},
 	cl_Pelvelea: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Pelvelea",
 		heritage: ["khmer", "Zeit"],
@@ -163,9 +180,16 @@ const contentGrid = {
 	},
 	cl_Tugas: {
 		userSelected: true,
-		userStoreDB: "Tugas",
-		canvas: () => {
-			return;
+		userStoreDBName: "Tugas",
+		userStoreDBClear: function () {
+			this.userStoreDBData = {};
+		},
+		get userStoreDBData() {
+			return tugasOptions;
+		},
+		set userStoreDBData(data) {
+			tugasOptions = deepClone(data);
+			createTugas();
 		},
 		contentGroup: "Utility",
 		name: "Tugas",
@@ -179,9 +203,6 @@ const contentGrid = {
 	},
 	cl_Kadar: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Kadar",
 		heritage: ["türkisch", "bis"],
@@ -197,9 +218,6 @@ const contentGrid = {
 	},
 	cl_Thiontu: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Thiontu",
 		heritage: ["irisch", "umwandeln"],
@@ -215,9 +233,6 @@ const contentGrid = {
 	},
 	cl_Egg: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Eierkochen",
 		source: {
@@ -235,9 +250,6 @@ const contentGrid = {
 	},
 	cl_Foody: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Foody",
 		heritage: ["vietnamesisch", "lecker"],
@@ -252,9 +264,6 @@ const contentGrid = {
 	},
 	cl_Hverertu: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Hver Ertu",
 		heritage: ["isländisch", "Wer bist du"],
@@ -270,10 +279,8 @@ const contentGrid = {
 	},
 	cl_Kounselor: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
+		width: 2,
 		name: "Kounselor",
 		heritage: ["jiddisch", "Ratgeber"],
 		subgrid: [
@@ -290,7 +297,7 @@ const contentGrid = {
 	},
 	cl_Kaihanga: {
 		userSelected: true,
-		canvas: () => {
+		canvas: function () {
 			clear_cl_Kaihanga();
 		},
 		contentGroup: "Utility",
@@ -309,9 +316,6 @@ const contentGrid = {
 	},
 	cl_Botanicals: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Botanicals",
 		heritage: ["englisch", "botanisch"],
@@ -327,9 +331,6 @@ const contentGrid = {
 	},
 	cl_PlatLesen: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "PlatLesen",
 		heritage: ["malaysisch", "Nummernschild"],
@@ -345,9 +346,6 @@ const contentGrid = {
 	},
 	cl_Iomlaid: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Iomlaid",
 		heritage: ["schottisch-gälisch", "Austausch"],
@@ -362,9 +360,6 @@ const contentGrid = {
 	},
 	cl_SpeechTranslate: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Benkyou",
 		name: "Discipuli",
 		heritage: ["latein", "Student"],
@@ -377,9 +372,6 @@ const contentGrid = {
 	},
 	cl_Afinn: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Benkyou",
 		name: "Afinn-Analyse",
 		source: {
@@ -397,9 +389,6 @@ const contentGrid = {
 	},
 	cl_Synonym: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Benkyou",
 		name: "Synonym",
 		heritage: ["deutsch", "Ersatzwort"],
@@ -415,9 +404,6 @@ const contentGrid = {
 	},
 	cl_BiktadA: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "BiktadA",
 		heritage: ["schwedisch", "gebeichtet"],
@@ -429,9 +415,6 @@ const contentGrid = {
 	},
 	cl_Boredom: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Utility",
 		name: "Boredom",
 		heritage: ["englisch", "Langeweile"],
@@ -445,9 +428,37 @@ const contentGrid = {
 	},
 	cl_WikiSearch: {
 		userSelected: true,
-		userStoreDB: "WikiSearch",
-		canvas: () => {
-			return;
+		userStoreDBName: "WikiSearch",
+		userStoreDBClear: function () {
+			this.userStoreDBData = { tab: null, content: null, image: null };
+		},
+		get userStoreDBData() {
+			return wikiOptions.search;
+		},
+		set userStoreDBData(data) {
+			wikiOptions.search = deepClone(data);
+			if (idVin_wikiInput.value == "") {
+				if (wikiOptions.search.tab != null) {
+					dbID("idVin_wikiInput").placeholder = wikiOptions.search.tab;
+					wikiSearchInput(wikiOptions.search.tab);
+					if (wikiOptions.search.content) {
+						wikiShowSelectedText(wikiOptions.search.content, true);
+					}
+					if (wikiOptions.search.image) {
+						wikiShowSelectedImage(wikiOptions.search.image, true);
+					}
+				} else if (accData.data == true) {
+					const arr = Object.values(accData.infos).filter((obj) => {
+						return obj.data != null;
+					});
+					if (arr.length > 0) {
+						const autoSearch = randomObject(arr);
+						dbID("idVin_wikiInput").placeholder = autoSearch.data;
+						wikiSearchInput(autoSearch.data, true);
+					}
+				}
+				clearTable("idTabBody_wikiTitleTable");
+			}
 		},
 		contentGroup: "Benkyou",
 		name: "Wiki-Search",
@@ -465,7 +476,7 @@ const contentGrid = {
 	},
 	cl_Geometrie: {
 		userSelected: true,
-		canvas: () => {
+		canvas: function () {
 			caGE.redraw();
 		},
 		contentGroup: "Tools",
@@ -483,9 +494,16 @@ const contentGrid = {
 	cl_Material: {
 		userSelected: true,
 		logReqUser: true,
-		userStoreDB: "Material",
-		canvas: () => {
-			return;
+		userStoreDBName: "Material",
+		userStoreDBClear: function () {
+			this.userStoreDBData = [...materialOptions.matListOrig];
+		},
+		get userStoreDBData() {
+			return [...materialOptions.matList];
+		},
+		set userStoreDBData(data) {
+			materialOptions.matList = data;
+			materialSelectedTable();
 		},
 		contentGroup: "Tools",
 		name: "Material",
@@ -504,9 +522,6 @@ const contentGrid = {
 	},
 	cl_Expansion: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Tools",
 		name: "Expansion",
 		heritage: ["englisch", "Ausdehnung"],
@@ -527,7 +542,7 @@ const contentGrid = {
 	cl_Pattern: {
 		userSelected: true,
 		logReqUser: true,
-		canvas: () => {
+		canvas: function () {
 			drawPattern();
 		},
 		contentGroup: "Tools",
@@ -544,7 +559,7 @@ const contentGrid = {
 	},
 	cl_Luas: {
 		userSelected: true,
-		canvas: () => {
+		canvas: function () {
 			luasOptions.lastAngle = 0;
 			caLU.redraw();
 		},
@@ -563,7 +578,7 @@ const contentGrid = {
 	},
 	cl_Middle: {
 		userSelected: true,
-		canvas: () => {
+		canvas: function () {
 			showMiddleCanvas();
 		},
 		contentGroup: "Tools",
@@ -572,16 +587,13 @@ const contentGrid = {
 		subgrid: [
 			["cl_MiddleInput0", "center"],
 			["cl_MiddleInput1", "center"],
-			["cl_MiddleMid", "right"],
-			["cl_MiddleDiff", "left"],
+			["cl_MiddleMid", "center"],
+			["cl_MiddleDiff", "center"],
 			["cl_MiddleCanvas", "center"],
 		],
 	},
 	cl_Ranje: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Tools",
 		name: "Ranje",
 		heritage: ["Haiti-Kreolisch", "anordnen"],
@@ -592,9 +604,6 @@ const contentGrid = {
 	},
 	cl_Niska: {
 		userSelected: true,
-		canvas: () => {
-			return;
-		},
 		source: {
 			Regelgewinde: "https://de.wikipedia.org/wiki/Metrisches_ISO-Gewinde",
 			Feingewinde: "http://gewindenormen.com",
@@ -609,31 +618,27 @@ const contentGrid = {
 			["cl_niskaSize", "center"],
 			["cl_niskaPitch", "center"],
 			["cl_niskaSelect", "center"],
-			["cl_niskaStrengthClass", "center"],
+			["cl_niskaStrengthClassA", "center"],
+			["cl_niskaStrengthClassB", "center"],
 			["cl_niskaList", "center"],
 		],
 	},
 	cl_Quickmath: {
 		userSelected: true,
-		width: 2,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Tools",
 		name: "Quickmath",
 		subgrid: [
-			["cl_quickmathInput", "right"],
+			["cl_quickmathInput", "center"],
 			["cl_quickmathStart", "center"],
-			["cl_quickmathEnd", "left"],
+			["cl_quickmathEnd", "center"],
 			["cl_quickmathListMultiply", "center"],
 			["cl_quickmathListDivide", "center"],
 			["cl_quickmathListPow", "center"],
-			["cl_quickmathListRoot", "center"],
 		],
 	},
 	cl_Pythagoras: {
 		userSelected: true,
-		canvas: () => {
+		canvas: function () {
 			calcPytho();
 		},
 		contentGroup: "Tools",
@@ -651,7 +656,7 @@ const contentGrid = {
 	cl_Pormula: {
 		userSelected: true,
 		width: 2,
-		canvas: () => {
+		canvas: function () {
 			pormulaCalculate();
 		},
 		contentGroup: "Tools",
@@ -680,28 +685,23 @@ const contentGrid = {
 	cl_Blechgeometrie: {
 		userSelected: true,
 		logReqUser: true,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Tools",
 		name: "Blechgeometrie",
 		source: {
 			Daten: "https://rime.de/de/wiki/lochabstand-berechnen/",
 		},
 		subgrid: [
-			["cl_BlechgeoVinDicke", "right"],
-			["cl_BlechgeoVinRadius", "right"],
-			["cl_BlechgeoVinForm", "right"],
-			["cl_BlechgeoVinBreite", "right"],
+			["cl_BlechgeoVinDicke", "center"],
+			["cl_BlechgeoVinRadius", "center"],
+			["cl_BlechgeoVinForm", "center"],
+			["cl_BlechgeoVinBreite", "center"],
 			["cl_BlechgeoLblResult", "center"],
-			["cl_BlechgeoImg", "left"],
+			["cl_BlechgeoImg", "center"],
 		],
 	},
 	cl_Numbery: {
 		userSelected: true,
-		width: 2,
-		height: 2,
-		canvas: () => {
+		canvas: function () {
 			startNumbery();
 		},
 		contentGroup: "Games",
@@ -717,22 +717,19 @@ const contentGrid = {
 		},
 		info: "Klassisches Memory!",
 		subgrid: [
-			["cl_NumberyInputs", "center"],
-			["cl_NumberyPlayers", "right"],
-			["cl_NumberyPairs", "right"],
-			["cl_NumberyCathegory", "right"],
-			["cl_NumberyPlayerNum", "right"],
-			["cl_NumberyResult", "center"],
-			["cl_NumberyImages", "center"],
+			["cl_NumberyInputs", "left"],
+			["cl_NumberyPlayers", "left"],
+			["cl_NumberyPairs", "left"],
+			["cl_NumberyCathegory", "left"],
+			["cl_NumberyPlayerNum", "left"],
+			["cl_NumberyResult", "left"],
+			["cl_NumberyImages", "center", "center"],
 		],
 	},
 	cl_Ocjene: {
 		userSelected: true,
 		width: 2,
 		height: 1,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Games",
 		name: "Ocjene",
 		heritage: ["bosnisch", "Noten"],
@@ -779,9 +776,6 @@ const contentGrid = {
 		userSelected: true,
 		width: 2,
 		height: 1,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Games",
 		name: "Beatmachine",
 		heritage: ["englisch", "Rhythmusmaschine"],
@@ -796,10 +790,6 @@ const contentGrid = {
 	},
 	cl_Linaha: {
 		userSelected: true,
-		height: 2,
-		canvas: () => {
-			return;
-		},
 		contentGroup: "Games",
 		name: "Linaha",
 		heritage: ["sesotho", "Länder"],
@@ -822,7 +812,7 @@ const contentGrid = {
 	cl_Ibhaluni: {
 		userSelected: true,
 		height: 2,
-		canvas: () => {
+		canvas: function () {
 			caIB.redraw();
 		},
 		contentGroup: "Games",
@@ -841,7 +831,7 @@ const contentGrid = {
 		userSelected: true,
 		width: 2,
 		height: 2,
-		canvas: () => {
+		canvas: function () {
 			caSU.redraw();
 		},
 		contentGroup: "Games",
@@ -850,7 +840,7 @@ const contentGrid = {
 			Code: "https://github.com/boggan/js-sudoku-generator#readme",
 			Puzzels: "https://www.kaggle.com/bryanpark/sudoku",
 		},
-		info: "Klassisches Sudoku-Puzzle.<br>Durch Eingabe einer Zahl mittels Tastatur kannst du die Zahl eintragen. Durch drücken der Leertaste kannst du die Eingabeart direkt wechseln.",
+		info: "Klassisches Sudoku-Puzzle.<br>Durch Eingabe einer Zahl mittels Tastatur kannst du die Zahl eintragen. Durch drücken der Leertaste kannst du die Eingabeart direkt wechseln. Mit SHIFT kannst du mehere Zellen gleichzeitig auswählen.",
 		subgrid: [
 			["cl_SudokuGetBoard", "center"],
 			["cl_SudokuTimer", "left"],
@@ -865,9 +855,50 @@ const contentGrid = {
 	cl_Lotto: {
 		userSelected: true,
 		logReqUser: false,
-		userStoreDB: "Lotto",
+		userStoreDBName: "Lotto",
+		userStoreDBClear: function () {
+			this.userStoreDBData = {
+				startup: true,
+				Eurojackpot: {
+					tips: [],
+					star: [],
+					date: null,
+				},
+				"6aus49": {
+					tips: [],
+					star: [],
+					date: null,
+				},
+			};
+		},
+		get userStoreDBData() {
+			let retData = {};
+			for (const [key, values] of Object.entries(lottoOptions.games)) {
+				retData[key] = {};
+				retData[key]["tips"] = values.savedSet.tips;
+				retData[key]["star"] = values.savedSet.star;
+				retData[key]["date"] = values.savedSet.date;
+			}
+			return retData;
+		},
+		set userStoreDBData(data) {
+			dbCLStyle("cl_LottoSavedGame").display = "initial";
+			for (const [key, values] of Object.entries(lottoOptions.games)) {
+				if (data[key] != null && data[key] != "") {
+					lottoOptions.games[key].savedSet["tips"] = data[key].date != null ? [...data[key].tips] : [];
+					lottoOptions.games[key].savedSet["star"] = data[key].date != null ? [...data[key].star] : [];
+					lottoOptions.games[key].savedSet["date"] = data[key].date != null ? data[key].date : null;
+				}
+			}
+			if (!data.startup) {
+				lottoUpdateSavegames();
+			}
+			lottoOptions.randomiziation = 0;
+			clearTimeout(lottoOptions.randomTimeout);
+			createLotto(false);
+		},
 		width: 2,
-		canvas: () => {
+		canvas: function () {
 			caLO.redraw();
 		},
 		contentGroup: "Games",
@@ -878,7 +909,8 @@ const contentGrid = {
 		},
 		info: "Lotto / Eurojackpot",
 		subgrid: [
-			["cl_LottoOptions", "center"],
+			["cl_LottoOptionsA", "center"],
+			["cl_LottoOptionsB", "center"],
 			["cl_LottoSavedGame", "center"],
 			["cl_LottoGetGames", "center"],
 			["cl_LottoTabGames", "center"],
@@ -890,7 +922,7 @@ const contentGrid = {
 		userSelected: true,
 		width: 2,
 		height: 2,
-		canvas: () => {
+		canvas: function () {
 			caRC.redraw();
 		},
 		contentGroup: "Games",
@@ -901,18 +933,21 @@ const contentGrid = {
 		},
 		info: 'Du bist der "blaue" und willst den grünen Punkt erreichen. Bewegen kannst du dich mit den Pfeiltasten. Drücke "x" um deine aktuelle Position zu markieren. Aber beachte: du hast nur 5 Markierungen!',
 		subgrid: [
-			["cl_RayCasterInputs", "center"],
+			["cl_RayCasterInputs", "left"],
 			["cl_RayCasterSpeed", "left"],
 			["cl_RayCasterSize", "left"],
 			["cl_RayCasterView", "left"],
-			["cl_RayCasterOptions", "left"],
+			["cl_RayCasterOptionsA", "left"],
+			["cl_RayCasterOptionsB", "left"],
+			["cl_RayCasterOptionsC", "left"],
+			["cl_RayCasterOptionsD", "left"],
 			["cl_RayCasterCanvas", "center"],
 		],
 	},
 	cl_Empat: {
 		userSelected: true,
 		height: 2,
-		canvas: () => {
+		canvas: function () {
 			caEM.redraw();
 		},
 		contentGroup: "Games",
@@ -928,7 +963,7 @@ const contentGrid = {
 		userSelected: true,
 		width: 2,
 		height: 2,
-		canvas: () => {
+		canvas: function () {
 			caSW.redraw();
 		},
 		contentGroup: "Games",
@@ -941,15 +976,38 @@ const contentGrid = {
 		subgrid: [
 			["cl_SweeperCanvas", "center"],
 			["cl_SweeperInputs", "center"],
-			["cl_SweeperGrid", "left"],
-			["cl_SweeperSweeps", "left"],
+			["cl_SweeperGrid", "center"],
+			["cl_SweeperSweeps", "center"],
 		],
 	},
 	cl_GeneralSettings: {
 		userSelected: true,
-		userStoreDB: "GeneralSettings",
-		canvas: () => {
-			return;
+		userStoreDBName: "GeneralSettings",
+		userStoreDBClear: function () {
+			this.userStoreDBData = {
+				copyClick: true,
+				copySeparator: true,
+				decimals: 4,
+				fontSize: 12,
+				clear: true,
+			};
+		},
+		get userStoreDBData() {
+			return globalValues.settings;
+		},
+		set userStoreDBData(data) {
+			const clear = data.hasOwnProperty("clear");
+			for (const key of Object.keys(globalValues.settings)) {
+				if (key == "clear") continue;
+				globalValues.settings[key] = data[key];
+			}
+			//call functions without arg to toggle secific functionality
+			if (!clear) {
+				settingsCopyClick();
+				settingsCopySeparator();
+				settingsFontsize();
+				settingsDecimals();
+			}
 		},
 		contentGroup: "GlobalSettings",
 		name: "General-Settings",
@@ -962,65 +1020,96 @@ const contentGrid = {
 	},
 	cl_ColorSettings: {
 		userSelected: true,
-		userStoreDB: "ColorSettings",
-		canvas: () => {
-			return;
+		userStoreDBName: "ColorSettings",
+		userStoreDBClear: function () {
+			this.userStoreDBData = null;
+		},
+		get userStoreDBData() {
+			return {
+				lightmode: deepClone(globalValues.colors.lightmode),
+				darkmode: deepClone(globalValues.colors.darkmode),
+			};
+		},
+		set userStoreDBData(data) {
+			if (data == null) {
+				globalValues.colors.lightmode = deepClone(globalValues.colors.colorSettingsOrig.lightmode);
+				globalValues.colors.darkmode = deepClone(globalValues.colors.colorSettingsOrig.darkmode);
+				return;
+			}
+			globalValues.colors.lightmode = deepClone(data.lightmode);
+			globalValues.colors.darkmode = deepClone(data.darkmode);
+			displayColorSystem();
+			populateColorSelector();
 		},
 		contentGroup: "GlobalSettings",
 		name: "Color-Settings",
 		subgrid: [
-			["cl_colourSettings_light_0", "right"],
-			["cl_colourSettings_light_1", "right"],
-			["cl_colourSettings_light_2", "right"],
-			["cl_colourSettings_dark_0", "right"],
-			["cl_colourSettings_dark_1", "right"],
-			["cl_colourSettings_dark_2", "right"],
+			["cl_colourSettingsHeaderLight", "center"],
+			["cl_colourSettingsHeaderDark", "center", "end"],
+			["cl_colourSettings_light_0", "center"],
+			["cl_colourSettings_light_1", "center"],
+			["cl_colourSettings_light_2", "center"],
+			["cl_colourSettings_dark_0", "center"],
+			["cl_colourSettings_dark_1", "center"],
+			["cl_colourSettings_dark_2", "center"],
 		],
 	},
 	cl_UserGridLayout: {
 		userSelected: true,
-		userStoreDB: "UserGridLayout",
-		height: 2,
-		canvas: () => {
-			return;
+		userStoreDBName: "UserGridLayout",
+		userStoreDBClear: function () {
+			this.userStoreDBData = [];
 		},
+		get userStoreDBData() {
+			return usergridOptions.generateArray();
+		},
+		set userStoreDBData(data) {
+			contentLayout.navContent.User = data.filter((cl) => {
+				return Object.keys(contentGrid).includes(cl);
+			});
+			for (const gridName of contentLayout.navContent.Universe) {
+				contentGrid[gridName].userSelected = contentLayout.navContent.User.includes(gridName); //safety, if old things in Database!
+			}
+			usergridCreateTable();
+			usergridOptions.checkAllGroups();
+		},
+		height: 2,
 		contentGroup: "GlobalSettings",
 		name: "User-Layout",
 		subgrid: [
-			// ["cl_UserGridCanvas", "right"],
-			["cl_UserGridBtnToggle", "left"],
-			["cl_UserGridBtnSave", "left"],
-			["cl_UserGridTable", "right"],
+			["cl_UserGridOptions", "center"],
+			["cl_UserGridTable", "center"],
+			// ["cl_UserGridCanvas", "center"],
 		],
 	},
 	cl_MaterialFilterSettings: {
 		userSelected: true,
-		userStoreDB: "MaterialFilterSettings",
-		height: 2,
-		canvas: () => {
-			return;
+		userStoreDBName: "MaterialFilterSettings",
+		userStoreDBClear: function () {
+			this.userStoreDBData = [...materialFilterOptions.listOrig];
 		},
+		get userStoreDBData() {
+			return [...materialFilterOptions.select];
+		},
+		set userStoreDBData(data) {
+			let filteredWrong = [];
+			materialFilterOptions.select = [];
+			for (const dataPoint of data) {
+				if (Object.keys(Data_Material.metadata).includes(dataPoint)) {
+					materialFilterOptions.select.push(dataPoint);
+				} else {
+					filteredWrong.push(dataPoint);
+				}
+			}
+			if (filteredWrong.length > 0) console.log("The following Filters are no longer supported:", filteredWrong);
+			materialFilterBuildTable();
+			materialFilterUpdateCB();
+			// materialSelectedTable();
+		},
+		height: 2,
 		contentGroup: "GlobalSettings",
 		name: "Materialfilter",
 		subgrid: [["cl_MaterialFilterTable", "center"]],
-	},
-	cl_userAcc: {
-		userSelected: true,
-		userStoreDB: "userAcc",
-		width: 0,
-		canvas: () => {
-			return;
-		},
-		contentGroup: "AccountSettings",
-		name: "Account-Settings",
-		subgrid: [
-			["cl_userAcc_infos", "left"],
-			["cl_userAcc_mail", "left"],
-			["cl_userAcc_pass", "left"],
-			["cl_userAcc_submit", "left"],
-			["cl_userAcc_check", "left"],
-			["cl_userAcc_alert", "left"],
-		],
 	},
 };
 

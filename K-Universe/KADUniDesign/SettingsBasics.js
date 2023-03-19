@@ -1,8 +1,20 @@
 const globalValues = {
 	mediaSizes: {
-		divGridMinWidth: 0,
+		get size1() {
+			return getCssRoot("UIHeight1", true, true);
+		},
+		get divGridMinWidth() {
+			return Math.floor(this.size1 * getCssRoot("divGridMinWidthFactor", true));
+		},
+		get gridMarginSide() {
+			return Math.floor(this.size1 * getCssRoot("gridMarginSide", true));
+		},
 		canvasScale: 0,
 		imgSize: 0,
+		get canvasSize() {
+			const val = getCssRoot("gridWidthGameCanvas", true, true);
+			return { w: val, h: val };
+		},
 	},
 	settings: {
 		copyClick: true,

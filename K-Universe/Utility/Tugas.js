@@ -53,7 +53,7 @@ function createTugas() {
       subGroup: "subgrid",
       img: "trash",
       ui: {
-        uiSize: "square",
+        uiSize: "size1",
         uiType: "transparent"
       },
       style: {
@@ -71,7 +71,7 @@ function createTugas() {
       subGroup: "subgrid",
       img: "edit",
       ui: {
-        uiSize: "square",
+        uiSize: "size1",
         uiType: "transparent"
       },
       style: {

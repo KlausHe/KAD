@@ -30,7 +30,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "Tools" : "Universe",
+	defaultPage: globalValues.hostDebug ? "News" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -63,12 +63,13 @@ window.addEventListener("resize", layoutResizeGrid);
 
 function layoutResizeGrid() {
 	const winWidth = window.innerWidth;
-	const gap = getCssRoot("gridGap", true);
-	const minWidth = getCssRoot("divGridMinWidth", true, true);
-	const margin = getCssRoot("gridMarginSide", true, true);
+	const minWidth = globalValues.mediaSizes.divGridMinWidth;
 	const x = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols, floored division
-	const tryWidth = minWidth * x + (x - 1) * gap + margin * 2;
-	const calcX = tryWidth < winWidth + gap + margin * 2 ? x : x;
+	// const gap = getCssRoot("gridGap", true);
+	// const margin = globalValues.mediaSizes.margin;
+	// const tryWidth = minWidth * x + (x - 1) * gap + margin * 2;
+	// const calcX = tryWidth < winWidth + gap + margin * 2 ? x : x;
+	const calcX = x; //tryWidth < winWidth + gap + margin * 2 ? x : x;
 	if (getCssRoot("gridRowLength", true) != calcX) {
 		setCssRoot("gridRowLength", calcX);
 		layoutNavClick(contentLayout.prevNavContent);
@@ -99,7 +100,7 @@ function layoutNavClick(layoutName = contentLayout.prevNavContent) {
 		if (layoutName === "Universe") {
 			contentLayout.navContent[layoutName] = [...contentLayout.origUniverse];
 		} else if (layoutName === "User") {
-			contentLayout.navContent[layoutName] = [...nuncDiscipuli.saves.UserGridLayout];
+			contentLayout.navContent[layoutName] = [...nuncDiscipuli.getData("UserGridLayout")];
 		} else {
 			contentLayout.navContent[layoutName] = contentLayout.navContent[layoutName].sort();
 		}
@@ -283,7 +284,7 @@ function layoutCreateSubgrid() {
 			names: ["navIcon", gridKey],
 			type: "Div",
 			createClass: ["clDropdownParent"],
-			ondoubleclick: () => {
+			onclick: () => {
 				layoutNavClick(contGroup);
 			},
 		});
@@ -297,7 +298,7 @@ function layoutCreateSubgrid() {
 		const dropIconText = cellLbl({
 			names: ["titleIcon", gridKey],
 			type: "Lbl",
-			text: `Kathegorie: ${contGroup}`,
+			text: `Gehe zu Kathegorie ${contGroup}.`,
 			createClass: ["clDropdown", "clDropdownInfo"],
 		});
 		dropIconParent.appendChild(dropIconText);
@@ -400,7 +401,7 @@ function layoutCreateSubgrid() {
 		parent.appendChild(titleUploadParent);
 		titleUploadParent.style.display = "none";
 		const titleUploadBtn = cellBtn({
-			names: ["gridtitle", "dbUpload_cl", contentGrid[gridKey].userStoreDB],
+			names: ["gridtitle", "dbUpload_cl", contentGrid[gridKey].userStoreDBName],
 			type: "Btn",
 			subGroup: "gridtitle",
 			img: "upload",
@@ -409,7 +410,7 @@ function layoutCreateSubgrid() {
 				uiType: "transparent",
 			},
 			onclick: () => {
-				saveDiscipuli(contentGrid[gridKey].userStoreDB);
+				saveDiscipuli(contentGrid[gridKey].userStoreDBName);
 			},
 		});
 		titleUploadParent.appendChild(titleUploadBtn);
@@ -425,7 +426,7 @@ function layoutCreateSubgrid() {
 		parent.appendChild(titleDownloadParent);
 		titleDownloadParent.style.display = "none";
 		const titleDownloadBtn = cellBtn({
-			names: ["gridtitle", "dbDownload_cl", contentGrid[gridKey].userStoreDB],
+			names: ["gridtitle", "dbDownload_cl", contentGrid[gridKey].userStoreDBName],
 			type: "Btn",
 			subGroup: "gridtitle",
 			img: "download",
@@ -434,7 +435,7 @@ function layoutCreateSubgrid() {
 				uiType: "transparent",
 			},
 			onclick: () => {
-				loadDiscipuli(contentGrid[gridKey].userStoreDB);
+				loadDiscipuli(contentGrid[gridKey].userStoreDBName);
 			},
 		});
 		titleDownloadParent.appendChild(titleDownloadBtn);

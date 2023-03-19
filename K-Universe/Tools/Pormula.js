@@ -151,8 +151,7 @@ function clear_cl_Pormula() {
   resetInput("idVin_pormulaPrecision", pormulaOptions.regOptionsOrig.precision)
   resetInput("idVin_pormulaPointEntry", pormulaOptions.valuesOrig[1] * 10)
 
-
-  pormulaOptions.data.len = pormulaOptions.valuesOrig.length;
+  pormulaOptions.data.length = pormulaOptions.valuesOrig.length;
   const inputParent = dbCL("clDiv_pormulaInput", null);
   for (let i = 0; i < inputParent.length; i++) {
     resetInput(`idVin_Pormula_x${i}`, (i < pormulaOptions.data.length) ? i + 1 : "", {

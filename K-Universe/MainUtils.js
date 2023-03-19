@@ -94,6 +94,10 @@ function dbCLStyle(id, loc = 0) {
 
 function resetInput(id, ph, opts = null) {
 	const obj = dbID(id);
+	if (obj.type == "checkbox") {
+		obj.checked = ph;
+		return ph;
+	}
 	obj.value = "";
 	obj.placeholder = ph;
 	if (opts != null) {
@@ -400,6 +404,7 @@ function randomObject(obj, top = null) {
 	// takes a single Number, an Array or an Object
 	if (typeof obj == "number") return randomObject(arrayFromNumber(obj, top));
 	if (typeof obj == "string") return obj[randomIndex(obj)];
+  if (Array.isArray(obj) && obj.length <=0) return null
 	if (Array.isArray(obj)) return obj[randomIndex(obj)];
 	const objKeys = Object.keys(obj);
 	return obj[objKeys[randomIndex(objKeys)]];

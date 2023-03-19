@@ -29,9 +29,11 @@
 	/* GRID SIZES */
 	--gridRowLength: 3;
 	--gridGap: 0.25rem;
-	--gridMarginSide: 0.833rem;
-	--divGridMinWidth: 41.667rem;
-	--divGridMinHeight: 15rem;
+	--gridMarginSideFactor: 0.5;
+	--gridMarginSide: calc(var(--UIHeight1) * var(--gridMarginSideFactor));
+	--divGridMinWidthFactor: 28;
+	--divGridMinWidth: calc(var(--UIHeight1) * var(--divGridMinWidthFactor));
+	--divGridMinHeight: calc(var(--UIHeight1) * 10);
 	--navContentLength: 5;
 	--navOrientation: column;
 	/* UI SIZES */
@@ -66,6 +68,9 @@
 	--rangeHeight: 0.833rem;
 	--rangeThumbWidth: 0.5rem;
 	--rangeThumbHeight: 1.25rem;
+	--gridWidthGameCanvas: 40rem;
+	--gridHeightGameCanvas: 40rem;
+	--canvasScale: 1;
 	/**/
 	--borderThin: 0.042rem solid hsl(var(--bgcNavbar));
 	--borderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
@@ -85,11 +90,6 @@
 	--fontWeight: 300;
 	--fontSizeMedium: 1.2rem;
 	--fontSizeLarge: 1.4rem;
-	--gridWidthGameCanvas: 40rem;
-	--gridHeightGameCanvas: 40rem;
-	/* this may be used some time */
-	--canvasScale: 1;
-	--gridHeightChartCanvas: calc(var(--gridHeightGameCanvas) * 0.75);
 }
 
 * {
@@ -121,8 +121,7 @@
 	font-family: "Roboto";
 	font-style: normal;
 	font-weight: 300;
-	src: local(""), url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"),
-		url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
+	src: local(""), url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
 }
 
 /* roboto-regular - latin */
@@ -130,8 +129,7 @@
 	font-family: "Roboto";
 	font-style: normal;
 	font-weight: 400;
-	src: local(""), url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"),
-		url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
+	src: local(""), url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
 }
 
 .fullscreenFontsize {
@@ -168,8 +166,7 @@ body {
 	background-color: hsl(var(--bgcSubgrid) / 0);
 	visibility: hidden;
 	pointer-events: none;
-	transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out, pointer-events 0s linear var(--transitionTimeHide),
-		visibility 0s linear var(--transitionTimeHide);
+	transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out, pointer-events 0s linear var(--transitionTimeHide), visibility 0s linear var(--transitionTimeHide);
 }
 
 .cl_backgroundAnimation {
@@ -254,8 +251,7 @@ tbody tr:last-child td {
 
 .scrollTable {
 	/* background-color: hsl(var(--bgcBackground)); */
-	background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))),
-		linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
+	background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
 }
 
 .cl_tableText {

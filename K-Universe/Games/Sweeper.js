@@ -1,8 +1,11 @@
 const sweeperOptions = {
-	width: 402,
-	height: 402,
-	gridSize: 10,
-	sweepCells: 10,
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
+	},
+	gridSize: 0,
+	gridSizeOrig: 10,
+	sweepCells: 0,
+	sweepCellsOrig: 10,
 	finished: false,
 	cells: [],
 };
@@ -20,9 +23,8 @@ function sweeperCellsChange(obj) {
 function clear_cl_Sweeper() {
 	//Clear on Start
 	sweeperOptions.cells = [];
-	let sweCellOptions = [];
-	resetInput("idVin_sweeperGrid", sweeperOptions.gridSize);
-	resetInput("idVin_sweeperSweeps", sweeperOptions.sweepCells);
+	sweeperOptions.gridSize = resetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
+	sweeperOptions.sweepCells = resetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
 	sweeperStart();
 	caSW.noLoop();
 	unfocusSweeper();
@@ -30,7 +32,7 @@ function clear_cl_Sweeper() {
 
 function sweeperStart() {
 	sweeperOptions.cells = [];
-	let cellW = Math.floor(sweeperOptions.width / sweeperOptions.gridSize);
+	let cellW = Math.floor(sweeperOptions.canvas.w / sweeperOptions.gridSize);
 	for (let i = 0; i < sweeperOptions.gridSize; i++) {
 		sweeperOptions.cells[i] = [];
 		for (let j = 0; j < sweeperOptions.gridSize; j++) {
@@ -83,12 +85,12 @@ function sweeperRevealSweeps() {
 	}
 }
 
-function mousePushedSweeper() {
+function sweeperMousePushed() {
 	if (sweeperOptions.finished) {
 		sweeperStart();
 		return;
 	}
-	let cellW = Math.floor(sweeperOptions.width / sweeperOptions.gridSize);
+	let cellW = Math.floor(sweeperOptions.canvas.w / sweeperOptions.gridSize);
 	let i = Math.floor(caSW.mouseX / cellW);
 	let j = Math.floor(caSW.mouseY / cellW);
 	if (window.event.shiftKey) {
@@ -111,10 +113,10 @@ function unfocusSweeper() {
 
 const caSW = new p5((c) => {
 	c.setup = function () {
-		c.canv = c.createCanvas(sweeperOptions.width + 4, sweeperOptions.height + 4);
+		c.canv = c.createCanvas(sweeperOptions.canvas.w, sweeperOptions.canvas.h);
 		c.canv.id("canvasSweeper");
 		c.canv.parent("#idCanv_sweeper");
-		c.canv.mousePressed(mousePushedSweeper);
+		c.canv.mousePressed(sweeperMousePushed);
 		c.colorMode(c.HSL);
 		c.noLoop();
 		c.clear();
@@ -143,7 +145,7 @@ function sweeperFinished(won) {
 	unfocusSweeper();
 }
 
-// CELL CLASS----------------------------------------------------------------------------------------------------------------------
+// CELL CLASS----------------------------
 class SweeperCell {
 	constructor(i, j, w) {
 		this.i = i;
@@ -178,12 +180,12 @@ class SweeperCell {
 
 	drawUnreveal() {
 		caSW.fill(0, 0, 60);
-		caSW.square(this.x, this.y, this.w, this.w * 0.08);
+		caSW.square(this.x, this.y, this.w);
 	}
 
 	drawReveal() {
 		caSW.fill(0, 0, 80);
-		caSW.square(this.x, this.y, this.w, this.w * 0.08);
+		caSW.square(this.x, this.y, this.w);
 	}
 
 	drawNum() {
@@ -251,27 +253,23 @@ class SweeperCell {
 	}
 
 	flag() {
-		if (!this.revealed) {
-			this.flagged = !this.flagged;
-			if (sweeperCheckFinished()) {
-				return;
-			}
+		if (this.revealed) return;
+		this.flagged = !this.flagged;
+		if (sweeperCheckFinished()) {
+			return;
 		}
 	}
 
 	countNeighbors() {
 		this.num = null;
-		if (this.sweep) {
-			this.num = null;
-		} else {
-			for (let iOff = -1; iOff <= 1; iOff++) {
-				for (let jOff = -1; jOff <= 1; jOff++) {
-					let i = this.i + iOff;
-					let j = this.j + jOff;
-					if (i > -1 && i < sweeperOptions.gridSize && j > -1 && j < sweeperOptions.gridSize) {
-						if (sweeperOptions.cells[i][j].sweep) {
-							this.num++;
-						}
+		if (this.sweep) return;
+		for (let iOff = -1; iOff <= 1; iOff++) {
+			for (let jOff = -1; jOff <= 1; jOff++) {
+				let i = this.i + iOff;
+				let j = this.j + jOff;
+				if (i > -1 && i < sweeperOptions.gridSize && j > -1 && j < sweeperOptions.gridSize) {
+					if (sweeperOptions.cells[i][j].sweep) {
+						this.num++;
 					}
 				}
 			}

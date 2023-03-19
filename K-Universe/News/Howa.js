@@ -66,7 +66,7 @@ const howaOptions = {
 			dbID: "idCb_howaTemperature",
 			checked: true,
 			dataPath: ["main", "temp"],
-			color: "red",
+			color: "black",
 		},
 		{
 			label: "Regen",

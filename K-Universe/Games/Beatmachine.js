@@ -58,8 +58,7 @@ function beatmachineCreateTracks() {
 			beatmachineToggleTrack(index);
 		};
 		temp.innerHTML = obj.name;
-		temp.setAttribute("uiSize", "small");
-		temp.setAttribute("uiAlign", "left");
+		temp.setAttribute("uiSize", "size4");
 		baseParent.appendChild(temp);
 
 		for (let i = 0; i < beatmachineOptions.duration; i++) {

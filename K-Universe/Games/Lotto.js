@@ -1,7 +1,8 @@
 const lottoOptions = {
 	url: "https://JohannesFriedrich.github.io/LottoNumberArchive/Lottonumbers_complete.json",
-	width: 320,
-	height: 400,
+	get canvas() {
+		return { w: (globalValues.mediaSizes.canvasSize.w * 3) / 4, h: globalValues.mediaSizes.canvasSize.h };
+	},
 	getGameTimer: null,
 	cells: [],
 	selGame: "6aus49",
@@ -128,7 +129,7 @@ function createLotto(clear = false) {
 	lottoOptions.cells = [];
 	const cols = lottoOptions.games[lottoOptions.selGame].cols;
 	const rows = lottoOptions.games[lottoOptions.selGame].rows;
-	const wCell = Math.floor(lottoOptions.width / cols);
+	const wCell = Math.floor(lottoOptions.canvas.w / cols);
 	for (let j = 0; j < rows; j++) {
 		for (let i = 0; i < cols; i++) {
 			const index = i + j * cols;
@@ -139,7 +140,7 @@ function createLotto(clear = false) {
 	}
 
 	const colsStar = lottoOptions.games[lottoOptions.selGame].starLength;
-	const wStar = Math.floor(lottoOptions.width / colsStar);
+	const wStar = Math.floor(lottoOptions.canvas.w / colsStar);
 	for (let i = 0; i < colsStar; i++) {
 		lottoOptions.cells.push(new LottoCell(i + lottoOptions.games[lottoOptions.selGame].starStart, i, rows, wStar, "star", wCell));
 	}
@@ -277,7 +278,7 @@ function lottoReturn(d) {
 
 const caLO = new p5((c) => {
 	c.setup = function () {
-		c.canv = c.createCanvas(lottoOptions.width + 4, lottoOptions.height + 4);
+		c.canv = c.createCanvas(lottoOptions.canvas.w, lottoOptions.canvas.h);
 		c.canv.id("canvasLotto");
 		c.canv.parent("#idCanv_lotto");
 		c.canv.mousePressed(mousePushedLotto);
@@ -337,16 +338,11 @@ class LottoCell {
 	}
 
 	selected() {
-		return (
-			(lottoOptions.games[lottoOptions.selGame].savedSet.tips.includes(this.num) && this.type === "tips") ||
-			(lottoOptions.games[lottoOptions.selGame].savedSet.star.includes(this.num) && this.type === "star")
-		);
+		return (lottoOptions.games[lottoOptions.selGame].savedSet.tips.includes(this.num) && this.type === "tips") || (lottoOptions.games[lottoOptions.selGame].savedSet.star.includes(this.num) && this.type === "star");
 	}
 
 	drawed() {
-		return (
-			(lottoOptions.games[lottoOptions.selGame].draw.tips.includes(this.num) && this.type === "tips") || (lottoOptions.games[lottoOptions.selGame].draw.star.includes(this.num) && this.type === "star")
-		);
+		return (lottoOptions.games[lottoOptions.selGame].draw.tips.includes(this.num) && this.type === "tips") || (lottoOptions.games[lottoOptions.selGame].draw.star.includes(this.num) && this.type === "star");
 	}
 
 	show() {

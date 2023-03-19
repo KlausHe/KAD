@@ -41,19 +41,6 @@ const quickmathOptions = {
         })
       }
     },
-    Root: {
-      tabID: "idTabBody_quickmathRoot",
-      get html() {
-        return `<sup>${quickmathOptions.values.i}</sup>\u221A${quickmathOptions.values.val}`; //"Root of 0?"
-      },
-      get num() {
-        let res = checkExponential(quickmathOptions.values.val ** (1 / (quickmathOptions.values.i + 1)), {
-          decimals: 4,
-          expoThreashold: 4
-        })
-        return (quickmathOptions.values.i <= 0 || quickmathOptions.values.val <= 0) ? "something with 'i'" : res;
-      }
-    }
   }
 };
 
@@ -69,7 +56,6 @@ function calcQuickmath() {
   tableQuickmathCalculate("Multiply");
   tableQuickmathCalculate("Divide");
   tableQuickmathCalculate("Pow");
-  tableQuickmathCalculate("Root");
 };
 
 function tableQuickmathCalculate(op) {

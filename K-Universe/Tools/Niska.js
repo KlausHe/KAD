@@ -1129,14 +1129,16 @@ const niskaOptions = {
 
 	strengthClass: {
 		val: [5.6, 6.8, 8.8, 10.9, 12.9],
-		index: 0,
+		index0: 0,
+		index1: 0,
 		indexOrig: 2,
-		get re() {
-			//Streckgrenze
-			return Math.floor((this.val[this.index] % 1) * 10 * Math.floor(this.val[this.index]) * 10);
+		re(id) {
+			let index = this[`index${id}`];
+			return Math.floor((this.val[index] % 1) * 10 * Math.floor(this.val[index]) * 10);
 		},
-		get rm() {
-			return Math.floor(this.val[this.index]) * 100;
+		rm(id) {
+			let index = this[`index${id}`];
+			return Math.floor(this.val[index]) * 100;
 		},
 	},
 	safetyAxialStatic: 1.5,
@@ -1240,11 +1242,12 @@ function clear_cl_Niska() {
 	niskaOptions.pitch.val = niskaOptions.pitch.valOrig;
 	niskaOptions.select.index = niskaOptions.select.indexOrig;
 	niskaOptions.select.type = niskaOptions.select.typeOrig;
-	niskaOptions.strengthClass.index = niskaOptions.strengthClass.indexOrig;
-	resetInput("idVin_niskaSize", niskaOptions.size.val, {
+	niskaOptions.strengthClass.index0 = niskaOptions.strengthClass.indexOrig;
+	niskaOptions.strengthClass.index1 = niskaOptions.strengthClass.indexOrig;
+	niskaOptions.size.val = resetInput("idVin_niskaSize", niskaOptions.size.valOrig, {
 		min: 0,
 	});
-	resetInput("idVin_niskaPitch", niskaOptions.pitch.val, {
+	niskaOptions.pitch.val = resetInput("idVin_niskaPitch", niskaOptions.pitch.valOrig, {
 		min: 0,
 	});
 
@@ -1273,28 +1276,35 @@ function clear_cl_Niska() {
 	selInput.appendChild(optGroup);
 	selInput.options[niskaOptions.select.index].selected = true;
 
-	clearFirstChild("idSel_niskaStrengthClass");
-	let selStrength = dbID("idSel_niskaStrengthClass");
+	clearFirstChild("idSel_niskaStrengthClassA");
+	clearFirstChild("idSel_niskaStrengthClassB");
+	let selStrength0 = dbID("idSel_niskaStrengthClassA");
+	let selStrength1 = dbID("idSel_niskaStrengthClassB");
 	for (const val of niskaOptions.strengthClass.val) {
 		const opt = document.createElement("OPTION");
 		opt.textContent = val;
 		opt.value = val;
-		selStrength.appendChild(opt);
+		let opt2 = opt.cloneNode(true);
+		selStrength0.appendChild(opt);
+		selStrength1.appendChild(opt2);
 	}
-	selStrength.options[niskaOptions.strengthClass.index].selected = true;
+	selStrength0.options[niskaOptions.strengthClass.index0].selected = true;
+	selStrength1.options[niskaOptions.strengthClass.index1].selected = true;
+
 	niskaCalc();
 }
 
 function niskaCalc() {
-	niskaOptions.size.val = numberFromInput("idVin_niskaSize");
+  niskaOptions.size.val = numberFromInput("idVin_niskaSize");
 	niskaOptions.pitch.val = numberFromInput("idVin_niskaPitch");
+	niskaOptions.strengthClass.index0 = dbID("idSel_niskaStrengthClassA").selectedIndex;
 	niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
 	niskaOptions.select.index = dbID("idSel_niskaSelect").selectedIndex;
 	niskaOptions.select.type = dbID("idSel_niskaSelect").options[niskaOptions.select.index].dataset.type;
 	niskaOptions.select.index -= niskaOptions.select.offset;
+	niskaOptions.strengthClass.index1 = dbID("idSel_niskaStrengthClassB").selectedIndex;
 	dbID("idLbl_niskaRegelInfo").textContent = niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde";
 	niskaHelpCalculation(niskaOptions.select.size, niskaOptions.select.pitch, 1);
-	niskaOptions.strengthClass.index = dbID("idSel_niskaStrengthClass").selectedIndex;
 	niskaTable();
 }
 
@@ -1305,14 +1315,14 @@ function niskaHelpCalculation(d, P, index) {
 	const innerCoreDiameterBolt = d - 1.22687 * P; // d3 Kerndurchmesser des Bolzengewindes
 	const outerCoreDiameter = d - 1.2269 * P;
 	const flankDiameter = d - 0.6495 * P; //d2 = Flankendurchmesser
-	const threadDepthBolt = 0.6134 * P; // Gewindetiefe des Bolzengewindes	h3 = 0,6134 * P = H * 17 / 24
-	const threadDepthNut = 0.5413 * P; // Gewindetiefe des Muttergewindes	H1 = 0,5413 * P
-	const rounding = 0.1443 * P; // Rundung	R = 0,1443 * P
+	// const threadDepthBolt = 0.6134 * P; // Gewindetiefe des Bolzengewindes	h3 = 0,6134 * P = H * 17 / 24
+	// const threadDepthNut = 0.5413 * P; // Gewindetiefe des Muttergewindes	H1 = 0,5413 * P
+	// const rounding = 0.1443 * P; // Rundung	R = 0,1443 * P
 	const pitchAngle = Math.atan(P / (flankDiameter * Math.PI)); //  φ° = Steigungswinkel(Grad)
 	const stressCrosssection = (Math.PI / 4) * ((flankDiameter + outerCoreDiameter) / 2) ** 2; //  AS = Spannungsquerschnitt
 	const stressDiameter_ds = (flankDiameter + innerCoreDiameterBolt) / 2; //Spannungsdurchmesser
 	const polarResistancemoment = (Math.PI * stressDiameter_ds ** 3) / 16; // pol.Widerstandsmoment(mm³)
-	const tensionPermitted = niskaOptions.strengthClass.re * niskaOptions.data.exploitRe; //σ zul = zul.Spannung
+	const tensionPermitted = niskaOptions.strengthClass.re(index) * niskaOptions.data.exploitRe; //σ zul = zul.Spannung
 	const threadFrictionAngle = Math.atan(niskaOptions.data.frictionCoefShear / Math.cos(niskaOptions.data.flankAngle / 2)); //  ρ '   = Gewindereibwinkel (Grad)
 
 	const preloadNum = tensionPermitted;
@@ -1326,11 +1336,11 @@ function niskaHelpCalculation(d, P, index) {
 	// S R = Rutschsicherheit(-)         //niskaOptions.data.safetyShearDynamic
 	// μ T = Haftreibwert Trennfuge(-)   // niskaOptions.data.frictionCoefShear
 	// i = Anzahl Trennfugen(-)
-	const strengthShearStatic = (preloadMax * niskaOptions.data.frictionCoefShear * 1) / niskaOptions.data.safetyShearStatic; // 1 = Anzahl Trennfugen
-	const strengthShearDynamic = (preloadMax * niskaOptions.data.frictionCoefShear * 1) / niskaOptions.data.safetyShearDynamic; // 1 = Anzahl Trennfugen
+	// const strengthShearStatic = (preloadMax * niskaOptions.data.frictionCoefShear * 1) / niskaOptions.data.safetyShearStatic; // 1 = Anzahl Trennfugen
+	// const strengthShearDynamic = (preloadMax * niskaOptions.data.frictionCoefShear * 1) / niskaOptions.data.safetyShearDynamic; // 1 = Anzahl Trennfugen
 
-	const strengthAxialStatic = tensionPermitted / niskaOptions.data.safetyAxialStatic;
-	const strengthAxialDynamic = tensionPermitted / niskaOptions.data.safetyAxialDynamic;
+	// const strengthAxialStatic = tensionPermitted / niskaOptions.data.safetyAxialStatic;
+	// const strengthAxialDynamic = tensionPermitted / niskaOptions.data.safetyAxialDynamic;
 
 	headIndex = niskaOptions.headSize.hasOwnProperty(`M${d}`);
 	niskaOptions.results.headDiameter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][0] : "-";

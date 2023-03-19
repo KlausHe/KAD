@@ -1,7 +1,8 @@
 //Vier gewinnt  empat kemenangan
 const empatOptions = {
-	width: 406,
-	height: 406,
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
+	},
 	playing: false,
 	won: false,
 	cols: 7,
@@ -28,11 +29,9 @@ function clear_cl_Empat() {
 	empatOptions.players = [];
 	empatOptions.turns = 0;
 	//create empty cells
-	empatOptions.size = Math.floor(empatOptions.width / empatOptions.cols);
+	empatOptions.size = Math.floor(empatOptions.canvas.w / empatOptions.cols);
 	for (let i = 0; i < empatOptions.playersOrig.length; i++) {
-		empatOptions.players.push(
-			new EmpatPlayer(empatOptions.playersOrig[i][0], empatOptions.playersOrig[i][1], i, empatOptions.size, empatOptions.playersOrig[i][2])
-		);
+		empatOptions.players.push(new EmpatPlayer(empatOptions.playersOrig[i][0], empatOptions.playersOrig[i][1], i, empatOptions.size, empatOptions.playersOrig[i][2]));
 	}
 	for (let i = 0; i < empatOptions.cols; i++) {
 		empatOptions.cells[i] = [];
@@ -64,7 +63,7 @@ function empatStart() {
 
 const caEM = new p5((c) => {
 	c.setup = function () {
-		c.canv_empat = c.createCanvas(empatOptions.width, empatOptions.height);
+		c.canv_empat = c.createCanvas(empatOptions.canvas.w, empatOptions.canvas.h);
 		c.canv_empat.id("canvasEmpat");
 		c.canv_empat.parent("#idCanv_empat");
 		c.canv_empat.mouseMoved(mouseHoverEmpat);
@@ -179,7 +178,7 @@ function mousePressedEmpat() {
 	}
 }
 
-function keyPushedEmpat(event) {
+function empatKeyPushed(event) {
 	event.preventDefault(); //prevent keyinput from comming thout to the window!
 	let keyInput = event.keyCode || window.event;
 	if (!empatOptions.players[empatOptions.curPlayer].bot) {
@@ -367,8 +366,8 @@ class EmpatPlayer {
 		this.curPos[1] = this.wh;
 		this.targetPos[1] = this.wh;
 		if (newRound) {
-			this.curPos[0] = this.id * (empatOptions.width - this.w) + this.wh;
-			this.targetPos[0] = this.id * (empatOptions.width - this.w) + this.wh;
+			this.curPos[0] = this.id * (empatOptions.canvas.w - this.w) + this.wh;
+			this.targetPos[0] = this.id * (empatOptions.canvas.w - this.w) + this.wh;
 		}
 	}
 }

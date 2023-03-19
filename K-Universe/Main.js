@@ -13,7 +13,7 @@ function initCssMediaSizes() {
 		globalValues.mediaSizes[key] = getCssRoot(key, true, true);
 	}
 }
-function mainSetup() {  
+function mainSetup() {
 	if (globalValues.hostDebug) {
 		dbCLStyle("cl_Loading").display = "none";
 	}
@@ -34,7 +34,7 @@ function mainSetup() {
 	FBUserSettings = FBData.collection("User_Settings");
 
 	layoutCreateContentlayoutList(); // First: create the LayoutLists
-	layoutCreateNavbar(); 
+	layoutCreateNavbar();
 	layoutCreateFooter();
 	layoutCreateSubgrid();
 
@@ -47,7 +47,6 @@ function mainSetup() {
 	layoutCreateNavbarPikaday();
 	createKadarPikaday("A");
 	createKadarPikaday("B");
-	createCovidPikaday();
 
 	//check if Userstate changed!
 	firebase.auth().onAuthStateChanged((user) => {
@@ -59,7 +58,7 @@ function mainSetup() {
 			nuncDiscipuli.cred.uid = null;
 		}
 		toggleLayout();
-		clearAllTiles();
+    clearAllTiles();
 		setTimeout(() => {
 			layoutHideLoadingscreen();
 			clearGlobalValue();
@@ -72,7 +71,7 @@ function resetAll() {
 	displayColorSystem();
 	clearGlobalValue();
 	// layoutNavClick();
-  layoutNavClick(contentLayout.defaultPage);
+	layoutNavClick(contentLayout.defaultPage);
 }
 
 function clearAllTiles() {
@@ -83,7 +82,7 @@ function clearAllTiles() {
 
 function redrawCanvases() {
 	for (let obj in contentGrid) {
-		contentGrid[obj].canvas();
+		if (contentGrid[obj].hasOwnProperty("canvas")) contentGrid[obj].canvas();
 	}
 }
 
