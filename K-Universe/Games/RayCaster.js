@@ -194,6 +194,10 @@ const caRC = new p5((c) => {
 	};
 }, "#idCanv_rayCaster");
 
+function raycasterResize() {
+	caRC.resizeCanvas(raycasterOptions.canvas.w, raycasterOptions.canvas.h);
+}
+
 function rayCasterDrawContent() {
 	for (let i = raycasterOptions.polygons.length - 1; i >= 0; i--) {
 		let intersects = raycasterOptions.polygons[i];

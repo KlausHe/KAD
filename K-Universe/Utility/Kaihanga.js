@@ -47,6 +47,10 @@ const caKA = new p5((c) => {
 	};
 }, "#idCanv_kaihanga");
 
+function kaihangaResize() {
+	caKA.resizeCanvas(kaihangaOptions.width, kaihangaOptions.height);
+}
+
 function mousePushedKaihanga() {
 	let speed = caKA.floor(caKA.map(caKA.mouseX, 0, kaihangaOptions.width, 1, 18));
 	kaihangaStart(speed);

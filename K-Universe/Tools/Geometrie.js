@@ -324,9 +324,7 @@ let geoObjects = {
 		},
 		fullarea: {
 			get text() {
-				return geoObjects.radState
-					? `2\u03C0(${geoDiameter().cap}+${geoDiameter().low})(${geoDiameter().cap}-${geoDiameter().low}+h)`
-					: `\u03C0(${geoDiameter().cap}+${geoDiameter().low})(1/2(${geoDiameter().cap}-${geoDiameter().low})+h)`;
+				return geoObjects.radState ? `2\u03C0(${geoDiameter().cap}+${geoDiameter().low})(${geoDiameter().cap}-${geoDiameter().low}+h)` : `\u03C0(${geoDiameter().cap}+${geoDiameter().low})(1/2(${geoDiameter().cap}-${geoDiameter().low})+h)`;
 			},
 			get formula() {
 				const valA = geoObjects.valA * geoDiameter().factor;
@@ -509,6 +507,10 @@ const caGE = new p5((c) => {
 		geoObjects[name].show;
 	};
 }, "#idCanv_geometire");
+
+function geoResize() {
+	caGE.resizeCanvas(kaihangaOptions.width, kaihangaOptions.height);
+}
 
 // //Draw Geometrie here
 function changeGeoObject(index) {

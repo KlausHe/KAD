@@ -186,16 +186,16 @@ const utilsColor = {
 		let l = (ma + mi) / 2;
 		if (ma != mi) {
 			const d = ma - mi;
-			s = l > 0.5 ? d / (2 - ma - mi) : d / (ma + mi);
 			if (r == ma) {
-				h = (g - b) / d;
+        h = (g - b) / d;
 			} else if (g == ma) {
-				h = 2 + (b - r) / d;
+        h = 2 + (b - r) / d;
 			} else if (b == ma) {
-				h = 4 + (r - g) / d;
+        h = 4 + (r - g) / d;
 			}
 			h = Math.min(h * 60, 360);
 			if (h < 0) h += 360;
+      s = l > 0.5 ? d / (2 - ma - mi) : d / (ma + mi);
 		}
 		h = Math.round(h);
 		s = Math.round(s * 100);

@@ -295,6 +295,10 @@ const caLO = new p5((c) => {
 	};
 }, "#idCanv_lotto");
 
+function lottoResize() {
+	caLO.resizeCanvas(lottoOptions.canvas.w, lottoOptions.canvas.h);
+}
+
 function mousePushedLotto() {
 	for (let cell of lottoOptions.cells) {
 		cell.clicked(Math.floor(caLO.mouseX), Math.floor(caLO.mouseY));

@@ -134,6 +134,9 @@ const caSW = new p5((c) => {
 	};
 }, "#idCanv_sweeper");
 
+function sweeperResize() {
+	caSW.resizeCanvas(sweeperOptions.canvas.w, sweeperOptions.canvas.h);
+}
 function sweeperFinished(won) {
 	sweeperOptions.finished = true;
 	if (!won) {

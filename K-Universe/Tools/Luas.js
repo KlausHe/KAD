@@ -43,13 +43,13 @@ const caLU = new p5((c) => {
 		c.frameRate(luasOptions.setFramerate);
 		c.angleMode(c.DEGREES);
 		c.colorMode(c.HSL);
-    c.strokeWeight(2);
+		c.strokeWeight(2);
 		c.noLoop();
 	};
-  
+
 	c.draw = function () {
-    caLU.clear();
-    c.stroke(globalValues.colors.elements.line);
+		caLU.clear();
+		c.stroke(globalValues.colors.elements.line);
 		c.push();
 		c.translate(luasOptions.width / 2, luasOptions.height / 2);
 		c.rotate(270);
@@ -67,6 +67,10 @@ const caLU = new p5((c) => {
 		}
 	};
 }, "#idCanv_luas");
+
+function luasResize() {
+	caLU.resizeCanvas(luasOptions.width, luasOptions.height);
+}
 
 function luasStart() {
 	if (luasOptions.state === 0) {
@@ -95,10 +99,7 @@ function luasInputChange() {
 	luasOptions.speedAngular = (luasOptions.speedVin * 360) / luasOptions.angularVin;
 	luasOptions.speedLinear = luasOptions.speedVin * Math.PI * luasOptions.diameterVin;
 
-	dbID("idLbl_luasResult").innerHTML = `Linear: ${checkExponential(luasOptions.speedLinear, { decimals: 3, expoThreashold: 6 })} ${luasOptions.linearText}/${luasOptions.angularText.replace(
-		"U/",
-		""
-	)}`;
+	dbID("idLbl_luasResult").innerHTML = `Linear: ${checkExponential(luasOptions.speedLinear, { decimals: 3, expoThreashold: 6 })} ${luasOptions.linearText}/${luasOptions.angularText.replace("U/", "")}`;
 	dataForLabel("idLbl_luasResult", luasOptions.speedLinear);
 }
 

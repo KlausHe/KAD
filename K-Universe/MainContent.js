@@ -298,6 +298,7 @@ const contentGrid = {
 	cl_Kaihanga: {
 		userSelected: true,
 		canvas: function () {
+			kaihangaResize();
 			clear_cl_Kaihanga();
 		},
 		contentGroup: "Utility",
@@ -339,9 +340,8 @@ const contentGrid = {
 		},
 		subgrid: [
 			["cl_platLesenNumInput", "center"],
-			["cl_platLesenNumResult", "center"],
 			["cl_platLesenRegInput", "center"],
-			["cl_platLesenRegResult", "center"],
+			["cl_platLesenResult", "center"],
 		],
 	},
 	cl_Iomlaid: {
@@ -477,6 +477,7 @@ const contentGrid = {
 	cl_Geometrie: {
 		userSelected: true,
 		canvas: function () {
+			geoResize();
 			caGE.redraw();
 		},
 		contentGroup: "Tools",
@@ -543,6 +544,7 @@ const contentGrid = {
 		userSelected: true,
 		logReqUser: true,
 		canvas: function () {
+			patternResize();
 			drawPattern();
 		},
 		contentGroup: "Tools",
@@ -561,6 +563,7 @@ const contentGrid = {
 		userSelected: true,
 		canvas: function () {
 			luasOptions.lastAngle = 0;
+			luasResize();
 			caLU.redraw();
 		},
 		contentGroup: "Tools",
@@ -579,7 +582,8 @@ const contentGrid = {
 	cl_Middle: {
 		userSelected: true,
 		canvas: function () {
-			showMiddleCanvas();
+			middleResize();
+			middleShowCanvas();
 		},
 		contentGroup: "Tools",
 		name: "Mittenberechnung",
@@ -639,7 +643,8 @@ const contentGrid = {
 	cl_Pythagoras: {
 		userSelected: true,
 		canvas: function () {
-			calcPytho();
+			pythoResize();
+			pythoCalc();
 		},
 		contentGroup: "Tools",
 		name: "Pythagoras",
@@ -656,9 +661,6 @@ const contentGrid = {
 	cl_Pormula: {
 		userSelected: true,
 		width: 2,
-		canvas: function () {
-			pormulaCalculate();
-		},
 		contentGroup: "Tools",
 		name: "Pormula",
 		source: {
@@ -729,7 +731,7 @@ const contentGrid = {
 	cl_Ocjene: {
 		userSelected: true,
 		width: 2,
-		height: 1,
+		height: 2,
 		contentGroup: "Games",
 		name: "Ocjene",
 		heritage: ["bosnisch", "Noten"],
@@ -775,7 +777,6 @@ const contentGrid = {
 	cl_Beatmachine: {
 		userSelected: true,
 		width: 2,
-		height: 1,
 		contentGroup: "Games",
 		name: "Beatmachine",
 		heritage: ["englisch", "Rhythmusmaschine"],
@@ -813,6 +814,7 @@ const contentGrid = {
 		userSelected: true,
 		height: 2,
 		canvas: function () {
+			ibhalumiResize();
 			caIB.redraw();
 		},
 		contentGroup: "Games",
@@ -832,6 +834,7 @@ const contentGrid = {
 		width: 2,
 		height: 2,
 		canvas: function () {
+			sudokuResize();
 			caSU.redraw();
 		},
 		contentGroup: "Games",
@@ -899,6 +902,7 @@ const contentGrid = {
 		},
 		width: 2,
 		canvas: function () {
+			lottoResize();
 			caLO.redraw();
 		},
 		contentGroup: "Games",
@@ -923,6 +927,7 @@ const contentGrid = {
 		width: 2,
 		height: 2,
 		canvas: function () {
+			raycasterResize();
 			caRC.redraw();
 		},
 		contentGroup: "Games",
@@ -948,6 +953,7 @@ const contentGrid = {
 		userSelected: true,
 		height: 2,
 		canvas: function () {
+			empatResize();
 			caEM.redraw();
 		},
 		contentGroup: "Games",
@@ -964,6 +970,7 @@ const contentGrid = {
 		width: 2,
 		height: 2,
 		canvas: function () {
+			sweeperResize();
 			caSW.redraw();
 		},
 		contentGroup: "Games",

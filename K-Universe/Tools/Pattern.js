@@ -46,6 +46,10 @@ const caPA = new p5((c) => {
   };
 }, '#idCanv_pattern');
 
+function patternResize() {
+	caPA.resizeCanvas(patternOptions.width + 2 * patternOptions.margin, patternOptions.height + 2 * patternOptions.margin);
+}
+
 function clear_cl_Pattern() {
   resetInput("idVin_Pattern0", patternOptions.length.oVal)
   resetInput("idVin_Pattern1", patternOptions.side.oVal)

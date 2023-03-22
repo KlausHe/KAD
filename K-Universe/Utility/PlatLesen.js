@@ -1,42 +1,51 @@
 function clear_cl_PlatLesen() {
-	clearFirstChild("idSel_platLesenReg");
-	clearFirstChild("idSel_platLesenNum");
-	dbID("idSel_platLesenReg").options[0] = new Option("Region wählen");
-	dbID("idSel_platLesenNum").options[0] = new Option("Nummernschild wählen");
-	dbID("idLbl_platLesenRegResult").textContent = "Aachen -> AC";
-	dbID("idLbl_platLesenNumResult").textContent = "AC -> Aachen";
+	resetInput("idVin_platLesenReg", "Region eingeben");
+	resetInput("idVin_platLesenNum", "Kürzel eingeben");
+	platlesenResult('"AC"', '"Aachen"');
 }
 
 function platLesenPopulateOptions() {
-	if (dbID("idSel_platLesenNum").options.length > 1) return;
+	if (dbID("idVin_platLesenNum").childNodes.length > 1) return;
 	let regArr = [];
 	let i = 1;
 	for (const [key, value] of Data_PlatLesen) {
-		dbID("idSel_platLesenNum").options[i] = new Option(key);
+		const opt = document.createElement("OPTION");
+		opt.textContent = key;
+		dbID("idDlist_platLesenNum").appendChild(opt);
 		regArr.push(value);
 		i++;
 	}
 	i = 1;
 	regArr = regArr.sort();
 	for (let v of regArr) {
-		dbID("idSel_platLesenReg").options[i] = new Option(v);
+		const opt = document.createElement("OPTION");
+		opt.textContent = v;
+		dbID("idDlist_platLesenReg").appendChild(opt);
 		i++;
 	}
 }
 
-function platLesenNum(sel) {
-	if (sel.selectedIndex == 0) {
-		dbID("idLbl_platLesenNumResult").textContent = "AC -> Aachen";
-		return;
+function platLesenInput(obj) {
+	if (obj.value == "") platlesenResult('"AC"', '"Aachen"');
+	let to = null;
+	const input = obj.value.toString().toLowerCase();
+	const type = obj.dataset.type;
+	if (type == "REG") {
+		dbID("idVin_platLesenNum").value = "";
+		let index = Array.from(Data_PlatLesen).findIndex((a) => a[1].toString().toLowerCase() == input); //REG
+		to = Array.from(Data_PlatLesen.keys())[index]; //REG
+	} else {
+		dbID("idVin_platLesenReg").value = "";
+		let index = Array.from(Data_PlatLesen).findIndex((a) => a[0].toString().toLowerCase() == input); //REG
+		to = Array.from(Data_PlatLesen.values())[index]; //NUM
 	}
-	dbID("idLbl_platLesenNumResult").textContent = Array.from(Data_PlatLesen.values())[sel.selectedIndex - 1];
+	platlesenResult(obj.value, to);
 }
 
-function platLesenReg(sel) {
-	if (sel.selectedIndex == 0) {
-		dbID("idLbl_platLesenRegResult").textContent = "Aachen -> AC";
+function platlesenResult(from, to) {
+	if (to == undefined) {
+		dbID("idLbl_platLesenResult").textContent = `\"${from}\" nicht gefunden`;
 		return;
 	}
-	let index = Array.from(Data_PlatLesen).findIndex((a) => a[1] == sel.value);
-	dbID("idLbl_platLesenRegResult").textContent = Array.from(Data_PlatLesen.keys())[index];
+	dbID("idLbl_platLesenResult").textContent = `${from}-> ${to}`;
 }

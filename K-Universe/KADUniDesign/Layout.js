@@ -30,7 +30,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "News" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_PlatLesen" : "Universe",
 };
 
 function layoutHideLoadingscreen() {

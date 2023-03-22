@@ -22,6 +22,10 @@ const caMI = new p5((c) => {
 	};
 }, "#idCanv_middle");
 
+function middleResize() {
+	caMI.resizeCanvas(getCssRoot("UIHeight1", true, true) * 12, getCssRoot("UIHeight1", true, true) * 12);
+}
+
 function clear_cl_Middle() {
 	resetInput("idVin_middleA", 5);
 	resetInput("idVin_middleB", 2);
@@ -77,10 +81,10 @@ function calcMiddle() {
 	middleOptions.barA.w = caMI.map(middleOptions.barA.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.barB.w = caMI.map(middleOptions.barB.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.dims.w = caMI.map(middleOptions.dims.mid, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
-	showMiddleCanvas();
+	middleShowCanvas();
 }
 
-function showMiddleCanvas() {
+function middleShowCanvas() {
 	caMI.clear();
 	caMI.strokeWeight(1);
 	middleOptions.fontWidth = getCssRoot("fontSize", true);

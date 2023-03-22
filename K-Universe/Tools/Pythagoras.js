@@ -21,7 +21,7 @@ function clear_cl_Pythagoras() {
 	}
 	pythoOptions.inputState = [0, 1];
 	pythoShowError();
-	calcPytho();
+	pythoCalc();
 }
 
 const caPY = new p5((c) => {
@@ -34,6 +34,10 @@ const caPY = new p5((c) => {
 		pythoOptions.p5Loaded = true;
 	};
 }, "#idCanv_pytho");
+
+function pythoResize() {
+	caPY.resizeCanvas(pythoOptions.width, pythoOptions.height);
+}
 
 function pythoTriHypo(a, b) {
 	return caPY.sqrt(a ** 2 + b ** 2);
@@ -64,10 +68,10 @@ function pythoNewEntry(obj) {
 		pythoOptions.inputState.unshift(i);
 		pythoOptions.inputState.pop();
 	}
-	calcPytho();
+	pythoCalc();
 }
 
-function calcPytho() {
+function pythoCalc() {
 	pythoShowError();
 	pythoOptions.vals = [];
 	const A = pythoOptions.inputState[0];

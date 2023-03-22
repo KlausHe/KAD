@@ -132,8 +132,7 @@
     <section class="cl_Howa" style="display:none;">
       <div class="cl_subGrid_Howa cl_subGrid">
         <div class="cl_HowaGraph">
-          <div id="idDiv_howaGraph"
-            style="width: calc(var(--UIWidth1)* 30); height: calc(var(--UIWidth1)* 10);">
+          <div id="idDiv_howaGraph" style="width: calc(var(--UIWidth1)* 30); height: calc(var(--UIWidth1)* 10);">
             <canvas id="idCanv_howaGraph"></canvas>
           </div>
         </div>
@@ -249,11 +248,8 @@
     <section class="cl_PostillonTicker" style="display:none;">
       <div class="cl_subGrid_PostillonTicker cl_subGrid">
         <div class="cl_PostillionNumber">
-          <button type="button" id="idLbl_newsTickerNumber" uiSize="size4" uiRadius="left">
-          </button><button type="button" id="idBtn_postillonTicker" uiRadius="none" uiSize="size1"
-            onclick="postillonToggleTicker()">
-            <img id="idImg_postillonTicker" src="Data/Images/SVG/tPlay.svg"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="postillonTickerNext(this)">
+          <button type="button" id="idLbl_newsTickerNumber"  uiRadius="left">
+          </button><button type="button" uiSize="size1" uiRadius="right" onclick="postillonTickerNext()">
             <img src="Data/Images/SVG/right.svg"></img>
           </button>
         </div>
@@ -471,7 +467,7 @@
         <div class="cl_WikiLanguage" uiWrap="nowrap">
           <select id="idSel_wikiLanguage" uiSize="size7" onchange="wikiSearchLanguage(this)"></select>
         </div>
-        <div class="cl_WikiTable clDiv_overviewTablesWide">
+        <div class="cl_WikiTable clDiv_overviewTablesAuto ">
           <table>
             <thead id="idTabHeader_wikiTitleTable">
             </thead>
@@ -692,18 +688,27 @@
     <section class="cl_PlatLesen" style="display:none;">
       <div class="cl_subGrid_PlatLesen cl_subGrid">
         <div class="cl_platLesenNumInput">
-          <select id="idSel_platLesenNum" uiSize="size12" onchange="platLesenNum(this)"
-            onfocus="platLesenPopulateOptions()"></select>
-        </div>
-        <div class="cl_platLesenNumResult ">
-          <label class="cl_outputLbl" id="idLbl_platLesenNumResult">Nummernschild</label>
+          <label class="cl_info" uiRadius="left">Nummernschild</label><input type="text" id="idVin_platLesenNum"
+            list="idDlist_platLesenNum" onfocus="platLesenPopulateOptions(this)" onchange="platLesenInput(this)"
+            data-type="NUM" uiSize="size6" uiRadius="right"></input>
+          <datalist id="idDlist_platLesenNum">
+          </datalist>
+          <!-- <select id="idSel_platLesenNum" uiSize="size12" onchange="platLesenNum(this)"
+            onfocus="platLesenPopulateOptions()"></select> -->
         </div>
         <div class="cl_platLesenRegInput">
-          <select id="idSel_platLesenReg" uiSize="size12" onchange="platLesenReg(this)"
-            onfocus="platLesenPopulateOptions()"></select>
+          <label class="cl_info" uiRadius="left">Region</label><input type="text" id="idVin_platLesenReg"
+            list="idDlist_platLesenReg" onfocus="platLesenPopulateOptions(this)" onchange="platLesenInput(this)"
+            data-type="REG" uiSize="size6" uiRadius="right"></input>
+          <datalist id="idDlist_platLesenReg">
+          </datalist>
+
+
+          <!-- <select id="idSel_platLesenReg" uiSize="size12" onchange="platLesenReg(this)"
+            onfocus="platLesenPopulateOptions()"></select> -->
         </div>
-        <div class="cl_platLesenRegResult">
-          <label class="cl_outputLbl" id="idLbl_platLesenRegResult">Region</label>
+        <div class="cl_platLesenResult">
+          <label class="cl_outputLbl" id="idLbl_platLesenResult">Region</label>
         </div>
       </div>
     </section>
@@ -2038,7 +2043,7 @@
         <div class="cl_OcjeneNotenwert32" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left"><input type="checkbox" class="cl_ocjeneNotenwerte"
               id="idCb_ocjeneNotenwert32" onclick="ocjeneNotenwert(this)"></input>
-          </label><label class="cl_info" for="idCb_ocjeneNotenwert16" uiSize="size3" uiAlign="center"
+          </label><label class="cl_info" for="idCb_ocjeneNotenwert32" uiSize="size3" uiAlign="center"
             uiRadius="right">1/32</label>
         </div>
         <div class="cl_OcjeneDotted" uiWrap="nowrap">

@@ -89,6 +89,10 @@ const caEM = new p5((c) => {
 	};
 }, "#idCanv_empat");
 
+function empatResize() {
+	caRC.resizeCanvas(empatOptions.canvas.w, empatOptions.canvas.h);
+}
+
 function empatCheckWinner(cell) {
 	//check cols |||||
 	if (emaptCheckArray(empatOptions.cells[cell.i])) return true;

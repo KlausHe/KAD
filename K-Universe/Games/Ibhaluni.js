@@ -76,6 +76,10 @@ const caIB = new p5((c) => {
 	};
 }, "#idCanv_ibhaluni");
 
+function ibhalumiResize() {
+	caIB.resizeCanvas(ibhaluniOptions.canvas.w, ibhaluniOptions.canvas.h);
+}
+
 function mousePushedIbhaluni() {
 	for (let balloon of ibhaluniOptions.balloons) {
 		const checked = balloon.clicked();

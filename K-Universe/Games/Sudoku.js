@@ -335,6 +335,10 @@ const caSU = new p5((c) => {
 	};
 }, "#idCanv_sudoku");
 
+function sudokuResize() {
+	caSU.resizeCanvas(sudokuOptions.canvas.w, sudokuOptions.canvas.h);
+}
+
 function sudokuCheckFinished() {
 	for (let i = 0; i < 9; i++) {
 		for (let j = 0; j < 9; j++) {
