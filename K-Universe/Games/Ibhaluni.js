@@ -1,6 +1,6 @@
 const ibhaluniOptions = {
 	get canvas() {
-		return { w: (globalValues.mediaSizes.canvasSize.w * 3) / 4, h: globalValues.mediaSizes.canvasSize.h };
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h };
 	},
 	backgroundDay: null,
 	backgroundNight: null,

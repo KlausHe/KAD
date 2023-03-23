@@ -543,6 +543,7 @@ const contentGrid = {
 	cl_Pattern: {
 		userSelected: true,
 		logReqUser: true,
+		width: 2,
 		canvas: function () {
 			patternResize();
 			drawPattern();

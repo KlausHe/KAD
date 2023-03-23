@@ -58,7 +58,7 @@ function mainSetup() {
 			nuncDiscipuli.cred.uid = null;
 		}
 		toggleLayout();
-    clearAllTiles();
+		clearAllTiles();
 		setTimeout(() => {
 			layoutHideLoadingscreen();
 			clearGlobalValue();

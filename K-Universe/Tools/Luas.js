@@ -1,6 +1,7 @@
 const luasOptions = {
-	width: 200,
-	height: 200,
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h * 0.5 };
+	},
 	radius: 0,
 	speedVin: 10,
 	speedAngular: null,
@@ -29,7 +30,7 @@ function clear_cl_Luas() {
 	dbID("idSel_luasLinearUnit").options[3] = new Option("m", 1, false); // text, value
 	dbID("idSel_luasLinearUnit").options[4] = new Option("km", 1, false); // text, value
 	luasInputChange();
-	luasOptions.radius = (luasOptions.width / 2) * 0.9;
+	luasOptions.radius = (luasOptions.canvas.w *0.5) * 0.9;
 	luasOptions.lastAngle = 0;
 	caLU.noLoop();
 	caLU.redraw();
@@ -37,7 +38,7 @@ function clear_cl_Luas() {
 
 const caLU = new p5((c) => {
 	c.setup = function () {
-		c.canv = c.createCanvas(luasOptions.width, luasOptions.height);
+		c.canv = c.createCanvas(luasOptions.canvas.w, luasOptions.canvas.h);
 		c.canv.id("canvasLuas");
 		c.canv.parent("#idCanv_luas");
 		c.frameRate(luasOptions.setFramerate);
@@ -51,7 +52,7 @@ const caLU = new p5((c) => {
 		caLU.clear();
 		c.stroke(globalValues.colors.elements.line);
 		c.push();
-		c.translate(luasOptions.width / 2, luasOptions.height / 2);
+		c.translate(luasOptions.canvas.w *0.5, luasOptions.canvas.h * 0.5);
 		c.rotate(270);
 		c.noFill();
 
@@ -69,7 +70,7 @@ const caLU = new p5((c) => {
 }, "#idCanv_luas");
 
 function luasResize() {
-	caLU.resizeCanvas(luasOptions.width, luasOptions.height);
+	caLU.resizeCanvas(luasOptions.canvas.w, luasOptions.canvas.h);
 }
 
 function luasStart() {

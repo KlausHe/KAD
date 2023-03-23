@@ -68,8 +68,8 @@
 	--rangeHeight: 0.833rem;
 	--rangeThumbWidth: 0.5rem;
 	--rangeThumbHeight: 1.25rem;
-	--gridWidthGameCanvas: 40rem;
-	--gridHeightGameCanvas: 40rem;
+	--gridWidthGameCanvas: 36rem;
+	--gridHeightGameCanvas: 36rem;
 	--canvasScale: 1;
 	/**/
 	--borderThin: 0.042rem solid hsl(var(--bgcNavbar));

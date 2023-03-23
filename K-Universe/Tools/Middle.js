@@ -1,6 +1,7 @@
 const middleOptions = {
-	width: 0,
-	height: 0,
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h / 12 };
+	},
 	radius: 0,
 	barA: {},
 	barB: {},
@@ -12,10 +13,8 @@ const caMI = new p5((c) => {
 	c.setup = function () {
 		c.noLoop();
 		middleOptions.dims = {};
-		middleOptions.width = getCssRoot("UIHeight1", true, true) * 12;
-		middleOptions.height = getCssRoot("UIHeight1", true, true) * 2;
-		middleOptions.middle = middleOptions.width * 0.5;
-		c.canv = c.createCanvas(middleOptions.width, middleOptions.height);
+		middleOptions.middle = middleOptions.canvas.w * 0.5;
+		c.canv = c.createCanvas(middleOptions.canvas.w, middleOptions.canvas.h);
 		c.canv.id("canvasMiddle");
 		c.canv.parent("#idCanv_middle");
 		c.colorMode(c.HSL);
@@ -23,7 +22,7 @@ const caMI = new p5((c) => {
 }, "#idCanv_middle");
 
 function middleResize() {
-	caMI.resizeCanvas(getCssRoot("UIHeight1", true, true) * 12, getCssRoot("UIHeight1", true, true) * 12);
+	caMI.resizeCanvas(middleOptions.canvas.w, middleOptions.canvas.h);
 }
 
 function clear_cl_Middle() {
@@ -32,8 +31,8 @@ function clear_cl_Middle() {
 	middleOptions.radius = getCssRoot("UIRadius", true, true);
 	middleOptions.barA = {
 		hStart: 0,
-		h: middleOptions.height / 2,
-		hText: middleOptions.height / 4,
+		h: middleOptions.canvas.h * 0.5,
+		hText: middleOptions.canvas.h * 0.25,
 		get fillCol() {
 			return globalValues.colors.elements.btnPositive;
 		},
@@ -42,9 +41,9 @@ function clear_cl_Middle() {
 		},
 	};
 	middleOptions.barB = {
-		hStart: middleOptions.height / 2,
-		h: middleOptions.height,
-		hText: (middleOptions.height * 3) / 4,
+		hStart: middleOptions.canvas.h * 0.5,
+		h: middleOptions.canvas.h * 0.5,
+		hText: middleOptions.canvas.h * 0.75,
 		get fillCol() {
 			return globalValues.colors.elements.btnNegative;
 		},
@@ -94,14 +93,14 @@ function middleShowCanvas() {
 	//Mittenindikator
 	caMI.stroke(globalValues.colors.elements.baseColor);
 	caMI.strokeWeight(2);
-	caMI.line(middleOptions.middle + middleOptions.dims.w, 0, middleOptions.middle + middleOptions.dims.w, middleOptions.height);
+	caMI.line(middleOptions.middle + middleOptions.dims.w, 0, middleOptions.middle + middleOptions.dims.w, middleOptions.canvas.h);
 
 	//Mittelstrich
 	caMI.stroke(globalValues.colors.elements.line);
-	caMI.line(middleOptions.middle, 0, middleOptions.middle, middleOptions.height);
+	caMI.line(middleOptions.middle, 0, middleOptions.middle, middleOptions.canvas.h);
 	// outer Rect
 	caMI.noFill();
-	caMI.rect(0, 0, middleOptions.width, middleOptions.height, middleOptions.radius);
+	caMI.rect(0, 0, middleOptions.canvas.w, middleOptions.canvas.h, middleOptions.radius);
 }
 
 function middleDrawBalken(bar) {

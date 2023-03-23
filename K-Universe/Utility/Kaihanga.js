@@ -1,9 +1,6 @@
 const kaihangaOptions = {
-	get width() {
-		return getCssRoot("UIHeight1", true, true) * 12;
-	},
-	get height() {
-		return getCssRoot("UIHeight1", true, true) * 12;
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h * 0.5 };
 	},
 	maxLength: 12,
 	entries: [],
@@ -30,7 +27,7 @@ function clear_cl_Kaihanga() {
 
 const caKA = new p5((c) => {
 	c.setup = function () {
-		c.canv = c.createCanvas(kaihangaOptions.width, kaihangaOptions.height);
+		c.canv = c.createCanvas(kaihangaOptions.canvas.w, kaihangaOptions.canvas.h);
 		c.canv.id("canvasKaihanga");
 		c.canv.parent("#idCanv_kaihanga");
 		c.canv.mousePressed(mousePushedKaihanga);
@@ -48,11 +45,11 @@ const caKA = new p5((c) => {
 }, "#idCanv_kaihanga");
 
 function kaihangaResize() {
-	caKA.resizeCanvas(kaihangaOptions.width, kaihangaOptions.height);
+	caKA.resizeCanvas(kaihangaOptions.canvas.w, kaihangaOptions.canvas.h);
 }
 
 function mousePushedKaihanga() {
-	let speed = caKA.floor(caKA.map(caKA.mouseX, 0, kaihangaOptions.width, 1, 18));
+	let speed = caKA.floor(caKA.map(caKA.mouseX, 0, kaihangaOptions.canvas.w, 1, 18));
 	kaihangaStart(speed);
 }
 
@@ -69,8 +66,8 @@ function kaihangaWheelUpdate() {
 		});
 	}
 	kaihangaOptions.wheel = new KaihangaWheel({
-		innerR: (kaihangaOptions.width * 0.1) / 2,
-		outerR: (kaihangaOptions.width * 0.8) / 2,
+		innerR: (kaihangaOptions.canvas.w * 0.1) / 2,
+		outerR: (kaihangaOptions.canvas.w * 0.8) / 2,
 		textFontSize: getCssRoot("fontSize", true),
 		segments: segOptions,
 		lineWeigth: 1,
@@ -231,7 +228,7 @@ class KaihangaWheel {
 	draw() {
 		caKA.clear();
 		caKA.push();
-		caKA.translate(kaihangaOptions.width / 2, kaihangaOptions.height / 2);
+		caKA.translate(kaihangaOptions.canvas.w / 2, kaihangaOptions.canvas.h / 2);
 		caKA.rotate((this.angle + 90) * -1);
 		caKA.noFill();
 		caKA.stroke(globalValues.colors.elements.line);
@@ -269,7 +266,7 @@ class KaihangaWheel {
 			caKA.push();
 			let cx = 1.5;
 			let cy = this.innerR * 1.5;
-			caKA.translate(kaihangaOptions.width / 2, kaihangaOptions.height / 2 - this.outerR - this.lineWeight);
+			caKA.translate(kaihangaOptions.canvas.w * 0.5, kaihangaOptions.canvas.h * 0.5 - this.outerR - this.lineWeight);
 			caKA.noStroke();
 			caKA.fill(globalValues.colors.elements.line);
 			caKA.push();

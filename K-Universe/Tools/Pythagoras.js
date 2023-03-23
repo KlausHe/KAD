@@ -2,6 +2,9 @@ const pythoOptions = {
 	p5Loaded: false,
 	width: 180,
 	height: 140,
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h * 0.5 };
+	},
 	margin: 20,
 	raduisRightAngle: 25,
 	greekFont: "Arial",

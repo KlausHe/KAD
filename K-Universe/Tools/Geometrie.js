@@ -1,6 +1,9 @@
 const geometrieOptions = {
 	width: 140,
 	height: 180,
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h * 0.5 };
+	},
 	roh: 0,
 	acc: 4,
 	units: {

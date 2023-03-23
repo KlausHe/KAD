@@ -1,6 +1,5 @@
 //SOURCE: https://ncase.me/sight-and-light/  DRAFT 4
 const raycasterOptions = {
-	width: 400,
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
 	},
