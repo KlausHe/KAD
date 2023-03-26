@@ -68,7 +68,7 @@ function kaihangaWheelUpdate() {
 	kaihangaOptions.wheel = new KaihangaWheel({
 		innerR: (kaihangaOptions.canvas.w * 0.1) / 2,
 		outerR: (kaihangaOptions.canvas.w * 0.8) / 2,
-		textFontSize: getCssRoot("fontSize", true),
+		textFontSize: globalValues.mediaSizes.fontSize,
 		segments: segOptions,
 		lineWeigth: 1,
 		animation: {

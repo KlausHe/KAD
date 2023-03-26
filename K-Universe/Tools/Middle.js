@@ -2,7 +2,6 @@ const middleOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h / 12 };
 	},
-	radius: 0,
 	barA: {},
 	barB: {},
 	dims: {},
@@ -28,7 +27,6 @@ function middleResize() {
 function clear_cl_Middle() {
 	resetInput("idVin_middleA", 5);
 	resetInput("idVin_middleB", 2);
-	middleOptions.radius = getCssRoot("UIRadius", true, true);
 	middleOptions.barA = {
 		hStart: 0,
 		h: middleOptions.canvas.h * 0.5,
@@ -86,7 +84,7 @@ function calcMiddle() {
 function middleShowCanvas() {
 	caMI.clear();
 	caMI.strokeWeight(1);
-	middleOptions.fontWidth = getCssRoot("fontSize", true);
+	middleOptions.fontWidth = globalValues.mediaSizes.fontSize;
 	caMI.textSize(middleOptions.fontWidth);
 	middleDrawBalken(middleOptions.barA);
 	middleDrawBalken(middleOptions.barB);
@@ -100,7 +98,7 @@ function middleShowCanvas() {
 	caMI.line(middleOptions.middle, 0, middleOptions.middle, middleOptions.canvas.h);
 	// outer Rect
 	caMI.noFill();
-	caMI.rect(0, 0, middleOptions.canvas.w, middleOptions.canvas.h, middleOptions.radius);
+	caMI.rect(0, 0, middleOptions.canvas.w, middleOptions.canvas.h, globalValues.mediaSizes.radius);
 }
 
 function middleDrawBalken(bar) {

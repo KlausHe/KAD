@@ -1,16 +1,23 @@
 const globalValues = {
 	mediaSizes: {
-		get size1() {
-			return getCssRoot("UIHeight1", true, true);
+    get size() {
+      return getCssRoot("UIHeight1", true, true);
+    },
+		get fontSize() {
+			return getCssRoot("fontSize", true, true);
+		},
+		get radius() {
+			return getCssRoot("UIRadius", true, true);
 		},
 		get divGridMinWidth() {
-			return Math.floor(this.size1 * getCssRoot("divGridMinWidthFactor", true));
+			return Math.floor(this.size * getCssRoot("divGridMinWidthFactor", true));
 		},
 		get gridMarginSide() {
-			return Math.floor(this.size1 * getCssRoot("gridMarginSide", true));
+			return Math.floor(this.size * getCssRoot("gridMarginSide", true));
 		},
-		canvasScale: 0,
-		imgSize: 0,
+		get imgSize() {
+			return getCssRoot("imgSize", true, true);
+		},
 		get canvasSize() {
 			const val = getCssRoot("gridWidthGameCanvas", true, true);
 			return { w: val, h: val };

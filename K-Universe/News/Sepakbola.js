@@ -424,7 +424,7 @@ function sepakbolaPushImages(arr) {
 }
 
 function sepakbolaCreateImage(url) {
-	const size = getCssRoot("imgSize", true, true);
+	const size = globalValues.mediaSizes.imgSize;
 	const img = new Image();
 	//shrink URL-image-size
 	let urlArr = url;

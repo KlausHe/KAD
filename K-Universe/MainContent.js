@@ -1123,7 +1123,6 @@ const contentGrid = {
 
 const contentFooter = [
 	["Icons", "https://www.iconfinder.com/iconsets/feather-2"],
-	["Font", "https://github.com/weiweihuanghuang/Work-Sans"],
 	["Canvas-Library", "https://p5js.org/"],
 	["Charts", "http://chartJS.org"],
 	["Date-Picker", "https://github.com/Pikaday/Pikaday"],

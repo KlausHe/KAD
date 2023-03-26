@@ -118,11 +118,10 @@ function drawPattern() {
 	const m = patternOptions.margin;
 	const w = patternOptions.canvas.w;
 	const h = patternOptions.canvas.h;
-	const r = getCssRoot("UIRadius", true, true);
+	const r = globalValues.mediaSizes.radius;
 
 	//text Length top
-	const fontSize = getCssRoot("fontSize", true);
-	caPA.textSize(fontSize);
+	caPA.textSize(globalValues.mediaSizes.fontSize);
 	caPA.textAlign(caPA.CENTER, caPA.CENTER);
 	caPA.noStroke();
 	caPA.fill(globalValues.colors.elements.line);

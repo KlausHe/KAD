@@ -121,8 +121,8 @@ const howaOptions = {
 	get ticksStyle() {
 		return {
 			autoSkip: true,
-			fontSize: getCssRoot("fontSize", true) - 2,
-			autoSkipPadding: getCssRoot("fontSize", true),
+			fontSize: globalValues.mediaSizes.fontSize * 0.8,
+			autoSkipPadding: globalValues.mediaSizes.fontSize,
 			beginAtZero: false,
 		};
 	},
@@ -332,7 +332,6 @@ function howaCreateGraph() {
 				};
 			}),
 		},
-
 		// Configuration options go here
 		options: {
 			responsive: true,
@@ -346,9 +345,9 @@ function howaCreateGraph() {
 					filter: (legendItem, data) => {
 						return legendItem.index != 1;
 					},
-					usePointStyle: true,
+					usePointStyle: false,
 					padding: getCssRoot("padding", true, true),
-					boxWidth: getCssRoot("colBoxWidth", true, true) * 0.5,
+					boxWidth: globalValues.mediaSizes.size,
 				},
 				onClick: (e) => {},
 			},
@@ -365,8 +364,8 @@ function howaCreateGraph() {
 						display: true,
 						ticks: {
 							autoSkip: true,
-							autoSkipPadding: getCssRoot("fontSize", true) - 2,
-							fontSize: getCssRoot("fontSize", true) - 2,
+							autoSkipPadding: globalValues.mediaSizes.fontSize * 0.8,
+							fontSize: globalValues.mediaSizes.fontSize * 0.8,
 							beginAtZero: false,
 						},
 						...howaOptions.gridLinesStyle,
@@ -425,7 +424,7 @@ function howaCreateGraph() {
 								return `${value}hPa`;
 							},
 							...howaOptions.ticksStyle,
-							fontSize: getCssRoot("fontSize", true) - 4,
+							fontSize: globalValues.mediaSizes.fontSize * 0.6,
 						},
 						...howaOptions.gridLinesStyle,
 					},

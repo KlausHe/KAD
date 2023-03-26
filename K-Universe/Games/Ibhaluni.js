@@ -68,7 +68,7 @@ const caIB = new p5((c) => {
 			ibhaluniOptions.balloons[i].show();
 		}
 		c.fill(globalValues.colors.elements.line);
-		c.textSize(12);
+		c.textSize(globalValues.mediaSizes.fontSize);
 		c.textAlign(c.LEFT, c.TOP);
 		c.text(`score: ${ibhaluniOptions.score}`, 10, 10);
 		c.textAlign(c.RIGHT, c.TOP);

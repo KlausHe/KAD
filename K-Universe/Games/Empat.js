@@ -424,7 +424,7 @@ class EmpatCell {
 			caEM.noStroke();
 			caEM.fill(globalValues.colors.elements.line);
 			caEM.textAlign(caEM.CENTER, caEM.CENTER);
-			caEM.textSize(18);
+			caEM.textSize(globalValues.mediaSizes.fontSize * 1.5);
 			caEM.text(`${this.i},${this.j}`, this.x, this.y);
 		}
 		//draw Player

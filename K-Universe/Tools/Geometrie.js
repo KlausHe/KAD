@@ -1,6 +1,4 @@
 const geometrieOptions = {
-	width: 140,
-	height: 180,
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h * 0.5 };
 	},
@@ -38,13 +36,17 @@ const geometrieOptions = {
 	},
 };
 
+// width: 140,
+// height: 180,
 let geoObjects = {
-	drawDim: {
-		a: 40,
-		b: 60,
-		c: 20,
-		d: 50,
-		s: 5,
+	get drawDim() {
+		return {
+			a: geometrieOptions.canvas.h / 4.5,
+			b: geometrieOptions.canvas.h / 3,
+			c: geometrieOptions.canvas.h / 9,
+			d: geometrieOptions.canvas.h / 3.6,
+			s: geometrieOptions.canvas.h / 36,
+		};
 	},
 	elements: ["Cuboid", "Cube", "Cylinder", "Pipe", "Sphere"],
 	names: ["Quader", "Würfel", "Zylinder", "Rohr", "Kugel"],
@@ -64,9 +66,9 @@ let geoObjects = {
 	},
 	initiateShow() {
 		caGE.clear();
-		caGE.textSize(12);
+    caGE.textSize(globalValues.mediaSizes.fontSize);
 		caGE.push();
-		caGE.translate(geometrieOptions.width / 2, geometrieOptions.height / 2);
+		caGE.translate(geometrieOptions.canvas.w / 2, geometrieOptions.canvas.h / 2);
 		caGE.strokeWeight(2);
 		caGE.fill(geoObjects.areaCol);
 		caGE.stroke(geoObjects.lineCol);
@@ -125,11 +127,10 @@ let geoObjects = {
 			caGE.endShape(caGE.CLOSE);
 
 			for (let n = 0; n < 4; n++) {
-				let i = n;
 				let k = n + 4;
 				let l = ((n + 5) % 4) + 4;
 				caGE.line(shape[k].x, shape[k].y, shape[l].x, shape[l].y);
-				caGE.line(shape[i].x, shape[i].y, shape[k].x, shape[k].y);
+				caGE.line(shape[n].x, shape[n].y, shape[k].x, shape[k].y);
 			}
 
 			//text
@@ -204,11 +205,10 @@ let geoObjects = {
 			caGE.endShape(caGE.CLOSE);
 
 			for (let n = 0; n < 4; n++) {
-				let i = n;
 				let k = n + 4;
 				let l = ((n + 5) % 4) + 4;
 				caGE.line(shape[k].x, shape[k].y, shape[l].x, shape[l].y);
-				caGE.line(shape[i].x, shape[i].y, shape[k].x, shape[k].y);
+				caGE.line(shape[n].x, shape[n].y, shape[k].x, shape[k].y);
 			}
 
 			//text
@@ -499,7 +499,7 @@ function clear_cl_Geometrie() {
 
 const caGE = new p5((c) => {
 	c.setup = function () {
-		c.canv = c.createCanvas(geometrieOptions.width, geometrieOptions.height);
+		c.canv = c.createCanvas(geometrieOptions.canvas.w, geometrieOptions.canvas.h);
 		c.canv.id("canvasGeometrie");
 		c.canv.parent("#idCanv_geometire");
 		c.colorMode(c.HSL);
@@ -512,7 +512,7 @@ const caGE = new p5((c) => {
 }, "#idCanv_geometire");
 
 function geoResize() {
-	caGE.resizeCanvas(kaihangaOptions.width, kaihangaOptions.height);
+	caGE.resizeCanvas(geometrieOptions.canvas.w, geometrieOptions.canvas.h);
 }
 
 // //Draw Geometrie here
@@ -640,10 +640,6 @@ function geoResultTable() {
 	}
 }
 
-function valChangeDim(dir, unitName) {
-	geoBerechnung();
-}
-
 function geoChangeDiameter() {
 	geoObjects.radState = dbID("idCb_geoRadius").checked;
 	let num = document.getElementsByName("naDiv_Area").length;
@@ -657,9 +653,8 @@ function geoChangeDiameter() {
 }
 
 function geoDiameter() {
-	return {
-		low: geoObjects.radState ? "r" : "d",
-		cap: geoObjects.radState ? "R" : "D",
-		factor: geoObjects.radState ? 1 : 0.5,
-	};
+	if (geoObjects.radState) {
+		return { low: "r", cap: "R", factor: 1 };
+	}
+	return { low: "d", cap: "D", factor: 0.5 };
 }

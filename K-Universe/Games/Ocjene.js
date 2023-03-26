@@ -1,10 +1,4 @@
-/*
-ToDo:
-- vorzeichen im gleichen Takt weglassen
-- Vorzeichen aufheben im gleichen Takt weglassen
-
-*/
-
+// https://abcnotation.com/wiki/abc:standard:v2.1
 const ocjeneOptions = {
 	get div() {
 		return "idCanv_ocjeneSheet";
@@ -12,7 +6,7 @@ const ocjeneOptions = {
 	division: 576,
 	notenwerte: {
 		selected: [],
-		selectedOrig: [0, 0, 1, 1, 0, 0], //1/1, 1/2, 1/4, 1/8, 1/16
+		selectedOrig: [0, 1, 1, 1, 0, 0], //1/1, 1/2, 1/4, 1/8, 1/16
 		quaternote: 144,
 		noteArrays: {
 			base: [576, 288, 144, 72, 36, 18],
@@ -56,7 +50,7 @@ const ocjeneOptions = {
 	},
 	interval: {
 		val: 0,
-		valOrig: 4,
+		valOrig: 2,
 	},
 	tempo: {
 		val: 0,
@@ -66,8 +60,8 @@ const ocjeneOptions = {
 	},
 	bars: {
 		val: 0,
-		valOrig: 4,
-		max: 24,
+		valOrig: 6,
+		max: 16,
 	},
 	barOverflowStop: {
 		state: true,
@@ -110,7 +104,7 @@ const ocjeneOptions = {
 	},
 	keys: {
 		index: 0,
-		indexOrig: 4,
+		indexOrig: 5,
 		get current() {
 			return ocjeneOptions.definitions.keys[ocjeneOptions.keys.index][ocjeneOptions.keySignatures.index];
 		},
@@ -319,8 +313,8 @@ const ocjeneOptions = {
 				"c'''",
 			],
 			midi: [
-				21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
-				69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
+				21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
+				94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
 			],
 			textLanguage: {
 				//Data_Country_CodesIso639
@@ -344,26 +338,7 @@ const ocjeneOptions = {
 				es: ["do", "ré", "mi", "fa", "sol", "la", "si", "do sostenido", "ré sostenido", "fa sostenido", "sol sostenido", "la sostenido", "ré bemol", "mi bemol", "sol bemol", "la bemol", "si bemol"],
 				ro: ["do", "ré", "mi", "fa", "sol", "la", "si", "do diez", "ré diez", "fa diez", "sol diez", "la diez", "ré bemol", "mi bemol", "sol bemol", "la bemol", "si bemol"],
 				lv: ["do", "ré", "mi", "fa", "sol", "la", "si", "do diez", "ré diez", "fa diez", "sol diez", "la diez", "ré bemol", "mi bemol", "sol bemol", "la bemol", "si bemol"],
-				pt: [
-					"Dó",
-					"Ré",
-					"Mi",
-					"Fá",
-					"Sol",
-					"Lá",
-					"Si",
-					"Dó sustenido",
-					"Ré sustenido",
-					"Fá sustenido",
-					"Sol sustenido",
-					"Lá sustenido",
-					"Si sustenido",
-					"Ré bemol",
-					"Mi bemol",
-					"Sol bemol",
-					"Lá bemol",
-					"Si bemol",
-				],
+				pt: ["Dó", "Ré", "Mi", "Fá", "Sol", "Lá", "Si", "Dó sustenido", "Ré sustenido", "Fá sustenido", "Sol sustenido", "Lá sustenido", "Si sustenido", "Ré bemol", "Mi bemol", "Sol bemol", "Lá bemol", "Si bemol"],
 				bg: ["до", "ре", "ми", "фа", "сол", "ла", "си", "д диезо", "ре диез", "фа диез", "сол диез", "ла диез", "ре бемол", "ми бемол", "сол бемол", "ла бемол", "си бемол"],
 				ru: ["до", "ре", "ми", "фа", "соль", "ля", "си", "до диез", "ре диез", "фа диез", "соль диез", "ля диез", "ре бемоль", "ми бемоль", "соль бемоль", "ля бемоль", "си бемоль"],
 				el: ["Ντο", "Ρε", "Μι", "Φα", "Σολ", "Λα", "Σι", "Ντο δίεση", "Ρε δίεση", "Φα δίεση", "Σολ δίεση", "Λα δίεση", "Ρε ύφεση", "Μι ύφεση", "Σολ ύφεση", "Λα ύφεση", "Σι ύφεση"],
@@ -420,6 +395,7 @@ const ocjeneOptions = {
 			["Cb", "Abm", [10, 3, 8, 1, 6]],
 		],
 		accidentals: [1, 3, 6, 8, 10],
+		notAccidentals: [0, 2, 4, 5, 7, 9, 11],
 		get keyAccidentals() {
 			return ocjeneOptions.definitions.keys[ocjeneOptions.keys.index][2];
 		},
@@ -806,7 +782,7 @@ const ocjeneSong = {
 	author: "",
 	get header() {
 		const config = {
-			T: `${firstLetterCap(this.title)}`, //Title --- shot bars:    \n%%barnumbers 1
+			// T: `${firstLetterCap(this.title)}`, //Title --- shot bars:    \n%%barnumbers 1
 			C: `M: ${this.author}`, //Author
 			S: `${new Date().getFullYear()}, Khage`, // copyright
 			M: ocjeneOptions.timeSignature.currSignature.join("/"), //Taktart
@@ -850,11 +826,15 @@ class ocjeneNote {
 		this.splitIndex = splitIndex;
 		this.spaceStembar = false;
 		this.slur = null;
+		this.pitchIndex();
 		this.addToSongData();
 		this.createPitch(splitMidiPitch);
 		this.checkSplit();
 		this.checkSpace();
 		this.translatePitch();
+	}
+	pitchIndex() {
+		return this.midiPitch % 12;
 	}
 	addToSongData() {
 		if (this.splitIndex == null) {
@@ -926,6 +906,19 @@ class ocjeneNote {
 		return this.timeStamp % ocjeneSong.barLength == 0;
 	}
 
+	static isAccidental(pitch) {
+		return ocjeneOptions.definitions.accidentals.includes(pitch % 12);
+	}
+	static getBaseKey(pitch) {
+		let state = ocjeneNote.isAccidental(pitch);
+		if (!state) return pitch;
+		return (pitch += ocjeneOptions.keys.shiftDir);
+	}
+	static isBaseKey(pitch) {
+		let base = ocjeneNote.getBaseKey(pitch);
+		return pitch == base;
+	}
+
 	createPitch(splitMidiPitch) {
 		if (splitMidiPitch) {
 			this.midiPitch = splitMidiPitch;
@@ -943,12 +936,12 @@ class ocjeneNote {
 			else this.midiPitch = nextPitch;
 		}
 		// correct Pitch if "keyOnly"
-		const accArr = ocjeneOptions.keyOnly.state ? ocjeneOptions.definitions.accidentals : []; // ocjeneOptions.definitions.keyAccidentals;
-		if (accArr.includes(this.midiPitch % 12)) {
-			this.midiPitch += ocjeneOptions.keys.shiftDir;
+		if (ocjeneOptions.keyOnly.state) {
+			this.midiPitch = ocjeneNote.getBaseKey(this.midiPitch);
 		}
 		this.createRest();
 	}
+
 	createRest() {
 		const prevPitch = this.getDataIndex() == 0 ? ocjeneSong.noteData[0].midiPitch : ocjeneSong.noteData[this.getDataIndex() - 1].midiPitch;
 		if (prevPitch == null) return;
@@ -970,10 +963,9 @@ class ocjeneNote {
 			duration = ocjeneOptions.notenwerte.noteArrays.base[durationIndex];
 		}
 		if (this.resolved) {
-			pitch = pitch.replace(/[^_]/, "");
+			pitch = pitch.replace(/[\^_]/, "");
 			pitch = `=${pitch}`;
 		}
-
 		this.abcJSPitch = `${prefix}${pitch}${duration}${postfix}`;
 	}
 	translateText() {
@@ -991,10 +983,10 @@ class ocjeneNote {
 }
 let failSafe = 10;
 function ocjeneGenerate() {
-	// console.clear();
+	console.clear();
 	btnColor("idBtn_ocjeneGenerate", null);
 	ocjeneSong.title = randomObject(netsaonaOptions.data.Random);
-	ocjeneSong.author = "Khage"; //randomObject(netsaonaOptions.data.Name);
+	ocjeneSong.author = randomObject(netsaonaOptions.data.Name);
 	ocjeneSong.noteData = [];
 	ocjeneSong.currentSongLength = 0;
 
@@ -1039,47 +1031,73 @@ function ocjeneCleanAfterGeneration() {
 	for (let n of ocjeneSong.noteData) {
 		let b = n.getBar();
 		if (bars[b] == undefined) bars[b] = [];
-		bars[b].push([n, 0]);
+		bars[b].push([n, null]);
 	}
-	const dir = ocjeneOptions.keys.shiftDir;
-	// console.log(bars);
-	for (let b of bars) {
-		for (let i = 0; i < b.length; i++) {
-			const n = b[i];
-			let midiPitch = n[0].midiPitch % 12;
-			if (ocjeneOptions.definitions.keyAccidentals.includes(midiPitch)) {
-				if (ocjeneOptions.definitions.accidentals.includes(midiPitch)) {
-					n[1] = dir * -1;
+
+	for (let b = 0; b < bars.length; b++) {
+		const bar = bars[b];
+		for (let i = 0; i < bar.length; i++) {
+			const notePitch = bar[i][0].pitchIndex();
+			const isBaseKey = ocjeneNote.isBaseKey(notePitch);
+			const isFromKey = ocjeneOptions.definitions.keyAccidentals.some((acc) => acc == notePitch);
+			if (isFromKey && isBaseKey) {
+				bar[i][1] = "resolved";
+			} else if (isFromKey && !isBaseKey) {
+				bar[i][1] = "shift";
+			}
+			// if (bar[i][0].splitIndex != null) {
+			// 	if (i == 0) bar[i][1] = bars[b - 1][i - 1][1];
+			// 	bar[i][1] = bar[i - 1][1];
+			// 	continue;
+			// }
+
+      
+      
+      //slured notes not correct"
+
+			
+      
+      
+      
+      for (let prevIndex = i - 1; prevIndex >= 0; prevIndex--) {
+				const noteBase = ocjeneNote.getBaseKey(notePitch);
+				const prevPitch = bar[prevIndex][0].pitchIndex();
+				const prevBase = ocjeneNote.getBaseKey(prevPitch);
+				if (noteBase != prevBase) continue;
+
+				// same - Base         -- do nothing if its null, set to null if it is resolved
+				if (notePitch == prevPitch && isBaseKey) {
+					bar[i][1] = null;
+					break;
+				}
+				// same - Accidential   -- shift to avoid accidential and keep shifting --> depending on the current key
+				if (notePitch == prevPitch && !isBaseKey) {
+					if (bar[prevIndex][1] == null) bar[i][1] = "shift";
+					if (bar[prevIndex][1] == "shift") bar[i][1] = null;
+					break;
+				}
+				// different - Base       -- resolve after accidential and keep shifting
+				if (notePitch != prevPitch && isBaseKey) {
+					bar[i][1] = "resolved";
+					break;
+				}
+				// different - Accidential -- do nothing
+				if (notePitch != prevPitch && !isBaseKey) {
+					// bar[i][1] = null;
+					break;
 				}
 			}
-			if (ocjeneOptions.definitions.keyAccidentals.includes(midiPitch - dir)) {
-				n[0].resolved = true;
-			}
-
 		}
 	}
-
-	for (let b of bars) {
-		for (let n of b) {
-			n[0].midiPitch = n[0].midiPitch + n[1];
-			n[0].translatePitch();
+	for (let bar of bars) {
+		for (let i = 0; i < bar.length; i++) {
+			if (bar[i][1] == null) continue;
+			if (bar[i][1] == "resolved") bar[i][0].resolved = true;
+			if (bar[i][1] == "shift") bar[i][0].midiPitch += ocjeneOptions.keys.shiftDir;
+			bar[i][0].translatePitch();
 		}
 	}
-
-	return;
-
-	const accArr = ocjeneOptions.keyOnly.state ? ocjeneOptions.definitions.accidentals : []; // ocjeneOptions.definitions.keyAccidentals;
-	if (accArr.includes(this.midiPitch % 12)) {
-		this.midiPitch += ocjeneOptions.keys.shiftDir;
-	}
-
-	// correct if note is acc and is present in key (shift)
-	// correct if note is base and is present as acc in key (-1 * shift)
-
-	// for (let i = ocjeneSong.noteData.length - 1; i > 0; i--) {
-	// 	note = ocjeneSong.noteData[i];
-	// }
-	// ocjeneSong.abcJSSong = "";
+	console.log(bars);
 }
 
 function ocjeneCreateNote(arr, type) {
@@ -1139,8 +1157,8 @@ function ocjeneDraw() {
 	let text = ocjeneOptions.showText.state ? `w: ${ocjeneSong.abcJSText}` : "";
 	const res = `${ocjeneSong.header}${ocjeneSong.abcJSSong}\n${text}`;
 	const drawOptions = {
-		// print:true, // show in DINA4 format
-		staffwidth: 400, // hier wird die weite width bestimmt!
+		print: false, // show in DINA4 format
+		staffwidth: globalValues.mediaSizes.canvasSize.w, // width 600
 		wrap: {
 			minSpacing: 1.8,
 			maxSpacing: 2.7,
@@ -1148,8 +1166,9 @@ function ocjeneDraw() {
 		},
 	};
 	// let abcSynth = new ABCJS.synth.CreateSynth();
-	// let abdObj = ABCJS.renderAbc(ocjeneOptions.div, res, drawOptions)[0];
-	ABCJS.renderAbc(ocjeneOptions.div, res, drawOptions);
+
+	let abdObj = ABCJS.renderAbc(ocjeneOptions.div, res, drawOptions)[0];
+	// ABCJS.renderAbc(ocjeneOptions.div, res, drawOptions);
 }
 
 function clear_cl_Ocjene(preset = null) {
@@ -1427,9 +1446,9 @@ const ocjeneSettings = {
 			if (ocjeneSettings.level == 2) return 4;
 		},
 		get tempo() {
-			if (ocjeneSettings.level == 0) return randomObject(80, 100);
+			if (ocjeneSettings.level == 0) return randomObject(80, 120);
 			if (ocjeneSettings.level == 1) return randomObject(70, 135);
-			if (ocjeneSettings.level == 2) return randomObject(60, 190);
+			if (ocjeneSettings.level == 2) return randomObject(60, 170);
 		},
 		get bars() {
 			if (ocjeneSettings.level == 0) return 4;
@@ -1447,9 +1466,9 @@ const ocjeneSettings = {
 			if (ocjeneSettings.level == 2) return false;
 		},
 		get textLanguage() {
-			if (ocjeneSettings.level == 0) return 3;
+			if (ocjeneSettings.level == 0) return 5;
 			if (ocjeneSettings.level == 1) return 0;
-			if (ocjeneSettings.level == 2) return 13;
+			if (ocjeneSettings.level == 2) return 16;
 		},
 		get interval() {
 			if (ocjeneSettings.level == 0) return 5;
@@ -1469,11 +1488,11 @@ const ocjeneSettings = {
 		get clef() {
 			if (ocjeneSettings.level == 0) return 0;
 			if (ocjeneSettings.level == 1) return randomObject([0, 6]);
-			if (ocjeneSettings.level == 2) return randomObject([0, 3, 6]); //Object.keys(ocjeneOptions.definitions.clefs).length
+			if (ocjeneSettings.level == 2) return randomObject([0, 6]);
 		},
 		get keys() {
 			if (ocjeneSettings.level == 0) return randomObject([0, 1, 8]);
-			if (ocjeneSettings.level == 1) return randomObject([0, 1, 2, 3, 8, 9, 10]);
+			if (ocjeneSettings.level == 1) return randomObject([0, 1, 2, 8, 9]);
 			if (ocjeneSettings.level == 2) return randomObject(ocjeneOptions.definitions.keys.length);
 		},
 		get keyOnly() {

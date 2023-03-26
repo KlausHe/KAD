@@ -390,7 +390,7 @@ class LottoCell {
 		caLO.textAlign(caLO.CENTER, caLO.CENTER);
 		caLO.noStroke();
 		caLO.stroke(utilsColor.stateAsArray(col, "HSL"));
-		caLO.textSize(getCssRoot("textSize", true));
+		caLO.textSize(globalValues.mediaSizes.fontSize);
 		caLO.text(this.num, 0, 2);
 		caLO.pop();
 	}

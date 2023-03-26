@@ -1,7 +1,5 @@
 const pythoOptions = {
 	p5Loaded: false,
-	width: 180,
-	height: 140,
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h * 0.5 };
 	},
@@ -29,7 +27,7 @@ function clear_cl_Pythagoras() {
 
 const caPY = new p5((c) => {
 	c.setup = function () {
-		c.canv = c.createCanvas(pythoOptions.width, pythoOptions.height);
+		c.canv = c.createCanvas(pythoOptions.canvas.w, pythoOptions.canvas.h);
 		c.canv.id("canvasPytho");
 		c.canv.parent("#idCanv_pytho");
 		c.noLoop();
@@ -39,7 +37,7 @@ const caPY = new p5((c) => {
 }, "#idCanv_pytho");
 
 function pythoResize() {
-	caPY.resizeCanvas(pythoOptions.width, pythoOptions.height);
+	caPY.resizeCanvas(pythoOptions.canvas.w, pythoOptions.canvas.h);
 }
 
 function pythoTriHypo(a, b) {
@@ -156,15 +154,15 @@ function pythoCalc() {
 }
 
 function drawPytho() {
-	let drawWidth = pythoOptions.width;
-	let drawHeight = pythoOptions.height;
+	let drawWidth = pythoOptions.canvas.w;
+	let drawHeight = pythoOptions.canvas.h;
 
-	if (pythoOptions.vals[0] / pythoOptions.vals[1] > pythoOptions.height / pythoOptions.width) {
+	if (pythoOptions.vals[0] / pythoOptions.vals[1] > pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "Y" fixed length, Scale "X"
-		drawWidth = valueConstrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.height, pythoOptions.width * 0.4, pythoOptions.width);
-	} else if (pythoOptions.vals[0] / pythoOptions.vals[1] < pythoOptions.height / pythoOptions.width) {
+		drawWidth = valueConstrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
+	} else if (pythoOptions.vals[0] / pythoOptions.vals[1] < pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "X" fixed length
-		drawHeight = valueConstrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.width, pythoOptions.height * 0.5, pythoOptions.height);
+		drawHeight = valueConstrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
 	}
 
 	drawWidth = drawWidth - 2 * pythoOptions.margin;
@@ -198,11 +196,11 @@ function drawPytho() {
 	caPY.strokeWeight(2);
 
 	caPY.push();
-	caPY.translate(pythoOptions.width - pythoOptions.margin, pythoOptions.height - pythoOptions.margin);
+	caPY.translate(pythoOptions.canvas.w - pythoOptions.margin, pythoOptions.canvas.h - pythoOptions.margin);
 	// Basics
 	caPY.noStroke();
 	caPY.fill(globalValues.colors.elements.line);
-	caPY.textSize(12);
+	caPY.textSize(globalValues.mediaSizes.fontSize);
 	caPY.textAlign(caPY.RIGHT, caPY.TOP); //A
 	caPY.text(pythPoints[0].Up, pythPoints[0].x, pythPoints[0].y);
 	caPY.textAlign(caPY.LEFT, caPY.BOTTOM); //B
@@ -242,7 +240,7 @@ function drawPytho() {
 	caPY.text(pythPoints[2].Lo, (pythPoints[0].x + pythPoints[1].x) / 2, (pythPoints[0].y + pythPoints[1].y) / 2);
 
 	caPY.textFont(pythoOptions.greekFont);
-	caPY.textSize(10);
+	caPY.textSize(globalValues.mediaSizes.fontSize * 0.8);
 	//Alpha
 	curColor = pythoOptions.inputState.includes(3) ? globalValues.colors.elements.baseColor : globalValues.colors.elements.line;
 	caPY.stroke(curColor);
@@ -263,6 +261,6 @@ function drawPytho() {
 	caPY.textAlign(caPY.LEFT, caPY.TOP); //B
 	caPY.text(`${pythoOptions.greekBeta}`, pythPoints[1].x + 4, pythPoints[1].y);
 
-	caPY.textSize(12);
+	caPY.textSize(globalValues.mediaSizes.fontSize);
 	caPY.pop();
 }

@@ -111,7 +111,7 @@ function timeoutCanvasFinished(
 	setTimeout(() => {
 		canv.stroke(255, 0, 0);
 		canv.strokeWeight(2);
-		canv.textSize(32);
+		canv.textSize(globalValues.mediaSizes.fontSize * 3);
 		canv.fill(0, 100, 60);
 		canv.textAlign(canv.CENTER, canv.BOTTOM);
 		canv.text(txt.textTop, canv.width / 2, canv.height / 2);
