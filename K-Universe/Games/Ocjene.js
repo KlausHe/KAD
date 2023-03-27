@@ -121,13 +121,15 @@ const ocjeneOptions = {
 		stateOrig: true,
 		base: 69,
 	},
-	rangeOffset: {
-		val: 10,
-		valOrig: 12,
-	},
-	firstPitchIterations: {
-		val: 0,
-		valOrig: 4,
+	variables: {
+		rangeOffset: {
+			val: 10,
+			valOrig: 12,
+		},
+		firstPitchIterations: {
+			val: 0,
+			valOrig: 8,
+		},
 	},
 	definitions: {
 		notes: {
@@ -409,7 +411,7 @@ const ocjeneInstruments = {
 		return this.data[this.index];
 	},
 	get firstPitch() {
-		return randomObjectCentered(this.getRange.lower, this.getRange.upper, ocjeneOptions.firstPitchIterations.val);
+		return randomObjectCentered(this.getRange.lower, this.getRange.upper, ocjeneOptions.variables.firstPitchIterations.val);
 	},
 	get getRange() {
 		if (!ocjeneOptions.limitRange.state) {
@@ -417,8 +419,8 @@ const ocjeneInstruments = {
 		}
 		const base = ocjeneOptions.limitRange.base - 3 * ocjeneOptions.clef.index;
 		return {
-			lower: Math.max(this.instrument.range.lower, base - ocjeneOptions.rangeOffset.val),
-			upper: Math.min(this.instrument.range.upper, base + ocjeneOptions.rangeOffset.val),
+			lower: Math.max(this.instrument.range.lower, base - ocjeneOptions.variables.rangeOffset.val),
+			upper: Math.min(this.instrument.range.upper, base + ocjeneOptions.variables.rangeOffset.val),
 		};
 	},
 	data: [
@@ -782,8 +784,8 @@ const ocjeneSong = {
 	author: "",
 	get header() {
 		const config = {
-			// T: `${firstLetterCap(this.title)}`, //Title --- shot bars:    \n%%barnumbers 1
-			C: `M: ${this.author}`, //Author
+			T: `${firstLetterCap(this.title)}`, //Title --- shot bars:    \n%%barnumbers 1
+			C: `Musik: ${this.author}`, //Author
 			S: `${new Date().getFullYear()}, Khage`, // copyright
 			M: ocjeneOptions.timeSignature.currSignature.join("/"), //Taktart
 			L: `1/${ocjeneOptions.division}`, // kleinster Notenwert
@@ -985,7 +987,7 @@ let failSafe = 10;
 function ocjeneGenerate() {
 	console.clear();
 	btnColor("idBtn_ocjeneGenerate", null);
-	ocjeneSong.title = randomObject(netsaonaOptions.data.Random);
+	ocjeneSong.title = randomObject(netsaonaOptions.data.RandomWord);
 	ocjeneSong.author = randomObject(netsaonaOptions.data.Name);
 	ocjeneSong.noteData = [];
 	ocjeneSong.currentSongLength = 0;
@@ -1037,29 +1039,12 @@ function ocjeneCleanAfterGeneration() {
 	for (let b = 0; b < bars.length; b++) {
 		const bar = bars[b];
 		for (let i = 0; i < bar.length; i++) {
+			let flag_untouched = true;
 			const notePitch = bar[i][0].pitchIndex();
 			const isBaseKey = ocjeneNote.isBaseKey(notePitch);
 			const isFromKey = ocjeneOptions.definitions.keyAccidentals.some((acc) => acc == notePitch);
-			if (isFromKey && isBaseKey) {
-				bar[i][1] = "resolved";
-			} else if (isFromKey && !isBaseKey) {
-				bar[i][1] = "shift";
-			}
-			// if (bar[i][0].splitIndex != null) {
-			// 	if (i == 0) bar[i][1] = bars[b - 1][i - 1][1];
-			// 	bar[i][1] = bar[i - 1][1];
-			// 	continue;
-			// }
 
-      
-      
-      //slured notes not correct"
-
-			
-      
-      
-      
-      for (let prevIndex = i - 1; prevIndex >= 0; prevIndex--) {
+			for (let prevIndex = i - 1; prevIndex >= 0; prevIndex--) {
 				const noteBase = ocjeneNote.getBaseKey(notePitch);
 				const prevPitch = bar[prevIndex][0].pitchIndex();
 				const prevBase = ocjeneNote.getBaseKey(prevPitch);
@@ -1067,26 +1052,35 @@ function ocjeneCleanAfterGeneration() {
 
 				// same - Base         -- do nothing if its null, set to null if it is resolved
 				if (notePitch == prevPitch && isBaseKey) {
-					bar[i][1] = null;
+					if (isFromKey) flag_untouched = false;
 					break;
 				}
 				// same - Accidential   -- shift to avoid accidential and keep shifting --> depending on the current key
 				if (notePitch == prevPitch && !isBaseKey) {
-					if (bar[prevIndex][1] == null) bar[i][1] = "shift";
-					if (bar[prevIndex][1] == "shift") bar[i][1] = null;
+					if (isFromKey) {
+						bar[i][1] = "shift";
+						flag_untouched = false;
+					} else {
+						if (bar[prevIndex][1] == null) bar[i][1] = "shift";
+					}
 					break;
 				}
 				// different - Base       -- resolve after accidential and keep shifting
 				if (notePitch != prevPitch && isBaseKey) {
+					if (isFromKey) flag_untouched = false;
 					bar[i][1] = "resolved";
 					break;
 				}
 				// different - Accidential -- do nothing
 				if (notePitch != prevPitch && !isBaseKey) {
-					// bar[i][1] = null;
+					if (isFromKey) {
+						bar[i][1] = "shift";
+						flag_untouched = false;
+					}
 					break;
 				}
 			}
+			if (flag_untouched && isFromKey) bar[i][1] = isBaseKey ? "resolved" : "shift";
 		}
 	}
 	for (let bar of bars) {
@@ -1097,7 +1091,7 @@ function ocjeneCleanAfterGeneration() {
 			bar[i][0].translatePitch();
 		}
 	}
-	console.log(bars);
+	// console.log(bars);
 }
 
 function ocjeneCreateNote(arr, type) {
@@ -1176,7 +1170,7 @@ function clear_cl_Ocjene(preset = null) {
 	dbIDStyle("idCanv_ocjeneSheet").backgroundColor = "#FFFFF3";
 	dbIDStyle("idCanv_ocjeneSheet").color = "#000000";
 
-	ocjeneOptions.firstPitchIterations.val = preset === null ? ocjeneOptions.firstPitchIterations.valOrig : ocjeneSettings.get("firstPitchIterations");
+	ocjeneOptions.variables.firstPitchIterations.val = preset === null ? ocjeneOptions.variables.firstPitchIterations.valOrig : ocjeneSettings.get("firstPitchIterations");
 
 	ocjeneOptions.tempo.val = preset === null ? ocjeneOptions.tempo.valOrig : ocjeneSettings.get("tempo");
 	resetInput("idVin_ocjeneTempo", ocjeneOptions.tempo.val, {
@@ -1285,7 +1279,7 @@ function clear_cl_Ocjene(preset = null) {
 	dbID("idCb_ocjeneBarOverflowStop").checked = ocjeneOptions.barOverflowStop.state;
 
 	ocjeneOptions.limitRange.state = preset === null ? ocjeneOptions.limitRange.stateOrig : ocjeneSettings.get("limitRange");
-	ocjeneOptions.rangeOffset.val = preset === null ? ocjeneOptions.rangeOffset.valOrig : ocjeneSettings.get("rangeOffset");
+	ocjeneOptions.variables.rangeOffset.val = preset === null ? ocjeneOptions.variables.rangeOffset.valOrig : ocjeneSettings.get("rangeOffset");
 	dbID("idCb_ocjeneLimitRange").checked = ocjeneOptions.limitRange.state;
 
 	ocjeneOptions.showText.state = preset === null ? ocjeneOptions.showText.stateOrig : ocjeneSettings.get("showText");
@@ -1500,16 +1494,6 @@ const ocjeneSettings = {
 			if (ocjeneSettings.level == 1) return false;
 			if (ocjeneSettings.level == 2) return false;
 		},
-		get limitRange() {
-			if (ocjeneSettings.level == 0) return true;
-			if (ocjeneSettings.level == 1) return true;
-			if (ocjeneSettings.level == 2) return false;
-		},
-		get rangeOffset() {
-			if (ocjeneSettings.level == 0) return 8;
-			if (ocjeneSettings.level == 1) return 10;
-			if (ocjeneSettings.level == 2) return 24;
-		},
 		get dotted() {
 			if (ocjeneSettings.level == 0) return 0;
 			if (ocjeneSettings.level == 1) return 15;
@@ -1524,6 +1508,17 @@ const ocjeneSettings = {
 			if (ocjeneSettings.level == 0) return 0;
 			if (ocjeneSettings.level == 1) return 15;
 			if (ocjeneSettings.level == 2) return 30;
+		},
+		//variables
+		get limitRange() {
+			if (ocjeneSettings.level == 0) return true;
+			if (ocjeneSettings.level == 1) return true;
+			if (ocjeneSettings.level == 2) return false;
+		},
+		get rangeOffset() {
+			if (ocjeneSettings.level == 0) return 8;
+			if (ocjeneSettings.level == 1) return 10;
+			if (ocjeneSettings.level == 2) return 24;
 		},
 	},
 };
