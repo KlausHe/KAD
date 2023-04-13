@@ -24,13 +24,13 @@ const contentLayout = {
 		});
 		return list;
 	},
-	AccountSettingsA: ["cl_userAcc"],
-	AccountSettingsB: ["cl_userAcc"],
+	AccountSettingsA: ["cl_UserAcc"],
+	AccountSettingsB: ["cl_UserAcc"],
 	contentList: [],
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Ocjene" : "Universe",
+	defaultPage: globalValues.hostDebug ? "Tools" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -88,13 +88,8 @@ function layoutResizeGrid() {
 	}
 }
 
-function layoutNavClick(layoutName = contentLayout.prevNavContent) {
-	const scrollOptions = {
-		top: 0,
-		behavior: "smooth",
-	};
-	document.body.scrollTo(scrollOptions); // For Safari
-	document.documentElement.scrollTo(scrollOptions); // For Safari
+function layoutNavClick(layoutName) {
+	//  = contentLayout.prevNavContent
 
 	if ([...Object.keys(contentLayout.navContent)].includes(layoutName)) {
 		if (layoutName === "Universe") {
@@ -122,6 +117,12 @@ function layoutNavClick(layoutName = contentLayout.prevNavContent) {
 			dbID(`idDiv_navBar_${obj}`).classList.remove("navbarActive");
 		}
 	}
+	const scrollOptions = {
+		top: 0,
+		behavior: "smooth",
+	};
+	document.body.scrollTo(scrollOptions); // For Safari
+	document.documentElement.scrollTo(scrollOptions); // For Safari
 }
 
 function layoutNavTitle() {
@@ -165,21 +166,19 @@ function layoutCreateContentList(layoutName) {
 }
 
 function layoutCreateGridLayout(layoutName) {
-	// fill list with data
-	let rowLength = getCssRoot("gridRowLength", true);
-	const widthIgnore = layoutName.includes("cl_"); // fullscreen-subgrid
-	let gridArray = [];
 	contentLayout.contentList = layoutCreateContentList(layoutName);
+	// fill list with data
+	const rowLength = layoutName.includes("cl_") ? 1 : getCssRoot("gridRowLength", true);
+	let gridArray = [];
 	if (rowLength === 1) {
 		for (const name of contentLayout.contentList) {
 			gridArray.push(name);
 		}
 	} else {
 		for (const name of contentLayout.contentList) {
-			// let contWidth = contentGrid[name].width ?? 1; // this is the same as below, the "nullish" operator.
 			let contWidth = contentGrid[name].hasOwnProperty("width") ? contentGrid[name].width : 1;
-			if (widthIgnore || contWidth === 0 || contWidth > rowLength) contWidth = rowLength;
-			const contHeight = contentGrid[name].hasOwnProperty("height") ? contentGrid[name].height : 1;
+			if (contWidth > rowLength) contWidth = rowLength;
+			let contHeight = contentGrid[name].hasOwnProperty("height") ? contentGrid[name].height : 1;
 			let notPlaced = true;
 			let indexRow = 0;
 
@@ -213,9 +212,7 @@ function layoutCreateGridLayout(layoutName) {
 						} //end Insertion
 					} //end ELSE "first spot is not taken"
 
-					if (!notPlaced) {
-						break;
-					}
+					if (!notPlaced) break;
 				} // end main FOR (r)
 				indexRow++;
 				//safety
@@ -227,45 +224,31 @@ function layoutCreateGridLayout(layoutName) {
 		} // end Grid-Element
 	} //end of "ELSE"
 
-	//fill grid with blank spots "."
-	const fillUp = gridArray.length % rowLength;
-	if (fillUp !== 0) {
-		for (let i = 0; i < rowLength - fillUp; i++) {
-			gridArray.push(".");
-		}
-	}
+	const gridEnd = gridArray.length % rowLength;
+	const addedLength = gridEnd == 0 ? 0 : rowLength - gridEnd;
+	const iteratinoLength = gridArray.length + addedLength;
+
 	// turn grid array to String
-	let gridString = '"';
-	for (let i = 0; i < gridArray.length; i++) {
-		if (gridArray[i] === undefined) {
-			gridString += " . ";
-		} else {
-			gridString += gridArray[i].replace("cl_", "cl_grid_") + " ";
-		}
-		if ((i + 1) % rowLength === 0 && i != gridArray.length - 1) {
+	let gridString = "";
+	for (let i = 0; i < iteratinoLength; i++) {
+		if (i % rowLength === 0) {
 			gridString += '" "';
-		} else if ((i + 1) % rowLength === 0 && i === gridArray.length - 1) {
-			gridString += '"';
 		}
+		gridString += gridArray[i] === undefined ? ". " : `${gridArray[i]} `;
 	}
+	gridString += '"';
+	gridString = gridString.slice(2); // remove fist '" ' from the string
 	dbIDStyle("id_contentGrid").gridTemplateAreas = gridString;
 }
 
 function layoutCreateSubgrid() {
 	for (const gridKey in contentGrid) {
-		dbCLStyle(gridKey).gridArea = gridKey.replace("_", "_grid_");
 		dbCL(gridKey).classList.add("cl_contentSubGrid");
-		//create Subgrid
-		let gridArr = contentGrid[gridKey].subgrid;
-		for (let j = 0; j < gridArr.length; j++) {
-			const keyName = gridArr[j][0];
-			dbCLStyle(keyName).gridArea = keyName.replace("cl_", "");
-			if (gridArr[j][1]) {
-				dbCLStyle(keyName).justifySelf = gridArr[j][1];
-			}
-			if (gridArr[j][2]) {
-				dbCLStyle(keyName).alignSelf = gridArr[j][2];
-			}
+		dbCLStyle(gridKey).gridArea = gridKey;
+		for (const content of contentGrid[gridKey].subgrid) {
+			dbCLStyle(content[0]).gridArea = content[0];
+			if (content[1]) dbCLStyle(content[0]).justifySelf = content[1];
+			if (content[2]) dbCLStyle(content[0]).alignSelf = content[2];
 		}
 
 		// CERATE Title-bar

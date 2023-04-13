@@ -412,25 +412,21 @@ input[imgBtn="subgrid"] {
 	width: var(--imgSize);
 }
 
-/* square */
 [uiSize~="size1"] {
 	width: var(--UIWidth1);
 }
 [uiSize~="size2"] {
 	width: var(--UIWidth2);
 }
-/* small */
 [uiSize~="size3"] {
 	width: var(--UIWidth3);
 }
-/* medium */
 [uiSize~="size4"] {
 	width: var(--UIWidth4);
 }
 [uiSize~="size5"] {
 	width: var(--UIWidth5);
 }
-/* norm */
 [uiSize~="size6"] {
 	width: var(--UIWidth6);
 }
@@ -446,16 +442,35 @@ input[imgBtn="subgrid"] {
 [uiSize~="size10"] {
 	width: var(--UIWidth10);
 }
-/* wide */
 [uiSize~="size11"] {
 	width: var(--UIWidth11);
 }
 [uiSize~="size12"] {
 	width: var(--UIWidth12);
 }
-/* large */
 [uiSize~="size13"] {
 	width: var(--UIWidth13);
+}
+[uiSize~="size14"] {
+	width: var(--UIWidth14);
+}
+[uiSize~="size15"] {
+	width: var(--UIWidth15);
+}
+[uiSize~="size16"] {
+	width: var(--UIWidth16);
+}
+[uiSize~="size17"] {
+	width: var(--UIWidth17);
+}
+[uiSize~="size18"] {
+	width: var(--UIWidth18);
+}
+[uiSize~="size19"] {
+	width: var(--UIWidth19);
+}
+[uiSize~="size20"] {
+	width: var(--UIWidth20);
 }
 
 [uiSize~="height2"] {

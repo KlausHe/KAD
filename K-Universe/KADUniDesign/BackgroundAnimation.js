@@ -10,7 +10,7 @@ const bgaOptions = {
 };
 
 //new: Stopwatch!
-function clear_cl_backgroundAnimation() {
+function clear_cl_BackgroundAnimation() {
 	bgaOptions.animations = [
 		new Clock(),
 		new SegmentClock(),
@@ -103,7 +103,7 @@ const caBA = new p5((c) => {
 		c.canv.id("canvasBackAnimation");
 		c.canv.parent("#idCanv_backgroundAnimation");
 		c.colorMode(c.HSL);
-		clear_cl_backgroundAnimation();
+		clear_cl_BackgroundAnimation();
 		bgaClearBackground();
 		c.noLoop();
 		bgaOptions.maxRadius = Math.min(window.innerWidth, window.innerHeight) / 3;

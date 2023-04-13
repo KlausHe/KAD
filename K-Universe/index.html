@@ -127,7 +127,7 @@
 
   </nav>
   <section class="cl_Loading">KAD-UNIVERSE<br>LOADING...</section>
-  <div class="cl_backgroundAnimation" id="idCanv_backgroundAnimation"></div>
+  <div class="cl_BackgroundAnimation" id="idCanv_backgroundAnimation"></div>
   <main id="id_contentGrid">
     <section class="cl_Howa" style="display:none;">
       <div class="cl_subGrid_Howa cl_subGrid">
@@ -248,7 +248,7 @@
     <section class="cl_PostillonTicker" style="display:none;">
       <div class="cl_subGrid_PostillonTicker cl_subGrid">
         <div class="cl_PostillionNumber">
-          <button type="button" id="idLbl_newsTickerNumber"  uiRadius="left">
+          <button type="button" id="idLbl_newsTickerNumber" uiRadius="left">
           </button><button type="button" uiSize="size1" uiRadius="right" onclick="postillonTickerNext()">
             <img src="Data/Images/SVG/right.svg"></img>
           </button>
@@ -618,10 +618,10 @@
           </datalist>
         </div>
         <div class="cl_KounselorOutputA">
-          <label class="cl_outputLbl" id="idLbl_kounselorOutputA">guter Kontrast</label>
+          <label class="cl_outputLbl" uiSize="size16" id="idLbl_kounselorOutputA">guter Kontrast</label>
         </div>
         <div class="cl_KounselorOutputB">
-          <label class="cl_outputLbl" id="idLbl_kounselorOutputB">schlechter Kontrast</label>
+          <label class="cl_outputLbl" uiSize="size16" id="idLbl_kounselorOutputB">schlechter Kontrast</label>
         </div>
       </div>
     </section>
@@ -652,15 +652,15 @@
     </section>
     <section class="cl_Botanicals" style="display:none;">
       <div class="cl_subGrid_Botanicals cl_subGrid">
-        <div class="cl_botanicalsVinPlant">
+        <div class="cl_BotanicalsVinPlant">
           <select uiSize="size10" id="idSel_botanicalsPlant" onchange="botanicalsPlantChange(this)"
             onfocus="botanicalsPopulateOptions(this)"></select>
         </div>
-        <div class="cl_botanicalsVinDiscomfort">
+        <div class="cl_BotanicalsVinDiscomfort">
           <select uiSize="size10" id="idSel_botanicalsDiscomfort" onchange="botanicalsDiscomfortChange(this)"
             onfocus="botanicalsPopulateOptions(this)"></select>
         </div>
-        <div class="cl_botanicalsTabResultPlant">
+        <div class="cl_BotanicalsTabResultPlant">
           <table id="idTab_botanicalsResultPlant">
             <thead>
               <tr>
@@ -672,7 +672,7 @@
             </tbody>
           </table>
         </div>
-        <div class="cl_botanicalsTabResultDiscomfort">
+        <div class="cl_BotanicalsTabResultDiscomfort">
           <table id="idTab_botanicalsResultDiscomfort">
             <thead>
               <tr>
@@ -687,34 +687,28 @@
     </section>
     <section class="cl_PlatLesen" style="display:none;">
       <div class="cl_subGrid_PlatLesen cl_subGrid">
-        <div class="cl_platLesenNumInput">
+        <div class="cl_PlatLesenNumInput">
           <label class="cl_info" uiRadius="left">Nummernschild</label><input type="text" id="idVin_platLesenNum"
             list="idDlist_platLesenNum" onfocus="platLesenPopulateOptions(this)" onchange="platLesenInput(this)"
             data-type="NUM" uiSize="size6" uiRadius="right"></input>
           <datalist id="idDlist_platLesenNum">
           </datalist>
-          <!-- <select id="idSel_platLesenNum" uiSize="size12" onchange="platLesenNum(this)"
-            onfocus="platLesenPopulateOptions()"></select> -->
         </div>
-        <div class="cl_platLesenRegInput">
+        <div class="cl_PlatLesenRegInput">
           <label class="cl_info" uiRadius="left">Region</label><input type="text" id="idVin_platLesenReg"
             list="idDlist_platLesenReg" onfocus="platLesenPopulateOptions(this)" onchange="platLesenInput(this)"
             data-type="REG" uiSize="size6" uiRadius="right"></input>
           <datalist id="idDlist_platLesenReg">
           </datalist>
-
-
-          <!-- <select id="idSel_platLesenReg" uiSize="size12" onchange="platLesenReg(this)"
-            onfocus="platLesenPopulateOptions()"></select> -->
         </div>
-        <div class="cl_platLesenResult">
+        <div class="cl_PlatLesenResult">
           <label class="cl_outputLbl" id="idLbl_platLesenResult">Region</label>
         </div>
       </div>
     </section>
     <section class="cl_Iomlaid" style="display:none;">
       <div class="cl_subGrid_Iomlaid cl_subGrid">
-        <div class="cl_iomlaidVinCur" uiWrap="nowrap">
+        <div class="cl_IomlaidVinCur" uiWrap="nowrap">
           <input type="number" id="idVin_IomlaidCur" uiSize="size6" uiRadius="left" min="0" step="0.01"
             oninput="iomlaidVinSet(this)"></input><button type="button" uiSize="size1" uiRadius="none"
             onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
@@ -724,10 +718,10 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_iomlaidSelCur">
+        <div class="cl_IomlaidSelCur">
           <select name="idSel_IomlaidCur" id="idSel_IomlaidCur" onchange="iomlaidSelSet(this)"></select>
         </div>
-        <div class="cl_iomlaidTab clDiv_overviewTablesAuto">
+        <div class="cl_IomlaidTab clDiv_overviewTablesAuto">
           <table id="idTab_Iomlaid">
             <thead id="idTabHeader_Iomlaid" class="scrollTable">
               <tr>
@@ -751,7 +745,7 @@
     </section>
     <section class="cl_SpeechTranslate" style="display:none;">
       <div class="cl_subGrid_SpeechTranslate cl_subGrid">
-        <div class="cl_speechLangSelect" uiWrap="nowrap">
+        <div class="cl_SpeechLangSelect" uiWrap="nowrap">
           <select id="idSel_translateSelectorFrom" uiSize="size6" uiRadius="left"
             onchange="speechTranslatePopulateSpeech()"></select><label class="cl_info" uiSize="size3"
             uiRadius="none">from</label><button type="button" uiSize="size1" uiRadius="none"
@@ -760,12 +754,12 @@
             id="idSel_translateSelectorTo" uiSize="size6" uiRadius="none"
             onchange="speechTranslatePopulateSpeech()"></select>
         </div>
-        <div class="cl_speechVoiceSelect" uiWrap="nowrap">
+        <div class="cl_SpeechVoiceSelect" uiWrap="nowrap">
           <select id="idSel_speechSelectorFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info"
             uiSize="size4" uiRadius="none">Voices</label><select id="idSel_speechSelectorTo" uiSize="size6"
             uiRadius="right"></select>
         </div>
-        <div class="cl_speechOptions" uiWrap="nowrap">
+        <div class="cl_SpeechOptions" uiWrap="nowrap">
           <button type="button" uiSize="size1" uiType="transparent"
             onclick="speechSpeakOnly(idArea_speechFromText, idSel_speechSelectorFrom)">
             <img class="img_OptRadio" src="Data/Images/SVG/radio.svg"
@@ -780,7 +774,7 @@
               style="filter:invert(var(--invBackground));"></img>
           </button>
         </div>
-        <div class="cl_speechOutputArea" uiWrap="nowrap">
+        <div class="cl_SpeechOutputArea" uiWrap="nowrap">
           <textarea id="idArea_speechFromText"></textarea>
           <textarea id="idArea_speechToText" onclick="copyToClipboard(value, id)" readonly></textarea>
         </div>
@@ -1185,7 +1179,7 @@
     </section>
     <section class="cl_Quickmath" style="display:none;">
       <div class="cl_subGrid_Quickmath cl_subGrid">
-        <div class="cl_quickmathInput" uiWrap="nowrap">
+        <div class="cl_QuickmathInput" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Faktor
           </label><input type="number" id="idVin_quickkmathVal" step="any" uiRadius="none"
             oninput="calcQuickmath()"></input><button type="button" uiSize="size1" uiRadius="none"
@@ -1197,7 +1191,7 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_quickmathStart" uiWrap="nowrap">
+        <div class="cl_QuickmathStart" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Untere Grenze
           </label><input type="number" id="idVin_quickkmathStart" step="any" uiRadius="none"
             oninput="calcQuickmath()"></input><button type="button" uiSize="size1" uiRadius="none"
@@ -1209,7 +1203,7 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_quickmathEnd" uiWrap="nowrap">
+        <div class="cl_QuickmathEnd" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Obere Grenze
           </label><input type="number" id="idVin_quickkmathEnd" step="any" uiRadius="none"
             oninput="calcQuickmath()"></input><button type="button" uiSize="size1" uiRadius="none"
@@ -1221,7 +1215,7 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_quickmathListMultiply">
+        <div class="cl_QuickmathListMultiply">
           <table id="idTab_quickmathMultiply">
             <thead id="idTabHeader_quickmathMultiply">
               <tr>
@@ -1232,7 +1226,7 @@
             </tbody>
           </table>
         </div>
-        <div class="cl_quickmathListDivide">
+        <div class="cl_QuickmathListDivide">
           <table id="idTab_quickmathDivide">
             <thead id="idTabHeader_quickmathDivide">
               <tr>
@@ -1243,7 +1237,7 @@
             </tbody>
           </table>
         </div>
-        <div class="cl_quickmathListPow">
+        <div class="cl_QuickmathListPow">
           <table id="idTab_quickmathPow">
             <thead id="idTabHeader_quickmathPow">
               <tr>
@@ -1258,7 +1252,7 @@
     </section>
     <section class="cl_Ranje" style="display:none;">
       <div class="cl_subGrid_Ranje cl_subGrid">
-        <div class="cl_ranjeInput" uiWrap="nowrap">
+        <div class="cl_RanjeInput" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Gesamtzahl
           </label><input type="number" id="idVin_ranjeVal" min="1" step="1" uiRadius="none"
             oninput="ranjeCalc()"></input><button type="button" uiSize="size1" uiRadius="none"
@@ -1270,7 +1264,7 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_ranjeList">
+        <div class="cl_RanjeList">
           <table id="idTab_ranjeList">
             <thead id="idTabHeader_ranjeList">
             </thead>
@@ -1282,10 +1276,10 @@
     </section>
     <section class="cl_Niska" style="display:none;">
       <div class="cl_subGrid_Niska cl_subGrid">
-        <div class="cl_niskaHeaderInput">
+        <div class="cl_NiskaHeaderInput">
           <label class="cl_info" uiSize="size12" uiAlign="center">Handeingabe</label>
         </div>
-        <div class="cl_niskaSize" uiWrap="nowrap">
+        <div class="cl_NiskaSize" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Gewindegröße
           </label><input type="number" id="idVin_niskaSize" min="1" step="1" uiRadius="none"
             oninput="niskaCalc()"></input><button type="button" uiSize="size1" uiRadius="none"
@@ -1297,7 +1291,7 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_niskaPitch" uiWrap="nowrap">
+        <div class="cl_NiskaPitch" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Steigung
           </label><input type="number" id="idVin_niskaPitch" min="1" step="1" uiRadius="none"
             oninput="niskaCalc()"></input><button type="button" uiSize="size1" uiRadius="none"
@@ -1309,24 +1303,24 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_niskaHeaderSelect">
+        <div class="cl_NiskaHeaderSelect">
           <label class="cl_info" uiSize="size12" uiAlign="center">Normgewinde</label>
         </div>
-        <div class="cl_niskaSelect">
+        <div class="cl_NiskaSelect">
           <label class="cl_info" id="idLbl_niskaRegelInfo" uiSize="size6" uiRadius="left">
           </label><select id="idSel_niskaSelect" onchange="niskaCalc()" uiRadius="right" uiSize="size6"></select>
         </div>
-        <div class="cl_niskaStrengthClassA">
+        <div class="cl_NiskaStrengthClassA">
           <label class="cl_info" id="idLbl_niskaStrengthClassA" uiSize="size6" uiRadius="left">Festigkeitsklasse
           </label><select id="idSel_niskaStrengthClassA" onchange="niskaCalc()" uiRadius="right"
             uiSize="size6"></select>
         </div>
-        <div class="cl_niskaStrengthClassB">
+        <div class="cl_NiskaStrengthClassB">
           <label class="cl_info" id="idLbl_niskaStrengthClassB" uiSize="size6" uiRadius="left">Festigkeitsklasse
           </label><select id="idSel_niskaStrengthClassB" onchange="niskaCalc()" uiRadius="right"
             uiSize="size6"></select>
         </div>
-        <div class="cl_niskaList">
+        <div class="cl_NiskaList">
           <table id="idTab_niskaList">
             <thead id="idTabHeader_niskaList">
             </thead>
@@ -2087,15 +2081,12 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_OcjeneInstrumentHeader">
-          <label class="cl_info" uiSize="size12" uiAlign="center">Instrument</label>
+        <div class="cl_OcjeneMelodieHeader">
+          <label class="cl_info" uiSize="size12" uiAlign="center">Melodie</label>
         </div>
         <div class="cl_OcjeneInstrument">
           <label class="cl_info" uiRadius="left">Instrument</label><select id="idSel_ocjeneInstrument" uiSize="size6"
             uiRadius="right" onChange="ocjeneInstrument(this)"></select>
-        </div>
-        <div class="cl_OcjeneMelodieHeader">
-          <label class="cl_info" uiSize="size12" uiAlign="center">Melodie</label>
         </div>
         <div class="cl_OcjeneInterval">
           <label class="cl_info" uiSize="size6" uiRadius="left">max. Interval
@@ -2122,21 +2113,21 @@
     </section>
     <section class="cl_Beatmachine" style="display:none;">
       <div class="cl_subGrid_Beatmachine cl_subGrid">
-        <div class="cl_beatmachineOptionsA">
+        <div class="cl_BeatmachineOptionsA">
           <button type="button" id="idBtn_beatmachineLoad" onclick="beatmachineGetSounds(this)">Load Sounds</button>
           <button type="button" id="idBtn_transportPlayPause" onclick="beatmachineTransport()"
             style="display:none;">Play</button>
           <button type="button" id="idBtn_transportClear" onclick="clear_cl_Beatmachine(this)">Clear</button>
         </div>
-        <div class="cl_beatmachineOptionsB">
+        <div class="cl_BeatmachineOptionsB">
           <button type="button" id="idBtn_transportCreateBeat" onclick="beatmachineCreateBeat(this)">Create
             Beat</button>
         </div>
-        <div class="cl_beatmachineOptionsC">
+        <div class="cl_BeatmachineOptionsC">
           <button type="button" id="idBtn_transporteExpand" onclick="beatmachineExpand(this)">Expand</button>
           <button type="button" id="idBtn_transporteMute" onclick="muteAll()">Mute All</button>
         </div>
-        <div class="cl_beatmachineOptionsD">
+        <div class="cl_BeatmachineOptionsD">
           <input type="number" id="idVin_beatmachine_BPM" min="50" max="200" step="1" uiRadius="left"
             oninput="beatmachineBPMChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
             onclick="utilsVinChange(this, 0)">
@@ -2147,7 +2138,7 @@
             <img class="img_oAdd"></img>
           </button>
         </div>
-        <div class="cl_beatmachineTracks">
+        <div class="cl_BeatmachineTracks">
         </div>
       </div>
     </section>
@@ -2220,38 +2211,38 @@
     </section>
     <section class="cl_ColorSettings" style="display:none;">
       <div class="cl_subGrid_ColorSettings cl_subGrid">
-        <div class="cl_colourSettingsHeaderLight">
+        <div class="cl_ColourSettingsHeaderLight">
           <label class="cl_info" uiSize="size7" uiAlign="center">Light-Mode</label>
         </div>
-        <div class="cl_colourSettingsHeaderDark">
+        <div class="cl_ColourSettingsHeaderDark">
           <label class="cl_info" uiSize="size7" uiAlign="center">Dark-Mode</label>
         </div>
-        <div class="cl_colourSettings_light_0">
+        <div class="cl_ColourSettings_light_0">
           <label class="cl_info" id="idLbl_colorSetting_light_Navbar" uiRadius="left">
           </label><input id="idVin_colorSetting_light_Navbar" type="color" data-theme="light" data-name="Navbar"
             uiRadius="right" uiSize="size1" onchange="colorChange(this)"></input>
         </div>
-        <div class="cl_colourSettings_light_1">
+        <div class="cl_ColourSettings_light_1">
           <label class="cl_info" id="idLbl_colorSetting_light_Gridtitle" uiRadius="left">
           </label><input id="idVin_colorSetting_light_Gridtitle" type="color" data-theme="light" data-name="Gridtitle"
             uiRadius="right" uiSize="size1" onchange="colorChange(this)"></input>
         </div>
-        <div class="cl_colourSettings_light_2">
+        <div class="cl_ColourSettings_light_2">
           <label class="cl_info" id="idLbl_colorSetting_light_Background" uiRadius="left">
           </label><input id="idVin_colorSetting_light_Background" type="color" data-theme="light" data-name="Background"
             uiRadius="right" uiSize="size1" onchange="colorChange(this)"></input>
         </div>
-        <div class="cl_colourSettings_dark_0">
+        <div class="cl_ColourSettings_dark_0">
           <label class="cl_info" id="idLbl_colorSetting_dark_Navbar" uiRadius="left">
           </label><input id="idVin_colorSetting_dark_Navbar" type="color" data-theme="dark" data-name="Navbar"
             uiRadius="right" uiSize="size1" onchange="colorChange(this)"></input>
         </div>
-        <div class="cl_colourSettings_dark_1">
+        <div class="cl_ColourSettings_dark_1">
           <label class="cl_info" id="idLbl_colorSetting_dark_Gridtitle" uiRadius="left">
           </label><input id="idVin_colorSetting_dark_Gridtitle" type="color" data-theme="dark" data-name="Gridtitle"
             uiRadius="right" uiSize="size1" onchange="colorChange(this)"></input>
         </div>
-        <div class="cl_colourSettings_dark_2">
+        <div class="cl_ColourSettings_dark_2">
           <label class="cl_info" id="idLbl_colorSetting_dark_Background" uiRadius="left">
           </label><input id="idVin_colorSetting_dark_Background" type="color" data-theme="dark" data-name="Background"
             uiRadius="right" uiSize="size1" onchange="colorChange(this)"></input>
@@ -2290,29 +2281,29 @@
         </div>
       </div>
     </section>
-    <section class="cl_userAcc" style="display:none;">
+    <section class="cl_UserAcc" style="display:none;">
       <div class="cl_subGrid_userAcc cl_subGrid">
-        <div class="cl_userAcc_infos" uiFlex="vertical">
+        <div class="cl_UserAcc_infos" uiFlex="vertical">
         </div>
-        <div class="cl_userAcc_mail">
+        <div class="cl_UserAcc_mail">
           <label class="cl_info" uiRadius="left">Mail
           </label><input type="email" id="idVin_userAcc_mail" uiRadius="right" uiSize="size7" placeholder="Mail"
             required>
         </div>
-        <div class="cl_userAcc_pass">
+        <div class="cl_UserAcc_pass">
           <label class="cl_info" uiRadius="left">Passwort
           </label><input type="password" id="idVin_userAcc_pass" uiRadius="right" uiSize="size7" placeholder="Passwort"
             required>
         </div>
-        <div class="cl_userAcc_submit">
+        <div class="cl_UserAcc_submit">
           <button type="button" id="idBtn_userAcc_submit" onclick="submitUser()"></button>
           <button type="button" onclick="cancelAccount()">Cancel</button>
         </div>
-        <div class="cl_userAcc_check">
+        <div class="cl_UserAcc_check">
           <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_userAcc_check"></input>
           </label><label class="cl_info" for="idCb_userAcc_check" uiRadius="right">Keep me logged in!</label>
         </div>
-        <div class="cl_userAcc_alert">
+        <div class="cl_UserAcc_alert">
           <label id="idLbl_userAcc_alert"></label>
         </div>
       </div>

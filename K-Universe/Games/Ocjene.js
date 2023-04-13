@@ -10,7 +10,7 @@ const ocjeneOptions = {
 		quaternote: 144,
 		noteArrays: {
 			base: [576, 288, 144, 72, 36, 18],
-			triplet: [null, 192, 96, 48, 24, 12],
+			triplet: [null, 192, 96, 48, 24, 12], //192
 			dotted: [null, 432, 216, 108, 54, 27],
 		},
 		get min() {
@@ -24,7 +24,7 @@ const ocjeneOptions = {
 		val: 0,
 		valOrig: 0,
 		min: 0,
-		max: 50,
+		max: 20,
 	},
 	triplet: {
 		state: false,
@@ -33,7 +33,7 @@ const ocjeneOptions = {
 		val: 0,
 		valOrig: 0,
 		min: 0,
-		max: 50,
+		max: 20,
 	},
 	rests: {
 		val: 0,
@@ -818,6 +818,9 @@ const ocjeneSong = {
 
 class ocjeneNote {
 	constructor(type, duration, timeStamp, tripletIndex, splitIndex = null, splitMidiPitch = null) {
+		// console.log(ocjeneSong.remainingSongLength, ocjeneSong.remainingBarLength, duration, type);
+
+		if (duration < ocjeneOptions.notenwerte.min) console.log("duration", duration, ocjeneOptions.notenwerte.min);
 		this.abcJSPitch = null;
 		this.midiPitch = null;
 		this.resolved = false;
@@ -828,7 +831,6 @@ class ocjeneNote {
 		this.splitIndex = splitIndex;
 		this.spaceStembar = false;
 		this.slur = null;
-		this.pitchIndex();
 		this.addToSongData();
 		this.createPitch(splitMidiPitch);
 		this.checkSplit();
@@ -859,6 +861,7 @@ class ocjeneNote {
 			const tsEnd = this.timeStamp + this.duration;
 			const newDuration = barStamp - this.timeStamp;
 			const addedNoteDuration = tsEnd - barStamp;
+			// console.log("split");
 			this.split(newDuration, addedNoteDuration);
 			return;
 		}
@@ -985,7 +988,7 @@ class ocjeneNote {
 }
 let failSafe = 10;
 function ocjeneGenerate() {
-	console.clear();
+	// console.clear();
 	btnColor("idBtn_ocjeneGenerate", null);
 	ocjeneSong.title = randomObject(netsaonaOptions.data.RandomWord);
 	ocjeneSong.author = randomObject(netsaonaOptions.data.Name);
@@ -1005,17 +1008,12 @@ function ocjeneGenerate() {
 			let arr = ocjeneOptions.notenwerte.noteArrays.base.slice();
 			fail = ocjeneCreateNote(arr, "base");
 		}
-		if (fail.error) {
-			// console.log(fail);
+		if (fail != null) {
 			failSafeCurr--;
 			if (failSafeCurr <= 0) {
 				failSafe--;
-				if (failSafe <= 0) {
-					alert("FATAL ERROR!");
-					return;
-				}
+				console.log("impossible!!!", fail, ocjeneSong.currentSongLength, ocjeneSong.remainingSongLength);
 				ocjeneGenerate();
-				console.log("impossible!!!", ocjeneSong.remainingSongLength);
 				// alert("Taktart kann nicht mit gewählter Taktzahl und gewählten Notenlängen errreicht werden.");
 				return;
 			}
@@ -1027,6 +1025,35 @@ function ocjeneGenerate() {
 	failSafe = 10;
 }
 
+function ocjeneCreateNote(arr, type) {
+	let possibleNotes = [];
+	const min = ocjeneOptions.notenwerte.min;
+	let indices = [];
+	for (let i = 0; i <= min; i++) {
+		if (ocjeneOptions.notenwerte.selected[i]) indices.push(i);
+	}
+	for (let i of indices) {
+		if (type == "triplet" && (arr[i] == null || i == min)) continue;
+		if (type == "dotted" && (arr[i] == null || i == min)) continue;
+		possibleNotes.push(arr[i]);
+	}
+	let mult = type == "triplet" ? 3 : 1;
+	mult = type == "dotted" ? 2 : 1;
+
+	possibleNotes = possibleNotes.filter((n) => n * mult <= ocjeneSong.remainingSongLength);
+	if (ocjeneOptions.barOverflowStop.state) possibleNotes = possibleNotes.filter((n) => n * mult <= ocjeneSong.remainingBarLength);
+	if (possibleNotes.length == 0) return { type: type, l: ocjeneSong.remainingBarLength };
+	//more doubled 1/16 and 1/32
+	ocjeneIncreasePossibilities(type, possibleNotes);
+	const duration = randomObject(possibleNotes);
+	new ocjeneNote(type, duration, ocjeneSong.currentSongLength, 0);
+	if (type == "triplet") {
+		new ocjeneNote(type, duration, ocjeneSong.currentSongLength, 1);
+		new ocjeneNote(type, duration, ocjeneSong.currentSongLength, 2);
+	}
+	return null;
+}
+
 function ocjeneCleanAfterGeneration() {
 	if (ocjeneOptions.keyOnly.state) return;
 	let bars = [[]];
@@ -1035,7 +1062,6 @@ function ocjeneCleanAfterGeneration() {
 		if (bars[b] == undefined) bars[b] = [];
 		bars[b].push([n, null]);
 	}
-
 	for (let b = 0; b < bars.length; b++) {
 		const bar = bars[b];
 		for (let i = 0; i < bar.length; i++) {
@@ -1092,32 +1118,6 @@ function ocjeneCleanAfterGeneration() {
 		}
 	}
 	// console.log(bars);
-}
-
-function ocjeneCreateNote(arr, type) {
-	let possibleNotes = [];
-	for (let i = 0; i < ocjeneOptions.notenwerte.selected.length; i++) {
-		if (!ocjeneOptions.notenwerte.selected[i]) continue;
-		if (type == "triplet" && i < 3) continue;
-		if (type == "dotted" && i == 0) continue;
-		possibleNotes.push(arr[i]);
-	}
-	let mult = type == "triplet" ? 3 : 1;
-	mult = type == "dotted" ? 2 : 1;
-
-	possibleNotes = possibleNotes.filter((n) => n * mult <= ocjeneSong.remainingSongLength);
-	if (ocjeneOptions.barOverflowStop.state) possibleNotes = possibleNotes.filter((n) => n * mult <= ocjeneSong.remainingBarLength);
-	if (possibleNotes.length == 0) return { error: true, type: type, l: ocjeneSong.remainingBarLength };
-
-	//more doubled 1/16 and 1/32
-	ocjeneIncreasePossibilities(type, possibleNotes);
-	const duration = randomObject(possibleNotes);
-	new ocjeneNote(type, duration, ocjeneSong.currentSongLength, 0);
-	if (type == "triplet") {
-		new ocjeneNote(type, duration, ocjeneSong.currentSongLength, 1);
-		new ocjeneNote(type, duration, ocjeneSong.currentSongLength, 2);
-	}
-	return { error: false };
 }
 
 function ocjeneIncreasePossibilities(type, possibleNotes) {

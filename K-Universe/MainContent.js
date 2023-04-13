@@ -1,5 +1,5 @@
 const contentGrid = {
-	cl_userAcc: {
+	cl_UserAcc: {
 		userSelected: true,
 		userStoreDBName: "userAcc",
 		userStoreDBClear: function () {
@@ -22,12 +22,12 @@ const contentGrid = {
 		contentGroup: "AccountSettings",
 		name: "Account-Settings",
 		subgrid: [
-			["cl_userAcc_infos", "left"],
-			["cl_userAcc_mail", "left"],
-			["cl_userAcc_pass", "left"],
-			["cl_userAcc_submit", "left"],
-			["cl_userAcc_check", "left"],
-			["cl_userAcc_alert", "left"],
+			["cl_UserAcc_infos", "left"],
+			["cl_UserAcc_mail", "left"],
+			["cl_UserAcc_pass", "left"],
+			["cl_UserAcc_submit", "left"],
+			["cl_UserAcc_check", "left"],
+			["cl_UserAcc_alert", "left"],
 		],
 	},
 	cl_Howa: {
@@ -280,7 +280,7 @@ const contentGrid = {
 	cl_Kounselor: {
 		userSelected: true,
 		contentGroup: "Utility",
-		width: 2,
+		width: 1,
 		name: "Kounselor",
 		heritage: ["jiddisch", "Ratgeber"],
 		subgrid: [
@@ -324,10 +324,10 @@ const contentGrid = {
 			Daten: "https://www.tabelle.info/kraeuter.html",
 		},
 		subgrid: [
-			["cl_botanicalsVinPlant", "center"],
-			["cl_botanicalsVinDiscomfort", "center"],
-			["cl_botanicalsTabResultPlant", "center"],
-			["cl_botanicalsTabResultDiscomfort", "center"],
+			["cl_BotanicalsVinPlant", "center"],
+			["cl_BotanicalsVinDiscomfort", "center"],
+			["cl_BotanicalsTabResultPlant", "center"],
+			["cl_BotanicalsTabResultDiscomfort", "center"],
 		],
 	},
 	cl_PlatLesen: {
@@ -339,9 +339,9 @@ const contentGrid = {
 			Daten: "https://www.wbrnet.info/db/9964.html",
 		},
 		subgrid: [
-			["cl_platLesenNumInput", "center"],
-			["cl_platLesenRegInput", "center"],
-			["cl_platLesenResult", "center"],
+			["cl_PlatLesenNumInput", "center"],
+			["cl_PlatLesenRegInput", "center"],
+			["cl_PlatLesenResult", "center"],
 		],
 	},
 	cl_Iomlaid: {
@@ -353,9 +353,9 @@ const contentGrid = {
 			Daten: "https://exchangerate.host",
 		},
 		subgrid: [
-			["cl_iomlaidSelCur", "right"],
-			["cl_iomlaidVinCur", "left"],
-			["cl_iomlaidTab", "center"],
+			["cl_IomlaidSelCur", "right"],
+			["cl_IomlaidVinCur", "left"],
+			["cl_IomlaidTab", "center"],
 		],
 	},
 	cl_SpeechTranslate: {
@@ -364,10 +364,10 @@ const contentGrid = {
 		name: "Discipuli",
 		heritage: ["latein", "Student"],
 		subgrid: [
-			["cl_speechLangSelect", "center"],
-			["cl_speechVoiceSelect", "center"],
-			["cl_speechOptions", "center"],
-			["cl_speechOutputArea", "center"],
+			["cl_SpeechLangSelect", "center"],
+			["cl_SpeechVoiceSelect", "center"],
+			["cl_SpeechOptions", "center"],
+			["cl_SpeechOutputArea", "center"],
 		],
 	},
 	cl_Afinn: {
@@ -603,8 +603,8 @@ const contentGrid = {
 		name: "Ranje",
 		heritage: ["Haiti-Kreolisch", "anordnen"],
 		subgrid: [
-			["cl_ranjeInput", "center"],
-			["cl_ranjeList", "center"],
+			["cl_RanjeInput", "center"],
+			["cl_RanjeList", "center"],
 		],
 	},
 	cl_Niska: {
@@ -616,16 +616,17 @@ const contentGrid = {
 		},
 		contentGroup: "Tools",
 		name: "Niska",
+		height: 2,
 		heritage: ["mazedonisch", "Gewinde"],
 		subgrid: [
-			["cl_niskaHeaderInput", "center"],
-			["cl_niskaHeaderSelect", "center"],
-			["cl_niskaSize", "center"],
-			["cl_niskaPitch", "center"],
-			["cl_niskaSelect", "center"],
-			["cl_niskaStrengthClassA", "center"],
-			["cl_niskaStrengthClassB", "center"],
-			["cl_niskaList", "center"],
+			["cl_NiskaHeaderInput", "center"],
+			["cl_NiskaHeaderSelect", "center"],
+			["cl_NiskaSize", "center"],
+			["cl_NiskaPitch", "center"],
+			["cl_NiskaSelect", "center"],
+			["cl_NiskaStrengthClassA", "center"],
+			["cl_NiskaStrengthClassB", "center"],
+			["cl_NiskaList", "center"],
 		],
 	},
 	cl_Quickmath: {
@@ -633,12 +634,12 @@ const contentGrid = {
 		contentGroup: "Tools",
 		name: "Quickmath",
 		subgrid: [
-			["cl_quickmathInput", "center"],
-			["cl_quickmathStart", "center"],
-			["cl_quickmathEnd", "center"],
-			["cl_quickmathListMultiply", "center"],
-			["cl_quickmathListDivide", "center"],
-			["cl_quickmathListPow", "center"],
+			["cl_QuickmathInput", "center"],
+			["cl_QuickmathStart", "center"],
+			["cl_QuickmathEnd", "center"],
+			["cl_QuickmathListMultiply", "center"],
+			["cl_QuickmathListDivide", "center"],
+			["cl_QuickmathListPow", "center"],
 		],
 	},
 	cl_Pythagoras: {
@@ -745,7 +746,6 @@ const contentGrid = {
 			["cl_OcjeneSheet", "right"],
 			["cl_OcjeneSongHeader", "left", "end"],
 			["cl_OcjeneRhytmusHeader", "left", "end"],
-			["cl_OcjeneInstrumentHeader", "left", "end"],
 			["cl_OcjeneMelodieHeader", "left", "end"],
 			["cl_OcjeneNotenwert1", "left"],
 			["cl_OcjeneNotenwert2", "left"],
@@ -783,11 +783,11 @@ const contentGrid = {
 		heritage: ["englisch", "Rhythmusmaschine"],
 		info: "Drumpattern im klassischen Stil erstellen",
 		subgrid: [
-			["cl_beatmachineOptionsA", "left"],
-			["cl_beatmachineOptionsB", "left"],
-			["cl_beatmachineOptionsC", "left"],
-			["cl_beatmachineOptionsD", "left"],
-			["cl_beatmachineTracks", "left"],
+			["cl_BeatmachineOptionsA", "left"],
+			["cl_BeatmachineOptionsB", "left"],
+			["cl_BeatmachineOptionsC", "left"],
+			["cl_BeatmachineOptionsD", "left"],
+			["cl_BeatmachineTracks", "left"],
 		],
 	},
 	cl_Linaha: {
@@ -1052,14 +1052,14 @@ const contentGrid = {
 		contentGroup: "GlobalSettings",
 		name: "Color-Settings",
 		subgrid: [
-			["cl_colourSettingsHeaderLight", "center"],
-			["cl_colourSettingsHeaderDark", "center", "end"],
-			["cl_colourSettings_light_0", "center"],
-			["cl_colourSettings_light_1", "center"],
-			["cl_colourSettings_light_2", "center"],
-			["cl_colourSettings_dark_0", "center"],
-			["cl_colourSettings_dark_1", "center"],
-			["cl_colourSettings_dark_2", "center"],
+			["cl_ColourSettingsHeaderLight", "center"],
+			["cl_ColourSettingsHeaderDark", "center", "end"],
+			["cl_ColourSettings_light_0", "center"],
+			["cl_ColourSettings_light_1", "center"],
+			["cl_ColourSettings_light_2", "center"],
+			["cl_ColourSettings_dark_0", "center"],
+			["cl_ColourSettings_dark_1", "center"],
+			["cl_ColourSettings_dark_2", "center"],
 		],
 	},
 	cl_UserGridLayout: {

@@ -70,7 +70,6 @@ function resetAll() {
 	createNewNuncDiscipuli();
 	displayColorSystem();
 	clearGlobalValue();
-	// layoutNavClick();
 	layoutNavClick(contentLayout.defaultPage);
 }
 
@@ -93,9 +92,9 @@ function htmlAltTag() {
 	setAlt("oSub");
 
 	function setAlt(name) {
-		const t = dbCL(`img_${name}`, null);
-		for (let e of t) {
-			e.alt = `${name}.svg`;
+		const obj = dbCL(`img_${name}`, null);
+		for (let imgObj of obj) {
+			imgObj.alt = `${name}.svg`;
 		}
 	}
 }

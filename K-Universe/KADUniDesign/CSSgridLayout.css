@@ -1,221 +1,261 @@
+.test {
+	grid-template-areas:
+		"cl_Howa cl_Howa "
+		"cl_Sepakbola cl_News "
+		"cl_Sepakbola cl_PostillonTicker "
+		"cl_Netsaona cl_Pelvelea "
+		"cl_Tugas cl_Kadar "
+		"cl_Thiontu cl_Egg "
+		"cl_Foody cl_Hverertu "
+		"cl_Kounselor cl_Kaihanga "
+		"cl_Botanicals cl_PlatLesen "
+		"cl_Iomlaid cl_SpeechTranslate "
+		"cl_Afinn cl_Synonym "
+		"cl_BiktadA cl_Boredom "
+		"cl_WikiSearch cl_Geometrie "
+		"cl_Material cl_Expansion "
+		"cl_Pattern cl_Pattern "
+		"cl_Luas cl_Middle "
+		"cl_Ranje cl_Niska "
+		"cl_Quickmath cl_Pythagoras "
+		"cl_Pormula cl_Pormula "
+		"cl_Blechgeometrie cl_Numbery "
+		"cl_Ocjene cl_Ocjene "
+		"cl_Ocjene cl_Ocjene "
+		"cl_Beatmachine cl_Beatmachine "
+		"cl_Linaha cl_Ibhaluni "
+		" . cl_Ibhaluni "
+		"cl_Sudoku cl_Sudoku "
+		"cl_Sudoku cl_Sudoku "
+		"cl_Lotto cl_Lotto "
+		"cl_RayCaster cl_RayCaster "
+		"cl_RayCaster cl_RayCaster "
+		"cl_Empat  . "
+		"cl_Empat  . "
+		"cl_Sweeper cl_Sweeper "
+		"cl_Sweeper cl_Sweeper ";
+}
+
 .cl_subGrid_userAcc {
 	grid-template-areas:
-		". userAcc_infos userAcc_infos ."
-		". userAcc_mail userAcc_mail ."
-		". userAcc_pass userAcc_pass ."
-		". userAcc_check userAcc_alert ."
-		". userAcc_submit userAcc_submit .";
+		". cl_UserAcc_infos cl_UserAcc_infos ."
+		". cl_UserAcc_mail cl_UserAcc_mail ."
+		". cl_UserAcc_pass cl_UserAcc_pass ."
+		". cl_UserAcc_check cl_UserAcc_alert ."
+		". cl_UserAcc_submit cl_UserAcc_submit .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: auto var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_GeneralSettings {
 	grid-template-areas:
-		". SettingsFontsize ."
-		". SettingsDecimals ."
-		". SettingsCopyClick ."
-		". SettingsCopySeparator .";
+		". cl_SettingsFontsize ."
+		". cl_SettingsDecimals ."
+		". cl_SettingsCopyClick ."
+		". cl_SettingsCopySeparator .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_ColorSettings {
 	grid-template-areas:
-		". colourSettingsHeaderLight ."
-		". colourSettings_light_0 ."
-		". colourSettings_light_1 ."
-		". colourSettings_light_2 ."
-		". colourSettingsHeaderDark ."
-		". colourSettings_dark_0 ."
-		". colourSettings_dark_1 ."
-		". colourSettings_dark_2 .";
+		". cl_ColourSettingsHeaderLight ."
+		". cl_ColourSettings_light_0 ."
+		". cl_ColourSettings_light_1 ."
+		". cl_ColourSettings_light_2 ."
+		". cl_ColourSettingsHeaderDark ."
+		". cl_ColourSettings_dark_0 ."
+		". cl_ColourSettings_dark_1 ."
+		". cl_ColourSettings_dark_2 .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_UserGridLayout {
 	grid-template-areas:
-		". UserGridOptions . ."
-		". UserGridTable . .";
+		". cl_UserGridOptions . ."
+		". cl_UserGridTable . .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_MaterialFilterSettings {
-	grid-template-areas: ". MaterialFilterTable .";
+	grid-template-areas: ". cl_MaterialFilterTable .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: auto;
 }
 
 .cl_subGrid_Howa {
 	grid-template-areas:
-		". HowaInput HowaInput HowaOptionsA HowaOptionsA ."
-		". HowaNow HowaNow HowaOptionsB HowaOptionsB ."
-		". HowaNow HowaNow HowaOptionsC HowaOptionsC."
-		". HowaGraph HowaGraph HowaGraph HowaGraph ."
-		". . HowaMapsExpand HowaZoom . ."
-		". . HowaMapsSelectCountry HowaMapsSelectCriteria . ."
-		". HowaMapsImg HowaMapsImg HowaMapsImg HowaMapsImg .";
+		". cl_HowaInput cl_HowaInput cl_HowaOptionsA cl_HowaOptionsA ."
+		". cl_HowaNow cl_HowaNow cl_HowaOptionsB cl_HowaOptionsB ."
+		". cl_HowaNow cl_HowaNow cl_HowaOptionsC cl_HowaOptionsC."
+		". cl_HowaGraph cl_HowaGraph cl_HowaGraph cl_HowaGraph ."
+		". . cl_HowaMapsExpand cl_HowaZoom . ."
+		". . cl_HowaMapsSelectCountry cl_HowaMapsSelectCriteria . ."
+		". cl_HowaMapsImg cl_HowaMapsImg cl_HowaMapsImg cl_HowaMapsImg .";
 	grid-template-columns: 1fr auto auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_News {
 	grid-template-areas:
-		". NewsNav NewsResultImage NewsResultTitle ."
-		". NewsCountry NewsResultImage NewsResultTitle ."
-		". NewsCategory NewsResultImage NewsResultTitle ."
-		". NewsTable NewsResultText NewsResultText .";
+		". cl_NewsNav cl_NewsResultImage cl_NewsResultTitle ."
+		". cl_NewsCountry cl_NewsResultImage cl_NewsResultTitle ."
+		". cl_NewsCategory cl_NewsResultImage cl_NewsResultTitle ."
+		". cl_NewsTable cl_NewsResultText cl_NewsResultText .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Lions {
 	grid-template-areas:
-		". LionsInput LionsOutput ."
-		". LionsTable LionsTable .";
+		". cl_LionsInput cl_LionsOutput ."
+		". cl_LionsTable cl_LionsTable .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight2) auto;
 }
 
 .cl_subGrid_Sepakbola {
 	grid-template-areas:
-		". SepakbolaInputLiga SepakbolaInputSeason SepakbolaInputDay ."
-		". SepakbolaTable SepakbolaTable SepakbolaMatches .";
+		". cl_SepakbolaInputLiga cl_SepakbolaInputSeason cl_SepakbolaInputDay ."
+		". cl_SepakbolaTable cl_SepakbolaTable cl_SepakbolaMatches .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_PostillonTicker {
 	grid-template-areas:
-		". PostillionNumber ."
-		". PostillionTable .";
+		". cl_PostillionNumber ."
+		". cl_PostillionTable .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Tugas {
 	grid-template-areas:
-		". TugasInput TugasList ."
-		". TugasEnter TugasList ."
-		". . TugasList .";
+		". cl_TugasInput cl_TugasList ."
+		". cl_TugasEnter cl_TugasList ."
+		". . cl_TugasList .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: auto var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Netsaona {
 	grid-template-areas:
-		". NetsaonaOptionsA ."
-		". NetsaonaOptionsB ."
-		". NetsaonaOptionsC ."
-		". NetsaonaOptionsD ."
-		". NetsaonaOptionsE ."
-		". NetsaonaOptionsF ."
-		". NetsaonaOptionsG ."
-		". NetsaonaOutput .";
+		". cl_NetsaonaOptionsA ."
+		". cl_NetsaonaOptionsB ."
+		". cl_NetsaonaOptionsC ."
+		". cl_NetsaonaOptionsD ."
+		". cl_NetsaonaOptionsE ."
+		". cl_NetsaonaOptionsF ."
+		". cl_NetsaonaOptionsG ."
+		". cl_NetsaonaOutput .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Afinn {
 	grid-template-areas:
-		". AfinnInput AfinnResult ."
-		". AfinnInput AfinnProgress ."
-		". AfinnNews AfinnTabResult ."
-		". AfinnWiki AfinnTabResult .";
+		". cl_AfinnInput cl_AfinnResult ."
+		". cl_AfinnInput cl_AfinnProgress ."
+		". cl_AfinnNews cl_AfinnTabResult ."
+		". cl_AfinnWiki cl_AfinnTabResult .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: auto auto var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Synonym {
 	grid-template-areas:
-		". SynonymInput ."
-		". SynonymSearchword ."
-		". SynonymTable .";
+		". cl_SynonymInput ."
+		". cl_SynonymSearchword ."
+		". cl_SynonymTable .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Boredom {
 	grid-template-areas:
-		". BoredomStart ."
-		". BoredomAnswer .";
+		". cl_BoredomStart ."
+		". cl_BoredomAnswer .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_BiktadA {
-	grid-template-areas: ". BiktadATable .";
+	grid-template-areas: ". cl_BiktadATable .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: auto;
 }
 
 .cl_subGrid_Hverertu {
 	grid-template-areas:
-		". HverertuInput ."
-		". HverertuTable .";
+		". cl_HverertuInput ."
+		". cl_HverertuTable .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Egg {
 	grid-template-areas:
-		". EggMassValue ."
-		". EggTempValue ."
-		". EggYolkValue ."
-		". EggStart ."
-		". EggTime ."
-		". EggTimeProgress .";
+		". cl_EggMassValue ."
+		". cl_EggTempValue ."
+		". cl_EggYolkValue ."
+		". cl_EggStart ."
+		". cl_EggTime ."
+		". cl_EggTimeProgress .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Foody {
 	grid-template-areas:
-		". FoodyType ."
-		". FoodyPreheat ."
-		". FoodyStart ."
-		". FoodyTime ."
-		". FoodyTimeProgress .";
+		". cl_FoodyType ."
+		". cl_FoodyPreheat ."
+		". cl_FoodyStart ."
+		". cl_FoodyTime ."
+		". cl_FoodyTimeProgress .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Kounselor {
 	grid-template-areas:
-		". KounselorOutputA KounselorOptionsA ."
-		". KounselorOutputA KounselorOptionsB ."
-		". KounselorOutputB KounselorOptionsC ."
-		". KounselorOutputB KounselorOptionsD ."
-		". . KounselorOptionsE ."
-		". . KounselorOptionsF ."
-		". . KounselorOptionsG .";
-	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
+		". cl_KounselorOutputA  ."
+		". cl_KounselorOutputB  ."
+		". cl_KounselorOptionsA ."
+		". cl_KounselorOptionsB ."
+		". cl_KounselorOptionsC ."
+		". cl_KounselorOptionsD ."
+		". cl_KounselorOptionsE ."
+		". cl_KounselorOptionsF ."
+		". cl_KounselorOptionsG .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight2) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_Kaihanga {
 	grid-template-areas:
-		". KaihangaInput KaihangaCanvas ."
-		". KaihangaSegments KaihangaCanvas ."
-		". KaihangaSegments KaihangaResult .";
+		". cl_KaihangaInput cl_KaihangaCanvas ."
+		". cl_KaihangaSegments cl_KaihangaCanvas ."
+		". cl_KaihangaSegments cl_KaihangaResult .";
 	grid-template-columns: 1fr auto auto 1r;
 	grid-template-rows: auto auto auto;
 }
 
 .cl_subGrid_Botanicals {
 	grid-template-areas:
-		". botanicalsVinPlant botanicalsVinDiscomfort ."
-		". botanicalsTabResultPlant botanicalsTabResultDiscomfort .";
+		". cl_BotanicalsVinPlant cl_BotanicalsVinDiscomfort ."
+		". cl_BotanicalsTabResultPlant cl_BotanicalsTabResultDiscomfort .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_PlatLesen {
 	grid-template-areas:
-		". platLesenRegInput ."
-		". platLesenNumInput ."
-		". platLesenResult .";
+		". cl_PlatLesenRegInput ."
+		". cl_PlatLesenNumInput ."
+		". cl_PlatLesenResult .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: auto auto auto;
 	/* grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto; */
@@ -223,328 +263,327 @@
 
 .cl_subGrid_Pelvelea {
 	grid-template-areas:
-		". PelveleaStarttime ."
-		". PelveleaBreaks ."
-		". PelveleaWorktime ."
-		". PelveleaResult ."
-		". PelveleaProgress ."
-		". PelveleaBreaktime .";
+		". cl_PelveleaStarttime ."
+		". cl_PelveleaBreaks ."
+		". cl_PelveleaWorktime ."
+		". cl_PelveleaResult ."
+		". cl_PelveleaProgress ."
+		". cl_PelveleaBreaktime .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Iomlaid {
 	grid-template-areas:
-		". iomlaidSelCur iomlaidVinCur . ."
-		". iomlaidTab iomlaidTab iomlaidTab .";
+		". cl_IomlaidSelCur cl_IomlaidVinCur . ."
+		". cl_IomlaidTab cl_IomlaidTab cl_IomlaidTab .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Thiontu {
 	grid-template-areas:
-		". ThiontuInputArea ThiontuOutputArea ."
-		". ThiontuOptions_A ThiontuOptions_A ."
-		". ThiontuOptions_B ThiontuOptions_B ."
-		". ThiontuOptions_C ThiontuOptions_C ."
-		". ThiontuOptions_D ThiontuOptions_D ."
-		". ThiontuOptions_E ThiontuOptions_E .";
+		". cl_ThiontuInputArea cl_ThiontuOutputArea ."
+		". cl_ThiontuOptions_A cl_ThiontuOptions_A ."
+		". cl_ThiontuOptions_B cl_ThiontuOptions_B ."
+		". cl_ThiontuOptions_C cl_ThiontuOptions_C ."
+		". cl_ThiontuOptions_D cl_ThiontuOptions_D ."
+		". cl_ThiontuOptions_E cl_ThiontuOptions_E .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: auto var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_Geometrie {
 	grid-template-areas:
-		". GeometrieAreaSelect GeometrieOptions ."
-		". GeometrieAreaSelect GeometrieAreaInputA ."
-		". GeometrieAreaSelect GeometrieAreaInputB ."
-		". GeometrieAreaSelect GeometrieAreaInputC ."
-		". GeometrieTable GeometrieCanvas ."
-		". GeometrieTable GeometrieCanvas .";
+		". cl_GeometrieAreaSelect cl_GeometrieOptions ."
+		". cl_GeometrieAreaSelect cl_GeometrieAreaInputA ."
+		". cl_GeometrieAreaSelect cl_GeometrieAreaInputB ."
+		". cl_GeometrieAreaSelect cl_GeometrieAreaInputC ."
+		". cl_GeometrieTable cl_GeometrieCanvas ."
+		". cl_GeometrieTable cl_GeometrieCanvas .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Material {
 	grid-template-areas:
-		". MaterialPropertyCb . ."
-		". MaterialList MaterialList . "
-		". MaterialSearchOptions MaterialSearchOptions ."
-		/* ". MaterialSearchVin MaterialSearchSel MaterialSearchClose ." */
-		". MaterialSearchList MaterialSearchList .";
+		". cl_MaterialPropertyCb . ."
+		". cl_MaterialList cl_MaterialList . "
+		". cl_MaterialSearchOptions cl_MaterialSearchOptions ."
+		/* ". cl_MaterialSearchVin cl_MaterialSearchSel cl_MaterialSearchClose ." */
+		". cl_MaterialSearchList cl_MaterialSearchList .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Expansion {
 	grid-template-areas:
-		". ExpansionMaterialsA ExpansionMaterialSwitch ExpansionMaterialsB ."
-		". ExpansionVinLength ExpansionVinLength ExpansionVinLength ."
-		". ExpansionVinTemperature ExpansionVinTemperature ExpansionVinTemperature ."
-		". ExpansionVinBaseTemperature ExpansionVinBaseTemperature ExpansionVinBaseTemperature ."
-		". ExpansionCBOptions ExpansionCBOptions ExpansionCBOptions ."
-		". ExpansionList ExpansionList ExpansionList .";
+		". cl_ExpansionMaterialsA cl_ExpansionMaterialSwitch cl_ExpansionMaterialsB ."
+		". cl_ExpansionVinLength cl_ExpansionVinLength cl_ExpansionVinLength ."
+		". cl_ExpansionVinTemperature cl_ExpansionVinTemperature cl_ExpansionVinTemperature ."
+		". cl_ExpansionVinBaseTemperature cl_ExpansionVinBaseTemperature cl_ExpansionVinBaseTemperature ."
+		". cl_ExpansionCBOptions cl_ExpansionCBOptions cl_ExpansionCBOptions ."
+		". cl_ExpansionList cl_ExpansionList cl_ExpansionList .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) auto;
 }
 
 .cl_subGrid_Middle {
 	grid-template-areas:
-		". MiddleInput0 ."
-		". MiddleInput1 ."
-		". MiddleCanvas ."
-		". MiddleMid ."
-		". MiddleDiff .";
+		". cl_MiddleInput0 ."
+		". cl_MiddleInput1 ."
+		". cl_MiddleCanvas ."
+		". cl_MiddleMid ."
+		". cl_MiddleDiff .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight2) var(--UIHeight2);
 }
 
 .cl_subGrid_Luas {
 	grid-template-areas:
-		". LuasVinAngularVin ."
-		". LuasVinLinearVin ."
-		". LuasOptAngularVin ."
-		". LuasOptLinearVin ."
-		". LuasCanvas ."
-		". LuasResult .";
+		". cl_LuasVinAngularVin ."
+		". cl_LuasVinLinearVin ."
+		". cl_LuasOptAngularVin ."
+		". cl_LuasOptLinearVin ."
+		". cl_LuasCanvas ."
+		". cl_LuasResult .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Quickmath {
 	grid-template-areas:
-		". quickmathInput quickmathInput quickmathInput ."
-		". quickmathStart quickmathStart quickmathStart ."
-		". quickmathEnd quickmathEnd quickmathEnd ."
-		". quickmathListMultiply quickmathListDivide quickmathListPow .";
+		". cl_QuickmathInput cl_QuickmathInput cl_QuickmathInput ."
+		". cl_QuickmathStart cl_QuickmathStart cl_QuickmathStart ."
+		". cl_QuickmathEnd cl_QuickmathEnd cl_QuickmathEnd ."
+		". cl_QuickmathListMultiply cl_QuickmathListDivide cl_QuickmathListPow .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Ranje {
 	grid-template-areas:
-		". ranjeInput ."
-		". ranjeList .";
+		". cl_RanjeInput ."
+		". cl_RanjeList .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Niska {
 	grid-template-areas:
-		". niskaHeaderInput niskaHeaderSelect ."
-		". niskaSize niskaSelect ."
-		". niskaPitch . ."
-		". niskaStrengthClassA niskaStrengthClassB ."
-		". niskaList niskaList .";
+		". cl_NiskaHeaderInput cl_NiskaHeaderSelect ."
+		". cl_NiskaSize cl_NiskaSelect ."
+		". cl_NiskaPitch . ."
+		". cl_NiskaStrengthClassA cl_NiskaStrengthClassB ."
+		". cl_NiskaList cl_NiskaList .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Pattern {
 	grid-template-areas:
-		". PatternInputA ."
-		". PatternInputB ."
-		". PatternInputC ."
-		". PatternInputD ."
-		". PatternInputE ."
-		". PatternCanvas .";
+		". cl_PatternInputA ."
+		". cl_PatternInputB ."
+		". cl_PatternInputC ."
+		". cl_PatternInputD ."
+		". cl_PatternInputE ."
+		". cl_PatternCanvas .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Pythagoras {
 	grid-template-areas:
-		". PythagorasInput0 PythagorasCanvas ."
-		". PythagorasInput1 PythagorasCanvas ."
-		". PythagorasInput2 PythagorasCanvas ."
-		". PythagorasInput3 PythagorasCanvas ."
-		". PythagorasInput4 PythagorasCanvas ."
-		" .PythagorasInfo PythagorasInfo .";
+		". cl_PythagorasInput0 cl_PythagorasCanvas ."
+		". cl_PythagorasInput1 cl_PythagorasCanvas ."
+		". cl_PythagorasInput2 cl_PythagorasCanvas ."
+		". cl_PythagorasInput3 cl_PythagorasCanvas ."
+		". cl_PythagorasInput4 cl_PythagorasCanvas ."
+		" .cl_PythagorasInfo cl_PythagorasInfo .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Pormula {
 	grid-template-areas:
-		". PormulaAddInputs PormulaTypeSelect PormulaBestFit PormulaPolyFit ."
-		". PormulaInputs PormulaTypeSelect PormulaOrder PormulaOrder ."
-		". PormulaInputs PormulaTypeSelect PormulaPrecision PormulaPrecision ."
-		". PormulaInputs PormulaTypeSelect PormulaAccuracy PormulaAccuracy ."
-		". PormulaInputs PormulaTypeSelect PormulaLblResult PormulaLblResult ."
-		". PormulaInfo PormulaInfo PormulaPointEntry PormulaPointResult ."
-		". PormulaCanvas PormulaCanvas PormulaCanvas PormulaCanvas .";
+		". cl_PormulaAddInputs cl_PormulaTypeSelect cl_PormulaBestFit cl_PormulaPolyFit ."
+		". cl_PormulaInputs cl_PormulaTypeSelect cl_PormulaOrder cl_PormulaOrder ."
+		". cl_PormulaInputs cl_PormulaTypeSelect cl_PormulaPrecision cl_PormulaPrecision ."
+		". cl_PormulaInputs cl_PormulaTypeSelect cl_PormulaAccuracy cl_PormulaAccuracy ."
+		". cl_PormulaInputs cl_PormulaTypeSelect cl_PormulaLblResult cl_PormulaLblResult ."
+		". cl_PormulaInfo cl_PormulaInfo cl_PormulaPointEntry cl_PormulaPointResult ."
+		". cl_PormulaCanvas cl_PormulaCanvas cl_PormulaCanvas cl_PormulaCanvas .";
 	grid-template-columns: 1fr auto auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) 1fr auto auto;
 }
 
 .cl_subGrid_Sudoku {
 	grid-template-areas:
-		". SudokuGetBoard SudokuOptionsA ."
-		". SudokuCanvas SudokuOptionsB ."
-		". SudokuCanvas SudokuTimer ."
-		". SudokuCanvas SudokuInput ."
-		". SudokuCanvas SudokuOptionsC ."
-		". SudokuCanvas SudokuOverview .";
+		". cl_SudokuGetBoard cl_SudokuOptionsA ."
+		". cl_SudokuCanvas cl_SudokuOptionsB ."
+		". cl_SudokuCanvas cl_SudokuTimer ."
+		". cl_SudokuCanvas cl_SudokuInput ."
+		". cl_SudokuCanvas cl_SudokuOptionsC ."
+		". cl_SudokuCanvas cl_SudokuOverview .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) calc(var(--UIHeight2) * 2) auto auto;
 }
 
 .cl_subGrid_Linaha {
 	grid-template-areas:
-		". LinahaOptionsA LinahaOptionsA ."
-		". LinahaOptionsB LinahaOptionsStart ."
-		". LinahaOptionsC LinahaOptionsStart ."
-		". LinahaRounds LinahaMap ."
-		". LinahaScore LinahaMap ."
-		". LinahaQuestion LinahaQuestion  ."
-		". LinahaAnswers LinahaAnswers .";
+		". cl_LinahaOptionsA cl_LinahaOptionsA ."
+		". cl_LinahaOptionsB cl_LinahaOptionsStart ."
+		". cl_LinahaOptionsC cl_LinahaOptionsStart ."
+		". cl_LinahaRounds cl_LinahaMap ."
+		". cl_LinahaScore cl_LinahaMap ."
+		". cl_LinahaQuestion cl_LinahaQuestion  ."
+		". cl_LinahaAnswers cl_LinahaAnswers .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Ibhaluni {
 	grid-template-areas:
-		". IbhaluniInputs ."
-		". IbhaluniCanvas .";
+		". cl_IbhaluniInputs ."
+		". cl_IbhaluniCanvas .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_RayCaster {
 	grid-template-areas:
-		". RayCasterCanvas RayCasterInputs ."
-		". RayCasterCanvas RayCasterSize ."
-		". RayCasterCanvas RayCasterSpeed ."
-		". RayCasterCanvas RayCasterView ."
-		". RayCasterCanvas RayCasterOptionsA ."
-		". RayCasterCanvas RayCasterOptionsB ."
-		". RayCasterCanvas RayCasterOptionsC ."
-		". RayCasterCanvas RayCasterOptionsD ."
-		". RayCasterCanvas . .";
+		". cl_RayCasterCanvas cl_RayCasterInputs ."
+		". cl_RayCasterCanvas cl_RayCasterSize ."
+		". cl_RayCasterCanvas cl_RayCasterSpeed ."
+		". cl_RayCasterCanvas cl_RayCasterView ."
+		". cl_RayCasterCanvas cl_RayCasterOptionsA ."
+		". cl_RayCasterCanvas cl_RayCasterOptionsB ."
+		". cl_RayCasterCanvas cl_RayCasterOptionsC ."
+		". cl_RayCasterCanvas cl_RayCasterOptionsD ."
+		". cl_RayCasterCanvas . .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) var(--UIWidth13) 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Lotto {
 	grid-template-areas:
-		". LottoOverview LottoOptionsA ."
-		". LottoOverview LottoOptionsB ."
-		". LottoCanvas LottoSavedGame ."
-		". LottoCanvas LottoGetGames ."
-		". LottoCanvas LottoTabGames .";
+		". cl_LottoOverview cl_LottoOptionsA ."
+		". cl_LottoOverview cl_LottoOptionsB ."
+		". cl_LottoCanvas cl_LottoSavedGame ."
+		". cl_LottoCanvas cl_LottoGetGames ."
+		". cl_LottoCanvas cl_LottoTabGames .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Sweeper {
 	grid-template-areas:
-		". SweeperInputs SweeperGrid SweeperSweeps ."
-		". SweeperCanvas SweeperCanvas SweeperCanvas .";
+		". cl_SweeperInputs cl_SweeperGrid cl_SweeperSweeps ."
+		". cl_SweeperCanvas cl_SweeperCanvas cl_SweeperCanvas .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Empat {
 	grid-template-areas:
-		". EmpatInputs ."
-		". EmpatCanvas .";
+		". cl_EmpatInputs ."
+		". cl_EmpatCanvas .";
 	grid-template-columns: 1fr var(--gridWidthGameCanvas) 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Numbery {
 	grid-template-areas:
-		". NumberyImages . NumberyInputs ."
-		". NumberyImages . NumberyPairs ."
-		". NumberyImages . NumberyPlayerNum ."
-		". NumberyImages . NumberyCathegory ."
-		". NumberyImages . NumberyPlayers ."
-		". NumberyImages . NumberyResult ."
-		". NumberyImages . . .";
+		". cl_NumberyImages . cl_NumberyInputs ."
+		". cl_NumberyImages . cl_NumberyPairs ."
+		". cl_NumberyImages . cl_NumberyPlayerNum ."
+		". cl_NumberyImages . cl_NumberyCathegory ."
+		". cl_NumberyImages . cl_NumberyPlayers ."
+		". cl_NumberyImages . cl_NumberyResult ."
+		". cl_NumberyImages . . .";
 	grid-template-columns: 1fr auto var(--UIWidth1) auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight2) auto;
 }
 
 .cl_subGrid_Ocjene {
 	grid-template-areas:
-		". OcjeneSheet OcjeneGenerate OcjeneGenerate ."
-		". OcjeneSheet OcjeneRandomA OcjeneRandomA ."
-		". OcjeneSheet OcjeneRandomB OcjeneRandomB ."
-		". OcjeneSheet OcjeneRandomC OcjeneRandomC ."
-		". OcjeneSheet OcjeneSongHeader OcjeneSongHeader ."
-		". OcjeneSheet OcjeneTimeSignature OcjeneTimeSignature ."
-		". OcjeneSheet OcjeneClefs OcjeneClefs ."
-		". OcjeneSheet OcjeneKeySignature OcjeneKeySignature ."
-		". OcjeneSheet OcjeneKey OcjeneKey ."
-		". OcjeneSheet OcjeneTempo OcjeneTempo ."
-		". OcjeneSheet OcjeneBars OcjeneBars ."
-		". OcjeneSheet OcjeneShowText OcjeneShowText ."
-		". OcjeneSheet OcjeneTextLanguage OcjeneTextLanguage ."
-		". OcjeneSheet OcjeneInstrumentHeader OcjeneInstrumentHeader ."
-		". OcjeneSheet OcjeneInstrument OcjeneInstrument ."
-		". OcjeneSheet OcjeneRhytmusHeader OcjeneRhytmusHeader ."
-		". OcjeneSheet OcjeneNotenwert1 OcjeneNotenwert8 ."
-		". OcjeneSheet OcjeneNotenwert2 OcjeneNotenwert16 ."
-		". OcjeneSheet OcjeneNotenwert4 OcjeneNotenwert32 ."
-		". OcjeneSheet OcjeneDotted OcjeneDotted ."
-		". OcjeneSheet OcjeneTriplet OcjeneTriplet ."
-		". OcjeneSheet OcjeneRests OcjeneRests ."
-		". OcjeneSheet OcjeneBarOverflowStop OcjeneBarOverflowStop ."
-		". OcjeneSheet OcjeneMelodieHeader OcjeneMelodieHeader ."
-		". OcjeneSheet OcjeneKeyOnly OcjeneKeyOnly ."
-		". OcjeneSheet OcjeneLimitRange OcjeneLimitRange ."
-		". OcjeneSheet OcjeneInterval OcjeneInterval .";
+		". cl_OcjeneSheet cl_OcjeneGenerate cl_OcjeneGenerate ."
+		". cl_OcjeneSheet cl_OcjeneRandomA cl_OcjeneRandomA ."
+		". cl_OcjeneSheet cl_OcjeneRandomB cl_OcjeneRandomB ."
+		". cl_OcjeneSheet cl_OcjeneRandomC cl_OcjeneRandomC ."
+		". cl_OcjeneSheet cl_OcjeneSongHeader cl_OcjeneSongHeader ."
+		". cl_OcjeneSheet cl_OcjeneTimeSignature cl_OcjeneTimeSignature ."
+		". cl_OcjeneSheet cl_OcjeneClefs cl_OcjeneClefs ."
+		". cl_OcjeneSheet cl_OcjeneKeySignature cl_OcjeneKeySignature ."
+		". cl_OcjeneSheet cl_OcjeneKey cl_OcjeneKey ."
+		". cl_OcjeneSheet cl_OcjeneTempo cl_OcjeneTempo ."
+		". cl_OcjeneSheet cl_OcjeneBars cl_OcjeneBars ."
+		". cl_OcjeneSheet cl_OcjeneShowText cl_OcjeneShowText ."
+		". cl_OcjeneSheet cl_OcjeneTextLanguage cl_OcjeneTextLanguage ."
+		". cl_OcjeneSheet cl_OcjeneRhytmusHeader cl_OcjeneRhytmusHeader ."
+		". cl_OcjeneSheet cl_OcjeneNotenwert1 cl_OcjeneNotenwert8 ."
+		". cl_OcjeneSheet cl_OcjeneNotenwert2 cl_OcjeneNotenwert16 ."
+		". cl_OcjeneSheet cl_OcjeneNotenwert4 cl_OcjeneNotenwert32 ."
+		". cl_OcjeneSheet cl_OcjeneDotted cl_OcjeneDotted ."
+		". cl_OcjeneSheet cl_OcjeneTriplet cl_OcjeneTriplet ."
+		". cl_OcjeneSheet cl_OcjeneRests cl_OcjeneRests ."
+		". cl_OcjeneSheet cl_OcjeneBarOverflowStop cl_OcjeneBarOverflowStop ."
+		". cl_OcjeneSheet cl_OcjeneMelodieHeader cl_OcjeneMelodieHeader ."
+		". cl_OcjeneSheet cl_OcjeneInstrument cl_OcjeneInstrument ."
+		". cl_OcjeneSheet cl_OcjeneKeyOnly cl_OcjeneKeyOnly ."
+		". cl_OcjeneSheet cl_OcjeneLimitRange cl_OcjeneLimitRange ."
+		". cl_OcjeneSheet cl_OcjeneInterval cl_OcjeneInterval .";
 	grid-template-columns: 1fr auto var(--UIWidth6) var(--UIWidth6) 1fr;
 	grid-template-rows:
 		var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
-		var(--UIHeight2) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
-		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) auto;
+		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
+		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Beatmachine {
 	grid-template-areas:
-		". beatmachineOptionsA beatmachineOptionsB ."
-		". beatmachineOptionsC beatmachineOptionsD ."
-		". beatmachineTracks beatmachineTracks .";
+		". cl_BeatmachineOptionsA cl_BeatmachineOptionsB ."
+		". cl_BeatmachineOptionsC cl_BeatmachineOptionsD ."
+		". cl_BeatmachineTracks cl_BeatmachineTracks .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Blechgeometrie {
 	grid-template-areas:
-		". BlechgeoVinDicke ."
-		". BlechgeoVinRadius ."
-		". BlechgeoVinForm  ."
-		". BlechgeoVinBreite ."
-		". BlechgeoImg ."
-		". BlechgeoLblResult .";
+		". cl_BlechgeoVinDicke ."
+		". cl_BlechgeoVinRadius ."
+		". cl_BlechgeoVinForm  ."
+		". cl_BlechgeoVinBreite ."
+		". cl_BlechgeoImg ."
+		". cl_BlechgeoLblResult .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_SpeechTranslate {
 	grid-template-areas:
-		". speechLangSelect ."
-		". speechVoiceSelect ."
-		". speechOptions ."
-		". speechOutputArea .";
+		". cl_SpeechLangSelect ."
+		". cl_SpeechVoiceSelect ."
+		". cl_SpeechOptions ."
+		". cl_SpeechOutputArea .";
 	grid-template-columns: 1fr auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_WikiSearch {
 	grid-template-areas:
-		". WikiInput WikiResultImage WikiResultTitle ."
-		". WikiLanguage WikiResultImage WikiResultTitle ."
-		". WikiTable WikiResultText WikiResultText .";
+		". cl_WikiInput cl_WikiResultImage cl_WikiResultTitle ."
+		". cl_WikiLanguage cl_WikiResultImage cl_WikiResultTitle ."
+		". cl_WikiTable cl_WikiResultText cl_WikiResultText .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto auto;
 }
 
 .cl_subGrid_Kadar {
 	grid-template-areas:
-		". KadarSelA KadarLblNow KadarSelB ."
-		". KadarResultTable_Anow KadarResultTable_AB KadarResultTable_Bnow .";
+		". cl_KadarSelA cl_KadarLblNow cl_KadarSelB ."
+		". cl_KadarResultTable_Anow cl_KadarResultTable_AB cl_KadarResultTable_Bnow .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
 }

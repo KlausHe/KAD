@@ -38,7 +38,7 @@ function clear_cl_Beatmachine() {
 }
 
 function beatmachineCreateTracks() {
-	const inputClass = dbCL("cl_beatmachineTracks");
+	const inputClass = dbCL("cl_BeatmachineTracks");
 	clearFirstChild(inputClass);
 
 	for (const [index, obj] of beatmachineOptions.tracks.entries()) {

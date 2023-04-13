@@ -62,6 +62,10 @@
 	--UIWidth13: calc(var(--UIHeight1) * 13);
 	--UIWidth14: calc(var(--UIHeight1) * 14);
 	--UIWidth15: calc(var(--UIHeight1) * 15);
+	--UIWidth16: calc(var(--UIHeight1) * 16);
+	--UIWidth17: calc(var(--UIHeight1) * 17);
+	--UIWidth18: calc(var(--UIHeight1) * 18);
+	--UIWidth19: calc(var(--UIHeight1) * 19);
 	--UIWidth20: calc(var(--UIHeight1) * 20);
 	--UIWidth30: calc(var(--UIHeight1) * 30);
 
@@ -131,10 +135,6 @@
 	src: local(""), url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
 }
 
-.fullscreenFontsize {
-	--fontSize: 30px;
-}
-
 body {
 	background-color: hsl(var(--bgcBackground));
 	color: hsl(var(--txtBackground));
@@ -168,7 +168,7 @@ body {
 	transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out, pointer-events 0s linear var(--transitionTimeHide), visibility 0s linear var(--transitionTimeHide);
 }
 
-.cl_backgroundAnimation {
+.cl_BackgroundAnimation {
 	position: fixed;
 	z-index: -1;
 }

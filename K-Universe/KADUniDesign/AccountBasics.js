@@ -174,9 +174,9 @@ function toggleLayout() {
 }
 
 // ------------CLEAR-------------
-function clear_cl_userAcc() {
-	dbCLStyle("cl_userAcc_pass").display = "initial";
-	dbCLStyle("cl_userAcc_check").display = "initial";
+function clear_cl_UserAcc() {
+	dbCLStyle("cl_UserAcc_pass").display = "initial";
+	dbCLStyle("cl_UserAcc_check").display = "initial";
 	dbID("idVin_userAcc_mail").removeAttribute("disabled");
 	enableBtn("idBtn_userAcc_submit", true); //enable Button
 	dbID("idLbl_userAcc_alert").textContent = "";
@@ -212,7 +212,7 @@ function openUserNav(btn) {
 			dbID("idBtn_userAcc_submit").textContent = firstLetterCap(type);
 			dbID("idVin_userAcc_mail").focus();
 			dbID("idVin_userAcc_mail").placeholder = "E-Mail";
-			dbCLStyle("cl_userAcc_infos").display = "none";
+			dbCLStyle("cl_UserAcc_infos").display = "none";
 			layoutNavClick("AccountSettingsA");
 			break;
 		case "register":
@@ -220,7 +220,7 @@ function openUserNav(btn) {
 			dbID("idBtn_userAcc_submit").textContent = firstLetterCap(type);
 			dbID("idVin_userAcc_mail").focus();
 			dbID("idVin_userAcc_mail").placeholder = "E-Mail";
-			dbCLStyle("cl_userAcc_infos").display = "initial";
+			dbCLStyle("cl_UserAcc_infos").display = "initial";
 			createUserInfos(type);
 			layoutNavClick("AccountSettingsB");
 			break;
@@ -230,16 +230,16 @@ function openUserNav(btn) {
 			createUserInfos(type);
 			dbID("idVin_userAcc_mail").setAttribute("disabled", "true");
 			dbID("idVin_userAcc_mail").placeholder = nuncDiscipuli.cred.email || "E-Mail";
-			dbCLStyle("cl_userAcc_infos").display = "initial";
-			dbCLStyle("cl_userAcc_pass").display = "none";
-			dbCLStyle("cl_userAcc_check").display = "none";
+			dbCLStyle("cl_UserAcc_infos").display = "initial";
+			dbCLStyle("cl_UserAcc_pass").display = "none";
+			dbCLStyle("cl_UserAcc_check").display = "none";
 			layoutNavClick("AccountSettingsA");
 			break;
 		case "logout":
 			accountLogout();
 			break;
 	}
-	clear_cl_userAcc();
+	clear_cl_UserAcc();
 }
 
 function accountLogout() {
@@ -257,7 +257,7 @@ function accountLogout() {
 
 // ------------CREATE INFO-DIV-------------
 function createUserInfos(type) {
-	const parent = dbCL("cl_userAcc_infos");
+	const parent = dbCL("cl_UserAcc_infos");
 	clearFirstChild(parent);
 	for (const [key, subObj] of Object.entries(accData.infos)) {
 		const uInfoParent = cellDiv({
@@ -328,7 +328,7 @@ function createUserInfos(type) {
 
 //---------------ACTIONS--------------
 function cancelAccount() {
-	clear_cl_userAcc();
+	clear_cl_UserAcc();
 	layoutNavClick(contentLayout.defaultPage);
 }
 
