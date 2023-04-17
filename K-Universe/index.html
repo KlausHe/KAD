@@ -29,11 +29,12 @@
   <link href="KADUniDesign/CSSinputLayout.css" rel="stylesheet" type="text/css">
   <link href="KADUniDesign/CSSpikaday.css" rel="stylesheet" type="text/css">
   <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css">
+  <link href="KADUniDesign//abcjs-audio.css" rel="stylesheet" type="text/css">
 
   <script src="Data/p5.min.js"></script>
   <script defer src="Data/p5.sound.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.1.8/abcjs-basic-min.min.js"
-    integrity="sha512-iCcP+ySC2NPfrCOshDzu+yAcKDBCWuHLD8bQpvol97zjVdoGXb2S/uAENtYRPUvrzVY/gP7ZDrr5LQHDLuLroA=="
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.2.1/abcjs-basic-min.min.js"
+    integrity="sha512-FFqK3AL+xlItJ6Ib63xV0II0rsqlqzBNlukMBtrU2S1HRsp8U6CTAV3ZMaddQ3vnjzMxK73WFi2Y5t1uyyyddw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js"
@@ -2070,6 +2071,17 @@
               id="idCb_ocjeneBarOverflowStop" onclick="ocjeneBarOverflowStop(this)"></input>
           </label>
         </div>
+        <div class="cl_OcjeneMetronome" uiWrap="nowrap">
+          <label class="cl_info" for="idCb_ocjeneMetronome" uiSize="size6" uiAlign="center" uiRadius="left">Metronom
+            (Intro)</label><label class="cl_info" uiSize="size1" uiRadius="none"><input type="checkbox"
+              id="idCb_ocjeneMetronome" onclick="ocjeneMetronome(this)"></input>
+          </label><input type="number" id="idVin_ocjeneMetronome" step="1" uiRadius="none"
+            oninput="ocjeneMetronome(this)"></input><button type="button" uiSize="size1" uiRadius="none"
+            onclick="utilsVinChange(this, -1)"><img class="img_oSub"></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
+            <img class="img_oAdd"></img>
+          </button>
+        </div>
         <div class="cl_OcjeneRests">
           <label class="cl_info" uiSize="size6" uiRadius="left">Pausen [%]</label><input type="number"
             id="idVin_ocjeneRests" step="1" min="0" max="50" uiRadius="none" oninput="ocjeneRests(this)"></input><button
@@ -2108,6 +2120,7 @@
         </div>
         <div class="cl_OcjeneSheet">
           <div id="idCanv_ocjeneSheet"></div>
+          <div id="idCanv_ocjeneAudio"></div>
         </div>
       </div>
     </section>

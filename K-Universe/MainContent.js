@@ -1,21 +1,21 @@
 const contentGrid = {
 	cl_UserAcc: {
 		userSelected: true,
-		userStoreDBName: "userAcc",
+		userStoreDBName: "UserAcc",
 		userStoreDBClear: function () {
 			this.userStoreDBData = false;
 		},
 		get userStoreDBData() {
 			let data = {};
-			for (const [key, value] of Object.entries(accData.infos)) {
+			for (const [key, value] of Object.entries(AccData.infos)) {
 				data[key] = value.data;
 			}
 			return data;
 		},
 		set userStoreDBData(data) {
-			accData.data = true;
+			AccData.data = true;
 			for (const [key, value] of Object.entries(data)) {
-				accData.infos[key].data = value;
+				AccData.infos[key].data = value;
 			}
 		},
 		width: 0,
@@ -447,8 +447,8 @@ const contentGrid = {
 					if (wikiOptions.search.image) {
 						wikiShowSelectedImage(wikiOptions.search.image, true);
 					}
-				} else if (accData.data == true) {
-					const arr = Object.values(accData.infos).filter((obj) => {
+				} else if (AccData.data == true) {
+					const arr = Object.values(AccData.infos).filter((obj) => {
 						return obj.data != null;
 					});
 					if (arr.length > 0) {
@@ -756,6 +756,7 @@ const contentGrid = {
 			["cl_OcjeneDotted", "left"],
 			["cl_OcjeneTriplet", "left"],
 			["cl_OcjeneBarOverflowStop", "left"],
+			["cl_OcjeneMetronome", "left"],
 			["cl_OcjeneShowText", "left"],
 			["cl_OcjeneTextLanguage", "left"],
 			["cl_OcjeneInstrument", "left"],

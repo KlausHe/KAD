@@ -339,7 +339,7 @@ input[imgBtn="subgrid"] {
 
 .cl_infoCB,
 .cl_info {
-  display: inline-block;
+	display: inline-block;
 	position: relative;
 	height: var(--UIHeight1);
 	background-color: hsl(var(--bgcBackground) / 0.15);
@@ -350,8 +350,8 @@ input[imgBtn="subgrid"] {
 	border-radius: var(--UIRadius);
 	text-align: center;
 }
-.cl_infoCB{
-  width: var(--UIWidth1);
+.cl_infoCB {
+	width: var(--UIWidth1);
 }
 
 .cl_outputLbl {
@@ -383,6 +383,14 @@ input[imgBtn="subgrid"] {
 .cl_outputText {
 	padding: var(--padding);
 	border-top: var(--borderThin);
+}
+
+.cl_abcHighlight {
+	fill: hsl(var(--bgcNavbar));
+}
+
+.cl_abcCursor {
+	stroke: hsl(var(--bgcButtonPositive));
 }
 
 .cl_BeatmachineBtn {

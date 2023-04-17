@@ -206,7 +206,8 @@ function checkExponential(number, { decimals = globalValues.settings.decimals, e
 }
 
 function utilsVinChange(id, v) {
-	const obj = id.parentNode.getElementsByTagName("input")[0];
+	// const obj = id.parentNode.getElementsByTagName("input")[0];
+	const obj = id.parentNode.querySelectorAll("input[type=number]")[0];
 	if (obj.disabled) return;
 	let dir = Number(v);
 	if (obj.type == "time") {
@@ -404,7 +405,7 @@ function randomObject(obj, top = null) {
 	// takes a single Number, an Array or an Object
 	if (typeof obj == "number") return randomObject(arrayFromNumber(obj, top));
 	if (typeof obj == "string") return obj[randomIndex(obj)];
-  if (Array.isArray(obj) && obj.length <=0) return null
+	if (Array.isArray(obj) && obj.length <= 0) return null;
 	if (Array.isArray(obj)) return obj[randomIndex(obj)];
 	const objKeys = Object.keys(obj);
 	return obj[objKeys[randomIndex(objKeys)]];
@@ -793,6 +794,9 @@ function UIOptions(cell, opt) {
 			},
 			false
 		);
+	}
+  if (opt.hasOwnProperty("for")) {
+		cell.setAttribute("for", opt.for);
 	}
 	if (opt.hasOwnProperty("style")) {
 		for (const [key, value] of Object.entries(opt.style)) {

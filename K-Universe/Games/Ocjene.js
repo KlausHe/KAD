@@ -3,6 +3,9 @@ const ocjeneOptions = {
 	get div() {
 		return "idCanv_ocjeneSheet";
 	},
+	get audio() {
+		return "#idCanv_ocjeneAudio";
+	},
 	division: 576,
 	notenwerte: {
 		selected: [],
@@ -10,7 +13,7 @@ const ocjeneOptions = {
 		quaternote: 144,
 		noteArrays: {
 			base: [576, 288, 144, 72, 36, 18],
-			triplet: [null, 192, 96, 48, 24, 12], //192
+			triplet: [null, 192, 96, 48, 24, 12],
 			dotted: [null, 432, 216, 108, 54, 27],
 		},
 		get min() {
@@ -66,6 +69,14 @@ const ocjeneOptions = {
 	barOverflowStop: {
 		state: true,
 		stateOrig: true,
+	},
+	metronome: {
+		state: false,
+		stateOrig: false,
+		val: 0,
+		valOrig: 0,
+		min: 0,
+		max: 2,
 	},
 	showText: {
 		state: false,
@@ -792,12 +803,31 @@ const ocjeneSong = {
 			Q: `1/4=${ocjeneOptions.tempo.val}`, // tempo
 			K: `${ocjeneOptions.keys.current} clef=${ocjeneOptions.clef.val()}`, //  Tonart, Reihenfolge wichtig!
 		};
-		return (
+		const options = ["%score T1"];
+		const text =
 			Object.entries(config)
 				.map(([key, value]) => `${key}:${value}\n`)
-				.join("") + "%\n"
-		);
+				.join("") +
+			options.join("\n") +
+			"\n";
+		return text;
 	},
+
+	// abc_string_with_drum:
+	// 	"M: 4/4\n
+	//   L: 1/8\n
+	//   Q:1/4=60\n
+	//   K:clef=perc stafflines = 1\n
+	//   %%equalbars 1\n
+	//   %%stretchlast 0.6\n
+	//   %%partsbox 1\n
+	//   %%MIDI channel 10\n
+	//   %%MIDI program 0\n
+	//   %%MIDI drumon\n
+	//   %%MIDI gchordoff\n
+	//   %%MIDI drum dddd 76 77 77 77 70 70 70 70\n
+	//   V:1\nA2 z2 z2 z2|\nz2 z2 z2 A2|\nz2 z2 A2 z2|\nA2 z2 z2 z2|\nA2 z2 z2 z2|\nz2 A2 z2 z2|\nz2 A2 z2 z2|\nA2 z2 z2 z2|\nA2 z2 z2 z2|\nz2 A2 z2 z2|",
+
 	get songlength() {
 		return ocjeneOptions.bars.val * this.barLength;
 	},
@@ -814,12 +844,61 @@ const ocjeneSong = {
 	noteData: [],
 	abcJSSong: "",
 	abcJSText: "",
+	getData() {
+		let song = "";
+		let text = "";
+		for (let n of ocjeneSong.noteData) {
+			song += n.abcJSPitch;
+			text += n.translateText();
+		}
+		song += "|]";
+		text += "]";
+		ocjeneSong.abcJSSong = song;
+		ocjeneSong.abcJSText = text;
+	},
+	abcCanvas: null,
+	synthControl: null,
+	synthOptions: {
+		displayLoop: true,
+		displayRestart: true,
+		displayPlay: true,
+		displayProgress: true,
+		displayWarp: false,
+		get drumIntro() {
+			return 0; //ocjeneOptions.metronome.val
+		},
+		get drum() {
+			return ocjeneOptions.metronome.state ? "dddd 76 77 77 77 60 30 30 30" : null;
+		},
+	},
+	cursorControl: new ocjeneCursorControl(),
+	startTune(userAction) {
+		ocjeneSong.synthControl.disable(true);
+		const midiBuffer = new ABCJS.synth.CreateSynth();
+		midiBuffer
+			.init({
+				visualObj: ocjeneSong.abcCanvas,
+			})
+			.then(function (response) {
+				if (ocjeneSong.synthControl) {
+					ocjeneSong.synthControl
+						.setTune(ocjeneSong.abcCanvas, userAction, ocjeneSong.synthOptions)
+						.then(function (response) {
+							// console.log("Audio successfully loaded.", response);
+						})
+						.catch(function (error) {
+							console.warn("Audio problem:", error);
+						});
+				}
+			})
+			.catch(function (error) {
+				console.warn("Audio problem:", error);
+			});
+	},
 };
 
 class ocjeneNote {
 	constructor(type, duration, timeStamp, tripletIndex, splitIndex = null, splitMidiPitch = null) {
-		// console.log(ocjeneSong.remainingSongLength, ocjeneSong.remainingBarLength, duration, type);
-
 		if (duration < ocjeneOptions.notenwerte.min) console.log("duration", duration, ocjeneOptions.notenwerte.min);
 		this.abcJSPitch = null;
 		this.midiPitch = null;
@@ -1132,22 +1211,57 @@ function ocjeneIncreasePossibilities(type, possibleNotes) {
 	}
 }
 
-function ocjeneGetSongData() {
-	let song = "";
-	let text = "";
-	for (let n of ocjeneSong.noteData) {
-		song += n.abcJSPitch;
-		text += n.translateText();
-	}
-	song += "|]";
-	text += "]";
-	ocjeneSong.abcJSSong = song;
-	ocjeneSong.abcJSText = text;
+function ocjeneCursorControl() {
+	this.onReady = function () {};
+	this.onStart = function () {
+		var svg = document.querySelector(`#idCanv_ocjeneSheet svg`);
+		var cursor = document.createElementNS("http://www.w3.org/2000/svg", "line");
+		cursor.setAttribute("class", "cl_abcCursor");
+		cursor.setAttributeNS(null, "x1", 0);
+		cursor.setAttributeNS(null, "y1", 0);
+		cursor.setAttributeNS(null, "x2", 0);
+		cursor.setAttributeNS(null, "y2", 0);
+		svg.appendChild(cursor);
+	};
+	this.beatSubdivisions = 2;
+	this.onBeat = function (beatNumber, totalBeats, totalTime) {};
+	this.onEvent = function (ev) {
+		if (ev.measureStart && ev.left === null) return; // this was the second part of a tie across a measure line. Just ignore it.
+		let lastSelection = document.querySelectorAll(`#${ocjeneOptions.div} svg .cl_abcHighlight`);
+		for (let k = 0; k < lastSelection.length; k++) {
+			lastSelection[k].classList.remove("cl_abcHighlight");
+		}
+		for (let i = 0; i < ev.elements.length; i++) {
+			const note = ev.elements[i];
+			for (let j = 0; j < note.length; j++) {
+				note[j].classList.add("cl_abcHighlight");
+			}
+		}
+		const cursor = document.querySelector(`#${ocjeneOptions.div} svg .cl_abcCursor`);
+		if (cursor) {
+			cursor.setAttribute("x1", ev.left - 2);
+			cursor.setAttribute("x2", ev.left - 2);
+			cursor.setAttribute("y1", ev.top);
+			cursor.setAttribute("y2", ev.top + ev.height);
+		}
+	};
+	this.onFinished = function () {
+		const els = document.querySelectorAll("svg .cl_abcHighlight");
+		for (let i = 0; i < els.length; i++) {
+			els[i].classList.remove("cl_abcHighlight");
+		}
+		const cursor = document.querySelector(`#${ocjeneOptions.div} svg .cl_abcCursor`);
+		if (cursor) {
+			cursor.setAttribute("x1", 0);
+			cursor.setAttribute("x2", 0);
+			cursor.setAttribute("y1", 0);
+			cursor.setAttribute("y2", 0);
+		}
+	};
 }
 
 function ocjeneDraw() {
-	ocjeneGetSongData();
-
+	ocjeneSong.getData();
 	let text = ocjeneOptions.showText.state ? `w: ${ocjeneSong.abcJSText}` : "";
 	const res = `${ocjeneSong.header}${ocjeneSong.abcJSSong}\n${text}`;
 	const drawOptions = {
@@ -1159,10 +1273,16 @@ function ocjeneDraw() {
 			preferredMeasuresPerLine: ocjeneSong.spread,
 		},
 	};
-	// let abcSynth = new ABCJS.synth.CreateSynth();
 
-	let abdObj = ABCJS.renderAbc(ocjeneOptions.div, res, drawOptions)[0];
-	// ABCJS.renderAbc(ocjeneOptions.div, res, drawOptions);
+	ocjeneSong.abcCanvas = ABCJS.renderAbc(ocjeneOptions.div, res, drawOptions)[0];
+	if (!ABCJS.synth.supportsAudio()) {
+		console.log("Audio is not supported in this browser.");
+		return;
+	}
+
+	ocjeneSong.synthControl = new ABCJS.synth.SynthController();
+	ocjeneSong.synthControl.load(ocjeneOptions.audio, ocjeneSong.cursorControl, ocjeneSong.synthOptions);
+	ocjeneSong.startTune(false);
 }
 
 function clear_cl_Ocjene(preset = null) {
@@ -1259,16 +1379,12 @@ function clear_cl_Ocjene(preset = null) {
 	ocjeneOptions.keyOnly.state = preset === null ? ocjeneOptions.keyOnly.stateOrig : ocjeneSettings.get("keyOnly");
 	dbID("idCb_ocjeneKeyOnly").checked = ocjeneOptions.keyOnly.state;
 
-	// ocjeneOptions.dotted.state = preset === null ? ocjeneOptions.dotted.stateOrig : ocjeneSettings.get("dotted");
-	// dbID("idCb_ocjeneDotted").checked = ocjeneOptions.dotted.state;
 	ocjeneOptions.dotted.val = preset === null ? ocjeneOptions.dotted.valOrig : ocjeneSettings.get("dotted");
 	resetInput("idVin_ocjeneDotted", ocjeneOptions.dotted.val, {
 		min: ocjeneOptions.dotted.min,
 		max: ocjeneOptions.dotted.max,
 	});
 
-	// ocjeneOptions.triplet.state = preset === null ? ocjeneOptions.triplet.stateOrig : ocjeneSettings.get("triplet");
-	// dbID("idCb_ocjeneTriplet").checked = ocjeneOptions.triplet.state;
 	ocjeneOptions.triplet.val = preset === null ? ocjeneOptions.triplet.valOrig : ocjeneSettings.get("triplet");
 	resetInput("idVin_ocjeneTriplet", ocjeneOptions.triplet.val, {
 		min: ocjeneOptions.triplet.min,
@@ -1277,6 +1393,14 @@ function clear_cl_Ocjene(preset = null) {
 
 	ocjeneOptions.barOverflowStop.state = preset === null ? ocjeneOptions.barOverflowStop.stateOrig : ocjeneSettings.get("barOverflowStop");
 	dbID("idCb_ocjeneBarOverflowStop").checked = ocjeneOptions.barOverflowStop.state;
+
+	ocjeneOptions.metronome.state = preset === null ? ocjeneOptions.metronome.stateOrig : ocjeneSettings.get("metronome");
+	dbID("idCb_ocjeneMetronome").checked = ocjeneOptions.metronome.state;
+	ocjeneOptions.metronome.val = ocjeneOptions.metronome.valOrig;
+	resetInput("idVin_ocjeneMetronome", ocjeneOptions.metronome.val, {
+		min: ocjeneOptions.metronome.min,
+		max: ocjeneOptions.metronome.max,
+	});
 
 	ocjeneOptions.limitRange.state = preset === null ? ocjeneOptions.limitRange.stateOrig : ocjeneSettings.get("limitRange");
 	ocjeneOptions.variables.rangeOffset.val = preset === null ? ocjeneOptions.variables.rangeOffset.valOrig : ocjeneSettings.get("rangeOffset");
@@ -1408,6 +1532,10 @@ function ocjeneBarOverflowStop(obj) {
 	ocjeneOptions.barOverflowStop.state = obj.checked;
 	ocjeneInputChange();
 }
+function ocjeneMetronome(obj) {
+	ocjeneOptions.metronome.state = obj.checked;
+	ocjeneInputChange();
+}
 
 function ocjeneLimitRange(obj) {
 	ocjeneOptions.limitRange.state = obj.checked;
@@ -1450,6 +1578,11 @@ const ocjeneSettings = {
 			if (ocjeneSettings.level == 2) return 16;
 		},
 		get barOverflowStop() {
+			if (ocjeneSettings.level == 0) return true;
+			if (ocjeneSettings.level == 1) return false;
+			if (ocjeneSettings.level == 2) return false;
+		},
+		get metronome() {
 			if (ocjeneSettings.level == 0) return true;
 			if (ocjeneSettings.level == 1) return false;
 			if (ocjeneSettings.level == 2) return false;

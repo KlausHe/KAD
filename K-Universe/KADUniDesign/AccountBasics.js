@@ -8,39 +8,40 @@ let nuncDiscipuli = {
 		return firebase.auth().currentUser != null;
 	},
 	get short() {
-		return accData.data ? accData.infos.shortName.data : "";
+		return AccData.data ? AccData.infos.shortName.data : "";
+	},
+	get createShort() {
+		const newShort = {
+			first: AccData.infos.firstName.data.slice(0, 2),
+			sur: AccData.infos.surname.data.slice(0, 2),
+			email: nuncDiscipuli.cred.email.slice(0, 2),
+		};
+
+		return newShort.first || newShort.sur || newShort.email;
 	},
 	clear: () => {
 		for (let obj in contentGrid) {
-			if (contentGrid[obj].hasOwnProperty("userStoreDBData")) {
-				contentGrid[obj].userStoreDBClear();
-			}
+			if (contentGrid[obj].hasOwnProperty("userStoreDBData")) contentGrid[obj].userStoreDBClear();
 		}
 	},
 	getAllData: () => {
 		let retData = {};
 		for (let obj in contentGrid) {
-			if (contentGrid[obj].hasOwnProperty("userStoreDBData")) {
-				retData[obj] = contentGrid[obj].userStoreDBData;
-			}
+			if (contentGrid[obj].hasOwnProperty("userStoreDBData")) retData[obj] = contentGrid[obj].userStoreDBData;
 		}
 		return retData;
 	},
 	getData(obj) {
 		let name = `cl_${obj}`;
-		if (contentGrid[name].hasOwnProperty("userStoreDBData")) {
-			return contentGrid[name].userStoreDBData;
-		}
+		if (contentGrid[name].hasOwnProperty("userStoreDBData")) return contentGrid[name].userStoreDBData;
 	},
 	saveData(obj, data) {
 		let name = `cl_${obj}`;
-		if (contentGrid[name].hasOwnProperty("userStoreDBData")) {
-			contentGrid[name].userStoreDBData = data;
-		}
+		if (contentGrid[name].hasOwnProperty("userStoreDBData")) contentGrid[name].userStoreDBData = data;
 	},
 };
 
-const accData = {
+const AccData = {
 	data: false,
 	infos: {
 		anrede: {
@@ -82,12 +83,7 @@ const accData = {
 			description: "Geburtsjahr",
 			get suggestions() {
 				let h = new Date().getFullYear();
-				return Array.from(
-					{
-						length: 150,
-					},
-					(_, i) => h - i - 1
-				);
+				return Array.from({ length: 150 }, (_, i) => h - i - 1);
 			},
 		},
 		birthPlace: {
@@ -116,12 +112,7 @@ const accData = {
 			description: "Schuhgröße",
 			get suggestions() {
 				let off = 5;
-				return Array.from(
-					{
-						length: 110,
-					},
-					(_, i) => off + i * 0.5 + 0.5
-				);
+				return Array.from({ length: 110 }, (_, i) => off + i * 0.5 + 0.5);
 			},
 		},
 		lFilm: {
@@ -162,7 +153,7 @@ function toggleLayout() {
 		dbID("idDiv_navBar_AccountSettingsA").setAttribute("data-type", "login");
 		dbID("idDiv_navBar_AccountSettingsB").setAttribute("data-type", "register");
 		dbIDStyle("idDiv_navBar_User").display = "none";
-		dbID("idLbl_navBarLbl_User").textContent = "User"; // User ShortName is set in userAccReturn(), after login the data has not yet returned
+		dbID("idLbl_navBarLbl_User").textContent = "User";
 
 		//hide Download/Upload buttons
 		for (const key of dbList) {
@@ -259,7 +250,7 @@ function accountLogout() {
 function createUserInfos(type) {
 	const parent = dbCL("cl_UserAcc_infos");
 	clearFirstChild(parent);
-	for (const [key, subObj] of Object.entries(accData.infos)) {
+	for (const [key, subObj] of Object.entries(AccData.infos)) {
 		const uInfoParent = cellDiv({
 			names: ["uInfoParent", key],
 			type: "Div",
@@ -290,7 +281,7 @@ function createUserInfos(type) {
 				list: `dList_uInfo_${key}`,
 				maxLength: subObj.maxlength ? subObj.maxlength : 50,
 			},
-			placeholder: type == "register" ? subObj.description : accData.infos[key].data == null || accData.infos[key].data == "" ? "..." : accData.infos[key].data,
+			placeholder: type == "register" ? subObj.description : AccData.infos[key].data == null || AccData.infos[key].data == "" ? "..." : AccData.infos[key].data,
 		});
 		uInfoParent.appendChild(uInfoVin);
 		const uInfoDel = cellBtn({
@@ -306,7 +297,7 @@ function createUserInfos(type) {
 				textAlign: "center",
 			},
 			onclick: () => {
-				accData.infos[key].data = null;
+				AccData.infos[key].data = null;
 				uInfoVin.value = "";
 				uInfoVin.placeholder = "...";
 			},
@@ -337,35 +328,30 @@ function submitUser() {
 	const type = dbID("idBtn_userAcc_submit").dataset.type;
 	nuncDiscipuli.cred.email = dbID("idVin_userAcc_mail").value.trim();
 	if (type == "register" || type == "change") {
-		for (let [key, val] of Object.entries(accData.infos)) {
+		for (let [key, val] of Object.entries(AccData.infos)) {
 			const id = `idVin_child_uInfoVin_${key}`;
 			const vinUser = dbID(id).value.trim();
 			if (vinUser != "") {
-				accData.infos[key].data = vinUser;
+				AccData.infos[key].data = vinUser;
 			}
 		}
 		if (nuncDiscipuli.short === null) {
-			const newShort = {
-				first: accData.infos.firstName.slice(0, 2),
-				sur: accData.infos.surname.slice(0, 2),
-				email: nuncDiscipuli.cred.email.slice(0, 2),
-			};
-			nuncDiscipuli.short = newShort.first || newShort.sur || newShort.email;
+			nuncDiscipuli.short = nuncDiscipuli.createShort;
 		}
+		dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
 	}
 	//just login
 	nuncDiscipuli.cred.keepLogin = dbID("idCb_userAcc_check").checked ? "LOCAL" : "SESSION"; // "NONE";
-	switch (type) {
-		case "login":
-			userAccLogin();
-			break;
-		case "register":
-			userAccRegister();
-			break;
-		case "change":
-			saveDiscipuli("userAcc");
-			layoutNavClick();
-			break;
+
+	if (type == "login") {
+		userAccLogin();
+	}
+	if (type == "register") {
+		userAccRegister();
+	}
+	if (type == "change") {
+		saveDiscipuli("UserAcc");
+		layoutNavClick();
 	}
 }
 
@@ -417,6 +403,9 @@ function userAccRegister() {
 
 function userAccSetUserBtn() {
 	dbIDStyle("idDiv_navBar_User").display = "initial";
+	if (nuncDiscipuli.short == null) {
+		nuncDiscipuli.short = nuncDiscipuli.createShort;
+	}
 	dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
 	enableBtn("idBtn_userAcc_submit", true);
 	layoutNavTitle();

@@ -147,8 +147,10 @@ function usergridCreateTable() {
 				{
 					names: ["disableUsergridSingle", groupKey, j],
 					type: "Lbl",
-					for: cellA.childNodes[0].id,
 					text: contentGrid[objName].name,
+					ui: {
+						for: cellA.childNodes[0].id,
+					},
 				},
 				uImage
 			);

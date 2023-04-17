@@ -528,6 +528,7 @@
 		". cl_OcjeneSheet cl_OcjeneTriplet cl_OcjeneTriplet ."
 		". cl_OcjeneSheet cl_OcjeneRests cl_OcjeneRests ."
 		". cl_OcjeneSheet cl_OcjeneBarOverflowStop cl_OcjeneBarOverflowStop ."
+		". cl_OcjeneSheet cl_OcjeneMetronome cl_OcjeneMetronome ."
 		". cl_OcjeneSheet cl_OcjeneMelodieHeader cl_OcjeneMelodieHeader ."
 		". cl_OcjeneSheet cl_OcjeneInstrument cl_OcjeneInstrument ."
 		". cl_OcjeneSheet cl_OcjeneKeyOnly cl_OcjeneKeyOnly ."
@@ -535,8 +536,9 @@
 		". cl_OcjeneSheet cl_OcjeneInterval cl_OcjeneInterval .";
 	grid-template-columns: 1fr auto var(--UIWidth6) var(--UIWidth6) 1fr;
 	grid-template-rows:
-		var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
-		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
+		var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) 
+    var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
+		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
 		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 

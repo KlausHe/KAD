@@ -24,13 +24,13 @@ const contentLayout = {
 		});
 		return list;
 	},
-	AccountSettingsA: ["cl_UserAcc"],
-	AccountSettingsB: ["cl_UserAcc"],
+
+	AccountSettings: ["cl_UserAcc"],
 	contentList: [],
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "Tools" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_Ocjene" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -89,8 +89,6 @@ function layoutResizeGrid() {
 }
 
 function layoutNavClick(layoutName) {
-	//  = contentLayout.prevNavContent
-
 	if ([...Object.keys(contentLayout.navContent)].includes(layoutName)) {
 		if (layoutName === "Universe") {
 			contentLayout.navContent[layoutName] = [...contentLayout.origUniverse];
@@ -154,7 +152,7 @@ function layoutCreateContentList(layoutName) {
 		return contentLayout.GlobalSettings;
 	}
 	if (layoutName === "AccountSettingsA" || layoutName === "AccountSettingsB") {
-		return contentLayout[layoutName];
+		return contentLayout.AccountSettings;
 	}
 	if (nuncDiscipuli.checkLogin) {
 		return [...contentLayout.navContent[layoutName]];
@@ -167,62 +165,76 @@ function layoutCreateContentList(layoutName) {
 
 function layoutCreateGridLayout(layoutName) {
 	contentLayout.contentList = layoutCreateContentList(layoutName);
+	if (contentLayout.contentList == []) {
+		layoutCreateAreaString([], 0);
+		return;
+	}
 	// fill list with data
-	const rowLength = layoutName.includes("cl_") ? 1 : getCssRoot("gridRowLength", true);
+	const rowLength = contentLayout.contentList.length == 1 ? 1 : getCssRoot("gridRowLength", true);
 	let gridArray = [];
 	if (rowLength === 1) {
 		for (const name of contentLayout.contentList) {
 			gridArray.push(name);
 		}
-	} else {
-		for (const name of contentLayout.contentList) {
-			let contWidth = contentGrid[name].hasOwnProperty("width") ? contentGrid[name].width : 1;
-			if (contWidth > rowLength) contWidth = rowLength;
-			let contHeight = contentGrid[name].hasOwnProperty("height") ? contentGrid[name].height : 1;
-			let notPlaced = true;
-			let indexRow = 0;
+		layoutCreateAreaString(gridArray, rowLength);
+		return;
+	}
 
-			while (notPlaced) {
-				for (let r = 0; r < rowLength; r++) {
-					const indexR = indexRow * rowLength + r;
-					notPlaced = false;
-					//if the first spot is not free and if the row can't contain the contWidth --> do nothing!
-					if (gridArray[indexR] !== undefined || Math.floor((indexR + contWidth - 1) / rowLength) != indexRow) {
-						notPlaced = true;
-					} else {
-						// if this place and all to the right are free(second loop) - and inside that loop,
+	for (const name of contentLayout.contentList) {
+		let contWidth = contentGrid[name].hasOwnProperty("width") ? contentGrid[name].width : 1;
+		if (contWidth > rowLength) contWidth = rowLength;
+		let contHeight = contentGrid[name].hasOwnProperty("height") ? contentGrid[name].height : 1;
+		let notPlaced = true;
+		let indexRow = 0;
+
+		while (notPlaced) {
+			for (let r = 0; r < rowLength; r++) {
+				const indexR = indexRow * rowLength + r;
+				notPlaced = false;
+				//if the first spot is not free and if the row can't contain the contWidth --> do nothing!
+				if (gridArray[indexR] !== undefined || Math.floor((indexR + contWidth - 1) / rowLength) != indexRow) {
+					notPlaced = true;
+				} else {
+					// if this place and all to the right are free(second loop) - and inside that loop,
+					for (let x = 0; x < contWidth; x++) {
+						for (let y = 0; y < contHeight; y++) {
+							const index = indexR + x + y * rowLength;
+							if (gridArray[index] !== undefined) {
+								notPlaced = true;
+							}
+						}
+					}
+					if (!notPlaced) {
+						// if  true, push to Array at these places!
 						for (let x = 0; x < contWidth; x++) {
 							for (let y = 0; y < contHeight; y++) {
 								const index = indexR + x + y * rowLength;
-								if (gridArray[index] !== undefined) {
-									notPlaced = true;
-								}
+								gridArray[index] = name; //--> not the name, the Index in the contentGrid!!!
 							}
 						}
-						if (!notPlaced) {
-							// if  true, push to Array at these places!
-							for (let x = 0; x < contWidth; x++) {
-								for (let y = 0; y < contHeight; y++) {
-									const index = indexR + x + y * rowLength;
-									gridArray[index] = name; //--> not the name, the Index in the contentGrid!!!
-								}
-							}
-							notPlaced = false;
-							break;
-						} //end Insertion
-					} //end ELSE "first spot is not taken"
+						notPlaced = false;
+						break;
+					} //end Insertion
+				} //end ELSE "first spot is not taken"
 
-					if (!notPlaced) break;
-				} // end main FOR (r)
-				indexRow++;
-				//safety
-				if (indexRow > 100) {
-					console.error("unable to find spot!");
-					break;
-				}
-			} // end WHILE
-		} // end Grid-Element
-	} //end of "ELSE"
+				if (!notPlaced) break;
+			} // end main FOR (r)
+			indexRow++;
+			//safety
+			if (indexRow > 100) {
+				console.error("unable to find spot!");
+				break;
+			}
+		} // end WHILE
+	} // end Grid-Element
+	layoutCreateAreaString(gridArray, rowLength);
+}
+
+function layoutCreateAreaString(gridArray, rowLength) {
+	if (gridArray == []) {
+		dbIDStyle("id_contentGrid").gridTemplateAreas = "";
+		return;
+	}
 
 	const gridEnd = gridArray.length % rowLength;
 	const addedLength = gridEnd == 0 ? 0 : rowLength - gridEnd;
