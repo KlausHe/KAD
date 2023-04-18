@@ -24,7 +24,6 @@ const contentLayout = {
 		});
 		return list;
 	},
-
 	AccountSettings: ["cl_UserAcc"],
 	contentList: [],
 	contentLength: 0,
@@ -152,6 +151,7 @@ function layoutCreateContentList(layoutName) {
 		return contentLayout.GlobalSettings;
 	}
 	if (layoutName === "AccountSettingsA" || layoutName === "AccountSettingsB") {
+    console.log(contentLayout.AccountSettings);
 		return contentLayout.AccountSettings;
 	}
 	if (nuncDiscipuli.checkLogin) {
