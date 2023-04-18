@@ -9,7 +9,7 @@ const ocjeneOptions = {
 	division: 576,
 	notenwerte: {
 		selected: [],
-		selectedOrig: [0, 1, 1, 1, 0, 0], //1/1, 1/2, 1/4, 1/8, 1/16
+		selectedOrig: [0, 1, 1, 1, 0, 0], //1/1, 1/2, 1/4, 1/8, 1/16, 1/32
 		quaternote: 144,
 		noteArrays: {
 			base: [576, 288, 144, 72, 36, 18],
@@ -23,7 +23,7 @@ const ocjeneOptions = {
 	dotted: {
 		state: false,
 		stateOrig: false,
-		probability: 0.2,
+		probability: 0.15,
 		val: 0,
 		valOrig: 0,
 		min: 0,
@@ -32,7 +32,7 @@ const ocjeneOptions = {
 	triplet: {
 		state: false,
 		stateOrig: true,
-		probability: 0.2,
+		probability: 0.15,
 		val: 0,
 		valOrig: 0,
 		min: 0,
@@ -53,7 +53,7 @@ const ocjeneOptions = {
 	},
 	interval: {
 		val: 0,
-		valOrig: 2,
+		valOrig: 4,
 	},
 	tempo: {
 		val: 0,
@@ -63,7 +63,7 @@ const ocjeneOptions = {
 	},
 	bars: {
 		val: 0,
-		valOrig: 6,
+		valOrig: 8,
 		max: 16,
 	},
 	barOverflowStop: {
@@ -115,7 +115,7 @@ const ocjeneOptions = {
 	},
 	keys: {
 		index: 0,
-		indexOrig: 5,
+		indexOrig: 0,
 		get current() {
 			return ocjeneOptions.definitions.keys[ocjeneOptions.keys.index][ocjeneOptions.keySignatures.index];
 		},
@@ -124,18 +124,18 @@ const ocjeneOptions = {
 		},
 	},
 	keyOnly: {
-		state: false,
-		stateOrig: false,
+		state: true,
+		stateOrig: true,
 	},
 	limitRange: {
-		state: false,
+		state: true,
 		stateOrig: true,
 		base: 69,
 	},
 	variables: {
 		rangeOffset: {
-			val: 10,
-			valOrig: 12,
+			val: 8,
+			valOrig: 8,
 		},
 		firstPitchIterations: {
 			val: 0,
@@ -383,6 +383,7 @@ const ocjeneOptions = {
 			[2, 4],
 			[3, 4],
 			[4, 4],
+			[5, 4],
 			[3, 8],
 			[6, 8],
 			[7, 8],
@@ -868,14 +869,28 @@ const ocjeneSong = {
 			return 0; //ocjeneOptions.metronome.val
 		},
 		get drum() {
-			return ocjeneOptions.metronome.state ? "dddd 76 77 77 77 60 30 30 30" : null;
+			if (!ocjeneOptions.metronome.state) return null;
+			const metronomePattern = [
+				"dddd 76 77 77 77 70 50 60 40", // 2/2
+				"dd 76 77 70 40", // 2/4
+				"ddd 76 77 77 70 50 40", // 3/4
+				"dddd 76 77 77 77 70 40 50 40", // 4/4
+				"ddddd 76 77 77 77 77 70 40 40 60 40", // 5/4
+				"d72d72d72 76 77 77 70 50 40", // 3/8
+				"d72d72d72d72d72d72 76 77 77 76 77 77 70 50 40 50 50 40", // 6/8
+				"d72d72d72d72d72d72d72 76 77 77 76 77 76 77 70 50 40 50 40 50 40", // 7/8
+				"d72d72d72d72d72d72d72d72d72 76 77 77 76 77 77 76 77 77 70 50 40 50 50 40 50 50 40", // 9/8
+				"d72d72d72d72d72d72d72d72d72d72d72d72 76 77 77 76 77 77 76 77 77 76 77 77 70 50 40 50 50 40 50 50 40 50 50 40", // 12/8
+			];
+			return metronomePattern[ocjeneOptions.timeSignature.index];
 		},
 	},
+	midiBuffer: null,
 	cursorControl: new ocjeneCursorControl(),
 	startTune(userAction) {
 		ocjeneSong.synthControl.disable(true);
-		const midiBuffer = new ABCJS.synth.CreateSynth();
-		midiBuffer
+		ocjeneSong.midiBuffer = new ABCJS.synth.CreateSynth();
+		ocjeneSong.midiBuffer
 			.init({
 				visualObj: ocjeneSong.abcCanvas,
 			})
@@ -1261,6 +1276,10 @@ function ocjeneCursorControl() {
 }
 
 function ocjeneDraw() {
+	if (ocjeneSong.midiBuffer != null) {
+		ocjeneSong.midiBuffer.stop();
+		ocjeneSong.midiBuffer = null;
+	}
 	ocjeneSong.getData();
 	let text = ocjeneOptions.showText.state ? `w: ${ocjeneSong.abcJSText}` : "";
 	const res = `${ocjeneSong.header}${ocjeneSong.abcJSSong}\n${text}`;
@@ -1497,13 +1516,11 @@ function ocjeneKeyOnly(obj) {
 }
 
 function ocjeneDotted(obj) {
-	// ocjeneOptions.dotted.state = obj.checked;
 	ocjeneOptions.dotted.val = obj.value;
 	ocjeneInputChange();
 }
 
 function ocjeneTriplet(obj) {
-	// ocjeneOptions.triplet.state = obj.checked;
 	ocjeneOptions.triplet.val = obj.value;
 	ocjeneInputChange();
 }
@@ -1534,7 +1551,8 @@ function ocjeneBarOverflowStop(obj) {
 }
 function ocjeneMetronome(obj) {
 	ocjeneOptions.metronome.state = obj.checked;
-	ocjeneInputChange();
+	ocjeneDraw();
+	// ocjeneInputChange();
 }
 
 function ocjeneLimitRange(obj) {

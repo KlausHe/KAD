@@ -151,7 +151,6 @@ function layoutCreateContentList(layoutName) {
 		return contentLayout.GlobalSettings;
 	}
 	if (layoutName === "AccountSettingsA" || layoutName === "AccountSettingsB") {
-    console.log(contentLayout.AccountSettings);
 		return contentLayout.AccountSettings;
 	}
 	if (nuncDiscipuli.checkLogin) {
