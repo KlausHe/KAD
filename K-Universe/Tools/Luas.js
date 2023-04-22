@@ -92,8 +92,8 @@ function luasStart() {
 }
 
 function luasInputChange() {
-	luasOptions.speedVin = numberFromInput("idVin_luasVelAngular");
-	luasOptions.diameterVin = numberFromInput("idVin_luasDiameter");
+	luasOptions.speedVin = utilsNumberFromInput("idVin_luasVelAngular");
+	luasOptions.diameterVin = utilsNumberFromInput("idVin_luasDiameter");
 	luasOptions.angularVin = Number(dbID("idSel_luasAngularUnit").value);
 	luasOptions.angularText = dbID("idSel_luasAngularUnit").options[dbID("idSel_luasAngularUnit").selectedIndex].textContent;
 	luasOptions.linearText = dbID("idSel_luasLinearUnit").options[dbID("idSel_luasLinearUnit").selectedIndex].textContent;

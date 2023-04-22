@@ -547,9 +547,9 @@ function changeGeoObject(index) {
 function geoBerechnung() {
 	// DIESE EINE FUNKTION STEUERT ALLE OUTPUTS!!!
 	let selectedObj = geoObjects[geoObjects.selectedGeo];
-	geoObjects.valA = numberFromInput("idVin_Area_0", selectedObj.vals[0]);
-	geoObjects.valB = numberFromInput("idVin_Area_1", selectedObj.vals[1]);
-	geoObjects.valC = numberFromInput("idVin_Area_2", selectedObj.vals[2]);
+	geoObjects.valA = utilsNumberFromInput("idVin_Area_0", selectedObj.vals[0]);
+	geoObjects.valB = utilsNumberFromInput("idVin_Area_1", selectedObj.vals[1]);
+	geoObjects.valC = utilsNumberFromInput("idVin_Area_2", selectedObj.vals[2]);
 
 	selectedObj.circumference.result = checkExponential(selectedObj.circumference.formula, {
 		decimals: 4,

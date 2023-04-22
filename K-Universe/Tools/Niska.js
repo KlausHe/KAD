@@ -1295,8 +1295,8 @@ function clear_cl_Niska() {
 }
 
 function niskaCalc() {
-  niskaOptions.size.val = numberFromInput("idVin_niskaSize");
-	niskaOptions.pitch.val = numberFromInput("idVin_niskaPitch");
+  niskaOptions.size.val = utilsNumberFromInput("idVin_niskaSize");
+	niskaOptions.pitch.val = utilsNumberFromInput("idVin_niskaPitch");
 	niskaOptions.strengthClass.index0 = dbID("idSel_niskaStrengthClassA").selectedIndex;
 	niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
 	niskaOptions.select.index = dbID("idSel_niskaSelect").selectedIndex;

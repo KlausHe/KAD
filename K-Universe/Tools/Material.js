@@ -202,7 +202,7 @@ function materialSelectedTable() {
 }
 
 function materialSearchSelectChange(obj) {
-	materialOptions.selMatGroup = obj.value;
+	materialOptions.selMatGroup = utilsNumberFromInput(obj);
 	materialSearchInput();
 }
 

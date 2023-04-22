@@ -206,40 +206,62 @@ function checkExponential(number, { decimals = globalValues.settings.decimals, e
 }
 
 function utilsVinChange(id, v) {
-	// const obj = id.parentNode.getElementsByTagName("input")[0];
-	const obj = id.parentNode.querySelectorAll("input[type=number]")[0];
+	let obj = null;
+	let siblingList = Array.from(id.parentNode.children);
+	for (let i = siblingList.indexOf(id) - 1; i >= 0; i--) {
+		if (siblingList[i].type != "button") {
+			obj = siblingList[i];
+			break;
+		}
+	}
+	if (obj == null) {
+		console.log("not found");
+		return;
+	}
 	if (obj.disabled) return;
-	let dir = Number(v);
-	if (obj.type == "time") {
+	const dir = Number(v);
+
+	if (obj.type == "time") evaluateTime();
+	if (obj.type == "number") evaluateNumber();
+
+	obj.dispatchEvent(new Event("input"));
+	obj.focus();
+
+	function evaluateTime() {
 		const h = Number(obj.value.slice(0, 2));
 		const m = Number(obj.value.slice(3, 5));
 		let time = m + h * 60;
 		time += time % 5 == 0 ? dir * 5 : dir;
 		const t = utilsMinutesToObj(time);
 		obj.value = `${t.h}:${t.m}`;
-	} else if (obj.type == "number") {
-		if (dir == 0) {
-			if (obj.validity.valid === false || Number(obj.value) === 0) obj.value = "";
-			else if (obj.value.length > 0) obj.value = obj.min || 0;
-		} else {
-			const time = new Date().getTime();
-			let skip = false;
-			if (obj.hasAttribute("data-ts")) {
-				if (time - obj.dataset.ts < 1500) skip = true;
-			}
-			obj.setAttribute("data-ts", time);
-			const actual = obj.value == "" && obj.placeholder != "" ? Number(obj.placeholder) : Number(obj.value);
-			const num = skip && actual % 5 == 0 ? actual + dir * 5 : actual + dir;
-			const min = obj.hasAttribute("min") && dir < 1 ? Number(obj.min) : null;
-			const max = obj.hasAttribute("max") && dir > 0 ? Number(obj.max) : null;
-			obj.value = valueConstrain(num, min, max);
-		}
 	}
-	obj.dispatchEvent(new Event("input"));
-	obj.focus();
+	function evaluateNumber() {
+		if (dir == 0) {
+			const time = new Date().getTime();
+			obj.setAttribute("data-ts", time);
+			if (Number(obj.value) === 0 || Number(obj.value) === Number(obj.min)) {
+				obj.value = "";
+				return;
+			}
+			obj.value = obj.min || 0;
+			return;
+		}
+
+		const time = new Date().getTime();
+		let skip = false;
+		if (obj.hasAttribute("data-ts")) {
+			if (time - obj.dataset.ts < 1500) skip = true;
+		}
+		obj.setAttribute("data-ts", time);
+		const actual = obj.value == "" && obj.placeholder != "" ? Number(obj.placeholder) : Number(obj.value);
+		const num = skip && actual % 5 == 0 ? actual + dir * 5 : actual + dir;
+		const min = obj.hasAttribute("min") && dir < 1 ? Number(obj.min) : null;
+		const max = obj.hasAttribute("max") && dir > 0 ? Number(obj.max) : null;
+		obj.value = valueConstrain(num, min, max);
+	}
 }
 
-function numberFromInput(id, failSafeVal = null, noPlaceholder = null) {
+function utilsNumberFromInput(id, failSafeVal = null, noPlaceholder = null) {
 	const obj = dbID(id);
 	if (!isNaN(obj.valueAsNumber)) return obj.valueAsNumber;
 	if (failSafeVal != null) return failSafeVal;
@@ -795,7 +817,7 @@ function UIOptions(cell, opt) {
 			false
 		);
 	}
-  if (opt.hasOwnProperty("for")) {
+	if (opt.hasOwnProperty("for")) {
 		cell.setAttribute("for", opt.for);
 	}
 	if (opt.hasOwnProperty("style")) {

@@ -64,9 +64,9 @@ function blechgeoFormChange() {
 };
 
 function calcBlechGeo() {
-  blechOptions.s = numberFromInput("idVin_blechgeoDicke", blechOptions.dicke);
-  blechOptions.r = numberFromInput("idVin_blechgeoRadius", blechOptions.radius);
-  blechOptions.b = numberFromInput("idVin_blechgeoBreite", blechOptions.breite);
+  blechOptions.s = utilsNumberFromInput("idVin_blechgeoDicke", blechOptions.dicke);
+  blechOptions.r = utilsNumberFromInput("idVin_blechgeoRadius", blechOptions.radius);
+  blechOptions.b = utilsNumberFromInput("idVin_blechgeoBreite", blechOptions.breite);
   let selBlechForm = blechOptions.geo[dbID("idSel_blechgeoForm").value];
 
   dbID("idLbl_blechgeoResult").textContent = `Mindestabstand: ${selBlechForm.func}`;

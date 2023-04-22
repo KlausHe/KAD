@@ -77,8 +77,8 @@ function pythoCalc() {
 	pythoOptions.vals = [];
 	const A = pythoOptions.inputState[0];
 	const B = pythoOptions.inputState[1];
-	pythoOptions.vals[A] = numberFromInput(`idVin_Pytho_${A}`);
-	pythoOptions.vals[B] = numberFromInput(`idVin_Pytho_${B}`);
+	pythoOptions.vals[A] = utilsNumberFromInput(`idVin_Pytho_${A}`);
+	pythoOptions.vals[B] = utilsNumberFromInput(`idVin_Pytho_${B}`);
 
 	if (A > 2) pythoOptions.vals[A] *= caPY.PI / 180; //convert dregrees to radians
 	if (B > 2) pythoOptions.vals[B] *= caPY.PI / 180; //convert dregrees to radians

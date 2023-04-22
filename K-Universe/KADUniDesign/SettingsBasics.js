@@ -200,7 +200,7 @@ function settingsCopySeparator(obj = null) {
 function settingsFontsize(obj = null) {
 	if (obj === null) {
 		const opt = globalValues.fontSizeArray.indexOf(Number(globalValues.settings.fontSize));
-		dbID("idSel_settingsFontsize").options[opt].selected = true; //set CB when loaded
+		dbID("idSel_settingsFontsize").options[opt].selected = true; //set FS when loaded
 	} else {
 		globalValues.settings.fontSize = obj.value;
 	}

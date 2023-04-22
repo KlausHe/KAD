@@ -53,8 +53,8 @@ function clear_cl_Middle() {
 }
 
 function calcMiddle() {
-	const a = numberFromInput("idVin_middleA");
-	const b = numberFromInput("idVin_middleB");
+	const a = utilsNumberFromInput("idVin_middleA");
+	const b = utilsNumberFromInput("idVin_middleB");
 	middleOptions.barA.val = a;
 	middleOptions.barB.val = b;
 	middleOptions.barA.text = `a: ${middleOptions.barA.val}`;

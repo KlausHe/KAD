@@ -176,8 +176,8 @@ function pormulaAddInput(dir) {
 	parent.forEach((p, i) => {
 		p.style.display = i < pormulaOptions.data.length ? "block" : "none";
 		if (dir == 1 && i == pormulaOptions.data.length - 1) {
-			dbID(`idVin_Pormula_x${i}`).value = numberFromInput(`idVin_Pormula_x${i - 1}`) + 1;
-			dbID(`idVin_Pormula_y${i}`).value = numberFromInput(`idVin_Pormula_y${i - 1}`) + 1;
+			dbID(`idVin_Pormula_x${i}`).value = utilsNumberFromInput(`idVin_Pormula_x${i - 1}`) + 1;
+			dbID(`idVin_Pormula_y${i}`).value = utilsNumberFromInput(`idVin_Pormula_y${i - 1}`) + 1;
 		}
 	});
 	pormulaCalculate();
@@ -200,14 +200,14 @@ function pormulaGetType(id = null, type) {
 
 function pormulaReadInputs() {
 	//no logic, only gathering informations
-	pormulaOptions.regOptions.order = numberFromInput("idVin_pormulaOrder");
-	pormulaOptions.regOptions.precision = numberFromInput("idVin_pormulaPrecision");
+	pormulaOptions.regOptions.order = utilsNumberFromInput("idVin_pormulaOrder");
+	pormulaOptions.regOptions.precision = utilsNumberFromInput("idVin_pormulaPrecision");
 	pormulaOptions.data.userPoints = [];
 	pormulaOptions.data.uniquePoints = [];
 	pormulaOptions.data.uniqueX = [];
 	for (let i = 0; i < pormulaOptions.data.length; i++) {
-		const x = numberFromInput(`idVin_Pormula_x${i}`, i, true);
-		const y = numberFromInput(`idVin_Pormula_y${i}`, pormulaOptions.valuesOrig[i], true);
+		const x = utilsNumberFromInput(`idVin_Pormula_x${i}`, i, true);
+		const y = utilsNumberFromInput(`idVin_Pormula_y${i}`, pormulaOptions.valuesOrig[i], true);
 		if (x != null && y != null) {
 			pormulaOptions.data.userPoints.push([x, y]);
 			if (!pormulaOptions.data.uniqueX.includes(x)) {
@@ -294,7 +294,7 @@ function pormulaPolyFit() {
 }
 
 function pormulaPoint() {
-	let p = numberFromInput("idVin_pormulaPointEntry");
+	let p = utilsNumberFromInput("idVin_pormulaPointEntry");
 	let r = pormulaOptions.reg.predict(p);
 	dbID("idLbl_pormulaPointResult").textContent = r[1];
 }

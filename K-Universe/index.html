@@ -491,8 +491,8 @@
       <div class="cl_subGrid_Egg cl_subGrid">
         <div class="cl_EggMassValue" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Eigröße</label><input type="number" id="idVin_EggMass" uiRadius="none"
-            min="40" max="90" step="1" oninput="eggMassChange(this)"></input><button type="button" uiSize="size1"
-            uiRadius="none" onclick="utilsVinChange(this, 0)">
+            step="1" oninput="eggMassChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
             <img class="img_trash"></img>
           </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
             <img class="img_oSub"></img>
@@ -502,8 +502,8 @@
         </div>
         <div class="cl_EggTempValue">
           <label class="cl_info" uiRadius="left">Ei Temp.</label><input type="number" id="idVin_EggTemp" uiRadius="none"
-            min="40" max="90" step="1" oninput="eggTempChange(this)"></input><button type="button" uiSize="size1"
-            uiRadius="none" onclick="utilsVinChange(this, 0)">
+            step="1" oninput="eggTempChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
+            onclick="utilsVinChange(this, 0)">
             <img class="img_trash"></img>
           </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
             <img class="img_oSub"></img>
@@ -513,8 +513,8 @@
         </div>
         <div class="cl_EggYolkValue">
           <label class="cl_info" uiRadius="left">Zielfestigkeit</label><input type="number" id="idVin_EggYolk"
-            uiRadius="none" min="45" max="90" step="1" oninput="eggYolkChange(this)"></input><button type="button"
-            uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 0)">
+            uiRadius="none" step="1" oninput="eggYolkChange(this)"></input><button type="button" uiSize="size1"
+            uiRadius="none" onclick="utilsVinChange(this, 0)">
             <img class="img_trash"></img>
           </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
             <img class="img_oSub"></img>
@@ -2072,15 +2072,16 @@
           </label>
         </div>
         <div class="cl_OcjeneMetronome" uiWrap="nowrap">
-          <label class="cl_info" for="idCb_ocjeneMetronome" uiSize="size6" uiAlign="center" uiRadius="left">Metronom
-            (Intro)</label><label class="cl_info" uiSize="size1" uiRadius="none"><input type="checkbox"
+          <label class="cl_info" for="idCb_ocjeneMetronome" uiSize="size6" uiAlign="center"
+            uiRadius="left">Metronom</label><label class="cl_info" uiSize="size6" uiRadius="none"><input type="checkbox"
               id="idCb_ocjeneMetronome" onclick="ocjeneMetronome(this)"></input>
-          </label><input type="number" id="idVin_ocjeneMetronome" step="1" uiRadius="none"
+          </label>
+          <!-- <input type="number" id="idVin_ocjeneMetronome" step="1" uiRadius="none"
             oninput="ocjeneMetronome(this)"></input><button type="button" uiSize="size1" uiRadius="none"
             onclick="utilsVinChange(this, -1)"><img class="img_oSub"></img>
           </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
             <img class="img_oAdd"></img>
-          </button>
+          </button> -->
         </div>
         <div class="cl_OcjeneRests">
           <label class="cl_info" uiSize="size6" uiRadius="left">Pausen [%]</label><input type="number"

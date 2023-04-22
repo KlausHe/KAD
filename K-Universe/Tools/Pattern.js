@@ -67,10 +67,10 @@ function clear_cl_Pattern() {
 }
 
 function calcPattern() {
-	patternOptions.length.val = numberFromInput("idVin_Pattern0", patternOptions.length.valOrig);
-	patternOptions.side.val = numberFromInput("idVin_Pattern1", patternOptions.side.valOrig);
-	patternOptions.asym.val = numberFromInput("idVin_Pattern2", patternOptions.asym.valOrig);
-	patternOptions.numHoles.val = numberFromInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
+	patternOptions.length.val = utilsNumberFromInput("idVin_Pattern0", patternOptions.length.valOrig);
+	patternOptions.side.val = utilsNumberFromInput("idVin_Pattern1", patternOptions.side.valOrig);
+	patternOptions.asym.val = utilsNumberFromInput("idVin_Pattern2", patternOptions.asym.valOrig);
+	patternOptions.numHoles.val = utilsNumberFromInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
 
 	//correct based on Length
 	patternOptions.side.val = patternOptions.length.val <= 2 * patternOptions.side.val ? 0 : patternOptions.side.val;

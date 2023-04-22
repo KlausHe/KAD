@@ -87,7 +87,7 @@ function setBPMtoInterval(val) {
 }
 
 function beatmachineBPMChange(obj) {
-	let val = obj.value;
+	let val = utilsNumberFromInput(obj);
 	val = val == "" ? obj.placeholder : Number(val);
 	setBPMtoInterval(val);
 	beatmachineOptions.stepIntervalChanged = true;

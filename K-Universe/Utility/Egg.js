@@ -6,6 +6,8 @@ const eggOptions = {
 	mass: {
 		val: 0,
 		valOrig: 60,
+		min: 40,
+		max: 85,
 		get label() {
 			for (const [key, val] of Object.entries(this.states)) {
 				if (this.val >= val) return `${this.val}g (${key})`;
@@ -21,6 +23,8 @@ const eggOptions = {
 	temp: {
 		val: 0,
 		valOrig: 10,
+		min: 4,
+		max: 22,
 		get label() {
 			for (const [key, val] of Object.entries(this.states)) {
 				if (this.val >= val) return `${this.val}°C (${key})`;
@@ -35,6 +39,8 @@ const eggOptions = {
 	yolk: {
 		val: 0,
 		valOrig: 65,
+		min: 45,
+		max: 90,
 		get label() {
 			for (const [key, val] of Object.entries(this.states)) {
 				if (this.val >= val) return `${this.val}°C (${key})`;
@@ -51,9 +57,19 @@ const eggOptions = {
 };
 
 function clear_cl_Egg() {
-	eggOptions.mass.val = resetInput("idVin_EggMass", eggOptions.mass.valOrig);
-	eggOptions.temp.val = resetInput("idVin_EggTemp", eggOptions.temp.valOrig);
-	eggOptions.yolk.val = resetInput("idVin_EggYolk", eggOptions.yolk.valOrig);
+	eggOptions.mass.val = resetInput("idVin_EggMass", eggOptions.mass.valOrig, {
+		min: eggOptions.mass.min,
+		max: eggOptions.mass.max,
+	});
+
+	eggOptions.temp.val = resetInput("idVin_EggTemp", eggOptions.temp.valOrig, {
+		min: eggOptions.temp.min,
+		max: eggOptions.temp.max,
+	});
+	eggOptions.yolk.val = resetInput("idVin_EggYolk", eggOptions.yolk.valOrig, {
+		min: eggOptions.yolk.min,
+		max: eggOptions.yolk.max,
+	});
 
 	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
 	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
@@ -63,19 +79,19 @@ function clear_cl_Egg() {
 }
 
 function eggMassChange(obj) {
-	eggOptions.mass.val = obj.value;
+	eggOptions.mass.val = utilsNumberFromInput(obj) ;
 	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
 	eggRefrechInput();
 }
 
 function eggTempChange(obj) {
-	eggOptions.temp.val = obj.value;
+	eggOptions.temp.val = utilsNumberFromInput(obj);
 	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
 	eggRefrechInput();
 }
 
 function eggYolkChange(obj) {
-	eggOptions.yolk.val = obj.value;
+	eggOptions.yolk.val = utilsNumberFromInput(obj);
 	dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
 	eggRefrechInput();
 }

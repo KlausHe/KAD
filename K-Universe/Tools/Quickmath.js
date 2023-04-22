@@ -52,7 +52,7 @@ function clear_cl_Quickmath() {
 };
 
 function calcQuickmath() {
-  quickmathOptions.values.val = numberFromInput("idVin_quickkmathVal");
+  quickmathOptions.values.val = utilsNumberFromInput("idVin_quickkmathVal");
   tableQuickmathCalculate("Multiply");
   tableQuickmathCalculate("Divide");
   tableQuickmathCalculate("Pow");
@@ -62,8 +62,8 @@ function tableQuickmathCalculate(op) {
   const operation = op;
   const obj = quickmathOptions.objects[operation];
   clearTable(obj.tabID);
-  const vinMin = numberFromInput("idVin_quickkmathStart");
-  const vinMax = numberFromInput("idVin_quickkmathEnd");
+  const vinMin = utilsNumberFromInput("idVin_quickkmathStart");
+  const vinMax = utilsNumberFromInput("idVin_quickkmathEnd");
   const start = Math.min(vinMin, vinMax);
   const end = Math.max(vinMin, vinMax) + 1;
 

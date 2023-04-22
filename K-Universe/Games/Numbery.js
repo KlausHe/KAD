@@ -100,7 +100,7 @@ function numberyPlayerChange() {
 
 function numberyGameSelect(obj) {
 	if (numberyOptions.isPlaying) return;
-	numberyOptions.cathegory = obj.value;
+	numberyOptions.cathegory = utilsNumberFromInput(obj);
 }
 
 function numberyRestart() {

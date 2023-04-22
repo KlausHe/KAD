@@ -13,7 +13,7 @@ function clear_cl_Ranje() {
 
 function ranjeCalc() {
   ranjeOptions.results = [];
-  ranjeOptions.value = numberFromInput("idVin_ranjeVal");
+  ranjeOptions.value = utilsNumberFromInput("idVin_ranjeVal");
   for (let i = 2; i < ranjeOptions.value; i++) {
     if (ranjeOptions.value % i === 0) {
       ranjeOptions.results.push([i, Math.floor(ranjeOptions.value / i)]);
