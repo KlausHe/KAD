@@ -880,7 +880,6 @@ const ocjeneSong = {
 			})
 			.then(function (response) {
 				if (ocjeneSong.synthControl) {
-					console.log(ocjeneSong.synthOptions.drumIntro);
 					ocjeneSong.synthControl
 						.setTune(ocjeneSong.abcCanvas, false, ocjeneSong.synthOptions)
 						.then(function (response) {
@@ -899,7 +898,6 @@ const ocjeneSong = {
 
 class ocjeneNote {
 	constructor(type, duration, timeStamp, tripletIndex, splitIndex = null, splitMidiPitch = null) {
-		if (duration < ocjeneOptions.notenwerte.min) console.log("duration", duration, ocjeneOptions.notenwerte.min);
 		this.abcJSPitch = null;
 		this.midiPitch = null;
 		this.resolved = false;
@@ -1564,96 +1562,116 @@ const ocjeneSettings = {
 		return this.data[fn];
 	},
 	data: {
-		get firstPitchIterations() {
-			if (ocjeneSettings.level == 0) return 20;
-			if (ocjeneSettings.level == 1) return 6;
-			if (ocjeneSettings.level == 2) return 4;
-		},
-		get tempo() {
-			if (ocjeneSettings.level == 0) return randomObject(80, 120);
-			if (ocjeneSettings.level == 1) return randomObject(70, 135);
-			if (ocjeneSettings.level == 2) return randomObject(60, 170);
+
+
+    get tempo() {
+			if (ocjeneSettings.level == 1) return randomObject(90, 110);
+			if (ocjeneSettings.level == 2) return ocjeneOptions.tempo.valOrig;
+			if (ocjeneSettings.level == 3) return randomObject(70, 135);
+			if (ocjeneSettings.level == 4) return randomObject(60, 170);
 		},
 		get bars() {
-			if (ocjeneSettings.level == 0) return 4;
-			if (ocjeneSettings.level == 1) return 8;
-			if (ocjeneSettings.level == 2) return 16;
+			if (ocjeneSettings.level == 1) return 4;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.bars.valOrig;
+			if (ocjeneSettings.level == 3) return 8;
+			if (ocjeneSettings.level == 4) return 16;
 		},
 		get barOverflowStop() {
-			if (ocjeneSettings.level == 0) return true;
-			if (ocjeneSettings.level == 1) return false;
-			if (ocjeneSettings.level == 2) return false;
+			if (ocjeneSettings.level == 1) return true;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.barOverflowStop.stateOrig;
+			if (ocjeneSettings.level == 3) return false;
+			if (ocjeneSettings.level == 4) return false;
 		},
 		get metronome() {
-			if (ocjeneSettings.level == 0) return true;
-			if (ocjeneSettings.level == 1) return false;
-			if (ocjeneSettings.level == 2) return false;
+			if (ocjeneSettings.level == 1) return true;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.metronome.stateOrig;
+			if (ocjeneSettings.level == 3) return false;
+			if (ocjeneSettings.level == 4) return false;
 		},
 		get showText() {
-			if (ocjeneSettings.level == 0) return true;
-			if (ocjeneSettings.level == 1) return false;
-			if (ocjeneSettings.level == 2) return false;
+			if (ocjeneSettings.level == 1) return true;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.showText.stateOrig;
+			if (ocjeneSettings.level == 3) return false;
+			if (ocjeneSettings.level == 4) return false;
 		},
 		get textLanguage() {
-			if (ocjeneSettings.level == 0) return 5;
-			if (ocjeneSettings.level == 1) return 0;
-			if (ocjeneSettings.level == 2) return 16;
+			if (ocjeneSettings.level == 1) return 5;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.textLanguage.indexOrig;
+			if (ocjeneSettings.level == 3) return 0;
+			if (ocjeneSettings.level == 4) return 16;
 		},
 		get interval() {
-			if (ocjeneSettings.level == 0) return 5;
-			if (ocjeneSettings.level == 1) return 7;
-			if (ocjeneSettings.level == 2) return 8;
+			if (ocjeneSettings.level == 1) return 5;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.interval.valOrig;
+			if (ocjeneSettings.level == 3) return 7;
+			if (ocjeneSettings.level == 4) return 8;
 		},
 		get timeSignature() {
-			if (ocjeneSettings.level == 0) return randomObject([2, 3]);
-			if (ocjeneSettings.level == 1) return randomObject([1, 2, 3, 5, 7]);
-			if (ocjeneSettings.level == 2) return randomObject(ocjeneOptions.definitions.timeSignatures.length);
+			if (ocjeneSettings.level == 1) return randomObject([2, 3]);
+			if (ocjeneSettings.level == 2) return ocjeneOptions.timeSignature.indexOrig;
+			if (ocjeneSettings.level == 3) return randomObject([1, 2, 3, 5, 7]);
+			if (ocjeneSettings.level == 4) return randomObject(ocjeneOptions.definitions.timeSignatures.length);
 		},
 		get notenwerte() {
-			if (ocjeneSettings.level == 0) return [1, 1, 1, 0, 0];
-			if (ocjeneSettings.level == 1) return [1, 1, 1, 1, 0];
-			if (ocjeneSettings.level == 2) return [0, 1, 1, 1, 1];
+			if (ocjeneSettings.level == 1) return [1, 1, 1, 0, 0];
+			if (ocjeneSettings.level == 2) return ocjeneOptions.notenwerte.selectedOrig;
+			if (ocjeneSettings.level == 3) return [1, 1, 1, 1, 0];
+			if (ocjeneSettings.level == 4) return [0, 1, 1, 1, 1];
 		},
 		get clef() {
-			if (ocjeneSettings.level == 0) return 0;
-			if (ocjeneSettings.level == 1) return randomObject([0, 6]);
-			if (ocjeneSettings.level == 2) return randomObject([0, 6]);
+			if (ocjeneSettings.level == 1) return 0;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.clef.indexOrig;
+			if (ocjeneSettings.level == 3) return randomObject([0, 6]);
+			if (ocjeneSettings.level == 4) return randomObject([0, 6]);
 		},
 		get keys() {
-			if (ocjeneSettings.level == 0) return randomObject([0, 1, 8]);
-			if (ocjeneSettings.level == 1) return randomObject([0, 1, 2, 8, 9]);
-			if (ocjeneSettings.level == 2) return randomObject(ocjeneOptions.definitions.keys.length);
+			if (ocjeneSettings.level == 1) return randomObject([0, 1, 8]);
+			if (ocjeneSettings.level == 2) return ocjeneOptions.keys.indexOrig;
+			if (ocjeneSettings.level == 3) return randomObject([0, 1, 2, 8, 9]);
+			if (ocjeneSettings.level == 4) return randomObject(ocjeneOptions.definitions.keys.length);
 		},
 		get keyOnly() {
-			if (ocjeneSettings.level == 0) return true;
-			if (ocjeneSettings.level == 1) return false;
-			if (ocjeneSettings.level == 2) return false;
+			if (ocjeneSettings.level == 1) return true;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.keyOnly.stateOrig;
+			if (ocjeneSettings.level == 3) return false;
+			if (ocjeneSettings.level == 4) return false;
 		},
 		get dotted() {
-			if (ocjeneSettings.level == 0) return 0;
-			if (ocjeneSettings.level == 1) return 15;
-			if (ocjeneSettings.level == 2) return 25;
+			if (ocjeneSettings.level == 1) return 0;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.dotted.valOrig;
+			if (ocjeneSettings.level == 3) return 10;
+			if (ocjeneSettings.level == 4) return 15;
 		},
 		get triplet() {
-			if (ocjeneSettings.level == 0) return 0;
-			if (ocjeneSettings.level == 1) return 10;
-			if (ocjeneSettings.level == 2) return 20;
+			if (ocjeneSettings.level == 1) return 0;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.triplet.valOrig;
+			if (ocjeneSettings.level == 3) return 10;
+			if (ocjeneSettings.level == 4) return 15;
 		},
 		get rests() {
-			if (ocjeneSettings.level == 0) return 0;
-			if (ocjeneSettings.level == 1) return 15;
-			if (ocjeneSettings.level == 2) return 30;
+			if (ocjeneSettings.level == 1) return 0;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.rests.valOrig;
+			if (ocjeneSettings.level == 3) return 15;
+			if (ocjeneSettings.level == 4) return 30;
+		},
+		get limitRange() {
+			if (ocjeneSettings.level == 1) return true;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.limitRange.stateOrig;
+			if (ocjeneSettings.level == 3) return true;
+			if (ocjeneSettings.level == 4) return false;
 		},
 		//variables
-		get limitRange() {
-			if (ocjeneSettings.level == 0) return true;
-			if (ocjeneSettings.level == 1) return true;
-			if (ocjeneSettings.level == 2) return false;
-		},
 		get rangeOffset() {
-			if (ocjeneSettings.level == 0) return 8;
-			if (ocjeneSettings.level == 1) return 10;
-			if (ocjeneSettings.level == 2) return 24;
+			if (ocjeneSettings.level == 1) return 8;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.variables.rangeOffset.valOrig;
+			if (ocjeneSettings.level == 3) return 10;
+			if (ocjeneSettings.level == 4) return 24;
+		},
+		get firstPitchIterations() {
+			if (ocjeneSettings.level == 1) return 20;
+			if (ocjeneSettings.level == 2) return ocjeneOptions.variables.firstPitchIterations.valOrig;
+			if (ocjeneSettings.level == 3) return 6;
+			if (ocjeneSettings.level == 4) return 4;
 		},
 	},
 };

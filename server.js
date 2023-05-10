@@ -15,6 +15,7 @@ if (process.env.NODE_ENV != "production") {
 	require("dotenv").config();
 }
 const axios = require("axios");
+const https = require("https");
 //set up the Server
 const Compression = require("compression");
 const express = require("express");
@@ -74,6 +75,7 @@ app.post(`${redirectPath}/Howa/`, (req, res) => {
 			res.send(JSON.stringify({ error }));
 			return;
 		}
+
 		res.send(JSON.stringify(data));
 	}
 	HowaAsync();
@@ -82,33 +84,30 @@ app.post(`${redirectPath}/Howa/`, (req, res) => {
 app.post(`${redirectPath}/News/`, (req, res) => {
 	const country = req.body.country;
 	const category = req.body.category;
-
 	const url = `https://newsdata.io/api/1/news?apikey=${process.env.API_NEWS_KEY}&country=${country}&language=${country}&category=${category}`;
-	async function NewsAsync() {
-		try {
-			const newsReturn = await axios.get(url);
-			newsData.data[category] = { data: newsReturn.data, timestamp: new Date().getTime() };
-			res.send(JSON.stringify(newsData.data[category].data));
-		} catch (error) {
-			console.log("error", url);
-			res.send(JSON.stringify({ error }));
-		}
+ function NewsAsync() {
+		https
+			.get(url, (resp) => {
+				let httpsData = "";
+				resp.on("data", (chunk) => {
+					httpsData += chunk;
+				});
+				resp.on("end", () => {
+					let newsReturn = JSON.parse(httpsData);
+					newsData.data[category] = { data: newsReturn, timestamp: new Date().getTime() };
+					res.send(JSON.stringify(newsData.data[category].data));
+				});
+			})
+			.on("error", (err) => {
+				res.send(JSON.stringify({ error: err.message }));
+				return;
+			});
 	}
 	if (newsData.data[category] == undefined || newsData.data[category].timestamp < newsData.interval) {
 		NewsAsync();
 	} else {
 		res.send(JSON.stringify(newsData.data[category].data));
 	}
-	return;
-	newsAPI.v2
-		.topHeadlines(options)
-		.then((response) => {
-			console.log(response);
-			res.send(JSON.stringify(response)); // echo the result back
-		})
-		.catch((error) => {
-			res.send(JSON.stringify({ error }));
-		});
 });
 
 app.post(`${redirectPath}/Lions/`, (req, res) => {
@@ -132,22 +131,29 @@ app.post(`${redirectPath}/Lions/`, (req, res) => {
 app.post(`${redirectPath}/SpeechTranslate/`, (req, res) => {
 	const data = req.body;
 	async function SpeechAsync() {
-		try {
-			const from = data.langFrom == "ja" ? "jpn" : data.langFrom;
-			const to = data.langTo == "ja" ? "jpn" : data.langTo;
-			const url = generateRequestUrl(data.text, {
-				from,
-				to,
-				raw: false,
+		const from = data.langFrom == "ja" ? "jpn" : data.langFrom;
+		const to = data.langTo == "ja" ? "jpn" : data.langTo;
+		const url = generateRequestUrl(data.text, {
+			from,
+			to,
+			raw: false,
+		});
+		https
+			.get(url, (resp) => {
+				let httpsData = "";
+				resp.on("data", (chunk) => {
+					httpsData += chunk;
+				});
+				resp.on("end", () => {
+					let returnData = normaliseResponse(JSON.parse(httpsData));
+					returnData.pronunciation = returnData.pronunciation == undefined || returnData.pronunciation == "" ? null : returnData.pronunciation;
+					res.send(JSON.stringify(returnData));
+				});
+			})
+			.on("error", (err) => {
+				res.send(JSON.stringify({ error: err.message }));
+				return;
 			});
-			const response = await axios.get(url);
-			let returnData = normaliseResponse(response.data);
-			returnData.pronunciation = returnData.pronunciation == undefined || returnData.pronunciation == "" ? null : returnData.pronunciation;
-			res.send(JSON.stringify(returnData));
-		} catch (error) {
-			res.send(JSON.stringify({ error }));
-			return;
-		}
 	}
 	SpeechAsync();
 });

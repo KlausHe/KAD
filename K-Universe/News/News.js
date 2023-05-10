@@ -4,7 +4,6 @@ const newsData = {
 	currIndex: 0,
 	articles: [],
 	categories: {
-		// world
 		top: "Allgemeines",
 		business: "Business",
 		entertainment: "Unterhaltung",
@@ -12,7 +11,6 @@ const newsData = {
 		science: "Wissenschaft",
 		politics: "Politik",
 		sports: "Sport",
-		food: "Ernährung",
 		technology: "Technologie",
 		environment: "Umwelt",
 	},
@@ -23,7 +21,10 @@ const newsData = {
 };
 
 function clear_cl_News() {
+	clearFirstChild("idSel_newsCountry");
+	clearFirstChild("idSel_newsCategory");
 	newsData.currIndex = 0;
+
 	let optGroup = document.createElement("optgroup");
 	optGroup.label = "Kategorie";
 	for (const [key, value] of Object.entries(newsData.categories)) {
@@ -99,9 +100,7 @@ function newsReturn(data) {
 
 function showNews() {
 	if (newsData.articles.length > 0) {
-		dbID("idDiv_News_Title").innerHTML = `${newsData.articles[newsData.currIndex].title} (${newsData.articles[newsData.currIndex].dateInfo}, ${
-			newsData.articles[newsData.currIndex].creator || newsData.articles[newsData.currIndex].source_id
-		})`;
+		dbID("idDiv_News_Title").innerHTML = `${newsData.articles[newsData.currIndex].title} (${newsData.articles[newsData.currIndex].dateInfo}, ${newsData.articles[newsData.currIndex].creator || newsData.articles[newsData.currIndex].source_id})`;
 		dbID("idDiv_News_Text").innerHTML = newsData.articles[newsData.currIndex].description;
 		dbID("idImg_News_Image").src = newsData.articles[newsData.currIndex].image_url;
 		dbID("idImg_News_Image").setAttribute("imgSize", "thumbnail");

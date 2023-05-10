@@ -227,7 +227,7 @@ function howaReqestData() {
 //   dbID('idLbl_howaNow').textContent = "";
 //   dbIDStyle("idDiv_howaReturnInfo").display = "initial";
 //   dbID("idLbl_howaNowReturnInfo").innerHTML = text;
-// };
+// };   
 
 // function howaHideInfo() {
 //   dbIDStyle("idDiv_howaReturnInfo").display = "none";

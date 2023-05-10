@@ -11,23 +11,7 @@ const bgaOptions = {
 
 //new: Stopwatch!
 function clear_cl_BackgroundAnimation() {
-	bgaOptions.animations = [
-		new Clock(),
-		new SegmentClock(),
-		new Time(),
-		new Cursordot(),
-		new Trail(),
-		new Hilbert(),
-		new LanktonsAnt(),
-		new Cardioid(),
-		new AStar(),
-		new Flowfield(),
-		new PoissonDisc(),
-		new Phyllotaxis(),
-		new TenPrint(),
-		new GameOfLife(),
-		new PongAI(),
-	];
+	bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Cursordot(), new Trail(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new GameOfLife(), new PongAI()];
 	clearFirstChild("idSel_bgaSelect");
 	bgaOptions.animations.forEach((cls, index) => {
 		dbID("idSel_bgaSelect").options[index] = new Option(cls.constructor.name);
@@ -1038,9 +1022,9 @@ class GameOfLife {
 			}
 		}
 		// Copy next to current
-		this.gridSTL = this.copy2DArray(this.gridPrev); // from
-		this.gridPrev = this.copy2DArray(this.gridCurr); // from
-		this.gridCurr = this.copy2DArray(gridNext); // from
+		this.gridSTL = this.copy2DArray(this.gridPrev);
+		this.gridPrev = this.copy2DArray(this.gridCurr);
+		this.gridCurr = this.copy2DArray(gridNext);
 		if (this.resetting === null && JSON.stringify(this.gridCurr) === JSON.stringify(this.gridSTL)) {
 			this.resetting = caBA.frameCount + caBA.frameRate() * 5;
 		}

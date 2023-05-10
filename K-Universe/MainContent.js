@@ -744,6 +744,9 @@ const contentGrid = {
 		info: "Notenleseübung mit zufälligen Melodien",
 		subgrid: [
 			["cl_OcjeneSheet", "right"],
+			["cl_OcjeneLevelHeader", "left", "end"],
+      ["cl_OcjeneLevelselect1", "left"],
+			["cl_OcjeneLevelselect2", "left"],
 			["cl_OcjeneSongHeader", "left", "end"],
 			["cl_OcjeneRhytmusHeader", "left", "end"],
 			["cl_OcjeneMelodieHeader", "left", "end"],
@@ -771,9 +774,6 @@ const contentGrid = {
 			["cl_OcjeneLimitRange", "left"],
 			["cl_OcjeneRests", "left"],
 			["cl_OcjeneGenerate", "left", "end"],
-			["cl_OcjeneRandomA", "left"],
-			["cl_OcjeneRandomB", "left"],
-			["cl_OcjeneRandomC", "left"],
 		],
 	},
 	cl_Beatmachine: {

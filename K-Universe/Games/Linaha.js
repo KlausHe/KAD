@@ -1,6 +1,6 @@
 const linahaOptions = {
 	url: "https://restcountries.com/v3.1/alpha?codes=",
-	// urlFields: "?fields=translations;flag;capital;population;area", // not working
+	// urlFields: "?fields=translations,flag,capital,population,area", // not working with "codes" only with "all"
 	setLength: 1,
 	setOptions: [2, 4, 6, 9, 12],
 	setLayout: {
@@ -202,7 +202,7 @@ function linahaCreateButtons() {
 		);
 		for (let x = 0; x < cols; x++) {
 			const index = y * cols + x;
-			const btn = tableAddCell(
+			tableAddCell(
 				null,
 				{
 					names: ["linahaAnswers", index],
