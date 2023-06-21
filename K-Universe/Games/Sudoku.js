@@ -624,12 +624,8 @@ function sudokuStartTimer(start) {
 }
 
 function sudokuTimer() {
-	let now = new Date();
-	let distance = (now - sudokuOptions.timerStart) / 1000;
-	let minutes = Math.floor(distance / 60);
-	let seconds = Math.floor(distance % 60);
-	minutes = minutes < 10 ? "0" + minutes : minutes;
-	seconds = seconds < 10 ? "0" + seconds : seconds;
-	let text = minutes + ":" + seconds;
+	const now = new Date() - sudokuOptions.timerStart;
+	const format = "mm:ss";
+	const text = utilsDate(now, { format });
 	dbID("idBtn_sudokuTimer").textContent = text;
 }

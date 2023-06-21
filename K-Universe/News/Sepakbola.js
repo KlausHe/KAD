@@ -196,8 +196,6 @@ function sepakbolaMatchesReturn(data = null) {
 		if (prevDay != day.getTime()) {
 			const rowTh = insertTableRow("idTabBody_SepakbolaMatches");
 			prevDay = new Date(day.getTime()).getTime();
-			let min = day.getMinutes();
-			min = min < 10 ? "0" + min : min;
 			tableAddCellHeader(rowTh, {
 				names: ["sepakbolaMatchesHeader", i],
 				type: "Lbl",

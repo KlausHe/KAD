@@ -132,7 +132,6 @@ class Clock {
 	draw() {
 		caBA.clear();
 		caBA.translate(caBA.width / 2, caBA.height / 2);
-
 		const today = new Date();
 		const format = today.getSeconds() % 2 == 0 ? "HH mm" : "HH:mm";
 		const time = utilsDate(today, { format });

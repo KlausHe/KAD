@@ -54,11 +54,12 @@ function lionsReturn(data) {
 		const obj = data[i];
 		const date = obj["Datum"];
 		let num = obj["Los-Nr."];
-		let save = 0;
-		while (num.length < 4 || save > 4) {
-			num = "0" + num;
-			save++;
-		}
+		num = num.padStart(4, 0);
+		// let save = 0;
+		// while (num.length < 4 || save > 4) {
+		// 	num = "0" + num;
+		// 	save++;
+		// }
 
 		const price = `${obj["Spende/Gutschein-Beschreibung"]}<br>${obj["Sponsor"]}`;
 

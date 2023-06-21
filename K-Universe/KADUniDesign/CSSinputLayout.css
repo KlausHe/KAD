@@ -147,7 +147,8 @@ progress::-moz-progress-bar {
 
 select {
 	/* padding-left: var(--padding);  instead of Padding use indent for safari*/
-	text-indent: var(--gridGap);
+	position:relative;
+  text-indent: var(--gridGap);
 	border-right: var(--UIBorderRight);
 	border-bottom: var(--UIBorderBottom);
 	max-width: var(--UIWidth16);
