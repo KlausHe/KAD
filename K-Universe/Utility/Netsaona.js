@@ -57,12 +57,12 @@ const netsaonaOptions = {
 		get Gender() {
 			return Data_Names.genders;
 		},
-		get Voice() {
-			return Object.keys(ocjeneOptions.definitions.clefs);
-		},
-		get Instrument() {
-			return ocjeneInstruments.data.map((i) => i.Name);
-		},
+		// get Voice() {
+		// 	return Object.keys(ocjeneOptions.definitions.clefs);
+		// },
+		// get Instrument() {
+		// 	return ocjeneInstruments.data.map((i) => i.Name);
+		// },
 		get Random() {
 			let rand = new Set(Object.keys(netsaonaOptions.data));
 			rand.delete("random");

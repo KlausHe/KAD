@@ -29,7 +29,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_Ocjene" : "Universe",
+	defaultPage: globalValues.hostDebug ? "cl_Sepakbola" : "Universe",
 };
 
 function layoutHideLoadingscreen() {

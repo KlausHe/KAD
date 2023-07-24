@@ -36,7 +36,6 @@
 		"cl_Sweeper cl_Sweeper ";
 }
 
-
 .cl_subGrid_userAcc {
 	grid-template-areas:
 		". cl_UserAcc_infos cl_UserAcc_infos ."
@@ -504,44 +503,6 @@
 		". cl_NumberyImages . . .";
 	grid-template-columns: 1fr auto var(--UIWidth1) auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight2) auto;
-}
-
-.cl_subGrid_Ocjene {
-	grid-template-areas:
-		". cl_OcjeneSheet cl_OcjeneGenerate cl_OcjeneGenerate ."
-		". cl_OcjeneSheet cl_OcjeneLevelHeader cl_OcjeneLevelHeader ."
-		". cl_OcjeneSheet cl_OcjeneLevelselect1 cl_OcjeneLevelselect1 ."
-		". cl_OcjeneSheet cl_OcjeneLevelselect2 cl_OcjeneLevelselect2 ."
-		". cl_OcjeneSheet cl_OcjeneSongHeader cl_OcjeneSongHeader ."
-		". cl_OcjeneSheet cl_OcjeneTimeSignature cl_OcjeneTimeSignature ."
-		". cl_OcjeneSheet cl_OcjeneClefs cl_OcjeneClefs ."
-		". cl_OcjeneSheet cl_OcjeneKeySignature cl_OcjeneKeySignature ."
-		". cl_OcjeneSheet cl_OcjeneKey cl_OcjeneKey ."
-		". cl_OcjeneSheet cl_OcjeneTempo cl_OcjeneTempo ."
-		". cl_OcjeneSheet cl_OcjeneBars cl_OcjeneBars ."
-		". cl_OcjeneSheet cl_OcjeneShowText cl_OcjeneShowText ."
-		". cl_OcjeneSheet cl_OcjeneTextLanguage cl_OcjeneTextLanguage ."
-		". cl_OcjeneSheet cl_OcjeneRhytmusHeader cl_OcjeneRhytmusHeader ."
-		". cl_OcjeneSheet cl_OcjeneNotenwert1 cl_OcjeneNotenwert8 ."
-		". cl_OcjeneSheet cl_OcjeneNotenwert2 cl_OcjeneNotenwert16 ."
-		". cl_OcjeneSheet cl_OcjeneNotenwert4 cl_OcjeneNotenwert32 ."
-		". cl_OcjeneSheet cl_OcjeneDotted cl_OcjeneDotted ."
-		". cl_OcjeneSheet cl_OcjeneTriplet cl_OcjeneTriplet ."
-		". cl_OcjeneSheet cl_OcjeneRests cl_OcjeneRests ."
-		". cl_OcjeneSheet cl_OcjeneBarOverflowStop cl_OcjeneBarOverflowStop ."
-		". cl_OcjeneSheet cl_OcjeneMetronome cl_OcjeneMetronome ."
-		". cl_OcjeneSheet cl_OcjeneMelodieHeader cl_OcjeneMelodieHeader ."
-		". cl_OcjeneSheet cl_OcjeneInstrument cl_OcjeneInstrument ."
-		". cl_OcjeneSheet cl_OcjeneKeyOnly cl_OcjeneKeyOnly ."
-		". cl_OcjeneSheet cl_OcjeneLimitRange cl_OcjeneLimitRange ."
-		". cl_OcjeneSheet cl_OcjeneInterval cl_OcjeneInterval .";
-	grid-template-columns: 1fr auto var(--UIWidth6) var(--UIWidth6) 1fr;
-	grid-template-rows:
-		var(--UIHeight1)
-		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
-		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
-		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1)
-		var(--UIHeight2) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_Beatmachine {
