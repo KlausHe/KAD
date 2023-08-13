@@ -158,13 +158,13 @@ function sepakbolaMatchdayChange(obj) {
 
 async function sepakbolaRequest() {
 	const liga = sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex];
-	//load table
-	const URLTable = sepakbolaOptions.https("table", liga.urlName, sepakbolaOptions.selected.season);
-	globalP5.loadJSON(URLTable, sepakbolaTableReturn, "json");
 
+  const URLTable = sepakbolaOptions.https("table", liga.urlName, sepakbolaOptions.selected.season);
+	globalP5.loadJSON(URLTable, sepakbolaTableReturn, "json");
+  
 	const URLMatches = sepakbolaOptions.https("matches", liga.urlName, sepakbolaOptions.selected.season);
 	globalP5.loadJSON(URLMatches, sepakbolaMatchesReturn, "json");
-
+  
 	const URLLastday = sepakbolaOptions.https("days", liga.urlName);
 	globalP5.loadJSON(URLLastday, sepakbolaLastdayReturn, "json");
 }

@@ -57,11 +57,10 @@ function clear_cl_News() {
 }
 
 function newsUpdateOptions() {
-	const searchOpt = {
+	utilsSocketPost("News", {
 		category: dbID("idSel_newsCategory").value,
 		country: dbID("idSel_newsCountry").value,
-	};
-	utilsSocketPost("News", searchOpt);
+	});
 }
 
 function newsError(errMsg) {

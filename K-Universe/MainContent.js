@@ -69,23 +69,23 @@ const contentGrid = {
 			["cl_HowaMapsImg", "center"],
 		],
 	},
-	cl_Sepakbola: {
-		userSelected: false,
-		height: 2,
-		contentGroup: "News",
-		name: "Sepakbola",
-		heritage: ["javanisch", "Fußball"],
-		source: {
-			Daten: "https://www.openligadb.de",
-		},
-		subgrid: [
-			["cl_SepakbolaInputLiga", "left"],
-			["cl_SepakbolaInputSeason", "left"],
-			["cl_SepakbolaInputDay", "center"],
-			["cl_SepakbolaTable", "right"],
-			["cl_SepakbolaMatches", "left"],
-		],
-	},
+	// cl_Sepakbola: {
+	// 	userSelected: false,
+	// 	height: 2,
+	// 	contentGroup: "News",
+	// 	name: "Sepakbola",
+	// 	heritage: ["javanisch", "Fußball"],
+	// 	source: {
+	// 		Daten: "https://www.openligadb.de",
+	// 	},
+	// 	subgrid: [
+	// 		["cl_SepakbolaInputLiga", "left"],
+	// 		["cl_SepakbolaInputSeason", "left"],
+	// 		["cl_SepakbolaInputDay", "center"],
+	// 		["cl_SepakbolaTable", "right"],
+	// 		["cl_SepakbolaMatches", "left"],
+	// 	],
+	// },
 	cl_News: {
 		userSelected: true,
 		contentGroup: "News",

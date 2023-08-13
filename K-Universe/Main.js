@@ -2,7 +2,7 @@
 const globalP5 = new p5((c) => {
 	c.setup = function () {
 		c.noCanvas();
-		c.loop();
+		c.noLoop();
 	};
 });
 
