@@ -11,10 +11,10 @@ const usergridOptions = {
 				}
 			}
 			if (counter == 0) {
-				dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = imgPath("cCheck");
+				dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = utilsGetImgPath("cCheck");
 				usergridOptions.groups[groupKey] = false;
 			} else {
-				dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = imgPath("cX");
+				dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = utilsGetImgPath("cX");
 				usergridOptions.groups[groupKey] = true;
 			}
 		}

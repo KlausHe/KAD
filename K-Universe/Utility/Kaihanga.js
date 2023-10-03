@@ -18,9 +18,8 @@ function clear_cl_Kaihanga() {
 	kaihangaOptions.startColor = caKA.floor(caKA.random(5, globalValues.colors.array.length));
 	kaihangaCreateRandomSet();
 	kaihangaUpdate();
-	resetInput("idVin_kaihangaEntry", "Enter Options");
+	utilsResetInput("idVin_kaihangaEntry", "Enter Options");
 	dbID("idLbl_kaihangaResult").textContent = "Gewinner: ...";
-	dataForLabel("idLbl_kaihangaResult");
 	dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
 	dbIDStyle("idCanv_kaihanga").cursor = "pointer";
 }
@@ -104,7 +103,6 @@ function kaihangaCreateRandomSet() {
 function kaihangaResult(winner) {
 	kaihangaOptions.spinning = false;
 	dbID("idLbl_kaihangaResult").textContent = "Gewinner: " + winner.text;
-	dataForLabel("idLbl_kaihangaResult", winner.text);
 }
 
 function kaihangaClearRow(index) {
@@ -143,7 +141,6 @@ function kaihangaCreateOption() {
 function kaihangaUpdate() {
 	if (!kaihangaOptions.spinning) {
 		dbID("idLbl_kaihangaResult").innerHTML = "Gewinner: ...";
-		dataForLabel("idLbl_kaihangaResult");
 		dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
 		dbIDStyle("idLbl_kaihangaResult").color = "";
 		kaihangaWheelUpdate();

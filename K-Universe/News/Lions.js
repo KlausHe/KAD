@@ -4,7 +4,7 @@ const lionsOptions = {
 };
 
 function clear_cl_Lions() {
-	resetInput("idVin_lionsInput", "1234");
+	utilsResetInput("idVin_lionsInput", "1234");
 	dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
 	lionsOptions.data = [];
 	if (Object.keys(lionsOptions.data).length === 0) {

@@ -178,7 +178,7 @@
             uiRadius="right">Windrichtung</label>
         </div>
         <div class="cl_HowaNow">
-          <label class="cl_outputLbl" id="idLbl_howaNow" onclick="copyFromLabel(this)">...</label>
+          <label class="cl_outputLbl" id="idLbl_howaNow">...</label>
         </div>
         <div class="cl_HowaZoom">
           <button id="idBtn_howaZoom" onclick="howaZoom(this)">Zoom</button>
@@ -335,7 +335,7 @@
           <button class="cl_NetsaonaOption"></button>
         </div>
         <div class="cl_NetsaonaOutput">
-          <label class="cl_outputLbl" id="idLbl_netsaonaOutput" onclick="copyFromLabel(this)">...</label>
+          <label class="cl_outputLbl" id="idLbl_netsaonaOutput">...</label>
         </div>
       </div>
     </section>
@@ -427,7 +427,7 @@
           <textarea id="idArea_thiontuInputEntry" oninput="thiontuUpdate()"></textarea>
         </div>
         <div class="cl_ThiontuOutputArea">
-          <textarea id="idArea_thiontuOutputArea" onclick="copyToClipboard(value, id)" readonly></textarea>
+          <textarea id="idArea_thiontuOutputArea" readonly></textarea>
         </div>
         <div class="cl_ThiontuOptions_A" name="naBtn_ThiontuOptions" uiWrap="nowrap">
           <button type="button" class="clBtn_ThiontuOptions"></button>
@@ -491,34 +491,34 @@
         <div class="cl_EggMassValue" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Eigröße</label><input type="number" id="idVin_EggMass" uiRadius="none"
             step="1" oninput="eggMassChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeAdd">
+            <img></img>
           </button><label class="cl_info" id="idLbl_EggMass" uiRadius="right"></label>
         </div>
         <div class="cl_EggTempValue">
           <label class="cl_info" uiRadius="left">Ei Temp.</label><input type="number" id="idVin_EggTemp" uiRadius="none"
             step="1" oninput="eggTempChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeAdd">
+            <img></img>
           </button><label class="cl_info" id="idLbl_EggTemp" uiRadius="right"></label>
         </div>
         <div class="cl_EggYolkValue">
           <label class="cl_info" uiRadius="left">Zielfestigkeit</label><input type="number" id="idVin_EggYolk"
             uiRadius="none" step="1" oninput="eggYolkChange(this)"></input><button type="button" uiSize="size1"
-            uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeAdd">
+            <img></img>
           </button><label class="cl_info" id="idLbl_EggYolk" uiRadius="right"></label>
         </div>
         <div class="cl_EggStart">
@@ -544,12 +544,12 @@
         <div class="cl_FoodyPreheat">
           <label class="cl_info" uiRadius="left">Vorheizen</label><input type="number" id="idVin_foodyPreheat"
             uiRadius="none" min="40" max="90" step="1" oninput="foodyPreheatChange(this)"></input><button type="button"
-            uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeAdd">
+            <img></img>
           </button><label class="cl_info" id="idLbl_foodyPreheat" uiSize="size4" uiRadius="right"></label>
         </div>
         <div class="cl_FoodyStart">
@@ -711,11 +711,11 @@
         <div class="cl_IomlaidVinCur" uiWrap="nowrap">
           <input type="number" id="idVin_IomlaidCur" uiSize="size6" uiRadius="left" min="0" step="0.01"
             oninput="iomlaidVinSet(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash"> <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_IomlaidSelCur">
@@ -776,7 +776,7 @@
         </div>
         <div class="cl_SpeechOutputArea" uiWrap="nowrap">
           <textarea id="idArea_speechFromText"></textarea>
-          <textarea id="idArea_speechToText" onclick="copyToClipboard(value, id)" readonly></textarea>
+          <textarea id="idArea_speechToText" readonly></textarea>
         </div>
       </div>
     </section>
@@ -881,34 +881,34 @@
         <div class="cl_GeometrieAreaInputA" name="naDiv_Area" id="idDiv_Area_0" uiWrap="nowrap">
           <label class="cl_infoCB" id="idLbl_Vin_Area_0" uiRadius="left"></label><input type="number" id="idVin_Area_0"
             uiRadius="none" step="any" min="0" oninput="geoBerechnung()"></input><button type="button" uiSize="size1"
-            uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_GeometrieAreaInputB" name="naDiv_Area" id="idDiv_Area_1" uiWrap="nowrap">
           <label class="cl_infoCB" id="idLbl_Vin_Area_1" uiRadius="left"></label><input type="number" id="idVin_Area_1"
             uiRadius="none" step="any" min="0" oninput="geoBerechnung()"></input><button type="button" uiSize="size1"
-            uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_GeometrieAreaInputC" name="naDiv_Area" id="idDiv_Area_2" uiWrap="nowrap">
           <label class="cl_infoCB" id="idLbl_Vin_Area_2" uiRadius="left"></label><input type="number" id="idVin_Area_2"
             uiRadius="none" step="any" min="0" oninput="geoBerechnung()"></input><button type="button" uiSize="size1"
-            uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_GeometrieOptions" id="idDiv_GeometrieOptions">
@@ -980,11 +980,11 @@
         <div class="cl_ExpansionVinLength" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Länge
           </label><input type="number" id="idVin_expansionLength" uiRadius="none"></input><button type="button"
-            uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 0)"><img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)"><img
+            uiSize="size1" uiRadius="none" class="vinChangeTrash"><img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub"><img
               class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeAdd">
+            <img></img>
           </button><button type="button" uiSize="size1" uiRadius="right" onclick="expansionEntryLength()">
             <img src="Data/Images/SVG/down.svg"></img>
           </button>
@@ -992,12 +992,12 @@
         <div class="cl_ExpansionVinBaseTemperature" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Bezugstemp.
           </label><input type="number" id="idVin_expansionBaseTemperature" uiRadius="none"></input><button type="button"
-            uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeAdd">
+            <img></img>
           </button><button type="button" uiSize="size1" uiRadius="right" onclick="expansionEntryBaseTemperature()">
             <img src="Data/Images/SVG/down.svg"></img>
           </button>
@@ -1005,12 +1005,12 @@
         <div class="cl_ExpansionVinTemperature" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Temperatur
           </label><input type="number" id="idVin_expansionTemperature" uiRadius="none"></input><button type="button"
-            uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeAdd">
+            <img></img>
           </button><button type="button" uiSize="size1" uiRadius="right" onclick="expansionEntryTemperature()">
             <img src="Data/Images/SVG/down.svg"></img>
           </button>
@@ -1044,45 +1044,45 @@
         <div class="cl_PatternInputA" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern0" uiRadius="left">
           </label><input type="number" id="idVin_Pattern0" min="0" step="any" uiRadius="none"
-            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PatternInputB" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern1" uiRadius="left">
           </label><input type="number" id="idVin_Pattern1" min="0" step="any" uiRadius="none"
-            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PatternInputC" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern2" uiRadius="left">
           </label><input type="number" id="idVin_Pattern2" min="0" step="any" uiRadius="none"
-            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PatternInputD" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern3" uiRadius="left">
           </label><input type="number" id="idVin_Pattern3" min="0" step="any" uiRadius="none"
-            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            oninput="calcPattern()"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PatternInputE" uiWrap="nowrap">
@@ -1100,24 +1100,24 @@
           <label class="cl_info" uiRadius="left">Winkelgeschw...
           </label><input type="number" id="idVin_luasVelAngular" min="0" step="any" uiRadius="none"
             oninput="luasInputChange()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_LuasVinLinearVin" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Durchmesser
           </label><input type="number" id="idVin_luasDiameter" min="0" step="any" uiRadius="none"
             oninput="luasInputChange()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_LuasOptAngularVin" uiWrap="nowrap">
@@ -1135,7 +1135,7 @@
           </button>
         </div>
         <div class="cl_LuasResult">
-          <label class="cl_outputLbl" id="idLbl_luasResult" onclick="copyFromLabel(this)">...</label>
+          <label class="cl_outputLbl" id="idLbl_luasResult">...</label>
         </div>
         <div class="cl_LuasCanvas">
           <div style="display:block;" id="idCanv_luas"></div>
@@ -1148,29 +1148,29 @@
           <label class="cl_info" uiRadius="left">Länge "a"
           </label><input type="number" id="idVin_middleA" step="any" uiRadius="none"
             oninput="calcMiddle()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"><img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash"><img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_MiddleInput1" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Länge "b"
           </label><input type="number" id="idVin_middleB" step="any" uiRadius="none"
             oninput="calcMiddle()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"><img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash"><img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_MiddleMid ">
-          <label class="cl_outputLbl" id="idLbl_middleMid" onclick="copyFromLabel(this)"></label>
+          <label class="cl_outputLbl" id="idLbl_middleMid"></label>
         </div>
         <div class="cl_MiddleDiff ">
-          <label class="cl_outputLbl" id="idLbl_middleDiff" onclick="copyFromLabel(this)"></label>
+          <label class="cl_outputLbl" id="idLbl_middleDiff"></label>
         </div>
         <div class="cl_MiddleCanvas">
           <div id="idCanv_middle"></div>
@@ -1183,36 +1183,36 @@
           <label class="cl_info" uiRadius="left">Faktor
           </label><input type="number" id="idVin_quickkmathVal" step="any" uiRadius="none"
             oninput="calcQuickmath()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_QuickmathStart" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Untere Grenze
           </label><input type="number" id="idVin_quickkmathStart" step="any" uiRadius="none"
             oninput="calcQuickmath()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_QuickmathEnd" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Obere Grenze
           </label><input type="number" id="idVin_quickkmathEnd" step="any" uiRadius="none"
             oninput="calcQuickmath()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_QuickmathListMultiply">
@@ -1255,13 +1255,12 @@
         <div class="cl_RanjeInput" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Gesamtzahl
           </label><input type="number" id="idVin_ranjeVal" min="1" step="1" uiRadius="none"
-            oninput="ranjeCalc()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            oninput="ranjeCalc()"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_RanjeList">
@@ -1282,25 +1281,23 @@
         <div class="cl_NiskaSize" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Gewindegröße
           </label><input type="number" id="idVin_niskaSize" min="1" step="1" uiRadius="none"
-            oninput="niskaCalc()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            oninput="niskaCalc()"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_NiskaPitch" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Steigung
           </label><input type="number" id="idVin_niskaPitch" min="1" step="1" uiRadius="none"
-            oninput="niskaCalc()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            oninput="niskaCalc()"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_NiskaHeaderSelect">
@@ -1336,60 +1333,60 @@
           <label class="cl_infoCB" uiRadius="left">a
           </label><input type="number" id="idVin_Pytho_0" min="0" step="any" uiRadius="none"
             oninput="pythoNewEntry(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PythagorasInput1" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">b
           </label><input type="number" id="idVin_Pytho_1" min="0" step="any" uiRadius="none"
             oninput="pythoNewEntry(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PythagorasInput2" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">c
           </label><input type="number" id="idVin_Pytho_2" min="0" step="any" uiRadius="none"
             oninput="pythoNewEntry(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PythagorasInput3" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">α
           </label><input type="number" id="idVin_Pytho_3" min="0" step="any" uiRadius="none"
             oninput="pythoNewEntry(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PythagorasInput4" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">β
           </label><input type="number" id="idVin_Pytho_4" min="0" step="any" uiRadius="none"
             oninput="pythoNewEntry(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PythagorasInfo" id="idDiv_pythagorasInfo">
@@ -1415,32 +1412,32 @@
           <label class="cl_info" id="idLbl_pormulaPrecision" uiRadius="left">Genauigkeit
           </label><input type="number" id="idVin_pormulaPrecision" min="0" max="7" step="1" uiRadius="none"
             oninput="pormulaCalculate()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PormulaOrder" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_pormulaOrder" uiRadius="left">Polynomgrad
           </label><input type="number" id="idVin_pormulaOrder" min="0" step="1" max="5" uiRadius="none"
             oninput="pormulaCalculate()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PormulaAddInputs" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Datenpunkte</label><button type="button" uiSize="size1" uiRadius="none"
             onclick="pormulaAddInput(-1)">
-            <img class="img_oSub"></img>
+            <img class="img_oSub" alt="oSub.svg"></img>
           </button><button type="button" uiSize="size1" uiRadius="right" onclick="pormulaAddInput(1)">
-            <img class="img_oAdd"></img>
+            <img class="img_oAdd" alt="oAdd.svg"></img>
           </button>
         </div>
         <div class="cl_PormulaInputs" id="idDiv_pormulaInputs" uiWrap="nowrap">
@@ -1521,10 +1518,10 @@
           <label class="cl_infoCB" uiRadius="left">x
           </label><input type="number" uiSize="size3" id="idVin_pormulaPointEntry" step="any" min="0" uiRadius="none"
             oninput="pormulaCalculate()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PormulaPointResult" uiWrap="nowrap">
@@ -1535,7 +1532,7 @@
           <label id="idLbl_pormulaInfo" uiSize="size11" style="display:block;"></label>
         </div>
         <div class="cl_PormulaLblResult">
-          <label class="cl_outputLbl" id="idLbl_pormulaResult" onclick="copyFromLabel(this)">
+          <label class="cl_outputLbl" id="idLbl_pormulaResult">
             <p class="cl_outputEquation" id="idP_pormulaResult"></p>
           </label>
         </div>
@@ -1555,24 +1552,24 @@
           <label class="cl_info" uiSize="size6" uiRadius="left">Blechdicke
           </label><input type="number" id="idVin_blechgeoDicke" step="any" min="0" uiRadius="none"
             oninput="calcBlechGeo()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_BlechgeoVinRadius" uiWrap="nowrap">
           <label class="cl_info" uiSize="size6" uiRadius="left">Biegeradius
           </label><input type="number" id="idVin_blechgeoRadius" step="any" min="0" uiRadius="left"
             oninput="calcBlechGeo()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_BlechgeoVinForm">
@@ -1584,16 +1581,16 @@
           <label class="cl_info" uiSize="size6" uiRadius="left">Breite
           </label><input type="number" id="idVin_blechgeoBreite" step="any" min="0" uiRadius="none"
             oninput="calcBlechGeo()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_BlechgeoLblResult">
-          <label class="cl_outputLbl" id="idLbl_blechgeoResult" onclick="copyFromLabel(this)">...</label>
+          <label class="cl_outputLbl" id="idLbl_blechgeoResult">...</label>
         </div>
         <div class="cl_BlechgeoImg">
           <img id="idImg_Blechgeometrie" imgSize="blech"></img>
@@ -1621,12 +1618,12 @@
           <label class="cl_info" uiSize="size3" uiRadius="left">Runden
           </label><input type="number" id="idVin_linahaRounds" value="5" min="1" max="10" step="1" uiSize="size6"
             uiRadius="none" oninput="linahaRoundsChange(this)"></input><button type="button" uiSize="size1"
-            uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)"><img
+            uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub"><img
               class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_LinahaRounds">
@@ -1730,12 +1727,12 @@
         <div class="cl_LottoGetGames" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Latest Games</label><input type="number" id="idVin_lottoNumberOfGames"
             min="1" max="400" step="1" uiRadius="none" oninput="lottoGetGames()"></input><button type="button"
-            uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_LottoTabGames">
@@ -1775,24 +1772,24 @@
           <label class="cl_info" uiSize="size3" uiRadius="left">Size
           </label><input type="number" id="idVin_rayMazeSize" value="8" min="4" max="20" step="1" uiRadius="none"
             oninput="raySizeChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_RayCasterSpeed" uiWrap="nowrap">
           <label class="cl_info" uiSize="size3" uiRadius="left">Speed
           </label><input type="number" id="idVin_rayMazeSpeed" min="0" max="10" step="1" uiRadius="none"
             oninput="raySpeedChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_RayCasterOptionsA" uiWrap="nowrap">
@@ -1818,12 +1815,12 @@
         <div class="cl_RayCasterView" uiWrap="nowrap">
           <label class="cl_info" uiSize="size3" uiRadius="left">View</label><input type="number" id="idVin_rayMazeView"
             min="1" max="10" step="1" uiRadius="none" oninput="rayViewChange(this)"></input><button type="button"
-            uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_RayCasterCanvas">
@@ -1851,22 +1848,22 @@
           <label class="cl_info" uiSize="size4" uiRadius="left">Size
           </label><input type="number" id="idVin_sweeperGrid" min="5" max="40" step="1" uiRadius="none"
             oninput="sweeperGridChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash"><img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_SweeperSweeps" uiWrap="nowrap">
           <label class="cl_info" uiSize="size4" uiRadius="left">Sweeps
           </label><input type="number" id="idVin_sweeperSweeps" min="1" max="24" step="1" uiRadius="none"
             oninput="sweeperCellsChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)"> <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash"><img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_SweeperCanvas">
@@ -1883,24 +1880,24 @@
           <label class="cl_info" uiSize="size4" uiRadius="left">Size
           </label><input type="number" id="idVin_numberyPairs" min="2" step="1" uiRadius="none"
             oninput="numberyPairsChange()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_NumberyPlayerNum">
           <label class="cl_info" uiSize="size4" uiRadius="left">Player
           </label><input type="number" id="idVin_numberyPlayer" min="2" max="8" step="1" uiRadius="none"
             oninput="numberyPlayerChange()"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_NumberyCathegory">
@@ -1923,7 +1920,7 @@
         </div>
       </div>
     </section>
-    
+
     <section class="cl_Beatmachine" style="display:none;">
       <div class="cl_subGrid_Beatmachine cl_subGrid">
         <div class="cl_BeatmachineOptionsA">
@@ -1943,12 +1940,12 @@
         <div class="cl_BeatmachineOptionsD">
           <input type="number" id="idVin_beatmachine_BPM" min="50" max="200" step="1" uiRadius="left"
             oninput="beatmachineBPMChange(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, 0)">
-            <img class="img_trash"></img>
-          </button><button type="button" uiSize="size1" uiRadius="none" onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeTrash">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_BeatmachineTracks">
@@ -1961,30 +1958,28 @@
           <label class="cl_info" uiSize="size6" uiRadius="left">Startzeit
           </label><input type="time" id="idVin_pelveleaStarttime" min="00:00" max="23:59" step="60" uiRadius="none"
             oninput="pelveleaStarttime(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this,-1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeSub"><img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PelveleaBreaks">
           <label class="cl_info" uiSize="size6" uiRadius="left">Pausenlänge
           </label><input type="time" id="idVin_pelveleaBreaks" min="00:00" max="03:00" step="60" uiRadius="none"
             oninput="pelveleaBreaks(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this,1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeSub"> <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PelveleaWorktime">
           <label class="cl_info" uiSize="size6" uiRadius="left">Arbeitszeit
           </label><input type="time" id="idVin_pelveleaWorktime" min="00:00" max="12:00" step="60" uiRadius="none"
             oninput="pelveleaWorktime(this)"></input><button type="button" uiSize="size1" uiRadius="none"
-            onclick="utilsVinChange(this, -1)">
-            <img class="img_oSub"></img>
-          </button><button type="button" uiSize="size1" uiRadius="right" onclick="utilsVinChange(this, 1)">
-            <img class="img_oAdd"></img>
+            class="vinChangeSub">
+            <img></img>
+          </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
+            <img></img>
           </button>
         </div>
         <div class="cl_PelveleaResult">

@@ -7,7 +7,7 @@ const ranjeOptions = {
 };
 
 function clear_cl_Ranje() {
-  resetInput("idVin_ranjeVal", 36)
+  utilsResetInput("idVin_ranjeVal", 36)
   ranjeCalc();
 };
 

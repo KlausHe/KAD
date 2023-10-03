@@ -5,7 +5,7 @@ const afinnOptions = {
 };
 
 function clear_cl_Afinn() {
-	resetInput("idVin_analysisEntry", "Type text to analyze");
+	utilsResetInput("idVin_analysisEntry", "Type text to analyze");
 	dbID("idLbl_analysisResult").textContent = "~Average score~";
 	clearTable("idTabBody_analysisResult");
 }

@@ -52,7 +52,7 @@ function clear_cl_Lotto() {
 	for (let i = 0; i < 1; i++) {
 		dbID("idSel_lottoGame").options[i] = new Option(Object.keys(lottoOptions.games)[i]);
 	}
-	resetInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
+	utilsResetInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
 	lottoOptions.selGame = Object.keys(lottoOptions.games)[0];
 	lottoOptions.randomiziation = 0;
 	clearTimeout(lottoOptions.randomTimeout);

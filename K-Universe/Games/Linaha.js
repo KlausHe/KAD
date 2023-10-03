@@ -53,9 +53,9 @@ function clear_cl_Linaha() {
 	selC.options[1].selected = true; // set to setLength
 
 	//clear Values
-	resetInput("idVin_linahaRounds", 5);
+	utilsResetInput("idVin_linahaRounds", 5);
 	dbID("idLbl_linahaQuestion").innerHTML = `Spiele <br>${linahaOptions.selRounds} Runden<br>Linaha!`;
-	enableBtn("idBtn_linahaMap", false);
+	utilsEnableBtn("idBtn_linahaMap", false);
 	linahaCreateAvaible();
 	linahaOptions.data = [];
 	linahaOptions.selRounds = 5;
@@ -125,7 +125,7 @@ function linahaFinished() {
 function linahaDisableEntries(lock) {
 	const inputArr = ["idSel_linahaSelectQ", "idSel_linahaSelectSwitch", "idSel_linahaSelectA", "idSel_linahaChoices", "idVin_linahaRounds"];
 	for (const id of inputArr) {
-		enableBtn(id, !lock);
+		utilsEnableBtn(id, !lock);
 	}
 }
 
@@ -280,10 +280,10 @@ function linahaShowData(domID, optionsID, dataIndex) {
 function linahaAnswered(index) {
 	if (!linahaOptions.isPlaying) return;
 	linahaOptions.answered = !linahaOptions.answered;
-	enableBtn("idBtn_linahaMap", linahaOptions.answered);
+	utilsEnableBtn("idBtn_linahaMap", linahaOptions.answered);
 	if (linahaOptions.answered) {
 		// answer is chosen
-		enableBtn("idBtn_linahaMap", true);
+		utilsEnableBtn("idBtn_linahaMap", true);
 		const isCorrect = index == linahaOptions.answerIndex;
 		linahaOptions.correctRounds += isCorrect ? 1 : 0;
 		if (isCorrect) {

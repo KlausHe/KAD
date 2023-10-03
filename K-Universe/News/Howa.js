@@ -166,7 +166,6 @@ function clear_cl_Howa() {
 	dbIDStyle("idSel_howaMapsCriteria").display = "none";
 	dbIDStyle("idSel_howaMapsCountry").display = "none";
 	dbIDStyle("idImg_howaMapsImg").display = "none";
-	dataForLabel("idLbl_howaNow");
 	howaGetCoordinates();
 }
 
@@ -251,7 +250,6 @@ function howaReturn(data) {
 	}
 
 	dbID("idLbl_howaNow").textContent = `${howaData.pos.location}: ${howaData.data[0].main.temp}°C`;
-	dataForLabel("idLbl_howaNow", howaData.data[0].main.temp);
 
 	/* Get suitable icon for howa */
 	const iconS = document.createElement("i");
@@ -270,13 +268,13 @@ function howaReturn(data) {
 
 function howaZoom(obj) {
 	howaOptions.zoomed = !howaOptions.zoomed;
-	btnColor(obj, howaOptions.zoomed ? "positive" : null);
+	utilsBtnColor(obj, howaOptions.zoomed ? "positive" : null);
 	howaRefreshGraph();
 	howaGraph.update();
 }
 
 function howaMapsExpand() {
-	btnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
+	utilsBtnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
 	if (weaterMaps.shown) {
 		dbIDStyle("idSel_howaMapsCriteria").display = "none";
 		dbIDStyle("idSel_howaMapsCountry").display = "none";
@@ -502,7 +500,7 @@ function howaColorGraph() {
 	howaGraph.options.scales.xAxes[0].gridLines.color = utilsColor.formatAsCSS([...lCol, 0.2], "HSL");
 
 	for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-		const alpha = valueMapping(i, 0, howaOptions.graphTypes.length - 1, 0.8, 0.2, true);
+		const alpha = utilsValueMapping(i, 0, howaOptions.graphTypes.length - 1, 0.8, 0.2, true);
 		howaGraph.options.scales.yAxes[i].gridLines.color = utilsColor.formatAsCSS([...lCol, alpha], "HSL");
 		howaGraph.options.scales.yAxes[i].ticks.fontColor = howaOptions.graphTypes[i].color;
 	}

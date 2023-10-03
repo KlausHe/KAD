@@ -100,8 +100,8 @@ class IbhaluniObj {
 		this.poppingScl = 1;
 		this.poppingSclLimits = [10, 25];
 		this.falling = false;
-		this.speedX = valueConstrain(Math.random(), 0.2, 1);
-		this.speedY = valueConstrain(Math.random(), 0.2, 1) * 1.5;
+		this.speedX = utilsValueConstrain(Math.random(), 0.2, 1);
+		this.speedY = utilsValueConstrain(Math.random(), 0.2, 1) * 1.5;
 		this.noiseSeed = Math.random() * 1000;
 		this.mirrored = Math.random() > 0.5;
 		this.angle = 0;
@@ -114,7 +114,7 @@ class IbhaluniObj {
 		}
 		caIB.push();
 		caIB.translate(this.x, this.y);
-		this.angle = valueMapping(this.speedX * caIB.noise(this.noiseSeed + this.y / 300) - this.speedX / 2, -this.speedX / 2, this.speedX / 2, -caIB.PI / 4, caIB.PI / 4);
+		this.angle = utilsValueMapping(this.speedX * caIB.noise(this.noiseSeed + this.y / 300) - this.speedX / 2, -this.speedX / 2, this.speedX / 2, -caIB.PI / 4, caIB.PI / 4);
 		caIB.rotate(this.angle);
 		// String hanging off the bottom
 		caIB.stroke(0);
@@ -133,8 +133,8 @@ class IbhaluniObj {
 			// caIB.rotate(this.angle);
 			if (this.popping && this.poppingCounter >= this.poppingSclLimits[0]) {
 				// Main balloon
-				const factorW = valueMapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.xSize * this.poppingScl * 0.5);
-				const factorH = valueMapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.ySize * this.poppingScl * 0.5);
+				const factorW = utilsValueMapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.xSize * this.poppingScl * 0.5);
+				const factorH = utilsValueMapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.ySize * this.poppingScl * 0.5);
 				this.drawEllipse(factorW, factorH);
 			} else {
 				// Main balloon

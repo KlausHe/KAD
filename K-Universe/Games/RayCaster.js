@@ -45,14 +45,14 @@ function clear_cl_RayCaster() {
 
 	rayCasterReset();
 
-	raycasterOptions.boardSize = resetInput("idVin_rayMazeSize", raycasterOptions.boardSizeOrig);
-	raycasterOptions.speed = resetInput("idVin_rayMazeSpeed", raycasterOptions.speedOrig);
-	raycasterOptions.fovD = resetInput("idVin_rayMazeView", raycasterOptions.fovDOrig);
+	raycasterOptions.boardSize = utilsResetInput("idVin_rayMazeSize", raycasterOptions.boardSizeOrig);
+	raycasterOptions.speed = utilsResetInput("idVin_rayMazeSpeed", raycasterOptions.speedOrig);
+	raycasterOptions.fovD = utilsResetInput("idVin_rayMazeView", raycasterOptions.fovDOrig);
 
-	raycasterOptions.modes.maze = resetInput("idCb_rayDebug", raycasterOptions.modes.mazeOrig);
-	raycasterOptions.modes.target = resetInput("idCb_rayDebug", raycasterOptions.modes.targetOrig);
-	raycasterOptions.modes.poly = resetInput("idCb_rayDebug", raycasterOptions.modes.polyOrig);
-	raycasterOptions.modes.spider = resetInput("idCb_rayDebug", raycasterOptions.modes.spiderOrig);
+	raycasterOptions.modes.maze = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.mazeOrig);
+	raycasterOptions.modes.target = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.targetOrig);
+	raycasterOptions.modes.poly = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.polyOrig);
+	raycasterOptions.modes.spider = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.spiderOrig);
 
 	raycasterOptions.borders = [
 		{
@@ -125,7 +125,7 @@ function raySpiderChange() {
 
 function rayPolyChange() {
 	raycasterOptions.modes.poly = dbID("idCb_rayPoly").checked;
-	enableBtn("idCb_raySpider", !raycasterOptions.modes.poly);
+	utilsEnableBtn("idCb_raySpider", !raycasterOptions.modes.poly);
 	focusRaycaster();
 }
 

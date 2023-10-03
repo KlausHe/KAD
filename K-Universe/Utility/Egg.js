@@ -57,16 +57,16 @@ const eggOptions = {
 };
 
 function clear_cl_Egg() {
-	eggOptions.mass.val = resetInput("idVin_EggMass", eggOptions.mass.valOrig, {
+	eggOptions.mass.val = utilsResetInput("idVin_EggMass", eggOptions.mass.valOrig, {
 		min: eggOptions.mass.min,
 		max: eggOptions.mass.max,
 	});
 
-	eggOptions.temp.val = resetInput("idVin_EggTemp", eggOptions.temp.valOrig, {
+	eggOptions.temp.val = utilsResetInput("idVin_EggTemp", eggOptions.temp.valOrig, {
 		min: eggOptions.temp.min,
 		max: eggOptions.temp.max,
 	});
-	eggOptions.yolk.val = resetInput("idVin_EggYolk", eggOptions.yolk.valOrig, {
+	eggOptions.yolk.val = utilsResetInput("idVin_EggYolk", eggOptions.yolk.valOrig, {
 		min: eggOptions.yolk.min,
 		max: eggOptions.yolk.max,
 	});

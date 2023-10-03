@@ -32,7 +32,7 @@ function clear_cl_Beatmachine() {
 	beatmachineOptions.BPM = beatmachineOptions.BPMOrig;
 	beatmachineOptions.expanding = false;
 	setBPMtoInterval(beatmachineOptions.BPM);
-	resetInput("idVin_beatmachine_BPM", beatmachineOptions.BPM);
+	utilsResetInput("idVin_beatmachine_BPM", beatmachineOptions.BPM);
 	beatmachineStop(true);
 	beatmachineCreateTracks();
 }
@@ -159,12 +159,12 @@ function beatmachineTransport() {
 
 function beatmachinePlay() {
 	dbID("idBtn_transportPlayPause").textContent = "Stop";
-	btnColor("idBtn_transportPlayPause", "positive");
+	utilsBtnColor("idBtn_transportPlayPause", "positive");
 	beatmachineOptions.loop = setInterval(beatmachineLoop, beatmachineOptions.stepInterval);
 }
 function beatmachineStop(reset = null) {
 	dbID("idBtn_transportPlayPause").textContent = "Play";
-	btnColor("idBtn_transportPlayPause", null);
+	utilsBtnColor("idBtn_transportPlayPause", null);
 	clearInterval(beatmachineOptions.loop);
 	beatmachineOptions.loop = null;
 
@@ -182,8 +182,8 @@ function beatmachineStop(reset = null) {
 
 function beatmachineLoop() {
 	for (let obj of beatmachineOptions.tracks) {
-		// beatmachineBtnColor(obj, beatmachineOptions.curTime);
-		// beatmachineBtnColor(obj, (beatmachineOptions.curTime + beatmachineOptions.duration - 1) % beatmachineOptions.duration, true);
+		// beatmachineutilsBtnColor(obj, beatmachineOptions.curTime);
+		// beatmachineutilsBtnColor(obj, (beatmachineOptions.curTime + beatmachineOptions.duration - 1) % beatmachineOptions.duration, true);
 		if (obj.enable && obj.pattern[beatmachineOptions.curTime] == 1) {
 			obj.sound.play();
 		}
@@ -200,21 +200,21 @@ function beatmachineLoop() {
 
 function muteAll() {
 	beatmachineOptions.muteAll = !beatmachineOptions.muteAll;
-	btnColor("idBtn_transporteMute", beatmachineOptions.muteAll ? "negative" : null);
+	utilsBtnColor("idBtn_transporteMute", beatmachineOptions.muteAll ? "negative" : null);
 	for (let obj of beatmachineOptions.tracks) {
 		obj.enable = !beatmachineOptions.muteAll;
-		btnColor(`idBtn_beatmachineEnable_${obj.name}`, beatmachineOptions.muteAll ? "negative" : "positive");
+		utilsBtnColor(`idBtn_beatmachineEnable_${obj.name}`, beatmachineOptions.muteAll ? "negative" : "positive");
 	}
 }
 
 function beatmachineToggleTrack(tIndex) {
 	if (beatmachineOptions.muteAll) {
 		beatmachineOptions.muteAll = false;
-		btnColor("idBtn_transporteMute", null);
+		utilsBtnColor("idBtn_transporteMute", null);
 	}
 	let track = beatmachineOptions.tracks[tIndex];
 	track.enable = !track.enable;
-	btnColor(`idBtn_beatmachineEnable_${track.name}`, track.enable ? "positive" : "negative");
+	utilsBtnColor(`idBtn_beatmachineEnable_${track.name}`, track.enable ? "positive" : "negative");
 }
 
 function beatmachineTogglePattern(btnObj) {
@@ -222,18 +222,18 @@ function beatmachineTogglePattern(btnObj) {
 	let pIndex = btnObj.getAttribute("data-pattern");
 	let track = beatmachineOptions.tracks[tIndex];
 	track.pattern[pIndex] = !track.pattern[pIndex];
-	beatmachineBtnColor(track, pIndex);
+	beatmachineutilsBtnColor(track, pIndex);
 }
 
 function beatmachineDrawAll() {
 	for (let obj of beatmachineOptions.tracks) {
 		for (let i = 0; i < beatmachineOptions.duration; i++) {
-			beatmachineBtnColor(obj, i);
+			beatmachineutilsBtnColor(obj, i);
 		}
 	}
 }
 
-function beatmachineBtnColor(trackObj, pIndex) {
+function beatmachineutilsBtnColor(trackObj, pIndex) {
 	const btn = dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
 	if (trackObj.pattern[pIndex]) {
 		btn.classList.add("cl_BeatmachineBtnSelect");

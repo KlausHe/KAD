@@ -42,7 +42,7 @@ function bgaToggleReset(obj) {
 function bgaStart() {
 	bgaOptions.animations[bgaOptions.curr].reset();
 	caBA.frameRate(bgaOptions.animations[bgaOptions.curr].Framerate);
-	dbID("idImg_bgaToggle").src = imgPath("tStop");
+	dbID("idImg_bgaToggle").src = utilsGetImgPath("tStop");
 	bgaOptions.drawing = true;
 	caBA.loop();
 	if (globalValues.hostDebug) {
@@ -51,7 +51,7 @@ function bgaStart() {
 }
 
 function bgaStopp() {
-	dbID("idImg_bgaToggle").src = imgPath("tPlay");
+	dbID("idImg_bgaToggle").src = utilsGetImgPath("tPlay");
 	caBA.noLoop();
 }
 

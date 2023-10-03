@@ -42,10 +42,10 @@ function clear_cl_Numbery() {
 		if (opt == numberyOptions.cathegory) option.selected = true;
 		selC.appendChild(option);
 	}
-	resetInput("idVin_numberyPairs", numberyOptions.pairsOrig, {
+	utilsResetInput("idVin_numberyPairs", numberyOptions.pairsOrig, {
 		max: numberyOptions.imgCount,
 	});
-	resetInput("idVin_numberyPlayer", numberyOptions.maxPlayersOrig);
+	utilsResetInput("idVin_numberyPlayer", numberyOptions.maxPlayersOrig);
 
 	numberyOptions.pairs = numberyOptions.pairsOrig;
 	numberyOptions.maxPlayers = numberyOptions.maxPlayersOrig;
@@ -56,9 +56,9 @@ function clear_cl_Numbery() {
 }
 
 function numberyDisableInputs() {
-	enableBtn("idVin_numberyPairs", !numberyOptions.isPlaying);
-	enableBtn("idVin_numberyPlayer", !numberyOptions.isPlaying);
-	enableBtn("idSel_numberCategory", !numberyOptions.isPlaying);
+	utilsEnableBtn("idVin_numberyPairs", !numberyOptions.isPlaying);
+	utilsEnableBtn("idVin_numberyPlayer", !numberyOptions.isPlaying);
+	utilsEnableBtn("idSel_numberCategory", !numberyOptions.isPlaying);
 	dbID("idBtn_startNumbery").textContent = numberyOptions.isPlaying ? "Stop" : "Start";
 }
 

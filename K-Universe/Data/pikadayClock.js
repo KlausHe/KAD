@@ -357,7 +357,7 @@
     isoWeek = function(date) {
       // Ensure we're at the start of the day.
       date.setHours(0, 0, 0, 0);
-      return getWeekNumber(date)
+      return utilsGetWeekNumber(date)
     },
 
     renderWeek = function(d, m, y) {

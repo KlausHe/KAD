@@ -51,7 +51,7 @@ function clear_cl_Sudoku() {
 			sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, "", "");
 		}
 	}
-	sudokuSetBtnColor("");
+	sudokuSetutilsBtnColor("");
 	sudokuSetDoneNumbers();
 	sudokuStartTimer(false);
 	caSU.clear();
@@ -109,8 +109,8 @@ function sudokuInputOptionChange(val = null) {
 	if (val != null) {
 		sudokuOptions.mode = val;
 	}
-	btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-	btnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "negative" : null);
+	utilsBtnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
+	utilsBtnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "negative" : null);
 	focusSudoku();
 }
 
@@ -277,9 +277,9 @@ function unfocusSudoku() {
 	caSU.noLoop();
 }
 
-function sudokuSetBtnColor(diff) {
-	btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-	btnColor("idBtn_sudokuPuzzle", diff == "puzzle" ? "positive" : null);
+function sudokuSetutilsBtnColor(diff) {
+	utilsBtnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
+	utilsBtnColor("idBtn_sudokuPuzzle", diff == "puzzle" ? "positive" : null);
 }
 
 function sudokuSetDoneNumbers() {
@@ -300,7 +300,7 @@ function sudokuSetDoneNumbers() {
 		let col = null;
 		if (numCount[i] == 9) col = "positive";
 		if (numCount[i] > 9) col = "negative";
-		btnColor(btnObj, col);
+		utilsBtnColor(btnObj, col);
 		btnObj.innerHTML = i + "<sup>" + numCount[i] + "</sup>";
 	}
 }

@@ -3,7 +3,7 @@ let tugasOptions = {}
 function clear_cl_Tugas() {
   tugasOptions = {};
   createTugas();
-  resetInput("idArea_tugasEntry", "Paste to Tugas")
+  utilsResetInput("idArea_tugasEntry", "Paste to Tugas")
 };
 
 function clearRowTugas(name) {

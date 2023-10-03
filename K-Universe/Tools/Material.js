@@ -36,7 +36,7 @@ function mat() {
 	}
 }
 function clear_cl_Material() {
-	resetInput("idVin_materialFilter", "Material suchen");
+	utilsResetInput("idVin_materialFilter", "Material suchen");
 	dbID("idCb_materialListFilter").checked = true;
 
 	let opt = document.createElement("option");

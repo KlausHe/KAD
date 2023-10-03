@@ -23,8 +23,8 @@ function sweeperCellsChange(obj) {
 function clear_cl_Sweeper() {
 	//Clear on Start
 	sweeperOptions.cells = [];
-	sweeperOptions.gridSize = resetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
-	sweeperOptions.sweepCells = resetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
+	sweeperOptions.gridSize = utilsResetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
+	sweeperOptions.sweepCells = utilsResetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
 	sweeperStart();
 	caSW.noLoop();
 	unfocusSweeper();

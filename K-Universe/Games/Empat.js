@@ -233,8 +233,8 @@ function botLogic() {
 		opts.cells[i].playerID = null;
 	}
 	if (nextPos == null) {
-		const randPos = Math.floor(valueConstrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
-		nextPos = getNearestValueInArray(opts.arr, randPos);
+		const randPos = Math.floor(utilsValueConstrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
+		nextPos = utilsGetNearestValueInArray(opts.arr, randPos);
 	}
 	empatOptions.players[empatOptions.curPlayer].setPosition(nextPos);
 	setTimeout(() => {

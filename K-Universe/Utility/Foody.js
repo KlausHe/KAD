@@ -143,7 +143,7 @@ const foodyOptions = {
 function clear_cl_Foody() {
 	clearInterval(foodyOptions.timerCount);
 	foodyOptions.timerState = true;
-	foodyOptions.preheat = resetInput("idVin_foodyPreheat", foodyOptions.preheatOrig);
+	foodyOptions.preheat = utilsResetInput("idVin_foodyPreheat", foodyOptions.preheatOrig);
 	dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
 	for (let i = 0; i < foodyOptions.data.length; i++) {
 		dbID("idSel_foodyType").options[i] = new Option(`${foodyOptions.data[i].name} (${foodyOptions.data[i].time}min)`);

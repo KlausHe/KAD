@@ -29,7 +29,7 @@ function clear_cl_Iomlaid() {
 	}
 	dbID("idSel_IomlaidCur").options[8].selected = true;
 
-	resetInput("idVin_IomlaidCur", iomlaidOptions.options.value);
+	utilsResetInput("idVin_IomlaidCur", iomlaidOptions.options.value);
 	dbID("idBtn_iomlaidDate").textContent = utilsDate(iomlaidOptions.options.date);
 	iomlaidCalculate();
 }
@@ -71,6 +71,8 @@ async function iomlaidCalculate() {
 	let date = utilsDate(null, { format: iomlaidOptions.dateFormat });
 	try {
 		const fetches = [fetch(`${iomlaidOptions.url}/${date}?base=${iomlaidOptions.options.base}`), fetch(`${iomlaidOptions.url}/${iomlaidOptions.options.date}?base=${iomlaidOptions.options.base}`)];
+
+		console.log(`${iomlaidOptions.url}/${date}?base=${iomlaidOptions.options.base}`, `${iomlaidOptions.url}/${iomlaidOptions.options.date}?base=${iomlaidOptions.options.base}`);
 		let results = await Promise.all(fetches);
 		let data = await Promise.all(results.map((r) => r.json()));
 		iomlaidOptions.data.latest = data[0].success == false ? null : data[0];

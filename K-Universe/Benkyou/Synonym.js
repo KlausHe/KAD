@@ -6,7 +6,7 @@ const synonymOptions = {
 }
 
 function clear_cl_Synonym() {
-  resetInput("idVin_synonymEntry", "Search for synonyms")
+  utilsResetInput("idVin_synonymEntry", "Search for synonyms")
   clearTable("idTabHeader_synonym_baseform");
   clearTable("idTabHeader_synonym1");
   clearTable("idTabHeader_synonym2");

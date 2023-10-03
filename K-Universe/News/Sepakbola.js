@@ -1,14 +1,12 @@
 const sepakbolaOptions = {
-	https: (kind, liga, season = null) => {
-		const types = {
-			table: "getbltable/", // Array mit 18 einträgen, jedes Team einzeln mit teamstatistik  -- einzeln
-			matches: "getmatchdata/", // Array mit 305 einträgen, jedes Match einzeln mit Team und Statistik
-			days: "getcurrentgroup/", // Object mit "GroupOrderID": 10--> 10 ist der aktuelle Spieltag   -- erst diesen, dann den nächsten
-		};
-		if (kind == "days") {
-			return `https://www.openligadb.de/api/${types[kind]}${liga}`; //https://www.openligadb.de/api/getbltable/bl1/2018
-		}
-		return `https://www.openligadb.de/api/${types[kind]}${liga}/${season}`;
+	get URLTable() {
+		return `https://www.openligadb.de/api/getbltable/${sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex].urlName}/${sepakbolaOptions.selected.season}`;
+	},
+	get URLMatches() {
+		return `https://www.openligadb.de/api/getmatchdata/${sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex].urlName}/${sepakbolaOptions.selected.season}`;
+	},
+	get URLLastday() {
+		return `https://www.openligadb.de/api/getcurrentgroup/${sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex].urlName}`;
 	},
 	selected: {},
 	selectedOrig: {
@@ -156,18 +154,27 @@ function sepakbolaMatchdayChange(obj) {
 	sepakbolaMatchesReturn();
 }
 
-async function sepakbolaRequest() {
-	const liga = sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex];
-
-  const URLTable = sepakbolaOptions.https("table", liga.urlName, sepakbolaOptions.selected.season);
-	globalP5.loadJSON(URLTable, sepakbolaTableReturn, "json");
-  
-	const URLMatches = sepakbolaOptions.https("matches", liga.urlName, sepakbolaOptions.selected.season);
-	globalP5.loadJSON(URLMatches, sepakbolaMatchesReturn, "json");
-  
-	const URLLastday = sepakbolaOptions.https("days", liga.urlName);
-	globalP5.loadJSON(URLLastday, sepakbolaLastdayReturn, "json");
+function sepakbolaRequest() {
+	// sepakbolaGetData();
+	// globalP5.loadJSON(sepakbolaOptions.URLTable, sepakbolaTableReturn, "jsonp");
+	globalP5.loadJSON(sepakbolaOptions.URLTable, "json", sepakbolaTableReturn, sepakbolaReturnError);
+	// globalP5.loadJSON(sepakbolaOptions.URLMatches, sepakbolaMatchesReturn, "jsonp");
+	// globalP5.loadJSON(sepakbolaOptions.URLLastday, sepakbolaLastdayReturn, "jsonp");
 }
+
+function sepakbolaReturnError(error) {
+	console.log(error);
+}
+
+// async function sepakbolaGetData() {
+//   try {
+//     let response = await fetch(sepakbolaOptions.URLTable);
+// 		const data = await response.json();
+// 		sepakbolaTableReturn(data);
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// }
 
 function sepakbolaLastdayReturn(data) {
 	sepakbolaOptions.selected.matchday = data.GroupOrderID;

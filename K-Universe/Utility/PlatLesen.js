@@ -1,6 +1,6 @@
 function clear_cl_PlatLesen() {
-	resetInput("idVin_platLesenReg", "Region eingeben");
-	resetInput("idVin_platLesenNum", "Kürzel eingeben");
+	utilsResetInput("idVin_platLesenReg", "Region eingeben");
+	utilsResetInput("idVin_platLesenNum", "Kürzel eingeben");
 	platlesenResult('"AC"', '"Aachen"');
 }
 

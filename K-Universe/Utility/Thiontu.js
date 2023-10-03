@@ -197,11 +197,11 @@ const thiontuData = {
 };
 
 function clear_cl_Thiontu() {
-	resetInput("idArea_thiontuInputEntry", "Type text to convert");
-	resetInput("idArea_thiontuOutputArea", "~~~~~~~~~~~");
+	utilsResetInput("idArea_thiontuInputEntry", "Type text to convert");
+	utilsResetInput("idArea_thiontuOutputArea", "~~~~~~~~~~~");
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
-		enableBtn(clBtn[i], true);
+		utilsEnableBtn(clBtn[i], true);
 		clBtn[i].textContent = Object.values(thiontuData.opts)[i].btnName;
 		clBtn[i].id = `idBtn_thiontuToText_${Object.keys(thiontuData.opts)[i]}`;
 		clBtn[i].setAttribute("data-textto", Object.keys(thiontuData.opts)[i]);
@@ -213,10 +213,10 @@ function clear_cl_Thiontu() {
 			false
 		);
 		if (i === 0) {
-			btnColor(clBtn[0], "positive");
+			utilsBtnColor(clBtn[0], "positive");
 			thiontuData.selected = Object.keys(thiontuData.opts)[i];
 		} else {
-			btnColor(clBtn[i]);
+			utilsBtnColor(clBtn[i]);
 		}
 	}
 }
@@ -225,10 +225,10 @@ function thiontuOptionChange(obj) {
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
 		if (!clBtn[i].disabled) {
-			btnColor(clBtn[i]);
+			utilsBtnColor(clBtn[i]);
 		}
 	}
-	btnColor(obj, "positive");
+	utilsBtnColor(obj, "positive");
 	thiontuData.selected = obj.dataset.textto;
 	thiontuUpdate();
 }
@@ -240,18 +240,18 @@ function thiontuUpdate() {
 	//check text and disable buttons if input is not valid for them
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
-		enableBtn(clBtn[i], thiontuData.opts[clBtn[i].dataset.textto].enable);
+		utilsEnableBtn(clBtn[i], thiontuData.opts[clBtn[i].dataset.textto].enable);
 		if (thiontuData.opts[clBtn[i].dataset.textto].enable) {
-			enableBtn(clBtn[i], true);
+			utilsEnableBtn(clBtn[i], true);
 		} else {
-			enableBtn(clBtn[i], false);
+			utilsEnableBtn(clBtn[i], false);
 			clBtn[i].style.backgroundColor = "";
 		}
 	}
 
 	//if selected is disabled, jump to ALL CAPS
 	if (!thiontuData.opts[thiontuData.selected].enable) {
-		btnColor(clBtn[0], "positive");
+		utilsBtnColor(clBtn[0], "positive");
 		thiontuData.selected = clBtn[0].dataset.textto;
 	}
 

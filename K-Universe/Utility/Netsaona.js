@@ -94,7 +94,6 @@ const netsaonaOptions = {
 
 function clear_cl_Netsaona() {
 	dbID("idLbl_netsaonaOutput").textContent = "...";
-	dataForLabel("idLbl_netsaonaOutput");
 
 	const clBtn = dbCL("cl_NetsaonaOption", null);
 	for (let i = 0; i < clBtn.length; i++) {
@@ -116,6 +115,5 @@ function netsaonaGenerate(obj) {
 	netsaonaOptions.selType = obj.dataset.type;
 	netsaonaOptions.selected = randomObject(netsaonaOptions.data[netsaonaOptions.selType]);
 	dbID("idLbl_netsaonaOutput").textContent = netsaonaOptions.selected;
-	dataForLabel("idLbl_netsaonaOutput", netsaonaOptions.selected);
 	netsaonaOptions.selType = null;
 }

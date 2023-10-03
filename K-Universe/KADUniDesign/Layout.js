@@ -1,4 +1,14 @@
+let contentGrid = {};
 const contentLayout = {
+	createContentGrid() {
+		let arr = Array.from(Object.entries(rawContentGrid));
+		contentGrid = Object.fromEntries(
+			arr.filter((obj) => {
+				return obj[1].active == undefined || obj[1].active == true;
+				// return !obj[1].hasOwnProperty("active") || obj[1].active == false;
+			})
+		);
+	},
 	navContent: {
 		Universe: [],
 		User: [],
@@ -12,7 +22,7 @@ const contentLayout = {
 	},
 	get getUniverse() {
 		return Object.keys(contentGrid).filter((key) => {
-			return contentGrid[key].contentGroup != "AccountSettings" && contentGrid[key].contentGroup != "GlobalSettings" && contentGrid[key].active != false;
+			return contentGrid[key].contentGroup != "AccountSettings" && contentGrid[key].contentGroup != "GlobalSettings";
 		});
 	},
 	get nameList() {
@@ -29,7 +39,7 @@ const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: globalValues.hostDebug ? "cl_News" : "Universe",
+	defaultPage: globalValues.hostDebug ? "News" : "Universe",
 };
 
 function layoutHideLoadingscreen() {
@@ -533,7 +543,7 @@ function layoutCreateNavbar() {
 	// move User to last place!
 	parent.insertBefore(dbID("idDiv_navBar_User"), parent.children[contentLayout.contentLength]);
 	setCssRoot("navContentLength", contentLayout.contentLength - 1); //"User" gets skipped
-	dbID("idBtn_navBar_KW").textContent = "KW " + getWeekNumber();
+	dbID("idBtn_navBar_KW").textContent = "KW " + utilsGetWeekNumber();
 	dbID("idDiv_navBar_Universe").classList.add("navbarActive");
 }
 

@@ -1244,10 +1244,10 @@ function clear_cl_Niska() {
 	niskaOptions.select.type = niskaOptions.select.typeOrig;
 	niskaOptions.strengthClass.index0 = niskaOptions.strengthClass.indexOrig;
 	niskaOptions.strengthClass.index1 = niskaOptions.strengthClass.indexOrig;
-	niskaOptions.size.val = resetInput("idVin_niskaSize", niskaOptions.size.valOrig, {
+	niskaOptions.size.val = utilsResetInput("idVin_niskaSize", niskaOptions.size.valOrig, {
 		min: 0,
 	});
-	niskaOptions.pitch.val = resetInput("idVin_niskaPitch", niskaOptions.pitch.valOrig, {
+	niskaOptions.pitch.val = utilsResetInput("idVin_niskaPitch", niskaOptions.pitch.valOrig, {
 		min: 0,
 	});
 
@@ -1349,18 +1349,19 @@ function niskaHelpCalculation(d, P, index) {
 	niskaOptions.results.headHeightOuter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][2] : "-";
 	niskaOptions.results.keyWidthOuter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][3] : "-";
 
-	niskaOptions.results.boreDiameter.val[index] = checkExponential(boreDiameter, niskaOptions.decimalOpts);
-	niskaOptions.results.innerCoreDiameterNut.val[index] = checkExponential(innerCoreDiameterNut, niskaOptions.decimalOpts);
-	niskaOptions.results.outerCoreDiameter.val[index] = checkExponential(outerCoreDiameter, niskaOptions.decimalOpts);
-	niskaOptions.results.flankDiameter.val[index] = checkExponential(flankDiameter, niskaOptions.decimalOpts);
-	niskaOptions.results.stressCrosssection.val[index] = checkExponential(stressCrosssection, niskaOptions.decimalOpts);
-	niskaOptions.results.preloadMax.val[index] = checkExponential(preloadMax, {
+  
+	niskaOptions.results.boreDiameter.val[index] = utilsNumber(boreDiameter, niskaOptions.decimalOpts);
+	niskaOptions.results.innerCoreDiameterNut.val[index] = utilsNumber(innerCoreDiameterNut, niskaOptions.decimalOpts);
+	niskaOptions.results.outerCoreDiameter.val[index] = utilsNumber(outerCoreDiameter, niskaOptions.decimalOpts);
+	niskaOptions.results.flankDiameter.val[index] = utilsNumber(flankDiameter, niskaOptions.decimalOpts);
+	niskaOptions.results.stressCrosssection.val[index] = utilsNumber(stressCrosssection, niskaOptions.decimalOpts);
+	niskaOptions.results.preloadMax.val[index] = utilsNumber(preloadMax, {
 		decimals: 0,
 	});
-	// niskaOptions.results.strengthAxialStatic.val[index] = checkExponential(strengthAxialStatic, niskaOptions.decimalOpts);
-	// niskaOptions.results.strengthAxialDynamic.val[index] = checkExponential(strengthAxialDynamic, niskaOptions.decimalOpts);
-	// niskaOptions.results.strengthShearStatic.val[index] = checkExponential(strengthShearStatic, niskaOptions.decimalOpts);
-	// niskaOptions.results.strengthShearDynamic.val[index] = checkExponential(strengthShearDynamic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthAxialStatic.val[index] = utilsNumber(strengthAxialStatic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthAxialDynamic.val[index] = utilsNumber(strengthAxialDynamic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthShearStatic.val[index] = utilsNumber(strengthShearStatic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthShearDynamic.val[index] = utilsNumber(strengthShearDynamic, niskaOptions.decimalOpts);
 }
 
 function niskaTable() {

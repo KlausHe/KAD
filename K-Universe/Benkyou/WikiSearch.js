@@ -25,7 +25,7 @@ const wikiOptions = {
 
 function clear_cl_WikiSearch() {
 	wikiOptions.random = null;
-	resetInput("idVin_wikiInput", "Search on Wiki");
+	utilsResetInput("idVin_wikiInput", "Search on Wiki");
 	dbID("idDiv_wiki_Title").textContent = "";
 	dbID("idDiv_wiki_Text").textContent = "";
 	dbID("idImg_Wiki_Image").src = "";
@@ -83,9 +83,9 @@ function wikiCreateTable(data) {
 			img: "right",
 			cellOnclick: () => {
 				for (let j = 0; j < wikiOptions.resultTerms.length; j++) {
-					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = imgPath("right");
+					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = utilsGetImgPath("right");
 				}
-				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = imgPath("search");
+				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = utilsGetImgPath("search");
 				globalP5.loadJSON(wikiOptions.contentUrl + wikiOptions.resultTerms[i], wikiShowSelectedText, "jsonp");
 				dbID("idDiv_wiki_Title").textContent = "searching...";
 				dbID("idDiv_wiki_Title").onclick = null;
@@ -101,9 +101,9 @@ function wikiCreateTable(data) {
 			},
 			cellOnclick: () => {
 				for (let j = 0; j < wikiOptions.resultTerms.length; j++) {
-					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = imgPath("right");
+					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = utilsGetImgPath("right");
 				}
-				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = imgPath("search");
+				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = utilsGetImgPath("search");
 				globalP5.loadJSON(wikiOptions.contentUrl + wikiOptions.resultTerms[i], wikiShowSelectedText, "jsonp");
 				globalP5.loadJSON(wikiOptions.imageUrl + wikiOptions.resultTerms[i], wikiShowSelectedImage, "jsonp");
 				dbID("idDiv_wiki_Title").textContent = "searching...";

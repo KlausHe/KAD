@@ -16,9 +16,9 @@ const expansionOptions = {
 };
 
 function clear_cl_Expansion() {
-	resetInput("idVin_expansionLength", expansionOptions.lengthOrig[0]);
-	resetInput("idVin_expansionTemperature", expansionOptions.tempsOrig[0]);
-	resetInput("idVin_expansionBaseTemperature", expansionOptions.baseTemp);
+	utilsResetInput("idVin_expansionLength", expansionOptions.lengthOrig[0]);
+	utilsResetInput("idVin_expansionTemperature", expansionOptions.tempsOrig[0]);
+	utilsResetInput("idVin_expansionBaseTemperature", expansionOptions.baseTemp);
 
 	dbID("idCb_expansionCoefficient").checked = false;
 	expansionOptions.exLength = [...expansionOptions.lengthOrig];
@@ -99,7 +99,7 @@ function expansionEntryMaterial() {
 	expansionOptions.materials.matA = dbID("idSel_expansionMaterialA").value;
 	expansionOptions.materials.matB = dbID("idSel_expansionMaterialB").value;
 	expansionOptions.materials.compare = expansionOptions.materials.matB == 0 || expansionOptions.materials.matA === expansionOptions.materials.matB ? false : true;
-	enableBtn(idCb_expansionDifference, !expansionOptions.materials.compare);
+	utilsEnableBtn(idCb_expansionDifference, !expansionOptions.materials.compare);
 
 	const cbEntry = dbID("idLbl_expansionDifference").textContent;
 	dbID("idLbl_expansionDifference").innerHTML = expansionOptions.materials.compare ? `<del>${cbEntry}</del>` : cbEntry;
@@ -151,7 +151,7 @@ function expansionCalc() {
 		expansionOptions.materials.deltaExpansion[t] = [];
 		for (let l = 0; l < expansionOptions.exLength.length; l++) {
 			const tempA = Object.keys(Data_Material.Materials[expansionOptions.materials.matA].expansion);
-			const selTempA = getNearestValueInArray(tempA, expansionOptions.exTemp[t]);
+			const selTempA = utilsGetNearestValueInArray(tempA, expansionOptions.exTemp[t]);
 			const alphaA = Number(Data_Material.Materials[expansionOptions.materials.matA].expansion[selTempA]);
 			const addLength = checkedLength ? 0 : expansionOptions.exLength[l];
 			const dLA = alphaA * dT * expansionOptions.exLength[l] * 0.000001 + addLength;
@@ -159,7 +159,7 @@ function expansionCalc() {
 			let alphaB = 0;
 			if (expansionOptions.materials.compare) {
 				const tempB = Object.keys(Data_Material.Materials[expansionOptions.materials.matB].expansion);
-				const selTempB = getNearestValueInArray(tempB, expansionOptions.exTemp[t]);
+				const selTempB = utilsGetNearestValueInArray(tempB, expansionOptions.exTemp[t]);
 				alphaB = Number(Data_Material.Materials[expansionOptions.materials.matB].expansion[selTempB]);
 				dLB = alphaB * dT * expansionOptions.exLength[l] * 0.000001 + addLength;
 			}
@@ -167,19 +167,10 @@ function expansionCalc() {
 				if (expansionOptions.materials.compare) {
 					expansionOptions.materials.deltaExpansion[t].push(`${alphaA} / ${alphaB}`);
 				} else {
-					expansionOptions.materials.deltaExpansion[t].push(
-						checkExponential(alphaA, {
-							decimals: 1,
-						})
-					);
+					expansionOptions.materials.deltaExpansion[t].push(utilsNumber(alphaA, { decimals: 1 }));
 				}
 			} else {
-				expansionOptions.materials.deltaExpansion[t].push(
-					checkExponential(dLA - dLB, {
-						decimals: 3,
-						expoThreashold: 4,
-					})
-				);
+				expansionOptions.materials.deltaExpansion[t].push(utilsNumber(dLA - dLB, { decimals: 3 }));
 			}
 		}
 	}

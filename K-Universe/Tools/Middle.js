@@ -25,8 +25,8 @@ function middleResize() {
 }
 
 function clear_cl_Middle() {
-	resetInput("idVin_middleA", 5);
-	resetInput("idVin_middleB", 2);
+	utilsResetInput("idVin_middleA", 5);
+	utilsResetInput("idVin_middleB", 2);
 	middleOptions.barA = {
 		hStart: 0,
 		h: middleOptions.canvas.h * 0.5,
@@ -63,18 +63,10 @@ function calcMiddle() {
 	middleOptions.dims.mappedMax = Math.ceil((middleOptions.dims.max + 1) / 10) * 10;
 	middleOptions.dims.mid = (a + b) * 0.5;
 	middleOptions.dims.diff = Math.abs((a - b) * 0.5);
-	middleOptions.dims.midText = checkExponential(middleOptions.dims.mid, {
-		decimals: 4,
-		expoThreashold: 7,
-	});
-	middleOptions.dims.diffText = checkExponential(middleOptions.dims.diff, {
-		decimals: 4,
-		expoThreashold: 7,
-	});
+	middleOptions.dims.midText = utilsNumber(middleOptions.dims.mid, { decimals: 3 });
+	middleOptions.dims.diffText = utilsNumber(middleOptions.dims.diff, { decimals: 3 });
 	dbID("idLbl_middleMid").textContent = `Mitte: ${middleOptions.dims.midText}`;
 	dbID("idLbl_middleDiff").textContent = `Differenz zur Mitte: ${middleOptions.dims.diffText}`;
-	dataForLabel("idLbl_middleMid", middleOptions.dims.midText);
-	dataForLabel("idLbl_middleDiff", middleOptions.dims.diffText);
 	middleOptions.barA.w = caMI.map(middleOptions.barA.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.barB.w = caMI.map(middleOptions.barB.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.dims.w = caMI.map(middleOptions.dims.mid, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);

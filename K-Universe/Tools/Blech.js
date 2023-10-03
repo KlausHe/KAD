@@ -10,7 +10,7 @@ const blechOptions = {
       get func() {
         return blechOptions.r + 2 * blechOptions.s;
       },
-      imgPath: "Data/Images/bl-rundloch.png",
+      utilsGetImgPath: "Data/Images/bl-rundloch.png",
       breite: true
     },
     Langloch: {
@@ -21,7 +21,7 @@ const blechOptions = {
       factorA: 3,
       factorB: 4,
       factorC: 5,
-      imgPath: "Data/Images/bl-langloch.png",
+      utilsGetImgPath: "Data/Images/bl-langloch.png",
       breite: false
     },
     Rechteckloch: {
@@ -32,16 +32,16 @@ const blechOptions = {
       factorA: 3,
       factorB: 3.5,
       factorC: 4,
-      imgPath: "Data/Images/bl-rechteckloch.png",
+      utilsGetImgPath: "Data/Images/bl-rechteckloch.png",
       breite: false
     }
   }
 };
 
 function clear_cl_Blechgeometrie() {
-  resetInput("idVin_blechgeoDicke", blechOptions.dicke)
-  resetInput("idVin_blechgeoRadius", blechOptions.radius)
-  resetInput("idVin_blechgeoBreite", blechOptions.breite)
+  utilsResetInput("idVin_blechgeoDicke", blechOptions.dicke)
+  utilsResetInput("idVin_blechgeoRadius", blechOptions.radius)
+  utilsResetInput("idVin_blechgeoBreite", blechOptions.breite)
 
   clearFirstChild("idSel_blechgeoForm");
   let selInput = dbID("idSel_blechgeoForm")
@@ -58,9 +58,9 @@ function clear_cl_Blechgeometrie() {
 function blechgeoFormChange() {
   let index = dbID("idSel_blechgeoForm").selectedIndex;
   let vinOption = dbID("idSel_blechgeoForm").options[index].text
-  let key = blechOptions.geo[vinOption].imgPath;
-  dbID('idImg_Blechgeometrie').src = blechOptions.geo[vinOption].imgPath;
-  enableBtn(idVin_blechgeoBreite, !blechOptions.geo[vinOption].breite);
+  let key = blechOptions.geo[vinOption].utilsGetImgPath;
+  dbID('idImg_Blechgeometrie').src = blechOptions.geo[vinOption].utilsGetImgPath;
+  utilsEnableBtn(idVin_blechgeoBreite, !blechOptions.geo[vinOption].breite);
 };
 
 function calcBlechGeo() {
@@ -70,5 +70,4 @@ function calcBlechGeo() {
   let selBlechForm = blechOptions.geo[dbID("idSel_blechgeoForm").value];
 
   dbID("idLbl_blechgeoResult").textContent = `Mindestabstand: ${selBlechForm.func}`;
-  dataForLabel("idLbl_blechgeoResult", selBlechForm.func);
 };

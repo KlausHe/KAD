@@ -22,7 +22,7 @@ async function utilsSocketPost(app = null, data) {
 	window[`${firstLetterLow(app)}Return`](obj);
 }
 
-function getWeekNumber(d) {
+function utilsGetWeekNumber(d) {
 	const date = d ? new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())) : new Date();
 	const curThu = new Date(date.getTime() + (3 - ((date.getDay() + 6) % 7)) * 86400000);
 	const yearThu = curThu.getFullYear();
@@ -30,19 +30,19 @@ function getWeekNumber(d) {
 	return Math.floor(1 + 0.5 + (curThu.getTime() - firstThu.getTime()) / 604800000);
 }
 
-function tableScrollInView(id) {
-	dbID(id).scrollIntoView({
-		behavior: "smooth",
-		block: "nearest",
-		inline: "end", //start
-	});
-}
+// function tableScrollInView(id) {
+// 	dbID(id).scrollIntoView({
+// 		behavior: "smooth",
+// 		block: "nearest",
+// 		inline: "end", //start
+// 	});
+// }
 
-function imgPath(name) {
+function utilsGetImgPath(name) {
 	return `Data/Images/SVG/${name}.svg`;
 }
 
-function copyToClipboard(text, id) {
+function utilsCopyToClipboard(text) {
 	if (globalValues.settings.copyClick) {
 		let val = text;
 		if (!isNaN(val) && Number.isFinite(Number(val))) {
@@ -92,7 +92,7 @@ function dbCLStyle(id, loc = 0) {
 	return document.getElementsByClassName(id)[loc].style;
 }
 
-function resetInput(id, ph, opts = null) {
+function utilsResetInput(id, ph, opts = null) {
 	const obj = dbID(id);
 	if (obj.type == "checkbox") {
 		obj.checked = ph;
@@ -108,7 +108,7 @@ function resetInput(id, ph, opts = null) {
 	return Number(obj.placeholder);
 }
 
-function btnColor(id, opt = null) {
+function utilsBtnColor(id, opt = null) {
 	const obj = dbID(id);
 	if (opt === null) obj.removeAttribute("data-btnstatus");
 	else if (opt === "positive") obj.dataset.btnstatus = "btnPositive";
@@ -116,7 +116,7 @@ function btnColor(id, opt = null) {
 	else if (opt === "colored") obj.dataset.btnstatus = "btnBasecolor";
 }
 
-function enableBtn(id, state) {
+function utilsEnableBtn(id, state) {
 	const obj = typeof id == "string" ? dbID(id) : id;
 	if (state) {
 		obj.removeAttribute("disabled");
@@ -130,79 +130,39 @@ function enableBtn(id, state) {
  *  @param {Number} low lower border or null
  *  @param {Number} high higher border or null
  */
-function valueConstrain(val, min = null, max = null) {
+function utilsValueConstrain(val, min = null, max = null) {
 	if (min == null && max == null) return val;
 	if (min != null && max != null) return Math.max(Math.min(val, max), min);
 	if (min == null && max != null) return Math.min(val, max);
 	if (min != null && max == null) return Math.max(val, min);
 }
 
-function valueMapping(i, start1, stop1, start2, stop2, bounds = false) {
+function utilsValueMapping(i, start1, stop1, start2, stop2, bounds = false) {
 	const val = ((i - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
 	if (!bounds) {
 		return val;
 	}
 	if (start2 < stop2) {
-		return valueConstrain(val, start2, stop2);
+		return utilsValueConstrain(val, start2, stop2);
 	} else {
-		return valueConstrain(val, stop2, start2);
+		return utilsValueConstrain(val, stop2, start2);
 	}
 }
 
 // untested!!!
 function arrayConstrain(arr, val, low = null, high = null) {
-	const arrayMin = Math.min(...array);
-	const arrayMax = Math.max(...array);
+	const arrayMin = Math.min(...arr);
+	const arrayMax = Math.max(...arr);
 	let a = low || arrayMin;
 	let b = high || arrayMax;
-	valueConstrain(val, a, b);
+	utilsValueConstrain(val, a, b);
 }
 
-function getNearestValueInArray(arr, val, higher = false) {
+function utilsGetNearestValueInArray(arr, val, higher = false) {
 	return arr.reduce((prev, curr) => {
 		if (higher) return Math.abs(curr - val) > Math.abs(prev - val) ? curr : prev;
 		else return Math.abs(curr - val) < Math.abs(prev - val) ? curr : prev;
 	});
-}
-
-function copyFromInput(id) {
-	if (dbID(id.id).value == "") {
-		copyToClipboard(dbID(id.id).placeholder, id.id);
-	} else {
-		copyToClipboard(dbID(id.id).value, id.id);
-	}
-}
-
-function copyFromLabel(obj) {
-	if (obj.dataset.copyval) {
-		copyToClipboard(obj.dataset.copyval, obj.id);
-	} else {
-		copyToClipboard("", obj.id);
-	}
-}
-
-function dataForLabel(id, val = null) {
-	if (val === null) {
-		dbID(id).removeAttribute("data-copyval");
-		dbIDStyle(id).cursor = "auto";
-	} else {
-		dbID(id).setAttribute("data-copyval", val);
-		dbIDStyle(id).cursor = "copy";
-	}
-}
-
-function checkExponential(number, { decimals = globalValues.settings.decimals, exponent = 3, expoThreashold = 5, enableExpo = null } = {}) {
-	//printExp Null: auto, true: force Exp , false: must be set, tu change the default "null"
-	if (typeof Number(number) == "NaN") return number;
-	// forced enableExpo          enableExpo auto         enableExpo determined
-	if (enableExpo == true || (enableExpo === null && Math.abs(number) > Math.pow(10, expoThreashold + 1))) {
-		//use Expo,  "1.234e+32" - String, always 1 in front,
-		return Number.parseFloat(number).toExponential(exponent);
-	} else {
-		// disabled enableExpo  // rounded Number to decimals
-		const decimalPow = Math.pow(10, decimals);
-		return Math.round(number * decimalPow) / decimalPow;
-	}
 }
 
 function utilsVinChange(id, v) {
@@ -214,11 +174,9 @@ function utilsVinChange(id, v) {
 			break;
 		}
 	}
-	if (obj == null) {
-		console.log("not found");
-		return;
-	}
+	if (obj == null) return;
 	if (obj.disabled) return;
+
 	const dir = Number(v);
 
 	if (obj.type == "time") evaluateTime();
@@ -227,6 +185,7 @@ function utilsVinChange(id, v) {
 	obj.dispatchEvent(new Event("input"));
 	obj.focus();
 
+	//---
 	function evaluateTime() {
 		const h = Number(obj.value.slice(0, 2));
 		const m = Number(obj.value.slice(3, 5));
@@ -257,7 +216,7 @@ function utilsVinChange(id, v) {
 		const num = skip && actual % 5 == 0 ? actual + dir * 5 : actual + dir;
 		const min = obj.hasAttribute("min") && dir < 1 ? Number(obj.min) : null;
 		const max = obj.hasAttribute("max") && dir > 0 ? Number(obj.max) : null;
-		obj.value = valueConstrain(num, min, max);
+		obj.value = utilsValueConstrain(num, min, max);
 	}
 }
 
@@ -269,14 +228,20 @@ function utilsNumberFromInput(id, failSafeVal = null, noPlaceholder = null) {
 	return Number(obj.placeholder);
 }
 
-// https://github.com/unicode-org/cldr/blob/main/common/validity/unit.xml
 function utilsNumber(value = 1, { formating = globalValues.copySeparatorLocation, indicator = false, leadingDigits = 1, decimals = 1, currency = null, unit = null, notation = "standard" } = {}) {
 	let options = {
 		useGrouping: indicator,
-		notation,
+		notation: notation,
 		minimumIntegerDigits: leadingDigits,
 		maximumFractionDigits: decimals,
 	};
+
+	if (options.notation == "engineering" || options.notation == "scientific") {
+		if (value < 1000 && value > -1000) {
+			options.notation = "standard";
+			options.maximumFractionDigits = 1;
+		}
+	}
 
 	if (currency) {
 		options.useGrouping = true;
@@ -653,20 +618,20 @@ function cellBtn(opt) {
 	mainChild.type = "button";
 	switch (opt.subGroup) {
 		case "button":
-			elImg.src = imgPath(opt.img);
+			elImg.src = utilsGetImgPath(opt.img);
 			break;
 		case "subgrid":
 			mainChild.type = "image";
-			elImg.src = imgPath(opt.img);
+			elImg.src = utilsGetImgPath(opt.img);
 			elImg.setAttribute("uiFilter", "invBackground");
 			break;
 		case "gridtitle":
 			mainChild.type = "image";
-			elImg.src = imgPath(opt.img);
+			elImg.src = utilsGetImgPath(opt.img);
 			elImg.setAttribute("uiFilter", "invGridtitle");
 			break;
 		case "navbar":
-			elImg.src = imgPath(opt.img);
+			elImg.src = utilsGetImgPath(opt.img);
 			elImg.setAttribute("uiFilter", "invNavbar");
 			break;
 		case "url":
@@ -730,18 +695,18 @@ function cellImg(opt) {
 	opt.type = "Img";
 	switch (opt.subGroup) {
 		case "button":
-			mainChild.src = imgPath(opt.img);
+			mainChild.src = utilsGetImgPath(opt.img);
 			break;
 		case "subgrid":
-			mainChild.src = imgPath(opt.img);
+			mainChild.src = utilsGetImgPath(opt.img);
 			mainChild.setAttribute("uiFilter", "invBackground");
 			break;
 		case "gridtitle":
-			mainChild.src = imgPath(opt.img);
+			mainChild.src = utilsGetImgPath(opt.img);
 			mainChild.setAttribute("uiFilter", "invGridtitle");
 			break;
 		case "navbar":
-			mainChild.src = imgPath(opt.img);
+			mainChild.src = utilsGetImgPath(opt.img);
 			mainChild.setAttribute("uiFilter", "invNavbar");
 			break;
 		case "url":
@@ -812,7 +777,7 @@ function UIOptions(cell, opt) {
 		cell.addEventListener(
 			"click",
 			() => {
-				copyToClipboard(cell.textContent, cell.id);
+				utilsCopyToClipboard(cell.textContent);
 			},
 			false
 		);

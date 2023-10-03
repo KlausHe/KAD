@@ -9,8 +9,8 @@ const speechTranslateOptions = {
 function clear_cl_SpeechTranslate() {
 	speechTranslateOptions.output = false;
 	speechTranslateOptions.synthObj.cancel();
-	resetInput("idArea_speechFromText", speechTranslateOptions.textDE);
-	resetInput("idArea_speechToText", speechTranslateOptions.textEN);
+	utilsResetInput("idArea_speechFromText", speechTranslateOptions.textDE);
+	utilsResetInput("idArea_speechToText", speechTranslateOptions.textEN);
 	let voicesUnsorted = speechTranslateOptions.synthObj.getVoices();
 	if (voicesUnsorted.length == 0 && speechTranslateOptions.resetCouner < 20) {
 		speechTranslateOptions.resetCouner++;

@@ -66,7 +66,7 @@ let geoObjects = {
 	},
 	initiateShow() {
 		caGE.clear();
-    caGE.textSize(globalValues.mediaSizes.fontSize);
+		caGE.textSize(globalValues.mediaSizes.fontSize);
 		caGE.push();
 		caGE.translate(geometrieOptions.canvas.w / 2, geometrieOptions.canvas.h / 2);
 		caGE.strokeWeight(2);
@@ -519,9 +519,9 @@ function geoResize() {
 function changeGeoObject(index) {
 	let cl = dbCL("clBtn_geometrieAreaSelect", null);
 	for (let i = 0; i < cl.length; i++) {
-		btnColor(cl[i]);
+		utilsBtnColor(cl[i]);
 	}
-	btnColor(cl[index], "positive");
+	utilsBtnColor(cl[index], "positive");
 	geoObjects.selectedGeo = geoObjects.elements[index];
 	geoObjects[geoObjects.selectedGeo].show;
 
@@ -536,7 +536,7 @@ function changeGeoObject(index) {
 		}
 	}
 
-	enableBtn(idCb_geoRadius, geoObjects[geoObjects.selectedGeo].cbRadiusEnable);
+	utilsEnableBtn(idCb_geoRadius, geoObjects[geoObjects.selectedGeo].cbRadiusEnable);
 	const cbEntry = dbID("idLbl_goeRadius").textContent;
 	dbID("idLbl_goeRadius").innerHTML = geoObjects[geoObjects.selectedGeo].cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
 
@@ -551,22 +551,10 @@ function geoBerechnung() {
 	geoObjects.valB = utilsNumberFromInput("idVin_Area_1", selectedObj.vals[1]);
 	geoObjects.valC = utilsNumberFromInput("idVin_Area_2", selectedObj.vals[2]);
 
-	selectedObj.circumference.result = checkExponential(selectedObj.circumference.formula, {
-		decimals: 4,
-		exponent: 2,
-	});
-	selectedObj.basearea.result = checkExponential(selectedObj.basearea.formula, {
-		decimals: 4,
-		exponent: 2,
-	});
-	selectedObj.fullarea.result = checkExponential(selectedObj.fullarea.formula, {
-		decimals: 4,
-		exponent: 2,
-	});
-	selectedObj.volume.result = checkExponential(selectedObj.volume.formula, {
-		decimals: 4,
-		exponent: 2,
-	});
+	selectedObj.circumference.result = utilsNumber(selectedObj.circumference.formula, { decimals: 3 });
+	selectedObj.basearea.result = utilsNumber(selectedObj.basearea.formula, { decimals: 3 });
+	selectedObj.fullarea.result = utilsNumber(selectedObj.fullarea.formula, { decimals: 3 });
+	selectedObj.volume.result = utilsNumber(selectedObj.volume.formula, { decimals: 3 });
 	geoUpdateMasse();
 	geoResultTable();
 }
@@ -576,7 +564,7 @@ function geoUpdateMasse() {
 	selectedObj.mass.result = [];
 	for (let i = 0; i < geometrieOptions.matList.length; i++) {
 		geometrieOptions.roh = Data_Material.Materials[geometrieOptions.matList[i]].roh;
-		const mass = checkExponential(selectedObj.mass.formula, geoObjects.acc, 4);
+		const mass = utilsNumber(selectedObj.mass.formula, { decimals: 4 });
 		selectedObj.mass.result.push({
 			mass: mass,
 			matName: geometrieOptions.matList[i],

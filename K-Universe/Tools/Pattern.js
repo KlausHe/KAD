@@ -54,10 +54,10 @@ function patternResize() {
 }
 
 function clear_cl_Pattern() {
-	patternOptions.length.val = resetInput("idVin_Pattern0", patternOptions.length.valOrig);
-	patternOptions.side.val = resetInput("idVin_Pattern1", patternOptions.side.valOrig);
-	patternOptions.asym.val = resetInput("idVin_Pattern2", patternOptions.asym.valOrig);
-	patternOptions.numHoles.val = resetInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
+	patternOptions.length.val = utilsResetInput("idVin_Pattern0", patternOptions.length.valOrig);
+	patternOptions.side.val = utilsResetInput("idVin_Pattern1", patternOptions.side.valOrig);
+	patternOptions.asym.val = utilsResetInput("idVin_Pattern2", patternOptions.asym.valOrig);
+	patternOptions.numHoles.val = utilsResetInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
 
 	dbID("idLbl_Pattern0").textContent = patternOptions.length.name; //gesamltänge
 	dbID("idLbl_Pattern1").textContent = patternOptions.side.name; //Seitenversatz
@@ -126,13 +126,7 @@ function drawPattern() {
 	caPA.noStroke();
 	caPA.fill(globalValues.colors.elements.line);
 	caPA.strokeWeight(1);
-	caPA.text(
-		checkExponential(patternOptions.length.val, {
-			decimals: 3,
-		}),
-		w / 2,
-		h * 0.1
-	);
+	caPA.text(utilsNumber(patternOptions.length.val, { decimals: 3 }), w / 2, h * 0.1);
 	//Maincontur
 	caPA.stroke(globalValues.colors.elements.line);
 	caPA.strokeWeight(4);
@@ -187,9 +181,9 @@ function drawPattern() {
 		caPA.noStroke();
 		if (i < patternOptions.absArr.length - 1 && patternOptions.absArr[i] != patternOptions.length.val) {
 			offset = 0.9;
-			caPA.text(checkExponential(patternOptions.absArr[i], { decimals: 3 }), absPos, h * offset);
+			caPA.text(utilsNumber(patternOptions.absArr[i], { decimals: 3 }), absPos, h * offset);
 		}
 		offset = 0.55;
-		caPA.text(checkExponential(patternOptions.incArr[i], { decimals: 3 }), incPos, h * offset);
+		caPA.text(utilsNumber(patternOptions.incArr[i], { decimals: 3 }), incPos, h * offset);
 	}
 }

@@ -14,10 +14,12 @@ function initCssMediaSizes() {
 	}
 }
 function mainSetup() {
-	if (globalValues.hostDebug) {
-		dbCLStyle("cl_Loading").display = "none";
+  if (globalValues.hostDebug) {
+    dbCLStyle("cl_Loading").display = "none";
 	}
-	htmlAltTag();
+  contentLayout.createContentGrid();
+	htmlSetVinChange();
+	htmlSetAltTags();
 	initCssMediaSizes();
 	globalValues.colors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
@@ -64,6 +66,7 @@ function mainSetup() {
 			clearGlobalValue();
 		}, 1000);
 	});
+	globalValues.globalInput.generateSpreadLists();
 }
 
 function resetAll() {
@@ -85,13 +88,13 @@ function redrawCanvases() {
 	}
 }
 
-function htmlAltTag() {
+function htmlSetAltTags() {
 	// needed to display local files in Firefox when the imgSrc is set inside css
-	setAlt("trash");
-	setAlt("oAdd");
-	setAlt("oSub");
+	envoked("trash");
+	envoked("oAdd");
+	envoked("oSub");
 
-	function setAlt(name) {
+	function envoked(name) {
 		const obj = dbCL(`img_${name}`, null);
 		for (let imgObj of obj) {
 			imgObj.alt = `${name}.svg`;
@@ -99,13 +102,24 @@ function htmlAltTag() {
 	}
 }
 
-function timeoutCanvasFinished(
-	canv,
-	txt = {
-		textTop: "",
-		textBottom: "",
+function htmlSetVinChange() {
+	const dirName = ["oSub", "trash", "oAdd"];
+	envoked("vinChangeSub", -1);
+	envoked("vinChangeTrash", 0);
+	envoked("vinChangeAdd", 1);
+
+	function envoked(name, dir) {
+		const obj = dbCL(`${name}`, null);
+		for (let btn of obj) {
+			btn.onclick = () => {
+				return utilsVinChange(btn, dir);
+			};
+			btn.children[0].classList.add(`img_${dirName[dir + 1]}`);
+		}
 	}
-) {
+}
+
+function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
 	canv.noLoop();
 	setTimeout(() => {
 		canv.stroke(255, 0, 0);
@@ -132,16 +146,14 @@ function clearGlobalValue() {
 function globalValueChanged(obj, enter = null) {
 	dbID("idVin_globalValue").classList.remove("cl_highlighted");
 	const arr = contentLayout.nameList;
+  globalValues.globalInput.value = obj.value;
 	if (arr.includes(obj.value)) {
 		dbID("idVin_globalValue").classList.add("cl_highlighted");
 		if (enter === true) {
-			let key = Object.entries(contentGrid).filter((arr) => {
-				return arr[1].name == obj.value;
-			})[0][0];
+			let key = Object.entries(contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
 			layoutToggelFullscreen(key);
 		}
 	}
-	globalValues.globalInput.value = obj.value;
 }
 
 function globalValuePopulateDatalist() {
@@ -161,7 +173,7 @@ function layoutCreateNavbarPikaday() {
 		showTime: false,
 		i18n: i18nDE,
 		onSelect: function (date) {
-			let weekText = `KW ${getWeekNumber()}`;
+			let weekText = `KW ${utilsGetWeekNumber()}`;
 			let weekDiff = Math.ceil((date.getTime() - new Date().getTime()) / 86400000 / 7);
 			if (weekDiff !== 0) {
 				weekText += weekDiff > 0 ? ` (+${weekDiff})` : ` (${weekDiff})`;

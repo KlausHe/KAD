@@ -1,8 +1,8 @@
 const globalValues = {
 	mediaSizes: {
-    get size() {
-      return getCssRoot("UIHeight1", true, true);
-    },
+		get size() {
+			return getCssRoot("UIHeight1", true, true);
+		},
 		get fontSize() {
 			return getCssRoot("fontSize", true, true);
 		},
@@ -125,42 +125,31 @@ const globalValues = {
 		},
 	},
 	globalInput: {
+		generateSpreadLists() {
+			// globalValues.globalInput.generateSpreadLists();
+			this.globalValString = [];
+			this.globalValNumber = [];
+			for (let obj in contentGrid) {
+				if (contentGrid[obj].hasOwnProperty("globalValString")) this.globalValString.push(contentGrid[obj].globalValString);
+				if (contentGrid[obj].hasOwnProperty("globalValNumber")) this.globalValNumber.push(contentGrid[obj].globalValNumber);
+			}
+		},
+		globalValString: [],
+		globalValNumber: [],
 		input: null,
 		get value() {
 			return this.input;
 		},
 		set value(v) {
 			let val = v.trim();
-			if (val == "") {
-				this.input = "";
-			} else {
-				this.input = isNaN(val) ? val : Number(val);
-			}
+			this.input = val == "" ? "" : isNaN(val) ? val : Number(val);
 			this.spreadVal();
 		},
 		spreadVal() {
-			const idArrays = {
-				strings: ["idVin_howaEntry", "idArea_tugasEntry", "idVin_wikiInput", "idArea_thiontuInputEntry", "idVin_kaihangaEntry", "idVin_analysisEntry", "idVin_synonymEntry"],
-				numerical: ["idVin_IomlaidCur", "idVin_Area_0", "idVin_expansionLength", "idVin_Pattern0", "idVin_luasDiameter", "idVin_middleA", "idVin_Pytho_0", "idVin_quickkmathVal", "idVin_ranjeVal"],
-			};
-			const val = this.value;
-			const idDrivers = {
-				get strings() {
-					return isNaN(val); //change string inputs
-				},
-				get numerical() {
-					return !isNaN(val); //change numerical inputs
-				},
-			};
-			//fill the used TYPE
-			for (const id of idArrays.strings) {
+			let arr = isNaN(this.value) ? globalValues.globalInput.globalValString : globalValues.globalInput.globalValNumber;
+			for (const id of arr) {
 				const obj = dbID(id);
-				obj.value = idDrivers.strings ? this.value : "";
-				obj.dispatchEvent(new Event("input"));
-			}
-			for (const id of idArrays.numerical) {
-				const obj = dbID(id);
-				obj.value = idDrivers.numerical ? this.value : "";
+				obj.value = globalValues.globalInput.value;
 				obj.dispatchEvent(new Event("input"));
 			}
 		},
@@ -185,7 +174,7 @@ function settingsCopyClick(obj = null) {
 	} else {
 		globalValues.settings.copyClick = obj.checked;
 	}
-	enableBtn("idCb_settingsCopySeparator", globalValues.settings.copyClick); //disabel button, because it is not needed when you can not copy
+	utilsEnableBtn("idCb_settingsCopySeparator", globalValues.settings.copyClick); //disabel button, because it is not needed when you can not copy
 }
 
 function settingsCopySeparator(obj = null) {
@@ -286,7 +275,7 @@ function colorUpdateCanvascolors(change = null) {
 
 function colToggleColormode(btn = null) {
 	if (btn === null) {
-		dbID("idImg_userNav_colormode").src = imgPath(globalValues.colors.darkmodeOn ? "sun" : "moon");
+		dbID("idImg_userNav_colormode").src = utilsGetImgPath(globalValues.colors.darkmodeOn ? "sun" : "moon");
 		return;
 	}
 	globalValues.colors.darkmodeOn = !globalValues.colors.darkmodeOn;

@@ -27,7 +27,7 @@ const hverertuOptions = {
 };
 
 function clear_cl_Hverertu() {
-  resetInput("idVin_hverertuEntry", "Enter a Name")
+  utilsResetInput("idVin_hverertuEntry", "Enter a Name")
   createHverertuTable()
   hverertuOptions.input = "";
 };

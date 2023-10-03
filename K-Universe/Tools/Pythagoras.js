@@ -18,7 +18,7 @@ function clear_cl_Pythagoras() {
 	pythoOptions.vals = [];
 	for (let i = 0; i < 5; i++) {
 		const val = pythoOptions.inputState.includes(i) ? pythoOptions.valsOrig[i] : "";
-		resetInput(`idVin_Pytho_${i}`, val);
+		utilsResetInput(`idVin_Pytho_${i}`, val);
 	}
 	pythoOptions.inputState = [0, 1];
 	pythoShowError();
@@ -145,7 +145,7 @@ function pythoCalc() {
 
 	for (let i = 0; i < 5; i++) {
 		if (!pythoOptions.inputState.includes(i)) {
-			resetInput(`idVin_Pytho_${i}`, i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3));
+			utilsResetInput(`idVin_Pytho_${i}`, i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3));
 		}
 	}
 	if (pythoOptions.p5Loaded) {
@@ -159,10 +159,10 @@ function drawPytho() {
 
 	if (pythoOptions.vals[0] / pythoOptions.vals[1] > pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "Y" fixed length, Scale "X"
-		drawWidth = valueConstrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
+		drawWidth = utilsValueConstrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
 	} else if (pythoOptions.vals[0] / pythoOptions.vals[1] < pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "X" fixed length
-		drawHeight = valueConstrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
+		drawHeight = utilsValueConstrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
 	}
 
 	drawWidth = drawWidth - 2 * pythoOptions.margin;

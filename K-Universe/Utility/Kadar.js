@@ -12,7 +12,7 @@ const kadarOptions = {
         return t ? "Millisekunde" : "Millisekunden";
       },
       get val() {
-        return checkExponential(kadarOptions.diff);
+        return utilsNumber(kadarOptions.diff);
       }
     },
     seconds: {
@@ -20,7 +20,7 @@ const kadarOptions = {
         return t ? "Sekunde" : "Sekunden";
       },
       get val() {
-        return checkExponential(kadarOptions.diff / 1000);
+        return utilsNumber(kadarOptions.diff / 1000);
       }
     },
     minutes: {
@@ -28,7 +28,7 @@ const kadarOptions = {
         return t ? "Minute" : "Minuten";
       },
       get val() {
-        return checkExponential(kadarOptions.diff / 60000);
+        return utilsNumber(kadarOptions.diff / 60000);
       }
     },
     hours: {
@@ -36,7 +36,7 @@ const kadarOptions = {
         return t ? "Stunde" : "Stunden";
       },
       get val() {
-        return checkExponential(kadarOptions.diff / 3600000);
+        return utilsNumber(kadarOptions.diff / 3600000);
       }
     },
     days: {
@@ -44,7 +44,7 @@ const kadarOptions = {
         return t ? "Tag" : "Tage";
       },
       get val() {
-        return checkExponential(kadarOptions.diff / 86400000);
+        return utilsNumber(kadarOptions.diff / 86400000);
       }
     },
     weeks: {
@@ -52,7 +52,7 @@ const kadarOptions = {
         return t ? "Woche" : "Wochen";
       },
       get val() {
-        return checkExponential(kadarOptions.diff / 604800000);
+        return utilsNumber(kadarOptions.diff / 604800000);
       }
     },
     month: {
@@ -60,7 +60,7 @@ const kadarOptions = {
         return t ? "Monat" : "Monate";
       },
       get val() {
-        return checkExponential(kadarOptions.diff / 2620800000);
+        return utilsNumber(kadarOptions.diff / 2620800000);
       }
     },
     years: {
@@ -68,7 +68,7 @@ const kadarOptions = {
         return t ? "Jahr" : "Jahre";
       },
       get val() {
-        return checkExponential(kadarOptions.diff / 31449600000);
+        return utilsNumber(kadarOptions.diff / 31449600000);
       }
     }
   }

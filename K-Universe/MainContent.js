@@ -1,4 +1,4 @@
-const contentGrid = {
+const rawContentGrid = {
 	cl_UserAcc: {
 		userSelected: true,
 		userStoreDBName: "UserAcc",
@@ -49,6 +49,7 @@ const contentGrid = {
 			howaColorGraph();
 		},
 		contentGroup: "News",
+		globalValString: "idVin_howaEntry",
 		name: "Howa",
 		heritage: ["turkmenisch", "Wetter"],
 		source: {
@@ -69,23 +70,24 @@ const contentGrid = {
 			["cl_HowaMapsImg", "center"],
 		],
 	},
-	// cl_Sepakbola: {
-	// 	userSelected: false,
-	// 	height: 2,
-	// 	contentGroup: "News",
-	// 	name: "Sepakbola",
-	// 	heritage: ["javanisch", "Fußball"],
-	// 	source: {
-	// 		Daten: "https://www.openligadb.de",
-	// 	},
-	// 	subgrid: [
-	// 		["cl_SepakbolaInputLiga", "left"],
-	// 		["cl_SepakbolaInputSeason", "left"],
-	// 		["cl_SepakbolaInputDay", "center"],
-	// 		["cl_SepakbolaTable", "right"],
-	// 		["cl_SepakbolaMatches", "left"],
-	// 	],
-	// },
+	cl_Sepakbola: {
+		userSelected: false,
+		height: 2,
+		active: true,
+		contentGroup: "News",
+		name: "Sepakbola",
+		heritage: ["javanisch", "Fußball"],
+		source: {
+			Daten: "https://www.openligadb.de",
+		},
+		subgrid: [
+			["cl_SepakbolaInputLiga", "left"],
+			["cl_SepakbolaInputSeason", "left"],
+			["cl_SepakbolaInputDay", "center"],
+			["cl_SepakbolaTable", "right"],
+			["cl_SepakbolaMatches", "left"],
+		],
+	},
 	cl_News: {
 		userSelected: true,
 		contentGroup: "News",
@@ -192,6 +194,7 @@ const contentGrid = {
 			createTugas();
 		},
 		contentGroup: "Utility",
+		globalValString: "idArea_tugasEntry",
 		name: "Tugas",
 		heritage: ["indonesisch", "Pflicht"],
 		info: 'Füge Texte ein und drück "Enter". Klicke auf einen deiner Texte und er kopiert sich direkt in deine Zwischenablage!',
@@ -219,6 +222,7 @@ const contentGrid = {
 	cl_Thiontu: {
 		userSelected: true,
 		contentGroup: "Utility",
+		globalValString: "idArea_thiontuInputEntry",
 		name: "Thiontu",
 		heritage: ["irisch", "umwandeln"],
 		subgrid: [
@@ -265,6 +269,7 @@ const contentGrid = {
 	cl_Hverertu: {
 		userSelected: true,
 		contentGroup: "Utility",
+		globalValString: "idVin_hverertuEntry",
 		name: "Hver Ertu",
 		heritage: ["isländisch", "Wer bist du"],
 		source: {
@@ -302,6 +307,7 @@ const contentGrid = {
 			clear_cl_Kaihanga();
 		},
 		contentGroup: "Utility",
+		globalValString: "idVin_kaihangaEntry",
 		name: "Kaihanga",
 		heritage: ["maori", "Hersteller"],
 		source: {
@@ -347,7 +353,9 @@ const contentGrid = {
 	cl_Iomlaid: {
 		userSelected: true,
 		contentGroup: "Utility",
+		globalValNumber: "idVin_IomlaidCur",
 		name: "Iomlaid",
+		active: false,
 		heritage: ["schottisch-gälisch", "Austausch"],
 		source: {
 			Daten: "https://exchangerate.host",
@@ -361,6 +369,7 @@ const contentGrid = {
 	cl_SpeechTranslate: {
 		userSelected: true,
 		contentGroup: "Benkyou",
+		globalValString: "idArea_speechFromText",
 		name: "Discipuli",
 		heritage: ["latein", "Student"],
 		subgrid: [
@@ -373,6 +382,7 @@ const contentGrid = {
 	cl_Afinn: {
 		userSelected: true,
 		contentGroup: "Benkyou",
+		globalValString: "idVin_analysisEntry",
 		name: "Afinn-Analyse",
 		source: {
 			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
@@ -390,6 +400,7 @@ const contentGrid = {
 	cl_Synonym: {
 		userSelected: true,
 		contentGroup: "Benkyou",
+		globalValString: "idVin_synonymEntry",
 		name: "Synonym",
 		heritage: ["deutsch", "Ersatzwort"],
 		source: {
@@ -461,6 +472,7 @@ const contentGrid = {
 			}
 		},
 		contentGroup: "Benkyou",
+		globalValString: "idVin_wikiInput",
 		name: "Wiki-Search",
 		source: {
 			Code: "https://thecodingtrain.com/CodingChallenges/075-wikipedia-api.html",
@@ -481,6 +493,7 @@ const contentGrid = {
 			caGE.redraw();
 		},
 		contentGroup: "Tools",
+		globalValNumber: "idVin_Area_0",
 		name: "Geometrie",
 		subgrid: [
 			["cl_GeometrieAreaSelect", "left"],
@@ -524,6 +537,7 @@ const contentGrid = {
 	cl_Expansion: {
 		userSelected: true,
 		contentGroup: "Tools",
+		globalValNumber: "idVin_expansionLength",
 		name: "Expansion",
 		heritage: ["englisch", "Ausdehnung"],
 		source: {
@@ -549,6 +563,7 @@ const contentGrid = {
 			drawPattern();
 		},
 		contentGroup: "Tools",
+		globalValNumber: "idVin_Pattern0",
 		name: "Pattern",
 		heritage: ["englisch", "Muster"],
 		subgrid: [
@@ -568,6 +583,7 @@ const contentGrid = {
 			caLU.redraw();
 		},
 		contentGroup: "Tools",
+		globalValNumber: "idVin_luasDiameter",
 		name: "Luas",
 		heritage: ["irisch", "Geschwindigkeit"],
 		info: "Geschwindigkeiten übersetzen und darstellen",
@@ -587,6 +603,7 @@ const contentGrid = {
 			middleShowCanvas();
 		},
 		contentGroup: "Tools",
+		globalValNumber: "idVin_middleA",
 		name: "Mittenberechnung",
 		info: "Berechnet mit: (b-a) / 2",
 		subgrid: [
@@ -600,6 +617,7 @@ const contentGrid = {
 	cl_Ranje: {
 		userSelected: true,
 		contentGroup: "Tools",
+		globalValNumber: "idVin_ranjeVal",
 		name: "Ranje",
 		heritage: ["Haiti-Kreolisch", "anordnen"],
 		subgrid: [
@@ -632,6 +650,7 @@ const contentGrid = {
 	cl_Quickmath: {
 		userSelected: true,
 		contentGroup: "Tools",
+		globalValNumber: "idVin_quickkmathVal",
 		name: "Quickmath",
 		subgrid: [
 			["cl_QuickmathInput", "center"],
@@ -649,6 +668,7 @@ const contentGrid = {
 			pythoCalc();
 		},
 		contentGroup: "Tools",
+		globalValNumber: "idVin_Pytho_0",
 		name: "Pythagoras",
 		subgrid: [
 			["cl_PythagorasInput0", "right"],

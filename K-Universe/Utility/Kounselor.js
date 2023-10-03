@@ -102,7 +102,7 @@ const kounselorOptions = {
 
 function clear_cl_Kounselor() {
 	for (const name of Object.keys(kounselorOptions.types)) {
-		resetInput(`idVin_kounselor${name}`, name);
+		utilsResetInput(`idVin_kounselor${name}`, name);
 		kounselorOptions.types[name].value = null;
 	}
 	kounselorOptions.curType = kounselorOptions.curTypeOrig;
@@ -162,10 +162,10 @@ function kounselorShowResults() {
 	for (const type of Object.keys(kounselorOptions.types)) {
 		if (type != kounselorOptions.curType) {
 			if (kounselorOptions.types[type].value == null) {
-				resetInput(`idVin_kounselor${type}`, type);
+				utilsResetInput(`idVin_kounselor${type}`, type);
 				continue;
 			}
-			resetInput(`idVin_kounselor${type}`, utilsColor.formatAsCSS(kounselorOptions.types[type].value, type));
+			utilsResetInput(`idVin_kounselor${type}`, utilsColor.formatAsCSS(kounselorOptions.types[type].value, type));
 		}
 	}
 	const colorCSS = utilsColor.formatAsCSS(kounselorOptions.types.HSL.value, "HSL");
