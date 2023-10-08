@@ -24,18 +24,18 @@ function tickerLoadData(data) {
 }
 
 function postillonTickerNext() {
-	postillonTickerOptions.num = randomObject(postillonTickerOptions.availiableNums);
+	postillonTickerOptions.num = KadUtils.Random.randomObject(postillonTickerOptions.availiableNums);
 	postillonTickerOptions.usedNums.push(postillonTickerOptions.num);
 	postillionCreate();
 }
 
 function postillionCreate() {
-	dbID("idLbl_newsTickerNumber").innerHTML = `Ticker ${postillonTickerOptions.num}`;
-	clearTable("idTabBody_postillionTable");
+	KadUtils.dbID("idLbl_newsTickerNumber").innerHTML = `Ticker ${postillonTickerOptions.num}`;
+	KadUtils.Table.clear("idTabBody_postillionTable");
 	const list = postillonTickerOptions.data[postillonTickerOptions.num];
 	for (let i = 0; i < list.length; i++) {
-		const row = insertTableRow("idTabBody_postillionTable");
-		tableAddCell(row, {
+		const row = KadUtils.Table.insertRow("idTabBody_postillionTable");
+		KadUtils.Table.addCell(row, {
 			names: ["postillon", i],
 			type: "Lbl",
 			text: `${list[i]}`,

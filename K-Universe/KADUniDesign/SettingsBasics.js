@@ -1,25 +1,25 @@
 const globalValues = {
 	mediaSizes: {
 		get size() {
-			return getCssRoot("UIHeight1", true, true);
+			return KadUtils.CSS.getRoot("UIHeight1", true, true);
 		},
 		get fontSize() {
-			return getCssRoot("fontSize", true, true);
+			return KadUtils.CSS.getRoot("fontSize", true, true);
 		},
 		get radius() {
-			return getCssRoot("UIRadius", true, true);
+			return KadUtils.CSS.getRoot("UIRadius", true, true);
 		},
 		get divGridMinWidth() {
-			return Math.floor(this.size * getCssRoot("divGridMinWidthFactor", true));
+			return Math.floor(this.size * KadUtils.CSS.getRoot("divGridMinWidthFactor", true));
 		},
 		get gridMarginSide() {
-			return Math.floor(this.size * getCssRoot("gridMarginSide", true));
+			return Math.floor(this.size * KadUtils.CSS.getRoot("gridMarginSide", true));
 		},
 		get imgSize() {
-			return getCssRoot("imgSize", true, true);
+			return KadUtils.CSS.getRoot("imgSize", true, true);
 		},
 		get canvasSize() {
-			const val = getCssRoot("gridWidthGameCanvas", true, true);
+			const val = KadUtils.CSS.getRoot("gridWidthGameCanvas", true, true);
 			return { w: val, h: val };
 		},
 	},
@@ -99,13 +99,13 @@ const globalValues = {
 				return [...globalValues.colors.mode.Navbar];
 			},
 			get text() {
-				return [...utilsColor.stateAsArray(globalValues.colors.mode.Background, "HSL")];
+				return [...KadUtils.Color.stateAsArray(globalValues.colors.mode.Background, "HSL")];
 			},
 			get textNavbar() {
-				return [...utilsColor.stateAsArray(globalValues.colors.mode.Background, "HSL")];
+				return [...KadUtils.Color.stateAsArray(globalValues.colors.mode.Background, "HSL")];
 			},
 			get line() {
-				return [...utilsColor.stateAsArray(globalValues.colors.mode.Background, "HSL")];
+				return [...KadUtils.Color.stateAsArray(globalValues.colors.mode.Background, "HSL")];
 			},
 			get btn() {
 				return [0, 0, 100];
@@ -148,7 +148,7 @@ const globalValues = {
 		spreadVal() {
 			let arr = isNaN(this.value) ? globalValues.globalInput.globalValString : globalValues.globalInput.globalValNumber;
 			for (const id of arr) {
-				const obj = dbID(id);
+				const obj = KadUtils.dbID(id);
 				obj.value = globalValues.globalInput.value;
 				obj.dispatchEvent(new Event("input"));
 			}
@@ -159,41 +159,41 @@ const globalValues = {
 function clear_cl_GeneralSettings() {
 	settingsCopySeparator();
 	for (let i = 0; i < globalValues.fontSizeArray.length; i++) {
-		dbID("idSel_settingsFontsize").options[i] = new Option(globalValues.fontSizeArray[i], globalValues.fontSizeArray[i]);
+		KadUtils.dbID("idSel_settingsFontsize").options[i] = new Option(globalValues.fontSizeArray[i], globalValues.fontSizeArray[i]);
 	}
-	dbID("idSel_settingsFontsize").options[4].selected = "true";
+	KadUtils.dbID("idSel_settingsFontsize").options[4].selected = "true";
 	for (let i = 0; i < globalValues.decimalsArray.length; i++) {
-		dbID("idSel_settingsDecimals").options[i] = new Option(globalValues.decimalsArray[i], globalValues.decimalsArray[i]);
+		KadUtils.dbID("idSel_settingsDecimals").options[i] = new Option(globalValues.decimalsArray[i], globalValues.decimalsArray[i]);
 	}
-	dbID("idSel_settingsDecimals").options[4].selected = "true";
+	KadUtils.dbID("idSel_settingsDecimals").options[4].selected = "true";
 }
 
 function settingsCopyClick(obj = null) {
 	if (obj === null) {
-		dbID("idCb_settingsCopyClick").checked = globalValues.settings.copyClick; //set CB when loaded
+		KadUtils.dbID("idCb_settingsCopyClick").checked = globalValues.settings.copyClick; //set CB when loaded
 	} else {
 		globalValues.settings.copyClick = obj.checked;
 	}
-	utilsEnableBtn("idCb_settingsCopySeparator", globalValues.settings.copyClick); //disabel button, because it is not needed when you can not copy
+	KadUtils.DOM.enableBtn("idCb_settingsCopySeparator", globalValues.settings.copyClick); //disabel button, because it is not needed when you can not copy
 }
 
 function settingsCopySeparator(obj = null) {
 	if (obj === null) {
-		dbID("idCb_settingsCopySeparator").checked = globalValues.settings.copySeparator; //set CB when loaded
+		KadUtils.dbID("idCb_settingsCopySeparator").checked = globalValues.settings.copySeparator; //set CB when loaded
 	} else {
 		globalValues.settings.copySeparator = obj.checked;
 	}
-	dbID("idLbl_settingsCopySeparator").innerHTML = `Nummernformat: ' ${globalValues.copySeparatorSign} '`;
+	KadUtils.dbID("idLbl_settingsCopySeparator").innerHTML = `Nummernformat: ' ${globalValues.copySeparatorSign} '`;
 }
 
 function settingsFontsize(obj = null) {
 	if (obj === null) {
 		const opt = globalValues.fontSizeArray.indexOf(Number(globalValues.settings.fontSize));
-		dbID("idSel_settingsFontsize").options[opt].selected = true; //set FS when loaded
+		KadUtils.dbID("idSel_settingsFontsize").options[opt].selected = true; //set FS when loaded
 	} else {
 		globalValues.settings.fontSize = obj.value;
 	}
-	setCssRoot("fontSize", globalValues.settings.fontSize, "px");
+	KadUtils.CSS.setRoot("fontSize", globalValues.settings.fontSize, "px");
 	colorUpdateCanvascolors(true);
 	layoutResizeGrid();
 }
@@ -201,7 +201,7 @@ function settingsFontsize(obj = null) {
 function settingsDecimals(obj = null) {
 	if (obj === null) {
 		const opt = globalValues.decimalsArray.indexOf(Number(globalValues.settings.decimals));
-		dbID("idSel_settingsDecimals").options[opt].selected = true; //set CB when loaded
+		KadUtils.dbID("idSel_settingsDecimals").options[opt].selected = true; //set CB when loaded
 	} else {
 		globalValues.settings.decimals = obj.value;
 		alert("Änderung wird erst bei Neuberechnung übernommen!");
@@ -211,8 +211,8 @@ function settingsDecimals(obj = null) {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function clear_cl_ColorSettings() {
-	globalValues.colors.lightmode = deepClone(globalValues.colors.colorSettingsOrig.lightmode);
-	globalValues.colors.darkmode = deepClone(globalValues.colors.colorSettingsOrig.darkmode);
+	globalValues.colors.lightmode = KadUtils.deepClone(globalValues.colors.colorSettingsOrig.lightmode);
+	globalValues.colors.darkmode = KadUtils.deepClone(globalValues.colors.colorSettingsOrig.darkmode);
 	displayColorSystem();
 	populateColorSelector();
 }
@@ -228,26 +228,26 @@ function displayColorSystem() {
 	for (let theme of ["light", "dark"]) {
 		for (let [name, col] of Object.entries(globalValues.colors[`${theme}mode`])) {
 			const selID = `idLbl_colorSetting_${theme}_${name}`;
-			dbIDStyle(selID).background = utilsColor.formatAsCSS(col, "HSL");
-			dbIDStyle(selID).color = utilsColor.stateAsCSS(col, "HSL");
+			KadUtils.dbIDStyle(selID).background = KadUtils.Color.formatAsCSS(col, "HSL");
+			KadUtils.dbIDStyle(selID).color = KadUtils.Color.stateAsCSS(col, "HSL");
 			if (globalValues.colors.modeName == theme) {
-				setCssRoot(`bgc${name}`, utilsColor.formatAsString(col, "HSL"));
-				setCssRoot(`txt${name}`, utilsColor.stateAsString(col, "HSL"));
-				setCssRoot(`inv${name}`, utilsColor.stateAsBool(col, "HSL"));
+				KadUtils.CSS.setRoot(`bgc${name}`, KadUtils.Color.formatAsString(col, "HSL"));
+				KadUtils.CSS.setRoot(`txt${name}`, KadUtils.Color.stateAsString(col, "HSL"));
+				KadUtils.CSS.setRoot(`inv${name}`, KadUtils.Color.stateAsBool(col, "HSL"));
 			}
 		}
 	}
 	colToggleColormode();
 	setTimeout(() => {
 		colorUpdateCanvascolors(true);
-	}, getCssRoot("transitionTimeName", true) * 1000);
+	}, KadUtils.CSS.getRoot("transitionTimeName", true) * 1000);
 }
 
 function populateColorSelector() {
 	for (let theme of ["light", "dark"]) {
 		for (const [name, col] of Object.entries(globalValues.colors[`${theme}mode`])) {
-			dbID(`idLbl_colorSetting_${theme}_${name}`).textContent = name;
-			dbID(`idVin_colorSetting_${theme}_${name}`).value = utilsColor.colAsString(col, "HSL", "HEX");
+			KadUtils.dbID(`idLbl_colorSetting_${theme}_${name}`).textContent = name;
+			KadUtils.dbID(`idVin_colorSetting_${theme}_${name}`).value = KadUtils.Color.colAsString(col, "HSL", "HEX");
 		}
 	}
 }
@@ -255,15 +255,15 @@ function populateColorSelector() {
 function colorChange(obj) {
 	const theme = obj.dataset.theme;
 	const name = obj.dataset.name;
-	globalValues.colors[`${theme}mode`][name] = utilsColor.colAsArray(obj.value, "HEX", "HSL");
+	globalValues.colors[`${theme}mode`][name] = KadUtils.Color.colAsArray(obj.value, "HEX", "HSL");
 	const col = globalValues.colors[`${theme}mode`][name];
-	setCssRoot(`bgc${name}`, utilsColor.formatAsString(col, "HSL"));
-	setCssRoot(`txt${name}`, utilsColor.stateAsString(col, "HSL"));
-	setCssRoot(`inv${name}`, utilsColor.stateAsBool(col, "HSL"));
+	KadUtils.CSS.setRoot(`bgc${name}`, KadUtils.Color.formatAsString(col, "HSL"));
+	KadUtils.CSS.setRoot(`txt${name}`, KadUtils.Color.stateAsString(col, "HSL"));
+	KadUtils.CSS.setRoot(`inv${name}`, KadUtils.Color.stateAsBool(col, "HSL"));
 
-	dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).background = utilsColor.formatAsCSS(col, "HSL");
-	dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).color = utilsColor.stateAsCSS(col, "HSL");
-	dbID(`idVin_colorSetting_${theme}_${name}`).value = obj.value;
+	KadUtils.dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).background = KadUtils.Color.formatAsCSS(col, "HSL");
+	KadUtils.dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).color = KadUtils.Color.stateAsCSS(col, "HSL");
+	KadUtils.dbID(`idVin_colorSetting_${theme}_${name}`).value = obj.value;
 	colorUpdateCanvascolors(true);
 }
 
@@ -275,7 +275,7 @@ function colorUpdateCanvascolors(change = null) {
 
 function colToggleColormode(btn = null) {
 	if (btn === null) {
-		dbID("idImg_userNav_colormode").src = utilsGetImgPath(globalValues.colors.darkmodeOn ? "sun" : "moon");
+		KadUtils.dbID("idImg_userNav_colormode").src = KadUtils.DOM.getImgPath(globalValues.colors.darkmodeOn ? "sun" : "moon");
 		return;
 	}
 	globalValues.colors.darkmodeOn = !globalValues.colors.darkmodeOn;

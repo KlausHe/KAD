@@ -45,14 +45,14 @@ function clear_cl_RayCaster() {
 
 	rayCasterReset();
 
-	raycasterOptions.boardSize = utilsResetInput("idVin_rayMazeSize", raycasterOptions.boardSizeOrig);
-	raycasterOptions.speed = utilsResetInput("idVin_rayMazeSpeed", raycasterOptions.speedOrig);
-	raycasterOptions.fovD = utilsResetInput("idVin_rayMazeView", raycasterOptions.fovDOrig);
+	raycasterOptions.boardSize = KadUtils.DOM.resetInput("idVin_rayMazeSize", raycasterOptions.boardSizeOrig);
+	raycasterOptions.speed = KadUtils.DOM.resetInput("idVin_rayMazeSpeed", raycasterOptions.speedOrig);
+	raycasterOptions.fovD = KadUtils.DOM.resetInput("idVin_rayMazeView", raycasterOptions.fovDOrig);
 
-	raycasterOptions.modes.maze = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.mazeOrig);
-	raycasterOptions.modes.target = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.targetOrig);
-	raycasterOptions.modes.poly = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.polyOrig);
-	raycasterOptions.modes.spider = utilsResetInput("idCb_rayDebug", raycasterOptions.modes.spiderOrig);
+	raycasterOptions.modes.maze = KadUtils.DOM.resetInput("idCb_rayDebug", raycasterOptions.modes.mazeOrig);
+	raycasterOptions.modes.target = KadUtils.DOM.resetInput("idCb_rayDebug", raycasterOptions.modes.targetOrig);
+	raycasterOptions.modes.poly = KadUtils.DOM.resetInput("idCb_rayDebug", raycasterOptions.modes.polyOrig);
+	raycasterOptions.modes.spider = KadUtils.DOM.resetInput("idCb_rayDebug", raycasterOptions.modes.spiderOrig);
 
 	raycasterOptions.borders = [
 		{
@@ -114,23 +114,23 @@ function rayViewChange(obj) {
 }
 
 function rayDebugChange() {
-	raycasterOptions.modes.maze = dbID("idCb_rayDebug").checked;
+	raycasterOptions.modes.maze = KadUtils.dbID("idCb_rayDebug").checked;
 	focusRaycaster();
 }
 
 function raySpiderChange() {
-	raycasterOptions.modes.spider = dbID("idCb_raySpider").checked;
+	raycasterOptions.modes.spider = KadUtils.dbID("idCb_raySpider").checked;
 	focusRaycaster();
 }
 
 function rayPolyChange() {
-	raycasterOptions.modes.poly = dbID("idCb_rayPoly").checked;
-	utilsEnableBtn("idCb_raySpider", !raycasterOptions.modes.poly);
+	raycasterOptions.modes.poly = KadUtils.dbID("idCb_rayPoly").checked;
+	KadUtils.DOM.enableBtn("idCb_raySpider", !raycasterOptions.modes.poly);
 	focusRaycaster();
 }
 
 function rayTargetChange() {
-	raycasterOptions.modes.target = dbID("idCb_rayTarget").checked;
+	raycasterOptions.modes.target = KadUtils.dbID("idCb_rayTarget").checked;
 	focusRaycaster();
 }
 
@@ -293,8 +293,8 @@ function newRayMaze() {
 	for (let i = 0; i < raycasterOptions.borders.length; i++) {
 		raycasterOptions.raySegments.push(raycasterOptions.borders[i]);
 	}
-	dbID("idCanv_rayCaster").focus();
-	disable_scroll();
+	KadUtils.dbID("idCanv_rayCaster").focus();
+	KadUtils.Interaction.disableScroll();
 	caRC.loop();
 }
 
@@ -431,7 +431,7 @@ function keyPushedRayCaster(event) {
 	let keyInput = event.keyCode || window.event;
 	if (event.type === "keyup" && (keyInput == 88 || keyInput == 120)) {
 		//"X"
-		raycasterOptions.rayStart.splice(1, 0, deepClone(raycasterOptions.rayStart[0])); //DEEP CLONE JSON
+		raycasterOptions.rayStart.splice(1, 0, KadUtils.deepClone(raycasterOptions.rayStart[0])); //DEEP CLONE JSON
 		raycasterOptions.polygons.splice(1, 0, raycasterOptions.polygons[0]);
 		if (raycasterOptions.rayStart.length > 6) {
 			raycasterOptions.rayStart.splice(raycasterOptions.rayStart.length - 1, 1);
@@ -565,20 +565,20 @@ class RaycasterCell {
 }
 
 function focusRaycaster() {
-	dbID("idCanv_rayCaster").focus();
-	// raycasterOptions.modeMaze = dbID("idCb_rayDebug").checked;
-	// raycasterOptions.modePoly = dbID("idCb_rayPoly").checked;
-	// raycasterOptions.modeSpider = dbID("idCb_raySpider").checked;
-	// raycasterOptions.modeTarget = dbID("idCb_rayTarget").checked;
-	disable_scroll();
+	KadUtils.dbID("idCanv_rayCaster").focus();
+	// raycasterOptions.modeMaze = KadUtils.dbID("idCb_rayDebug").checked;
+	// raycasterOptions.modePoly = KadUtils.dbID("idCb_rayPoly").checked;
+	// raycasterOptions.modeSpider = KadUtils.dbID("idCb_raySpider").checked;
+	// raycasterOptions.modeTarget = KadUtils.dbID("idCb_rayTarget").checked;
+	KadUtils.Interaction.disableScroll();
 	caRC.loop();
 }
 
 function unfocusRaycaster() {
-	dbID("idCanv_rayCaster").blur();
+	KadUtils.dbID("idCanv_rayCaster").blur();
 	// raycasterOptions.rayStart[0].velX = 0;
 	// raycasterOptions.rayStart[0].velY = 0;
-	enable_scroll();
+	KadUtils.Interaction.enableScroll();
 	caRC.noLoop();
 	caRC.redraw();
 }

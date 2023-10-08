@@ -12,7 +12,7 @@ const kadarOptions = {
         return t ? "Millisekunde" : "Millisekunden";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff);
+        return KadUtils.Value.number(kadarOptions.diff);
       }
     },
     seconds: {
@@ -20,7 +20,7 @@ const kadarOptions = {
         return t ? "Sekunde" : "Sekunden";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff / 1000);
+        return KadUtils.Value.number(kadarOptions.diff / 1000);
       }
     },
     minutes: {
@@ -28,7 +28,7 @@ const kadarOptions = {
         return t ? "Minute" : "Minuten";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff / 60000);
+        return KadUtils.Value.number(kadarOptions.diff / 60000);
       }
     },
     hours: {
@@ -36,7 +36,7 @@ const kadarOptions = {
         return t ? "Stunde" : "Stunden";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff / 3600000);
+        return KadUtils.Value.number(kadarOptions.diff / 3600000);
       }
     },
     days: {
@@ -44,7 +44,7 @@ const kadarOptions = {
         return t ? "Tag" : "Tage";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff / 86400000);
+        return KadUtils.Value.number(kadarOptions.diff / 86400000);
       }
     },
     weeks: {
@@ -52,7 +52,7 @@ const kadarOptions = {
         return t ? "Woche" : "Wochen";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff / 604800000);
+        return KadUtils.Value.number(kadarOptions.diff / 604800000);
       }
     },
     month: {
@@ -60,7 +60,7 @@ const kadarOptions = {
         return t ? "Monat" : "Monate";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff / 2620800000);
+        return KadUtils.Value.number(kadarOptions.diff / 2620800000);
       }
     },
     years: {
@@ -68,7 +68,7 @@ const kadarOptions = {
         return t ? "Jahr" : "Jahre";
       },
       get val() {
-        return utilsNumber(kadarOptions.diff / 31449600000);
+        return KadUtils.Value.number(kadarOptions.diff / 31449600000);
       }
     }
   }
@@ -78,37 +78,37 @@ function clear_cl_Kadar() {
   kadarOptions.valA = null;
   kadarOptions.valB = null;
   kadarOptions.valAB = null;
-  dbID("idBtn_kadarDateNow").textContent = utilsDate()
-  clearTable(kadarOptions.tableA);
-  clearTable(kadarOptions.tableB);
-  clearTable(kadarOptions.tableAB);
+  KadUtils.dbID("idBtn_kadarDateNow").textContent = KadUtils.Date.getDate()
+  KadUtils.Table.clear(kadarOptions.tableA);
+  KadUtils.Table.clear(kadarOptions.tableB);
+  KadUtils.Table.clear(kadarOptions.tableAB);
 };
 
 function clearKadarTableAnow() {
-  clearTable(kadarOptions.tableA);
+  KadUtils.Table.clear(kadarOptions.tableA);
   kadarOptions.valA = null;
-  dbID("idBtn_kadarDateA").textContent = "Start Datum";
-  // dbID("idBtn_kadarDateA").value = "Start Datum";
+  KadUtils.dbID("idBtn_kadarDateA").textContent = "Start Datum";
+  // KadUtils.dbID("idBtn_kadarDateA").value = "Start Datum";
   kadarCalculate();
 }
 
 function clearKadarTableBnow() {
-  clearTable(kadarOptions.tableB);
+  KadUtils.Table.clear(kadarOptions.tableB);
   kadarOptions.valB = null;
-  dbID("idBtn_kadarDateB").textContent = "End Datum";
+  KadUtils.dbID("idBtn_kadarDateB").textContent = "End Datum";
   kadarCalculate();
 }
 
 function createKadarPikaday(loc) {
   new Pikaday({
-    field: dbID(`idBtn_kadarDate${loc}`),
+    field: KadUtils.dbID(`idBtn_kadarDate${loc}`),
     showTime: true,
     firstDay: 1,
     position: "top",
     i18n: i18nDE,
     onSelect: (date) => {
       kadarOptions[`val${loc}`] = date.getTime();
-      dbID(`idBtn_kadarDate${loc}`).textContent = utilsDate(date);
+      KadUtils.dbID(`idBtn_kadarDate${loc}`).textContent = KadUtils.Date.getDate(date);
       kadarCalculate();
     }
   });
@@ -128,19 +128,19 @@ function kadarCalculate() {
     kadarOptions.diff = Math.abs(kadarOptions.valA - kadarOptions.valB);
     kadarTable(kadarOptions.tableAB);
   } else {
-    dbID("idBtn_kadarDateNow").textContent = utilsDate();
-    clearTable(kadarOptions.tableAB);
+    KadUtils.dbID("idBtn_kadarDateNow").textContent = KadUtils.Date.getDate();
+    KadUtils.Table.clear(kadarOptions.tableAB);
   };
 };
 
 function kadarTable(tableID) {
-  clearTable(tableID);
+  KadUtils.Table.clear(tableID);
   for (let i = 0; i < Object.keys(kadarOptions.calc).length; i++) {
     const time = Object.keys(kadarOptions.calc)[i];
-    const row = insertTableRow(tableID);
+    const row = KadUtils.Table.insertRow(tableID);
 
     // time
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["kadarTime", i],
       type: "Lbl",
       text: kadarOptions.calc[time].val,
@@ -151,7 +151,7 @@ function kadarTable(tableID) {
     });
 
     //  Unit
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["kadarTime", i],
       type: "Lbl",
       text: kadarOptions.calc[time].text(Math.abs(kadarOptions.calc[time].val) == 1)

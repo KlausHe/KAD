@@ -1244,15 +1244,15 @@ function clear_cl_Niska() {
 	niskaOptions.select.type = niskaOptions.select.typeOrig;
 	niskaOptions.strengthClass.index0 = niskaOptions.strengthClass.indexOrig;
 	niskaOptions.strengthClass.index1 = niskaOptions.strengthClass.indexOrig;
-	niskaOptions.size.val = utilsResetInput("idVin_niskaSize", niskaOptions.size.valOrig, {
+	niskaOptions.size.val = KadUtils.DOM.resetInput("idVin_niskaSize", niskaOptions.size.valOrig, {
 		min: 0,
 	});
-	niskaOptions.pitch.val = utilsResetInput("idVin_niskaPitch", niskaOptions.pitch.valOrig, {
+	niskaOptions.pitch.val = KadUtils.DOM.resetInput("idVin_niskaPitch", niskaOptions.pitch.valOrig, {
 		min: 0,
 	});
 
-	clearFirstChild("idSel_niskaSelect");
-	let selInput = dbID("idSel_niskaSelect");
+	KadUtils.DOM.clearFirstChild("idSel_niskaSelect");
+	let selInput = KadUtils.dbID("idSel_niskaSelect");
 	let optGroup = document.createElement("optgroup");
 	optGroup.label = "Regelgewinde";
 	for (const [index, val] of niskaOptions.regel.entries()) {
@@ -1276,10 +1276,10 @@ function clear_cl_Niska() {
 	selInput.appendChild(optGroup);
 	selInput.options[niskaOptions.select.index].selected = true;
 
-	clearFirstChild("idSel_niskaStrengthClassA");
-	clearFirstChild("idSel_niskaStrengthClassB");
-	let selStrength0 = dbID("idSel_niskaStrengthClassA");
-	let selStrength1 = dbID("idSel_niskaStrengthClassB");
+	KadUtils.DOM.clearFirstChild("idSel_niskaStrengthClassA");
+	KadUtils.DOM.clearFirstChild("idSel_niskaStrengthClassB");
+	let selStrength0 = KadUtils.dbID("idSel_niskaStrengthClassA");
+	let selStrength1 = KadUtils.dbID("idSel_niskaStrengthClassB");
 	for (const val of niskaOptions.strengthClass.val) {
 		const opt = document.createElement("OPTION");
 		opt.textContent = val;
@@ -1295,15 +1295,15 @@ function clear_cl_Niska() {
 }
 
 function niskaCalc() {
-  niskaOptions.size.val = utilsNumberFromInput("idVin_niskaSize");
-	niskaOptions.pitch.val = utilsNumberFromInput("idVin_niskaPitch");
-	niskaOptions.strengthClass.index0 = dbID("idSel_niskaStrengthClassA").selectedIndex;
+  niskaOptions.size.val = KadUtils.DOM.numberFromInput("idVin_niskaSize");
+	niskaOptions.pitch.val = KadUtils.DOM.numberFromInput("idVin_niskaPitch");
+	niskaOptions.strengthClass.index0 = KadUtils.dbID("idSel_niskaStrengthClassA").selectedIndex;
 	niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
-	niskaOptions.select.index = dbID("idSel_niskaSelect").selectedIndex;
-	niskaOptions.select.type = dbID("idSel_niskaSelect").options[niskaOptions.select.index].dataset.type;
+	niskaOptions.select.index = KadUtils.dbID("idSel_niskaSelect").selectedIndex;
+	niskaOptions.select.type = KadUtils.dbID("idSel_niskaSelect").options[niskaOptions.select.index].dataset.type;
 	niskaOptions.select.index -= niskaOptions.select.offset;
-	niskaOptions.strengthClass.index1 = dbID("idSel_niskaStrengthClassB").selectedIndex;
-	dbID("idLbl_niskaRegelInfo").textContent = niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde";
+	niskaOptions.strengthClass.index1 = KadUtils.dbID("idSel_niskaStrengthClassB").selectedIndex;
+	KadUtils.dbID("idLbl_niskaRegelInfo").textContent = niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde";
 	niskaHelpCalculation(niskaOptions.select.size, niskaOptions.select.pitch, 1);
 	niskaTable();
 }
@@ -1350,30 +1350,30 @@ function niskaHelpCalculation(d, P, index) {
 	niskaOptions.results.keyWidthOuter.val[index] = headIndex ? niskaOptions.headSize[`M${d}`][3] : "-";
 
   
-	niskaOptions.results.boreDiameter.val[index] = utilsNumber(boreDiameter, niskaOptions.decimalOpts);
-	niskaOptions.results.innerCoreDiameterNut.val[index] = utilsNumber(innerCoreDiameterNut, niskaOptions.decimalOpts);
-	niskaOptions.results.outerCoreDiameter.val[index] = utilsNumber(outerCoreDiameter, niskaOptions.decimalOpts);
-	niskaOptions.results.flankDiameter.val[index] = utilsNumber(flankDiameter, niskaOptions.decimalOpts);
-	niskaOptions.results.stressCrosssection.val[index] = utilsNumber(stressCrosssection, niskaOptions.decimalOpts);
-	niskaOptions.results.preloadMax.val[index] = utilsNumber(preloadMax, {
+	niskaOptions.results.boreDiameter.val[index] = KadUtils.Value.number(boreDiameter, niskaOptions.decimalOpts);
+	niskaOptions.results.innerCoreDiameterNut.val[index] = KadUtils.Value.number(innerCoreDiameterNut, niskaOptions.decimalOpts);
+	niskaOptions.results.outerCoreDiameter.val[index] = KadUtils.Value.number(outerCoreDiameter, niskaOptions.decimalOpts);
+	niskaOptions.results.flankDiameter.val[index] = KadUtils.Value.number(flankDiameter, niskaOptions.decimalOpts);
+	niskaOptions.results.stressCrosssection.val[index] = KadUtils.Value.number(stressCrosssection, niskaOptions.decimalOpts);
+	niskaOptions.results.preloadMax.val[index] = KadUtils.Value.number(preloadMax, {
 		decimals: 0,
 	});
-	// niskaOptions.results.strengthAxialStatic.val[index] = utilsNumber(strengthAxialStatic, niskaOptions.decimalOpts);
-	// niskaOptions.results.strengthAxialDynamic.val[index] = utilsNumber(strengthAxialDynamic, niskaOptions.decimalOpts);
-	// niskaOptions.results.strengthShearStatic.val[index] = utilsNumber(strengthShearStatic, niskaOptions.decimalOpts);
-	// niskaOptions.results.strengthShearDynamic.val[index] = utilsNumber(strengthShearDynamic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthAxialStatic.val[index] = KadUtils.Value.number(strengthAxialStatic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthAxialDynamic.val[index] = KadUtils.Value.number(strengthAxialDynamic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthShearStatic.val[index] = KadUtils.Value.number(strengthShearStatic, niskaOptions.decimalOpts);
+	// niskaOptions.results.strengthShearDynamic.val[index] = KadUtils.Value.number(strengthShearDynamic, niskaOptions.decimalOpts);
 }
 
 function niskaTable() {
-	clearTable("idTabHeader_niskaList");
+	KadUtils.Table.clear("idTabHeader_niskaList");
 
-	const rowTh = insertTableRow("idTabHeader_niskaList");
-	tableAddCellHeader(rowTh, {
+	const rowTh = KadUtils.Table.insertRow("idTabHeader_niskaList");
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["niska", "Header"],
 		type: "Lbl",
 		text: "",
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["niska", "Header", "Handeingabe"],
 		type: "Lbl",
 		text: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`,
@@ -1382,7 +1382,7 @@ function niskaTable() {
 			textAlign: "center",
 		},
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["niska", "Header", "Normgewinde"],
 		type: "Lbl",
 		text: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`,
@@ -1392,10 +1392,10 @@ function niskaTable() {
 		},
 	});
 
-	clearTable("idTabBody_niskaList");
+	KadUtils.Table.clear("idTabBody_niskaList");
 	for (let [key, value] of Object.entries(niskaOptions.results)) {
-		const row = insertTableRow("idTabBody_niskaList");
-		tableAddCell(row, {
+		const row = KadUtils.Table.insertRow("idTabBody_niskaList");
+		KadUtils.Table.addCell(row, {
 			names: ["niska", "name", key],
 			type: "Lbl",
 			text: value.name,
@@ -1404,7 +1404,7 @@ function niskaTable() {
 				textAlign: "left",
 			},
 		});
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["niska", "val", key],
 			type: "Lbl",
 			text: value.val[0],
@@ -1413,7 +1413,7 @@ function niskaTable() {
 			},
 			copy: true,
 		});
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["niska", "unit", key],
 			type: "Lbl",
 			text: value.unit,
@@ -1422,7 +1422,7 @@ function niskaTable() {
 				textAlign: "left",
 			},
 		});
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["niska", "val", key],
 			type: "Lbl",
 			text: value.val[1],
@@ -1431,7 +1431,7 @@ function niskaTable() {
 			},
 			copy: true,
 		});
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["niska", "unit", key],
 			type: "Lbl",
 			text: value.unit,

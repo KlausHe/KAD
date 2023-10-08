@@ -469,11 +469,11 @@ let geoObjects = {
 };
 
 function clear_cl_Geometrie() {
-	let parent = dbID("idDiv_GeometrieAreaSelect");
-	clearFirstChild(parent);
+	let parent = KadUtils.dbID("idDiv_GeometrieAreaSelect");
+	KadUtils.DOM.clearFirstChild(parent);
 
 	for (let i = 0; i < geoObjects.elements.length; i++) {
-		tableAddCell(
+		KadUtils.Table.addCell(
 			null,
 			{
 				names: ["geometrieAreaSelect", i],
@@ -489,11 +489,11 @@ function clear_cl_Geometrie() {
 		);
 	}
 	changeGeoObject(0);
-	dbID("idCb_geoRadius").checked = false;
+	KadUtils.dbID("idCb_geoRadius").checked = false;
 
 	let num = document.getElementsByName("naDiv_Area").length;
 	for (let i = 0; i < num; i++) {
-		dbID(`idVin_Area_${i}`).value = "";
+		KadUtils.dbID(`idVin_Area_${i}`).value = "";
 	}
 }
 
@@ -517,28 +517,28 @@ function geoResize() {
 
 // //Draw Geometrie here
 function changeGeoObject(index) {
-	let cl = dbCL("clBtn_geometrieAreaSelect", null);
+	let cl = KadUtils.dbCL("clBtn_geometrieAreaSelect", null);
 	for (let i = 0; i < cl.length; i++) {
-		utilsBtnColor(cl[i]);
+		KadUtils.DOM.btnColor(cl[i]);
 	}
-	utilsBtnColor(cl[index], "positive");
+	KadUtils.DOM.btnColor(cl[index], "positive");
 	geoObjects.selectedGeo = geoObjects.elements[index];
 	geoObjects[geoObjects.selectedGeo].show;
 
 	let num = document.getElementsByName("naDiv_Area").length;
 	for (let i = 0; i < num; i++) {
 		if (geoObjects[geoObjects.selectedGeo].vals[i]) {
-			dbIDStyle(`idDiv_Area_${i}`).display = "initial";
-			dbID(`idLbl_Vin_Area_${i}`).textContent = geoObjects[geoObjects.selectedGeo].lbl[i]; //LABEL
-			dbID(`idVin_Area_${i}`).placeholder = geoObjects[geoObjects.selectedGeo].vals[i];
+			KadUtils.dbIDStyle(`idDiv_Area_${i}`).display = "initial";
+			KadUtils.dbID(`idLbl_Vin_Area_${i}`).textContent = geoObjects[geoObjects.selectedGeo].lbl[i]; //LABEL
+			KadUtils.dbID(`idVin_Area_${i}`).placeholder = geoObjects[geoObjects.selectedGeo].vals[i];
 		} else {
-			dbIDStyle(`idDiv_Area_${i}`).display = "none";
+			KadUtils.dbIDStyle(`idDiv_Area_${i}`).display = "none";
 		}
 	}
 
-	utilsEnableBtn(idCb_geoRadius, geoObjects[geoObjects.selectedGeo].cbRadiusEnable);
-	const cbEntry = dbID("idLbl_goeRadius").textContent;
-	dbID("idLbl_goeRadius").innerHTML = geoObjects[geoObjects.selectedGeo].cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
+	KadUtils.DOM.enableBtn(idCb_geoRadius, geoObjects[geoObjects.selectedGeo].cbRadiusEnable);
+	const cbEntry = KadUtils.dbID("idLbl_goeRadius").textContent;
+	KadUtils.dbID("idLbl_goeRadius").innerHTML = geoObjects[geoObjects.selectedGeo].cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
 
 	geoBerechnung();
 }
@@ -547,14 +547,14 @@ function changeGeoObject(index) {
 function geoBerechnung() {
 	// DIESE EINE FUNKTION STEUERT ALLE OUTPUTS!!!
 	let selectedObj = geoObjects[geoObjects.selectedGeo];
-	geoObjects.valA = utilsNumberFromInput("idVin_Area_0", selectedObj.vals[0]);
-	geoObjects.valB = utilsNumberFromInput("idVin_Area_1", selectedObj.vals[1]);
-	geoObjects.valC = utilsNumberFromInput("idVin_Area_2", selectedObj.vals[2]);
+	geoObjects.valA = KadUtils.DOM.numberFromInput("idVin_Area_0", selectedObj.vals[0]);
+	geoObjects.valB = KadUtils.DOM.numberFromInput("idVin_Area_1", selectedObj.vals[1]);
+	geoObjects.valC = KadUtils.DOM.numberFromInput("idVin_Area_2", selectedObj.vals[2]);
 
-	selectedObj.circumference.result = utilsNumber(selectedObj.circumference.formula, { decimals: 3 });
-	selectedObj.basearea.result = utilsNumber(selectedObj.basearea.formula, { decimals: 3 });
-	selectedObj.fullarea.result = utilsNumber(selectedObj.fullarea.formula, { decimals: 3 });
-	selectedObj.volume.result = utilsNumber(selectedObj.volume.formula, { decimals: 3 });
+	selectedObj.circumference.result = KadUtils.Value.number(selectedObj.circumference.formula, { decimals: 3 });
+	selectedObj.basearea.result = KadUtils.Value.number(selectedObj.basearea.formula, { decimals: 3 });
+	selectedObj.fullarea.result = KadUtils.Value.number(selectedObj.fullarea.formula, { decimals: 3 });
+	selectedObj.volume.result = KadUtils.Value.number(selectedObj.volume.formula, { decimals: 3 });
 	geoUpdateMasse();
 	geoResultTable();
 }
@@ -564,7 +564,7 @@ function geoUpdateMasse() {
 	selectedObj.mass.result = [];
 	for (let i = 0; i < geometrieOptions.matList.length; i++) {
 		geometrieOptions.roh = Data_Material.Materials[geometrieOptions.matList[i]].roh;
-		const mass = utilsNumber(selectedObj.mass.formula, { decimals: 4 });
+		const mass = KadUtils.Value.number(selectedObj.mass.formula, { decimals: 4 });
 		selectedObj.mass.result.push({
 			mass: mass,
 			matName: geometrieOptions.matList[i],
@@ -574,7 +574,7 @@ function geoUpdateMasse() {
 
 function geoResultTable() {
 	const selectedObj = geoObjects[geoObjects.selectedGeo];
-	clearTable("idTabBody_geometrieResults");
+	KadUtils.Table.clear("idTabBody_geometrieResults");
 	let unitObj = Object.keys(geometrieOptions.units);
 	let unitLength = unitObj.length - 1 + selectedObj.mass.result.length;
 	for (let i = 0; i < unitLength; i++) {
@@ -589,10 +589,10 @@ function geoResultTable() {
 			resultNum = i - unitObj.length + 1;
 			lblName = `${geometrieOptions.units[unitName].name} (${selectedObj.mass.result[resultNum].matName})`;
 		}
-		const row = insertTableRow("idTabBody_geometrieResults");
+		const row = KadUtils.Table.insertRow("idTabBody_geometrieResults");
 
 		//LBL Title
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["geoResults", "title", i],
 			type: "Lbl",
 			text: `${lblName}<br>[${selectedObj[unitName].text}]`,
@@ -603,7 +603,7 @@ function geoResultTable() {
 		});
 
 		//  LBL Value
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["geoResults", "value", i],
 			type: "Lbl",
 			text: resultNum != null ? selectedObj[unitName].result[resultNum].mass : selectedObj[unitName].result,
@@ -616,7 +616,7 @@ function geoResultTable() {
 		});
 
 		// Lbl unit
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["geoResults", "unit", i],
 			type: "Lbl",
 			get text() {
@@ -629,11 +629,11 @@ function geoResultTable() {
 }
 
 function geoChangeDiameter() {
-	geoObjects.radState = dbID("idCb_geoRadius").checked;
+	geoObjects.radState = KadUtils.dbID("idCb_geoRadius").checked;
 	let num = document.getElementsByName("naDiv_Area").length;
 	for (let i = 0; i < num; i++) {
 		if (geoObjects[geoObjects.selectedGeo].vals[i]) {
-			dbID(`idLbl_Vin_Area_${i}`).innerHTML = geoObjects[geoObjects.selectedGeo].lbl[i]; //LABEL
+			KadUtils.dbID(`idLbl_Vin_Area_${i}`).innerHTML = geoObjects[geoObjects.selectedGeo].lbl[i]; //LABEL
 		}
 	}
 	geoObjects[geoObjects.selectedGeo].show;

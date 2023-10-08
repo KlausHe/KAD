@@ -27,10 +27,10 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "HEX", "RGB");
+					kounselorOptions.types.RGB.value = KadUtils.Color.get(this.value, "HEX", "RGB");
 				}
 				if (this.value == null) {
-					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "HEX");
+					this.value = KadUtils.Color.get(kounselorOptions.types.RGB.value, "RGB", "HEX");
 				}
 			},
 		},
@@ -54,11 +54,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "HSL", "RGB");
+					kounselorOptions.types.RGB.value = KadUtils.Color.get(this.value, "HSL", "RGB");
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "HSL");
+					this.value = KadUtils.Color.get(kounselorOptions.types.RGB.value, "RGB", "HSL");
 				}
 			},
 		},
@@ -72,11 +72,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "HSB", "RGB");
+					kounselorOptions.types.RGB.value = KadUtils.Color.get(this.value, "HSB", "RGB");
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "HSB");
+					this.value = KadUtils.Color.get(kounselorOptions.types.RGB.value, "RGB", "HSB");
 				}
 			},
 		},
@@ -89,11 +89,11 @@ const kounselorOptions = {
 			},
 			convert() {
 				if (kounselorOptions.types.RGB.value == null) {
-					kounselorOptions.types.RGB.value = utilsColor.get(this.value, "CMYK", "RGB");
+					kounselorOptions.types.RGB.value = KadUtils.Color.get(this.value, "CMYK", "RGB");
 				}
 				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
-					this.value = utilsColor.get(kounselorOptions.types.RGB.value, "RGB", "CMYK");
+					this.value = KadUtils.Color.get(kounselorOptions.types.RGB.value, "RGB", "CMYK");
 				}
 			},
 		},
@@ -102,7 +102,7 @@ const kounselorOptions = {
 
 function clear_cl_Kounselor() {
 	for (const name of Object.keys(kounselorOptions.types)) {
-		utilsResetInput(`idVin_kounselor${name}`, name);
+		KadUtils.DOM.resetInput(`idVin_kounselor${name}`, name);
 		kounselorOptions.types[name].value = null;
 	}
 	kounselorOptions.curType = kounselorOptions.curTypeOrig;
@@ -112,11 +112,11 @@ function clear_cl_Kounselor() {
 
 function kounselorPopulateDatalists(obj) {
 	const type = obj.dataset.type;
-	if (dbID(`idDlist_kounselor${type}`).childNodes.length > 1) return;
+	if (KadUtils.dbID(`idDlist_kounselor${type}`).childNodes.length > 1) return;
 	for (const data of Data_Kounselor) {
 		const opt = document.createElement("OPTION");
 		opt.textContent = data[type];
-		dbID(`idDlist_kounselor${type}`).appendChild(opt);
+		KadUtils.dbID(`idDlist_kounselor${type}`).appendChild(opt);
 	}
 }
 
@@ -162,15 +162,15 @@ function kounselorShowResults() {
 	for (const type of Object.keys(kounselorOptions.types)) {
 		if (type != kounselorOptions.curType) {
 			if (kounselorOptions.types[type].value == null) {
-				utilsResetInput(`idVin_kounselor${type}`, type);
+				KadUtils.DOM.resetInput(`idVin_kounselor${type}`, type);
 				continue;
 			}
-			utilsResetInput(`idVin_kounselor${type}`, utilsColor.formatAsCSS(kounselorOptions.types[type].value, type));
+			KadUtils.DOM.resetInput(`idVin_kounselor${type}`, KadUtils.Color.formatAsCSS(kounselorOptions.types[type].value, type));
 		}
 	}
-	const colorCSS = utilsColor.formatAsCSS(kounselorOptions.types.HSL.value, "HSL");
-	dbIDStyle("idLbl_kounselorOutputA").background = colorCSS;
-	dbIDStyle("idLbl_kounselorOutputB").background = colorCSS;
-	dbIDStyle("idLbl_kounselorOutputA").color = utilsColor.stateAsCSS(kounselorOptions.types.HSL.value, "HSL");
-	dbIDStyle("idLbl_kounselorOutputB").color = utilsColor.stateAsCSS(kounselorOptions.types.HSL.value, "HSL", true);
+	const colorCSS = KadUtils.Color.formatAsCSS(kounselorOptions.types.HSL.value, "HSL");
+	KadUtils.dbIDStyle("idLbl_kounselorOutputA").background = colorCSS;
+	KadUtils.dbIDStyle("idLbl_kounselorOutputB").background = colorCSS;
+	KadUtils.dbIDStyle("idLbl_kounselorOutputA").color = KadUtils.Color.stateAsCSS(kounselorOptions.types.HSL.value, "HSL");
+	KadUtils.dbIDStyle("idLbl_kounselorOutputB").color = KadUtils.Color.stateAsCSS(kounselorOptions.types.HSL.value, "HSL", true);
 }

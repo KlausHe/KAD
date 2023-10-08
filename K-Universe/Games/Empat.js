@@ -48,12 +48,12 @@ function empatStart() {
 	clear_cl_Empat();
 	empatOptions.playing = !empatOptions.playing;
 	if (empatOptions.playing) {
-		dbID("idBtn_empatStart").textContent = "Reset";
+		KadUtils.dbID("idBtn_empatStart").textContent = "Reset";
 		empatOptions.won = false;
 		caEM.loop();
 		focusEmpat();
 	} else {
-		dbID("idBtn_empatStart").textContent = "Start";
+		KadUtils.dbID("idBtn_empatStart").textContent = "Start";
 		empatOptions.won = false;
 		caEM.noLoop();
 		unfocusEmpat();
@@ -183,7 +183,7 @@ function mousePressedEmpat() {
 }
 
 function empatKeyPushed(event) {
-	event.preventDefault(); //prevent keyinput from comming thout to the window!
+	event.KadUtils.Interaction.preventDefault(); //prevent keyinput from comming thout to the window!
 	let keyInput = event.keyCode || window.event;
 	if (!empatOptions.players[empatOptions.curPlayer].bot) {
 		if (keyInput == 13 || keyInput == 32 || keyInput == 40) {
@@ -233,8 +233,8 @@ function botLogic() {
 		opts.cells[i].playerID = null;
 	}
 	if (nextPos == null) {
-		const randPos = Math.floor(utilsValueConstrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
-		nextPos = utilsGetNearestValueInArray(opts.arr, randPos);
+		const randPos = Math.floor(KadUtils.Value.constrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
+		nextPos = KadUtils.Array.getNearestValueInArray(opts.arr, randPos);
 	}
 	empatOptions.players[empatOptions.curPlayer].setPosition(nextPos);
 	setTimeout(() => {
@@ -243,11 +243,11 @@ function botLogic() {
 }
 
 function focusEmpat() {
-	dbID("idCanv_empat").focus();
+	KadUtils.dbID("idCanv_empat").focus();
 }
 
 function unfocusEmpat() {
-	dbID("idCanv_empat").blur();
+	KadUtils.dbID("idCanv_empat").blur();
 }
 
 class EmpatPlayer {

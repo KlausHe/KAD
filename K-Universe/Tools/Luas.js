@@ -19,16 +19,16 @@ const luasOptions = {
 
 //Canvas Stuff
 function clear_cl_Luas() {
-	utilsResetInput("idVin_luasVelAngular", 10);
-	utilsResetInput("idVin_luasDiameter", 10);
+	KadUtils.DOM.resetInput("idVin_luasVelAngular", 10);
+	KadUtils.DOM.resetInput("idVin_luasDiameter", 10);
 
-	dbID("idSel_luasAngularUnit").options[0] = new Option("U/s", 1, false); // text, value
-	dbID("idSel_luasAngularUnit").options[1] = new Option("U/min", 60, false, true); // text, value
-	dbID("idSel_luasLinearUnit").options[0] = new Option("mm", 1, false, true); // text, value
-	dbID("idSel_luasLinearUnit").options[1] = new Option("cm", 1, false); // text, value
-	dbID("idSel_luasLinearUnit").options[2] = new Option("dm", 1, false); // text, value
-	dbID("idSel_luasLinearUnit").options[3] = new Option("m", 1, false); // text, value
-	dbID("idSel_luasLinearUnit").options[4] = new Option("km", 1, false); // text, value
+	KadUtils.dbID("idSel_luasAngularUnit").options[0] = new Option("U/s", 1, false); // text, value
+	KadUtils.dbID("idSel_luasAngularUnit").options[1] = new Option("U/min", 60, false, true); // text, value
+	KadUtils.dbID("idSel_luasLinearUnit").options[0] = new Option("mm", 1, false, true); // text, value
+	KadUtils.dbID("idSel_luasLinearUnit").options[1] = new Option("cm", 1, false); // text, value
+	KadUtils.dbID("idSel_luasLinearUnit").options[2] = new Option("dm", 1, false); // text, value
+	KadUtils.dbID("idSel_luasLinearUnit").options[3] = new Option("m", 1, false); // text, value
+	KadUtils.dbID("idSel_luasLinearUnit").options[4] = new Option("km", 1, false); // text, value
 	luasInputChange();
 	luasOptions.radius = luasOptions.canvas.w * 0.5 * 0.9;
 	luasOptions.lastAngle = 0;
@@ -77,14 +77,14 @@ function luasStart() {
 	if (luasOptions.state === 0) {
 		// play
 		luasOptions.state = 1;
-		dbID("idImg_luasChecker").src = utilsGetImgPath("tStop");
+		KadUtils.dbID("idImg_luasChecker").src = KadUtils.DOM.getImgPath("tStop");
 		luasOptions.lastAngle = 0;
 		luasOptions.lastFramecount = caLU.frameCount;
 		caLU.loop();
 	} else {
 		//stop
 		luasOptions.state = 0;
-		dbID("idImg_luasChecker").src = utilsGetImgPath("tPlay");
+		KadUtils.dbID("idImg_luasChecker").src = KadUtils.DOM.getImgPath("tPlay");
 		caLU.noLoop();
 		luasOptions.lastAngle = 0;
 		luasOptions.lastFramecount = caLU.frameCount;
@@ -92,20 +92,20 @@ function luasStart() {
 }
 
 function luasInputChange() {
-	luasOptions.speedVin = utilsNumberFromInput("idVin_luasVelAngular");
-	luasOptions.diameterVin = utilsNumberFromInput("idVin_luasDiameter");
-	luasOptions.angularVin = Number(dbID("idSel_luasAngularUnit").value);
-	luasOptions.angularText = dbID("idSel_luasAngularUnit").options[dbID("idSel_luasAngularUnit").selectedIndex].textContent;
-	luasOptions.linearText = dbID("idSel_luasLinearUnit").options[dbID("idSel_luasLinearUnit").selectedIndex].textContent;
+	luasOptions.speedVin = KadUtils.DOM.numberFromInput("idVin_luasVelAngular");
+	luasOptions.diameterVin = KadUtils.DOM.numberFromInput("idVin_luasDiameter");
+	luasOptions.angularVin = Number(KadUtils.dbID("idSel_luasAngularUnit").value);
+	luasOptions.angularText = KadUtils.dbID("idSel_luasAngularUnit").options[KadUtils.dbID("idSel_luasAngularUnit").selectedIndex].textContent;
+	luasOptions.linearText = KadUtils.dbID("idSel_luasLinearUnit").options[KadUtils.dbID("idSel_luasLinearUnit").selectedIndex].textContent;
 	luasOptions.speedAngular = (luasOptions.speedVin * 360) / luasOptions.angularVin;
 	luasOptions.speedLinear = luasOptions.speedVin * Math.PI * luasOptions.diameterVin;
 
-	dbID("idLbl_luasResult").innerHTML = `Linear: ${utilsNumber(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.linearText}/${luasOptions.angularText.replace("U/", "")}`;
+	KadUtils.dbID("idLbl_luasResult").innerHTML = `Linear: ${KadUtils.Value.number(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.linearText}/${luasOptions.angularText.replace("U/", "")}`;
 }
 
 function luasChangeDirection() {
 	luasOptions.direction = luasOptions.direction == 1 ? -1 : 1;
-	const luas = dbIDStyle("idImg_luasDirection");
+	const luas = KadUtils.dbIDStyle("idImg_luasDirection");
 	luas.transform = `scaleX(${luasOptions.direction})`;
 	luas.webkitTransform = `scaleX(${luasOptions.direction})`;
 }

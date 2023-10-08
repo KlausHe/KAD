@@ -120,7 +120,7 @@ const pormulaOptions = {
 				}
 				let orderMin = Math.min(pormulaOptions.regOptions.order, pormulaOptions.data.uniquePoints.length);
 				if (orderMin < pormulaOptions.regOptions.order) {
-					dbID("idVin_pormulaOrder").value = orderMin;
+					KadUtils.dbID("idVin_pormulaOrder").value = orderMin;
 					pormulaOptions.regOptions.order = orderMin;
 					pormulaOptions.messages.push(`Order wurde geändert!`);
 					return;
@@ -131,10 +131,10 @@ const pormulaOptions = {
 };
 
 function clear_cl_Pormula() {
-	const selectParent = dbID("idDiv_PormulaTypeSelect");
-	clearFirstChild(selectParent);
+	const selectParent = KadUtils.dbID("idDiv_PormulaTypeSelect");
+	KadUtils.DOM.clearFirstChild(selectParent);
 	for (let i = 0; i < Object.keys(pormulaOptions.types).length; i++) {
-		tableAddCell(
+		KadUtils.Table.addCell(
 			null,
 			{
 				names: ["pormulaTypeSelect", i],
@@ -151,17 +151,19 @@ function clear_cl_Pormula() {
 	}
 	pormulaGetType();
 
-	pormulaOptions.regOptions.order = utilsResetInput("idVin_pormulaOrder", pormulaOptions.regOptionsOrig.order);
-	pormulaOptions.regOptions.precision = utilsResetInput("idVin_pormulaPrecision", pormulaOptions.regOptionsOrig.precision);
-	utilsResetInput("idVin_pormulaPointEntry", pormulaOptions.valuesOrig[1] * 10);
+	pormulaOptions.regOptions.order = KadUtils.DOM.resetInput("idVin_pormulaOrder", pormulaOptions.regOptionsOrig.order);
+	pormulaOptions.regOptions.precision = KadUtils.DOM.resetInput("idVin_pormulaPrecision", pormulaOptions.regOptionsOrig.precision);
+	KadUtils.DOM.resetInput("idVin_pormulaPointEntryA", pormulaOptions.valuesOrig[1] * 2);
+	KadUtils.DOM.resetInput("idVin_pormulaPointEntryB", pormulaOptions.valuesOrig[1] * 5);
+	KadUtils.DOM.resetInput("idVin_pormulaPointEntryC", pormulaOptions.valuesOrig[1] * 10);
 
 	pormulaOptions.data.length = pormulaOptions.valuesOrig.length;
-	const inputParent = dbCL("clDiv_pormulaInput", null);
+	const inputParent = KadUtils.dbCL("clDiv_pormulaInput", null);
 	for (let i = 0; i < inputParent.length; i++) {
-		utilsResetInput(`idVin_Pormula_x${i}`, i < pormulaOptions.data.length ? i + 1 : "", {
+		KadUtils.DOM.resetInput(`idVin_Pormula_x${i}`, i < pormulaOptions.data.length ? i + 1 : "", {
 			value: i < pormulaOptions.data.length ? i + 1 : "",
 		});
-		utilsResetInput(`idVin_Pormula_y${i}`, i < pormulaOptions.data.length ? pormulaOptions.valuesOrig[i] : "", {
+		KadUtils.DOM.resetInput(`idVin_Pormula_y${i}`, i < pormulaOptions.data.length ? pormulaOptions.valuesOrig[i] : "", {
 			value: i < pormulaOptions.data.length ? pormulaOptions.valuesOrig[i] : "",
 		});
 	}
@@ -171,28 +173,28 @@ function clear_cl_Pormula() {
 
 function pormulaAddInput(dir) {
 	pormulaOptions.data.length += dir;
-	pormulaOptions.data.length = utilsValueConstrain(pormulaOptions.data.length, pormulaOptions.data.minLength, pormulaOptions.data.maxLength);
-	const parent = dbCL("clDiv_pormulaInput", null);
+	pormulaOptions.data.length = KadUtils.Value.constrain(pormulaOptions.data.length, pormulaOptions.data.minLength, pormulaOptions.data.maxLength);
+	const parent = KadUtils.dbCL("clDiv_pormulaInput", null);
 	parent.forEach((p, i) => {
 		p.style.display = i < pormulaOptions.data.length ? "block" : "none";
 		if (dir == 1 && i == pormulaOptions.data.length - 1) {
-			dbID(`idVin_Pormula_x${i}`).value = utilsNumberFromInput(`idVin_Pormula_x${i - 1}`) + 1;
-			dbID(`idVin_Pormula_y${i}`).value = utilsNumberFromInput(`idVin_Pormula_y${i - 1}`) + 1;
+			KadUtils.dbID(`idVin_Pormula_x${i}`).value = KadUtils.DOM.numberFromInput(`idVin_Pormula_x${i - 1}`) + 1;
+			KadUtils.dbID(`idVin_Pormula_y${i}`).value = KadUtils.DOM.numberFromInput(`idVin_Pormula_y${i - 1}`) + 1;
 		}
 	});
 	pormulaCalculate();
 }
 
 function pormulaGetType(id = null, type) {
-	let cl = dbCL("clBtn_pormulaTypeSelect", null);
+	let cl = KadUtils.dbCL("clBtn_pormulaTypeSelect", null);
 	for (let i = 0; i < cl.length; i++) {
-		utilsBtnColor(cl[i]);
+		KadUtils.DOM.btnColor(cl[i]);
 	}
 	if (id != null) {
-		utilsBtnColor(id, "positive");
+		KadUtils.DOM.btnColor(id, "positive");
 		pormulaOptions.selType = type;
 	} else {
-		utilsBtnColor(cl[0], "positive");
+		KadUtils.DOM.btnColor(cl[0], "positive");
 		pormulaOptions.selType = Object.keys(pormulaOptions.types)[0];
 	}
 	pormulaCalculate();
@@ -200,14 +202,14 @@ function pormulaGetType(id = null, type) {
 
 function pormulaReadInputs() {
 	//no logic, only gathering informations
-	pormulaOptions.regOptions.order = utilsNumberFromInput("idVin_pormulaOrder");
-	pormulaOptions.regOptions.precision = utilsNumberFromInput("idVin_pormulaPrecision");
+	pormulaOptions.regOptions.order = KadUtils.DOM.numberFromInput("idVin_pormulaOrder");
+	pormulaOptions.regOptions.precision = KadUtils.DOM.numberFromInput("idVin_pormulaPrecision");
 	pormulaOptions.data.userPoints = [];
 	pormulaOptions.data.uniquePoints = [];
 	pormulaOptions.data.uniqueX = [];
 	for (let i = 0; i < pormulaOptions.data.length; i++) {
-		const x = utilsNumberFromInput(`idVin_Pormula_x${i}`, i, true);
-		const y = utilsNumberFromInput(`idVin_Pormula_y${i}`, pormulaOptions.valuesOrig[i], true);
+		const x = KadUtils.DOM.numberFromInput(`idVin_Pormula_x${i}`, i, true);
+		const y = KadUtils.DOM.numberFromInput(`idVin_Pormula_y${i}`, pormulaOptions.valuesOrig[i], true);
 		if (x != null && y != null) {
 			pormulaOptions.data.userPoints.push([x, y]);
 			if (!pormulaOptions.data.uniqueX.includes(x)) {
@@ -235,13 +237,13 @@ function pormulaRegressioin() {
 	regType.calc();
 	pormulaPoint();
 	const string = regType.result(pormulaOptions.reg.equation);
-	dbID("idP_pormulaResult").innerHTML = string;
-	dbID("idLbl_pormulaAccuracy").textContent = `${(pormulaOptions.reg.r2 * 100).toFixed(2)}%`;
+	KadUtils.dbID("idP_pormulaResult").innerHTML = string;
+	KadUtils.dbID("idLbl_pormulaAccuracy").textContent = `${(pormulaOptions.reg.r2 * 100).toFixed(2)}%`;
 }
 
 function pormulaError() {
-	dbID("idP_pormulaResult").innerHTML = "---";
-	dbID("idLbl_pormulaAccuracy").textContent = "0%";
+	KadUtils.dbID("idP_pormulaResult").innerHTML = "---";
+	KadUtils.dbID("idLbl_pormulaAccuracy").textContent = "0%";
 }
 
 function pormulaBestFit() {
@@ -288,26 +290,32 @@ function pormulaPolyFit() {
 		prevR = newR;
 	}
 
-	utilsResetInput("idVin_pormulaOrder", pormulaOptions.regOptions.order);
+	KadUtils.DOM.resetInput("idVin_pormulaOrder", pormulaOptions.regOptions.order);
 	pormulaGetType(`idBtn_child_pormulaTypeSelect_${polyI}`, polyName);
 }
 
 function pormulaPoint() {
-	let p = utilsNumberFromInput("idVin_pormulaPointEntry");
-	let r = pormulaOptions.reg.predict(p);
-	dbID("idLbl_pormulaPointResult").textContent = r[1];
+	let p1 = KadUtils.DOM.numberFromInput("idVin_pormulaPointEntryA");
+	let p2 = KadUtils.DOM.numberFromInput("idVin_pormulaPointEntryB");
+	let p3 = KadUtils.DOM.numberFromInput("idVin_pormulaPointEntryC");
+	let r1 = pormulaOptions.reg.predict(p1);
+	let r2 = pormulaOptions.reg.predict(p2);
+	let r3 = pormulaOptions.reg.predict(p3);
+	KadUtils.dbID("idLbl_pormulaPointResultA").textContent = KadUtils.Value.number(r1[1], { notation: "scientific", decimals:2 });
+	KadUtils.dbID("idLbl_pormulaPointResultB").textContent = KadUtils.Value.number(r2[1], { notation: "scientific", decimals:2 });
+	KadUtils.dbID("idLbl_pormulaPointResultC").textContent = KadUtils.Value.number(r3[1], { notation: "scientific", decimals:2 });
 }
 
 function pormulaInfo() {
 	if (pormulaOptions.messages.length == 0) {
-		dbIDStyle("idDiv_pormulaInfo").display = "none";
+		KadUtils.dbIDStyle("idDiv_pormulaInfo").display = "none";
 	} else {
 		let text = "";
 		pormulaOptions.messages.forEach((t, i) => {
 			if (i > 0) text += "<br>";
 			text += t;
 		});
-		dbID("idLbl_pormulaInfo").innerHTML = text;
-		dbIDStyle("idDiv_pormulaInfo").display = "initial";
+		KadUtils.dbID("idLbl_pormulaInfo").innerHTML = text;
+		KadUtils.dbIDStyle("idDiv_pormulaInfo").display = "initial";
 	}
 }

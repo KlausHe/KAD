@@ -23,12 +23,12 @@ function clear_cl_Ibhaluni() {
 function ibhaluniStart() {
 	if (ibhaluniOptions.started) {
 		ibhaluniOptions.started = false;
-		dbID("idBtn_ibhaluniStart").textContent = "Start";
+		KadUtils.dbID("idBtn_ibhaluniStart").textContent = "Start";
 		caIB.noLoop();
 	} else {
 		ibhaluniOptions.started = true;
 		ibhaluniReset();
-		dbID("idBtn_ibhaluniStart").textContent = "Stop";
+		KadUtils.dbID("idBtn_ibhaluniStart").textContent = "Stop";
 		caIB.loop();
 	}
 }
@@ -100,8 +100,8 @@ class IbhaluniObj {
 		this.poppingScl = 1;
 		this.poppingSclLimits = [10, 25];
 		this.falling = false;
-		this.speedX = utilsValueConstrain(Math.random(), 0.2, 1);
-		this.speedY = utilsValueConstrain(Math.random(), 0.2, 1) * 1.5;
+		this.speedX = KadUtils.Value.constrain(Math.random(), 0.2, 1);
+		this.speedY = KadUtils.Value.constrain(Math.random(), 0.2, 1) * 1.5;
 		this.noiseSeed = Math.random() * 1000;
 		this.mirrored = Math.random() > 0.5;
 		this.angle = 0;
@@ -114,7 +114,7 @@ class IbhaluniObj {
 		}
 		caIB.push();
 		caIB.translate(this.x, this.y);
-		this.angle = utilsValueMapping(this.speedX * caIB.noise(this.noiseSeed + this.y / 300) - this.speedX / 2, -this.speedX / 2, this.speedX / 2, -caIB.PI / 4, caIB.PI / 4);
+		this.angle = KadUtils.Value.mapping(this.speedX * caIB.noise(this.noiseSeed + this.y / 300) - this.speedX / 2, -this.speedX / 2, this.speedX / 2, -caIB.PI / 4, caIB.PI / 4);
 		caIB.rotate(this.angle);
 		// String hanging off the bottom
 		caIB.stroke(0);
@@ -133,8 +133,8 @@ class IbhaluniObj {
 			// caIB.rotate(this.angle);
 			if (this.popping && this.poppingCounter >= this.poppingSclLimits[0]) {
 				// Main balloon
-				const factorW = utilsValueMapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.xSize * this.poppingScl * 0.5);
-				const factorH = utilsValueMapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.ySize * this.poppingScl * 0.5);
+				const factorW = KadUtils.Value.mapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.xSize * this.poppingScl * 0.5);
+				const factorH = KadUtils.Value.mapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.ySize * this.poppingScl * 0.5);
 				this.drawEllipse(factorW, factorH);
 			} else {
 				// Main balloon
@@ -170,7 +170,7 @@ class IbhaluniObj {
 
 	update() {
 		if (this.poppingCounter > this.poppingSclLimits[1] && this.falling == false) {
-			if (dbID("idCb_ibhaluniSoundOutput").checked) {
+			if (KadUtils.dbID("idCb_ibhaluniSoundOutput").checked) {
 				this.stop();
 				this.play();
 			}

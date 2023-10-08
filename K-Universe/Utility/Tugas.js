@@ -3,7 +3,7 @@ let tugasOptions = {}
 function clear_cl_Tugas() {
   tugasOptions = {};
   createTugas();
-  utilsResetInput("idArea_tugasEntry", "Paste to Tugas")
+  KadUtils.DOM.resetInput("idArea_tugasEntry", "Paste to Tugas")
 };
 
 function clearRowTugas(name) {
@@ -13,22 +13,22 @@ function clearRowTugas(name) {
 
 function editRowTugas(name) {
   delete tugasOptions[name];
-  dbID("idArea_tugasEntry").value = name;
+  KadUtils.dbID("idArea_tugasEntry").value = name;
 };
 
 function newTugas() {
-  const value = dbID("idArea_tugasEntry").value.toString().trim();
+  const value = KadUtils.dbID("idArea_tugasEntry").value.toString().trim();
   if (value == "") return
 
   tugasOptions[value] = false;
-  dbID("idArea_tugasEntry").value = "";
+  KadUtils.dbID("idArea_tugasEntry").value = "";
   createTugas();
   saveDiscipuli("Tugas");
 }
 
 function createTugas() {
   //clear list
-  clearTable(idTabBody_tugas);
+  KadUtils.Table.clear(idTabBody_tugas);
   let tempList = [];
   for (let i = 0; i < Object.keys(tugasOptions).length; i++) {
     tempList.push({
@@ -36,7 +36,7 @@ function createTugas() {
       state: Object.values(tugasOptions)[i]
     });
   };
-  const sortedList = sortArrayByKey(tempList, "name", false, true);
+  const sortedList = KadUtils.Array.sortArrayByKey(tempList, "name", false, true);
 
   //create list
   for (let i = 0; i < sortedList.length; i++) {
@@ -47,7 +47,7 @@ function createTugas() {
     const entryState = sortedList[i].state;
 
     //clearButton
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["tugasTrash", i],
       type: "Btn",
       subGroup: "subgrid",
@@ -65,7 +65,7 @@ function createTugas() {
     });
 
     // EDIT
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["tugasEdit", i],
       type: "Btn",
       subGroup: "subgrid",
@@ -79,12 +79,12 @@ function createTugas() {
       },
       onclick: () => {
         editRowTugas(entryValue);
-        dbID("idArea_tugasEntry").focus();
+        KadUtils.dbID("idArea_tugasEntry").focus();
       }
     });
 
     // Check
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["tugasCheck", i],
       type: "Vin",
       subGroup: "checkbox",
@@ -108,7 +108,7 @@ function createTugas() {
     });
 
     // TEXT
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["tugas", i],
       type: "Lbl",
       text: entryState ? `<del>${entryValue}</del>` : entryValue,

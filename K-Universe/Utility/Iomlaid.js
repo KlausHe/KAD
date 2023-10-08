@@ -18,25 +18,25 @@ function clear_cl_Iomlaid() {
 		latest: {},
 		historic: {},
 	};
-	iomlaidOptions.options = deepClone(iomlaidOptions.optionsOrig);
-	iomlaidOptions.options.date = utilsDate(dateStart, { format: iomlaidOptions.dateFormat });
+	iomlaidOptions.options = KadUtils.deepClone(iomlaidOptions.optionsOrig);
+	iomlaidOptions.options.date = KadUtils.Date.getDate(dateStart, { format: iomlaidOptions.dateFormat });
 
 	for (let [key, value] of currencies) {
 		let option1 = document.createElement("option");
 		option1.textContent = `${key} (${value})`;
 		option1.setAttribute("data-base", key);
-		dbID("idSel_IomlaidCur").appendChild(option1);
+		KadUtils.dbID("idSel_IomlaidCur").appendChild(option1);
 	}
-	dbID("idSel_IomlaidCur").options[8].selected = true;
+	KadUtils.dbID("idSel_IomlaidCur").options[8].selected = true;
 
-	utilsResetInput("idVin_IomlaidCur", iomlaidOptions.options.value);
-	dbID("idBtn_iomlaidDate").textContent = utilsDate(iomlaidOptions.options.date);
+	KadUtils.DOM.resetInput("idVin_IomlaidCur", iomlaidOptions.options.value);
+	KadUtils.dbID("idBtn_iomlaidDate").textContent = KadUtils.Date.getDate(iomlaidOptions.options.date);
 	iomlaidCalculate();
 }
 
 function createIomlaidPikaday() {
 	iomlaidPicker = new Pikaday({
-		field: dbID("idBtn_iomlaidDate"),
+		field: KadUtils.dbID("idBtn_iomlaidDate"),
 		showTime: false,
 		i18n: i18nDE,
 		minDate: new Date(2000, 1, 1),
@@ -62,13 +62,13 @@ function iomlaidSelSet(sel) {
 }
 
 function iomlaidSelDate(date) {
-	iomlaidOptions.options.date = utilsDate(date, { format: iomlaidOptions.dateFormat });
-	dbID("idBtn_iomlaidDate").textContent = utilsDate(date);
+	iomlaidOptions.options.date = KadUtils.Date.getDate(date, { format: iomlaidOptions.dateFormat });
+	KadUtils.dbID("idBtn_iomlaidDate").textContent = KadUtils.Date.getDate(date);
 	iomlaidCalculate();
 }
 
 async function iomlaidCalculate() {
-	let date = utilsDate(null, { format: iomlaidOptions.dateFormat });
+	let date = KadUtils.Date.getDate(null, { format: iomlaidOptions.dateFormat });
 	try {
 		const fetches = [fetch(`${iomlaidOptions.url}/${date}?base=${iomlaidOptions.options.base}`), fetch(`${iomlaidOptions.url}/${iomlaidOptions.options.date}?base=${iomlaidOptions.options.base}`)];
 
@@ -84,15 +84,15 @@ async function iomlaidCalculate() {
 }
 
 function iomlaidTable() {
-	dbID("idTabHeader_iomlaidRequestedAmount").textContent = `Betrag: ${utilsNumber(iomlaidOptions.options.value, { currency: iomlaidOptions.options.base })}`;
-	clearTable("idTabBody_Iomlaid");
+	KadUtils.dbID("idTabHeader_iomlaidRequestedAmount").textContent = `Betrag: ${KadUtils.Value.number(iomlaidOptions.options.value, { currency: iomlaidOptions.options.base })}`;
+	KadUtils.Table.clear("idTabBody_Iomlaid");
 	let i = 0;
 
 	for (let [key, value] of currencies) {
 		if (key != iomlaidOptions.options.base) {
-			let row = insertTableRow("idTabBody_Iomlaid");
+			let row = KadUtils.Table.insertRow("idTabBody_Iomlaid");
 			// Währung
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["iomlaidCurrency", i],
 				type: "Lbl",
 				text: `${key} (${value})`,
@@ -101,20 +101,20 @@ function iomlaidTable() {
 			});
 
 			//latest Kurs
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["iomlaidLatestChange", i],
 				type: "Lbl",
-				text: iomlaidOptions.data.latest == null ? "n.d." : utilsNumber(iomlaidOptions.data.latest.rates[key], { decimals: 3 }),
+				text: iomlaidOptions.data.latest == null ? "n.d." : KadUtils.Value.number(iomlaidOptions.data.latest.rates[key], { decimals: 3 }),
 				cellStyle: {
 					textAlign: "right",
 				},
 				copy: true,
 			});
 			//latest Betrag
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["iomlaidLatestRate", i],
 				type: "Lbl",
-				text: iomlaidOptions.data.latest == null ? "n.d." : utilsNumber(iomlaidOptions.data.latest.rates[key] * iomlaidOptions.options.value, { currency: key }),
+				text: iomlaidOptions.data.latest == null ? "n.d." : KadUtils.Value.number(iomlaidOptions.data.latest.rates[key] * iomlaidOptions.options.value, { currency: key }),
 				createCellClass: ["clTab_borderThinRight"],
 				cellStyle: {
 					textAlign: "right",
@@ -123,10 +123,10 @@ function iomlaidTable() {
 			});
 
 			//historic Kurs
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["iomlaidHistoricChange", i],
 				type: "Lbl",
-				text: iomlaidOptions.data.historic == null ? "n.d." : utilsNumber(iomlaidOptions.data.historic.rates[key], { decimals: 3 }),
+				text: iomlaidOptions.data.historic == null ? "n.d." : KadUtils.Value.number(iomlaidOptions.data.historic.rates[key], { decimals: 3 }),
 				cellStyle: {
 					textAlign: "right",
 				},
@@ -134,10 +134,10 @@ function iomlaidTable() {
 			});
 
 			//historic Betrag
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["iomlaidHistoricRate", i],
 				type: "Lbl",
-				text: iomlaidOptions.data.historic == null ? "n.d." : utilsNumber(iomlaidOptions.data.historic.rates[key] * iomlaidOptions.options.value, { currency: key }),
+				text: iomlaidOptions.data.historic == null ? "n.d." : KadUtils.Value.number(iomlaidOptions.data.historic.rates[key] * iomlaidOptions.options.value, { currency: key }),
 				cellStyle: {
 					textAlign: "right",
 				},

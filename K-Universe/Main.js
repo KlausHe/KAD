@@ -10,14 +10,14 @@ window.onload = mainSetup;
 
 function initCssMediaSizes() {
 	for (let key of Object.keys(globalValues.mediaSizes)) {
-		globalValues.mediaSizes[key] = getCssRoot(key, true, true);
+		globalValues.mediaSizes[key] = KadUtils.CSS.getRoot(key, true, true);
 	}
 }
 function mainSetup() {
-  if (globalValues.hostDebug) {
-    dbCLStyle("cl_Loading").display = "none";
+	if (globalValues.hostDebug) {
+		KadUtils.dbCLStyle("cl_Loading").display = "none";
 	}
-  contentLayout.createContentGrid();
+	contentLayout.createContentGrid();
 	htmlSetVinChange();
 	htmlSetAltTags();
 	initCssMediaSizes();
@@ -95,7 +95,7 @@ function htmlSetAltTags() {
 	envoked("oSub");
 
 	function envoked(name) {
-		const obj = dbCL(`img_${name}`, null);
+		const obj = KadUtils.dbCL(`img_${name}`, null);
 		for (let imgObj of obj) {
 			imgObj.alt = `${name}.svg`;
 		}
@@ -109,10 +109,10 @@ function htmlSetVinChange() {
 	envoked("vinChangeAdd", 1);
 
 	function envoked(name, dir) {
-		const obj = dbCL(`${name}`, null);
+		const obj = KadUtils.dbCL(`${name}`, null);
 		for (let btn of obj) {
 			btn.onclick = () => {
-				return utilsVinChange(btn, dir);
+				return KadUtils.DOM.vinChange(btn, dir);
 			};
 			btn.children[0].classList.add(`img_${dirName[dir + 1]}`);
 		}
@@ -135,20 +135,20 @@ function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
 
 function clearGlobalValue() {
 	globalValues.globalInput.value = "";
-	dbID("idVin_globalValue").value = "";
-	dbID("idVin_globalValue").addEventListener("keyup", (event) => {
+	KadUtils.dbID("idVin_globalValue").value = "";
+	KadUtils.dbID("idVin_globalValue").addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
-			globalValueChanged(dbID("idVin_globalValue"), true);
+			globalValueChanged(KadUtils.dbID("idVin_globalValue"), true);
 		}
 	});
 }
 
 function globalValueChanged(obj, enter = null) {
-	dbID("idVin_globalValue").classList.remove("cl_highlighted");
+	KadUtils.dbID("idVin_globalValue").classList.remove("cl_highlighted");
 	const arr = contentLayout.nameList;
-  globalValues.globalInput.value = obj.value;
+	globalValues.globalInput.value = obj.value;
 	if (arr.includes(obj.value)) {
-		dbID("idVin_globalValue").classList.add("cl_highlighted");
+		KadUtils.dbID("idVin_globalValue").classList.add("cl_highlighted");
 		if (enter === true) {
 			let key = Object.entries(contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
 			layoutToggelFullscreen(key);
@@ -157,28 +157,28 @@ function globalValueChanged(obj, enter = null) {
 }
 
 function globalValuePopulateDatalist() {
-	if (dbID("idDlist_globalValue").childNodes.length > 1) return;
+	if (KadUtils.dbID("idDlist_globalValue").childNodes.length > 1) return;
 	for (const name of contentLayout.nameList) {
 		const opt = document.createElement("OPTION");
 		opt.textContent = name;
-		dbID("idDlist_globalValue").appendChild(opt);
+		KadUtils.dbID("idDlist_globalValue").appendChild(opt);
 	}
 }
 
 function layoutCreateNavbarPikaday() {
 	new Pikaday({
-		field: dbID("idBtn_navBar_KW"),
+		field: KadUtils.dbID("idBtn_navBar_KW"),
 		numberOfMonths: 2,
 		mainCalendar: "left",
 		showTime: false,
 		i18n: i18nDE,
 		onSelect: function (date) {
-			let weekText = `KW ${utilsGetWeekNumber()}`;
+			let weekText = `KW ${KadUtils.Date.getWeekNumber()}`;
 			let weekDiff = Math.ceil((date.getTime() - new Date().getTime()) / 86400000 / 7);
 			if (weekDiff !== 0) {
 				weekText += weekDiff > 0 ? ` (+${weekDiff})` : ` (${weekDiff})`;
 			}
-			dbID("idBtn_navBar_KW").textContent = weekText;
+			KadUtils.dbID("idBtn_navBar_KW").textContent = weekText;
 		},
 	});
 }

@@ -50,14 +50,14 @@ const lottoOptions = {
 function clear_cl_Lotto() {
 	// for (let i = 0; i < Object.keys(lottoOptions.games).length; i++) {
 	for (let i = 0; i < 1; i++) {
-		dbID("idSel_lottoGame").options[i] = new Option(Object.keys(lottoOptions.games)[i]);
+		KadUtils.dbID("idSel_lottoGame").options[i] = new Option(Object.keys(lottoOptions.games)[i]);
 	}
-	utilsResetInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
+	KadUtils.DOM.resetInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
 	lottoOptions.selGame = Object.keys(lottoOptions.games)[0];
 	lottoOptions.randomiziation = 0;
 	clearTimeout(lottoOptions.randomTimeout);
 	createLotto(true);
-	dbID("idLbl_lottoOverview").textContent = `...`;
+	KadUtils.dbID("idLbl_lottoOverview").textContent = `...`;
 	lottoUpdateSavegames();
 	lottoGetGames();
 }
@@ -66,9 +66,9 @@ function clear_cl_Lotto() {
 
 function lottoUpdateSavegames() {
 	if (lottoOptions.games[lottoOptions.selGame].savedSet.date == null) {
-		dbID("idLbl_lottoShowSaved").textContent = "Nichts gespeichert";
+		KadUtils.dbID("idLbl_lottoShowSaved").textContent = "Nichts gespeichert";
 	} else {
-		dbID("idLbl_lottoShowSaved").textContent = utilsDate(lottoOptions.games[lottoOptions.selGame].savedSet.date);
+		KadUtils.dbID("idLbl_lottoShowSaved").textContent = KadUtils.Date.getDate(lottoOptions.games[lottoOptions.selGame].savedSet.date);
 	}
 }
 
@@ -79,13 +79,13 @@ function lottoRandom() {
 		createLotto(true);
 		let tipArr = [...Array(lottoOptions.games[lottoOptions.selGame].tipLength).keys()];
 		for (let i = 0; i < lottoOptions.games[lottoOptions.selGame].tipMax; i++) {
-			const randIndex = randomIndex(tipArr);
+			const randIndex = KadUtils.Random.randomIndex(tipArr);
 			const id = tipArr.splice(randIndex, 1)[0];
 			lottoOptions.games[lottoOptions.selGame].savedSet.tips.push(id);
 		}
 		let starArr = [...Array(lottoOptions.games[lottoOptions.selGame].starLength).keys()];
 		for (let i = 0; i < lottoOptions.games[lottoOptions.selGame].starMax; i++) {
-			const randIndex = randomIndex(starArr);
+			const randIndex = KadUtils.Random.randomIndex(starArr);
 			const id = starArr.splice(randIndex, 1)[0];
 			lottoOptions.games[lottoOptions.selGame].savedSet.star.push(id);
 		}
@@ -153,7 +153,7 @@ async function lottoGetGames() {
 		lottoOptions.getGameTimer = null;
 	}
 	lottoOptions.getGameTimer = setTimeout(() => {
-		lottoOptions.numberOfLatestGames = utilsNumberFromInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
+		lottoOptions.numberOfLatestGames = KadUtils.DOM.numberFromInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
 		globalP5.loadJSON(lottoOptions.url, lottoReturn, "json");
 		lottoOptions.getGameTimer = null;
 	}, 800);
@@ -161,12 +161,12 @@ async function lottoGetGames() {
 
 function lottoReturn(d) {
 	lottoOptions.games[lottoOptions.selGame].loadedSets = {};
-	clearTable("idTabHeader_Lotto");
-	clearTable("idTabBody_Lotto");
+	KadUtils.Table.clear("idTabHeader_Lotto");
+	KadUtils.Table.clear("idTabBody_Lotto");
 
 	if (d.length == 0) {
-		const rowTh = insertTableRow("idTabHeader_Lotto");
-		tableAddCellHeader(rowTh, {
+		const rowTh = KadUtils.Table.insertRow("idTabHeader_Lotto");
+		KadUtils.Table.addHeaderCell(rowTh, {
 			names: ["lottoTableHeader", "date"],
 			type: "Lbl",
 			text: `Keine Daten für ${lottoOptions.selGame} gefunden.`,
@@ -192,8 +192,8 @@ function lottoReturn(d) {
 	}
 
 	//header
-	const rowTh = insertTableRow("idTabHeader_Lotto");
-	tableAddCellHeader(rowTh, {
+	const rowTh = KadUtils.Table.insertRow("idTabHeader_Lotto");
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["lottoTableHeader", "date"],
 		type: "Lbl",
 		text: "Date",
@@ -201,29 +201,29 @@ function lottoReturn(d) {
 			textAlign: "left",
 		},
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["lottoTableHeader", "numbers"],
 		type: "Lbl",
 		text: "Numbers",
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["lottoTableHeader", "star"],
 		type: "Lbl",
 		text: "Star",
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["lottoTableHeader", "winner"],
 		type: "Lbl",
 		text: "Winner",
 	});
 	// body
 	for (const [i, entry] of Object.entries(lottoOptions.games[lottoOptions.selGame].loadedSets)) {
-		let row = insertTableRow("idTabBody_Lotto");
+		let row = KadUtils.Table.insertRow("idTabBody_Lotto");
 		//--  date
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["lottoTable", "date", i],
 			type: "Lbl",
-			text: utilsDate(entry.drawDate),
+			text: KadUtils.Date.getDate(entry.drawDate),
 			cellStyle: {
 				textAlign: "right",
 			},
@@ -243,7 +243,7 @@ function lottoReturn(d) {
 			},
 		});
 		//--  numbers
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["lottoTable", "numbers", i],
 			type: "Lbl",
 			text: `${entry.mainTable.join(", ")}`,
@@ -253,7 +253,7 @@ function lottoReturn(d) {
 			},
 		});
 		//--  star
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["lottoTable", "star", i],
 			type: "Lbl",
 			text: `${entry.starTable.join(", ")}`,
@@ -263,7 +263,7 @@ function lottoReturn(d) {
 			},
 		});
 		//--  winners
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["lottoTable", "winners", i],
 			type: "Lbl",
 			text: entry.winner,
@@ -308,12 +308,12 @@ function mousePushedLotto() {
 }
 
 function focusLotto() {
-	dbID("idCanv_lotto").focus();
+	KadUtils.dbID("idCanv_lotto").focus();
 	caLO.redraw();
 }
 
 function unfocusLotto() {
-	dbID("idCanv_lotto").blur();
+	KadUtils.dbID("idCanv_lotto").blur();
 }
 
 function lottoCheckCorrect() {
@@ -326,7 +326,7 @@ function lottoCheckCorrect() {
 			output[cell.type]++;
 		}
 	}
-	dbID("idLbl_lottoOverview").innerHTML = `Tips: ${output.tips} | Star: ${output.star}`;
+	KadUtils.dbID("idLbl_lottoOverview").innerHTML = `Tips: ${output.tips} | Star: ${output.star}`;
 }
 
 // CELL CLASS----------------------------------------------------------------------------------------------------------------------
@@ -368,7 +368,7 @@ class LottoCell {
 			color.setAlpha(0.5);
 		}
 		caLO.fill(color);
-		caLO.stroke(utilsColor.stateAsArray(col, "HSL"));
+		caLO.stroke(KadUtils.Color.stateAsArray(col, "HSL"));
 		if (this.type === "tips") {
 			caLO.circle(0, 0, this.w * 0.8);
 			caLO.noFill();
@@ -389,7 +389,7 @@ class LottoCell {
 		}
 		caLO.textAlign(caLO.CENTER, caLO.CENTER);
 		caLO.noStroke();
-		caLO.stroke(utilsColor.stateAsArray(col, "HSL"));
+		caLO.stroke(KadUtils.Color.stateAsArray(col, "HSL"));
 		caLO.textSize(globalValues.mediaSizes.fontSize);
 		caLO.text(this.num, 0, 2);
 		caLO.pop();

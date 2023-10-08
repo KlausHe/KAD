@@ -9,8 +9,8 @@ const speechTranslateOptions = {
 function clear_cl_SpeechTranslate() {
 	speechTranslateOptions.output = false;
 	speechTranslateOptions.synthObj.cancel();
-	utilsResetInput("idArea_speechFromText", speechTranslateOptions.textDE);
-	utilsResetInput("idArea_speechToText", speechTranslateOptions.textEN);
+	KadUtils.DOM.resetInput("idArea_speechFromText", speechTranslateOptions.textDE);
+	KadUtils.DOM.resetInput("idArea_speechToText", speechTranslateOptions.textEN);
 	let voicesUnsorted = speechTranslateOptions.synthObj.getVoices();
 	if (voicesUnsorted.length == 0 && speechTranslateOptions.resetCouner < 20) {
 		speechTranslateOptions.resetCouner++;
@@ -20,7 +20,7 @@ function clear_cl_SpeechTranslate() {
 		return;
 	} else {
 		speechTranslatePopulateLanguage();
-		voices = sortArrayByKey(voicesUnsorted, "lang", false, true);
+		voices = KadUtils.Array.sortArrayByKey(voicesUnsorted, "lang", false, true);
 		speechTranslatePopulateSpeech();
 	}
 }
@@ -40,19 +40,19 @@ function speechTranslatePopulateLanguage() {
 		if (key == "en") {
 			option2.selected = true;
 		}
-		dbID("idSel_translateSelectorFrom").appendChild(option1);
-		dbID("idSel_translateSelectorTo").appendChild(option2);
+		KadUtils.dbID("idSel_translateSelectorFrom").appendChild(option1);
+		KadUtils.dbID("idSel_translateSelectorTo").appendChild(option2);
 	});
 }
 
 function speechTranslatePopulateSpeech() {
-	dbID("idSel_speechSelectorFrom").innerHTML = "";
-	dbID("idSel_speechSelectorTo").innerHTML = "";
+	KadUtils.dbID("idSel_speechSelectorFrom").innerHTML = "";
+	KadUtils.dbID("idSel_speechSelectorTo").innerHTML = "";
 	let lang = navigator.language.split("-")[0] || "de";
-	let fromIndex = dbID("idSel_translateSelectorFrom").selectedIndex;
-	let fromCode = dbID("idSel_translateSelectorFrom").options[fromIndex].dataset.code;
-	let toIndex = dbID("idSel_translateSelectorTo").selectedIndex;
-	let toCode = dbID("idSel_translateSelectorTo").options[toIndex].dataset.code;
+	let fromIndex = KadUtils.dbID("idSel_translateSelectorFrom").selectedIndex;
+	let fromCode = KadUtils.dbID("idSel_translateSelectorFrom").options[fromIndex].dataset.code;
+	let toIndex = KadUtils.dbID("idSel_translateSelectorTo").selectedIndex;
+	let toCode = KadUtils.dbID("idSel_translateSelectorTo").options[toIndex].dataset.code;
 	for (i = 0; i < voices.length; i++) {
 		let langSplit;
 		if (voices[i].lang.split("-")[0] == "zh") {
@@ -81,12 +81,12 @@ function createSpeechOption(landCode, voice, id) {
 	option.setAttribute("data-name", voice.name);
 	const dataLang = voice.lang == "nb-NO" ? "no-NO" : voice.lang; //special treatment with norway!
 	option.setAttribute("data-lang", dataLang);
-	dbID(id).appendChild(option);
+	KadUtils.dbID(id).appendChild(option);
 }
 
 function translateSwitch() {
-	const objFrom = dbID("idSel_translateSelectorFrom");
-	const objTo = dbID("idSel_translateSelectorTo");
+	const objFrom = KadUtils.dbID("idSel_translateSelectorFrom");
+	const objTo = KadUtils.dbID("idSel_translateSelectorTo");
 	const objFromIndex = objFrom.selectedIndex;
 	objFrom.options[objTo.selectedIndex].selected = true;
 	objTo.options[objFromIndex].selected = true;
@@ -94,8 +94,8 @@ function translateSwitch() {
 }
 
 function speechLanguageChange() {
-	let objFrom = dbID("idSel_translateSelectorFrom");
-	let objTo = dbID("idSel_translateSelectorTo");
+	let objFrom = KadUtils.dbID("idSel_translateSelectorFrom");
+	let objTo = KadUtils.dbID("idSel_translateSelectorTo");
 	let language = {
 		from: objFrom.options[objFrom.selectedIndex].dataset.code,
 		fromSplit: objFrom.options[objFrom.selectedIndex].dataset.code.split("-")[0],
@@ -107,17 +107,17 @@ function speechLanguageChange() {
 
 function speechSpeak(out) {
 	speechTranslateOptions.output = out == 1 ? true : false;
-	dbID("idArea_speechToText").value = "...";
-	speechTranslateRequest(dbID("idArea_speechFromText").value.trim());
+	KadUtils.dbID("idArea_speechToText").value = "...";
+	speechTranslateRequest(KadUtils.dbID("idArea_speechFromText").value.trim());
 }
 
 function speechTranslateRequest(text) {
 	if (text === undefined || text == "") {
-		dbID("idArea_speechToText").value = "";
+		KadUtils.dbID("idArea_speechToText").value = "";
 		return;
 	}
 	let languages = speechLanguageChange();
-	utilsSocketPost("SpeechTranslate", {
+	KadUtils.socketPost("SpeechTranslate", {
 		text: text,
 		langTo: languages.toSplit,
 		langFrom: languages.fromSplit,
@@ -129,15 +129,15 @@ function speechTranslateReturn(data) {
 		alert("Sorry, hat nicht geklappt.\nVersuchs nochmal!");
 	}
 	const pronunciation = data.pronunciation == null ? "" : `\n(${data.pronunciation})`;
-	dbID("idArea_speechToText").value = `${data.text}${pronunciation}`;
+	KadUtils.dbID("idArea_speechToText").value = `${data.text}${pronunciation}`;
 	if (speechTranslateOptions.output) {
 		speechSpeakOnly(idArea_speechToText, idSel_speechSelectorTo);
 	}
 }
 
 function speechSpeakOnly(IDSelectText, IDSelectLang) {
-	let textElement = dbID(IDSelectText.id);
-	let langElement = dbID(IDSelectLang.id);
+	let textElement = KadUtils.dbID(IDSelectText.id);
+	let langElement = KadUtils.dbID(IDSelectLang.id);
 	let text = textElement.textContent || textElement.value.split("\n(")[0] || textElement.placeholder;
 	let lang = langElement.dataset.lang || langElement.selectedOptions[0].dataset.lang;
 	speechSpeakOutput(text, lang);

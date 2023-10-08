@@ -411,7 +411,9 @@
 		". cl_PormulaInputs cl_PormulaTypeSelect cl_PormulaPrecision cl_PormulaPrecision ."
 		". cl_PormulaInputs cl_PormulaTypeSelect cl_PormulaAccuracy cl_PormulaAccuracy ."
 		". cl_PormulaInputs cl_PormulaTypeSelect cl_PormulaLblResult cl_PormulaLblResult ."
-		". cl_PormulaInfo cl_PormulaInfo cl_PormulaPointEntry cl_PormulaPointResult ."
+		". cl_PormulaInfo cl_PormulaInfo cl_PormulaPointEntryA cl_PormulaPointResultA ."
+		". . . cl_PormulaPointEntryB cl_PormulaPointResultB ."
+		". . . cl_PormulaPointEntryC cl_PormulaPointResultC ."
 		". cl_PormulaCanvas cl_PormulaCanvas cl_PormulaCanvas cl_PormulaCanvas .";
 	grid-template-columns: 1fr auto auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) 1fr auto auto;

@@ -23,8 +23,8 @@ function sweeperCellsChange(obj) {
 function clear_cl_Sweeper() {
 	//Clear on Start
 	sweeperOptions.cells = [];
-	sweeperOptions.gridSize = utilsResetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
-	sweeperOptions.sweepCells = utilsResetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
+	sweeperOptions.gridSize = KadUtils.DOM.resetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
+	sweeperOptions.sweepCells = KadUtils.DOM.resetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
 	sweeperStart();
 	caSW.noLoop();
 	unfocusSweeper();
@@ -46,8 +46,8 @@ function sweeperStart() {
 }
 
 function sweeperCreateSweeps() {
-	let arr = createIndexedArray(sweeperOptions.gridSize, sweeperOptions.gridSize);
-	subset = randomSubset(arr, sweeperOptions.sweepCells);
+	let arr = KadUtils.Array.createIndexedArray(sweeperOptions.gridSize, sweeperOptions.gridSize);
+	subset = KadUtils.Random.randomSubset(arr, sweeperOptions.sweepCells);
 	for (let opt of subset) {
 		sweeperOptions.cells[opt[0]][opt[1]].sweep = true;
 	}
@@ -102,12 +102,12 @@ function sweeperMousePushed() {
 }
 
 function focusSweeper() {
-	dbID("idCanv_sweeper").focus();
+	KadUtils.dbID("idCanv_sweeper").focus();
 	caSW.redraw();
 }
 
 function unfocusSweeper() {
-	dbID("idCanv_sweeper").blur();
+	KadUtils.dbID("idCanv_sweeper").blur();
 	caSW.noLoop();
 }
 

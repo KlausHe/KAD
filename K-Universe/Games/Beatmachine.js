@@ -32,14 +32,14 @@ function clear_cl_Beatmachine() {
 	beatmachineOptions.BPM = beatmachineOptions.BPMOrig;
 	beatmachineOptions.expanding = false;
 	setBPMtoInterval(beatmachineOptions.BPM);
-	utilsResetInput("idVin_beatmachine_BPM", beatmachineOptions.BPM);
+	KadUtils.DOM.resetInput("idVin_beatmachine_BPM", beatmachineOptions.BPM);
 	beatmachineStop(true);
 	beatmachineCreateTracks();
 }
 
 function beatmachineCreateTracks() {
-	const inputClass = dbCL("cl_BeatmachineTracks");
-	clearFirstChild(inputClass);
+	const inputClass = KadUtils.dbCL("cl_BeatmachineTracks");
+	KadUtils.DOM.clearFirstChild(inputClass);
 
 	for (const [index, obj] of beatmachineOptions.tracks.entries()) {
 		let baseParent = document.createElement("div");
@@ -87,7 +87,7 @@ function setBPMtoInterval(val) {
 }
 
 function beatmachineBPMChange(obj) {
-	let val = utilsNumberFromInput(obj);
+	let val = KadUtils.DOM.numberFromInput(obj);
 	val = val == "" ? obj.placeholder : Number(val);
 	setBPMtoInterval(val);
 	beatmachineOptions.stepIntervalChanged = true;
@@ -103,8 +103,8 @@ function beatmachineGetSounds() {
 			loadCounter++;
 			if (loadCounter == beatmachineOptions.tracks.length) {
 				console.log("all loaded");
-				dbIDStyle("idBtn_beatmachineLoad").display = "none";
-				dbIDStyle("idBtn_transportPlayPause").display = "initial";
+				KadUtils.dbIDStyle("idBtn_beatmachineLoad").display = "none";
+				KadUtils.dbIDStyle("idBtn_transportPlayPause").display = "initial";
 			}
 		}
 	}
@@ -158,13 +158,13 @@ function beatmachineTransport() {
 }
 
 function beatmachinePlay() {
-	dbID("idBtn_transportPlayPause").textContent = "Stop";
-	utilsBtnColor("idBtn_transportPlayPause", "positive");
+	KadUtils.dbID("idBtn_transportPlayPause").textContent = "Stop";
+	KadUtils.DOM.btnColor("idBtn_transportPlayPause", "positive");
 	beatmachineOptions.loop = setInterval(beatmachineLoop, beatmachineOptions.stepInterval);
 }
 function beatmachineStop(reset = null) {
-	dbID("idBtn_transportPlayPause").textContent = "Play";
-	utilsBtnColor("idBtn_transportPlayPause", null);
+	KadUtils.dbID("idBtn_transportPlayPause").textContent = "Play";
+	KadUtils.DOM.btnColor("idBtn_transportPlayPause", null);
 	clearInterval(beatmachineOptions.loop);
 	beatmachineOptions.loop = null;
 
@@ -174,7 +174,7 @@ function beatmachineStop(reset = null) {
 	}
 }
 
-// const btn = dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
+// const btn = KadUtils.dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
 // if (trackObj.pattern[pIndex]) {
 //   btn.classList.add("cl_BeatmachineBtnRow");
 // } else {
@@ -182,8 +182,8 @@ function beatmachineStop(reset = null) {
 
 function beatmachineLoop() {
 	for (let obj of beatmachineOptions.tracks) {
-		// beatmachineutilsBtnColor(obj, beatmachineOptions.curTime);
-		// beatmachineutilsBtnColor(obj, (beatmachineOptions.curTime + beatmachineOptions.duration - 1) % beatmachineOptions.duration, true);
+		// beatmachineKadUtils.DOM.btnColor(obj, beatmachineOptions.curTime);
+		// beatmachineKadUtils.DOM.btnColor(obj, (beatmachineOptions.curTime + beatmachineOptions.duration - 1) % beatmachineOptions.duration, true);
 		if (obj.enable && obj.pattern[beatmachineOptions.curTime] == 1) {
 			obj.sound.play();
 		}
@@ -200,21 +200,21 @@ function beatmachineLoop() {
 
 function muteAll() {
 	beatmachineOptions.muteAll = !beatmachineOptions.muteAll;
-	utilsBtnColor("idBtn_transporteMute", beatmachineOptions.muteAll ? "negative" : null);
+	KadUtils.DOM.btnColor("idBtn_transporteMute", beatmachineOptions.muteAll ? "negative" : null);
 	for (let obj of beatmachineOptions.tracks) {
 		obj.enable = !beatmachineOptions.muteAll;
-		utilsBtnColor(`idBtn_beatmachineEnable_${obj.name}`, beatmachineOptions.muteAll ? "negative" : "positive");
+		KadUtils.DOM.btnColor(`idBtn_beatmachineEnable_${obj.name}`, beatmachineOptions.muteAll ? "negative" : "positive");
 	}
 }
 
 function beatmachineToggleTrack(tIndex) {
 	if (beatmachineOptions.muteAll) {
 		beatmachineOptions.muteAll = false;
-		utilsBtnColor("idBtn_transporteMute", null);
+		KadUtils.DOM.btnColor("idBtn_transporteMute", null);
 	}
 	let track = beatmachineOptions.tracks[tIndex];
 	track.enable = !track.enable;
-	utilsBtnColor(`idBtn_beatmachineEnable_${track.name}`, track.enable ? "positive" : "negative");
+	KadUtils.DOM.btnColor(`idBtn_beatmachineEnable_${track.name}`, track.enable ? "positive" : "negative");
 }
 
 function beatmachineTogglePattern(btnObj) {
@@ -222,19 +222,19 @@ function beatmachineTogglePattern(btnObj) {
 	let pIndex = btnObj.getAttribute("data-pattern");
 	let track = beatmachineOptions.tracks[tIndex];
 	track.pattern[pIndex] = !track.pattern[pIndex];
-	beatmachineutilsBtnColor(track, pIndex);
+	beatmachineKadUtils.DOM.btnColor(track, pIndex);
 }
 
 function beatmachineDrawAll() {
 	for (let obj of beatmachineOptions.tracks) {
 		for (let i = 0; i < beatmachineOptions.duration; i++) {
-			beatmachineutilsBtnColor(obj, i);
+			beatmachineKadUtils.DOM.btnColor(obj, i);
 		}
 	}
 }
 
-function beatmachineutilsBtnColor(trackObj, pIndex) {
-	const btn = dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
+function beatmachineBtnColor(trackObj, pIndex) {
+	const btn = KadUtils.dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
 	if (trackObj.pattern[pIndex]) {
 		btn.classList.add("cl_BeatmachineBtnSelect");
 	} else {

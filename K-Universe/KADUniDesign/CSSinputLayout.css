@@ -312,8 +312,8 @@ input[imgBtn="subgrid"] {
 .cl_numberyDiv {
 	border: var(--borderThin);
 	border-radius: var(--UIRadius);
-	width: var(--UIHeight2);
-	height: var(--UIHeight2);
+	width: var(--UIHeight3);
+	height: var(--UIHeight3);
 	-webkit-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;

@@ -42,8 +42,8 @@ function clear_cl_Sudoku() {
 			j: 0,
 		},
 	];
-	dbID("idCb_sudokuAutoCheck").checked = sudokuOptions.errorCheck;
-	dbID("idCb_sudokuErasePencils").checked = sudokuOptions.pencilErase;
+	KadUtils.dbID("idCb_sudokuAutoCheck").checked = sudokuOptions.errorCheck;
+	KadUtils.dbID("idCb_sudokuErasePencils").checked = sudokuOptions.pencilErase;
 	//print empty cells
 	for (let i = 0; i < 9; i++) {
 		sudokuOptions.cells[i] = [];
@@ -51,7 +51,7 @@ function clear_cl_Sudoku() {
 			sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, "", "");
 		}
 	}
-	sudokuSetutilsBtnColor("");
+	sudokuSetBtnColor("");
 	sudokuSetDoneNumbers();
 	sudokuStartTimer(false);
 	caSU.clear();
@@ -89,7 +89,7 @@ function sudokuRequest(req) {
 		globalP5.loadJSON("./Data/DataLists/Sudoku1000.json", sudokuLoadData, "json");
 		return null;
 	}
-	sudokuOptions.curIndex = randomObject(sudokuOptions.availiableNums);
+	sudokuOptions.curIndex = KadUtils.Random.randomObject(sudokuOptions.availiableNums);
 	sudokuOptions.usedNums.push(sudokuOptions.curIndex);
 	for (let i = 0; i < 9; i++) {
 		for (let j = 0; j < 9; j++) {
@@ -109,14 +109,14 @@ function sudokuInputOptionChange(val = null) {
 	if (val != null) {
 		sudokuOptions.mode = val;
 	}
-	utilsBtnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-	utilsBtnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "negative" : null);
+	KadUtils.DOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
+	KadUtils.DOM.btnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "negative" : null);
 	focusSudoku();
 }
 
 function sudokuOptionChange() {
-	sudokuOptions.errorCheck = dbID("idCb_sudokuAutoCheck").checked;
-	sudokuOptions.pencilErase = dbID("idCb_sudokuErasePencils").checked;
+	sudokuOptions.errorCheck = KadUtils.dbID("idCb_sudokuAutoCheck").checked;
+	sudokuOptions.pencilErase = KadUtils.dbID("idCb_sudokuErasePencils").checked;
 	if (!sudokuOptions.errorCheck) {
 		for (let i = 0; i < 9; i++) {
 			for (let j = 0; j < 9; j++) {
@@ -143,7 +143,7 @@ function sudokuValidate() {
 	if (!errFlag) {
 		alert("Everything looks good!");
 	} else {
-		dbID("idCb_sudokuAutoCheck").checked = true;
+		KadUtils.dbID("idCb_sudokuAutoCheck").checked = true;
 		sudokuOptions.errorCheck = true;
 	}
 	focusSudoku();
@@ -194,7 +194,7 @@ function sudokuHint() {
 }
 
 function sudokuKeyPressed(event) {
-	event.preventDefault(); //prevent keyinput from comming thout to the window!
+	event.KadUtils.Interaction.preventDefault(); //prevent keyinput from comming thout to the window!
 	let keyInput = event.keyCode || window.event;
 	let cell = {};
 	if (keyInput == 32) {
@@ -268,18 +268,18 @@ function sudokuGroupHighlight(obj) {
 }
 
 function focusSudoku() {
-	dbID("idCanv_sudoku").focus();
+	KadUtils.dbID("idCanv_sudoku").focus();
 	caSU.redraw();
 }
 
 function unfocusSudoku() {
-	dbID("idCanv_sudoku").blur();
+	KadUtils.dbID("idCanv_sudoku").blur();
 	caSU.noLoop();
 }
 
-function sudokuSetutilsBtnColor(diff) {
-	utilsBtnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-	utilsBtnColor("idBtn_sudokuPuzzle", diff == "puzzle" ? "positive" : null);
+function sudokuSetBtnColor(diff) {
+	KadUtils.DOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
+	KadUtils.DOM.btnColor("idBtn_sudokuPuzzle", diff == "puzzle" ? "positive" : null);
 }
 
 function sudokuSetDoneNumbers() {
@@ -296,11 +296,11 @@ function sudokuSetDoneNumbers() {
 	}
 
 	for (let i = 1; i <= 9; i++) {
-		let btnObj = dbID(`idBtn_sudokuNumOverview_${i}`);
+		let btnObj = KadUtils.dbID(`idBtn_sudokuNumOverview_${i}`);
 		let col = null;
 		if (numCount[i] == 9) col = "positive";
 		if (numCount[i] > 9) col = "negative";
-		utilsBtnColor(btnObj, col);
+		KadUtils.DOM.btnColor(btnObj, col);
 		btnObj.innerHTML = i + "<sup>" + numCount[i] + "</sup>";
 	}
 }
@@ -347,7 +347,7 @@ function sudokuCheckFinished() {
 			}
 		}
 	}
-	let time = dbID("idBtn_sudokuTimer").textContent;
+	let time = KadUtils.dbID("idBtn_sudokuTimer").textContent;
 	sudokuStartTimer(false);
 	timeoutCanvasFinished(caSU, {
 		textTop: "You finished",
@@ -626,6 +626,6 @@ function sudokuStartTimer(start) {
 function sudokuTimer() {
 	const now = new Date() - sudokuOptions.timerStart;
 	const format = "mm:ss";
-	const text = utilsDate(now, { format });
-	dbID("idBtn_sudokuTimer").textContent = text;
+	const text = KadUtils.Date.getDate(now, { format });
+	KadUtils.dbID("idBtn_sudokuTimer").textContent = text;
 }

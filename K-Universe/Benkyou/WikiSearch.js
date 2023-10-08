@@ -12,7 +12,7 @@ const wikiOptions = {
 		return `https://${this.language}.wikipedia.org/wiki/`;
 	},
 	get language() {
-		return dbID("idSel_wikiLanguage").selectedOptions[0].dataset.code;
+		return KadUtils.dbID("idSel_wikiLanguage").selectedOptions[0].dataset.code;
 	},
 	random: null,
 	resultTerms: null,
@@ -25,17 +25,17 @@ const wikiOptions = {
 
 function clear_cl_WikiSearch() {
 	wikiOptions.random = null;
-	utilsResetInput("idVin_wikiInput", "Search on Wiki");
-	dbID("idDiv_wiki_Title").textContent = "";
-	dbID("idDiv_wiki_Text").textContent = "";
-	dbID("idImg_Wiki_Image").src = "";
-	dbID("idImg_Wiki_Image").removeAttribute("imgSize");
+	KadUtils.DOM.resetInput("idVin_wikiInput", "Search on Wiki");
+	KadUtils.dbID("idDiv_wiki_Title").textContent = "";
+	KadUtils.dbID("idDiv_wiki_Text").textContent = "";
+	KadUtils.dbID("idImg_Wiki_Image").src = "";
+	KadUtils.dbID("idImg_Wiki_Image").removeAttribute("imgSize");
 
 	wikiOptions.search = {
 		tab: null,
 		content: null,
 	};
-	clearTable("idTabBody_wikiTitleTable");
+	KadUtils.Table.clear("idTabBody_wikiTitleTable");
 	wikiSearchPopulateLanguage();
 }
 
@@ -49,7 +49,7 @@ function wikiSearchPopulateLanguage() {
 		if (key == lang) {
 			option.selected = true;
 		}
-		dbID("idSel_wikiLanguage").appendChild(option);
+		KadUtils.dbID("idSel_wikiLanguage").appendChild(option);
 	});
 }
 
@@ -58,11 +58,11 @@ function wikiSearchInput(input = null, random = null) {
 	wikiOptions.search.tab = input ? input.trim() : idVin_wikiInput.value.replace(/\s+/g, "_");
 	if (wikiOptions.search.tab != null && wikiOptions.search.tab != "") {
 		globalP5.loadJSON(`${wikiOptions.searchUrl}${wikiOptions.search.tab}`, wikiCreateTable, "jsonp");
-		dbID("idDiv_wiki_Title").textContent = "Artikel wählen";
-		dbID("idDiv_wiki_Title").onclick = null;
-		dbID("idDiv_wiki_Text").textContent = "";
-		dbID("idImg_Wiki_Image").src = "";
-		dbID("idImg_Wiki_Image").removeAttribute("imgSize");
+		KadUtils.dbID("idDiv_wiki_Title").textContent = "Artikel wählen";
+		KadUtils.dbID("idDiv_wiki_Title").onclick = null;
+		KadUtils.dbID("idDiv_wiki_Text").textContent = "";
+		KadUtils.dbID("idImg_Wiki_Image").src = "";
+		KadUtils.dbID("idImg_Wiki_Image").removeAttribute("imgSize");
 	}
 }
 
@@ -72,27 +72,27 @@ function wikiSearchLanguage(obj) {
 
 function wikiCreateTable(data) {
 	wikiOptions.resultTerms = data[1];
-	clearTable("idTabBody_wikiTitleTable");
+	KadUtils.Table.clear("idTabBody_wikiTitleTable");
 	for (let i = 0; i < wikiOptions.resultTerms.length; i++) {
-		let row = insertTableRow("idTabBody_wikiTitleTable");
+		let row = KadUtils.Table.insertRow("idTabBody_wikiTitleTable");
 		// arrow
-		const arrow = tableAddCell(row, {
+		const arrow = KadUtils.Table.addCell(row, {
 			names: ["wikiContent", i],
 			type: "Img",
 			subGroup: "subgrid",
 			img: "right",
 			cellOnclick: () => {
 				for (let j = 0; j < wikiOptions.resultTerms.length; j++) {
-					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = utilsGetImgPath("right");
+					KadUtils.dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = KadUtils.DOM.getImgPath("right");
 				}
-				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = utilsGetImgPath("search");
+				KadUtils.dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = KadUtils.DOM.getImgPath("search");
 				globalP5.loadJSON(wikiOptions.contentUrl + wikiOptions.resultTerms[i], wikiShowSelectedText, "jsonp");
-				dbID("idDiv_wiki_Title").textContent = "searching...";
-				dbID("idDiv_wiki_Title").onclick = null;
+				KadUtils.dbID("idDiv_wiki_Title").textContent = "searching...";
+				KadUtils.dbID("idDiv_wiki_Title").onclick = null;
 			},
 		});
 		//--  Title
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["wikiContent", i],
 			type: "Lbl",
 			text: wikiOptions.resultTerms[i],
@@ -101,13 +101,13 @@ function wikiCreateTable(data) {
 			},
 			cellOnclick: () => {
 				for (let j = 0; j < wikiOptions.resultTerms.length; j++) {
-					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = utilsGetImgPath("right");
+					KadUtils.dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = KadUtils.DOM.getImgPath("right");
 				}
-				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = utilsGetImgPath("search");
+				KadUtils.dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = KadUtils.DOM.getImgPath("search");
 				globalP5.loadJSON(wikiOptions.contentUrl + wikiOptions.resultTerms[i], wikiShowSelectedText, "jsonp");
 				globalP5.loadJSON(wikiOptions.imageUrl + wikiOptions.resultTerms[i], wikiShowSelectedImage, "jsonp");
-				dbID("idDiv_wiki_Title").textContent = "searching...";
-				dbID("idDiv_wiki_Title").onclick = null;
+				KadUtils.dbID("idDiv_wiki_Title").textContent = "searching...";
+				KadUtils.dbID("idDiv_wiki_Title").onclick = null;
 			},
 		});
 	}
@@ -119,7 +119,7 @@ function wikiCreateTable(data) {
 }
 
 function wikiQueryRandom() {
-	const term = randomObject(wikiOptions.resultTerms);
+	const term = KadUtils.Random.randomObject(wikiOptions.resultTerms);
 	globalP5.loadJSON(wikiOptions.contentUrl + term, wikiShowSelectedText, "jsonp");
 	globalP5.loadJSON(wikiOptions.imageUrl + term, wikiShowSelectedImage, "jsonp");
 }
@@ -133,12 +133,12 @@ function wikiShowSelectedText(data, loaded) {
 	}
 	let pagesID = Object.keys(wikiOptions.search.content);
 	const title = wikiOptions.search.content[pagesID].title;
-	dbID("idDiv_wiki_Title").textContent = title;
-	dbID("idDiv_wiki_Title").onclick = () => {
+	KadUtils.dbID("idDiv_wiki_Title").textContent = title;
+	KadUtils.dbID("idDiv_wiki_Title").onclick = () => {
 		const urlTitle = title.replace(/\s+/g, "_");
 		window.open(`${wikiOptions.openUrl}${urlTitle}`);
 	};
-	dbID("idDiv_wiki_Text").textContent = wikiOptions.search.content[pagesID].extract;
+	KadUtils.dbID("idDiv_wiki_Text").textContent = wikiOptions.search.content[pagesID].extract;
 }
 
 function wikiShowSelectedImage(data, loaded) {
@@ -149,9 +149,9 @@ function wikiShowSelectedImage(data, loaded) {
 	}
 	let pagesID = Object.keys(wikiOptions.search.image);
 	if (wikiOptions.search.image[pagesID].thumbnail) {
-		dbID("idImg_Wiki_Image").src = wikiOptions.search.image[pagesID].thumbnail.source;
-		dbID("idImg_Wiki_Image").setAttribute("imgSize", "thumbnail");
+		KadUtils.dbID("idImg_Wiki_Image").src = wikiOptions.search.image[pagesID].thumbnail.source;
+		KadUtils.dbID("idImg_Wiki_Image").setAttribute("imgSize", "thumbnail");
 	} else {
-		dbID("idImg_Wiki_Image").src = "";
+		KadUtils.dbID("idImg_Wiki_Image").src = "";
 	}
 }

@@ -136,53 +136,53 @@ function toggleLayout() {
 	if (nuncDiscipuli.checkLogin) {
 		// logged in
 		loadDiscipuli();
-		dbID("idImg_userNav_A").src = utilsGetImgPath("uCheck");
-		dbID("idImg_userNav_B").src = utilsGetImgPath("uX");
-		dbID("idDiv_navBar_AccountSettingsA").setAttribute("data-type", "change");
-		dbID("idDiv_navBar_AccountSettingsB").setAttribute("data-type", "logout");
+		KadUtils.dbID("idImg_userNav_A").src = KadUtils.DOM.getImgPath("uCheck");
+		KadUtils.dbID("idImg_userNav_B").src = KadUtils.DOM.getImgPath("uX");
+		KadUtils.dbID("idDiv_navBar_AccountSettingsA").setAttribute("data-type", "change");
+		KadUtils.dbID("idDiv_navBar_AccountSettingsB").setAttribute("data-type", "logout");
 		//show Download/Upload buttons
 		for (const key of dbList) {
-			dbIDStyle(`idDiv_child_gridtitle_dbUpload_${key}`).display = "initial";
-			dbIDStyle(`idDiv_child_gridtitle_dbDownload_${key}`).display = "initial";
+			KadUtils.dbIDStyle(`idDiv_child_gridtitle_dbUpload_${key}`).display = "initial";
+			KadUtils.dbIDStyle(`idDiv_child_gridtitle_dbDownload_${key}`).display = "initial";
 		}
-		setCssRoot("navContentLength", contentLayout.contentLength);
+		KadUtils.CSS.setRoot("navContentLength", contentLayout.contentLength);
 	} else {
 		// logged out
-		dbID("idImg_userNav_A").src = utilsGetImgPath("uBasic");
-		dbID("idImg_userNav_B").src = utilsGetImgPath("uPlus");
-		dbID("idDiv_navBar_AccountSettingsA").setAttribute("data-type", "login");
-		dbID("idDiv_navBar_AccountSettingsB").setAttribute("data-type", "register");
-		dbIDStyle("idDiv_navBar_User").display = "none";
-		dbID("idLbl_navBarLbl_User").textContent = "User";
+		KadUtils.dbID("idImg_userNav_A").src = KadUtils.DOM.getImgPath("uBasic");
+		KadUtils.dbID("idImg_userNav_B").src = KadUtils.DOM.getImgPath("uPlus");
+		KadUtils.dbID("idDiv_navBar_AccountSettingsA").setAttribute("data-type", "login");
+		KadUtils.dbID("idDiv_navBar_AccountSettingsB").setAttribute("data-type", "register");
+		KadUtils.dbIDStyle("idDiv_navBar_User").display = "none";
+		KadUtils.dbID("idLbl_navBarLbl_User").textContent = "User";
 
 		//hide Download/Upload buttons
 		for (const key of dbList) {
-			dbIDStyle(`idDiv_child_gridtitle_dbUpload_${key}`).display = "none";
-			dbIDStyle(`idDiv_child_gridtitle_dbDownload_${key}`).display = "none";
+			KadUtils.dbIDStyle(`idDiv_child_gridtitle_dbUpload_${key}`).display = "none";
+			KadUtils.dbIDStyle(`idDiv_child_gridtitle_dbDownload_${key}`).display = "none";
 		}
-		setCssRoot("navContentLength", contentLayout.contentLength - 1); //"User" gets skipped
+		KadUtils.CSS.setRoot("navContentLength", contentLayout.contentLength - 1); //"User" gets skipped
 	}
 }
 
 // ------------CLEAR-------------
 function clear_cl_UserAcc() {
-	dbCLStyle("cl_UserAcc_pass").display = "initial";
-	dbCLStyle("cl_UserAcc_check").display = "initial";
-	dbID("idVin_userAcc_mail").removeAttribute("disabled");
-	utilsEnableBtn("idBtn_userAcc_submit", true); //enable Button
-	dbID("idLbl_userAcc_alert").textContent = "";
-	dbID("idVin_userAcc_mail").value = "";
-	dbID("idVin_userAcc_mail").addEventListener("keyup", (event) => {
+	KadUtils.dbCLStyle("cl_UserAcc_pass").display = "initial";
+	KadUtils.dbCLStyle("cl_UserAcc_check").display = "initial";
+	KadUtils.dbID("idVin_userAcc_mail").removeAttribute("disabled");
+	KadUtils.DOM.enableBtn("idBtn_userAcc_submit", true); //enable Button
+	KadUtils.dbID("idLbl_userAcc_alert").textContent = "";
+	KadUtils.dbID("idVin_userAcc_mail").value = "";
+	KadUtils.dbID("idVin_userAcc_mail").addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
-			dbID("idVin_userAcc_pass").focus();
-			event.preventDefault();
+			KadUtils.dbID("idVin_userAcc_pass").focus();
+			event.KadUtils.Interaction.preventDefault();
 		}
 	});
-	dbID("idVin_userAcc_pass").value = "";
-	dbID("idVin_userAcc_pass").addEventListener("keyup", (event) => {
+	KadUtils.dbID("idVin_userAcc_pass").value = "";
+	KadUtils.dbID("idVin_userAcc_pass").addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
-			dbID("idBtn_userAcc_submit").click();
-			event.preventDefault();
+			KadUtils.dbID("idBtn_userAcc_submit").click();
+			event.KadUtils.Interaction.preventDefault();
 		}
 	});
 }
@@ -199,31 +199,31 @@ function openUserNav(btn) {
 	//initialize inputs
 	switch (type) {
 		case "login":
-			dbID("idBtn_userAcc_submit").setAttribute("data-type", type);
-			dbID("idBtn_userAcc_submit").textContent = firstLetterCap(type);
-			dbID("idVin_userAcc_mail").focus();
-			dbID("idVin_userAcc_mail").placeholder = "E-Mail";
-			dbCLStyle("cl_UserAcc_infos").display = "none";
+			KadUtils.dbID("idBtn_userAcc_submit").setAttribute("data-type", type);
+			KadUtils.dbID("idBtn_userAcc_submit").textContent = KadUtils.String.firstLetterCap(type);
+			KadUtils.dbID("idVin_userAcc_mail").focus();
+			KadUtils.dbID("idVin_userAcc_mail").placeholder = "E-Mail";
+			KadUtils.dbCLStyle("cl_UserAcc_infos").display = "none";
 			layoutNavClick("AccountSettingsA");
 			break;
 		case "register":
-			dbID("idBtn_userAcc_submit").setAttribute("data-type", type);
-			dbID("idBtn_userAcc_submit").textContent = firstLetterCap(type);
-			dbID("idVin_userAcc_mail").focus();
-			dbID("idVin_userAcc_mail").placeholder = "E-Mail";
-			dbCLStyle("cl_UserAcc_infos").display = "initial";
+			KadUtils.dbID("idBtn_userAcc_submit").setAttribute("data-type", type);
+			KadUtils.dbID("idBtn_userAcc_submit").textContent = KadUtils.String.firstLetterCap(type);
+			KadUtils.dbID("idVin_userAcc_mail").focus();
+			KadUtils.dbID("idVin_userAcc_mail").placeholder = "E-Mail";
+			KadUtils.dbCLStyle("cl_UserAcc_infos").display = "initial";
 			createUserInfos(type);
 			layoutNavClick("AccountSettingsB");
 			break;
 		case "change":
-			dbID("idBtn_userAcc_submit").setAttribute("data-type", type);
-			dbID("idBtn_userAcc_submit").textContent = firstLetterCap(type);
+			KadUtils.dbID("idBtn_userAcc_submit").setAttribute("data-type", type);
+			KadUtils.dbID("idBtn_userAcc_submit").textContent = KadUtils.String.firstLetterCap(type);
 			createUserInfos(type);
-			dbID("idVin_userAcc_mail").setAttribute("disabled", "true");
-			dbID("idVin_userAcc_mail").placeholder = nuncDiscipuli.cred.email || "E-Mail";
-			dbCLStyle("cl_UserAcc_infos").display = "initial";
-			dbCLStyle("cl_UserAcc_pass").display = "none";
-			dbCLStyle("cl_UserAcc_check").display = "none";
+			KadUtils.dbID("idVin_userAcc_mail").setAttribute("disabled", "true");
+			KadUtils.dbID("idVin_userAcc_mail").placeholder = nuncDiscipuli.cred.email || "E-Mail";
+			KadUtils.dbCLStyle("cl_UserAcc_infos").display = "initial";
+			KadUtils.dbCLStyle("cl_UserAcc_pass").display = "none";
+			KadUtils.dbCLStyle("cl_UserAcc_check").display = "none";
 			layoutNavClick("AccountSettingsA");
 			break;
 		case "logout":
@@ -248,8 +248,8 @@ function accountLogout() {
 
 // ------------CREATE INFO-DIV-------------
 function createUserInfos(type) {
-	const parent = dbCL("cl_UserAcc_infos");
-	clearFirstChild(parent);
+	const parent = KadUtils.dbCL("cl_UserAcc_infos");
+	KadUtils.DOM.clearFirstChild(parent);
 	for (const [key, subObj] of Object.entries(AccData.infos)) {
 		const uInfoParent = cellDiv({
 			names: ["uInfoParent", key],
@@ -324,13 +324,13 @@ function cancelAccount() {
 }
 
 function submitUser() {
-	utilsEnableBtn("idBtn_userAcc_submit", false); //disable Button
-	const type = dbID("idBtn_userAcc_submit").dataset.type;
-	nuncDiscipuli.cred.email = dbID("idVin_userAcc_mail").value.trim();
+	KadUtils.DOM.enableBtn("idBtn_userAcc_submit", false); //disable Button
+	const type = KadUtils.dbID("idBtn_userAcc_submit").dataset.type;
+	nuncDiscipuli.cred.email = KadUtils.dbID("idVin_userAcc_mail").value.trim();
 	if (type == "register" || type == "change") {
 		for (let [key, val] of Object.entries(AccData.infos)) {
 			const id = `idVin_child_uInfoVin_${key}`;
-			const vinUser = dbID(id).value.trim();
+			const vinUser = KadUtils.dbID(id).value.trim();
 			if (vinUser != "") {
 				AccData.infos[key].data = vinUser;
 			}
@@ -338,10 +338,10 @@ function submitUser() {
 		if (nuncDiscipuli.short === null) {
 			nuncDiscipuli.short = nuncDiscipuli.createShort;
 		}
-		dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
+		KadUtils.dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
 	}
 	//just login
-	nuncDiscipuli.cred.keepLogin = dbID("idCb_userAcc_check").checked ? "LOCAL" : "SESSION"; // "NONE";
+	nuncDiscipuli.cred.keepLogin = KadUtils.dbID("idCb_userAcc_check").checked ? "LOCAL" : "SESSION"; // "NONE";
 
 	if (type == "login") {
 		userAccLogin();
@@ -362,7 +362,7 @@ function userAccLogin() {
 		.then(() => {
 			return firebase
 				.auth()
-				.signInWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim())
+				.signInWithEmailAndPassword(nuncDiscipuli.cred.email, KadUtils.dbID("idVin_userAcc_pass").value.trim())
 				.then((response) => {
 					nuncDiscipuli.cred.uid = response.user.uid;
 					loadDiscipuli();
@@ -380,7 +380,7 @@ function userAccRegister() {
 		.then(() => {
 			return firebase
 				.auth()
-				.createUserWithEmailAndPassword(nuncDiscipuli.cred.email, dbID("idVin_userAcc_pass").value.trim())
+				.createUserWithEmailAndPassword(nuncDiscipuli.cred.email, KadUtils.dbID("idVin_userAcc_pass").value.trim())
 				.then((response) => {
 					nuncDiscipuli.cred.uid = response.user.uid;
 				});
@@ -402,19 +402,19 @@ function userAccRegister() {
 }
 
 function userAccSetUserBtn() {
-	dbIDStyle("idDiv_navBar_User").display = "initial";
+	KadUtils.dbIDStyle("idDiv_navBar_User").display = "initial";
 	if (nuncDiscipuli.short == null) {
 		nuncDiscipuli.short = nuncDiscipuli.createShort;
 	}
-	dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
-	utilsEnableBtn("idBtn_userAcc_submit", true);
+	KadUtils.dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
+	KadUtils.DOM.enableBtn("idBtn_userAcc_submit", true);
 	layoutNavTitle();
 	layoutNavClick("User");
 }
 
 function userAccError(error) {
-	utilsEnableBtn(idBtn_userAcc_submit, true);
-	dbID("idLbl_userAcc_alert").textContent = "E-Mail oder Passwort falsch!";
+	KadUtils.DOM.enableBtn(idBtn_userAcc_submit, true);
+	KadUtils.dbID("idLbl_userAcc_alert").textContent = "E-Mail oder Passwort falsch!";
 }
 
 //--------------Load Single DATA-------------
@@ -456,10 +456,10 @@ function saveDiscipuli(category = null) {
 	FBUserSettings.doc(nuncDiscipuli.cred.uid)
 		.update(data, { merge: true })
 		.then(() => {
-			utilsEnableBtn("idBtn_userAcc_submit", true);
+			KadUtils.DOM.enableBtn("idBtn_userAcc_submit", true);
 			setTimeout(() => {
 				for (const key of Object.keys(data)) {
-					dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${key}`).filter = "invert(0)";
+					KadUtils.dbIDStyle(`idBtn_child_gridtitle_dbUpload_cl_${key}`).filter = "invert(0)";
 				}
 			}, 500);
 		})

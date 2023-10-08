@@ -6,18 +6,18 @@ const synonymOptions = {
 }
 
 function clear_cl_Synonym() {
-  utilsResetInput("idVin_synonymEntry", "Search for synonyms")
-  clearTable("idTabHeader_synonym_baseform");
-  clearTable("idTabHeader_synonym1");
-  clearTable("idTabHeader_synonym2");
-  clearTable("idTabBody_synonym1");
-  clearTable("idTabBody_synonym2");
+  KadUtils.DOM.resetInput("idVin_synonymEntry", "Search for synonyms")
+  KadUtils.Table.clear("idTabHeader_synonym_baseform");
+  KadUtils.Table.clear("idTabHeader_synonym1");
+  KadUtils.Table.clear("idTabHeader_synonym2");
+  KadUtils.Table.clear("idTabBody_synonym1");
+  KadUtils.Table.clear("idTabBody_synonym2");
 };
 
 function newSynonym() {
-  synonymOptions.input = dbID('idVin_synonymEntry').value.toString().trim();
+  synonymOptions.input = KadUtils.dbID('idVin_synonymEntry').value.toString().trim();
   if (synonymOptions.input) {
-    dbID('idVin_synonymEntry').value = "";
+    KadUtils.dbID('idVin_synonymEntry').value = "";
     synonymGetData();
   };
 };
@@ -26,25 +26,25 @@ async function synonymGetData() {
   try {
     let response = await fetch(`${synonymOptions.urlP1}${synonymOptions.input}${synonymOptions.urlP2}`);
     synonymOptions.data = await response.json();
-    dbID("idLbl_synonymSearchWord").textContent = synonymOptions.input;
+    KadUtils.dbID("idLbl_synonymSearchWord").textContent = synonymOptions.input;
     synonymCreateTable();
   } catch (err) {
-    dbID("idLbl_synonymSearchWord").textContent = "---";
+    KadUtils.dbID("idLbl_synonymSearchWord").textContent = "---";
     console.error(err);
   }
 };
 
 function synonymCreateTable() {
-  clearTable("idTabHeader_synonym_baseform");
-  clearTable("idTabHeader_synonym1");
-  clearTable("idTabHeader_synonym2");
-  clearTable("idTabBody_synonym1");
-  clearTable("idTabBody_synonym2");
+  KadUtils.Table.clear("idTabHeader_synonym_baseform");
+  KadUtils.Table.clear("idTabHeader_synonym1");
+  KadUtils.Table.clear("idTabHeader_synonym2");
+  KadUtils.Table.clear("idTabBody_synonym1");
+  KadUtils.Table.clear("idTabBody_synonym2");
 
 
   if (synonymOptions.data.hasOwnProperty("baseforms")) {
-    let row = insertTableRow("idTabHeader_synonym_baseform");
-    tableAddCellHeader(row, {
+    let row = KadUtils.Table.insertRow("idTabHeader_synonym_baseform");
+    KadUtils.Table.addHeaderCell(row, {
       names: ["synonym", "BaseformTitle"],
       type: "Lbl",
       text: "Grundform",
@@ -52,7 +52,7 @@ function synonymCreateTable() {
         textAlign: "left"
       }
     });
-    tableAddCellHeader(row, {
+    KadUtils.Table.addHeaderCell(row, {
       names: ["synonym", "BaseformWord"],
       type: "Lbl",
       text: synonymOptions.data.baseforms[0],
@@ -67,8 +67,8 @@ function synonymCreateTable() {
     sets = [...sets, ...synonymOptions.data.synsets[i].terms.map(index => index.term)];
   };
   if (sets.length > 0) {
-    row = insertTableRow("idTabHeader_synonym1");
-    tableAddCellHeader(row, {
+    row = KadUtils.Table.insertRow("idTabHeader_synonym1");
+    KadUtils.Table.addHeaderCell(row, {
       names: ["synonym", "synonymTitle"],
       type: "Lbl",
       text: "Synonyme",
@@ -78,8 +78,8 @@ function synonymCreateTable() {
       }
     });
     for (let i = 0; i < sets.length; i++) {
-      row = insertTableRow("idTabBody_synonym1");
-      tableAddCell(row, {
+      row = KadUtils.Table.insertRow("idTabBody_synonym1");
+      KadUtils.Table.addCell(row, {
         names: ["synonym", "synset", i],
         type: "Lbl",
         text: sets[i],
@@ -90,7 +90,7 @@ function synonymCreateTable() {
       });
       if (i < sets.length - 1) {
         i++;
-        tableAddCell(row, {
+        KadUtils.Table.addCell(row, {
           names: ["synonym", "synset", i],
           type: "Lbl",
           text: sets[i],
@@ -102,7 +102,7 @@ function synonymCreateTable() {
       };
       if (i < sets.length - 1) {
         i++;
-        tableAddCell(row, {
+        KadUtils.Table.addCell(row, {
           names: ["synonym", "synset", i],
           type: "Lbl",
           text: sets[i],
@@ -117,8 +117,8 @@ function synonymCreateTable() {
 
 
   if (synonymOptions.data.hasOwnProperty("similarterms")) {
-    row = insertTableRow("idTabHeader_synonym2");
-    tableAddCellHeader(row, {
+    row = KadUtils.Table.insertRow("idTabHeader_synonym2");
+    KadUtils.Table.addHeaderCell(row, {
       names: ["synonym", "similar", "title"],
       type: "Lbl",
       text: `Ähnliche Befriffe:`,
@@ -128,8 +128,8 @@ function synonymCreateTable() {
       }
     });
     for (let i = 0; i < Object.keys(synonymOptions.data.similarterms).length; i++) {
-      row = insertTableRow("idTabBody_synonym2");
-      tableAddCell(row, {
+      row = KadUtils.Table.insertRow("idTabBody_synonym2");
+      KadUtils.Table.addCell(row, {
         names: ["synonym", "similarterms", i],
         type: "Lbl",
         text: synonymOptions.data.similarterms[i].term,
@@ -144,7 +144,7 @@ function synonymCreateTable() {
       });
       if (i < Object.keys(synonymOptions.data.similarterms).length - 1) {
         i++;
-        tableAddCell(row, {
+        KadUtils.Table.addCell(row, {
           names: ["synonym", "similarterms", i],
           type: "Lbl",
           text: synonymOptions.data.similarterms[i].term,
@@ -160,7 +160,7 @@ function synonymCreateTable() {
       };
       if (i < Object.keys(synonymOptions.data.similarterms).length - 1) {
         i++;
-        tableAddCell(row, {
+        KadUtils.Table.addCell(row, {
           names: ["synonym", "similarterms", i],
           type: "Lbl",
           text: synonymOptions.data.similarterms[i].term,

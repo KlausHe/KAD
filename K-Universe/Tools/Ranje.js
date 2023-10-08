@@ -7,13 +7,13 @@ const ranjeOptions = {
 };
 
 function clear_cl_Ranje() {
-  utilsResetInput("idVin_ranjeVal", 36)
+  KadUtils.DOM.resetInput("idVin_ranjeVal", 36)
   ranjeCalc();
 };
 
 function ranjeCalc() {
   ranjeOptions.results = [];
-  ranjeOptions.value = utilsNumberFromInput("idVin_ranjeVal");
+  ranjeOptions.value = KadUtils.DOM.numberFromInput("idVin_ranjeVal");
   for (let i = 2; i < ranjeOptions.value; i++) {
     if (ranjeOptions.value % i === 0) {
       ranjeOptions.results.push([i, Math.floor(ranjeOptions.value / i)]);
@@ -26,11 +26,11 @@ function ranjeCalc() {
 };
 
 function tableRanjeCalculate() {
-  clearTable("idTabHeader_ranjeList");
-  clearTable("idTabBody_ranjeList");
+  KadUtils.Table.clear("idTabHeader_ranjeList");
+  KadUtils.Table.clear("idTabBody_ranjeList");
   for (let i = 0; i < ranjeOptions.results.length; i++) {
-    const row = insertTableRow("idTabBody_ranjeList");
-    tableAddCell(row, {
+    const row = KadUtils.Table.insertRow("idTabBody_ranjeList");
+    KadUtils.Table.addCell(row, {
       names: ["ranje", "op", i],
       type: "Lbl",
       text: ranjeOptions.value,
@@ -38,7 +38,7 @@ function tableRanjeCalculate() {
         textAlign: "center"
       }
     });
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["ranje", "eq", i],
       type: "Lbl",
       text: "=",
@@ -46,7 +46,7 @@ function tableRanjeCalculate() {
         textAlign: "center"
       }
     });
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["ranje", "res", i],
       type: "Lbl",
       text: `${ranjeOptions.results[i][0]} x ${ranjeOptions.results[i][1]}`,

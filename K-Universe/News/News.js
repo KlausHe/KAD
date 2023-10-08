@@ -21,8 +21,8 @@ const newsData = {
 };
 
 function clear_cl_News() {
-	clearFirstChild("idSel_newsCountry");
-	clearFirstChild("idSel_newsCategory");
+	KadUtils.DOM.clearFirstChild("idSel_newsCountry");
+	KadUtils.DOM.clearFirstChild("idSel_newsCategory");
 	newsData.currIndex = 0;
 
 	let optGroup = document.createElement("optgroup");
@@ -36,7 +36,7 @@ function clear_cl_News() {
 		}
 		optGroup.appendChild(option);
 	}
-	dbID("idSel_newsCategory").appendChild(optGroup);
+	KadUtils.dbID("idSel_newsCategory").appendChild(optGroup);
 
 	optGroup = document.createElement("optgroup");
 	optGroup.label = "Land";
@@ -49,17 +49,17 @@ function clear_cl_News() {
 		}
 		optGroup.appendChild(option);
 	}
-	dbID("idSel_newsCountry").appendChild(optGroup);
+	KadUtils.dbID("idSel_newsCountry").appendChild(optGroup);
 
-	dbID("idBtn_tickerNewsToggle").textContent = "Start Ticker";
-	utilsBtnColor("idBtn_tickerNewsToggle");
+	KadUtils.dbID("idBtn_tickerNewsToggle").textContent = "Start Ticker";
+	KadUtils.DOM.btnColor("idBtn_tickerNewsToggle");
 	newsUpdateOptions();
 }
 
 function newsUpdateOptions() {
-	utilsSocketPost("News", {
-		category: dbID("idSel_newsCategory").value,
-		country: dbID("idSel_newsCountry").value,
+	KadUtils.socketPost("News", {
+		category: KadUtils.dbID("idSel_newsCategory").value,
+		country: KadUtils.dbID("idSel_newsCountry").value,
 	});
 }
 
@@ -70,7 +70,7 @@ function newsError(errMsg) {
 	newsData.articles[0].description = "";
 	newsData.articles[0].dateInfo = "  &#x1F61E  ";
 	newsData.articles[0].error = true;
-	clearTable("idTabBody_newsTitleTable");
+	KadUtils.Table.clear("idTabBody_newsTitleTable");
 	newsStopTicker();
 	newsData.currIndex = 0;
 }
@@ -86,7 +86,7 @@ function newsReturn(data) {
 	}
 	newsData.articles = data.results;
 	for (let i = newsData.articles.length - 1; i >= 0; i--) {
-		newsData.articles[i].dateInfo = utilsDate(newsData.articles[i].pubDate, { format: "DD.MM.YY/HH:mm" });
+		newsData.articles[i].dateInfo = KadUtils.Date.getDate(newsData.articles[i].pubDate, { format: "DD.MM.YY/HH:mm" });
 		let link = newsData.articles[i].link.replace(/https:\/\//, "");
 		link = link.replace(/http:\/\//, "");
 		link = link.replace(/www./, "");
@@ -99,24 +99,24 @@ function newsReturn(data) {
 
 function showNews() {
 	if (newsData.articles.length > 0) {
-		dbID("idDiv_News_Title").innerHTML = `${newsData.articles[newsData.currIndex].title} (${newsData.articles[newsData.currIndex].dateInfo}, ${newsData.articles[newsData.currIndex].creator || newsData.articles[newsData.currIndex].source_id})`;
-		dbID("idDiv_News_Text").innerHTML = newsData.articles[newsData.currIndex].description;
+		KadUtils.dbID("idDiv_News_Title").innerHTML = `${newsData.articles[newsData.currIndex].title} (${newsData.articles[newsData.currIndex].dateInfo}, ${newsData.articles[newsData.currIndex].creator || newsData.articles[newsData.currIndex].source_id})`;
+		KadUtils.dbID("idDiv_News_Text").innerHTML = newsData.articles[newsData.currIndex].description;
 		if (newsData.articles[newsData.currIndex].image_url != null) {
-			dbID("idImg_News_Image").src = newsData.articles[newsData.currIndex].image_url;
-			dbID("idImg_News_Image").setAttribute("imgSize", "thumbnail");
+			KadUtils.dbID("idImg_News_Image").src = newsData.articles[newsData.currIndex].image_url;
+			KadUtils.dbID("idImg_News_Image").setAttribute("imgSize", "thumbnail");
 		}
 		newsUpdateTableIcons();
 	}
 }
 
 function newsCreateTable() {
-	clearTable("idTabBody_newsTitleTable");
+	KadUtils.Table.clear("idTabBody_newsTitleTable");
 	for (let i = 0; i < newsData.articles.length; i++) {
-		const row = insertTableRow("idTabBody_newsTitleTable");
+		const row = KadUtils.Table.insertRow("idTabBody_newsTitleTable");
 		row.id = `idRow_NewsTitle_${i}`;
 
 		// arrow
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["newsContent", i],
 			type: "Img",
 			subGroup: "subgrid",
@@ -130,19 +130,19 @@ function newsCreateTable() {
 				news_URL();
 			},
 			onmouseover: () => {
-				dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].src = utilsGetImgPath("globe");
+				KadUtils.dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].src = KadUtils.DOM.getImgPath("globe");
 			},
 			onmouseleave: () => {
-				if (dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].dataset.shown == "true") {
-					dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].src = utilsGetImgPath("search");
+				if (KadUtils.dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].dataset.shown == "true") {
+					KadUtils.dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].src = KadUtils.DOM.getImgPath("search");
 				} else {
-					dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].src = utilsGetImgPath("right");
+					KadUtils.dbID("idTabBody_newsTitleTable").rows[i].cells[0].childNodes[0].src = KadUtils.DOM.getImgPath("right");
 				}
 			},
 		});
 
 		//--  Title Label
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["newsSource", i],
 			type: "Lbl",
 			text: newsData.articles[i].source,
@@ -164,10 +164,10 @@ function newsCreateTable() {
 function newsUpdateTableIcons() {
 	if (!newsData.articles[0].hasOwnProperty("error")) {
 		let activeImg = document.querySelectorAll('[data-shown="true"]')[0];
-		activeImg.src = utilsGetImgPath("right");
+		activeImg.src = KadUtils.DOM.getImgPath("right");
 		activeImg.setAttribute("data-shown", false);
-		let nextActiveImg = dbID("idTabBody_newsTitleTable").rows[newsData.currIndex].cells[0].childNodes[0];
-		nextActiveImg.src = utilsGetImgPath("search");
+		let nextActiveImg = KadUtils.dbID("idTabBody_newsTitleTable").rows[newsData.currIndex].cells[0].childNodes[0];
+		nextActiveImg.src = KadUtils.DOM.getImgPath("search");
 		nextActiveImg.setAttribute("data-shown", true);
 	}
 }
@@ -187,8 +187,8 @@ function newsShowNext() {
 function newsToggleTicker() {
 	if (newsData.intervalTicker === null) {
 		newsData.intervalTicker = setInterval(newsAutoTicker, newsData.intervalTimeTicker);
-		dbID("idBtn_tickerNewsToggle").textContent = "Stop Ticker";
-		utilsBtnColor("idBtn_tickerNewsToggle", "negative");
+		KadUtils.dbID("idBtn_tickerNewsToggle").textContent = "Stop Ticker";
+		KadUtils.DOM.btnColor("idBtn_tickerNewsToggle", "negative");
 	} else {
 		newsStopTicker();
 	}
@@ -205,8 +205,8 @@ function newsAutoTicker() {
 
 function newsStopTicker() {
 	if (newsData.intervalTicker != null) {
-		dbID("idBtn_tickerNewsToggle").textContent = "Start Ticker";
-		utilsBtnColor("idBtn_tickerNewsToggle");
+		KadUtils.dbID("idBtn_tickerNewsToggle").textContent = "Start Ticker";
+		KadUtils.DOM.btnColor("idBtn_tickerNewsToggle");
 		clearInterval(newsData.intervalTicker);
 		newsData.intervalTicker = null;
 	}

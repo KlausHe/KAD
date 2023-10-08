@@ -4,17 +4,17 @@ const usergridOptions = {
 		//usergridCheckGroup
 		for (const [groupKey, state] of Object.entries(usergridOptions.groups)) {
 			let counter = 0;
-			const cbEnabled = dbCL(`clCb_disableUsergridSingle_${groupKey}`, null);
+			const cbEnabled = KadUtils.dbCL(`clCb_disableUsergridSingle_${groupKey}`, null);
 			for (let i = 0; i < cbEnabled.length; i++) {
 				if (cbEnabled[i].checked) {
 					counter++;
 				}
 			}
 			if (counter == 0) {
-				dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = utilsGetImgPath("cCheck");
+				KadUtils.dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = KadUtils.DOM.getImgPath("cCheck");
 				usergridOptions.groups[groupKey] = false;
 			} else {
-				dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = utilsGetImgPath("cX");
+				KadUtils.dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = KadUtils.DOM.getImgPath("cX");
 				usergridOptions.groups[groupKey] = true;
 			}
 		}
@@ -22,7 +22,7 @@ const usergridOptions = {
 	groups: {},
 	updateAllSingles: (groupKey) => {
 		//change the "checked" value in the DOM element, nothing else!
-		const singleList = dbCL(`clCb_disableUsergridSingle_${groupKey}`, null);
+		const singleList = KadUtils.dbCL(`clCb_disableUsergridSingle_${groupKey}`, null);
 		for (let i = 0; i < singleList.length; i++) {
 			singleList[i].checked = usergridOptions.groups[groupKey];
 		}
@@ -37,7 +37,7 @@ const usergridOptions = {
 	},
 	generateArray: () => {
 		for (const key of contentLayout.navContent.Universe) {
-			contentGrid[key].userSelected = dbID(`idVin_child_disableUsergridSingle_CB_${key}`).checked;
+			contentGrid[key].userSelected = KadUtils.dbID(`idVin_child_disableUsergridSingle_CB_${key}`).checked;
 		}
 		return Object.keys(contentGrid).filter((key) => {
 			return contentGrid[key].userSelected === true && contentLayout.navContent.Universe.includes(key);
@@ -71,13 +71,13 @@ function usergridToggleGroup(groupKey) {
 
 function usergridCreateTable() {
 	//clear Table
-	clearTable("idTabBody_DisableUserGrid");
+	KadUtils.Table.clear("idTabBody_DisableUserGrid");
 	for (const groupKey in usergridOptions.groups) {
 		//create Headers
-		const rowTh = insertTableRow("idTabBody_DisableUserGrid");
+		const rowTh = KadUtils.Table.insertRow("idTabBody_DisableUserGrid");
 		rowTh.id = `idTabBody_DisableUserGrid_Group${groupKey}`;
 
-		tableAddCellHeader(rowTh, {
+		KadUtils.Table.addHeaderCell(rowTh, {
 			names: ["disableUsergridGroup", groupKey],
 			type: "Lbl",
 			text: groupKey,
@@ -90,7 +90,7 @@ function usergridCreateTable() {
 			},
 		});
 
-		tableAddCellHeader(rowTh, {
+		KadUtils.Table.addHeaderCell(rowTh, {
 			names: ["disableUsergridGroup", groupKey],
 			type: "Btn",
 			subGroup: "subgrid",
@@ -113,9 +113,9 @@ function usergridCreateTable() {
 
 		for (let j = 0; j < contentLayout.navContent[groupKey].length; j++) {
 			let objName = contentLayout.navContent[groupKey][j];
-			const row = insertTableRow("idTabBody_DisableUserGrid");
+			const row = KadUtils.Table.insertRow("idTabBody_DisableUserGrid");
 			// Checkbox
-			const cellA = tableAddCell(row, {
+			const cellA = KadUtils.Table.addCell(row, {
 				names: ["disableUsergridSingle", "CB", objName],
 				type: "Vin",
 				subGroup: "checkbox",
@@ -131,7 +131,7 @@ function usergridCreateTable() {
 			//userImage
 			let uImage = null;
 			if (contentGrid[objName].hasOwnProperty("userStoreDBName")) {
-				uImage = tableAddCell(row, {
+				uImage = KadUtils.Table.addCell(row, {
 					names: ["disableUsergridSingle", groupKey, j],
 					type: "Img",
 					subGroup: "subgrid",
@@ -142,7 +142,7 @@ function usergridCreateTable() {
 				});
 			}
 			// LBL for
-			tableAddCell(
+			KadUtils.Table.addCell(
 				row,
 				{
 					names: ["disableUsergridSingle", groupKey, j],
@@ -161,7 +161,7 @@ function usergridCreateTable() {
 				objName = contentLayout.navContent[groupKey][j];
 
 				// Checkbox
-				const cellB = tableAddCell(row, {
+				const cellB = KadUtils.Table.addCell(row, {
 					names: ["disableUsergridSingle", "CB", objName],
 					type: "Vin",
 					subGroup: "checkbox",
@@ -177,7 +177,7 @@ function usergridCreateTable() {
 				//userImage
 				let uImage;
 				if (contentGrid[objName].hasOwnProperty("userStoreDBName")) {
-					uImage = tableAddCell(row, {
+					uImage = KadUtils.Table.addCell(row, {
 						names: ["disableUsergridSingle", groupKey, j],
 						type: "Img",
 						subGroup: "subgrid",
@@ -188,7 +188,7 @@ function usergridCreateTable() {
 					});
 				}
 				// LBL for
-				tableAddCell(
+				KadUtils.Table.addCell(
 					row,
 					{
 						names: ["disableUsergridSingle", groupKey, j],
@@ -207,7 +207,7 @@ function usergridCreateTable() {
 }
 
 function saveUsergridLayout() {
-	dbID("idBtn_child_gridtitle_dbUpload_cl_UserGridLayout").click();
+	KadUtils.dbID("idBtn_child_gridtitle_dbUpload_cl_UserGridLayout").click();
 }
 
 /*
@@ -221,7 +221,7 @@ let mouseIsDraggedUGrid = false;
 let allGridEnabled = false;
 
 function clear_cl_UserGrid() {
-  caUG.background(getCssRoot("bgcNavbar"));
+  caUG.background(KadUtils.CSS.getRoot("bgcNavbar"));
 };
 
 const caUG = new p5((c) => {
@@ -237,7 +237,7 @@ const caUG = new p5((c) => {
   };
 
   c.draw = function() {
-    c.background(getCssRoot("bgcNavbar"));
+    c.background(KadUtils.CSS.getRoot("bgcNavbar"));
     for (i = 0; i < demoCells.length; i++) {
       demoCells[i].show();
     };
@@ -247,8 +247,8 @@ const caUG = new p5((c) => {
 function createBlockArray() {
   layoutCreateGridLayout(nuncDiscipuli.accountInfos.shortName);
   demoCells = [];
-  rowsUGrid = getCssRoot("gridRowLength", true);
-  colsUGrid = getCssRoot("gridColLength", true);
+  rowsUGrid = KadUtils.CSS.getRoot("gridRowLength", true);
+  colsUGrid = KadUtils.CSS.getRoot("gridColLength", true);
   let tileWidth = canvasUGridwidth / (rowsUGrid - 1);
   let tileHeight = canvasUGridheight / (colsUGrid + 1);
 
@@ -331,8 +331,8 @@ class UGridCell {
   };
 
   show() {
-    let bgcColor = this.free ? this.selected ? getCssRoot("bgcSubgrid") : getCssRoot("bgcNavbar") : getCssRoot("bgcBackground");
-    let textColor = this.free ? this.selected ? getCssRoot("textColorSubgrid") : getCssRoot("textColorNavbar") : getCssRoot("textColorBackground");
+    let bgcColor = this.free ? this.selected ? KadUtils.CSS.getRoot("bgcSubgrid") : KadUtils.CSS.getRoot("bgcNavbar") : KadUtils.CSS.getRoot("bgcBackground");
+    let textColor = this.free ? this.selected ? KadUtils.CSS.getRoot("textColorSubgrid") : KadUtils.CSS.getRoot("textColorNavbar") : KadUtils.CSS.getRoot("textColorBackground");
 
     this.posCenter = p5.Vector.add(this.posCanvas, p5.Vector.div(this.tileSize, 2));
 

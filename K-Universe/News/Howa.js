@@ -137,7 +137,7 @@ const howaOptions = {
 };
 
 function clear_cl_Howa() {
-	dbID("idVin_howaEntry").value = "";
+	KadUtils.dbID("idVin_howaEntry").value = "";
 
 	// howaHideInfo();
 	if (howaOptions.intervalRefresh != null) {
@@ -151,42 +151,42 @@ function clear_cl_Howa() {
 	};
 	//reset CB-Selections
 	for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-		dbID(howaOptions.graphTypes[i].dbID).checked = howaOptions.graphTypes[i].checked;
+		KadUtils.dbID(howaOptions.graphTypes[i].dbID).checked = howaOptions.graphTypes[i].checked;
 	}
 
 	//populate MapSelectCriteria
 	for (let i = 0; i < weaterMaps.criteria.length; i++) {
-		dbID("idSel_howaMapsCriteria").options[i] = new Option(weaterMaps.criteria[i].name);
+		KadUtils.dbID("idSel_howaMapsCriteria").options[i] = new Option(weaterMaps.criteria[i].name);
 	}
 
 	//populate MapSelectCountry
 	for (let [index, land] of Data_Country_GermanDistrics.entries()) {
-		dbID("idSel_howaMapsCountry").options[index] = new Option(land.LandDE);
+		KadUtils.dbID("idSel_howaMapsCountry").options[index] = new Option(land.LandDE);
 	}
-	dbIDStyle("idSel_howaMapsCriteria").display = "none";
-	dbIDStyle("idSel_howaMapsCountry").display = "none";
-	dbIDStyle("idImg_howaMapsImg").display = "none";
+	KadUtils.dbIDStyle("idSel_howaMapsCriteria").display = "none";
+	KadUtils.dbIDStyle("idSel_howaMapsCountry").display = "none";
+	KadUtils.dbIDStyle("idImg_howaMapsImg").display = "none";
 	howaGetCoordinates();
 }
 
 function howaPopulateDatalist() {
-	if (dbID("idDlist_howaPlaces").childNodes.length > 1) return;
+	if (KadUtils.dbID("idDlist_howaPlaces").childNodes.length > 1) return;
 	for (const city of Data_PlatLesen.values()) {
 		const opt = document.createElement("OPTION");
 		opt.textContent = city;
-		dbID("idDlist_howaPlaces").appendChild(opt);
+		KadUtils.dbID("idDlist_howaPlaces").appendChild(opt);
 	}
 }
 
 function howaGetCoordinates() {
 	if ("geolocation" in navigator) {
 		howaData.pos.location = null;
-		dbID("idVin_howaEntry").value = "";
-		dbIDStyle("idBtn_getGeoLocation").display = "initial";
+		KadUtils.dbID("idVin_howaEntry").value = "";
+		KadUtils.dbIDStyle("idBtn_getGeoLocation").display = "initial";
 		navigator.geolocation.getCurrentPosition(howaNavigatorPosition, howaNavigatorError);
 	} else {
 		howaNavigatorError();
-		dbIDStyle("idBtn_getGeoLocation").display = "none";
+		KadUtils.dbIDStyle("idBtn_getGeoLocation").display = "none";
 	}
 }
 
@@ -198,14 +198,14 @@ function howaNavigatorPosition(data) {
 
 function howaNavigatorError() {
 	// howaShowInfo("No Geolocation");
-	dbID("idLbl_howaNow").textContent = "No Geolocation";
+	KadUtils.dbID("idLbl_howaNow").textContent = "No Geolocation";
 	howaData.pos.lat = howaData.latOrig;
 	howaData.pos.lon = howaData.lonOrig;
 	howaReqestData();
 }
 
 async function howaGetLocation() {
-	let input = dbID("idVin_howaEntry").value.trim();
+	let input = KadUtils.dbID("idVin_howaEntry").value.trim();
 	if (input == "") return;
 	howaData.pos.location = input;
 	howaReqestData();
@@ -217,25 +217,25 @@ function howaReqestData() {
 		howaData.getTimer = null;
 	}
 	howaData.getTimer = setTimeout(() => {
-		utilsSocketPost("Howa", howaData.pos);
+		KadUtils.socketPost("Howa", howaData.pos);
 		howaData.getTimer = null;
 	}, 400);
 }
 
 // function howaShowInfo(text) {
-//   dbID('idLbl_howaNow').textContent = "";
-//   dbIDStyle("idDiv_howaReturnInfo").display = "initial";
-//   dbID("idLbl_howaNowReturnInfo").innerHTML = text;
+//   KadUtils.dbID('idLbl_howaNow').textContent = "";
+//   KadUtils.dbIDStyle("idDiv_howaReturnInfo").display = "initial";
+//   KadUtils.dbID("idLbl_howaNowReturnInfo").innerHTML = text;
 // };   
 
 // function howaHideInfo() {
-//   dbIDStyle("idDiv_howaReturnInfo").display = "none";
-//   dbID("idLbl_howaNowReturnInfo").textContent = "";
+//   KadUtils.dbIDStyle("idDiv_howaReturnInfo").display = "none";
+//   KadUtils.dbID("idLbl_howaNowReturnInfo").textContent = "";
 // }
 
 function howaReturn(data) {
 	if (data.error) {
-		dbID("idLbl_howaNow").textContent = "Stadt nicht gefunden";
+		KadUtils.dbID("idLbl_howaNow").textContent = "Stadt nicht gefunden";
 		return;
 	}
 
@@ -249,15 +249,15 @@ function howaReturn(data) {
 		howaOptions.intervalRefresh = setInterval(howaReqestData, globalValues.intervalJSON);
 	}
 
-	dbID("idLbl_howaNow").textContent = `${howaData.pos.location}: ${howaData.data[0].main.temp}°C`;
+	KadUtils.dbID("idLbl_howaNow").textContent = `${howaData.pos.location}: ${howaData.data[0].main.temp}°C`;
 
 	/* Get suitable icon for howa */
 	const iconS = document.createElement("i");
-	dbID("idLbl_howaNow").appendChild(iconS);
+	KadUtils.dbID("idLbl_howaNow").appendChild(iconS);
 	iconS.id = "idI_howaIconNow";
 	iconS.classList.remove(...iconS.classList);
 	iconS.classList.add("wi");
-	const dayTime = utilsGetHour() >= utilsGetHour(howaData.data[0].sys.sunrise) && utilsGetHour() < utilsGetHour(howaData.data[0].sys.sunset) ? "day" : "night";
+	const dayTime = KadUtils.Date.getHour() >= KadUtils.Date.getHour(howaData.data[0].sys.sunrise) && KadUtils.Date.getHour() < KadUtils.Date.getHour(howaData.data[0].sys.sunset) ? "day" : "night";
 	iconS.classList.add(`wi-owm-${dayTime}-${howaData.data[0].weather[0].id}`);
 
 	//refresh Graph-data
@@ -268,17 +268,17 @@ function howaReturn(data) {
 
 function howaZoom(obj) {
 	howaOptions.zoomed = !howaOptions.zoomed;
-	utilsBtnColor(obj, howaOptions.zoomed ? "positive" : null);
+	KadUtils.DOM.btnColor(obj, howaOptions.zoomed ? "positive" : null);
 	howaRefreshGraph();
 	howaGraph.update();
 }
 
 function howaMapsExpand() {
-	utilsBtnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
+	KadUtils.DOM.btnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
 	if (weaterMaps.shown) {
-		dbIDStyle("idSel_howaMapsCriteria").display = "none";
-		dbIDStyle("idSel_howaMapsCountry").display = "none";
-		dbIDStyle("idImg_howaMapsImg").display = "none";
+		KadUtils.dbIDStyle("idSel_howaMapsCriteria").display = "none";
+		KadUtils.dbIDStyle("idSel_howaMapsCountry").display = "none";
+		KadUtils.dbIDStyle("idImg_howaMapsImg").display = "none";
 	} else {
 		howaChangeMap();
 	}
@@ -286,15 +286,15 @@ function howaMapsExpand() {
 }
 
 function howaChangeMap() {
-	const indexCountry = dbID("idSel_howaMapsCountry").options.selectedIndex;
-	const indexCriteria = dbID("idSel_howaMapsCriteria").options.selectedIndex;
+	const indexCountry = KadUtils.dbID("idSel_howaMapsCountry").options.selectedIndex;
+	const indexCriteria = KadUtils.dbID("idSel_howaMapsCriteria").options.selectedIndex;
 
 	const country = Data_Country_GermanDistrics[indexCountry].dwd;
 	const criteria = weaterMaps.criteria[indexCriteria].url;
-	dbID("idImg_howaMapsImg").src = `${howaData.dwdURL}${country}_${criteria}.png`;
-	dbIDStyle("idImg_howaMapsImg").display = "initial";
-	dbIDStyle("idSel_howaMapsCriteria").display = "initial";
-	dbIDStyle("idSel_howaMapsCountry").display = "initial";
+	KadUtils.dbID("idImg_howaMapsImg").src = `${howaData.dwdURL}${country}_${criteria}.png`;
+	KadUtils.dbIDStyle("idImg_howaMapsImg").display = "initial";
+	KadUtils.dbIDStyle("idSel_howaMapsCriteria").display = "initial";
+	KadUtils.dbIDStyle("idSel_howaMapsCountry").display = "initial";
 }
 
 function howaOptionChange() {
@@ -302,9 +302,9 @@ function howaOptionChange() {
 		for (let i = 0; i < howaOptions.graphTypes.length; i++) {
 			const dbIDName = howaOptions.graphTypes[i].dbID;
 			const yAxis = howaOptions.graphTypes[i].yAxis;
-			howaGraph.data.datasets[i].hidden = !dbID(dbIDName).checked;
+			howaGraph.data.datasets[i].hidden = !KadUtils.dbID(dbIDName).checked;
 			const index = howaGraph.options.scales.yAxes.map((obj) => obj.id).indexOf(yAxis);
-			howaGraph.options.scales.yAxes[index].display = dbID(dbIDName).checked;
+			howaGraph.options.scales.yAxes[index].display = KadUtils.dbID(dbIDName).checked;
 		}
 		howaGraph.update();
 	}
@@ -318,7 +318,7 @@ function howaCreateGraph() {
 		// The data for our dataset
 		data: {
 			labels: howaData.data.map((data) => {
-				return utilsDate(new Date(data.dt * 1000), { format: "WD HH h" });
+				return KadUtils.Date.getDate(new Date(data.dt * 1000), { format: "WD HH h" });
 			}),
 			datasets: howaOptions.graphTypes.map((d, i) => {
 				return {
@@ -344,7 +344,7 @@ function howaCreateGraph() {
 						return legendItem.index != 1;
 					},
 					usePointStyle: false,
-					padding: getCssRoot("padding", true, true),
+					padding: KadUtils.CSS.getRoot("padding", true, true),
 					boxWidth: globalValues.mediaSizes.size,
 				},
 				onClick: (e) => {},
@@ -475,7 +475,7 @@ function howaRefreshGraph() {
 		if (howaOptions.zoomed && index >= howaOptions.maxZoomedData) {
 			return result;
 		}
-		result.push(utilsDate(new Date(data.dt * 1000), { format: "WD HH h" }).replace(" h", "h"));
+		result.push(KadUtils.Date.getDate(new Date(data.dt * 1000), { format: "WD HH h" }).replace(" h", "h"));
 		return result;
 	}, []);
 
@@ -494,14 +494,14 @@ function howaRefreshGraph() {
 
 function howaColorGraph() {
 	const lCol = globalValues.colors.elements.line;
-	const tCol = utilsColor.formatAsCSS(globalValues.colors.elements.text, "HSL");
+	const tCol = KadUtils.Color.formatAsCSS(globalValues.colors.elements.text, "HSL");
 	howaGraph.options.legend.labels.fontColor = tCol;
 	howaGraph.options.scales.xAxes[0].ticks.fontColor = tCol;
-	howaGraph.options.scales.xAxes[0].gridLines.color = utilsColor.formatAsCSS([...lCol, 0.2], "HSL");
+	howaGraph.options.scales.xAxes[0].gridLines.color = KadUtils.Color.formatAsCSS([...lCol, 0.2], "HSL");
 
 	for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-		const alpha = utilsValueMapping(i, 0, howaOptions.graphTypes.length - 1, 0.8, 0.2, true);
-		howaGraph.options.scales.yAxes[i].gridLines.color = utilsColor.formatAsCSS([...lCol, alpha], "HSL");
+		const alpha = KadUtils.Value.mapping(i, 0, howaOptions.graphTypes.length - 1, 0.8, 0.2, true);
+		howaGraph.options.scales.yAxes[i].gridLines.color = KadUtils.Color.formatAsCSS([...lCol, alpha], "HSL");
 		howaGraph.options.scales.yAxes[i].ticks.fontColor = howaOptions.graphTypes[i].color;
 	}
 	howaGraph.update();

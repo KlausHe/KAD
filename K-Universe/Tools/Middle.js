@@ -25,8 +25,8 @@ function middleResize() {
 }
 
 function clear_cl_Middle() {
-	utilsResetInput("idVin_middleA", 5);
-	utilsResetInput("idVin_middleB", 2);
+	KadUtils.DOM.resetInput("idVin_middleA", 5);
+	KadUtils.DOM.resetInput("idVin_middleB", 2);
 	middleOptions.barA = {
 		hStart: 0,
 		h: middleOptions.canvas.h * 0.5,
@@ -53,8 +53,8 @@ function clear_cl_Middle() {
 }
 
 function calcMiddle() {
-	const a = utilsNumberFromInput("idVin_middleA");
-	const b = utilsNumberFromInput("idVin_middleB");
+	const a = KadUtils.DOM.numberFromInput("idVin_middleA");
+	const b = KadUtils.DOM.numberFromInput("idVin_middleB");
 	middleOptions.barA.val = a;
 	middleOptions.barB.val = b;
 	middleOptions.barA.text = `a: ${middleOptions.barA.val}`;
@@ -63,10 +63,10 @@ function calcMiddle() {
 	middleOptions.dims.mappedMax = Math.ceil((middleOptions.dims.max + 1) / 10) * 10;
 	middleOptions.dims.mid = (a + b) * 0.5;
 	middleOptions.dims.diff = Math.abs((a - b) * 0.5);
-	middleOptions.dims.midText = utilsNumber(middleOptions.dims.mid, { decimals: 3 });
-	middleOptions.dims.diffText = utilsNumber(middleOptions.dims.diff, { decimals: 3 });
-	dbID("idLbl_middleMid").textContent = `Mitte: ${middleOptions.dims.midText}`;
-	dbID("idLbl_middleDiff").textContent = `Differenz zur Mitte: ${middleOptions.dims.diffText}`;
+	middleOptions.dims.midText = KadUtils.Value.number(middleOptions.dims.mid, { decimals: 3 });
+	middleOptions.dims.diffText = KadUtils.Value.number(middleOptions.dims.diff, { decimals: 3 });
+	KadUtils.dbID("idLbl_middleMid").textContent = `Mitte: ${middleOptions.dims.midText}`;
+	KadUtils.dbID("idLbl_middleDiff").textContent = `Differenz zur Mitte: ${middleOptions.dims.diffText}`;
 	middleOptions.barA.w = caMI.map(middleOptions.barA.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.barB.w = caMI.map(middleOptions.barB.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.dims.w = caMI.map(middleOptions.dims.mid, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);

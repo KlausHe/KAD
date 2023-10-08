@@ -12,11 +12,11 @@ const bgaOptions = {
 //new: Stopwatch!
 function clear_cl_BackgroundAnimation() {
 	bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Cursordot(), new Trail(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new GameOfLife(), new PongAI()];
-	clearFirstChild("idSel_bgaSelect");
+	KadUtils.DOM.clearFirstChild("idSel_bgaSelect");
 	bgaOptions.animations.forEach((cls, index) => {
-		dbID("idSel_bgaSelect").options[index] = new Option(cls.constructor.name);
+		KadUtils.dbID("idSel_bgaSelect").options[index] = new Option(cls.constructor.name);
 	});
-	dbID("idCb_bgaReset").checked = true;
+	KadUtils.dbID("idCb_bgaReset").checked = true;
 }
 
 function bgaClearBackground() {
@@ -42,7 +42,7 @@ function bgaToggleReset(obj) {
 function bgaStart() {
 	bgaOptions.animations[bgaOptions.curr].reset();
 	caBA.frameRate(bgaOptions.animations[bgaOptions.curr].Framerate);
-	dbID("idImg_bgaToggle").src = utilsGetImgPath("tStop");
+	KadUtils.dbID("idImg_bgaToggle").src = KadUtils.DOM.getImgPath("tStop");
 	bgaOptions.drawing = true;
 	caBA.loop();
 	if (globalValues.hostDebug) {
@@ -51,7 +51,7 @@ function bgaStart() {
 }
 
 function bgaStopp() {
-	dbID("idImg_bgaToggle").src = utilsGetImgPath("tPlay");
+	KadUtils.dbID("idImg_bgaToggle").src = KadUtils.DOM.getImgPath("tPlay");
 	caBA.noLoop();
 }
 
@@ -82,7 +82,7 @@ function bgaQuit() {
 
 const caBA = new p5((c) => {
 	c.setup = function () {
-		const n = getCssRoot("navbarHeight", true, true);
+		const n = KadUtils.CSS.getRoot("navbarHeight", true, true);
 		c.canv = c.createCanvas(window.innerWidth, window.innerHeight - 2 * n);
 		c.canv.id("canvasBackAnimation");
 		c.canv.parent("#idCanv_backgroundAnimation");
@@ -98,8 +98,8 @@ const caBA = new p5((c) => {
 		}
 	};
 	c.windowResized = function () {
-		const g = getCssRoot("gridGap", true, true);
-		const n = getCssRoot("navbarHeight", true, true);
+		const g = KadUtils.CSS.getRoot("gridGap", true, true);
+		const n = KadUtils.CSS.getRoot("navbarHeight", true, true);
 		c.resizeCanvas(window.innerWidth, window.innerHeight - g - n);
 		if (bgaOptions.drawing) {
 			bgaOptions.animations[bgaOptions.curr].reset();
@@ -134,8 +134,8 @@ class Clock {
 		caBA.translate(caBA.width / 2, caBA.height / 2);
 		const today = new Date();
 		const format = today.getSeconds() % 2 == 0 ? "HH mm" : "HH:mm";
-		const time = utilsDate(today, { format });
-		const date = utilsDate(today);
+		const time = KadUtils.Date.getDate(today, { format });
+		const date = KadUtils.Date.getDate(today);
 		caBA.textAlign(caBA.CENTER, caBA.BOTTOM);
 		caBA.textSize(this.size);
 		caBA.text(time, 0, 0);
@@ -255,7 +255,7 @@ class Time {
 	draw() {
 		caBA.clear();
 		caBA.translate(caBA.width / 2, caBA.height / 2);
-		const time = utilsDate(null, { format: "HH:mm:ss-ms" });
+		const time = KadUtils.Date.getDate(null, { format: "HH:mm:ss-ms" });
 		caBA.text(time, -this.offset, 0);
 	}
 }
@@ -294,8 +294,8 @@ class Trail {
 		caBA.noFill();
 		caBA.stroke(this.col);
 		caBA.strokeWeight(this.w * 2);
-		this.shape = ""; //randomObject(["", caBA.TRIANGLE_FAN])
-		this.close = caBA.OPEN; //randomObject(["", caBA.CLOSE])
+		this.shape = ""; //KadUtils.Random.randomObject(["", caBA.TRIANGLE_FAN])
+		this.close = caBA.OPEN; //KadUtils.Random.randomObject(["", caBA.CLOSE])
 		this.trail[0] = {
 			x: caBA.mouseX,
 			y: caBA.mouseY,
@@ -401,7 +401,7 @@ class LanktonsAnt {
 	reset() {
 		this.cols = Math.floor(caBA.width / this.resolution);
 		this.rows = Math.floor(caBA.height / this.resolution);
-		this.grid = create2DArray(this.cols, this.rows, 0);
+		this.grid = KadUtils.Array.createArray(this.cols, this.rows, 0);
 		this.x = Math.floor(this.cols / 2);
 		this.y = Math.floor(this.rows / 2);
 		this.dir = Math.floor(Math.random() * 4);
@@ -531,8 +531,8 @@ class AStar {
 				this.grid[i][j].addNeighbors(this.grid);
 			}
 		}
-		this.startPoint = this.grid[randomObject(this.cols)][randomObject(this.rows)];
-		this.endPoint = this.grid[randomObject(this.cols)][randomObject(this.rows)];
+		this.startPoint = this.grid[KadUtils.Random.randomObject(this.cols)][KadUtils.Random.randomObject(this.rows)];
+		this.endPoint = this.grid[KadUtils.Random.randomObject(this.cols)][KadUtils.Random.randomObject(this.rows)];
 		this.startPoint.wall = false;
 		this.endPoint.wall = false;
 		this.openSet = [];
@@ -949,7 +949,7 @@ class TenPrint {
 	}
 	draw() {
 		for (let i = 0; i < 5; i++) {
-			const avaibleIndex = randomIndex(this.avaible);
+			const avaibleIndex = KadUtils.Random.randomIndex(this.avaible);
 			const index = this.avaible.splice(avaibleIndex, 1);
 			const spot = this.grid[index];
 			if (spot.dir) {
@@ -980,7 +980,7 @@ class GameOfLife {
 		this.resetting = null;
 		this.cols = Math.floor(caBA.width / this.resolution);
 		this.rows = Math.floor(caBA.height / this.resolution);
-		this.gridCurr = create2DArray(this.cols, this.rows);
+		this.gridCurr = KadUtils.Array.createArray(this.cols, this.rows);
 		for (let i = 0; i < this.cols; i++) {
 			for (let j = 0; j < this.rows; j++) {
 				this.gridCurr[i][j] = Math.random() > 0.7;
@@ -1005,7 +1005,7 @@ class GameOfLife {
 			}
 		}
 		// logic
-		let gridNext = create2DArray(this.cols, this.rows);
+		let gridNext = KadUtils.Array.createArray(this.cols, this.rows);
 		for (let i = 0; i < this.cols; i++) {
 			for (let j = 0; j < this.rows; j++) {
 				const state = this.gridCurr[i][j];
@@ -1045,7 +1045,7 @@ class GameOfLife {
 		return sum;
 	}
 	copy2DArray(from) {
-		return deepClone(from);
+		return KadUtils.deepClone(from);
 	}
 }
 

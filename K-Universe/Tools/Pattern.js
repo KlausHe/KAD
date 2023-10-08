@@ -54,23 +54,23 @@ function patternResize() {
 }
 
 function clear_cl_Pattern() {
-	patternOptions.length.val = utilsResetInput("idVin_Pattern0", patternOptions.length.valOrig);
-	patternOptions.side.val = utilsResetInput("idVin_Pattern1", patternOptions.side.valOrig);
-	patternOptions.asym.val = utilsResetInput("idVin_Pattern2", patternOptions.asym.valOrig);
-	patternOptions.numHoles.val = utilsResetInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
+	patternOptions.length.val = KadUtils.DOM.resetInput("idVin_Pattern0", patternOptions.length.valOrig);
+	patternOptions.side.val = KadUtils.DOM.resetInput("idVin_Pattern1", patternOptions.side.valOrig);
+	patternOptions.asym.val = KadUtils.DOM.resetInput("idVin_Pattern2", patternOptions.asym.valOrig);
+	patternOptions.numHoles.val = KadUtils.DOM.resetInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
 
-	dbID("idLbl_Pattern0").textContent = patternOptions.length.name; //gesamltänge
-	dbID("idLbl_Pattern1").textContent = patternOptions.side.name; //Seitenversatz
-	dbID("idLbl_Pattern2").textContent = patternOptions.asym.name; //Asymmetrie
-	dbID("idLbl_Pattern3").textContent = patternOptions.numHoles.name; //Punkte
+	KadUtils.dbID("idLbl_Pattern0").textContent = patternOptions.length.name; //gesamltänge
+	KadUtils.dbID("idLbl_Pattern1").textContent = patternOptions.side.name; //Seitenversatz
+	KadUtils.dbID("idLbl_Pattern2").textContent = patternOptions.asym.name; //Asymmetrie
+	KadUtils.dbID("idLbl_Pattern3").textContent = patternOptions.numHoles.name; //Punkte
 	calcPattern();
 }
 
 function calcPattern() {
-	patternOptions.length.val = utilsNumberFromInput("idVin_Pattern0", patternOptions.length.valOrig);
-	patternOptions.side.val = utilsNumberFromInput("idVin_Pattern1", patternOptions.side.valOrig);
-	patternOptions.asym.val = utilsNumberFromInput("idVin_Pattern2", patternOptions.asym.valOrig);
-	patternOptions.numHoles.val = utilsNumberFromInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
+	patternOptions.length.val = KadUtils.DOM.numberFromInput("idVin_Pattern0", patternOptions.length.valOrig);
+	patternOptions.side.val = KadUtils.DOM.numberFromInput("idVin_Pattern1", patternOptions.side.valOrig);
+	patternOptions.asym.val = KadUtils.DOM.numberFromInput("idVin_Pattern2", patternOptions.asym.valOrig);
+	patternOptions.numHoles.val = KadUtils.DOM.numberFromInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
 
 	//correct based on Length
 	patternOptions.side.val = patternOptions.length.val <= 2 * patternOptions.side.val ? 0 : patternOptions.side.val;
@@ -81,7 +81,7 @@ function calcPattern() {
 	} else {
 		patternOptions.propHoles.val = 2;
 	}
-	dbID("idVin_Pattern4").textContent = `${patternOptions.propHoles.val} Punkte`;
+	KadUtils.dbID("idVin_Pattern4").textContent = `${patternOptions.propHoles.val} Punkte`;
 
 	//Array
 	let incBasis = (patternOptions.length.val - 2 * patternOptions.side.val - patternOptions.asym.val) / (patternOptions.numHoles.val - 1);
@@ -109,7 +109,7 @@ function calcPattern() {
 }
 
 function patternProp() {
-	dbID("idVin_Pattern3").value = patternOptions.propHoles.val;
+	KadUtils.dbID("idVin_Pattern3").value = patternOptions.propHoles.val;
 	calcPattern();
 }
 
@@ -126,7 +126,7 @@ function drawPattern() {
 	caPA.noStroke();
 	caPA.fill(globalValues.colors.elements.line);
 	caPA.strokeWeight(1);
-	caPA.text(utilsNumber(patternOptions.length.val, { decimals: 3 }), w / 2, h * 0.1);
+	caPA.text(KadUtils.Value.number(patternOptions.length.val, { decimals: 3 }), w / 2, h * 0.1);
 	//Maincontur
 	caPA.stroke(globalValues.colors.elements.line);
 	caPA.strokeWeight(4);
@@ -181,9 +181,9 @@ function drawPattern() {
 		caPA.noStroke();
 		if (i < patternOptions.absArr.length - 1 && patternOptions.absArr[i] != patternOptions.length.val) {
 			offset = 0.9;
-			caPA.text(utilsNumber(patternOptions.absArr[i], { decimals: 3 }), absPos, h * offset);
+			caPA.text(KadUtils.Value.number(patternOptions.absArr[i], { decimals: 3 }), absPos, h * offset);
 		}
 		offset = 0.55;
-		caPA.text(utilsNumber(patternOptions.incArr[i], { decimals: 3 }), incPos, h * offset);
+		caPA.text(KadUtils.Value.number(patternOptions.incArr[i], { decimals: 3 }), incPos, h * offset);
 	}
 }

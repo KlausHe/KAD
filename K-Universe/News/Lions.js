@@ -4,8 +4,8 @@ const lionsOptions = {
 };
 
 function clear_cl_Lions() {
-	utilsResetInput("idVin_lionsInput", "1234");
-	dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
+	KadUtils.DOM.resetInput("idVin_lionsInput", "1234");
+	KadUtils.dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
 	lionsOptions.data = [];
 	if (Object.keys(lionsOptions.data).length === 0) {
 		lionsRequestData();
@@ -13,8 +13,8 @@ function clear_cl_Lions() {
 }
 
 function lionsRequestNumber() {
-	const infoLbl = dbID("idLbl_lionsOutput");
-	lionsOptions.num = dbID("idVin_lionsInput").value.trim();
+	const infoLbl = KadUtils.dbID("idLbl_lionsOutput");
+	lionsOptions.num = KadUtils.dbID("idVin_lionsInput").value.trim();
 	if (lionsOptions.num == "" || isNaN(lionsOptions.num) || lionsOptions.num.length != 4) {
 		infoLbl.textContent = `...`;
 		infoLbl.classList.remove("cl_highlighted");
@@ -34,14 +34,14 @@ function lionsRequestNumber() {
 	}
 	infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[index].date}`;
 	infoLbl.classList.add("cl_highlighted");
-	dbID("idTabBody_Lions").rows[index].scrollIntoView({
+	KadUtils.dbID("idTabBody_Lions").rows[index].scrollIntoView({
 		behavior: "smooth",
 		block: "center",
 	});
 }
 
 function lionsRequestData() {
-	utilsSocketPost("Lions", null);
+	KadUtils.socketPost("Lions", null);
 }
 
 function lionsReturn(data) {
@@ -79,9 +79,9 @@ function lionsReturn(data) {
 
 function createLionsTable() {
 	//header
-	clearTable("idTabHeader_Lions");
-	const rowTh = insertTableRow("idTabHeader_Lions");
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.clear("idTabHeader_Lions");
+	const rowTh = KadUtils.Table.insertRow("idTabHeader_Lions");
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Date"],
 		type: "Lbl",
 		text: "Datum",
@@ -89,7 +89,7 @@ function createLionsTable() {
 			textAlign: "left",
 		},
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Winner"],
 		type: "Lbl",
 		text: "Gewinner",
@@ -97,7 +97,7 @@ function createLionsTable() {
 			textAlign: "left",
 		},
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Price"],
 		type: "Lbl",
 		text: "Preis",
@@ -106,10 +106,10 @@ function createLionsTable() {
 		},
 	});
 
-	clearTable("idTabBody_Lions");
+	KadUtils.Table.clear("idTabBody_Lions");
 	for (const [index, obj] of lionsOptions.data.entries()) {
-		const row = insertTableRow("idTabBody_Lions");
-		tableAddCell(row, {
+		const row = KadUtils.Table.insertRow("idTabBody_Lions");
+		KadUtils.Table.addCell(row, {
 			names: ["lions", "date", index],
 			type: "Lbl",
 			text: obj.date,
@@ -117,7 +117,7 @@ function createLionsTable() {
 				textAlign: "left",
 			},
 		});
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["lions", "winner", index],
 			type: "Lbl",
 			text: obj.num.join(", "),
@@ -125,7 +125,7 @@ function createLionsTable() {
 				textAlign: "left",
 			},
 		});
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["lions", "price", index],
 			type: "Lbl",
 			text: obj.price,

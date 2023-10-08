@@ -113,7 +113,7 @@ function biktadaIPError(data) {
 }
 
 function biktadaPassValue(id) {
-	dbID(`idLbl_cell_biktada_value_${id}`).innerHTML = biktadaOptions.data[id].value;
+	KadUtils.dbID(`idLbl_cell_biktada_value_${id}`).innerHTML = biktadaOptions.data[id].value;
 }
 
 function clear_cl_BiktadA() {
@@ -130,9 +130,9 @@ function biktadaGetData() {
 
 function createBiktadaTable() {
 	//header
-	clearTable("idTabHeader_BiktadA");
-	const rowTh = insertTableRow("idTabHeader_BiktadA");
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.clear("idTabHeader_BiktadA");
+	const rowTh = KadUtils.Table.insertRow("idTabHeader_BiktadA");
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["biktadaHeader", "Description"],
 		type: "Lbl",
 		text: "Info",
@@ -140,7 +140,7 @@ function createBiktadaTable() {
 			textAlign: "left",
 		},
 	});
-	tableAddCellHeader(rowTh, {
+	KadUtils.Table.addHeaderCell(rowTh, {
 		names: ["biktadaHeader", "Value"],
 		type: "Lbl",
 		text: "Wert",
@@ -150,10 +150,10 @@ function createBiktadaTable() {
 	});
 
 	// body
-	clearTable("idTabBody_BiktadA");
+	KadUtils.Table.clear("idTabBody_BiktadA");
 	for (const objName in biktadaOptions.data) {
-		const row = insertTableRow("idTabBody_BiktadA");
-		tableAddCell(row, {
+		const row = KadUtils.Table.insertRow("idTabBody_BiktadA");
+		KadUtils.Table.addCell(row, {
 			names: ["biktada", "description", objName],
 			type: "Lbl",
 			text: biktadaOptions.data[objName].description,
@@ -162,7 +162,7 @@ function createBiktadaTable() {
 				textAlign: "left",
 			},
 		});
-		tableAddCell(row, {
+		KadUtils.Table.addCell(row, {
 			names: ["biktada", "value", objName],
 			type: "Lbl",
 			text: "...",

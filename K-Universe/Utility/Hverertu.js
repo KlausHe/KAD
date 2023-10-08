@@ -27,13 +27,13 @@ const hverertuOptions = {
 };
 
 function clear_cl_Hverertu() {
-  utilsResetInput("idVin_hverertuEntry", "Enter a Name")
+  KadUtils.DOM.resetInput("idVin_hverertuEntry", "Enter a Name")
   createHverertuTable()
   hverertuOptions.input = "";
 };
 
 function hverertuGetData() {
-  hverertuOptions.input = dbID("idVin_hverertuEntry").value.trim();
+  hverertuOptions.input = KadUtils.dbID("idVin_hverertuEntry").value.trim();
   if (hverertuOptions.input == "") return
   for (let obj in hverertuOptions.data) {
     hverertuOptions.data[obj].data;
@@ -41,13 +41,13 @@ function hverertuGetData() {
 };
 
 function hverertuPassValue(id) {
-  dbID(`idLbl_cell_hverertu_value_${id}`).innerHTML = hverertuOptions.data[id].value;
+  KadUtils.dbID(`idLbl_cell_hverertu_value_${id}`).innerHTML = hverertuOptions.data[id].value;
 }
 
 function hverertuAlter(data) {
   hverertuOptions.data.Alter.value = (data.age == null) ? "keine Daten gefunden" : data.age;
   hverertuPassValue("Alter");
-  dbID("idLbl_child_hverertuHeader_Value").innerHTML = data.name;
+  KadUtils.dbID("idLbl_child_hverertuHeader_Value").innerHTML = data.name;
 }
 
 function hverertuHerkunft(data) {
@@ -74,9 +74,9 @@ function hverertuGender(data) {
 
 function createHverertuTable() {
   //header
-  clearTable("idTabHeader_Hverertu");
-  const rowTh = insertTableRow("idTabHeader_Hverertu")
-  tableAddCellHeader(rowTh, {
+  KadUtils.Table.clear("idTabHeader_Hverertu");
+  const rowTh = KadUtils.Table.insertRow("idTabHeader_Hverertu")
+  KadUtils.Table.addHeaderCell(rowTh, {
     names: ["hverertuHeader", "Description"],
     type: "Lbl",
     text: "Name",
@@ -84,7 +84,7 @@ function createHverertuTable() {
       textAlign: "left"
     }
   });
-  tableAddCellHeader(rowTh, {
+  KadUtils.Table.addHeaderCell(rowTh, {
     names: ["hverertuHeader", "Value"],
     type: "Lbl",
     text: "...",
@@ -97,11 +97,11 @@ function createHverertuTable() {
  
  
  
-  clearTable("idTabBody_Hverertu");
+  KadUtils.Table.clear("idTabBody_Hverertu");
   // body
   for (const objName in hverertuOptions.data) {
-    const row = insertTableRow("idTabBody_Hverertu")
-    tableAddCell(row, {
+    const row = KadUtils.Table.insertRow("idTabBody_Hverertu")
+    KadUtils.Table.addCell(row, {
       names: ["hverertu", "description", objName],
       type: "Lbl",
       text: hverertuOptions.data[objName].description,
@@ -110,7 +110,7 @@ function createHverertuTable() {
         textAlign: "left"
       }
     });
-    tableAddCell(row, {
+    KadUtils.Table.addCell(row, {
       names: ["hverertu", "value", objName],
       type: "Lbl",
       text: "...",

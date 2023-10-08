@@ -11,11 +11,11 @@ function clear_cl_MaterialFilterSettings() {
 
 //Hauptliste mit Werkstoffdaten ersetllen!!!
 function materialFilterBuildTable() {
-	clearTable("idTabHeader_MaterialFilterTable");
-	let headerRow = insertTableRow("idTabHeader_MaterialFilterTable");
-	clearTable("idTabBody_MaterialFilterTable");
+	KadUtils.Table.clear("idTabHeader_MaterialFilterTable");
+	let headerRow = KadUtils.Table.insertRow("idTabHeader_MaterialFilterTable");
+	KadUtils.Table.clear("idTabBody_MaterialFilterTable");
 	for (const key of Object.keys(Data_Material.metadata)) {
-		let bodyRow = insertTableRow("idTabBody_MaterialFilterTable");
+		let bodyRow = KadUtils.Table.insertRow("idTabBody_MaterialFilterTable");
 		let nextCell = 0;
 		let cell = bodyRow.insertCell(nextCell);
 		let tempCB = document.createElement("input");

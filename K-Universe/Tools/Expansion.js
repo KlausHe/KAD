@@ -16,11 +16,11 @@ const expansionOptions = {
 };
 
 function clear_cl_Expansion() {
-	utilsResetInput("idVin_expansionLength", expansionOptions.lengthOrig[0]);
-	utilsResetInput("idVin_expansionTemperature", expansionOptions.tempsOrig[0]);
-	utilsResetInput("idVin_expansionBaseTemperature", expansionOptions.baseTemp);
+	KadUtils.DOM.resetInput("idVin_expansionLength", expansionOptions.lengthOrig[0]);
+	KadUtils.DOM.resetInput("idVin_expansionTemperature", expansionOptions.tempsOrig[0]);
+	KadUtils.DOM.resetInput("idVin_expansionBaseTemperature", expansionOptions.baseTemp);
 
-	dbID("idCb_expansionCoefficient").checked = false;
+	KadUtils.dbID("idCb_expansionCoefficient").checked = false;
 	expansionOptions.exLength = [...expansionOptions.lengthOrig];
 	expansionOptions.exTemp = [...expansionOptions.tempsOrig];
 	expansionPopulateSelection();
@@ -28,10 +28,10 @@ function clear_cl_Expansion() {
 }
 
 function expansionPopulateSelection() {
-	if (dbID("idSel_expansionMaterialA").options.length > 1) return;
-	dbID("idSel_expansionMaterialA").innerHTML = "";
-	dbID("idSel_expansionMaterialB").innerHTML = "";
-	dbID("idSel_expansionMaterialB").options[0] = new Option("---", 0);
+	if (KadUtils.dbID("idSel_expansionMaterialA").options.length > 1) return;
+	KadUtils.dbID("idSel_expansionMaterialA").innerHTML = "";
+	KadUtils.dbID("idSel_expansionMaterialB").innerHTML = "";
+	KadUtils.dbID("idSel_expansionMaterialB").options[0] = new Option("---", 0);
 
 	let selOptGroup = document.createElement("optgroup");
 	selOptGroup.id = "idOptGroup_selectedMaterialsA";
@@ -62,17 +62,17 @@ function expansionPopulateSelection() {
 	selOptGroup2.id = "idOptGroup_selectedMaterialsB";
 	const matOptGroup2 = matOptGroup.cloneNode(true);
 	matOptGroup2.id = "idOptGroup_generalMaterialsB";
-	dbID("idSel_expansionMaterialA").appendChild(selOptGroup);
-	dbID("idSel_expansionMaterialA").appendChild(matOptGroup);
-	dbID("idSel_expansionMaterialB").appendChild(selOptGroup2);
-	dbID("idSel_expansionMaterialB").appendChild(matOptGroup2);
+	KadUtils.dbID("idSel_expansionMaterialA").appendChild(selOptGroup);
+	KadUtils.dbID("idSel_expansionMaterialA").appendChild(matOptGroup);
+	KadUtils.dbID("idSel_expansionMaterialB").appendChild(selOptGroup2);
+	KadUtils.dbID("idSel_expansionMaterialB").appendChild(matOptGroup2);
 }
 
 function expansionUpdateOptions() {
-	const groupA = dbID("idOptGroup_selectedMaterialsA");
-	const groupB = dbID("idOptGroup_selectedMaterialsB");
-	clearFirstChild("idOptGroup_selectedMaterialsA");
-	clearFirstChild("idOptGroup_selectedMaterialsB");
+	const groupA = KadUtils.dbID("idOptGroup_selectedMaterialsA");
+	const groupB = KadUtils.dbID("idOptGroup_selectedMaterialsB");
+	KadUtils.DOM.clearFirstChild("idOptGroup_selectedMaterialsA");
+	KadUtils.DOM.clearFirstChild("idOptGroup_selectedMaterialsB");
 	for (let i = 0; i < expansionOptions.matList.length; i++) {
 		if (Data_Material.Materials[expansionOptions.matList[i]].expansion) {
 			const opt1 = document.createElement("OPTION");
@@ -86,29 +86,29 @@ function expansionUpdateOptions() {
 }
 
 function expansionSwitch() {
-	const tempSelB = dbID("idSel_expansionMaterialB").selectedIndex;
-	const tempSelA = dbID("idSel_expansionMaterialA").selectedIndex;
+	const tempSelB = KadUtils.dbID("idSel_expansionMaterialB").selectedIndex;
+	const tempSelA = KadUtils.dbID("idSel_expansionMaterialA").selectedIndex;
 	if (tempSelB > 0) {
-		dbID("idSel_expansionMaterialA").options[tempSelB - 1].selected = true;
-		dbID("idSel_expansionMaterialB").options[tempSelA + 1].selected = true;
+		KadUtils.dbID("idSel_expansionMaterialA").options[tempSelB - 1].selected = true;
+		KadUtils.dbID("idSel_expansionMaterialB").options[tempSelA + 1].selected = true;
 	}
 	expansionEntryMaterial();
 }
 
 function expansionEntryMaterial() {
-	expansionOptions.materials.matA = dbID("idSel_expansionMaterialA").value;
-	expansionOptions.materials.matB = dbID("idSel_expansionMaterialB").value;
+	expansionOptions.materials.matA = KadUtils.dbID("idSel_expansionMaterialA").value;
+	expansionOptions.materials.matB = KadUtils.dbID("idSel_expansionMaterialB").value;
 	expansionOptions.materials.compare = expansionOptions.materials.matB == 0 || expansionOptions.materials.matA === expansionOptions.materials.matB ? false : true;
-	utilsEnableBtn(idCb_expansionDifference, !expansionOptions.materials.compare);
+	KadUtils.DOM.enableBtn(idCb_expansionDifference, !expansionOptions.materials.compare);
 
-	const cbEntry = dbID("idLbl_expansionDifference").textContent;
-	dbID("idLbl_expansionDifference").innerHTML = expansionOptions.materials.compare ? `<del>${cbEntry}</del>` : cbEntry;
+	const cbEntry = KadUtils.dbID("idLbl_expansionDifference").textContent;
+	KadUtils.dbID("idLbl_expansionDifference").innerHTML = expansionOptions.materials.compare ? `<del>${cbEntry}</del>` : cbEntry;
 
 	expansionCalc();
 }
 
 function expansionEntryLength() {
-	const val = Number(dbID("idVin_expansionLength").value);
+	const val = Number(KadUtils.dbID("idVin_expansionLength").value);
 	if (!expansionOptions.exLength.includes(val)) {
 		expansionOptions.exLength.push(val);
 		expansionOptions.exLength.sort((a, b) => {
@@ -119,12 +119,12 @@ function expansionEntryLength() {
 }
 
 function expansionEntryBaseTemperature() {
-	expansionOptions.baseTemp = Number(dbID("idVin_expansionBaseTemperature").value);
+	expansionOptions.baseTemp = Number(KadUtils.dbID("idVin_expansionBaseTemperature").value);
 	expansionCalc();
 }
 
 function expansionEntryTemperature() {
-	const val = Number(dbID("idVin_expansionTemperature").value);
+	const val = Number(KadUtils.dbID("idVin_expansionTemperature").value);
 	if (!expansionOptions.exTemp.includes(val)) {
 		expansionOptions.exTemp.push(val);
 		expansionOptions.exTemp.sort((a, b) => {
@@ -143,15 +143,15 @@ function expansionCoefficient() {
 }
 
 function expansionCalc() {
-	const checkedLength = dbID("idCb_expansionDifference").checked;
-	const checkedCoeff = dbID("idCb_expansionCoefficient").checked;
+	const checkedLength = KadUtils.dbID("idCb_expansionDifference").checked;
+	const checkedCoeff = KadUtils.dbID("idCb_expansionCoefficient").checked;
 	expansionOptions.materials.deltaExpansion = [];
 	for (let t = 0; t < expansionOptions.exTemp.length; t++) {
 		const dT = expansionOptions.exTemp[t] - expansionOptions.baseTemp;
 		expansionOptions.materials.deltaExpansion[t] = [];
 		for (let l = 0; l < expansionOptions.exLength.length; l++) {
 			const tempA = Object.keys(Data_Material.Materials[expansionOptions.materials.matA].expansion);
-			const selTempA = utilsGetNearestValueInArray(tempA, expansionOptions.exTemp[t]);
+			const selTempA = KadUtils.Array.getNearestValueInArray(tempA, expansionOptions.exTemp[t]);
 			const alphaA = Number(Data_Material.Materials[expansionOptions.materials.matA].expansion[selTempA]);
 			const addLength = checkedLength ? 0 : expansionOptions.exLength[l];
 			const dLA = alphaA * dT * expansionOptions.exLength[l] * 0.000001 + addLength;
@@ -159,7 +159,7 @@ function expansionCalc() {
 			let alphaB = 0;
 			if (expansionOptions.materials.compare) {
 				const tempB = Object.keys(Data_Material.Materials[expansionOptions.materials.matB].expansion);
-				const selTempB = utilsGetNearestValueInArray(tempB, expansionOptions.exTemp[t]);
+				const selTempB = KadUtils.Array.getNearestValueInArray(tempB, expansionOptions.exTemp[t]);
 				alphaB = Number(Data_Material.Materials[expansionOptions.materials.matB].expansion[selTempB]);
 				dLB = alphaB * dT * expansionOptions.exLength[l] * 0.000001 + addLength;
 			}
@@ -167,10 +167,10 @@ function expansionCalc() {
 				if (expansionOptions.materials.compare) {
 					expansionOptions.materials.deltaExpansion[t].push(`${alphaA} / ${alphaB}`);
 				} else {
-					expansionOptions.materials.deltaExpansion[t].push(utilsNumber(alphaA, { decimals: 1 }));
+					expansionOptions.materials.deltaExpansion[t].push(KadUtils.Value.number(alphaA, { decimals: 1 }));
 				}
 			} else {
-				expansionOptions.materials.deltaExpansion[t].push(utilsNumber(dLA - dLB, { decimals: 3 }));
+				expansionOptions.materials.deltaExpansion[t].push(KadUtils.Value.number(dLA - dLB, { decimals: 3 }));
 			}
 		}
 	}
@@ -191,8 +191,8 @@ function build_ExpansionTable() {
 		layoutNavClick();
 	}
 
-	clearTable("idTabHeader_ExpansionList");
-	const headerRow = insertTableRow("idTabHeader_ExpansionList");
+	KadUtils.Table.clear("idTabHeader_ExpansionList");
+	const headerRow = KadUtils.Table.insertRow("idTabHeader_ExpansionList");
 
 	let headCell = document.createElement("th");
 	if (expansionOptions.materials.compare) {
@@ -203,7 +203,7 @@ function build_ExpansionTable() {
 	headerRow.appendChild(headCell);
 	//create Header
 	for (let n = 0; n < expansionOptions.exTemp.length; n++) {
-		tableAddCellHeader(headerRow, {
+		KadUtils.Table.addHeaderCell(headerRow, {
 			names: ["expansionHeaderTemp", n],
 			type: "Lbl",
 			text: `${expansionOptions.exTemp[n]} C`,
@@ -217,10 +217,10 @@ function build_ExpansionTable() {
 		});
 	}
 	//clear list
-	clearTable("idTabBody_ExpansionList");
+	KadUtils.Table.clear("idTabBody_ExpansionList");
 	for (let i = 0; i < expansionOptions.exLength.length; i++) {
-		const row = insertTableRow("idTabBody_ExpansionList");
-		tableAddCellHeader(row, {
+		const row = KadUtils.Table.insertRow("idTabBody_ExpansionList");
+		KadUtils.Table.addHeaderCell(row, {
 			names: ["expansionHeaderLength", i],
 			type: "Lbl",
 			text: `${expansionOptions.exLength[i]} mm`,
@@ -234,7 +234,7 @@ function build_ExpansionTable() {
 			},
 		});
 		for (let t = 0; t < expansionOptions.exTemp.length; t++) {
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["expansionVal", t, i],
 				type: "Lbl",
 				text: expansionOptions.materials.deltaExpansion[t][i],

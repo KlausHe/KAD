@@ -18,7 +18,7 @@ function clear_cl_Pythagoras() {
 	pythoOptions.vals = [];
 	for (let i = 0; i < 5; i++) {
 		const val = pythoOptions.inputState.includes(i) ? pythoOptions.valsOrig[i] : "";
-		utilsResetInput(`idVin_Pytho_${i}`, val);
+		KadUtils.DOM.resetInput(`idVin_Pytho_${i}`, val);
 	}
 	pythoOptions.inputState = [0, 1];
 	pythoShowError();
@@ -55,10 +55,10 @@ function pythoMinusNinety(angle) {
 function pythoShowError(text = null) {
 	pythoOptions.errorShown = text === null ? true : false;
 	if (pythoOptions.errorShown) {
-		dbIDStyle("idDiv_pythagorasInfo").display = "none";
+		KadUtils.dbIDStyle("idDiv_pythagorasInfo").display = "none";
 	} else {
-		dbID("idLbl_pythagorasInfo").textContent = text;
-		dbIDStyle("idDiv_pythagorasInfo").display = "initial";
+		KadUtils.dbID("idLbl_pythagorasInfo").textContent = text;
+		KadUtils.dbIDStyle("idDiv_pythagorasInfo").display = "initial";
 	}
 }
 
@@ -77,12 +77,12 @@ function pythoCalc() {
 	pythoOptions.vals = [];
 	const A = pythoOptions.inputState[0];
 	const B = pythoOptions.inputState[1];
-	pythoOptions.vals[A] = utilsNumberFromInput(`idVin_Pytho_${A}`);
-	pythoOptions.vals[B] = utilsNumberFromInput(`idVin_Pytho_${B}`);
+	pythoOptions.vals[A] = KadUtils.DOM.numberFromInput(`idVin_Pytho_${A}`);
+	pythoOptions.vals[B] = KadUtils.DOM.numberFromInput(`idVin_Pytho_${B}`);
 
 	if (A > 2) pythoOptions.vals[A] *= caPY.PI / 180; //convert dregrees to radians
 	if (B > 2) pythoOptions.vals[B] *= caPY.PI / 180; //convert dregrees to radians
-	const arr = deepClone(pythoOptions.inputState).sort();
+	const arr = KadUtils.deepClone(pythoOptions.inputState).sort();
 	switch (arr.join("")) {
 		case "01": //a & b
 			pythoOptions.vals[2] = pythoTriHypo(pythoOptions.vals[0], pythoOptions.vals[1]); //c
@@ -145,7 +145,7 @@ function pythoCalc() {
 
 	for (let i = 0; i < 5; i++) {
 		if (!pythoOptions.inputState.includes(i)) {
-			utilsResetInput(`idVin_Pytho_${i}`, i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3));
+			KadUtils.DOM.resetInput(`idVin_Pytho_${i}`, i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3));
 		}
 	}
 	if (pythoOptions.p5Loaded) {
@@ -159,10 +159,10 @@ function drawPytho() {
 
 	if (pythoOptions.vals[0] / pythoOptions.vals[1] > pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "Y" fixed length, Scale "X"
-		drawWidth = utilsValueConstrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
+		drawWidth = KadUtils.Value.constrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
 	} else if (pythoOptions.vals[0] / pythoOptions.vals[1] < pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "X" fixed length
-		drawHeight = utilsValueConstrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
+		drawHeight = KadUtils.Value.constrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
 	}
 
 	drawWidth = drawWidth - 2 * pythoOptions.margin;

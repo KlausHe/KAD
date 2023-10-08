@@ -66,7 +66,7 @@ const netsaonaOptions = {
 		get Random() {
 			let rand = new Set(Object.keys(netsaonaOptions.data));
 			rand.delete("random");
-			let type = randomObject([...rand]);
+			let type = KadUtils.Random.randomObject([...rand]);
 			return netsaonaOptions.data[type];
 		},
 		get RandomWord() {
@@ -76,26 +76,26 @@ const netsaonaOptions = {
 			randomSet.delete("ID");
 			randomSet.delete("Boolean");
 			randomSet.delete("Integer");
-			let type = randomObject([...randomSet]);
+			let type = KadUtils.Random.randomObject([...randomSet]);
 			return netsaonaOptions.data[type];
 		},
 	},
 	RandomSelection(arr) {
 		let randomSet = new Set([...arr]);
-		let type = randomObject([...randomSet]);
+		let type = KadUtils.Random.randomObject([...randomSet]);
 		return netsaonaOptions.data[type];
 	},
 	RandomSelectedElement(arr) {
 		let randomSet = new Set([...arr]);
-		let type = randomObject([...randomSet]);
-		return randomObject(netsaonaOptions.data[type]);
+		let type = KadUtils.Random.randomObject([...randomSet]);
+		return KadUtils.Random.randomObject(netsaonaOptions.data[type]);
 	},
 };
 
 function clear_cl_Netsaona() {
-	dbID("idLbl_netsaonaOutput").textContent = "...";
+	KadUtils.dbID("idLbl_netsaonaOutput").textContent = "...";
 
-	const clBtn = dbCL("cl_NetsaonaOption", null);
+	const clBtn = KadUtils.dbCL("cl_NetsaonaOption", null);
 	for (let i = 0; i < clBtn.length; i++) {
 		const name = Object.keys(netsaonaOptions.data)[i];
 		clBtn[i].textContent = name;
@@ -113,7 +113,7 @@ function clear_cl_Netsaona() {
 
 function netsaonaGenerate(obj) {
 	netsaonaOptions.selType = obj.dataset.type;
-	netsaonaOptions.selected = randomObject(netsaonaOptions.data[netsaonaOptions.selType]);
-	dbID("idLbl_netsaonaOutput").textContent = netsaonaOptions.selected;
+	netsaonaOptions.selected = KadUtils.Random.randomObject(netsaonaOptions.data[netsaonaOptions.selType]);
+	KadUtils.dbID("idLbl_netsaonaOutput").textContent = netsaonaOptions.selected;
 	netsaonaOptions.selType = null;
 }

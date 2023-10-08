@@ -5,13 +5,13 @@ const afinnOptions = {
 };
 
 function clear_cl_Afinn() {
-	utilsResetInput("idVin_analysisEntry", "Type text to analyze");
-	dbID("idLbl_analysisResult").textContent = "~Average score~";
-	clearTable("idTabBody_analysisResult");
+	KadUtils.DOM.resetInput("idVin_analysisEntry", "Type text to analyze");
+	KadUtils.dbID("idLbl_analysisResult").textContent = "~Average score~";
+	KadUtils.Table.clear("idTabBody_analysisResult");
 }
 
 function analysisNews() {
-	dbID("idVin_analysisEntry").value = newsData.articles[newsData.currIndex].description;
+	KadUtils.dbID("idVin_analysisEntry").value = newsData.articles[newsData.currIndex].description;
 	afinnInput(newsData.articles[newsData.currIndex].description);
 }
 
@@ -19,7 +19,7 @@ function analysisWiki() {
 	const data = nuncDiscipuli.getData("WikiSearch");
 	if (data.content != null) {
 		let pagesID = Object.keys(data.content);
-		dbID("idVin_analysisEntry").value = data.content[pagesID].extract;
+		KadUtils.dbID("idVin_analysisEntry").value = data.content[pagesID].extract;
 		afinnInput(data.content[pagesID].extract);
 	}
 }
@@ -27,11 +27,11 @@ function analysisWiki() {
 async function afinnInput(input = null) {
 	afinnOptions.searchInput = input;
 	if (input === null) {
-		afinnOptions.searchInput = dbID("idVin_analysisEntry").value.trim();
+		afinnOptions.searchInput = KadUtils.dbID("idVin_analysisEntry").value.trim();
 	}
 	if (afinnOptions.searchInput == "") {
-		dbID("idLbl_analysisResult").textContent = "~Average score~";
-		clearTable("idTabBody_analysisResult");
+		KadUtils.dbID("idLbl_analysisResult").textContent = "~Average score~";
+		KadUtils.Table.clear("idTabBody_analysisResult");
 		return;
 	}
 	afinnOptions.results = afinnAnalyze();
@@ -87,29 +87,29 @@ function afinnAnalyze() {
 
 function afinnCreateOutput() {
 	if (afinnOptions.results.totalScore === null) {
-		dbID("idLbl_analysisResult").textContent = "~~~~~~~";
-		dbID("idProg_analysisProgress").setAttribute("value", 10);
-		clearTable("idTabBody_analysisResult");
-		clearTable("idTabBody_analysisResult");
+		KadUtils.dbID("idLbl_analysisResult").textContent = "~~~~~~~";
+		KadUtils.dbID("idProg_analysisProgress").setAttribute("value", 10);
+		KadUtils.Table.clear("idTabBody_analysisResult");
+		KadUtils.Table.clear("idTabBody_analysisResult");
 	} else {
 		const score = analysisConvertScore(afinnOptions.results.totalScore);
 		const plural = afinnOptions.results.wordCount == 1 ? "Wort" : "Wörter";
 		const count = `(${afinnOptions.results.wordCount} ${plural})`;
-		dbID("idLbl_analysisResult").textContent = `Ø${score} ${count}`;
-		dbID("idProg_analysisProgress").setAttribute("value", score + 10);
+		KadUtils.dbID("idLbl_analysisResult").textContent = `Ø${score} ${count}`;
+		KadUtils.dbID("idProg_analysisProgress").setAttribute("value", score + 10);
 		afinnCreateTable();
 	}
 }
 
 function afinnCreateTable() {
-	clearTable("idTabBody_analysisResult");
+	KadUtils.Table.clear("idTabBody_analysisResult");
 	const data = afinnOptions.results.analysedWords; //alias
 	const dataSorted = Object.keys(data).sort((a, b) => {
 		return data[b].score - data[a].score;
 	});
 	for (let i = dataSorted.length - 1; i >= 0; i--) {
 		if (dataSorted.length > 0) {
-			let row = insertTableRow("idTabBody_analysisResult");
+			let row = KadUtils.Table.insertRow("idTabBody_analysisResult");
 			let foundPos = null;
 			for (let n = 0; n < dataSorted.length; n++) {
 				if (data[dataSorted[n]].score >= 0) {
@@ -117,7 +117,7 @@ function afinnCreateTable() {
 					break;
 				}
 			}
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["analysisPosWord", i],
 				type: "Lbl",
 				text: foundPos != null ? (data[foundPos].occurence > 1 ? `${foundPos} (${data[foundPos].occurence})` : foundPos) : "",
@@ -126,7 +126,7 @@ function afinnCreateTable() {
 				},
 				copy: foundPos != null ? true : false,
 			});
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["analysisPosScore", i],
 				type: "Lbl",
 				text: foundPos != null ? analysisConvertScore(data[foundPos].score) : "",
@@ -144,7 +144,7 @@ function afinnCreateTable() {
 					break;
 				}
 			}
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["analysisNegWord", i],
 				type: "Lbl",
 				// text: (foundNeg != null) ? foundNeg : "",
@@ -154,7 +154,7 @@ function afinnCreateTable() {
 				},
 				copy: foundNeg != null ? true : false,
 			});
-			tableAddCell(row, {
+			KadUtils.Table.addCell(row, {
 				names: ["analysisNegScore", i],
 				type: "Lbl",
 				text: foundNeg != null ? analysisConvertScore(data[foundNeg].score) : "",

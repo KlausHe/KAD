@@ -40,7 +40,7 @@ const rawContentGrid = {
 			return howaData.pos.location;
 		},
 		set userStoreDBData(data) {
-			dbID("idVin_howaEntry").value = data;
+			KadUtils.dbID("idVin_howaEntry").value = data;
 			howaGetLocation();
 		},
 		width: 2,
@@ -73,7 +73,7 @@ const rawContentGrid = {
 	cl_Sepakbola: {
 		userSelected: false,
 		height: 2,
-		active: true,
+		active: false,
 		contentGroup: "News",
 		name: "Sepakbola",
 		heritage: ["javanisch", "Fußball"],
@@ -116,7 +116,7 @@ const rawContentGrid = {
 			return lionsOptions.num;
 		},
 		set userStoreDBData(data) {
-			dbID("idVin_lionsInput").value = data;
+			KadUtils.dbID("idVin_lionsInput").value = data;
 			setTimeout(() => {
 				lionsRequestNumber();
 			}, 1000);
@@ -190,7 +190,7 @@ const rawContentGrid = {
 			return tugasOptions;
 		},
 		set userStoreDBData(data) {
-			tugasOptions = deepClone(data);
+			tugasOptions = KadUtils.deepClone(data);
 			createTugas();
 		},
 		contentGroup: "Utility",
@@ -447,10 +447,10 @@ const rawContentGrid = {
 			return wikiOptions.search;
 		},
 		set userStoreDBData(data) {
-			wikiOptions.search = deepClone(data);
+			wikiOptions.search = KadUtils.deepClone(data);
 			if (idVin_wikiInput.value == "") {
 				if (wikiOptions.search.tab != null) {
-					dbID("idVin_wikiInput").placeholder = wikiOptions.search.tab;
+					KadUtils.dbID("idVin_wikiInput").placeholder = wikiOptions.search.tab;
 					wikiSearchInput(wikiOptions.search.tab);
 					if (wikiOptions.search.content) {
 						wikiShowSelectedText(wikiOptions.search.content, true);
@@ -463,12 +463,12 @@ const rawContentGrid = {
 						return obj.data != null;
 					});
 					if (arr.length > 0) {
-						const autoSearch = randomObject(arr);
-						dbID("idVin_wikiInput").placeholder = autoSearch.data;
+						const autoSearch = KadUtils.Random.randomObject(arr);
+						KadUtils.dbID("idVin_wikiInput").placeholder = autoSearch.data;
 						wikiSearchInput(autoSearch.data, true);
 					}
 				}
-				clearTable("idTabBody_wikiTitleTable");
+				KadUtils.Table.clear("idTabBody_wikiTitleTable");
 			}
 		},
 		contentGroup: "Benkyou",
@@ -698,8 +698,12 @@ const rawContentGrid = {
 			["cl_PormulaOrder", "center"],
 			["cl_PormulaInputs", "left"],
 			["cl_PormulaAddInputs", "left"],
-			["cl_PormulaPointEntry", "center"],
-			["cl_PormulaPointResult", "center"],
+			["cl_PormulaPointEntryA", "center"],
+			["cl_PormulaPointEntryB", "center"],
+			["cl_PormulaPointEntryC", "center"],
+			["cl_PormulaPointResultA", "center"],
+			["cl_PormulaPointResultB", "center"],
+			["cl_PormulaPointResultC", "center"],
 			["cl_PormulaInfo", "center"],
 			["cl_PormulaLblResult", "center"],
 			["cl_PormulaAccuracy", "center"],
@@ -710,6 +714,7 @@ const rawContentGrid = {
 		userSelected: true,
 		logReqUser: true,
 		contentGroup: "Tools",
+		globalValNumber: "idVin_blechgeoDicke",
 		name: "Blechgeometrie",
 		source: {
 			Daten: "https://rime.de/de/wiki/lochabstand-berechnen/",
@@ -861,7 +866,7 @@ const rawContentGrid = {
 			return retData;
 		},
 		set userStoreDBData(data) {
-			dbCLStyle("cl_LottoSavedGame").display = "initial";
+			KadUtils.dbCLStyle("cl_LottoSavedGame").display = "initial";
 			for (const [key, values] of Object.entries(lottoOptions.games)) {
 				if (data[key] != null && data[key] != "") {
 					lottoOptions.games[key].savedSet["tips"] = data[key].date != null ? [...data[key].tips] : [];
@@ -1009,18 +1014,18 @@ const rawContentGrid = {
 		},
 		get userStoreDBData() {
 			return {
-				lightmode: deepClone(globalValues.colors.lightmode),
-				darkmode: deepClone(globalValues.colors.darkmode),
+				lightmode: KadUtils.deepClone(globalValues.colors.lightmode),
+				darkmode: KadUtils.deepClone(globalValues.colors.darkmode),
 			};
 		},
 		set userStoreDBData(data) {
 			if (data == null) {
-				globalValues.colors.lightmode = deepClone(globalValues.colors.colorSettingsOrig.lightmode);
-				globalValues.colors.darkmode = deepClone(globalValues.colors.colorSettingsOrig.darkmode);
+				globalValues.colors.lightmode = KadUtils.deepClone(globalValues.colors.colorSettingsOrig.lightmode);
+				globalValues.colors.darkmode = KadUtils.deepClone(globalValues.colors.colorSettingsOrig.darkmode);
 				return;
 			}
-			globalValues.colors.lightmode = deepClone(data.lightmode);
-			globalValues.colors.darkmode = deepClone(data.darkmode);
+			globalValues.colors.lightmode = KadUtils.deepClone(data.lightmode);
+			globalValues.colors.darkmode = KadUtils.deepClone(data.darkmode);
 			displayColorSystem();
 			populateColorSelector();
 		},
