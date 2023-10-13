@@ -115,7 +115,7 @@ function eggCalculate() {
 }
 
 function eggShowTime() {
-	let obj = KadUtils.Date.utilsSecondsToObj(eggOptions.timeRemaining);
+	let obj = KadUtils.Date.secondsToObj(eggOptions.timeRemaining);
 	KadUtils.dbID("idLbl_EggTime").textContent = `${obj.h}:${obj.m}:${obj.s}`;
 }
 

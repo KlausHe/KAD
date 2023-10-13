@@ -206,7 +206,7 @@ function foodyCountdown() {
 		} else {
 			zubereitung = " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
 		}
-		let obj = KadUtils.Date.utilsSecondsToObj(foodyOptions.timeRemaining);
+		let obj = KadUtils.Date.secondsToObj(foodyOptions.timeRemaining);
 		KadUtils.dbID("idLbl_foodyTime").textContent = `${obj.h}:${obj.m}:${obj.s} ${zubereitung}`;
 	}
 }

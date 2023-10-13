@@ -140,7 +140,7 @@ const KadUtils = {
 				const m = Number(obj.value.slice(3, 5));
 				let time = m + h * 60;
 				time += time % 5 == 0 ? dir * 5 : dir;
-				const t = utilsMinutesToObj(time);
+				const t = KadUtils.Date.minutesToObj(time);
 				obj.value = `${t.h}:${t.m}`;
 			}
 			function evaluateNumber() {

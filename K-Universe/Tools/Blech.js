@@ -10,7 +10,7 @@ const blechOptions = {
       get func() {
         return blechOptions.r + 2 * blechOptions.s;
       },
-      utilsGetImgPath: "Data/Images/bl-rundloch.png",
+      imgPath: "Data/Images/bl-rundloch.png",
       breite: true
     },
     Langloch: {
@@ -21,7 +21,7 @@ const blechOptions = {
       factorA: 3,
       factorB: 4,
       factorC: 5,
-      utilsGetImgPath: "Data/Images/bl-langloch.png",
+      imgPath: "Data/Images/bl-langloch.png",
       breite: false
     },
     Rechteckloch: {
@@ -32,7 +32,7 @@ const blechOptions = {
       factorA: 3,
       factorB: 3.5,
       factorC: 4,
-      utilsGetImgPath: "Data/Images/bl-rechteckloch.png",
+      imgPath: "Data/Images/bl-rechteckloch.png",
       breite: false
     }
   }
@@ -58,8 +58,8 @@ function clear_cl_Blechgeometrie() {
 function blechgeoFormChange() {
   let index = KadUtils.dbID("idSel_blechgeoForm").selectedIndex;
   let vinOption = KadUtils.dbID("idSel_blechgeoForm").options[index].text
-  let key = blechOptions.geo[vinOption].utilsGetImgPath;
-  KadUtils.dbID('idImg_Blechgeometrie').src = blechOptions.geo[vinOption].utilsGetImgPath;
+  let key = blechOptions.geo[vinOption].imgPath;
+  KadUtils.dbID('idImg_Blechgeometrie').src = blechOptions.geo[vinOption].imgPath;
   KadUtils.DOM.enableBtn(idVin_blechgeoBreite, !blechOptions.geo[vinOption].breite);
 };
 
