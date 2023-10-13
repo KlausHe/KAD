@@ -176,7 +176,7 @@ async function linahaGetData() {
 function linahaCreateButtons() {
 	//select random countries
 	const currArr = linahaOptions.data.slice(0, linahaOptions.btnCount);
-	linahaOptions.answerIndex = randomObject(currArr.length);
+	linahaOptions.answerIndex = KadUtils.Random.randomObject(currArr.length);
 	linahaShowData("idLbl_linahaQuestion", linahaOptions.selQ, linahaOptions.answerIndex);
 	if (linahaOptions.selQ == 1) {
 		KadUtils.dbID("idLbl_linahaQuestion").setAttribute("uiType", "transparent");

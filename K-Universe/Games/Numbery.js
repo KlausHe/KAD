@@ -47,7 +47,7 @@ function clear_cl_Numbery() {
 		max: numberyOptions.imgCount,
 	});
 
-	numberyOptions.maxPlayersOrig = globalValues.colors.array.length - 5;
+	numberyOptions.maxPlayersOrig = Math.min(5, globalValues.colors.array.length - 5);
 	numberyOptions.playerCount = numberyOptions.maxPlayersOrig;
 	KadUtils.DOM.resetInput("idVin_numberyPlayer", 2, { min: 2, max: numberyOptions.maxPlayersOrig });
 	numberyOptions.pairs = numberyOptions.pairsOrig;

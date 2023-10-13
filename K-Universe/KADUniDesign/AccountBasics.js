@@ -175,14 +175,14 @@ function clear_cl_UserAcc() {
 	KadUtils.dbID("idVin_userAcc_mail").addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
 			KadUtils.dbID("idVin_userAcc_pass").focus();
-			event.KadUtils.Interaction.preventDefault();
+			event.preventDefault();
 		}
 	});
 	KadUtils.dbID("idVin_userAcc_pass").value = "";
 	KadUtils.dbID("idVin_userAcc_pass").addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
 			KadUtils.dbID("idBtn_userAcc_submit").click();
-			event.KadUtils.Interaction.preventDefault();
+			event.preventDefault();
 		}
 	});
 }
@@ -429,7 +429,7 @@ function loadDiscipuli(category = null) {
 			} else {
 				for (const [key, value] of Object.entries(savedData)) {
 					if (key == "uid" || key == "email" || !Object.keys(contentGrid).includes(`cl_${key}`) || contentGrid[`cl_${key}`].userStoreDBName != key) {
-						console.log("Currently not sopported:", key);
+						console.log("Currently not supported data from saved userdata:", key);
 					} else {
 						nuncDiscipuli.saveData(key, value);
 					}

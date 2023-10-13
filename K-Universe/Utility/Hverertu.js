@@ -41,7 +41,7 @@ function hverertuGetData() {
 };
 
 function hverertuPassValue(id) {
-  KadUtils.dbID(`idLbl_cell_hverertu_value_${id}`).innerHTML = hverertuOptions.data[id].value;
+  KadUtils.dbID(`idLbl_child_hverertu_value_${id}`).innerHTML = hverertuOptions.data[id].value;
 }
 
 function hverertuAlter(data) {

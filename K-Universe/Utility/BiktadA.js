@@ -113,7 +113,7 @@ function biktadaIPError(data) {
 }
 
 function biktadaPassValue(id) {
-	KadUtils.dbID(`idLbl_cell_biktada_value_${id}`).innerHTML = biktadaOptions.data[id].value;
+	KadUtils.dbID(`idLbl_child_biktada_value_${id}`).innerHTML = biktadaOptions.data[id].value;
 }
 
 function clear_cl_BiktadA() {

@@ -457,7 +457,6 @@ const KadUtils = {
 			let cell = document.createElement("th");
 			cell.id = `id${opt.type}${opt.name}`;
 			const mainChild = this.createCell(opt.type, opt);
-			// if ((opt.type = "Lbl")) mainChild = cellLbl(opt);
 			cell.appendChild(mainChild);
 			this.CellOptions(cell, opt);
 			row.appendChild(cell);
@@ -465,15 +464,12 @@ const KadUtils = {
 		},
 		addCell(row, opt = {}, prevCell = null) {
 			opt.name = this.createName(opt);
+      const mainChild = this.createCell(opt.type, opt);
 			let cell = undefined;
 			if (prevCell === null) {
 				cell = row.insertCell(-1);
 				cell.id = `id${opt.type}_cell${opt.name}`;
 			}
-			// let mainChild = null;
-			const mainChild = this.createCell(opt.type, opt);
-			// if (opt.type == "Vin") {
-			// 	mainChild = cellVin(opt);
 			if (mainChild != null) {
 				if (prevCell === null) {
 					cell.appendChild(mainChild);
@@ -489,32 +485,33 @@ const KadUtils = {
 		},
 		cells: {
 			Vin(opt) {
-				const mainChild = document.createElement("INPUT");
+				const child = document.createElement("INPUT");
 				if (opt.subGroup == "checkbox") {
-					mainChild.type = "checkbox";
-					mainChild.checked = opt.checked || false;
+					child.type = "checkbox";
+					child.checked = opt.checked || false;
 				} else {
-					mainChild.type = opt.subGroup;
-					mainChild.placeholder = opt.placeholder;
+					child.type = opt.subGroup;
+					child.placeholder = opt.placeholder;
 				}
-				return mainChild;
+				this.UIOptions(child, opt);
+				return child;
 			},
 			Btn(opt) {
-				const mainChild = document.createElement("BUTTON");
+				const child = document.createElement("BUTTON");
 				const elImg = document.createElement("img");
-				mainChild.appendChild(elImg);
-				mainChild.type = "button";
+				child.appendChild(elImg);
+				child.type = "button";
 				switch (opt.subGroup) {
 					case "button":
 						elImg.src = KadUtils.DOM.getImgPath(opt.img);
 						break;
 					case "subgrid":
-						mainChild.type = "image";
+						child.type = "image";
 						elImg.src = KadUtils.DOM.getImgPath(opt.img);
 						elImg.setAttribute("uiFilter", "invBackground");
 						break;
 					case "gridtitle":
-						mainChild.type = "image";
+						child.type = "image";
 						elImg.src = KadUtils.DOM.getImgPath(opt.img);
 						elImg.setAttribute("uiFilter", "invGridtitle");
 						break;
@@ -524,86 +521,86 @@ const KadUtils = {
 						break;
 					case "url":
 					case "urlInvert":
-						mainChild.type = "image";
+						child.type = "image";
 						elImg.src = opt.img;
 						break;
 					default:
-						mainChild.type = "text";
-						mainChild.textContent = opt.text;
+						child.type = "text";
+						child.textContent = opt.text;
 				}
-				this.UIOptions(mainChild, opt);
-				return mainChild;
+				this.UIOptions(child, opt);
+				return child;
 			},
 			Lbl(opt) {
-				const mainChild = document.createElement("label");
-				mainChild.type = "Lbl";
-				mainChild.innerHTML = opt.text;
+				const child = document.createElement("label");
+				child.type = "Lbl";
+				child.innerHTML = opt.text;
 				if (opt.hasOwnProperty("for")) {
-					mainChild.for = opt.for;
+					child.for = opt.for;
 					opt.pointer = true;
 				}
-				this.UIOptions(mainChild, opt);
-				return mainChild;
+				this.UIOptions(child, opt);
+				return child;
 			},
 			H1(opt) {
-				const mainChild = document.createElement("H1");
-				mainChild.innerHTML = opt.text;
-				this.UIOptions(mainChild, opt);
-				return mainChild;
+				const child = document.createElement("H1");
+				child.innerHTML = opt.text;
+				this.UIOptions(child, opt);
+				return child;
 			},
 			Sel(opt) {
-				const mainChild = document.createElement("select");
+				const child = document.createElement("select");
 				opt.type = "sel";
 				let start = 0;
 				if (opt.hasOwnProperty("optionTitle")) {
-					mainChild.options[start] = new Option(opt.optionTitle);
+					child.options[start] = new Option(opt.optionTitle);
 					start = 1;
 				}
 				for (let n = 0; n < opt.options.length; n++) {
-					mainChild.options[n + start] = new Option(opt.options[n]);
+					child.options[n + start] = new Option(opt.options[n]);
 				}
-				this.UIOptions(mainChild, opt);
-				return mainChild;
+				this.UIOptions(child, opt);
+				return child;
 			},
 			Colbox(opt) {
-				const mainChild = document.createElement("div");
+				const child = document.createElement("div");
 				opt.type = "Colbox";
-				mainChild.classList.add("coloredBox");
-				mainChild.style.background = KadUtils.Color.formatAsCSS(opt.color, "HSL");
-				this.UIOptions(mainChild, opt);
-				return mainChild;
+				child.classList.add("coloredBox");
+				child.style.background = KadUtils.Color.formatAsCSS(opt.color, "HSL");
+				this.UIOptions(child, opt);
+				return child;
 			},
 			Img(opt) {
-				const mainChild = document.createElement("IMG");
+				const child = document.createElement("IMG");
 				opt.type = "Img";
 				switch (opt.subGroup) {
 					case "button":
-						mainChild.src = KadUtils.DOM.getImgPath(opt.img);
+						child.src = KadUtils.DOM.getImgPath(opt.img);
 						break;
 					case "subgrid":
-						mainChild.src = KadUtils.DOM.getImgPath(opt.img);
-						mainChild.setAttribute("uiFilter", "invBackground");
+						child.src = KadUtils.DOM.getImgPath(opt.img);
+						child.setAttribute("uiFilter", "invBackground");
 						break;
 					case "gridtitle":
-						mainChild.src = KadUtils.DOM.getImgPath(opt.img);
-						mainChild.setAttribute("uiFilter", "invGridtitle");
+						child.src = KadUtils.DOM.getImgPath(opt.img);
+						child.setAttribute("uiFilter", "invGridtitle");
 						break;
 					case "navbar":
-						mainChild.src = KadUtils.DOM.getImgPath(opt.img);
-						mainChild.setAttribute("uiFilter", "invNavbar");
+						child.src = KadUtils.DOM.getImgPath(opt.img);
+						child.setAttribute("uiFilter", "invNavbar");
 						break;
 					case "url":
 					case "urlInvert":
-						mainChild.src = opt.img;
+						child.src = opt.img;
 						break;
 				}
-				this.UIOptions(mainChild, opt);
-				return mainChild;
+				this.UIOptions(child, opt);
+				return child;
 			},
 			Div(opt) {
-				const mainChild = document.createElement("div");
-				this.UIOptions(mainChild, opt);
-				return mainChild;
+				const child = document.createElement("div");
+				this.UIOptions(child, opt);
+				return child;
 			},
 			UIOptions(cell, opt) {
 				opt.name = KadUtils.Table.createName(opt);

@@ -28,7 +28,6 @@ const usergridOptions = {
 		}
 	},
 	toggleAllGridDisable: () => {
-		//general enabling/disabling of all groups and therefor singles
 		usergridOptions.enableAll = !usergridOptions.enableAll;
 		for (const groupKey in usergridOptions.groups) {
 			usergridOptions.groups[groupKey] = usergridOptions.enableAll;
@@ -38,7 +37,7 @@ const usergridOptions = {
 	generateArray: () => {
 		for (const key of contentLayout.navContent.Universe) {
 			contentGrid[key].userSelected = KadUtils.dbID(`idVin_child_disableUsergridSingle_CB_${key}`).checked;
-		}
+4		}
 		return Object.keys(contentGrid).filter((key) => {
 			return contentGrid[key].userSelected === true && contentLayout.navContent.Universe.includes(key);
 		});
@@ -89,7 +88,6 @@ function usergridCreateTable() {
 				usergridToggleGroup(groupKey);
 			},
 		});
-
 		KadUtils.Table.addHeaderCell(rowTh, {
 			names: ["disableUsergridGroup", groupKey],
 			type: "Btn",
@@ -110,100 +108,97 @@ function usergridCreateTable() {
 				usergridToggleGroup(groupKey);
 			},
 		});
-
 		for (let j = 0; j < contentLayout.navContent[groupKey].length; j++) {
 			let objName = contentLayout.navContent[groupKey][j];
 			const row = KadUtils.Table.insertRow("idTabBody_DisableUserGrid");
-			// Checkbox
-			const cellA = KadUtils.Table.addCell(row, {
-				names: ["disableUsergridSingle", "CB", objName],
-				type: "Vin",
-				subGroup: "checkbox",
-				cellStyle: {
-					textAlign: "center",
-				},
-				createClass: [`clCb_disableUsergridSingle_${groupKey}`],
-				checked: contentGrid[objName].userSelected,
-				onclick: () => {
-					usergridToggleSingle(objName);
-				},
-			});
-			//userImage
-			let uImage = null;
-			if (contentGrid[objName].hasOwnProperty("userStoreDBName")) {
-				uImage = KadUtils.Table.addCell(row, {
-					names: ["disableUsergridSingle", groupKey, j],
-					type: "Img",
-					subGroup: "subgrid",
-					img: "upload",
-					onclick: () => {
-						usergridToggleSingle(objName);
-					},
-				});
-			}
-			// LBL for
-			KadUtils.Table.addCell(
-				row,
-				{
-					names: ["disableUsergridSingle", groupKey, j],
-					type: "Lbl",
-					text: contentGrid[objName].name,
-					ui: {
-						for: cellA.childNodes[0].id,
-					},
-				},
-				uImage
-			);
-
+			usergridCreateCheckbox(row, j, groupKey, objName);
 			//create the second column
 			if (contentLayout.navContent[groupKey][j + 1] !== undefined) {
 				++j;
 				objName = contentLayout.navContent[groupKey][j];
-
-				// Checkbox
-				const cellB = KadUtils.Table.addCell(row, {
-					names: ["disableUsergridSingle", "CB", objName],
-					type: "Vin",
-					subGroup: "checkbox",
-					style: {
-						textAlign: "center",
-					},
-					createClass: [`clCb_disableUsergridSingle_${groupKey}`],
-					checked: contentGrid[objName].userSelected,
-					onclick: () => {
-						usergridToggleSingle(objName);
-					},
-				});
-				//userImage
-				let uImage;
-				if (contentGrid[objName].hasOwnProperty("userStoreDBName")) {
-					uImage = KadUtils.Table.addCell(row, {
-						names: ["disableUsergridSingle", groupKey, j],
-						type: "Img",
-						subGroup: "subgrid",
-						img: "upload",
-						onclick: () => {
-							usergridToggleSingle(objName);
-						},
-					});
-				}
-				// LBL for
-				KadUtils.Table.addCell(
-					row,
-					{
-						names: ["disableUsergridSingle", groupKey, j],
-						type: "Lbl",
-						for: cellB.childNodes[0].id,
-						text: contentGrid[objName].name,
-						style: {
-							textAlign: "left",
-						},
-					},
-					contentGrid[objName].hasOwnProperty("userStoreDBName") ? uImage : null
-				);
+				usergridCreateCheckbox(row, j, groupKey, objName);
+				// const cellB = KadUtils.Table.addCell(row, {
+				// 	names: ["disableUsergridSingle", "CB", objName],
+				// 	type: "Vin",
+				// 	subGroup: "checkbox",
+				// 	style: {
+				// 		textAlign: "center",
+				// 	},
+				// 	createClass: [`clCb_disableUsergridSingle_${groupKey}`],
+				// 	checked: contentGrid[objName].userSelected,
+				// 	onclick: () => {
+				// 		usergridToggleSingle(objName);
+				// 	},
+				// });
+				// let uImage;
+				// if (contentGrid[objName].hasOwnProperty("userStoreDBName")) {
+				// 	uImage = KadUtils.Table.addCell(row, {
+				// 		names: ["disableUsergridSingle", groupKey, j],
+				// 		type: "Img",
+				// 		subGroup: "subgrid",
+				// 		img: "upload",
+				// 		onclick: () => {
+				// 			usergridToggleSingle(objName);
+				// 		},
+				// 	});
+				// }
+				// KadUtils.Table.addCell(
+				// 	row,
+				// 	{
+				// 		names: ["disableUsergridSingle", groupKey, j],
+				// 		type: "Lbl",
+				// 		for: cellB.childNodes[0].id,
+				// 		text: contentGrid[objName].name,
+				// 		style: {
+				// 			textAlign: "left",
+				// 		},
+				// 	},
+				// 	contentGrid[objName].hasOwnProperty("userStoreDBName") ? uImage : null
+				// );
 			}
 		}
 	}
+}
+
+function usergridCreateCheckbox(row, j, groupKey, objName) {
+	// Checkbox
+	const cellA = KadUtils.Table.addCell(row, {
+		names: ["disableUsergridSingle", "CB", objName],
+		type: "Vin",
+		subGroup: "checkbox",
+		cellStyle: {
+			textAlign: "center",
+		},
+		createClass: [`clCb_disableUsergridSingle_${groupKey}`],
+		checked: contentGrid[objName].userSelected,
+		onclick: () => {
+			usergridToggleSingle(objName);
+		},
+	});
+	let uImage = null;
+	if (contentGrid[objName].hasOwnProperty("userStoreDBName")) {
+		uImage = KadUtils.Table.addCell(row, {
+			names: ["disableUsergridSingle", groupKey, j],
+			type: "Img",
+			subGroup: "subgrid",
+			img: "upload",
+			onclick: () => {
+				usergridToggleSingle(objName);
+			},
+		});
+	}
+	KadUtils.Table.addCell(
+		row,
+		{
+			names: ["disableUsergridSingle", groupKey, j],
+			type: "Lbl",
+			text: contentGrid[objName].name,
+			ui: {
+				for: cellA.childNodes[0].id,
+			},
+		},
+		uImage
+	);
 }
 
 function saveUsergridLayout() {
