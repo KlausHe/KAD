@@ -1,4 +1,7 @@
-const netsaonaOptions = {
+import { dbID, dbCL, KadRandom } from "../General/KadUtils.js";
+import * as Data from "../General/MainData.js";
+
+export const netsaonaOptions = {
 	selType: null,
 	selected: null,
 	data: {
@@ -12,61 +15,55 @@ const netsaonaOptions = {
 		},
 		Tier: ["Hund", "Katze", "Hamster", "Maus", "Esel", "Flamingo"],
 		get Pflanze() {
-			return Data_Botanicals.map((o) => {
+			return Data.Data_Botanicals.map((o) => {
 				return o.plant;
 			});
 		},
 		get Beschwerde() {
 			let disSet = new Set();
-			for (let d of Data_Botanicals) {
+			for (let d of Data.Data_Botanicals) {
 				d.discomfort.forEach((i) => disSet.add(i));
 			}
 			return Array.from(disSet).sort();
 		},
 		get Farbe() {
-			return Data_Kounselor.map((o) => {
+			return Data.Data_RALColors.map((o) => {
 				return o.Name;
 			});
 		},
 		get Wochentag() {
-			return i18nDE.weekdays;
+			return Data.Data_i18nDE.weekdays;
 		},
 		get Monat() {
-			return i18nDE.months;
+			return Data.Data_i18nDE.months;
 		},
 		get Stadt() {
-			return Array.from(Data_PlatLesen.values());
+			return Array.from(Data.Data_Nummernschild.values());
 		},
 		get Land() {
-			return Array.from(Data_Country_CodesIso3166.values());
+			return Array.from(Data.Data_Country_CodesIso3166.values());
 		},
 		get Bundesland() {
-			return Data_Country_GermanDistrics.map((o) => {
+			return Data.Data_Country_GermanDistrics.map((o) => {
 				return o.LandDE;
 			});
 		},
 		get Sprache() {
-			return Array.from(Data_Country_CodesIso639.values());
+			return Array.from(Data.Data_Country_CodesIso639.values());
 		},
 		get Name() {
-			return Data_Names.all;
+			return Data.Data_HumanNames.all;
 		},
 		get Geld() {
-			return Array.from(currencies.values());
+			return Array.from(Data.Data_Currencies.values());
 		},
 		get Gender() {
-			return Data_Names.genders;
+			return Data.Data_HumanNames.genders;
 		},
-		// get Voice() {
-		// 	return Object.keys(ocjeneOptions.definitions.clefs);
-		// },
-		// get Instrument() {
-		// 	return ocjeneInstruments.data.map((i) => i.Name);
-		// },
 		get Random() {
 			let rand = new Set(Object.keys(netsaonaOptions.data));
 			rand.delete("random");
-			let type = KadUtils.Random.randomObject([...rand]);
+			let type = KadRandom.randomObject([...rand]);
 			return netsaonaOptions.data[type];
 		},
 		get RandomWord() {
@@ -76,26 +73,25 @@ const netsaonaOptions = {
 			randomSet.delete("ID");
 			randomSet.delete("Boolean");
 			randomSet.delete("Integer");
-			let type = KadUtils.Random.randomObject([...randomSet]);
+			let type = KadRandom.randomObject([...randomSet]);
 			return netsaonaOptions.data[type];
 		},
 	},
 	RandomSelection(arr) {
 		let randomSet = new Set([...arr]);
-		let type = KadUtils.Random.randomObject([...randomSet]);
+		let type = KadRandom.randomObject([...randomSet]);
 		return netsaonaOptions.data[type];
 	},
 	RandomSelectedElement(arr) {
 		let randomSet = new Set([...arr]);
-		let type = KadUtils.Random.randomObject([...randomSet]);
-		return KadUtils.Random.randomObject(netsaonaOptions.data[type]);
+		let type = KadRandom.randomObject([...randomSet]);
+		return KadRandom.randomObject(netsaonaOptions.data[type]);
 	},
 };
 
-function clear_cl_Netsaona() {
-	KadUtils.dbID("idLbl_netsaonaOutput").textContent = "...";
-
-	const clBtn = KadUtils.dbCL("cl_NetsaonaOption", null);
+export function clear_cl_Netsaona() {
+	dbID("idLbl_netsaonaOutput").textContent = "...";
+	const clBtn = dbCL("cl_NetsaonaOption", null);
 	for (let i = 0; i < clBtn.length; i++) {
 		const name = Object.keys(netsaonaOptions.data)[i];
 		clBtn[i].textContent = name;
@@ -113,7 +109,7 @@ function clear_cl_Netsaona() {
 
 function netsaonaGenerate(obj) {
 	netsaonaOptions.selType = obj.dataset.type;
-	netsaonaOptions.selected = KadUtils.Random.randomObject(netsaonaOptions.data[netsaonaOptions.selType]);
-	KadUtils.dbID("idLbl_netsaonaOutput").textContent = netsaonaOptions.selected;
+	netsaonaOptions.selected = KadRandom.randomObject(netsaonaOptions.data[netsaonaOptions.selType]);
+	dbID("idLbl_netsaonaOutput").textContent = netsaonaOptions.selected;
 	netsaonaOptions.selType = null;
 }

@@ -1,3 +1,7 @@
+import { dbID, KadTable } from "../General/KadUtils.js";
+import { globalP5 } from "../Main.js";
+import { Data_Country_CodesIso639 } from "../General/MainData.js";
+
 const biktadaOptions = {
 	ieAlert: null,
 	dataCount: 0,
@@ -113,12 +117,12 @@ function biktadaIPError(data) {
 }
 
 function biktadaPassValue(id) {
-	KadUtils.dbID(`idLbl_child_biktada_value_${id}`).innerHTML = biktadaOptions.data[id].value;
+	dbID(`idLbl_child_biktada_value_${id}`).innerHTML = biktadaOptions.data[id].value;
 }
 
-function clear_cl_BiktadA() {
+export function clear_cl_BiktadA() {
 	createBiktadaTable();
-	biktadaIe = null;
+	biktadaOptions.ieAlert = null;
 	biktadaGetData();
 }
 
@@ -130,9 +134,9 @@ function biktadaGetData() {
 
 function createBiktadaTable() {
 	//header
-	KadUtils.Table.clear("idTabHeader_BiktadA");
-	const rowTh = KadUtils.Table.insertRow("idTabHeader_BiktadA");
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadTable.clear("idTabHeader_BiktadA");
+	const rowTh = KadTable.insertRow("idTabHeader_BiktadA");
+	KadTable.addHeaderCell(rowTh, {
 		names: ["biktadaHeader", "Description"],
 		type: "Lbl",
 		text: "Info",
@@ -140,7 +144,7 @@ function createBiktadaTable() {
 			textAlign: "left",
 		},
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadTable.addHeaderCell(rowTh, {
 		names: ["biktadaHeader", "Value"],
 		type: "Lbl",
 		text: "Wert",
@@ -150,10 +154,10 @@ function createBiktadaTable() {
 	});
 
 	// body
-	KadUtils.Table.clear("idTabBody_BiktadA");
+	KadTable.clear("idTabBody_BiktadA");
 	for (const objName in biktadaOptions.data) {
-		const row = KadUtils.Table.insertRow("idTabBody_BiktadA");
-		KadUtils.Table.addCell(row, {
+		const row = KadTable.insertRow("idTabBody_BiktadA");
+		KadTable.addCell(row, {
 			names: ["biktada", "description", objName],
 			type: "Lbl",
 			text: biktadaOptions.data[objName].description,
@@ -162,7 +166,7 @@ function createBiktadaTable() {
 				textAlign: "left",
 			},
 		});
-		KadUtils.Table.addCell(row, {
+		KadTable.addCell(row, {
 			names: ["biktada", "value", objName],
 			type: "Lbl",
 			text: "...",

@@ -1,3 +1,6 @@
+import { dbID, daEL, KadValue, KadDOM } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+
 const ibhaluniOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h };
@@ -10,25 +13,35 @@ const ibhaluniOptions = {
 	started: false,
 	bgcCanvas: "skyblue",
 	sound: null,
+	enableSound: false,
 	score: 0,
 	misses: 0,
 };
 
-function clear_cl_Ibhaluni() {
+daEL(idBtn_ibhaluniStart, "click", ibhaluniStart);
+daEL(idCb_ibhaluniSoundOutput, "change", ibhaluniToggleSound);
+
+export function clear_cl_Ibhaluni() {
+	KadDOM.resetInput("idCb_ibhaluniSoundOutput", false);
 	ibhaluniOptions.balloons = [];
 	caIB.noLoop();
 	caIB.background(globalValues.colors.elements.background);
 }
 
+export function canvas_cl_Ibhaluni() {
+	caIB.resizeCanvas(ibhaluniOptions.canvas.w, ibhaluniOptions.canvas.h);
+	caIB.redraw();
+}
+
 function ibhaluniStart() {
 	if (ibhaluniOptions.started) {
 		ibhaluniOptions.started = false;
-		KadUtils.dbID("idBtn_ibhaluniStart").textContent = "Start";
+		dbID("idBtn_ibhaluniStart").textContent = "Start";
 		caIB.noLoop();
 	} else {
 		ibhaluniOptions.started = true;
 		ibhaluniReset();
-		KadUtils.dbID("idBtn_ibhaluniStart").textContent = "Stop";
+		dbID("idBtn_ibhaluniStart").textContent = "Stop";
 		caIB.loop();
 	}
 }
@@ -76,15 +89,14 @@ const caIB = new p5((c) => {
 	};
 }, "#idCanv_ibhaluni");
 
-function ibhalumiResize() {
-	caIB.resizeCanvas(ibhaluniOptions.canvas.w, ibhaluniOptions.canvas.h);
-}
-
 function mousePushedIbhaluni() {
 	for (let balloon of ibhaluniOptions.balloons) {
 		const checked = balloon.clicked();
 		if (checked) return;
 	}
+}
+function ibhaluniToggleSound() {
+	ibhaluniOptions.enableSound = dbID("idCb_ibhaluniSoundOutput").checked;
 }
 
 class IbhaluniObj {
@@ -100,8 +112,8 @@ class IbhaluniObj {
 		this.poppingScl = 1;
 		this.poppingSclLimits = [10, 25];
 		this.falling = false;
-		this.speedX = KadUtils.Value.constrain(Math.random(), 0.2, 1);
-		this.speedY = KadUtils.Value.constrain(Math.random(), 0.2, 1) * 1.5;
+		this.speedX = KadValue.constrain(Math.random(), 0.2, 1);
+		this.speedY = KadValue.constrain(Math.random(), 0.2, 1) * 1.5;
 		this.noiseSeed = Math.random() * 1000;
 		this.mirrored = Math.random() > 0.5;
 		this.angle = 0;
@@ -114,7 +126,7 @@ class IbhaluniObj {
 		}
 		caIB.push();
 		caIB.translate(this.x, this.y);
-		this.angle = KadUtils.Value.mapping(this.speedX * caIB.noise(this.noiseSeed + this.y / 300) - this.speedX / 2, -this.speedX / 2, this.speedX / 2, -caIB.PI / 4, caIB.PI / 4);
+		this.angle = KadValue.mapping(this.speedX * caIB.noise(this.noiseSeed + this.y / 300) - this.speedX / 2, -this.speedX / 2, this.speedX / 2, -caIB.PI / 4, caIB.PI / 4);
 		caIB.rotate(this.angle);
 		// String hanging off the bottom
 		caIB.stroke(0);
@@ -133,8 +145,8 @@ class IbhaluniObj {
 			// caIB.rotate(this.angle);
 			if (this.popping && this.poppingCounter >= this.poppingSclLimits[0]) {
 				// Main balloon
-				const factorW = KadUtils.Value.mapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.xSize * this.poppingScl * 0.5);
-				const factorH = KadUtils.Value.mapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.ySize * this.poppingScl * 0.5);
+				const factorW = KadValue.mapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.xSize * this.poppingScl * 0.5);
+				const factorH = KadValue.mapping(this.poppingCounter, this.poppingSclLimits[0], this.poppingSclLimits[1], 0, this.ySize * this.poppingScl * 0.5);
 				this.drawEllipse(factorW, factorH);
 			} else {
 				// Main balloon
@@ -170,10 +182,7 @@ class IbhaluniObj {
 
 	update() {
 		if (this.poppingCounter > this.poppingSclLimits[1] && this.falling == false) {
-			if (KadUtils.dbID("idCb_ibhaluniSoundOutput").checked) {
-				this.stop();
-				this.play();
-			}
+			this.playSound();
 			this.falling = true;
 			ibhaluniOptions.score++;
 		}
@@ -181,14 +190,13 @@ class IbhaluniObj {
 		this.y += this.falling ? this.speedY * 3 : this.speedY * -1;
 	}
 
-	play() {
+	playSound() {
+		if (!ibhaluniOptions.enableSound) return;
+		if (!ibhaluniOptions.sound.paused) {
+			ibhaluniOptions.sound.pause();
+			ibhaluniOptions.sound.currentTime = 0;
+		}
 		ibhaluniOptions.sound.play();
-	}
-
-	stop() {
-		if (ibhaluniOptions.sound.paused) return;
-		ibhaluniOptions.sound.pause();
-		ibhaluniOptions.sound.currentTime = 0;
 	}
 
 	check() {

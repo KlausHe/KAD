@@ -1,3 +1,5 @@
+import { daEL, dbID, KadDOM , KadDate} from "../General/KadUtils.js";
+
 const eggOptions = {
 	timerEggCount: null,
 	timeTotal: 0,
@@ -56,43 +58,48 @@ const eggOptions = {
 	},
 };
 
-function clear_cl_Egg() {
-	eggOptions.mass.val = KadUtils.DOM.resetInput("idVin_EggMass", eggOptions.mass.valOrig, {
+daEL(idVin_EggMass, "input", () => eggMassChange(idVin_EggMass));
+daEL(idVin_EggTemp, "input", () => eggTempChange(idVin_EggTemp));
+daEL(idVin_EggYolk, "input", () => eggYolkChange(idVin_EggYolk));
+daEL(idBtn_EggStart, "click", eggStartChange);
+
+export function clear_cl_Egg() {
+	eggOptions.mass.val = KadDOM.resetInput("idVin_EggMass", eggOptions.mass.valOrig, {
 		min: eggOptions.mass.min,
 		max: eggOptions.mass.max,
 	});
 
-	eggOptions.temp.val = KadUtils.DOM.resetInput("idVin_EggTemp", eggOptions.temp.valOrig, {
+	eggOptions.temp.val = KadDOM.resetInput("idVin_EggTemp", eggOptions.temp.valOrig, {
 		min: eggOptions.temp.min,
 		max: eggOptions.temp.max,
 	});
-	eggOptions.yolk.val = KadUtils.DOM.resetInput("idVin_EggYolk", eggOptions.yolk.valOrig, {
+	eggOptions.yolk.val = KadDOM.resetInput("idVin_EggYolk", eggOptions.yolk.valOrig, {
 		min: eggOptions.yolk.min,
 		max: eggOptions.yolk.max,
 	});
 
-	KadUtils.dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
-	KadUtils.dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
-	KadUtils.dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
+	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
+	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
+	dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
 	eggOptions.timerState = true;
 	eggStartChange();
 }
 
 function eggMassChange(obj) {
-	eggOptions.mass.val = KadUtils.DOM.numberFromInput(obj) ;
-	KadUtils.dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
+	eggOptions.mass.val = KadDOM.numberFromInput(obj);
+	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
 	eggRefrechInput();
 }
 
 function eggTempChange(obj) {
-	eggOptions.temp.val = KadUtils.DOM.numberFromInput(obj);
-	KadUtils.dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
+	eggOptions.temp.val = KadDOM.numberFromInput(obj);
+	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
 	eggRefrechInput();
 }
 
 function eggYolkChange(obj) {
-	eggOptions.yolk.val = KadUtils.DOM.numberFromInput(obj);
-	KadUtils.dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
+	eggOptions.yolk.val = KadDOM.numberFromInput(obj);
+	dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
 	eggRefrechInput();
 }
 
@@ -115,33 +122,33 @@ function eggCalculate() {
 }
 
 function eggShowTime() {
-	let obj = KadUtils.Date.secondsToObj(eggOptions.timeRemaining);
-	KadUtils.dbID("idLbl_EggTime").textContent = `${obj.h}:${obj.m}:${obj.s}`;
+	let obj = KadDate.secondsToObj(eggOptions.timeRemaining);
+	dbID("idLbl_EggTime").textContent = `${obj.h}:${obj.m}:${obj.s}`;
 }
 
 function eggStartChange() {
 	eggOptions.timerState = !eggOptions.timerState;
 	if (eggOptions.timerState) {
-		KadUtils.dbID("idBtn_EggStart").textContent = "Stop";
+		dbID("idBtn_EggStart").textContent = "Stop";
 		eggCalculate();
-		KadUtils.dbID("idProg_eggProgress").setAttribute("max", eggOptions.timeTotal);
+		dbID("idProg_eggProgress").setAttribute("max", eggOptions.timeTotal);
 		eggCountdown();
 		eggOptions.timerEggCount = setInterval(eggCountdown, 1000);
 	} else {
-		KadUtils.dbID("idBtn_EggStart").textContent = "Start";
+		dbID("idBtn_EggStart").textContent = "Start";
 		clearInterval(eggOptions.timerEggCount);
 		let textStart = "Eieruhr";
-		KadUtils.dbID("idLbl_EggTime").textContent = textStart;
+		dbID("idLbl_EggTime").textContent = textStart;
 	}
 }
 
 function eggCountdown() {
 	eggOptions.timeRemaining--;
-	KadUtils.dbID("idProg_eggProgress").setAttribute("value", eggOptions.timeRemaining);
+	dbID("idProg_eggProgress").setAttribute("value", eggOptions.timeRemaining);
 	if (eggOptions.timeRemaining <= 0) {
-		KadUtils.dbID("idLbl_EggTime").textContent = "Fertig!";
+		dbID("idLbl_EggTime").textContent = "Fertig!";
 		clearInterval(eggOptions.timerEggCount);
-		if (KadUtils.dbID("idCb_eggVoiceOutput").checked) {
+		if (dbID("idCb_eggVoiceOutput").checked) {
 			speechSpeakOutput("Deine Eier sind fertig!", "de");
 		}
 	} else {

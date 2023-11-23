@@ -1,50 +1,24 @@
-.test {
+.cl_subGrid_userLogin {
 	grid-template-areas:
-		"cl_Howa cl_Howa "
-		"cl_Sepakbola cl_News "
-		"cl_Sepakbola cl_PostillonTicker "
-		"cl_Netsaona cl_Pelvelea "
-		"cl_Tugas cl_Kadar "
-		"cl_Thiontu cl_Egg "
-		"cl_Foody cl_Hverertu "
-		"cl_Kounselor cl_Kaihanga "
-		"cl_Botanicals cl_PlatLesen "
-		"cl_Iomlaid cl_SpeechTranslate "
-		"cl_Afinn cl_Synonym "
-		"cl_BiktadA cl_Boredom "
-		"cl_WikiSearch cl_Geometrie "
-		"cl_Material cl_Expansion "
-		"cl_Pattern cl_Pattern "
-		"cl_Luas cl_Middle "
-		"cl_Ranje cl_Niska "
-		"cl_Quickmath cl_Pythagoras "
-		"cl_Pormula cl_Pormula "
-		"cl_Blechgeometrie cl_Numbery "
-		"cl_Ocjene cl_Ocjene "
-		"cl_Ocjene cl_Ocjene "
-		"cl_Beatmachine cl_Beatmachine "
-		"cl_Linaha cl_Ibhaluni "
-		" . cl_Ibhaluni "
-		"cl_Sudoku cl_Sudoku "
-		"cl_Sudoku cl_Sudoku "
-		"cl_Lotto cl_Lotto "
-		"cl_RayCaster cl_RayCaster "
-		"cl_RayCaster cl_RayCaster "
-		"cl_Empat  . "
-		"cl_Empat  . "
-		"cl_Sweeper cl_Sweeper "
-		"cl_Sweeper cl_Sweeper ";
+		". cl_UserLogin_mail ."
+		". cl_UserLogin_pass ."
+		". cl_UserLogin_check ."
+		". cl_UserLogin_alert ."
+		". cl_UserLogin_submit ."
+		". cl_UserLogin_cancel .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto var(--UIHeight1) auto;
 }
 
-.cl_subGrid_userAcc {
+.cl_subGrid_userChange {
 	grid-template-areas:
-		". cl_UserAcc_infos cl_UserAcc_infos ."
-		". cl_UserAcc_mail cl_UserAcc_mail ."
-		". cl_UserAcc_pass cl_UserAcc_pass ."
-		". cl_UserAcc_check cl_UserAcc_alert ."
-		". cl_UserAcc_submit cl_UserAcc_submit .";
-	grid-template-columns: 1fr auto auto 1fr;
-	grid-template-rows: auto var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
+		". cl_UserChange_user ."
+		". cl_UserChange_logout ."
+		". cl_UserChange_infos ."
+		". cl_UserChange_change ."
+		". cl_UserChange_cancel .";
+	grid-template-columns: 1fr auto 1fr;
+	grid-template-rows: var(--UIHeight2) var(--UIHeight2) auto var(--UIHeight1) var(--UIHeight1);
 }
 
 .cl_subGrid_GeneralSettings {
@@ -100,9 +74,9 @@
 
 .cl_subGrid_News {
 	grid-template-areas:
-		". cl_NewsNav cl_NewsResultImage cl_NewsResultTitle ."
 		". cl_NewsCountry cl_NewsResultImage cl_NewsResultTitle ."
 		". cl_NewsCategory cl_NewsResultImage cl_NewsResultTitle ."
+		". cl_NewsTable cl_NewsResultImage cl_NewsResultTitle ."
 		". cl_NewsTable cl_NewsResultText cl_NewsResultText .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
@@ -155,12 +129,12 @@
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
 }
 
-.cl_subGrid_Afinn {
+.cl_subGrid_Analysis {
 	grid-template-areas:
-		". cl_AfinnInput cl_AfinnResult ."
-		". cl_AfinnInput cl_AfinnProgress ."
-		". cl_AfinnNews cl_AfinnTabResult ."
-		". cl_AfinnWiki cl_AfinnTabResult .";
+		". cl_AnalysisInput cl_AnalysisResult ."
+		". cl_AnalysisInput cl_AnalysisProgress ."
+		". cl_AnalysisNews cl_AnalysisTabResult ."
+		". cl_AnalysisWiki cl_AnalysisTabResult .";
 	grid-template-columns: 1fr auto auto 1fr;
 	grid-template-rows: auto auto var(--UIHeight1) auto;
 }

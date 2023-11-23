@@ -1,3 +1,5 @@
+import { daEL, dbID, KadDOM, KadDate, KadRandom } from "../General/KadUtils.js";
+
 const foodyOptions = {
 	chosenFood: {},
 	timerState: false,
@@ -140,63 +142,66 @@ const foodyOptions = {
 	],
 };
 
-function clear_cl_Foody() {
+daEL(idVin_foodyPreheat, "input", () => foodyPreheatChange(idVin_foodyPreheat));
+daEL(idBtn_foodyStart, "click", foodyStartChange);
+
+export function clear_cl_Foody() {
 	clearInterval(foodyOptions.timerCount);
 	foodyOptions.timerState = true;
-	foodyOptions.preheat = KadUtils.DOM.resetInput("idVin_foodyPreheat", foodyOptions.preheatOrig);
-	KadUtils.dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
+	foodyOptions.preheat = KadDOM.resetInput("idVin_foodyPreheat", foodyOptions.preheatOrig);
+	dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
 	for (let i = 0; i < foodyOptions.data.length; i++) {
-		KadUtils.dbID("idSel_foodyType").options[i] = new Option(`${foodyOptions.data[i].name} (${foodyOptions.data[i].time}min)`);
+		dbID("idSel_foodyType").options[i] = new Option(`${foodyOptions.data[i].name} (${foodyOptions.data[i].time}min)`);
 	}
-	const randomStart = KadUtils.Random.randomIndex(foodyOptions.data);
-	KadUtils.dbID("idSel_foodyType").options[randomStart].selected = true;
+	const randomStart = KadRandom.randomIndex(foodyOptions.data);
+	dbID("idSel_foodyType").options[randomStart].selected = true;
 	foodyStartChange();
 }
 
 function foodyStartChange() {
-	let index = KadUtils.dbID("idSel_foodyType").selectedIndex;
+	let index = dbID("idSel_foodyType").selectedIndex;
 	foodyOptions.chosenFood = foodyOptions.data[index];
 	foodyOptions.timerState = !foodyOptions.timerState;
 	if (foodyOptions.timerState) {
-		KadUtils.dbID("idBtn_foodyStart").textContent = "Stop";
+		dbID("idBtn_foodyStart").textContent = "Stop";
 		let noTopfPreheat;
 		if (foodyOptions.chosenFood.temp != "Topf") {
 			noTopfPreheat = foodyOptions.preheat;
 		} else {
 			noTopfPreheat = 0;
-			KadUtils.dbID("idLbl_foodyPreheat").textContent = "---";
+			dbID("idLbl_foodyPreheat").textContent = "---";
 		}
 		foodyOptions.timeTotal = (foodyOptions.chosenFood.time + noTopfPreheat) * 60;
 		foodyOptions.timeRemaining = foodyOptions.timeTotal;
-		const bar = KadUtils.dbID("idProg_foodyProgress");
+		const bar = dbID("idProg_foodyProgress");
 		bar.setAttribute("max", foodyOptions.timeTotal);
 		foodyCountdown();
 		foodyOptions.timerCount = setInterval(foodyCountdown, 1000);
 	} else {
-		KadUtils.dbID("idBtn_foodyStart").textContent = "Start";
+		dbID("idBtn_foodyStart").textContent = "Start";
 		clearInterval(foodyOptions.timerCount);
 		let textStart = "Foody";
-		KadUtils.dbID("idLbl_foodyTime").innerHTML = textStart;
+		dbID("idLbl_foodyTime").innerHTML = textStart;
 	}
 }
 
 function foodyPreheatChange() {
-	foodyOptions.preheat = KadUtils.dbID("idVin_foodyPreheat").value;
-	KadUtils.dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
+	foodyOptions.preheat = dbID("idVin_foodyPreheat").value;
+	dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
 }
 
 function foodyCountdown() {
 	foodyOptions.timeRemaining--;
-	const bar = KadUtils.dbID("idProg_foodyProgress");
+	const bar = dbID("idProg_foodyProgress");
 	bar.setAttribute("value", foodyOptions.timeRemaining);
 	if (foodyOptions.timeRemaining <= 0) {
-		if (KadUtils.dbID("idCb_foodyVoiceOutput").checked) {
-			let index = KadUtils.dbID("idSel_foodyType").selectedIndex;
+		if (dbID("idCb_foodyVoiceOutput").checked) {
+			let index = dbID("idSel_foodyType").selectedIndex;
 			let s = foodyOptions.data[index].numerus ? "sind" : "ist";
 			const sentence = `${foodyOptions.data[index].name} ${s} feritg!`;
 			speechSpeakOutput(sentence, "de");
 		}
-		KadUtils.dbID("idLbl_foodyTime").textContent = "Fertig!";
+		dbID("idLbl_foodyTime").textContent = "Fertig!";
 		clearInterval(foodyOptions.timerCount);
 		setTimeout(foodyStartChange, 10000);
 	} else {
@@ -206,7 +211,7 @@ function foodyCountdown() {
 		} else {
 			zubereitung = " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
 		}
-		let obj = KadUtils.Date.secondsToObj(foodyOptions.timeRemaining);
-		KadUtils.dbID("idLbl_foodyTime").textContent = `${obj.h}:${obj.m}:${obj.s} ${zubereitung}`;
+		let obj = KadDate.secondsToObj(foodyOptions.timeRemaining);
+		dbID("idLbl_foodyTime").textContent = `${obj.h}:${obj.m}:${obj.s} ${zubereitung}`;
 	}
 }

@@ -1,3 +1,6 @@
+import { daEL, dbID, KadDOM, KadValue } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+
 const middleOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h / 12 };
@@ -20,13 +23,12 @@ const caMI = new p5((c) => {
 	};
 }, "#idCanv_middle");
 
-function middleResize() {
-	caMI.resizeCanvas(middleOptions.canvas.w, middleOptions.canvas.h);
-}
+daEL(idVin_middleA, "input", calcMiddle);
+daEL(idVin_middleB, "input", calcMiddle);
 
-function clear_cl_Middle() {
-	KadUtils.DOM.resetInput("idVin_middleA", 5);
-	KadUtils.DOM.resetInput("idVin_middleB", 2);
+export function clear_cl_Middle() {
+	KadDOM.resetInput("idVin_middleA", 5);
+	KadDOM.resetInput("idVin_middleB", 2);
 	middleOptions.barA = {
 		hStart: 0,
 		h: middleOptions.canvas.h * 0.5,
@@ -52,9 +54,14 @@ function clear_cl_Middle() {
 	calcMiddle();
 }
 
+export function canvas_cl_Middle() {
+	caMI.resizeCanvas(middleOptions.canvas.w, middleOptions.canvas.h);
+	middleShowCanvas();
+}
+
 function calcMiddle() {
-	const a = KadUtils.DOM.numberFromInput("idVin_middleA");
-	const b = KadUtils.DOM.numberFromInput("idVin_middleB");
+	const a = KadDOM.numberFromInput("idVin_middleA");
+	const b = KadDOM.numberFromInput("idVin_middleB");
 	middleOptions.barA.val = a;
 	middleOptions.barB.val = b;
 	middleOptions.barA.text = `a: ${middleOptions.barA.val}`;
@@ -63,10 +70,10 @@ function calcMiddle() {
 	middleOptions.dims.mappedMax = Math.ceil((middleOptions.dims.max + 1) / 10) * 10;
 	middleOptions.dims.mid = (a + b) * 0.5;
 	middleOptions.dims.diff = Math.abs((a - b) * 0.5);
-	middleOptions.dims.midText = KadUtils.Value.number(middleOptions.dims.mid, { decimals: 3 });
-	middleOptions.dims.diffText = KadUtils.Value.number(middleOptions.dims.diff, { decimals: 3 });
-	KadUtils.dbID("idLbl_middleMid").textContent = `Mitte: ${middleOptions.dims.midText}`;
-	KadUtils.dbID("idLbl_middleDiff").textContent = `Differenz zur Mitte: ${middleOptions.dims.diffText}`;
+	middleOptions.dims.midText = KadValue.number(middleOptions.dims.mid, { decimals: 3 });
+	middleOptions.dims.diffText = KadValue.number(middleOptions.dims.diff, { decimals: 3 });
+	dbID("idLbl_middleMid").textContent = `Mitte: ${middleOptions.dims.midText}`;
+	dbID("idLbl_middleDiff").textContent = `Differenz zur Mitte: ${middleOptions.dims.diffText}`;
 	middleOptions.barA.w = caMI.map(middleOptions.barA.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.barB.w = caMI.map(middleOptions.barB.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
 	middleOptions.dims.w = caMI.map(middleOptions.dims.mid, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);

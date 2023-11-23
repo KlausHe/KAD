@@ -1,16 +1,37 @@
+import * as KadUtils from "../General/KadUtils.js";
+
 const lionsOptions = {
 	data: [],
 	num: null,
 };
 
-function clear_cl_Lions() {
-	KadUtils.DOM.resetInput("idVin_lionsInput", "1234");
+KadUtils.daEL(idVin_lionsInput, "input", () => lionsRequestNumber(idVin_lionsInput));
+
+export function clear_cl_Lions() {
+	KadUtils.KadDOM.resetInput("idVin_lionsInput", "1234");
 	KadUtils.dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
 	lionsOptions.data = [];
 	if (Object.keys(lionsOptions.data).length === 0) {
 		lionsRequestData();
 	}
 }
+
+export const storage_cl_Lions = {
+	dbName: "Lions",
+	contentName: "cl_Lions",
+	clear() {
+		this.data = 0;
+	},
+	get data() {
+		return lionsOptions.num;
+	},
+	set data(data) {
+		KadUtils.dbID("idVin_lionsInput").value = data;
+		setTimeout(() => {
+			lionsRequestNumber();
+		}, 1000);
+	},
+};
 
 function lionsRequestNumber() {
 	const infoLbl = KadUtils.dbID("idLbl_lionsOutput");
@@ -41,7 +62,7 @@ function lionsRequestNumber() {
 }
 
 function lionsRequestData() {
-	KadUtils.socketPost("Lions", null);
+	KadUtils.socketPost("Lions", null, lionsReturn);
 }
 
 function lionsReturn(data) {
@@ -79,9 +100,9 @@ function lionsReturn(data) {
 
 function createLionsTable() {
 	//header
-	KadUtils.Table.clear("idTabHeader_Lions");
-	const rowTh = KadUtils.Table.insertRow("idTabHeader_Lions");
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.clear("idTabHeader_Lions");
+	const rowTh = KadUtils.KadTable.insertRow("idTabHeader_Lions");
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Date"],
 		type: "Lbl",
 		text: "Datum",
@@ -89,7 +110,7 @@ function createLionsTable() {
 			textAlign: "left",
 		},
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Winner"],
 		type: "Lbl",
 		text: "Gewinner",
@@ -97,7 +118,7 @@ function createLionsTable() {
 			textAlign: "left",
 		},
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Price"],
 		type: "Lbl",
 		text: "Preis",
@@ -106,10 +127,10 @@ function createLionsTable() {
 		},
 	});
 
-	KadUtils.Table.clear("idTabBody_Lions");
+	KadUtils.KadTable.clear("idTabBody_Lions");
 	for (const [index, obj] of lionsOptions.data.entries()) {
-		const row = KadUtils.Table.insertRow("idTabBody_Lions");
-		KadUtils.Table.addCell(row, {
+		const row = KadUtils.KadTable.insertRow("idTabBody_Lions");
+		KadUtils.KadTable.addCell(row, {
 			names: ["lions", "date", index],
 			type: "Lbl",
 			text: obj.date,
@@ -117,7 +138,7 @@ function createLionsTable() {
 				textAlign: "left",
 			},
 		});
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["lions", "winner", index],
 			type: "Lbl",
 			text: obj.num.join(", "),
@@ -125,7 +146,7 @@ function createLionsTable() {
 				textAlign: "left",
 			},
 		});
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["lions", "price", index],
 			type: "Lbl",
 			text: obj.price,

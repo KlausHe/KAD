@@ -34,7 +34,6 @@
 	--divGridMinWidthFactor: 28;
 	--divGridMinWidth: calc(var(--UIHeight1) * var(--divGridMinWidthFactor));
 	--divGridMinHeight: calc(var(--UIHeight1) * 10);
-	--navContentLength: 5;
 	--navOrientation: column;
 	/* UI SIZES */
 	--UIRadius: 0.3rem;
@@ -351,27 +350,20 @@ tbody tr:last-child td {
 	-webkit-box-align: center;
 	align-items: center;
 	flex-wrap: nowrap;
+	gap: calc(2 * var(--padding));
 	height: var(--gridtitleHeight);
 	background-color: hsl(var(--bgcGridtitle) / 0.9);
-	/* -webkit-box-shadow: inset 0 calc(var(--gridGap)/4*-1) 0.25rem 0rem hsl(var(--bgcSubgrid)), inset 0 calc(var(--gridGap)/2) 0.25rem 0rem hsl(var(--bgcBackground)); */
-	/* shadow: inset 0 calc(var(--gridGap)/4*-1) 0.25rem 0rem hsl(var(--bgcSubgrid)), inset 0 calc(var(--gridGap)/2) 0.25rem 0rem hsl(var(--bgcBackground)); */
+	color: hsl(var(--txtGridtitle));
 	-webkit-transition: all var(--transitionTimeInfo) ease;
 	transition: all var(--transitionTimeInfo) ease;
-	/*  negative Margins to compensate the parents padding */
-	margin: 0 calc(var(--padding) * -1) var(--padding);
+	margin: 0 0 var(--padding) 0;
+	padding: 0 var(--padding);
 	z-index: 5;
 }
 
 .cl_gridTitle div,
 h1 {
-	color: hsl(var(--txtGridtitle));
 	font-size: var(--fontSizeMedium);
-	display: -webkit-box;
-	display: flex;
-	background-color: transparent;
-	-webkit-box-align: center;
-	align-items: center;
-	padding: 0 var(--padding);
 }
 
 .cl_subGrid {
@@ -384,8 +376,6 @@ h1 {
 	background-color: hsl(var(--bgcSubgrid) / var(--opacitySubgrid));
 	border-radius: var(--LayoutRadius);
 	min-height: var(--divGridMinHeight);
-	margin: 0;
-	padding: 0 var(--padding) var(--padding);
 	-webkit-transition: all var(--transitionTimeInfo) ease;
 	transition: all var(--transitionTimeInfo) ease;
 	overflow: hidden;
@@ -394,21 +384,18 @@ h1 {
 
 .cl_contentSubGrid:hover > .cl_gridTitle {
 	background-color: hsl(var(--bgcNavbar) / 1);
-}
-
-.cl_contentSubGrid:hover {
-	--opacitySubgrid: 0.2;
+	color: hsl(var(--txtNavbar));
 }
 
 /* Dropdon/Dropup  */
-.clDropdownParent {
+.cl_DropdownParent {
 	display: inline-block;
 	position: relative;
 	padding: 0;
 }
 
 /* Dropdown Infos */
-.clDropdownParent:hover .clDropdownInfo {
+.cl_DropdownParent:hover .cl_DropdownInfo {
 	display: block;
 	opacity: 1;
 	pointer-events: auto;
@@ -416,7 +403,7 @@ h1 {
 	transition-delay: var(--transitionTimeInfo);
 }
 
-.clDropdownParent:hover .clDropdownName {
+.cl_DropdownParent:hover .clDropdownName {
 	display: block;
 	opacity: 1;
 	pointer-events: auto;
