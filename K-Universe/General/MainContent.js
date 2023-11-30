@@ -1,3 +1,5 @@
+export const contentGroupSort = ["Universe", "News", "Benkyou", "Utility", "Tools", "Games", "User"];
+
 export const rawContentGrid = {
 	//Benkyou
 	cl_Analysis: {
@@ -264,7 +266,7 @@ export const rawContentGrid = {
 	},
 	cl_Lions: {
 		userSelected: true,
-		active: false,
+		active: true,
 		contentGroup: "News",
 		name: "Lions",
 		heritage: ["englisch", "Löwen"],

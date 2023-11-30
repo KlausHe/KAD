@@ -24,10 +24,10 @@
   <meta content="hsl(240, 52%, 54%)" media="(prefers-color-scheme: light)">
   <meta content="hsl(223, 11%, 18%)" media="(prefers-color-scheme: dark)">
 
-  <link href="KADUniDesign/CSSbodyLayout.css" rel="stylesheet" type="text/css">
-  <link href="KADUniDesign/CSSgridLayout.css" rel="stylesheet" type="text/css">
-  <link href="KADUniDesign/CSSinputLayout.css" rel="stylesheet" type="text/css">
-  <link href="KADUniDesign/CSSpikaday.css" rel="stylesheet" type="text/css">
+  <link href="CSS/CSSbodyLayout.css" rel="stylesheet" type="text/css">
+  <link href="CSS/CSSgridLayout.css" rel="stylesheet" type="text/css">
+  <link href="CSS/CSSinputLayout.css" rel="stylesheet" type="text/css">
+  <!-- <link href="CSS/CSSpikaday.css" rel="stylesheet" type="text/css"> -->
   <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css">
 
   <script src="Data/p5.min.js"></script>
@@ -35,7 +35,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js"
     integrity="sha512-0k6FXllQktdobw8Nc8KQN2WtZrOuxpMn7jC2RKCF6LR7EdOhhrg3H5cBPxhs3CFzQVlO6ni1B9SDLUPhBs0Alg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script type="module" src="Main.js"></script>
 </head>
 
@@ -1783,9 +1782,8 @@
           </table>
         </div>
         <div class="cl_UserGridOptions">
-          <button type="button" id="idBtn_toggleUserGrid" onclick="usergridOptions.toggleAllGridDisable()">Toggle
-            all</button>
-          <button type="button" id="idBtn_loaduserGridLayout" onclick="saveUsergridLayout()">Save</button>
+          <button type="button" id="idBtn_toggleUserGrid">Toggle all</button>
+          <button type="button" id="idBtn_loaduserGridLayout">Save</button>
         </div>
       </div>
     </section>

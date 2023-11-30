@@ -1,4 +1,6 @@
-import { dbID, dbIDStyle, dbCL, daEL, KadDOM, KadRandom } from "../General/KadUtils.js";
+//use AudioContext() and AudioBuffer() 
+
+import { dbID, dbIDStyle, dbCL, daEL,error, KadDOM, KadRandom } from "../General/KadUtils.js";
 
 const beatmachineOptions = {
 	BPMOrig: 105,
@@ -36,9 +38,7 @@ daEL(idBtn_transporteMute, "click", muteAll);
 daEL(idVin_beatmachine_BPM, "input", () => beatmachineBPMChange(idVin_beatmachine_BPM));
 
 export function clear_cl_Beatmachine() {
-	console.log("TODO");
-	// alles ind Javascript, kein aktives auslesen vom DOM, kein starten/stoppen bei jedem click. Jeder Button sendet aktiv und ändert das jeweilige pattern.
-	return;
+	// console.log("TODO");
 	daEL(idBtn_beatmachineLoad, "click", () => beatmachineGetSounds(idBtn_beatmachineLoad));
 	beatmachineOptions.soundsLoaded = false;
 	beatmachineOptions.curTime = 0;
@@ -163,6 +163,7 @@ function beatmachineCreateBeat() {
 }
 
 function beatmachineTransport() {
+  error("Beatmachine needs reworking. Stay tuned for the next update")
 	beatmachineOptions.curTime = 0;
 	console.log("transport");
 	if (beatmachineOptions.transportState === false) {

@@ -34,7 +34,9 @@ async function synonymGetData() {
 		synonymCreateTable();
 	} catch (err) {
 		dbID("idLbl_synonymSearchWord").textContent = "---";
-		console.error(err);
+		KadUtils.error("Could not receive data for", "'Synonym'", err);
+
+
 	}
 }
 

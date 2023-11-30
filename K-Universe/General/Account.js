@@ -29,6 +29,7 @@ export const nuncDiscipuli = {
 		keepLogin: null,
 	},
 	registering: false,
+	logging: false,
 	get short() {
 		return AccData.data ? AccData.infos.shortName.data : "";
 	},
@@ -209,7 +210,6 @@ KadUtils.daEL(idDiv_navBar_AccountLogin, "click", openNavLogin);
 KadUtils.daEL(idDiv_navBar_AccountChange, "click", openNavChange);
 
 function openNavLogin() {
-	console.log("LoginAccount");
 	clear_cl_UserLogin();
 	navClick("cl_UserLogin");
 	KadUtils.dbID("idVin_userLogin_email").focus();
@@ -256,6 +256,7 @@ function firebaseLogin() {
 	const email = KadUtils.dbID(idVin_userLogin_email).value.trim();
 	const pass = KadUtils.dbID(idVin_userLogin_pass).value.trim();
 	// setPersistence(auth, nuncDiscipuli.cred.keepLogin);
+	nuncDiscipuli.logging = true;
 	signInWithEmailAndPassword(auth, email, pass)
 		.then(() => {
 			KadUtils.KadDOM.enableBtn("idBtn_userLogin_login", false);
@@ -326,7 +327,6 @@ function userAccSetUserBtn() {
 	if (nuncDiscipuli.short == null) AccData.infos.shortName.data = nuncDiscipuli.createShort();
 	KadUtils.dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
 	KadUtils.KadDOM.enableBtn("idBtn_userLogin_login", true);
-	navClick("User");
 }
 
 function userAccError(error) {
@@ -362,15 +362,6 @@ export function saveDiscipuli(category = null) {
 		}
 	}
 	saveToDatabase(saveData);
-	return;
-	const { error, data } = saveToDatabase(saveData);
-	if (error !== null) return;
-	KadUtils.KadDOM.enableBtn("idBtn_userAcc_submit", true);
-	setTimeout(() => {
-		for (const key of Object.keys(data)) {
-			KadUtils.dbIDStyle(`idBtn_child_gridtitle_dbUL_cl_${key}`).filter = "invert(0)";
-		}
-	}, 500);
 }
 
 //--------------Load Single DATA-------------
@@ -386,6 +377,11 @@ async function loadFromDatabase(categories) {
 		}
 	}
 	userAccSetUserBtn();
+
+	if (nuncDiscipuli.logging) {
+		nuncDiscipuli.logging = false;
+		navClick("User");
+	}
 }
 
 async function saveToDatabase(data) {

@@ -67,8 +67,7 @@ function lionsRequestData() {
 
 function lionsReturn(data) {
 	if (data.error) {
-		console.error(data.error);
-		return;
+		KadUtils.error("Lions could not acces the Winnerlist", data.error);
 	}
 	lionsOptions.data = [];
 	for (let i = 1; i < data.length; i++) {
@@ -76,14 +75,7 @@ function lionsReturn(data) {
 		const date = obj["Datum"];
 		let num = obj["Los-Nr."];
 		num = num.padStart(4, 0);
-		// let save = 0;
-		// while (num.length < 4 || save > 4) {
-		// 	num = "0" + num;
-		// 	save++;
-		// }
-
 		const price = `${obj["Spende/Gutschein-Beschreibung"]}<br>${obj["Sponsor"]}`;
-
 		const index = lionsOptions.data.findIndex((obj) => obj.date == date && obj.price == price);
 		if (index < 0) {
 			lionsOptions.data.push({

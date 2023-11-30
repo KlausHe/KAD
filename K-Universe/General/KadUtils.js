@@ -22,11 +22,13 @@ export function daEL(id, type, fn) {
 export function hostDebug() {
 	return ["local", "127.0.0.1"].some((s) => window.location.hostname.includes(s));
 }
+export function error(...errorText) {
+	throw new Error(errorText.join("; "));
+}
 export async function socketPost(app = null, data, callback) {
 	if (app == null) return;
 	if (typeof data != "object") {
-		console.error("NO OBJECT", data);
-		return;
+		error("NO OBJECT'", data);
 	}
 	const path = "K-Universe/";
 	const request = new Request(`${path}${app}/`, {

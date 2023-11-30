@@ -1,4 +1,4 @@
-import { daEL, dbID, deepClone, KadDOM, KadTable, KadDate, KadValue } from "../General/KadUtils.js";
+import { daEL, dbID, deepClone, error, KadDOM, KadTable, KadDate, KadValue } from "../General/KadUtils.js";
 import { Data_Currencies } from "../General/MainData.js";
 
 const iomlaidOptions = {
@@ -84,7 +84,7 @@ async function iomlaidCalculate() {
 		iomlaidOptions.data.historic = data[1].success == false ? null : data[1];
 		iomlaidTable();
 	} catch (err) {
-		console.error(err);
+		error("Could not receive data for", "'Iomlaid'", err);
 	}
 }
 

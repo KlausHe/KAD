@@ -182,7 +182,7 @@ async function linahaGetData() {
 		linahaOptions.data = await response.json();
 		linahaCreateButtons();
 	} catch (err) {
-		console.error(err);
+		KadUtils.error("Could not receive data for", "'Linaha'", err);
 	}
 }
 

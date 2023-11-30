@@ -159,7 +159,6 @@ export function clear_cl_Howa() {
   KadUtils.KadDOM.resetInput("idVin_howaEntry", "Ort");
 
 
-	// howaHideInfo();
 	if (howaOptions.intervalRefresh != null) {
 		clearInterval(howaOptions.intervalRefresh);
 		howaOptions.intervalRefresh = null;
@@ -237,7 +236,6 @@ function howaNavigatorPosition(data) {
 }
 
 function howaNavigatorError() {
-	// howaShowInfo("No Geolocation");
 	KadUtils.dbID("idLbl_howaNow").textContent = "No Geolocation";
 	howaData.pos.lat = howaData.latOrig;
 	howaData.pos.lon = howaData.lonOrig;
@@ -262,17 +260,6 @@ function howaReqestData() {
 	}, 400);
 }
 
-// function howaShowInfo(text) {
-//   KadUtils.dbID('idLbl_howaNow').textContent = "";
-//   KadUtils.dbIDStyle("idDiv_howaReturnInfo").display = "initial";
-//   KadUtils.dbID("idLbl_howaNowReturnInfo").innerHTML = text;
-// };
-
-// function howaHideInfo() {
-//   KadUtils.dbIDStyle("idDiv_howaReturnInfo").display = "none";
-//   KadUtils.dbID("idLbl_howaNowReturnInfo").textContent = "";
-// }
-
 function howaReturn(data) {
 	if (data.error) {
 		KadUtils.dbID("idLbl_howaNow").textContent = "Stadt nicht gefunden";
@@ -280,7 +267,6 @@ function howaReturn(data) {
 	}
 
 	if (data != null) {
-		// howaHideInfo();
 		howaData.pos.location = data.currentData.name;
 		howaData.data = [data.currentData, ...data.forecastData.list];
 	}

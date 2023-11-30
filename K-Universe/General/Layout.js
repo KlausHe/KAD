@@ -1,7 +1,7 @@
 import * as KadUtils from "./KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import { globalValues } from "../Settings/Basics.js";
-import { rawContentGrid, contentFooter } from "./MainContent.js";
+import { contentGroupSort, rawContentGrid, contentFooter } from "./MainContent.js";
 import { nuncDiscipuli, loadDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
 import * as DBData from "../MainModulesDBData.js";
@@ -49,7 +49,6 @@ export const contentLayout = {
 	prevNavFullscreen: null,
 	defaultPage: KadUtils.hostDebug() ? "Benkyou" : "Universe",
 };
-
 
 export function createContentlayoutList() {
 	contentLayout.navContent.Universe = contentLayout.getUniverse;
@@ -265,6 +264,7 @@ function createAreaString(gridArray, rowLength) {
 export function createSubgrid() {
 	const dbList = [];
 	for (const dbDataObj of Object.values(DBData)) {
+		// dbList.push(dbDataObj.dbName);
 		dbList.push(dbDataObj.contentName);
 	}
 	for (const gridKey in contentGrid) {
@@ -423,7 +423,7 @@ export function createSubgrid() {
 					uiType: "transparent",
 				},
 				onclick: () => {
-					saveDiscipuli(displayName);
+					saveDiscipuli(gridKey.slice(3)); // remove "cl_"
 				},
 			});
 			titleUploadParent.appendChild(titleUploadBtn);
@@ -449,8 +449,7 @@ export function createSubgrid() {
 					uiType: "transparent",
 				},
 				onclick: () => {
-					console.log("downloadbtn:", gridKey, displayName);
-					loadDiscipuli(displayName);
+					loadDiscipuli(gridKey.slice(3)); // remove "cl_"
 				},
 			});
 			titleDownloadParent.appendChild(titleDownloadBtn);
@@ -516,9 +515,13 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	contentLayout.contentLength = 0;
-	for (let i = Object.keys(contentLayout.navContent).length - 1; i >= 0; i--) {
+
+	if (contentGroupSort.length != Object.keys(contentLayout.navContent).length) console.log("Not all Groupnames contained in `contentGroupSort`");
+	// const navNamesOld = Object.keys(contentLayout.navContent);
+
+	for (let i = contentGroupSort.length - 1; i >= 0; i--) {
 		contentLayout.contentLength++;
-		let obj = Object.keys(contentLayout.navContent)[i];
+		const obj = contentGroupSort[i];
 		const navParentDiv = KadUtils.KadTable.createCell("Div", {
 			names: ["navBar", obj],
 			type: "Div",
@@ -526,11 +529,8 @@ export function createNavbar() {
 			idNoChild: true,
 			style: {
 				whiteSpace: "nowrap",
-				display: obj == "User" ? "none" : "initial",
 			},
-			onclick: () => {
-				navClick(obj);
-			},
+			onclick: () => navClick(obj),
 		});
 		parent.insertBefore(navParentDiv, parent.children[0]);
 		const navParentImg = KadUtils.KadTable.createCell("Img", {
@@ -544,13 +544,13 @@ export function createNavbar() {
 			createClass: ["cl_navNames"],
 			type: "Lbl",
 			idNoChild: true,
-			text: obj == "User" ? nuncDiscipuli.short || "User" : obj,
+			text: obj,
 		});
 		navParentDiv.appendChild(navParentLbl);
 	}
-	// move User to last place!
-	parent.insertBefore(KadUtils.dbID("idDiv_navBar_User"), parent.children[contentLayout.contentLength]);
 	KadUtils.dbID("idDiv_navBar_Universe").classList.add("navbarActive");
+	KadUtils.dbIDStyle("idDiv_navBar_User").display = "none";
+	KadUtils.dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short || "User";
 }
 
 export function createFooter() {
