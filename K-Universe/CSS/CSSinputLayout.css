@@ -1,0 +1,624 @@
+/* all the inputs */
+input,
+button,
+textarea,
+select {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	height: var(--UIHeight1);
+	text-decoration: none;
+	background-color: hsl(var(--bgcButton));
+	color: hsl(var(--txtButton));
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+	/* no padding!--> it shifts the Images in buttons to the side */
+	padding: 0;
+	vertical-align: middle;
+}
+
+input:hover,
+button:hover,
+textarea:hover,
+select:hover {
+	background-color: hsl(var(--bgcNavbar) / 0.6);
+	color: hsl(var(--txtNavbar));
+	transition-duration: 0.1s;
+	transition-delay: 0s;
+}
+
+div {
+	padding: 0;
+	margin: 0;
+}
+
+label {
+	vertical-align: middle;
+}
+
+label[for] {
+	cursor: pointer;
+}
+
+h1 {
+	/* vertical-align: middle; */
+	font-weight: var(--fontWeight);
+}
+
+/*           I-whatever*/
+i {
+	vertical-align: middle;
+	align-items: center;
+	-webkit-box-align: center;
+	margin: 0 var(--padding);
+}
+
+img {
+	width: var(--imgSize);
+	background-color: transparent;
+	border-color: transparent;
+	margin: 0;
+	padding: 0;
+	-webkit-box-align: center;
+	align-items: center;
+	vertical-align: middle;
+	-webkit-transition: all var(--transitionTimeName) ease-in-out;
+	transition: all var(--transitionTimeName) ease-in-out;
+}
+
+img[imgBtn="subgrid"] {
+	-webkit-filter: invert(var(--invBackground));
+	filter: invert(var(--invBackground));
+	cursor: default;
+}
+
+img[imgBtn="gridtitle"] {
+	-webkit-filter: invert(var(--invGridtitle));
+	filter: invert(var(--invGridtitle));
+	/* cursor: default; */
+}
+
+img[imgSize="blech"] {
+	width: 15rem;
+	height: 6.5rem;
+}
+
+img[imgSize="numbery"] {
+	width: 100%;
+	height: auto;
+}
+
+img[imgSize="howaImg"] {
+	width: var(--gridWidthGameCanvas);
+	height: auto;
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+}
+
+img[imgSize="thumbnail"] {
+	width: var(--UIHeight3);
+	aspect-ratio: 1/1;
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+	object-fit: cover;
+}
+
+img[imgSize="thumbnail"]:hover,
+img[imgSize="thumbnail"]:focus {
+	scale: 2;
+}
+
+.img_trash {
+	content: url("../Data/Images/SVG/trash.svg");
+}
+
+.img_oAdd {
+	content: url("../Data/Images/SVG/oAdd.svg");
+}
+
+.img_oSub {
+	content: url("../Data/Images/SVG/oSub.svg");
+}
+
+textarea {
+	width: var(--UIWidth12);
+	height: var(--UIHeight3);
+	padding: var(--padding);
+	resize: none;
+}
+
+progress {
+	padding: 0;
+	width: var(--UIWidth12);
+	height: var(--rangeHeight);
+	background-color: hsl(var(--bgcButton));
+	outline: none;
+	border: none;
+	vertical-align: middle;
+}
+
+progress::-webkit-progress-value {
+	background-color: hsl(var(--bgcNavbar));
+}
+
+progress::-moz-progress-bar {
+	background-color: hsl(var(--bgcNavbar));
+}
+
+select {
+	/* padding-left: var(--padding);  instead of Padding use indent for safari*/
+	position: relative;
+	text-indent: var(--gridGap);
+	border-right: var(--UIBorderRight);
+	border-bottom: var(--UIBorderBottom);
+	max-width: var(--UIWidth16);
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	padding-right: calc(2 * var(--padding));
+}
+
+select:disabled {
+	background-color: hsl(var(--bgcBackground) / 0.1);
+	color: var(--txtBackground);
+	cursor: default;
+}
+
+button {
+	position: relative;
+	width: var(--UIWidth6);
+	text-align: center;
+	-webkit-box-align: center;
+	align-items: center;
+	cursor: pointer;
+	transition: all var(--transitionTimeInfo) ease-in-out;
+}
+
+button:disabled {
+	background-color: hsl(var(--bgcBackground) / 0.05);
+	color: hsl(var(--txtBackground));
+	cursor: default;
+}
+
+button:active {
+	background-color: hsl(var(--bgcNavbar));
+	color: hsl(var(--txtNavbar));
+	transition-duration: 0s;
+	transition-delay: 0s;
+}
+
+[data-btnstatus="btnPositive"] {
+	background-color: hsl(var(--bgcButtonPositive));
+	color: hsl(var(--txtButtonPositive));
+}
+
+[data-btnstatus="btnNegative"] {
+	background-color: hsl(var(--bgcButtonNegative));
+	color: hsl(var(--txtButtonNegative));
+}
+
+[data-btnstatus="btnBasecolor"] {
+	background-color: hsl(var(--bgcNavbar));
+	color: hsl(var(--txtNavbar));
+}
+
+input {
+	width: var(--UIWidth6);
+	-webkit-box-align: center;
+	align-items: center;
+	text-align: left;
+}
+
+input:disabled {
+	background-color: hsl(var(--bgcBackground) / 0.1);
+	color: hsl(var(--txtBackground));
+	cursor: default;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+	padding: var(--padding);
+}
+
+input[type="time"] {
+	width: var(--UIWidth4);
+}
+
+input[type="number"] {
+	appearance: none;
+	-moz-appearance: textfield;
+	width: var(--UIWidth3);
+	padding: var(--padding);
+}
+
+/* Webkit browsers like Safari and Chrome */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="range"] {
+	padding: 0;
+	display: inline-block;
+	max-width: calc(var(--UIWidth6) - var(--padding));
+	height: var(--rangeHeight);
+	background-color: hsl(var(--bgcButton));
+}
+
+/* WEBKIT BASED BROWSERS (CHROME, SAFARI, OPERA) */
+input[type="range"]::-webkit-slider-runnable-track {
+	max-width: calc(var(--UIWidth6) - var(--padding));
+	height: var(--rangeHeight);
+	background-color: hsl(var(--bgcButton));
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: var(--rangeThumbWidth);
+	height: var(--rangeThumbHeight);
+	background-color: hsl(var(--bgcNavbar));
+	cursor: pointer;
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+	margin-top: -4px;
+}
+
+/* FIREFOX */
+input[type="range"]::-moz-range-track {
+	max-width: calc(var(--UIWidth6) - var(--padding));
+	height: var(--rangeHeight);
+	background-color: hsl(var(--bgcButton));
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+}
+
+input[type="range"]::-moz-range-thumb {
+	width: var(--rangeThumbWidth);
+	height: var(--rangeThumbHeight);
+	background-color: hsl(var(--bgcNavbar));
+	cursor: pointer;
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+}
+
+input[type="checkbox"] {
+	/* mox: none; because "Checkbox" does not work */
+	-moz-appearance: none;
+	-webkit-appearance: checkbox;
+	appearance: checkbox;
+	width: var(--UIHeight1);
+	/* width: var(--imgSize); */
+	height: var(--imgSize);
+	cursor: pointer;
+}
+
+input[type="image"] {
+	height: var(--imgSize);
+	width: var(--imgSize);
+	background-color: transparent;
+	border-color: transparent;
+	padding: 0;
+	margin: 0 var(--padding);
+}
+
+input[imgBtn="subgrid"] {
+	-webkit-filter: invert(var(--invBackground));
+	filter: invert(var(--invBackground));
+	cursor: default;
+}
+
+.cl_numberyDiv {
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+	width: var(--UIHeight3);
+	height: var(--UIHeight3);
+	-webkit-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.cl_numberyDiv:hover {
+	background-color: hsl(var(--bgcBackground));
+}
+
+.numbery_imgHidden {
+	display: none;
+}
+
+.numbery_Div {
+	--col: var(--bgcNavbar);
+	background-color: hsl(var(--col));
+}
+
+.numbery_Svg {
+	--inv: var(--invNavbar);
+	-webkit-filter: invert(var(--inv));
+	filter: invert(var(--inv));
+}
+
+.cl_infoCB,
+.cl_infoNav,
+.cl_info {
+	display: inline-block;
+	position: relative;
+	height: var(--UIHeight1);
+	background-color: hsl(var(--bgcBackground) / 0.15);
+	color: hsl(var(--txtBackground));
+	width: var(--UIWidth6);
+	line-height: 150%;
+	border: var(--borderThin);
+	border-radius: var(--UIRadius);
+	text-align: center;
+}
+.cl_infoCB {
+	width: var(--UIWidth1);
+}
+
+.cl_infoNav {
+	background-color: transparent;
+	color: hsl(var(--txtNavbar));
+}
+
+.cl_outputLbl {
+	background-color: hsl(var(--bgcNavbar));
+	color: hsl(var(--txtNavbar));
+	border-radius: var(--LayoutRadius);
+	font-size: var(--fontSizeLarge);
+	border: var(--borderThinInverse);
+	min-height: var(--UIHeight2);
+	min-width: var(--UIWidth12);
+	display: -webkit-box;
+	display: flex;
+	-webkit-box-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.cl_outputEquation {
+	font-size: var(--fontSizeLarge);
+}
+
+.cl_highlighted {
+	background-color: hsl(var(--bgcButtonPositive));
+	color: hsl(var(--txtButtonPositive));
+}
+
+.cl_outputText {
+	padding: var(--padding);
+	border-top: var(--borderThin);
+}
+
+.cl_BeatmachineBtn {
+	width: var(--UIHeight1);
+	height: var(--UIHeight1);
+	background-color: hsl(var(--bgcButton));
+	transition: all 0s;
+}
+
+.cl_BeatmachineBtnSelect {
+	background-color: hsl(var(--bgcNavbar));
+}
+
+.cl_BeatmachineBtnBorder {
+	border-left: var(--UIBorderRight);
+}
+.cl_BeatmachineBtnRow {
+	border-right: var(--UIBorderRight);
+}
+/*                                 BUTTONSIZES AND RADIUS-TYPES!!!*/
+[uiType~="transparent"] {
+	background-color: transparent;
+	border-color: transparent;
+}
+
+[uiSize~="img"] {
+	width: var(--imgSize);
+}
+
+[uiSize~="size1"] {
+	width: var(--UIWidth1);
+}
+[uiSize~="size2"] {
+	width: var(--UIWidth2);
+}
+[uiSize~="size3"] {
+	width: var(--UIWidth3);
+}
+[uiSize~="size4"] {
+	width: var(--UIWidth4);
+}
+[uiSize~="size5"] {
+	width: var(--UIWidth5);
+}
+[uiSize~="size6"] {
+	width: var(--UIWidth6);
+}
+[uiSize~="size7"] {
+	width: var(--UIWidth7);
+}
+[uiSize~="size8"] {
+	width: var(--UIWidth8);
+}
+[uiSize~="size9"] {
+	width: var(--UIWidth9);
+}
+[uiSize~="size10"] {
+	width: var(--UIWidth10);
+}
+[uiSize~="size11"] {
+	width: var(--UIWidth11);
+}
+[uiSize~="size12"] {
+	width: var(--UIWidth12);
+}
+[uiSize~="size13"] {
+	width: var(--UIWidth13);
+}
+[uiSize~="size14"] {
+	width: var(--UIWidth14);
+}
+[uiSize~="size15"] {
+	width: var(--UIWidth15);
+}
+[uiSize~="size16"] {
+	width: var(--UIWidth16);
+}
+[uiSize~="size17"] {
+	width: var(--UIWidth17);
+}
+[uiSize~="size18"] {
+	width: var(--UIWidth18);
+}
+[uiSize~="size19"] {
+	width: var(--UIWidth19);
+}
+[uiSize~="size20"] {
+	width: var(--UIWidth20);
+}
+
+[uiSize~="height2"] {
+	height: var(--UIHeight2);
+}
+
+[uiSize~="height3"] {
+	height: var(--UIHeight3);
+}
+
+[uiSize~="outputTable"] {
+	max-width: var(--UIWidth20);
+}
+
+[uiSize~="outputTitle"] {
+	width: var(--UIWidth13);
+}
+
+[uiSize~="outputText"] {
+	width: var(--UIWidth20);
+}
+
+[uiSize~="sudoku"] {
+	width: calc(var(--UIHeight1) * 1.5);
+	height: calc(var(--UIHeight1) * 1.5);
+}
+
+[uiSize~="linahaBtn"] {
+	width: var(--UIWidth6);
+	height: calc(var(--UIHeight2));
+}
+
+[uiSize~="linahaImg"] {
+	width: calc(var(--UIHeight2) * 1.5);
+	height: calc(var(--UIHeight2) * 0.9);
+}
+
+[uiRadius~="none"] {
+	border-radius: 0;
+}
+
+[uiRadius~="top"] {
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+[uiRadius~="right"] {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+[uiRadius~="bottom"] {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+[uiRadius~="left"] {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+[uiAlign~="left"] {
+	text-align: left;
+}
+
+[uiAlign~="center"] {
+	text-align: center;
+}
+
+[uiAlign~="right"] {
+	text-align: right;
+}
+
+[uiFlex~="horizontal"] {
+	display: -webkit-box;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	flex-direction: row;
+	-webkit-box-pack: start;
+	justify-content: left;
+	-webkit-box-align: center;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: var(--gridGap);
+	padding-bottom: var(--gridGap);
+}
+
+[uiFlex~="vertical"] {
+	display: -webkit-box;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	gap: var(--gridGap);
+	padding-right: var(--gridGap);
+}
+
+[uiFilter~="invNavbar"] {
+	filter: invert(var(--invNavbar));
+	transition: all var(--transitionTimeInfo) linear var(--transitionTimeInfo);
+}
+
+[uiFilter~="invNavbar"]:active {
+	transition-duration: 0s;
+	transition-delay: 0s;
+}
+
+[uiFilter~="invGridtitle"] {
+	filter: invert(var(--invGridtitle));
+	transition: all var(--transitionTimeInfo) linear var(--transitionTimeInfo);
+}
+
+[uiFilter~="invGridtitle"]:active {
+	filter: var(--invGridtitle);
+	transition-duration: 0s;
+	transition-delay: 0s;
+}
+
+[uiFilter~="invBackground"] {
+	filter: invert(var(--invBackground));
+	transition: all var(--transitionTimeInfo) linear var(--transitionTimeInfo);
+}
+
+[uiFilter~="invBackground"]:active {
+	filter: var(--invBackground);
+	transition-duration: 0s;
+	transition-delay: 0s;
+}
+
+[uiFilter~="invTrue"] {
+	-webkit-filter: invert(1);
+	filter: invert(1);
+}
+
+[uiFilter~="invFalse"] {
+	-webkit-filter: invert(0);
+	filter: invert(0);
+}
+
+[uiWrap~="nowrap"] {
+	white-space: nowrap;
+}

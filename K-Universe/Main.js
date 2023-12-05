@@ -1,5 +1,12 @@
+import * as KadUtils from "./General/KadUtils.js";
+import { createNewNuncDiscipuli } from "./General/Account.js";
+import * as Layout from "./General/Layout.js";
+import { globalValues, displayColorSystem, colToggleColormode } from "./Settings/Basics.js";
+import { bgaClearBackground, bgaToggleReset } from "./General/BackgroundAnimation.js";
+import * as Clear from "../MainModulesClear.js";
+
 // p5-Setup in Soundlibrary only!  Use Instance "globalP5" for general functionality
-const globalP5 = new p5((c) => {
+export const globalP5 = new p5((c) => {
 	c.setup = function () {
 		c.noCanvas();
 		c.noLoop();
@@ -8,97 +15,58 @@ const globalP5 = new p5((c) => {
 
 window.onload = mainSetup;
 
-function initCssMediaSizes() {
-	for (let key of Object.keys(globalValues.mediaSizes)) {
-		globalValues.mediaSizes[key] = KadUtils.CSS.getRoot(key, true, true);
-	}
-}
 function mainSetup() {
-	if (globalValues.hostDebug) {
-		KadUtils.dbCLStyle("cl_Loading").display = "none";
-	}
-	contentLayout.createContentGrid();
+	if (KadUtils.hostDebug()) KadUtils.dbCLStyle("cl_Loading").display = "none";
+	Layout.contentLayout.createContentGrid();
 	htmlSetVinChange();
-	htmlSetAltTags();
-	initCssMediaSizes();
 	globalValues.colors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
-	firebase.initializeApp({
-		apiKey: "AIzaSyDHgM7J-2Q_W1Swp0Ozx6nY1QDoFcwEFwQ",
-		authDomain: "kad-universe.firebaseapp.com",
-		databaseURL: "https://kad-universe.firebaseio.com",
-		projectId: "kad-universe",
-		storageBucket: "kad-universe.appspot.com",
-		messagingSenderId: "874702902059",
-		appId: "1:874702902059:web:cbe47b5a31e8f57d",
-	});
-	const FBData = firebase.firestore();
-	FBUserSettings = FBData.collection("User_Settings");
 
-	layoutCreateContentlayoutList(); // First: create the LayoutLists
-	layoutCreateNavbar();
-	layoutCreateFooter();
-	layoutCreateSubgrid();
-
-	contentLayout.prevNavContent = contentLayout.defaultPage;
-	layoutResizeGrid();
-	layoutNavClick();
-
+	Layout.createContentlayoutList(); // First: create the LayoutLists
+	Layout.createNavbar();
+	Layout.createFooter();
+	Layout.createSubgrid();
+	Layout.contentLayout.prevNavContent = Layout.contentLayout.defaultPage;
 	//create Pikadays
-	createIomlaidPikaday();
-	layoutCreateNavbarPikaday();
-	createKadarPikaday("A");
-	createKadarPikaday("B");
+	// createIomlaidPikaday();
+	// createKadarPikaday("A");
+	// createKadarPikaday("B");
 
-	//check if Userstate changed!
-	firebase.auth().onAuthStateChanged((user) => {
-		if (user != null) {
-			nuncDiscipuli.cred.email = user.email;
-			nuncDiscipuli.cred.uid = user.uid;
-		} else if (user === null) {
-			nuncDiscipuli.cred.email = null;
-			nuncDiscipuli.cred.uid = null;
-		}
-		toggleLayout();
-		clearAllTiles();
-		setTimeout(() => {
-			layoutHideLoadingscreen();
-			clearGlobalValue();
-		}, 1000);
-	});
+	clearAllTiles();
+	Layout.resizeGrid();
+	Layout.navClick();
+	setTimeout(() => {
+		hideLoadingscreen();
+		clearGlobalValue();
+	}, 1000);
 	globalValues.globalInput.generateSpreadLists();
+	mainAttachGlobalEventlisteners();
+	KadUtils.KadDOM.resetInput(idVin_globalValue, "Mastervalue");
+	KadUtils.dbID("idLbl_navBar_KW").textContent = `KW ${KadUtils.KadDate.getWeekNumber()}`;
 }
 
-function resetAll() {
+function mainAttachGlobalEventlisteners() {
+	// Navbar
+	KadUtils.daEL(idDiv_navBar_Trash, "click", resetAll);
+	KadUtils.daEL(idVin_globalValue, "input", globalValueChanged);
+	KadUtils.daEL(idVin_globalValue, "focus", globalValuePopulateDatalist);
+	KadUtils.daEL(idDiv_navBar_GlobalSettings, "click", () => Layout.navClick("GlobalSettings"));
+	KadUtils.daEL(idDiv_navBar_Colormode, "click", colToggleColormode);
+	// Footer
+	KadUtils.daEL(idDiv_clearBackground, "click", bgaClearBackground);
+	KadUtils.daEL(idCb_bgaReset, "click", () => bgaToggleReset(idCb_bgaReset));
+}
+
+export function resetAll() {
 	createNewNuncDiscipuli();
 	displayColorSystem();
 	clearGlobalValue();
-	layoutNavClick(contentLayout.defaultPage);
+	Layout.navClick();
 }
 
 function clearAllTiles() {
-	for (const obj in contentGrid) {
-		window[`clear_${obj}`]();
-	}
-}
-
-function redrawCanvases() {
-	for (let obj in contentGrid) {
-		if (contentGrid[obj].hasOwnProperty("canvas")) contentGrid[obj].canvas();
-	}
-}
-
-function htmlSetAltTags() {
-	// needed to display local files in Firefox when the imgSrc is set inside css
-	envoked("trash");
-	envoked("oAdd");
-	envoked("oSub");
-
-	function envoked(name) {
-		const obj = KadUtils.dbCL(`img_${name}`, null);
-		for (let imgObj of obj) {
-			imgObj.alt = `${name}.svg`;
-		}
+	for (const clearFunction of Object.values(Clear)) {
+		clearFunction();
 	}
 }
 
@@ -112,20 +80,32 @@ function htmlSetVinChange() {
 		const obj = KadUtils.dbCL(`${name}`, null);
 		for (let btn of obj) {
 			btn.onclick = () => {
-				return KadUtils.DOM.vinChange(btn, dir);
+				return KadUtils.KadDOM.vinChange(btn, dir);
 			};
-			btn.children[0].classList.add(`img_${dirName[dir + 1]}`);
+			const name = dirName[dir + 1];
+			const img = document.createElement("img");
+			img.classList.add(`img_${name}`);
+			img.setAttribute("alt", `${name}.svg`);
+			btn.appendChild(img);
 		}
 	}
 }
 
-function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
+function hideLoadingscreen() {
+	KadUtils.dbCL("cl_Loading").classList.add("cl_LoadingFinished");
+}
+
+// function showLoadingscreen() {
+// 	KadUtils.dbCL("cl_Loading").classList.remove("cl_LoadingFinished");
+// }
+
+export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
 	canv.noLoop();
 	setTimeout(() => {
 		canv.stroke(255, 0, 0);
 		canv.strokeWeight(2);
 		canv.textSize(globalValues.mediaSizes.fontSize * 3);
-		canv.fill(0, 100, 60);
+		canv.fill(0);
 		canv.textAlign(canv.CENTER, canv.BOTTOM);
 		canv.text(txt.textTop, canv.width / 2, canv.height / 2);
 		canv.textAlign(canv.CENTER, canv.TOP);
@@ -135,50 +115,35 @@ function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
 
 function clearGlobalValue() {
 	globalValues.globalInput.value = "";
-	KadUtils.dbID("idVin_globalValue").value = "";
-	KadUtils.dbID("idVin_globalValue").addEventListener("keyup", (event) => {
+	const obj = KadUtils.dbID("idVin_globalValue");
+	obj.value = "";
+	obj.addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
-			globalValueChanged(KadUtils.dbID("idVin_globalValue"), true);
+			globalValueChanged(true);
 		}
 	});
 }
 
-function globalValueChanged(obj, enter = null) {
-	KadUtils.dbID("idVin_globalValue").classList.remove("cl_highlighted");
-	const arr = contentLayout.nameList;
+function globalValueChanged(enter = null) {
+	const obj = KadUtils.dbID("idVin_globalValue");
+	obj.classList.remove("cl_highlighted");
+	const arr = Layout.contentLayout.nameList;
 	globalValues.globalInput.value = obj.value;
 	if (arr.includes(obj.value)) {
-		KadUtils.dbID("idVin_globalValue").classList.add("cl_highlighted");
+		obj.classList.add("cl_highlighted");
 		if (enter === true) {
-			let key = Object.entries(contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
-			layoutToggelFullscreen(key);
+			let key = Object.entries(Layout.contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
+			Layout.toggelFullscreen(key);
 		}
 	}
 }
 
 function globalValuePopulateDatalist() {
-	if (KadUtils.dbID("idDlist_globalValue").childNodes.length > 1) return;
-	for (const name of contentLayout.nameList) {
+	const obj = KadUtils.dbID("idDlist_globalValue");
+	if (obj.childNodes.length > 1) return;
+	for (const name of Layout.contentLayout.nameList) {
 		const opt = document.createElement("OPTION");
 		opt.textContent = name;
-		KadUtils.dbID("idDlist_globalValue").appendChild(opt);
+		obj.appendChild(opt);
 	}
-}
-
-function layoutCreateNavbarPikaday() {
-	new Pikaday({
-		field: KadUtils.dbID("idBtn_navBar_KW"),
-		numberOfMonths: 2,
-		mainCalendar: "left",
-		showTime: false,
-		i18n: i18nDE,
-		onSelect: function (date) {
-			let weekText = `KW ${KadUtils.Date.getWeekNumber()}`;
-			let weekDiff = Math.ceil((date.getTime() - new Date().getTime()) / 86400000 / 7);
-			if (weekDiff !== 0) {
-				weekText += weekDiff > 0 ? ` (+${weekDiff})` : ` (${weekDiff})`;
-			}
-			KadUtils.dbID("idBtn_navBar_KW").textContent = weekText;
-		},
-	});
 }

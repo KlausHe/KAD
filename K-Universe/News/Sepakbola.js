@@ -1,3 +1,7 @@
+import * as KadUtils from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+import { globalP5 } from "../Main.js";
+
 const sepakbolaOptions = {
 	get URLTable() {
 		return `https://www.openligadb.de/api/getbltable/${sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex].urlName}/${sepakbolaOptions.selected.season}`;
@@ -88,7 +92,11 @@ const sepakbolaOptions = {
 	],
 };
 
-function clear_cl_Sepakbola() {
+KadUtils.daEL(idSel_sepakbolaLiga, "change", () => sepakbolaLigaChange(idSel_sepakbolaLiga));
+KadUtils.daEL(idSel_sepakbolaSeason, "change", () => sepakbolaSeasonChange(idSel_sepakbolaSeason));
+KadUtils.daEL(idSel_sepakbolaMatchday, "change", () => sepakbolaMatchdayChange(idSel_sepakbolaMatchday));
+
+export function clear_cl_Sepakbola() {
 	sepakbolaOptions.selected = KadUtils.deepClone(sepakbolaOptions.selectedOrig);
 	sepakbolaOptions.images = {};
 	sepakbolaCreateDropdownLiga();
@@ -102,7 +110,7 @@ function clear_cl_Sepakbola() {
 function sepakbolaCreateDropdownLiga() {
 	//generate Liga Dropdown
 	let ligaSelect = KadUtils.dbID("idSel_sepakbolaLiga");
-	KadUtils.DOM.clearFirstChild("idSel_sepakbolaLiga");
+	KadUtils.KadDOM.clearFirstChild("idSel_sepakbolaLiga");
 	for (let i = 0; i < sepakbolaOptions.liga.length; i++) {
 		const liga = sepakbolaOptions.liga[i];
 		let option = document.createElement("option");
@@ -119,7 +127,7 @@ function sepakbolaCreateDropdownLiga() {
 function sepakbolaCreateDropdownSeasons() {
 	const selLiga = sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex];
 	const seasonSel = KadUtils.dbID("idSel_sepakbolaSeason");
-	KadUtils.DOM.clearFirstChild("idSel_sepakbolaSeason");
+	KadUtils.KadDOM.clearFirstChild("idSel_sepakbolaSeason");
 	for (let i = 0; i < selLiga.seasons.length; i++) {
 		let option = document.createElement("option");
 		option.textContent = selLiga.seasons[i].dropdownText;
@@ -157,7 +165,7 @@ function sepakbolaMatchdayChange(obj) {
 function sepakbolaRequest() {
 	// sepakbolaGetData();
 	// globalP5.loadJSON(sepakbolaOptions.URLTable, sepakbolaTableReturn, "jsonp");
-	globalP5.loadJSON(sepakbolaOptions.URLTable, "json", sepakbolaTableReturn, sepakbolaReturnError);
+	// globalP5.loadJSON(sepakbolaOptions.URLTable, "json", sepakbolaTableReturn, sepakbolaReturnError);
 	// globalP5.loadJSON(sepakbolaOptions.URLMatches, sepakbolaMatchesReturn, "jsonp");
 	// globalP5.loadJSON(sepakbolaOptions.URLLastday, sepakbolaLastdayReturn, "jsonp");
 }
@@ -197,16 +205,16 @@ function sepakbolaMatchesReturn(data = null) {
 	const seasonSelected = matches[sepakbolaOptions.selected.matchday - 1];
 	sepakbolaPushImages("match");
 	let prevDay = null;
-	KadUtils.Table.clear("idTabBody_SepakbolaMatches");
+	KadUtils.KadTable.clear("idTabBody_SepakbolaMatches");
 	for (let i = 0; i < seasonSelected.length; i++) {
 		let day = new Date(seasonSelected[i].MatchDateTimeUTC);
 		if (prevDay != day.getTime()) {
-			const rowTh = KadUtils.Table.insertRow("idTabBody_SepakbolaMatches");
+			const rowTh = KadUtils.KadTable.insertRow("idTabBody_SepakbolaMatches");
 			prevDay = new Date(day.getTime()).getTime();
-			KadUtils.Table.addHeaderCell(rowTh, {
+			KadUtils.KadTable.addHeaderCell(rowTh, {
 				names: ["sepakbolaMatchesHeader", i],
 				type: "Lbl",
-				text: KadUtils.Date.getDate(day, { format: "WD - DD.MM. - HH:mm" }),
+				text: KadUtils.KadDate.getDate(day, { format: "WD - DD.MM. - HH:mm" }),
 				colSpan: 4,
 				cellStyle: {
 					textAlign: "center",
@@ -214,9 +222,9 @@ function sepakbolaMatchesReturn(data = null) {
 			});
 		}
 
-		let row = KadUtils.Table.insertRow("idTabBody_SepakbolaMatches");
+		let row = KadUtils.KadTable.insertRow("idTabBody_SepakbolaMatches");
 		//--  VereinsLogo1
-		const logo1 = KadUtils.Table.addCell(row, {
+		const logo1 = KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaMatchesLogo", "logoT1", i],
 			type: "Lbl",
 			text: `${seasonSelected[i].Team1.ShortName || seasonSelected[i].Team1.TeamName} `,
@@ -227,7 +235,7 @@ function sepakbolaMatchesReturn(data = null) {
 		logo1.appendChild(sepakbolaOptions.images[seasonSelected[i].Team1.TeamId].cloneNode());
 
 		//--  GOAL1 : Goal2
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaMatchesGoals", i],
 			type: "Lbl",
 			get text() {
@@ -248,7 +256,7 @@ function sepakbolaMatchesReturn(data = null) {
 		});
 
 		//--  VereinsLogo2
-		const logo2 = KadUtils.Table.addCell(row, {
+		const logo2 = KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaMatchesLogo", "logoT2", i],
 			type: "Lbl",
 			text: `${seasonSelected[i].Team2.ShortName || seasonSelected[i].Team2.TeamName} `,
@@ -265,9 +273,9 @@ function sepakbolaTableReturn(data) {
 	const table = sepakbolaOptions.liga[sepakbolaOptions.selected.ligaIndex].table;
 	sepakbolaPushImages("table");
 	//header
-	KadUtils.Table.clear("idTabHeader_SepakbolaTable");
-	const rowTh = KadUtils.Table.insertRow("idTabHeader_SepakbolaTable");
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.clear("idTabHeader_SepakbolaTable");
+	const rowTh = KadUtils.KadTable.insertRow("idTabHeader_SepakbolaTable");
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["sepakbolaTableHeader", "season"],
 		type: "Lbl",
 		text: "",
@@ -276,44 +284,44 @@ function sepakbolaTableReturn(data) {
 			textAlign: "left",
 		},
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["sepakbolaTableHeader", "Spiele"],
 		type: "Lbl",
 		text: "Sp",
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["sepakbolaTableHeader", "Sieg"],
 		type: "Lbl",
 		text: "S",
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["sepakbolaTableHeader", "Unentschieden"],
 		type: "Lbl",
 		text: "U",
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["sepakbolaTableHeader", "Niederlage"],
 		type: "Lbl",
 		text: "N",
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["sepakbolaTableHeader", "Diff"],
 		type: "Lbl",
 		text: "TD",
 	});
-	KadUtils.Table.addHeaderCell(rowTh, {
+	KadUtils.KadTable.addHeaderCell(rowTh, {
 		names: ["sepakbolaTableHeader", "Points"],
 		type: "Lbl",
 		text: "P",
 	});
 
 	// body
-	KadUtils.Table.clear("idTabBody_SepakbolaTable");
+	KadUtils.KadTable.clear("idTabBody_SepakbolaTable");
 	for (let i = 0; i < table.length; i++) {
-		let row = KadUtils.Table.insertRow("idTabBody_SepakbolaTable");
+		let row = KadUtils.KadTable.insertRow("idTabBody_SepakbolaTable");
 
 		//--  Platz
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "place", i],
 			type: "Lbl",
 			text: i + 1,
@@ -323,7 +331,7 @@ function sepakbolaTableReturn(data) {
 		});
 
 		//--  VereinsLogo
-		const logo = KadUtils.Table.addCell(row, {
+		const logo = KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "logo", i],
 			type: "Lbl",
 			text: "",
@@ -331,7 +339,7 @@ function sepakbolaTableReturn(data) {
 		logo.appendChild(sepakbolaOptions.images[table[i].TeamInfoId]);
 
 		//--  Team Name
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "name", i],
 			type: "Lbl",
 			text: table[i].ShortName != null ? table[i].ShortName : table[i].TeamName,
@@ -342,7 +350,7 @@ function sepakbolaTableReturn(data) {
 		});
 
 		//--  Spiele
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "matchcount", i],
 			type: "Lbl",
 			text: `(${table[i].Matches})`,
@@ -353,7 +361,7 @@ function sepakbolaTableReturn(data) {
 		});
 
 		//--  Siege
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "siege", i],
 			type: "Lbl",
 			text: table[i].Won,
@@ -363,7 +371,7 @@ function sepakbolaTableReturn(data) {
 			},
 		});
 		//--  Unentschieden
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "draw", i],
 			type: "Lbl",
 			text: table[i].Draw,
@@ -373,7 +381,7 @@ function sepakbolaTableReturn(data) {
 			},
 		});
 		//--  Niederlage
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "lost", i],
 			type: "Lbl",
 			text: table[i].Lost,
@@ -384,7 +392,7 @@ function sepakbolaTableReturn(data) {
 		});
 
 		//--  T-Diff
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "goalDiff", i],
 			type: "Lbl",
 			text: table[i].GoalDiff > 0 ? `(+${table[i].GoalDiff})` : `(${table[i].GoalDiff})`,
@@ -395,7 +403,7 @@ function sepakbolaTableReturn(data) {
 		});
 
 		// points
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["sepakbolaTable", "points", i],
 			type: "Lbl",
 			text: table[i].Points,

@@ -1,3 +1,7 @@
+import { daEL, KadDOM, KadRandom, KadArray } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+import { timeoutCanvasFinished } from "../Main.js";
+
 const sweeperOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
@@ -10,24 +14,36 @@ const sweeperOptions = {
 	cells: [],
 };
 
+daEL(idBtn_startSweeper, "click", sweeperStart);
+daEL(idVin_sweeperGrid, "input", () => sweeperGridChange(idVin_sweeperGrid));
+daEL(idVin_sweeperSweeps, "input", () => sweeperCellsChange(idVin_sweeperSweeps));
+
+export function clear_cl_Sweeper() {
+	//Clear on Start
+	sweeperOptions.cells = [];
+	sweeperOptions.gridSize = KadDOM.resetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
+	sweeperOptions.sweepCells = KadDOM.resetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
+	sweeperStartOver();
+}
+export function canvas_cl_Sweeper() {
+	caSW.resizeCanvas(sweeperOptions.canvas.w, sweeperOptions.canvas.h);
+	caSW.redraw();
+}
+
+function sweeperStartOver() {
+	sweeperOptions.cells = [];
+	sweeperStart();
+}
+
 function sweeperGridChange(obj) {
-	sweeperOptions.gridSize = Number(obj.value);
-	clear_cl_Sweeper();
+	sweeperOptions.gridSize = KadDOM.numberFromInput(obj);
+	console.log(sweeperOptions.gridSize);
+	sweeperStartOver();
 }
 
 function sweeperCellsChange(obj) {
-	sweeperOptions.sweepCells = Number(obj.value);
-	clear_cl_Sweeper();
-}
-
-function clear_cl_Sweeper() {
-	//Clear on Start
-	sweeperOptions.cells = [];
-	sweeperOptions.gridSize = KadUtils.DOM.resetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
-	sweeperOptions.sweepCells = KadUtils.DOM.resetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
-	sweeperStart();
-	caSW.noLoop();
-	unfocusSweeper();
+	sweeperOptions.sweepCells = KadDOM.numberFromInput(obj);
+	sweeperStartOver();
 }
 
 function sweeperStart() {
@@ -46,8 +62,8 @@ function sweeperStart() {
 }
 
 function sweeperCreateSweeps() {
-	let arr = KadUtils.Array.createIndexedArray(sweeperOptions.gridSize, sweeperOptions.gridSize);
-	subset = KadUtils.Random.randomSubset(arr, sweeperOptions.sweepCells);
+	let arr = KadArray.createIndexedArray(sweeperOptions.gridSize, sweeperOptions.gridSize);
+	const subset = KadRandom.randomSubset(arr, sweeperOptions.sweepCells);
 	for (let opt of subset) {
 		sweeperOptions.cells[opt[0]][opt[1]].sweep = true;
 	}
@@ -101,16 +117,6 @@ function sweeperMousePushed() {
 	caSW.redraw();
 }
 
-function focusSweeper() {
-	KadUtils.dbID("idCanv_sweeper").focus();
-	caSW.redraw();
-}
-
-function unfocusSweeper() {
-	KadUtils.dbID("idCanv_sweeper").blur();
-	caSW.noLoop();
-}
-
 const caSW = new p5((c) => {
 	c.setup = function () {
 		c.canv = c.createCanvas(sweeperOptions.canvas.w, sweeperOptions.canvas.h);
@@ -134,9 +140,6 @@ const caSW = new p5((c) => {
 	};
 }, "#idCanv_sweeper");
 
-function sweeperResize() {
-	caSW.resizeCanvas(sweeperOptions.canvas.w, sweeperOptions.canvas.h);
-}
 function sweeperFinished(won) {
 	sweeperOptions.finished = true;
 	if (!won) {
@@ -145,7 +148,6 @@ function sweeperFinished(won) {
 	timeoutCanvasFinished(caSW, {
 		textBottom: won ? "You won!" : "You lost!",
 	});
-	unfocusSweeper();
 }
 
 // CELL CLASS----------------------------

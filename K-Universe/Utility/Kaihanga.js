@@ -1,3 +1,7 @@
+import { daEL, dbID, dbIDStyle, KadDOM, KadTable, KadColor, KadRandom } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+import { netsaonaOptions } from "./Netsaona.js";
+
 const kaihangaOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.5, h: globalValues.mediaSizes.canvasSize.h * 0.5 };
@@ -9,19 +13,27 @@ const kaihangaOptions = {
 	startColor: null,
 };
 
-function clear_cl_Kaihanga() {
+daEL(idVin_kaihangaEntry, "change", kaihangaEntrySubmit);
+daEL(idBtn_kaihangaEntry, "click", kaihangaEntrySubmit);
+
+export function clear_cl_Kaihanga() {
 	kaihangaOptions.entries = [];
 	kaihangaOptions.spinning = false;
-	KadUtils.Table.clear("idTabBody_Kaihanga");
+	KadTable.clear("idTabBody_Kaihanga");
 	caKA.noLoop();
 	caKA.clear();
 	kaihangaOptions.startColor = caKA.floor(caKA.random(5, globalValues.colors.array.length));
 	kaihangaCreateRandomSet();
 	kaihangaUpdate();
-	KadUtils.DOM.resetInput("idVin_kaihangaEntry", "Enter Options");
-	KadUtils.dbID("idLbl_kaihangaResult").textContent = "Gewinner: ...";
-	KadUtils.dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
-	KadUtils.dbIDStyle("idCanv_kaihanga").cursor = "pointer";
+	KadDOM.resetInput("idVin_kaihangaEntry", "Enter Options");
+	dbID("idLbl_kaihangaResult").textContent = "Gewinner: ...";
+	dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
+	dbIDStyle("idCanv_kaihanga").cursor = "pointer";
+}
+
+export function canvas_cl_Kaihanga() {
+	caKA.resizeCanvas(kaihangaOptions.canvas.w, kaihangaOptions.canvas.h);
+	clear_cl_Kaihanga();
 }
 
 const caKA = new p5((c) => {
@@ -43,10 +55,6 @@ const caKA = new p5((c) => {
 	};
 }, "#idCanv_kaihanga");
 
-function kaihangaResize() {
-	caKA.resizeCanvas(kaihangaOptions.canvas.w, kaihangaOptions.canvas.h);
-}
-
 function mousePushedKaihanga() {
 	let speed = caKA.floor(caKA.map(caKA.mouseX, 0, kaihangaOptions.canvas.w, 1, 18));
 	kaihangaStart(speed);
@@ -55,11 +63,13 @@ function mousePushedKaihanga() {
 //gameLogic
 function kaihangaWheelUpdate() {
 	let segOptions = [];
+	let colStart = 5 + KadRandom.randomIndex(globalValues.colors.array.slice(5, globalValues.colors.array.length));
+	const step = Math.floor(globalValues.colors.array.length / kaihangaOptions.entries.length);
 	for (let i = 0; i < kaihangaOptions.entries.length; i++) {
-		const col = globalValues.colors.array[(i + kaihangaOptions.startColor) % globalValues.colors.array.length];
+		const col = globalValues.colors.array[(i * step + colStart) % globalValues.colors.array.length];
 		segOptions.push({
 			fillStyle: col,
-			strokeStyle: KadUtils.Color.stateAsArray(col, "HSL"),
+			strokeStyle: KadColor.stateAsArray(col, "HSL"),
 			text: kaihangaOptions.entries[i],
 			num: i,
 		});
@@ -81,28 +91,18 @@ function kaihangaWheelUpdate() {
 }
 
 function kaihangaStart(speed) {
-	if (kaihangaOptions.spinning == false) {
-		kaihangaCreateRandomSet();
-		kaihangaUpdate();
-		kaihangaOptions.wheel.animation.spins = speed;
-		kaihangaOptions.wheel.animation.duration = 1 / (speed * 10);
-		kaihangaOptions.wheel.startAnimation();
-		kaihangaOptions.spinning = true;
-	}
-}
-
-function kaihangaCreateRandomSet() {
-	if (kaihangaOptions.entries.length == 0) {
-		let rand = caKA.floor(caKA.random(4, 8));
-		for (let i = 0; i < rand; i++) {
-			kaihangaAddOption(kaihangaCreateOption());
-		}
-	}
+	if (kaihangaOptions.spinning == true) return;
+	kaihangaCreateRandomSet();
+	kaihangaUpdate();
+	kaihangaOptions.wheel.animation.spins = speed;
+	kaihangaOptions.wheel.animation.duration = 1 / (speed * 10);
+	kaihangaOptions.wheel.startAnimation();
+	kaihangaOptions.spinning = true;
 }
 
 function kaihangaResult(winner) {
 	kaihangaOptions.spinning = false;
-	KadUtils.dbID("idLbl_kaihangaResult").textContent = "Gewinner: " + winner.text;
+	dbID("idLbl_kaihangaResult").textContent = "Gewinner: " + winner.text;
 }
 
 function kaihangaClearRow(index) {
@@ -111,44 +111,42 @@ function kaihangaClearRow(index) {
 }
 
 function kaihangaEntrySubmit() {
-	if (KadUtils.dbID("idVin_kaihangaEntry").value.trim() == "") {
-		kaihangaAddOption();
-	}
+	const value = KadDOM.stringFromInput("idVin_kaihangaEntry");
+	if (value == "") return;
+	kaihangaAddOption(value);
 }
 
-function kaihangaAddOption(randOpt = null) {
-	if (!kaihangaOptions.spinning) {
-		let value = randOpt;
-		if (randOpt == null) {
-			value = KadUtils.dbID("idVin_kaihangaEntry").value.trim();
-			if (value == "") {
-				value = kaihangaCreateOption();
-			}
-		}
-		kaihangaOptions.entries.push(value);
-		KadUtils.dbID("idVin_kaihangaEntry").value = "";
-	}
+function kaihangaAddOption(value) {
+	if (kaihangaOptions.spinning) return;
+	kaihangaOptions.entries.push(value);
+	dbID("idVin_kaihangaEntry").value = "";
 	kaihangaUpdate();
 }
 
-function kaihangaCreateOption() {
-	let opt = netsaonaOptions.data.RandomWord.filter((op) => {
-		return op.length <= kaihangaOptions.maxLength;
-	});
-	return KadUtils.Random.randomObject(opt);
+function kaihangaCreateRandomSet() {
+	if (kaihangaOptions.entries.length != 0) return;
+	const rand = caKA.floor(caKA.random(3, 8));
+	for (let i = 0; i < rand; i++) {
+		kaihangaAddOption(kaihangaCreateRandomOption());
+	}
+}
+
+function kaihangaCreateRandomOption() {
+	let opt = netsaonaOptions.data.RandomWord.filter((w) => w.length <= kaihangaOptions.maxLength);
+	return KadRandom.randomObject(opt);
 }
 
 function kaihangaUpdate() {
 	if (!kaihangaOptions.spinning) {
-		KadUtils.dbID("idLbl_kaihangaResult").innerHTML = "Gewinner: ...";
-		KadUtils.dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
-		KadUtils.dbIDStyle("idLbl_kaihangaResult").color = "";
+		dbID("idLbl_kaihangaResult").innerHTML = "Gewinner: ...";
+		dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
+		dbIDStyle("idLbl_kaihangaResult").color = "";
 		kaihangaWheelUpdate();
-		KadUtils.Table.clear("idTabBody_Kaihanga");
+		KadTable.clear("idTabBody_Kaihanga");
 		for (let i = 0; i < kaihangaOptions.entries.length; i++) {
-			let row = KadUtils.Table.insertRow("idTabBody_Kaihanga");
+			let row = KadTable.insertRow("idTabBody_Kaihanga");
 			row.id = `idRow_kaihanga_${i}`;
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["kaihanga", i],
 				type: "Btn",
 				subGroup: "subgrid",
@@ -165,7 +163,7 @@ function kaihangaUpdate() {
 					kaihangaClearRow(i);
 				},
 			});
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["kaihanga", i],
 				type: "Colbox",
 				color: kaihangaOptions.wheel.segments[i].fillStyle,
@@ -176,7 +174,7 @@ function kaihangaUpdate() {
 					textAlign: "center",
 				},
 			});
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["kaihanga", i],
 				type: "Lbl",
 				text: kaihangaOptions.entries[i],

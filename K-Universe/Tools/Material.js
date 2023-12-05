@@ -1,60 +1,44 @@
-const materialOptions = {
+import { daEL, dbID, dbIDStyle, KadDOM, KadTable } from "../General/KadUtils.js";
+import { Data_Materials } from "../General/MainData.js";
+import { globalP5 } from "../Main.js";
+import { geoUpdateMasse, geoResultTable } from "./Geometrie.js";
+import { materialFilterOptions, storage_cl_MaterialFilterSettings } from "../Settings/MaterialFilterSettings.js";
+
+export const materialOptions = {
 	matListOrig: ["S275JR", "AlSi5Cu3", "X5CrNi18-10"],
 	matList: [],
 	filterList: [],
 	get headerList() {
-		return KadUtils.dbID("idCb_materialListFilter").checked ? [...nuncDiscipuli.getData("MaterialFilterSettings")] : Object.keys(Data_Material.metadata);
+		return dbID("idCb_materialListFilter").checked ? [...storage_cl_MaterialFilterSettings.data] : Object.keys(Data_Materials.metadata);
 	},
 	optGroup: null,
 	selMatGroup: null,
 };
 
-function mat() {
-	Data_Material_BU;
+daEL(idCb_materialListFilter, "click", materialPropertyfilter);
+daEL(idVin_materialFilter, "input", materialSearchInput);
+daEL(idSel_materialFilter, "change", materialSearchSelectChange);
+daEL(idBtn_materialFilter, "click", () => toggleMaterialSearch(false));
 
-	Data_Material_BU.matSortList = new Set(
-		Object.entries(Data_Material_BU.Materials).map((arr) => {
-			return arr[1].matSort;
-		})
-	);
-	Data_Material_BU.matSortList = [...Data_Material_BU.matSortList].sort();
-	Data_Material_BU.matZustandList = new Set(
-		Object.entries(Data_Material_BU.Materials).map((arr) => {
-			return arr[1].matZustand;
-		})
-	);
-	Data_Material_BU.matZustandList.delete(undefined);
-	Data_Material_BU.matZustandList = [...Data_Material_BU.matZustandList].sort();
-
-	globalP5.saveJSON(Data_Material_BU, "newList.json");
-	for (const [k, data] of Object.entries(Data_Material.Materials)) {
-		for (const [key, value] of Object.entries(data)) {
-			if (value == null) delete data[key];
-			if (key == "matSort") data[key] = [...Data_Material.matSortList].indexOf(value);
-			if (key == "matZustand") data[key] = [...Data_Material.matZustandList].indexOf(value);
-		}
-	}
-}
-function clear_cl_Material() {
-	KadUtils.DOM.resetInput("idVin_materialFilter", "Material suchen");
-	KadUtils.dbID("idCb_materialListFilter").checked = true;
-
+export function clear_cl_Material() {
+	KadDOM.resetInput("idVin_materialFilter", "Material suchen");
+	dbID("idCb_materialListFilter").checked = true;
 	let opt = document.createElement("option");
 	opt.textContent = "Alle Werkstoffe";
 	opt.value = null;
-	KadUtils.dbID("idSel_materialFilter").appendChild(opt);
+	dbID("idSel_materialFilter").appendChild(opt);
 	let matKeyList = [];
-	for (const matKeys of Object.keys(Data_Material.Materials)) {
-		let matKey = Data_Material.Materials[matKeys].matGroup;
+	for (const matKeys of Object.keys(Data_Materials.Materials)) {
+		let matKey = Data_Materials.Materials[matKeys].matGroup;
 		if (!matKeyList.includes(matKey)) {
 			matKeyList.push(matKey);
 			let option = document.createElement("option");
 			option.textContent = matKey;
 			option.value = matKey;
-			KadUtils.dbID("idSel_materialFilter").appendChild(option);
+			dbID("idSel_materialFilter").appendChild(option);
 		}
 	}
-	materialOptions.filterList = Object.keys(Data_Material.Materials);
+	materialOptions.filterList = Object.keys(Data_Materials.Materials);
 	materialFilterOptions.select = [...materialFilterOptions.listOrig];
 	materialOptions.matList = materialOptions.matListOrig;
 	materialSelectedTable();
@@ -62,21 +46,36 @@ function clear_cl_Material() {
 	toggleMaterialSearch(false);
 }
 
+export const storage_cl_Material = {
+	dbName: "Material",
+	contentName: "cl_Material",
+	clear() {
+		this.data = [...materialOptions.matListOrig];
+	},
+	get data() {
+		return [...materialOptions.matList];
+	},
+	set data(data) {
+		materialOptions.matList = data;
+		materialSelectedTable();
+	},
+};
+
 function materialPropertyfilter() {
 	materialSelectedTable();
 	materialSearchTable();
 }
 
 //Hauptliste mit Werkstoffdaten ersetllen!!!
-function materialSelectedTable() {
+export function materialSelectedTable() {
 	if (materialOptions.matList.length === 0) {
 		materialOptions.matList = materialOptions.matListOrig;
 	}
 	materialOptions.matList = [...new Set(materialOptions.matList)].sort(); // delete duplicates
 
-	KadUtils.Table.clear("idTabHeader_Materiallisted");
-	const headerRow = KadUtils.Table.insertRow("idTabHeader_Materiallisted");
-	KadUtils.Table.addHeaderCell(headerRow, {
+	KadTable.clear("idTabHeader_Materiallisted");
+	const headerRow = KadTable.insertRow("idTabHeader_Materiallisted");
+	KadTable.addHeaderCell(headerRow, {
 		names: ["materialHeaderEdge"],
 		type: "Lbl",
 		text: "Eigenschaften",
@@ -87,7 +86,7 @@ function materialSelectedTable() {
 	});
 
 	for (let a = 0; a < materialOptions.matList.length; a++) {
-		KadUtils.Table.addHeaderCell(headerRow, {
+		KadTable.addHeaderCell(headerRow, {
 			names: ["materialHeaderTrash", a],
 			type: "Btn",
 			subGroup: "subgrid",
@@ -107,7 +106,7 @@ function materialSelectedTable() {
 		});
 	}
 
-	KadUtils.Table.addHeaderCell(headerRow, {
+	KadTable.addHeaderCell(headerRow, {
 		names: ["materialHeaderAdd"],
 		type: "Btn",
 		subGroup: "subgrid",
@@ -127,13 +126,13 @@ function materialSelectedTable() {
 	});
 
 	//clear list
-	KadUtils.Table.clear("idTabBody_Materiallisted");
+	KadTable.clear("idTabBody_Materiallisted");
 
 	for (let i = 0; i < materialOptions.headerList.length; i++) {
-		let row = KadUtils.Table.insertRow("idTabBody_Materiallisted");
+		let row = KadTable.insertRow("idTabBody_Materiallisted");
 		const listItem = materialOptions.headerList[i];
-		const dataItem = Data_Material.metadata[listItem];
-		KadUtils.Table.addCell(row, {
+		const dataItem = Data_Materials.metadata[listItem];
+		KadTable.addCell(row, {
 			names: ["material", "bez", i],
 			type: "Lbl",
 			text: dataItem.Bezeichnung,
@@ -145,7 +144,7 @@ function materialSelectedTable() {
 			},
 			copy: true,
 		});
-		KadUtils.Table.addCell(row, {
+		KadTable.addCell(row, {
 			names: ["material", "abbr", i],
 			type: "Lbl",
 			text: dataItem.abbr ? `[${dataItem.abbr}]` : "",
@@ -154,7 +153,7 @@ function materialSelectedTable() {
 			},
 			copy: true,
 		});
-		KadUtils.Table.addCell(row, {
+		KadTable.addCell(row, {
 			names: ["material", "unit", i],
 			type: "Lbl",
 			text: dataItem.Unit ? `[${dataItem.Unit}]` : "",
@@ -162,9 +161,9 @@ function materialSelectedTable() {
 		});
 
 		for (let n = 0; n < materialOptions.matList.length; n++) {
-			const item = Data_Material.Materials[materialOptions.matList[n]];
+			const item = Data_Materials.Materials[materialOptions.matList[n]];
 			const value = item[listItem];
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["material", "value", i, n],
 				type: "Lbl",
 				get text() {
@@ -182,11 +181,11 @@ function materialSelectedTable() {
 				get ui() {
 					if (listItem == "matSort")
 						return {
-							title: Data_Material.matSortList[value],
+							title: Data_Materials.matSortList[value],
 						};
 					if (listItem == "matZustand") {
 						return {
-							title: Data_Material.matZustandList[value],
+							title: Data_Materials.matZustandList[value],
 						};
 					}
 					return "";
@@ -201,22 +200,18 @@ function materialSelectedTable() {
 	geoResultTable();
 }
 
-function materialSearchSelectChange(obj) {
-	materialOptions.selMatGroup = KadUtils.DOM.numberFromInput(obj);
+function materialSearchSelectChange() {
+	materialOptions.selMatGroup = dbID(idSel_materialFilter).value;
 	materialSearchInput();
 }
 
 function materialSearchInput() {
 	materialOptions.filterList = [];
-	let val = KadUtils.dbID("idVin_materialFilter").value.toLowerCase();
-	let search =
-		val == ""
-			? ""
-			: val
-					.toLowerCase()
-					.trim()
-					.split(/[*^\s]/g);
-	for (const [key, value] of Object.entries(Data_Material.Materials)) {
+	let val = dbID("idVin_materialFilter").value.toLowerCase();
+	let search = val == "" ? "" : val.trim().split(/[*^\s]+/g);
+	console.log(search);
+
+	for (const [key, value] of Object.entries(Data_Materials.Materials)) {
 		if (materialOptions.selMatGroup == null || value.matGroup == materialOptions.selMatGroup) {
 			if (val == "") {
 				materialOptions.filterList.push(key);
@@ -235,15 +230,15 @@ function materialSearchInput() {
 }
 
 function materialSearchTable() {
-	KadUtils.Table.clear("idTabHeader_MaterialSearchList");
-	const headerRow0 = KadUtils.Table.insertRow("idTabHeader_MaterialSearchList");
-	const headerRow1 = KadUtils.Table.insertRow("idTabHeader_MaterialSearchList");
-	const headerRow2 = KadUtils.Table.insertRow("idTabHeader_MaterialSearchList");
+	KadTable.clear("idTabHeader_MaterialSearchList");
+	const headerRow0 = KadTable.insertRow("idTabHeader_MaterialSearchList");
+	const headerRow1 = KadTable.insertRow("idTabHeader_MaterialSearchList");
+	const headerRow2 = KadTable.insertRow("idTabHeader_MaterialSearchList");
 	for (let i = 0; i < materialOptions.headerList.length; i++) {
-		KadUtils.Table.addHeaderCell(headerRow0, {
+		KadTable.addHeaderCell(headerRow0, {
 			names: ["materialSearch", "bez", i],
 			type: "Lbl",
-			text: Data_Material.metadata[materialOptions.headerList[i]].Bezeichnung,
+			text: Data_Materials.metadata[materialOptions.headerList[i]].Bezeichnung,
 			createCellClass: [i == materialOptions.headerList.length - 1 ? "" : "clTab_borderThinRight"],
 			createClass: ["clTab_vertical"],
 			cellStyle: {
@@ -251,11 +246,11 @@ function materialSearchTable() {
 			},
 			copy: true,
 		});
-		KadUtils.Table.addHeaderCell(headerRow1, {
+		KadTable.addHeaderCell(headerRow1, {
 			names: ["materialSearch", "abbr", i],
 			type: "Lbl",
 			createCellClass: [i == materialOptions.headerList.length - 1 ? "" : "clTab_borderThinRight"],
-			text: Data_Material.metadata[materialOptions.headerList[i]].abbr ? `[${Data_Material.metadata[materialOptions.headerList[i]].abbr}]` : "",
+			text: Data_Materials.metadata[materialOptions.headerList[i]].abbr ? `[${Data_Materials.metadata[materialOptions.headerList[i]].abbr}]` : "",
 			cellStyle: {
 				textAlign: "center",
 			},
@@ -263,29 +258,29 @@ function materialSearchTable() {
 				whiteSpace: "nowrap",
 			},
 		});
-		KadUtils.Table.addHeaderCell(headerRow2, {
+		KadTable.addHeaderCell(headerRow2, {
 			names: ["materialSearch", "units", i],
 			type: "Lbl",
 			createCellClass: [i == materialOptions.headerList.length - 1 ? "" : "clTab_borderThinRight"],
-			text: Data_Material.metadata[materialOptions.headerList[i]].Unit ? `[${Data_Material.metadata[materialOptions.headerList[i]].Unit}]` : "",
+			text: Data_Materials.metadata[materialOptions.headerList[i]].Unit ? `[${Data_Materials.metadata[materialOptions.headerList[i]].Unit}]` : "",
 			cellStyle: {
 				textAlign: "center",
 			},
 		});
 	}
 
-	KadUtils.Table.clear("idTabBody_MaterialSearchList");
+	KadTable.clear("idTabBody_MaterialSearchList");
 	for (let i = 0; i < materialOptions.filterList.length; i++) {
-		let row = KadUtils.Table.insertRow("idTabBody_MaterialSearchList");
+		let row = KadTable.insertRow("idTabBody_MaterialSearchList");
 		row.style.cursor = "pointer";
 		row.onclick = function () {
 			materialOptions.matList.push(materialOptions.filterList[i]);
 			materialSelectedTable();
 		};
 		for (let j = 0; j < materialOptions.headerList.length; j++) {
-			const value = Data_Material.Materials[materialOptions.filterList[i]][materialOptions.headerList[j]];
+			const value = Data_Materials.Materials[materialOptions.filterList[i]][materialOptions.headerList[j]];
 			const listItem = materialOptions.headerList[j];
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["materialSearch", "value", i, j],
 				type: "Lbl",
 				createCellClass: [j == materialOptions.headerList.length - 1 ? "" : "clTab_borderThinRight"],
@@ -301,11 +296,11 @@ function materialSearchTable() {
 				get ui() {
 					if (listItem == "matSort")
 						return {
-							title: Data_Material.matSortList[value],
+							title: Data_Materials.matSortList[value],
 						};
 					if (listItem == "matZustand")
 						return {
-							title: Data_Material.matZustandList[value],
+							title: Data_Materials.matZustandList[value],
 						};
 					return "";
 				},
@@ -316,13 +311,42 @@ function materialSearchTable() {
 			});
 		}
 	}
-	let row = KadUtils.Table.insertRow("idTabBody_MaterialSearchList");
-	let cell = row.insertCell(0);
+	let row = KadTable.insertRow("idTabBody_MaterialSearchList");
+	row.insertCell(0);
 }
 
 function toggleMaterialSearch(state) {
 	const t = state ? "block" : "none";
-	KadUtils.dbIDStyle("idDiv_MaterialSearchOptions").display = t;
-	KadUtils.dbIDStyle("idDiv_MaterialSearchList").display = t;
+	dbIDStyle("idDiv_MaterialSearchOptions").display = t;
+	dbIDStyle("idDiv_MaterialSearchList").display = t;
 	if (state) materialSearchTable();
+}
+
+// clean Data manually
+function mat() {
+	console.log("HEEE");
+	Data_Materials_BU;
+
+	Data_Materials_BU.matSortList = new Set(
+		Object.entries(Data_Materials_BU.Materials).map((arr) => {
+			return arr[1].matSort;
+		})
+	);
+	Data_Materials_BU.matSortList = [...Data_Materials_BU.matSortList].sort();
+	Data_Materials_BU.matZustandList = new Set(
+		Object.entries(Data_Materials_BU.Materials).map((arr) => {
+			return arr[1].matZustand;
+		})
+	);
+	Data_Materials_BU.matZustandList.delete(undefined);
+	Data_Materials_BU.matZustandList = [...Data_Materials_BU.matZustandList].sort();
+
+	globalP5.saveJSON(Data_Materials_BU, "newList.json");
+	for (const [k, data] of Object.entries(Data_Materials.Materials)) {
+		for (const [key, value] of Object.entries(data)) {
+			if (value == null) delete data[key];
+			if (key == "matSort") data[key] = [...Data_Materials.matSortList].indexOf(value);
+			if (key == "matZustand") data[key] = [...Data_Materials.matZustandList].indexOf(value);
+		}
+	}
 }

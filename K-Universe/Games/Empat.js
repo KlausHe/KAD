@@ -1,3 +1,6 @@
+import { dbID, daEL, KadValue, KadArray, KadInteraction } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+import { timeoutCanvasFinished } from "../Main.js";
 //Vier gewinnt  empat kemenangan
 const empatOptions = {
 	get canvas() {
@@ -22,7 +25,10 @@ const empatOptions = {
 	players: [],
 };
 
-function clear_cl_Empat() {
+daEL(idBtn_empatStart, "click", empatStart);
+daEL(idCanv_empat, "keydown", empatKeyPushed);
+
+export function clear_cl_Empat() {
 	empatOptions.cells = [];
 	empatOptions.winCells = [];
 	empatOptions.curPlayer = 0;
@@ -31,7 +37,7 @@ function clear_cl_Empat() {
 	//create empty cells
 	empatOptions.size = Math.floor(empatOptions.canvas.w / empatOptions.cols);
 	for (let i = 0; i < empatOptions.playersOrig.length; i++) {
-		empatOptions.players.push(new EmpatPlayer(empatOptions.playersOrig[i][0], empatOptions.playersOrig[i][1], i, empatOptions.size, empatOptions.playersOrig[i][2]));
+		empatOptions.players.push(new EmpatPlayer(i));
 	}
 	for (let i = 0; i < empatOptions.cols; i++) {
 		empatOptions.cells[i] = [];
@@ -39,25 +45,25 @@ function clear_cl_Empat() {
 			empatOptions.cells[i][j] = new EmpatCell(i, j, empatOptions.size);
 		}
 	}
-	unfocusEmpat();
+	KadInteraction.unfocus(idCanv_empat, caEM);
+}
+export function canvas_cl_Empat() {
+	caEM.resizeCanvas(empatOptions.canvas.w, empatOptions.canvas.h);
 	caEM.redraw();
-	caEM.noLoop();
 }
 
 function empatStart() {
 	clear_cl_Empat();
 	empatOptions.playing = !empatOptions.playing;
 	if (empatOptions.playing) {
-		KadUtils.dbID("idBtn_empatStart").textContent = "Reset";
+		dbID("idBtn_empatStart").textContent = "Reset";
 		empatOptions.won = false;
 		caEM.loop();
-		focusEmpat();
+		KadInteraction.focus(idCanv_empat);
 	} else {
-		KadUtils.dbID("idBtn_empatStart").textContent = "Start";
+		dbID("idBtn_empatStart").textContent = "Start";
 		empatOptions.won = false;
-		caEM.noLoop();
-		unfocusEmpat();
-		caEM.redraw();
+		KadInteraction.unfocus(idCanv_empat, caEM);
 	}
 }
 
@@ -89,9 +95,6 @@ const caEM = new p5((c) => {
 	};
 }, "#idCanv_empat");
 
-function empatResize() {
-	caRC.resizeCanvas(empatOptions.canvas.w, empatOptions.canvas.h);
-}
 
 function empatCheckWinner(cell) {
 	//check cols |||||
@@ -159,7 +162,7 @@ function empatFinished() {
 		caEM.stroke(empatOptions.players[empatOptions.curPlayer].color);
 		caEM.line(empatOptions.winCells[0].x, empatOptions.winCells[0].y, empatOptions.winCells[1].x, empatOptions.winCells[1].y);
 	}, 50);
-	unfocusEmpat();
+	KadInteraction.unfocus(idCanv_empat);
 	timeoutCanvasFinished(caEM, {
 		textTop: `Player \"${empatOptions.players[empatOptions.curPlayer].name}\" won`,
 		textBottom: `in round ${Math.floor(empatOptions.turns / 2) + 1}!`,
@@ -183,8 +186,8 @@ function mousePressedEmpat() {
 }
 
 function empatKeyPushed(event) {
-	event.KadUtils.Interaction.preventDefault(); //prevent keyinput from comming thout to the window!
-	let keyInput = event.keyCode || window.event;
+	event.preventDefault();
+	let keyInput = event.keyCode;
 	if (!empatOptions.players[empatOptions.curPlayer].bot) {
 		if (keyInput == 13 || keyInput == 32 || keyInput == 40) {
 			empatOptions.players[empatOptions.curPlayer].drop();
@@ -233,8 +236,8 @@ function botLogic() {
 		opts.cells[i].playerID = null;
 	}
 	if (nextPos == null) {
-		const randPos = Math.floor(KadUtils.Value.constrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
-		nextPos = KadUtils.Array.getNearestValueInArray(opts.arr, randPos);
+		const randPos = Math.floor(KadValue.constrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
+		nextPos = KadArray.getNearestValueInArray(opts.arr, randPos);
 	}
 	empatOptions.players[empatOptions.curPlayer].setPosition(nextPos);
 	setTimeout(() => {
@@ -242,23 +245,15 @@ function botLogic() {
 	}, 800);
 }
 
-function focusEmpat() {
-	KadUtils.dbID("idCanv_empat").focus();
-}
-
-function unfocusEmpat() {
-	KadUtils.dbID("idCanv_empat").blur();
-}
-
 class EmpatPlayer {
-	constructor(name, col, id, w, bot) {
-		this.name = id == 0 && nuncDiscipuli.short ? nuncDiscipuli.short : "Yellow";
-		this.bot = bot;
-		this.color = col;
-		this.id = id;
-		this.r = Math.floor(w * 0.8);
-		this.w = w;
-		this.wh = w / 2;
+	constructor(i) {
+		this.name = empatOptions.playersOrig[i][0];
+		this.bot = empatOptions.playersOrig[i][2];
+		this.color = empatOptions.playersOrig[i][1];
+		this.id = i;
+		this.w = empatOptions.size;
+		this.wh = this.w / 2;
+		this.r = Math.floor(this.w * 0.8);
 		this.sliding;
 		this.dropping;
 		this.dropped;

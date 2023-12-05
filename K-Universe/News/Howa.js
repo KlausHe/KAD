@@ -1,3 +1,7 @@
+import * as KadUtils from "../General/KadUtils.js";
+import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
+import { globalValues } from "../Settings/Basics.js";
+
 let howaData = {
 	dwdURL: "https://www.dwd.de/DWD/warnungen/warnapp_gemeinden/json/warnungen_gemeinde_map_",
 	data: [],
@@ -136,10 +140,25 @@ const howaOptions = {
 	},
 };
 
-function clear_cl_Howa() {
-	KadUtils.dbID("idVin_howaEntry").value = "";
+KadUtils.daEL(idVin_howaEntry, "change", howaGetLocation);
+KadUtils.daEL(idVin_howaEntry, "focus", () => howaPopulateDatalist(idVin_howaEntry));
+KadUtils.daEL(idBtn_getGeoLocation, "click", howaGetCoordinates);
+KadUtils.daEL(idBtn_howaGetLocation, "click", howaGetLocation);
+KadUtils.daEL(idCb_howaTemperature, "click", howaOptionChange);
+KadUtils.daEL(idCb_howaPressure, "click", howaOptionChange);
+KadUtils.daEL(idCb_howaRain, "click", howaOptionChange);
+KadUtils.daEL(idCb_howaWindSpeed, "click", howaOptionChange);
+KadUtils.daEL(idCb_howaHumidity, "click", howaOptionChange);
+KadUtils.daEL(idCb_howaWindDirection, "click", howaOptionChange);
+KadUtils.daEL(idBtn_howaZoom, "click", () => howaZoom(idBtn_howaZoom));
+KadUtils.daEL(idBtn_howaMapsExpand, "click", howaMapsExpand);
+KadUtils.daEL(idSel_howaMapsCriteria, "change", howaChangeMap);
+KadUtils.daEL(idSel_howaMapsCountry, "change", howaChangeMap);
 
-	// howaHideInfo();
+export function clear_cl_Howa() {
+  KadUtils.KadDOM.resetInput("idVin_howaEntry", "Ort");
+
+
 	if (howaOptions.intervalRefresh != null) {
 		clearInterval(howaOptions.intervalRefresh);
 		howaOptions.intervalRefresh = null;
@@ -169,9 +188,29 @@ function clear_cl_Howa() {
 	howaGetCoordinates();
 }
 
+export const storage_cl_Howa = {
+	dbName: "Howa",
+	contentName: "cl_Howa",
+	clear() {
+		this.data = "Berlin";
+	},
+	get data() {
+		return howaData.pos.location;
+	},
+	set data(data) {
+		KadUtils.dbID("idVin_howaEntry").value = data;
+		howaGetLocation();
+	},
+};
+
+export function canvas_cl_Howa() {
+	howaRefreshGraph();
+	howaColorGraph();
+}
+
 function howaPopulateDatalist() {
 	if (KadUtils.dbID("idDlist_howaPlaces").childNodes.length > 1) return;
-	for (const city of Data_PlatLesen.values()) {
+	for (const city of Data_Nummernschild.values()) {
 		const opt = document.createElement("OPTION");
 		opt.textContent = city;
 		KadUtils.dbID("idDlist_howaPlaces").appendChild(opt);
@@ -197,7 +236,6 @@ function howaNavigatorPosition(data) {
 }
 
 function howaNavigatorError() {
-	// howaShowInfo("No Geolocation");
 	KadUtils.dbID("idLbl_howaNow").textContent = "No Geolocation";
 	howaData.pos.lat = howaData.latOrig;
 	howaData.pos.lon = howaData.lonOrig;
@@ -217,21 +255,10 @@ function howaReqestData() {
 		howaData.getTimer = null;
 	}
 	howaData.getTimer = setTimeout(() => {
-		KadUtils.socketPost("Howa", howaData.pos);
+		KadUtils.socketPost("Howa", howaData.pos, howaReturn);
 		howaData.getTimer = null;
 	}, 400);
 }
-
-// function howaShowInfo(text) {
-//   KadUtils.dbID('idLbl_howaNow').textContent = "";
-//   KadUtils.dbIDStyle("idDiv_howaReturnInfo").display = "initial";
-//   KadUtils.dbID("idLbl_howaNowReturnInfo").innerHTML = text;
-// };   
-
-// function howaHideInfo() {
-//   KadUtils.dbIDStyle("idDiv_howaReturnInfo").display = "none";
-//   KadUtils.dbID("idLbl_howaNowReturnInfo").textContent = "";
-// }
 
 function howaReturn(data) {
 	if (data.error) {
@@ -240,7 +267,6 @@ function howaReturn(data) {
 	}
 
 	if (data != null) {
-		// howaHideInfo();
 		howaData.pos.location = data.currentData.name;
 		howaData.data = [data.currentData, ...data.forecastData.list];
 	}
@@ -257,7 +283,7 @@ function howaReturn(data) {
 	iconS.id = "idI_howaIconNow";
 	iconS.classList.remove(...iconS.classList);
 	iconS.classList.add("wi");
-	const dayTime = KadUtils.Date.getHour() >= KadUtils.Date.getHour(howaData.data[0].sys.sunrise) && KadUtils.Date.getHour() < KadUtils.Date.getHour(howaData.data[0].sys.sunset) ? "day" : "night";
+	const dayTime = KadUtils.KadDate.hourAsNumber() >= KadUtils.KadDate.hourAsNumber(howaData.data[0].sys.sunrise) && KadUtils.KadDate.hourAsNumber() < KadUtils.KadDate.hourAsNumber(howaData.data[0].sys.sunset) ? "day" : "night";
 	iconS.classList.add(`wi-owm-${dayTime}-${howaData.data[0].weather[0].id}`);
 
 	//refresh Graph-data
@@ -268,13 +294,13 @@ function howaReturn(data) {
 
 function howaZoom(obj) {
 	howaOptions.zoomed = !howaOptions.zoomed;
-	KadUtils.DOM.btnColor(obj, howaOptions.zoomed ? "positive" : null);
+	KadUtils.KadDOM.btnColor(obj, howaOptions.zoomed ? "positive" : null);
 	howaRefreshGraph();
 	howaGraph.update();
 }
 
 function howaMapsExpand() {
-	KadUtils.DOM.btnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
+	KadUtils.KadDOM.btnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
 	if (weaterMaps.shown) {
 		KadUtils.dbIDStyle("idSel_howaMapsCriteria").display = "none";
 		KadUtils.dbIDStyle("idSel_howaMapsCountry").display = "none";
@@ -318,7 +344,7 @@ function howaCreateGraph() {
 		// The data for our dataset
 		data: {
 			labels: howaData.data.map((data) => {
-				return KadUtils.Date.getDate(new Date(data.dt * 1000), { format: "WD HH h" });
+				return KadUtils.KadDate.getDate(new Date(data.dt * 1000), { format: "WD HH h" });
 			}),
 			datasets: howaOptions.graphTypes.map((d, i) => {
 				return {
@@ -344,7 +370,7 @@ function howaCreateGraph() {
 						return legendItem.index != 1;
 					},
 					usePointStyle: false,
-					padding: KadUtils.CSS.getRoot("padding", true, true),
+					padding: KadUtils.KadCSS.getRoot("padding", true, true),
 					boxWidth: globalValues.mediaSizes.size,
 				},
 				onClick: (e) => {},
@@ -475,7 +501,7 @@ function howaRefreshGraph() {
 		if (howaOptions.zoomed && index >= howaOptions.maxZoomedData) {
 			return result;
 		}
-		result.push(KadUtils.Date.getDate(new Date(data.dt * 1000), { format: "WD HH h" }).replace(" h", "h"));
+		result.push(KadUtils.KadDate.getDate(new Date(data.dt * 1000), { format: "WD HH h" }).replace(" h", "h"));
 		return result;
 	}, []);
 
@@ -494,14 +520,14 @@ function howaRefreshGraph() {
 
 function howaColorGraph() {
 	const lCol = globalValues.colors.elements.line;
-	const tCol = KadUtils.Color.formatAsCSS(globalValues.colors.elements.text, "HSL");
+	const tCol = KadUtils.KadColor.formatAsCSS(globalValues.colors.elements.text, "HSL");
 	howaGraph.options.legend.labels.fontColor = tCol;
 	howaGraph.options.scales.xAxes[0].ticks.fontColor = tCol;
-	howaGraph.options.scales.xAxes[0].gridLines.color = KadUtils.Color.formatAsCSS([...lCol, 0.2], "HSL");
+	howaGraph.options.scales.xAxes[0].gridLines.color = KadUtils.KadColor.formatAsCSS([...lCol, 0.2], "HSL");
 
 	for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-		const alpha = KadUtils.Value.mapping(i, 0, howaOptions.graphTypes.length - 1, 0.8, 0.2, true);
-		howaGraph.options.scales.yAxes[i].gridLines.color = KadUtils.Color.formatAsCSS([...lCol, alpha], "HSL");
+		const alpha = KadUtils.KadValue.mapping(i, 0, howaOptions.graphTypes.length - 1, 0.8, 0.2, true);
+		howaGraph.options.scales.yAxes[i].gridLines.color = KadUtils.KadColor.formatAsCSS([...lCol, alpha], "HSL");
 		howaGraph.options.scales.yAxes[i].ticks.fontColor = howaOptions.graphTypes[i].color;
 	}
 	howaGraph.update();

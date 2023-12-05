@@ -1,54 +1,62 @@
-const afinnOptions = {
+import { dbID, daEL, KadDOM, KadTable } from "../General/KadUtils.js";
+import { newsData } from "../News/News.js";
+import { storage_cl_WikiSearch } from "./WikiSearch.js";
+import { globalP5 } from "../Main.js";
+import { nuncDiscipuli } from "../General/Account.js";
+
+const analysisOptions = {
 	data: null,
 	searchInput: "",
 	results: {},
 };
+daEL(idVin_analysisEntry, "input", () => analysisInput(null));
+daEL(idBtn_analyseNews, "click", analysisNews);
+daEL(idBtn_analyseWiki, "click", analysisWiki);
 
-function clear_cl_Afinn() {
-	KadUtils.DOM.resetInput("idVin_analysisEntry", "Type text to analyze");
-	KadUtils.dbID("idLbl_analysisResult").textContent = "~Average score~";
-	KadUtils.Table.clear("idTabBody_analysisResult");
+export function clear_cl_Analysis() {
+	KadDOM.resetInput("idVin_analysisEntry", "Type text to analyze");
+	dbID("idLbl_analysisResult").textContent = "~Average score~";
+	KadTable.clear("idTabBody_analysisResult");
 }
 
 function analysisNews() {
-	KadUtils.dbID("idVin_analysisEntry").value = newsData.articles[newsData.currIndex].description;
-	afinnInput(newsData.articles[newsData.currIndex].description);
+	dbID("idVin_analysisEntry").value = newsData.articles[newsData.currIndex].description;
+	analysisInput(newsData.articles[newsData.currIndex].description);
 }
 
 function analysisWiki() {
-	const data = nuncDiscipuli.getData("WikiSearch");
+	const data = storage_cl_WikiSearch.data;
 	if (data.content != null) {
 		let pagesID = Object.keys(data.content);
-		KadUtils.dbID("idVin_analysisEntry").value = data.content[pagesID].extract;
-		afinnInput(data.content[pagesID].extract);
+		dbID("idVin_analysisEntry").value = data.content[pagesID].extract;
+		analysisInput(data.content[pagesID].extract);
 	}
 }
 
-async function afinnInput(input = null) {
-	afinnOptions.searchInput = input;
+async function analysisInput(input = null) {
 	if (input === null) {
-		afinnOptions.searchInput = KadUtils.dbID("idVin_analysisEntry").value.trim();
+		analysisOptions.searchInput = KadDOM.stringFromInput(idVin_analysisEntry);
 	}
-	if (afinnOptions.searchInput == "") {
-		KadUtils.dbID("idLbl_analysisResult").textContent = "~Average score~";
-		KadUtils.Table.clear("idTabBody_analysisResult");
+	if (analysisOptions.searchInput == "") {
+		dbID("idLbl_analysisResult").textContent = "~Average score~";
+		KadTable.clear("idTabBody_analysisResult");
 		return;
 	}
-	afinnOptions.results = afinnAnalyze();
-	if (afinnOptions.results != null) {
-		afinnCreateOutput();
-		afinnCreateTable();
+	analysisOptions.results = analysisAnalyze();
+	if (analysisOptions.results != null) {
+		analysisCreateOutput();
+		analysisCreateTable();
 	}
 }
 
-function afinnLoadData(data) {
-	afinnOptions.data = data;
-	afinnAnalyze();
+function analysisLoadData(data) {
+	analysisOptions.data = data;
+	analysisAnalyze();
 }
 
-function afinnAnalyze() {
-	if (afinnOptions.data === null) {
-		globalP5.loadJSON("./Data/DataLists/AfinnGerman.json", afinnLoadData, "json");
+function analysisAnalyze() {
+	if (analysisOptions.data === null) {
+		globalP5.loadJSON("./Data/DataLists/AnalysisGerman.json", analysisLoadData, "json");
 		return null;
 	}
 	let results = {
@@ -59,7 +67,7 @@ function afinnAnalyze() {
 	};
 	const regexSplit = new RegExp(/[0-9_\:\.\-\s\\\/\,\?\!]+/);
 	const regexClean = new RegExp(/[$-/:-?{-~!"^_`\ [\]] /);
-	let words = afinnOptions.searchInput.split(regexSplit);
+	let words = analysisOptions.searchInput.split(regexSplit);
 	words = words.filter((word) => {
 		return !((!regexClean.test(word) && word === "") || word === undefined || word === "-" || word === "…");
 	});
@@ -67,8 +75,8 @@ function afinnAnalyze() {
 		let score = 0;
 		let word = words[j];
 		word = word.toString().toLowerCase();
-		if (afinnOptions.data.hasOwnProperty(word)) {
-			const wordScore = Number(afinnOptions.data[word]);
+		if (analysisOptions.data.hasOwnProperty(word)) {
+			const wordScore = Number(analysisOptions.data[word]);
 			results.wordCount++;
 			results.singleScores += wordScore;
 			if (!results.analysedWords.hasOwnProperty(word)) {
@@ -85,31 +93,31 @@ function afinnAnalyze() {
 	return results;
 }
 
-function afinnCreateOutput() {
-	if (afinnOptions.results.totalScore === null) {
-		KadUtils.dbID("idLbl_analysisResult").textContent = "~~~~~~~";
-		KadUtils.dbID("idProg_analysisProgress").setAttribute("value", 10);
-		KadUtils.Table.clear("idTabBody_analysisResult");
-		KadUtils.Table.clear("idTabBody_analysisResult");
+function analysisCreateOutput() {
+	if (analysisOptions.results.totalScore === null) {
+		dbID("idLbl_analysisResult").textContent = "~~~~~~~";
+		dbID("idProg_analysisProgress").setAttribute("value", 10);
+		KadTable.clear("idTabBody_analysisResult");
+		KadTable.clear("idTabBody_analysisResult");
 	} else {
-		const score = analysisConvertScore(afinnOptions.results.totalScore);
-		const plural = afinnOptions.results.wordCount == 1 ? "Wort" : "Wörter";
-		const count = `(${afinnOptions.results.wordCount} ${plural})`;
-		KadUtils.dbID("idLbl_analysisResult").textContent = `Ø${score} ${count}`;
-		KadUtils.dbID("idProg_analysisProgress").setAttribute("value", score + 10);
-		afinnCreateTable();
+		const score = convertScore(analysisOptions.results.totalScore);
+		const plural = analysisOptions.results.wordCount == 1 ? "Wort" : "Wörter";
+		const count = `(${analysisOptions.results.wordCount} ${plural})`;
+		dbID("idLbl_analysisResult").textContent = `Ø${score} ${count}`;
+		dbID("idProg_analysisProgress").setAttribute("value", score + 10);
+		analysisCreateTable();
 	}
 }
 
-function afinnCreateTable() {
-	KadUtils.Table.clear("idTabBody_analysisResult");
-	const data = afinnOptions.results.analysedWords; //alias
+function analysisCreateTable() {
+	KadTable.clear("idTabBody_analysisResult");
+	const data = analysisOptions.results.analysedWords; //alias
 	const dataSorted = Object.keys(data).sort((a, b) => {
 		return data[b].score - data[a].score;
 	});
 	for (let i = dataSorted.length - 1; i >= 0; i--) {
 		if (dataSorted.length > 0) {
-			let row = KadUtils.Table.insertRow("idTabBody_analysisResult");
+			let row = KadTable.insertRow("idTabBody_analysisResult");
 			let foundPos = null;
 			for (let n = 0; n < dataSorted.length; n++) {
 				if (data[dataSorted[n]].score >= 0) {
@@ -117,7 +125,7 @@ function afinnCreateTable() {
 					break;
 				}
 			}
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["analysisPosWord", i],
 				type: "Lbl",
 				text: foundPos != null ? (data[foundPos].occurence > 1 ? `${foundPos} (${data[foundPos].occurence})` : foundPos) : "",
@@ -126,10 +134,10 @@ function afinnCreateTable() {
 				},
 				copy: foundPos != null ? true : false,
 			});
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["analysisPosScore", i],
 				type: "Lbl",
-				text: foundPos != null ? analysisConvertScore(data[foundPos].score) : "",
+				text: foundPos != null ? convertScore(data[foundPos].score) : "",
 				createCellClass: [Object.keys(data).length > 1 ? "clTab_borderThinRight" : null],
 				cellStyle: {
 					textAlign: "right",
@@ -144,7 +152,7 @@ function afinnCreateTable() {
 					break;
 				}
 			}
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["analysisNegWord", i],
 				type: "Lbl",
 				// text: (foundNeg != null) ? foundNeg : "",
@@ -154,10 +162,10 @@ function afinnCreateTable() {
 				},
 				copy: foundNeg != null ? true : false,
 			});
-			KadUtils.Table.addCell(row, {
+			KadTable.addCell(row, {
 				names: ["analysisNegScore", i],
 				type: "Lbl",
-				text: foundNeg != null ? analysisConvertScore(data[foundNeg].score) : "",
+				text: foundNeg != null ? convertScore(data[foundNeg].score) : "",
 				cellStyle: {
 					textAlign: "right",
 				},
@@ -167,6 +175,6 @@ function afinnCreateTable() {
 	}
 }
 
-function analysisConvertScore(score) {
+function convertScore(score) {
 	return Math.floor(score * 1000) / 100;
 }

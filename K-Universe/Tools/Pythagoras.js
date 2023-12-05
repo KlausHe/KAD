@@ -1,3 +1,6 @@
+import { daEL, dbID, dbIDStyle, deepClone, KadDOM, KadValue } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+
 const pythoOptions = {
 	p5Loaded: false,
 	get canvas() {
@@ -14,14 +17,25 @@ const pythoOptions = {
 	errorShown: false,
 };
 
-function clear_cl_Pythagoras() {
+daEL(idVin_Pytho_0, "input", () => pythoNewEntry(idVin_Pytho_0));
+daEL(idVin_Pytho_1, "input", () => pythoNewEntry(idVin_Pytho_1));
+daEL(idVin_Pytho_2, "input", () => pythoNewEntry(idVin_Pytho_2));
+daEL(idVin_Pytho_3, "input", () => pythoNewEntry(idVin_Pytho_3));
+daEL(idVin_Pytho_4, "input", () => pythoNewEntry(idVin_Pytho_4));
+
+export function clear_cl_Pythagoras() {
 	pythoOptions.vals = [];
 	for (let i = 0; i < 5; i++) {
 		const val = pythoOptions.inputState.includes(i) ? pythoOptions.valsOrig[i] : "";
-		KadUtils.DOM.resetInput(`idVin_Pytho_${i}`, val);
+		KadDOM.resetInput(`idVin_Pytho_${i}`, val);
 	}
 	pythoOptions.inputState = [0, 1];
 	pythoShowError();
+	pythoCalc();
+}
+
+export function canvas_cl_Pythagoras() {
+	caPY.resizeCanvas(pythoOptions.canvas.w, pythoOptions.canvas.h);
 	pythoCalc();
 }
 
@@ -35,10 +49,6 @@ const caPY = new p5((c) => {
 		pythoOptions.p5Loaded = true;
 	};
 }, "#idCanv_pytho");
-
-function pythoResize() {
-	caPY.resizeCanvas(pythoOptions.canvas.w, pythoOptions.canvas.h);
-}
 
 function pythoTriHypo(a, b) {
 	return caPY.sqrt(a ** 2 + b ** 2);
@@ -55,10 +65,10 @@ function pythoMinusNinety(angle) {
 function pythoShowError(text = null) {
 	pythoOptions.errorShown = text === null ? true : false;
 	if (pythoOptions.errorShown) {
-		KadUtils.dbIDStyle("idDiv_pythagorasInfo").display = "none";
+		dbIDStyle("idDiv_pythagorasInfo").display = "none";
 	} else {
-		KadUtils.dbID("idLbl_pythagorasInfo").textContent = text;
-		KadUtils.dbIDStyle("idDiv_pythagorasInfo").display = "initial";
+		dbID("idLbl_pythagorasInfo").textContent = text;
+		dbIDStyle("idDiv_pythagorasInfo").display = "initial";
 	}
 }
 
@@ -77,12 +87,12 @@ function pythoCalc() {
 	pythoOptions.vals = [];
 	const A = pythoOptions.inputState[0];
 	const B = pythoOptions.inputState[1];
-	pythoOptions.vals[A] = KadUtils.DOM.numberFromInput(`idVin_Pytho_${A}`);
-	pythoOptions.vals[B] = KadUtils.DOM.numberFromInput(`idVin_Pytho_${B}`);
+	pythoOptions.vals[A] = KadDOM.numberFromInput(`idVin_Pytho_${A}`);
+	pythoOptions.vals[B] = KadDOM.numberFromInput(`idVin_Pytho_${B}`);
 
 	if (A > 2) pythoOptions.vals[A] *= caPY.PI / 180; //convert dregrees to radians
 	if (B > 2) pythoOptions.vals[B] *= caPY.PI / 180; //convert dregrees to radians
-	const arr = KadUtils.deepClone(pythoOptions.inputState).sort();
+	const arr = deepClone(pythoOptions.inputState).sort();
 	switch (arr.join("")) {
 		case "01": //a & b
 			pythoOptions.vals[2] = pythoTriHypo(pythoOptions.vals[0], pythoOptions.vals[1]); //c
@@ -145,7 +155,7 @@ function pythoCalc() {
 
 	for (let i = 0; i < 5; i++) {
 		if (!pythoOptions.inputState.includes(i)) {
-			KadUtils.DOM.resetInput(`idVin_Pytho_${i}`, i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3));
+			KadDOM.resetInput(`idVin_Pytho_${i}`, i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3));
 		}
 	}
 	if (pythoOptions.p5Loaded) {
@@ -159,10 +169,10 @@ function drawPytho() {
 
 	if (pythoOptions.vals[0] / pythoOptions.vals[1] > pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "Y" fixed length, Scale "X"
-		drawWidth = KadUtils.Value.constrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
+		drawWidth = KadValue.constrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
 	} else if (pythoOptions.vals[0] / pythoOptions.vals[1] < pythoOptions.canvas.h / pythoOptions.canvas.w) {
 		//--> "X" fixed length
-		drawHeight = KadUtils.Value.constrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
+		drawHeight = KadValue.constrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
 	}
 
 	drawWidth = drawWidth - 2 * pythoOptions.margin;

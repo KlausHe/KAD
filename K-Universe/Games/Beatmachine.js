@@ -1,3 +1,7 @@
+//use AudioContext() and AudioBuffer() 
+
+import { dbID, dbIDStyle, dbCL, daEL,error, KadDOM, KadRandom } from "../General/KadUtils.js";
+
 const beatmachineOptions = {
 	BPMOrig: 105,
 	curTime: 0,
@@ -8,6 +12,7 @@ const beatmachineOptions = {
 	duration: 16,
 	muteAll: false,
 	expanding: false,
+	soundsLoaded: false,
 	tracks: [
 		{ name: "Base", pattern: [], path: "Data/sounds/909_BD1.mp3", sound: null, enable: true },
 		{ name: "Snare", pattern: [], path: "Data/sounds/909_SD2.mp3", sound: null, enable: true },
@@ -24,7 +29,18 @@ const beatmachineOptions = {
 	],
 };
 
-function clear_cl_Beatmachine() {
+daEL(idBtn_beatmachineLoad, "click", () => beatmachineGetSounds(idBtn_beatmachineLoad));
+daEL(idBtn_transportPlayPause, "click", beatmachineTransport);
+daEL(idBtn_transportClear, "click", () => clear_cl_Beatmachine(idBtn_transportClear));
+daEL(idBtn_transportCreateBeat, "click", () => beatmachineCreateBeat(idBtn_transportCreateBeat));
+daEL(idBtn_transporteExpand, "click", () => beatmachineExpand(idBtn_transporteExpand));
+daEL(idBtn_transporteMute, "click", muteAll);
+daEL(idVin_beatmachine_BPM, "input", () => beatmachineBPMChange(idVin_beatmachine_BPM));
+
+export function clear_cl_Beatmachine() {
+	// console.log("TODO");
+	daEL(idBtn_beatmachineLoad, "click", () => beatmachineGetSounds(idBtn_beatmachineLoad));
+	beatmachineOptions.soundsLoaded = false;
 	beatmachineOptions.curTime = 0;
 	beatmachineOptions.stepInterval = 0;
 	beatmachineOptions.stepIntervalChanged = false;
@@ -32,24 +48,21 @@ function clear_cl_Beatmachine() {
 	beatmachineOptions.BPM = beatmachineOptions.BPMOrig;
 	beatmachineOptions.expanding = false;
 	setBPMtoInterval(beatmachineOptions.BPM);
-	KadUtils.DOM.resetInput("idVin_beatmachine_BPM", beatmachineOptions.BPM);
+	KadDOM.resetInput("idVin_beatmachine_BPM", beatmachineOptions.BPM);
 	beatmachineStop(true);
 	beatmachineCreateTracks();
 }
 
 function beatmachineCreateTracks() {
-	const inputClass = KadUtils.dbCL("cl_BeatmachineTracks");
-	KadUtils.DOM.clearFirstChild(inputClass);
-
+	const inputClass = dbCL("cl_BeatmachineTracks");
+	KadDOM.clearFirstChild(inputClass);
 	for (const [index, obj] of beatmachineOptions.tracks.entries()) {
 		let baseParent = document.createElement("div");
 		baseParent.id = `idDiv_beatmachineTrack_${obj.name}`;
-
 		if (!beatmachineOptions.expanding) {
 			obj.enable = true;
 			obj.pattern = [];
 		}
-
 		let temp = document.createElement("BUTTON");
 		temp.id = `idBtn_beatmachineEnable_${obj.name}`;
 		temp.setAttribute("data-track", index);
@@ -87,24 +100,27 @@ function setBPMtoInterval(val) {
 }
 
 function beatmachineBPMChange(obj) {
-	let val = KadUtils.DOM.numberFromInput(obj);
+	let val = KadDOM.numberFromInput(obj);
 	val = val == "" ? obj.placeholder : Number(val);
 	setBPMtoInterval(val);
 	beatmachineOptions.stepIntervalChanged = true;
 }
 
 function beatmachineGetSounds() {
+	if (beatmachineOptions.soundsLoaded == true) return;
 	let loadCounter = 0;
 	for (const obj of beatmachineOptions.tracks) {
-		loadSound(obj.path, beatmachineSoundLoaded);
-		function beatmachineSoundLoaded(sound) {
-			obj.sound = sound;
-			obj.sound.setVolume(0.6);
+		obj.sound = new Audio(obj.path);
+		obj.sound.oncanplaythrough = (event) => {
+			beatmachineSoundLoaded();
+		};
+		function beatmachineSoundLoaded() {
 			loadCounter++;
 			if (loadCounter == beatmachineOptions.tracks.length) {
 				console.log("all loaded");
-				KadUtils.dbIDStyle("idBtn_beatmachineLoad").display = "none";
-				KadUtils.dbIDStyle("idBtn_transportPlayPause").display = "initial";
+				beatmachineOptions.soundsLoaded = true;
+				dbIDStyle("idBtn_beatmachineLoad").display = "none";
+				dbIDStyle("idBtn_transportPlayPause").display = "initial";
 			}
 		}
 	}
@@ -128,11 +144,11 @@ function beatmachineCreateBeat() {
 		for (let i = 0; i < beatmachineOptions.duration; i++) {
 			track.pattern[i] = 0;
 			if (i % 4 == 0) {
-				track.pattern[i] = Math.random() > 0.6 ? 1 : 0;
+				track.pattern[i] = KadRandom.boolProbablity(0.4);
 			} else if (i % 2 == 0) {
-				track.pattern[i] = Math.random() > 0.8 ? 1 : 0;
+				track.pattern[i] = KadRandom.boolProbablity(0.2);
 			} else {
-				track.pattern[i] = Math.random() > 0.95 ? 1 : 0;
+				track.pattern[i] = KadRandom.boolProbablity(0.05);
 			}
 			if (i % 4 == 0 && track.name == "Base") {
 				track.pattern[i] = 1;
@@ -147,7 +163,9 @@ function beatmachineCreateBeat() {
 }
 
 function beatmachineTransport() {
+  error("Beatmachine needs reworking. Stay tuned for the next update")
 	beatmachineOptions.curTime = 0;
+	console.log("transport");
 	if (beatmachineOptions.transportState === false) {
 		beatmachinePlay();
 		beatmachineOptions.transportState = true;
@@ -158,23 +176,23 @@ function beatmachineTransport() {
 }
 
 function beatmachinePlay() {
-	KadUtils.dbID("idBtn_transportPlayPause").textContent = "Stop";
-	KadUtils.DOM.btnColor("idBtn_transportPlayPause", "positive");
+	dbID("idBtn_transportPlayPause").textContent = "Stop";
+	KadDOM.btnColor("idBtn_transportPlayPause", "positive");
 	beatmachineOptions.loop = setInterval(beatmachineLoop, beatmachineOptions.stepInterval);
 }
 function beatmachineStop(reset = null) {
-	KadUtils.dbID("idBtn_transportPlayPause").textContent = "Play";
-	KadUtils.DOM.btnColor("idBtn_transportPlayPause", null);
+	dbID("idBtn_transportPlayPause").textContent = "Play";
+	KadDOM.btnColor("idBtn_transportPlayPause", null);
 	clearInterval(beatmachineOptions.loop);
 	beatmachineOptions.loop = null;
-
 	if (reset) return;
 	for (let obj of beatmachineOptions.tracks) {
-		obj.sound.stop();
+		obj.sound.pause();
+		obj.sound.currentTime = 0;
 	}
 }
 
-// const btn = KadUtils.dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
+// const btn = dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
 // if (trackObj.pattern[pIndex]) {
 //   btn.classList.add("cl_BeatmachineBtnRow");
 // } else {
@@ -182,8 +200,8 @@ function beatmachineStop(reset = null) {
 
 function beatmachineLoop() {
 	for (let obj of beatmachineOptions.tracks) {
-		// beatmachineKadUtils.DOM.btnColor(obj, beatmachineOptions.curTime);
-		// beatmachineKadUtils.DOM.btnColor(obj, (beatmachineOptions.curTime + beatmachineOptions.duration - 1) % beatmachineOptions.duration, true);
+		// beatmachineKadDOM.btnColor(obj, beatmachineOptions.curTime);
+		// beatmachineKadDOM.btnColor(obj, (beatmachineOptions.curTime + beatmachineOptions.duration - 1) % beatmachineOptions.duration, true);
 		if (obj.enable && obj.pattern[beatmachineOptions.curTime] == 1) {
 			obj.sound.play();
 		}
@@ -200,21 +218,21 @@ function beatmachineLoop() {
 
 function muteAll() {
 	beatmachineOptions.muteAll = !beatmachineOptions.muteAll;
-	KadUtils.DOM.btnColor("idBtn_transporteMute", beatmachineOptions.muteAll ? "negative" : null);
+	KadDOM.btnColor("idBtn_transporteMute", beatmachineOptions.muteAll ? "negative" : null);
 	for (let obj of beatmachineOptions.tracks) {
 		obj.enable = !beatmachineOptions.muteAll;
-		KadUtils.DOM.btnColor(`idBtn_beatmachineEnable_${obj.name}`, beatmachineOptions.muteAll ? "negative" : "positive");
+		KadDOM.btnColor(`idBtn_beatmachineEnable_${obj.name}`, beatmachineOptions.muteAll ? "negative" : "positive");
 	}
 }
 
 function beatmachineToggleTrack(tIndex) {
 	if (beatmachineOptions.muteAll) {
 		beatmachineOptions.muteAll = false;
-		KadUtils.DOM.btnColor("idBtn_transporteMute", null);
+		KadDOM.btnColor("idBtn_transporteMute", null);
 	}
 	let track = beatmachineOptions.tracks[tIndex];
 	track.enable = !track.enable;
-	KadUtils.DOM.btnColor(`idBtn_beatmachineEnable_${track.name}`, track.enable ? "positive" : "negative");
+	KadDOM.btnColor(`idBtn_beatmachineEnable_${track.name}`, track.enable ? "positive" : "negative");
 }
 
 function beatmachineTogglePattern(btnObj) {
@@ -222,27 +240,22 @@ function beatmachineTogglePattern(btnObj) {
 	let pIndex = btnObj.getAttribute("data-pattern");
 	let track = beatmachineOptions.tracks[tIndex];
 	track.pattern[pIndex] = !track.pattern[pIndex];
-	beatmachineKadUtils.DOM.btnColor(track, pIndex);
+	beatmachineBtnColor(track, pIndex);
 }
 
 function beatmachineDrawAll() {
 	for (let obj of beatmachineOptions.tracks) {
 		for (let i = 0; i < beatmachineOptions.duration; i++) {
-			beatmachineKadUtils.DOM.btnColor(obj, i);
+			beatmachineBtnColor(obj, i);
 		}
 	}
 }
 
 function beatmachineBtnColor(trackObj, pIndex) {
-	const btn = KadUtils.dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
+	const btn = dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
 	if (trackObj.pattern[pIndex]) {
 		btn.classList.add("cl_BeatmachineBtnSelect");
 	} else {
 		btn.classList.remove("cl_BeatmachineBtnSelect");
 	}
-}
-
-function setup() {
-	noCanvas();
-	noLoop();
 }

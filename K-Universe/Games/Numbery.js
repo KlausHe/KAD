@@ -1,3 +1,7 @@
+import * as KadUtils from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+import { nuncDiscipuli } from "../General/Account.js";
+
 const numberyOptions = {
 	pairsOrig: 6,
 	pairs: 6,
@@ -29,13 +33,18 @@ const numberyOptions = {
 	},
 };
 
-function clear_cl_Numbery() {
+KadUtils.daEL(idBtn_startNumbery, "click", numberyToggleStart);
+KadUtils.daEL(idVin_numberyPairs, "input", ()=>numberyPairsChange(idVin_numberyPairs));
+KadUtils.daEL(idSel_numberCategory, "input", () => numberyGameSelect(idSel_numberCategory));
+KadUtils.daEL(idVin_numberyPlayer, "input", ()=>numberyPlayerChange(idVin_numberyPlayer));
+
+export function clear_cl_Numbery() {
 	numberyMakePlayers();
-	numberyOptions.delay = KadUtils.CSS.getRoot("transitionTimeHide", true) * 1000;
+	numberyOptions.delay = KadUtils.KadCSS.getRoot("transitionTimeHide", true) * 1000;
 	KadUtils.dbID("idLbl_numberyResult").textContent = "...";
 	let selC = KadUtils.dbID("idSel_numberCategory");
-	KadUtils.DOM.clearFirstChild("idSel_numberCategory");
-	numberyOptions.cathegory = KadUtils.Random.randomObject(Object.keys(numberyOptions.cathegories));
+	KadUtils.KadDOM.clearFirstChild("idSel_numberCategory");
+	numberyOptions.cathegory = KadUtils.KadRandom.randomObject(Object.keys(numberyOptions.cathegories));
 	for (const opt of Object.keys(numberyOptions.cathegories)) {
 		const option = document.createElement("OPTION");
 		option.textContent = opt;
@@ -43,24 +52,28 @@ function clear_cl_Numbery() {
 		if (opt == numberyOptions.cathegory) option.selected = true;
 		selC.appendChild(option);
 	}
-	KadUtils.DOM.resetInput("idVin_numberyPairs", numberyOptions.pairsOrig, {
+	KadUtils.KadDOM.resetInput("idVin_numberyPairs", numberyOptions.pairsOrig, {
 		max: numberyOptions.imgCount,
 	});
 
 	numberyOptions.maxPlayersOrig = Math.min(5, globalValues.colors.array.length - 5);
 	numberyOptions.playerCount = numberyOptions.maxPlayersOrig;
-	KadUtils.DOM.resetInput("idVin_numberyPlayer", 2, { min: 2, max: numberyOptions.maxPlayersOrig });
+	KadUtils.KadDOM.resetInput("idVin_numberyPlayer", 2, { min: 2, max: numberyOptions.maxPlayersOrig });
 	numberyOptions.pairs = numberyOptions.pairsOrig;
 	numberyOptions.isPlaying = false;
 	let inputImg = KadUtils.dbCL("cl_NumberyImages");
-	KadUtils.DOM.clearFirstChild(inputImg);
+	KadUtils.KadDOM.clearFirstChild(inputImg);
 	numberyDisableInputs(true);
 }
 
+export function canvas_cl_Numbery() {
+  startNumbery();
+}
+
 function numberyDisableInputs() {
-	KadUtils.DOM.enableBtn("idVin_numberyPairs", !numberyOptions.isPlaying);
-	KadUtils.DOM.enableBtn("idVin_numberyPlayer", !numberyOptions.isPlaying);
-	KadUtils.DOM.enableBtn("idSel_numberCategory", !numberyOptions.isPlaying);
+	KadUtils.KadDOM.enableBtn("idVin_numberyPairs", !numberyOptions.isPlaying);
+	KadUtils.KadDOM.enableBtn("idVin_numberyPlayer", !numberyOptions.isPlaying);
+	KadUtils.KadDOM.enableBtn("idSel_numberCategory", !numberyOptions.isPlaying);
 	KadUtils.dbID("idBtn_startNumbery").textContent = numberyOptions.isPlaying ? "Stop" : "Start";
 }
 
@@ -88,16 +101,16 @@ function numberyToggleStart() {
 	numberyDisableInputs();
 }
 
-function numberyPairsChange() {
+function numberyPairsChange(obj) {
 	if (numberyOptions.isPlaying) return;
-	let pairs = KadUtils.DOM.numberFromInput(idVin_numberyPairs);
+	let pairs = KadUtils.KadDOM.numberFromInput(obj);
 	numberyOptions.pairs = pairs == "" ? numberyOptions.pairsOrig : Number(pairs);
 	startNumbery(true);
 }
 
-function numberyPlayerChange() {
+function numberyPlayerChange(obj) {
 	if (numberyOptions.isPlaying) return;
-	let nums = KadUtils.DOM.numberFromInput(idVin_numberyPlayer);
+	let nums = KadUtils.KadDOM.numberFromInput(obj);
 	numberyOptions.playerCount = nums == "" ? numberyOptions.maxPlayersOrig : Number(nums);
 	numberyMakePlayers();
 	numberyScoreBoard();
@@ -105,8 +118,8 @@ function numberyPlayerChange() {
 
 function numberyGameSelect(obj) {
 	if (numberyOptions.isPlaying) return;
-	numberyOptions.cathegory = KadUtils.DOM.stringFromInput(obj);
-	KadUtils.DOM.resetInput("idVin_numberyPairs", numberyOptions.pairsOrig, { max: numberyOptions.imgCount });
+	numberyOptions.cathegory = KadUtils.KadDOM.stringFromInput(obj);
+	KadUtils.KadDOM.resetInput("idVin_numberyPairs", numberyOptions.pairsOrig, { max: numberyOptions.imgCount });
 }
 
 function numberyRestart() {
@@ -127,13 +140,13 @@ function startNumbery(userInput = false) {
 	if (!userInput) numberyRestart();
 	if (!userInput) numberyMakePlayers();
 	let imgIDArr = Array.from(Array(numberyOptions.imgCount).keys());
-	imgIDArr = KadUtils.Random.shuffleData(imgIDArr);
+	imgIDArr = KadUtils.KadRandom.shuffleData(imgIDArr);
 	imgIDArr = imgIDArr.slice(0, numberyOptions.pairs); // Get sub-array of first n elements after shuffled
-	imgIDArr = KadUtils.Random.shuffleData([...imgIDArr, ...imgIDArr]);
+	imgIDArr = KadUtils.KadRandom.shuffleData([...imgIDArr, ...imgIDArr]);
 
 	//generate Cells
 	let inputImg = KadUtils.dbCL("cl_NumberyImages");
-	KadUtils.DOM.clearFirstChild(inputImg);
+	KadUtils.KadDOM.clearFirstChild(inputImg);
 	const layout = numberyLayout(numberyOptions.pairs);
 	for (let i = 0; i < layout.cols; i++) {
 		const baseParent = document.createElement("div");
@@ -183,11 +196,11 @@ function numberyCheckTwo() {
 	const cells = [numberyOptions.cells[numberyOptions.cellCurrSel[0]], numberyOptions.cells[numberyOptions.cellCurrSel[1]]];
 	if (cells[0].svg.dataset.imgID == cells[1].svg.dataset.imgID) {
 		numberyOptions.player.scored();
-		const c = KadUtils.Color.stateAsBool(numberyOptions.player.col, "HSL");
+		const c = KadUtils.KadColor.stateAsBool(numberyOptions.player.col, "HSL");
 		for (let cell of cells) {
 			cell.div.classList.add("numbery_Div");
 			cell.svg.classList.add("numbery_Svg");
-			cell.div.style.setProperty("--col", KadUtils.Color.formatAsString(numberyOptions.player.col, "HSL"));
+			cell.div.style.setProperty("--col", KadUtils.KadColor.formatAsString(numberyOptions.player.col, "HSL"));
 			cell.svg.style.setProperty("--inv", c);
 		}
 	} else {
@@ -212,24 +225,24 @@ function numberyCheckFinished() {
 	}
 	numberyToggleStart();
 	const result = KadUtils.dbID("idLbl_numberyResult");
-	let maxScored = KadUtils.Array.sortArrayByKey(numberyOptions.players, "score", true);
+	let maxScored = KadUtils.KadArray.sortArrayByKey(numberyOptions.players, "score", true);
 	if (maxScored[0].score == maxScored[1].score) {
 		result.textContent = `Tie with ${maxScored[0].score} points`;
 	} else {
 		result.textContent = `${maxScored[0].name} won!`;
-		result.style.setProperty("--bgcNavbar", KadUtils.Color.formatAsString(maxScored[0].col, "HSL"));
-		result.style.setProperty("--txtNavbar", KadUtils.Color.stateAsString(maxScored[0].col, "HSL"));
+		result.style.setProperty("--bgcNavbar", KadUtils.KadColor.formatAsString(maxScored[0].col, "HSL"));
+		result.style.setProperty("--txtNavbar", KadUtils.KadColor.stateAsString(maxScored[0].col, "HSL"));
 	}
 	return true;
 }
 
 function numberyScoreBoard() {
-	KadUtils.Table.clear("idTabBody_Numbery");
+	KadUtils.KadTable.clear("idTabBody_Numbery");
 	for (let i = 0; i < numberyOptions.players.length; i++) {
-		const row = KadUtils.Table.insertRow("idTabBody_Numbery");
+		const row = KadUtils.KadTable.insertRow("idTabBody_Numbery");
 		const isPlayer = i == numberyOptions.playerID;
 		// colored Box
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["numbery", i],
 			type: "Colbox",
 			color: numberyOptions.players[i].col,
@@ -238,7 +251,7 @@ function numberyScoreBoard() {
 			},
 		});
 		//Name
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["numberyName", i],
 			type: "Lbl",
 			text: numberyOptions.players[i].name,
@@ -248,7 +261,7 @@ function numberyScoreBoard() {
 			},
 		});
 		//Score
-		KadUtils.Table.addCell(row, {
+		KadUtils.KadTable.addCell(row, {
 			names: ["numberyScore", i],
 			type: "Lbl",
 			text: numberyOptions.players[i].score,
@@ -263,7 +276,7 @@ function numberyScoreBoard() {
 function numberyMakePlayers() {
 	numberyOptions.players = [];
 	numberyOptions.playerID = 0;
-	let colStart = 5 + KadUtils.Random.randomIndex(globalValues.colors.array.slice(5, globalValues.colors.array.length));
+	let colStart = 5 + KadUtils.KadRandom.randomIndex(globalValues.colors.array.slice(5, globalValues.colors.array.length));
 	const step = Math.floor(globalValues.colors.array.length / numberyOptions.playerCount);
 	for (let i = 0; i < numberyOptions.playerCount; i++) {
 		const colID = (i * step + colStart) % globalValues.colors.array.length;

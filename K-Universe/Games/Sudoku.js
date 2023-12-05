@@ -1,3 +1,7 @@
+import { daEL, dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/Basics.js";
+import { globalP5 } from "../Main.js";
+
 const sudokuOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
@@ -15,12 +19,7 @@ const sudokuOptions = {
 	get board() {
 		return this.data[this.curIndex];
 	},
-	selCells: [
-		{
-			i: 0, //Cols left-right, outer Loop
-			j: 0, //rows up-down, inner Loops
-		},
-	],
+	selCells: [{ i: 0, j: 0 }],
 	cellWidth: 10,
 	timerInstance: null,
 	timerStart: null,
@@ -31,19 +30,26 @@ const sudokuOptions = {
 	pencilErase: false,
 };
 
-function clear_cl_Sudoku() {
+daEL(idBtn_sudokuPuzzle, "click", () => sudokuRequest(idBtn_sudokuPuzzle));
+daEL(idBtn_sudokuHCleaer, "click", sudokuClear);
+daEL(idBtn_sudokuTimer, "click", sudokuStopTimer);
+daEL(idBtn_sudokuWrite, "click", () => sudokuInputOptionChange(0));
+daEL(idBtn_sudokuPencil, "click", () => sudokuInputOptionChange(1));
+daEL(idBtn_sudokuValidate, "click", sudokuValidate);
+daEL(idBtn_sudokuHint, "click", sudokuHint);
+daEL(idCb_sudokuAutoCheck, "click", sudokuOptionChange);
+daEL(idCb_sudokuErasePencils, "click", sudokuOptionChange);
+daEL(idBtn_sudokuNumOverview_1, "click", () => sudokuGroupHighlight(idBtn_sudokuNumOverview_1));
+daEL(idCanv_sudoku, "keydown", sudokuKeyPressed);
+
+export function clear_cl_Sudoku() {
 	sudokuOptions.curHighlight = null;
 	sudokuOptions.usedNums = [];
 	sudokuOptions.cells = [];
 	sudokuOptions.cellWidth = Math.floor(sudokuOptions.canvas.w / 9);
-	sudokuOptions.selCells = [
-		{
-			i: 0,
-			j: 0,
-		},
-	];
-	KadUtils.dbID("idCb_sudokuAutoCheck").checked = sudokuOptions.errorCheck;
-	KadUtils.dbID("idCb_sudokuErasePencils").checked = sudokuOptions.pencilErase;
+	sudokuOptions.selCells = [{ i: 0, j: 0 }];
+	dbID("idCb_sudokuAutoCheck").checked = sudokuOptions.errorCheck;
+	dbID("idCb_sudokuErasePencils").checked = sudokuOptions.pencilErase;
 	//print empty cells
 	for (let i = 0; i < 9; i++) {
 		sudokuOptions.cells[i] = [];
@@ -54,22 +60,24 @@ function clear_cl_Sudoku() {
 	sudokuSetBtnColor("");
 	sudokuSetDoneNumbers();
 	sudokuStartTimer(false);
-	caSU.clear();
-	caSU.redraw();
-	caSU.noLoop();
-	unfocusSudoku();
 	sudokuOptions.mode = 1;
+	caSU.clear();
 	sudokuInputOptionChange();
 	sudokuOptionChange();
+	KadInteraction.unfocus(idCanv_sudoku, caSU);
+}
+
+export function canvas_cl_Sudoku() {
+	caSU.resizeCanvas(sudokuOptions.canvas.w, sudokuOptions.canvas.h);
+	caSU.redraw();
 }
 
 function sudokuClear() {
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			if (sudokuOptions.cells[i][j].solution === false) {
-				sudokuOptions.cells[i][j].clearCell();
-				sudokuOptions.cells[i][j].clearPencils();
-			}
+	for (let n = 0; n < 9 * 9; n++) {
+		const { i, j } = KadArray.indexTo2DxyPosition(n, 9);
+		if (sudokuOptions.cells[i][j].solution === false) {
+			sudokuOptions.cells[i][j].clearCell();
+			sudokuOptions.cells[i][j].clearPencils();
 		}
 	}
 	sudokuOptions.curHighlight = null;
@@ -89,64 +97,58 @@ function sudokuRequest(req) {
 		globalP5.loadJSON("./Data/DataLists/Sudoku1000.json", sudokuLoadData, "json");
 		return null;
 	}
-	sudokuOptions.curIndex = KadUtils.Random.randomObject(sudokuOptions.availiableNums);
+	sudokuOptions.curIndex = KadRandom.randomObject(sudokuOptions.availiableNums);
 	sudokuOptions.usedNums.push(sudokuOptions.curIndex);
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			let index = 9 * i + j;
-			const puzzle = sudokuOptions.board.puzzle[index].replace(0, "");
-			const solution = sudokuOptions.board.solution[index];
-			sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, puzzle, solution);
-		}
+	for (let index = 0; index < 9 * 9; index++) {
+		const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+		const puzzle = sudokuOptions.board.puzzle[index].replace(0, "");
+		const solution = sudokuOptions.board.solution[index];
+		sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, puzzle, solution);
 	}
-
 	sudokuStartTimer(true);
 	sudokuSetDoneNumbers();
-	focusSudoku();
+	KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
 function sudokuInputOptionChange(val = null) {
 	if (val != null) {
 		sudokuOptions.mode = val;
 	}
-	KadUtils.DOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-	KadUtils.DOM.btnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "negative" : null);
-	focusSudoku();
+	KadDOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
+	KadDOM.btnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "positive" : null);
+	KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
 function sudokuOptionChange() {
-	sudokuOptions.errorCheck = KadUtils.dbID("idCb_sudokuAutoCheck").checked;
-	sudokuOptions.pencilErase = KadUtils.dbID("idCb_sudokuErasePencils").checked;
+	sudokuOptions.errorCheck = dbID("idCb_sudokuAutoCheck").checked;
+	sudokuOptions.pencilErase = dbID("idCb_sudokuErasePencils").checked;
 	if (!sudokuOptions.errorCheck) {
-		for (let i = 0; i < 9; i++) {
-			for (let j = 0; j < 9; j++) {
-				sudokuOptions.cells[i][j].error = false;
-			}
+		for (let index = 0; index < 9 * 9; index++) {
+			const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+			sudokuOptions.cells[i][j].error = false;
 		}
 	} else {
 		sudokuErrors();
 	}
-	caSU.redraw();
-	focusSudoku();
+	KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
 function sudokuValidate() {
 	let errFlag = false;
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			if (sudokuOptions.cells[i][j].solved && sudokuOptions.cells[i][j].num != sudokuOptions.cells[i][j].solutionNum) {
-				sudokuOptions.cells[i][j].error = true;
-				errFlag = true;
-			}
+	for (let index = 0; index < 9 * 9; index++) {
+		const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+		if (sudokuOptions.cells[i][j].solved && sudokuOptions.cells[i][j].num != sudokuOptions.cells[i][j].solutionNum) {
+			sudokuOptions.cells[i][j].error = true;
+			errFlag = true;
 		}
 	}
 	if (!errFlag) {
 		alert("Everything looks good!");
 	} else {
-		KadUtils.dbID("idCb_sudokuAutoCheck").checked = true;
+		dbID("idCb_sudokuAutoCheck").checked = true;
 		sudokuOptions.errorCheck = true;
 	}
-	focusSudoku();
+	KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
 function sudokuHint() {
@@ -154,21 +156,20 @@ function sudokuHint() {
 		let possibilitiesA = [];
 		let possibilitiesB = [];
 		let possibilitiesC = [];
-		for (let i = 0; i < 9; i++) {
-			for (let j = 0; j < 9; j++) {
-				if (!sudokuOptions.cells[i][j].solution && sudokuOptions.cells[i][j].num == "") {
-					possibilitiesC.push([i, j]);
-					let pencilCount = 0;
-					for (let n = 0; n < sudokuOptions.cells[i][j].pencils.length; n++) {
-						if (sudokuOptions.cells[i][j].pencils[n].selected) {
-							pencilCount++;
-						}
+		for (let index = 0; index < 9 * 9; index++) {
+			const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+			if (!sudokuOptions.cells[i][j].solution && sudokuOptions.cells[i][j].num == "") {
+				possibilitiesC.push([i, j]);
+				let pencilCount = 0;
+				for (let n = 0; n < sudokuOptions.cells[i][j].pencils.length; n++) {
+					if (sudokuOptions.cells[i][j].pencils[n].selected) {
+						pencilCount++;
 					}
-					if (pencilCount === 3) {
-						possibilitiesA.push([i, j]);
-					} else if (pencilCount > 0) {
-						possibilitiesB.push([i, j]);
-					}
+				}
+				if (pencilCount === 3) {
+					possibilitiesA.push([i, j]);
+				} else if (pencilCount > 0) {
+					possibilitiesB.push([i, j]);
 				}
 			}
 		}
@@ -190,13 +191,13 @@ function sudokuHint() {
 		cell.solution = true;
 		cell.colNum.drawn = cell.colNum.hinted;
 	}
-	focusSudoku();
+	KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
 function sudokuKeyPressed(event) {
-	event.KadUtils.Interaction.preventDefault(); //prevent keyinput from comming thout to the window!
+	event.preventDefault(); //prevent keyinput from comming thout to the window!
 	let keyInput = event.keyCode || window.event;
-	let cell = {};
+	// let cell = {};
 	if (keyInput == 32) {
 		sudokuOptions.mode = !sudokuOptions.mode;
 		sudokuInputOptionChange();
@@ -264,22 +265,12 @@ function sudokuShiftPressed() {
 function sudokuGroupHighlight(obj) {
 	sudokuOptions.curHighlight = sudokuOptions.curHighlight == obj.getAttribute("alt") ? null : obj.getAttribute("alt");
 	caSU.redraw();
-	focusSudoku();
-}
-
-function focusSudoku() {
-	KadUtils.dbID("idCanv_sudoku").focus();
-	caSU.redraw();
-}
-
-function unfocusSudoku() {
-	KadUtils.dbID("idCanv_sudoku").blur();
-	caSU.noLoop();
+	KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
 function sudokuSetBtnColor(diff) {
-	KadUtils.DOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-	KadUtils.DOM.btnColor("idBtn_sudokuPuzzle", diff == "puzzle" ? "positive" : null);
+	KadDOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
+	KadDOM.btnColor("idBtn_sudokuPuzzle", diff == "puzzle" ? "positive" : null);
 }
 
 function sudokuSetDoneNumbers() {
@@ -287,20 +278,18 @@ function sudokuSetDoneNumbers() {
 	for (let i = 1; i <= 9; i++) {
 		numCount[i] = 0;
 	}
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			if (sudokuOptions.cells[i][j].num != "" && sudokuOptions.cells[i][j].mode == 1) {
-				numCount[sudokuOptions.cells[i][j].num]++;
-			}
+	for (let index = 0; index < 9 * 9; index++) {
+		const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+		if (sudokuOptions.cells[i][j].num != "" && sudokuOptions.cells[i][j].mode == 1) {
+			numCount[sudokuOptions.cells[i][j].num]++;
 		}
 	}
-
 	for (let i = 1; i <= 9; i++) {
-		let btnObj = KadUtils.dbID(`idBtn_sudokuNumOverview_${i}`);
+		let btnObj = dbID(`idBtn_sudokuNumOverview_${i}`);
 		let col = null;
 		if (numCount[i] == 9) col = "positive";
 		if (numCount[i] > 9) col = "negative";
-		KadUtils.DOM.btnColor(btnObj, col);
+		KadDOM.btnColor(btnObj, col);
 		btnObj.innerHTML = i + "<sup>" + numCount[i] + "</sup>";
 	}
 }
@@ -316,10 +305,9 @@ const caSU = new p5((c) => {
 	};
 	c.draw = function () {
 		if (sudokuOptions.cells.length > 0) {
-			for (let i = 0; i < 9; i++) {
-				for (let j = 0; j < 9; j++) {
-					sudokuOptions.cells[i][j].show();
-				}
+			for (let index = 0; index < 9 * 9; index++) {
+				const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+				sudokuOptions.cells[i][j].show();
 			}
 		}
 		//draw Quadrants
@@ -327,27 +315,21 @@ const caSU = new p5((c) => {
 		caSU.noFill();
 		caSU.stroke(0);
 		caSU.strokeWeight(3);
-		for (let i = 0; i < 3; i++) {
-			for (let j = 0; j < 3; j++) {
-				caSU.square(i * quadSud, j * quadSud, quadSud);
-			}
+		for (let index = 0; index < 3 * 3; index++) {
+			const { i, j } = KadArray.indexTo2DxyPosition(index, 3);
+			caSU.square(i * quadSud, j * quadSud, quadSud);
 		}
 	};
 }, "#idCanv_sudoku");
 
-function sudokuResize() {
-	caSU.resizeCanvas(sudokuOptions.canvas.w, sudokuOptions.canvas.h);
-}
-
 function sudokuCheckFinished() {
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			if (!sudokuOptions.cells[i][j].correct) {
-				return false;
-			}
+	for (let index = 0; index < 9 * 9; index++) {
+		const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+		if (!sudokuOptions.cells[i][j].correct) {
+			return false;
 		}
 	}
-	let time = KadUtils.dbID("idBtn_sudokuTimer").textContent;
+	let time = dbID("idBtn_sudokuTimer").textContent;
 	sudokuStartTimer(false);
 	timeoutCanvasFinished(caSU, {
 		textTop: "You finished",
@@ -379,10 +361,9 @@ function sudokuCheckArray(cellArr) {
 
 function sudokuErrors() {
 	//clear cells
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			sudokuOptions.cells[i][j].error = false;
-		}
+	for (let index = 0; index < 9 * 9; index++) {
+		const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+		sudokuOptions.cells[i][j].error = false;
 	}
 	//check Spalten
 	for (let i = 0; i < 9; i++) {
@@ -399,18 +380,17 @@ function sudokuErrors() {
 	//check Quads
 	let tempSudQuad = [];
 	let x, y;
-	for (let i = 0; i < 3; i++) {
-		for (let j = 0; j < 3; j++) {
-			tempSudQuad = [];
-			for (let n = 0; n < 3; n++) {
-				for (let m = 0; m < 3; m++) {
-					x = m + i * 3;
-					y = n + j * 3;
-					tempSudQuad.push(sudokuOptions.cells[x][y]);
-				}
+	for (let index = 0; index < 3 * 3; index++) {
+		const { i, j } = KadArray.indexTo2DxyPosition(index, 3);
+		tempSudQuad = [];
+		for (let n = 0; n < 3; n++) {
+			for (let m = 0; m < 3; m++) {
+				x = m + i * 3;
+				y = n + j * 3;
+				tempSudQuad.push(sudokuOptions.cells[x][y]);
 			}
-			sudokuCheckArray(tempSudQuad);
 		}
+		sudokuCheckArray(tempSudQuad);
 	}
 }
 
@@ -626,6 +606,6 @@ function sudokuStartTimer(start) {
 function sudokuTimer() {
 	const now = new Date() - sudokuOptions.timerStart;
 	const format = "mm:ss";
-	const text = KadUtils.Date.getDate(now, { format });
-	KadUtils.dbID("idBtn_sudokuTimer").textContent = text;
+	const text = KadDate.getDate(now, { format });
+	dbID("idBtn_sudokuTimer").textContent = text;
 }

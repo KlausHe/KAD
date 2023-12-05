@@ -1,3 +1,8 @@
+import { globalP5 } from "../Main.js";
+import { dbID,daEL, KadTable, KadRandom } from "../General/KadUtils.js";
+
+daEL(idBtn_newsTickerNext, "click", postillonTickerNext);
+
 let postillonTickerOptions = {
 	num: null,
 	tickerNums: null,
@@ -10,7 +15,7 @@ let postillonTickerOptions = {
 	data: null,
 };
 
-function clear_cl_PostillonTicker() {
+export function clear_cl_PostillonTicker() {
 	if (postillonTickerOptions.data == null) {
 		globalP5.loadJSON("./Data/DataLists/Newsticker.json", tickerLoadData, "json");
 	}
@@ -24,18 +29,18 @@ function tickerLoadData(data) {
 }
 
 function postillonTickerNext() {
-	postillonTickerOptions.num = KadUtils.Random.randomObject(postillonTickerOptions.availiableNums);
+	postillonTickerOptions.num = KadRandom.randomObject(postillonTickerOptions.availiableNums);
 	postillonTickerOptions.usedNums.push(postillonTickerOptions.num);
 	postillionCreate();
 }
 
 function postillionCreate() {
-	KadUtils.dbID("idLbl_newsTickerNumber").innerHTML = `Ticker ${postillonTickerOptions.num}`;
-	KadUtils.Table.clear("idTabBody_postillionTable");
+	dbID("idLbl_newsTickerNumber").innerHTML = `Ticker ${postillonTickerOptions.num}`;
+	KadTable.clear("idTabBody_postillionTable");
 	const list = postillonTickerOptions.data[postillonTickerOptions.num];
 	for (let i = 0; i < list.length; i++) {
-		const row = KadUtils.Table.insertRow("idTabBody_postillionTable");
-		KadUtils.Table.addCell(row, {
+		const row = KadTable.insertRow("idTabBody_postillionTable");
+		KadTable.addCell(row, {
 			names: ["postillon", i],
 			type: "Lbl",
 			text: `${list[i]}`,
