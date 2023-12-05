@@ -49,11 +49,11 @@ function lionsRequestNumber() {
 		}
 	}
 	if (index == null) {
-		infoLbl.innerHTML = `- ${lionsOptions.num} -<br>leider kein Gewinn`;
+		infoLbl.innerHTML = `kein Gewinn`;
 		infoLbl.classList.remove("cl_highlighted");
 		return;
 	}
-	infoLbl.innerHTML = `${lionsOptions.num} hat gewonnen<br>am ${lionsOptions.data[index].date}`;
+	infoLbl.innerHTML = `gewonnen am<br>${lionsOptions.data[index].date}`;
 	infoLbl.classList.add("cl_highlighted");
 	KadUtils.dbID("idTabBody_Lions").rows[index].scrollIntoView({
 		behavior: "smooth",
@@ -75,7 +75,7 @@ function lionsReturn(data) {
 		const date = obj["Datum"];
 		let num = obj["Los-Nr."];
 		num = num.padStart(4, 0);
-		const price = `${obj["Spende/Gutschein-Beschreibung"]}<br>${obj["Sponsor"]}`;
+		const price = `${obj["Spende/Gutschein"]}<br>${obj["Sponsor"]}`;
 		const index = lionsOptions.data.findIndex((obj) => obj.date == date && obj.price == price);
 		if (index < 0) {
 			lionsOptions.data.push({

@@ -313,7 +313,7 @@ export const rawContentGrid = {
 	cl_Sepakbola: {
 		userSelected: false,
 		height: 2,
-		active: true,
+		active: false,
 		contentGroup: "News",
 		name: "Sepakbola",
 		heritage: ["javanisch", "Fußball"],
