@@ -147,9 +147,6 @@ export function clear_cl_UserLogin() {
 	nuncDiscipuli.cred.email = KadUtils.KadDOM.resetInput("idVin_userLogin_email", "E-Mail");
 	nuncDiscipuli.cred.uid = KadUtils.KadDOM.resetInput("idVin_userLogin_pass", "Passwort");
 
-	KadUtils.dbID("idVin_userLogin_email").value = "klausheuken@gmx.de";
-	KadUtils.dbID("idVin_userLogin_pass").value = "klaus1234";
-
 	KadUtils.KadDOM.resetInput("idCb_userLogin_check", true);
 	accountPersistanceChange();
 	KadUtils.dbID("idVin_userLogin_email").removeAttribute("disabled");
