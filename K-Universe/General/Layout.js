@@ -7,13 +7,18 @@ import { bgaOptions } from "./BackgroundAnimation.js";
 import * as DBData from "../MainModulesDBData.js";
 // import * as Pikaday from "../Data/pikadayClock.js";
 
+function contentCheckActive(contentObj) {
+	if (!contentObj.hasOwnProperty("active")) return true;
+	return contentObj.active;
+}
+
 export let contentGrid = {};
 export const contentLayout = {
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		contentGrid = Object.fromEntries(
 			arr.filter((obj) => {
-				return obj[1].active == undefined || obj[1].active == true;
+				return contentCheckActive(obj[1]);
 			})
 		);
 	},
@@ -37,7 +42,7 @@ export const contentLayout = {
 		let list = [];
 		Object.values(contentGrid).forEach((obj) => {
 			if (obj.contentGroup == "Account-Settings" || obj.contentGroup == "Global-Settings") return;
-			if (obj.hasOwnProperty("active") && obj.active == false) return;
+			if (!contentCheckActive(obj)) return;
 			list.push(obj.name);
 		});
 		return list;
@@ -515,9 +520,7 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	contentLayout.contentLength = 0;
-
 	if (contentGroupSort.length != Object.keys(contentLayout.navContent).length) console.log("Not all Groupnames contained in `contentGroupSort`");
-	// const navNamesOld = Object.keys(contentLayout.navContent);
 
 	for (let i = contentGroupSort.length - 1; i >= 0; i--) {
 		contentLayout.contentLength++;
