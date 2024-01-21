@@ -266,7 +266,7 @@ export const rawContentGrid = {
 	},
 	cl_Lions: {
 		userSelected: true,
-		active: true,
+		active: false,
 		contentGroup: "News",
 		name: "Lions",
 		heritage: ["englisch", "Löwen"],

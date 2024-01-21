@@ -1,7 +1,7 @@
 {
 	"name": "kad-server",
 	"version": "2.0.1",
-	"description": "KAD-Universe deploys useful and lesser useful little Apps.",
+	"description": "KAD-Universe deploys useful and lesser useful little Apps. Some might not load external content due to random API changes.",
 	"main": "server.js",
 	"dependencies": {
 		"axios": "^1.1.3",
