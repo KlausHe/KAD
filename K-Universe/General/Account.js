@@ -337,7 +337,6 @@ function userAccError(error) {
 export async function loadDiscipuli(category = null) {
 	if (!userLoggedIn()) return;
 	const categories = [];
-  console.log(category);
 	if (category !== null) {
 		categories.push(category);
 	} else {
