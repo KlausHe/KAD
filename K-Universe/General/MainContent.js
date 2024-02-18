@@ -266,7 +266,7 @@ export const rawContentGrid = {
 	},
 	cl_Lions: {
 		userSelected: true,
-		active: true,
+		deactivated: true,
 		contentGroup: "News",
 		name: "Lions",
 		heritage: ["englisch", "Löwen"],
@@ -313,7 +313,7 @@ export const rawContentGrid = {
 	cl_Sepakbola: {
 		userSelected: false,
 		height: 2,
-		active: false,
+		deactivated: true,
 		contentGroup: "News",
 		name: "Sepakbola",
 		heritage: ["javanisch", "Fußball"],
@@ -631,7 +631,7 @@ export const rawContentGrid = {
 		contentGroup: "Utility",
 		globalValNumber: "idVin_IomlaidCur",
 		name: "Iomlaid",
-		active: false,
+		deactivated: true,
 		heritage: ["schottisch-gälisch", "Austausch"],
 		source: {
 			Daten: "https://exchangerate.host",
@@ -646,7 +646,7 @@ export const rawContentGrid = {
 		userSelected: true,
 		contentGroup: "Utility",
 		name: "Kadar",
-		active: false,
+		deactivated: true,
 		heritage: ["türkisch", "bis"],
 		info: "Berechne Zeiten",
 		subgrid: [

@@ -11,16 +11,15 @@ const howaData = {
 	URLForecast: "https://api.openweathermap.org/data/2.5/forecast?",
 };
 
-if (process.env.NODE_ENV != "production") {
-	require("dotenv").config();
-}
-const axios = require("axios");
-const https = require("https");
+import "dotenv/config";
+import axios from "axios";
+import https from "https";
+
 //set up the Server
-const Compression = require("compression");
-const express = require("express");
+import compression from "compression";
+import express from "express";
 const app = express();
-app.use(Compression());
+app.use(compression());
 app.use(express.json());
 app.use(express.static("K-Universe"));
 
@@ -31,8 +30,10 @@ app.use(express.static("K-Universe"));
 app.listen(process.env.PORT);
 console.log(`Started @ Port: ${process.env.PORT}`);
 
-const tableToJson = require("tabletojson").Tabletojson;
-const { generateRequestUrl, normaliseResponse } = require("google-translate-api-browser");
+import { tabletojson } from "tabletojson";
+
+// const { generateRequestUrl, normaliseResponse } = require("google-translate-api-browser");
+import { generateRequestUrl, normaliseResponse } from "google-translate-api-browser";
 
 //----------------------------------Data----------------------------
 app.post(`${redirectPath}/Howa/`, (req, res) => {
@@ -85,7 +86,7 @@ app.post(`${redirectPath}/News/`, (req, res) => {
 	const country = req.body.country;
 	const category = req.body.category;
 	const url = `https://newsdata.io/api/1/news?apikey=${process.env.API_NEWS_KEY}&country=${country}&language=${country}&category=${category}`;
- function NewsAsync() {
+	function NewsAsync() {
 		https
 			.get(url, (resp) => {
 				let httpsData = "";
@@ -119,7 +120,7 @@ app.post(`${redirectPath}/Lions/`, (req, res) => {
 	};
 	async function lionsAsync() {
 		try {
-			const data = await tableToJson.convertUrl(url, options);
+			const data = await tabletojson.convertUrl(url, options);
 			res.send(JSON.stringify(data[0]));
 		} catch (error) {
 			res.send(JSON.stringify({ error }));
