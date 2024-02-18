@@ -30,7 +30,7 @@ const wikiOptions = {
 
 daEL(idVin_wikiInput, "change", () => wikiSearchInput(null));
 daEL(idBtn_wikiInput, "click", () => wikiSearchInput(null));
-daEL(idSel_wikiLanguage, "change", () => wikiSearchLanguage(idSel_wikiLanguage));
+daEL(idSel_wikiLanguage, "change", wikiSearchLanguage);
 
 onclick = "newsShowNext(0)idDiv_wiki_Text";
 
@@ -107,7 +107,7 @@ function wikiSearchInput(input = null, random = null) {
 	}
 }
 
-function wikiSearchLanguage(obj) {
+function wikiSearchLanguage() {
 	wikiSearchInput();
 }
 

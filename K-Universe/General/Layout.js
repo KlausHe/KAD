@@ -8,8 +8,8 @@ import * as DBData from "../MainModulesDBData.js";
 // import * as Pikaday from "../Data/pikadayClock.js";
 
 function contentCheckActive(contentObj) {
-	if (!contentObj.hasOwnProperty("active")) return true;
-	return contentObj.active;
+	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
+	return true;
 }
 
 export let contentGrid = {};

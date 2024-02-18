@@ -95,10 +95,6 @@ function hideLoadingscreen() {
 	KadUtils.dbCL("cl_Loading").classList.add("cl_LoadingFinished");
 }
 
-// function showLoadingscreen() {
-// 	KadUtils.dbCL("cl_Loading").classList.remove("cl_LoadingFinished");
-// }
-
 export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
 	canv.noLoop();
 	setTimeout(() => {
