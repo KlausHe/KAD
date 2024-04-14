@@ -57,7 +57,6 @@ daEL(idSel_lottoGame, "change", lottoGameSelect);
 daEL(idVin_lottoNumberOfGames, "input", lottoGetGames);
 
 export function clear_cl_Lotto() {
-	// for (let i = 0; i < Object.keys(lottoOptions.games).length; i++) {
 	for (let i = 0; i < 1; i++) {
 		dbID("idSel_lottoGame").options[i] = new Option(Object.keys(lottoOptions.games)[i]);
 	}

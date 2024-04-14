@@ -24,11 +24,9 @@
 .cl_subGrid_GeneralSettings {
 	grid-template-areas:
 		". cl_SettingsFontsize ."
-		". cl_SettingsDecimals ."
-		". cl_SettingsCopyClick ."
-		". cl_SettingsCopySeparator .";
+		". cl_SettingsDecimals .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1);
+	grid-template-rows: var(--UIHeight1) auto;
 }
 
 .cl_subGrid_ColorSettings {

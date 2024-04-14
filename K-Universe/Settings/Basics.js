@@ -28,13 +28,8 @@ export const globalValues = {
 		},
 	},
 	settings: {
-		copyClick: true,
-		copySeparator: true,
 		decimals: 4,
 		fontSize: 12,
-	},
-	get copySeparatorSign() {
-		return this.settings.copySeparator ? "," : ".";
 	},
 	fontSizeArray: [6, 8, 10, 11, 12, 14, 16, 18, 20, 24, 26, 32],
 	decimalsArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -124,7 +119,6 @@ export const globalValues = {
 	},
 	globalInput: {
 		generateSpreadLists() {
-			// globalValues.globalInput.generateSpreadLists();
 			this.globalValString = [];
 			this.globalValNumber = [];
 			for (let obj in contentGrid) {
@@ -155,13 +149,10 @@ export const globalValues = {
 };
 
 //------------------GeneralSettings-------------------------------------------------------------------------------------------------------------------------------------------
-daEL(idCb_settingsCopyClick, "click", () => settingsCopyClick(idCb_settingsCopyClick));
-daEL(idCb_settingsCopySeparator, "click", () => settingsCopySeparator(idCb_settingsCopySeparator));
 daEL(idSel_settingsFontsize, "change", () => settingsFontsize(idSel_settingsFontsize));
 daEL(idSel_settingsDecimals, "change", () => settingsDecimals(idSel_settingsDecimals));
 
 export function clear_cl_GeneralSettings() {
-	settingsCopySeparator();
 	for (let i = 0; i < globalValues.fontSizeArray.length; i++) {
 		dbID("idSel_settingsFontsize").options[i] = new Option(globalValues.fontSizeArray[i], globalValues.fontSizeArray[i]);
 	}
@@ -173,12 +164,10 @@ export function clear_cl_GeneralSettings() {
 }
 
 export const storage_cl_GeneralSettings = {
-  dbName: "GeneralSettings",
+	dbName: "GeneralSettings",
 	contentName: "cl_GeneralSettings",
 	clear() {
 		this.data = {
-			copyClick: true,
-			copySeparator: true,
 			decimals: 4,
 			fontSize: 12,
 			clear: true,
@@ -195,30 +184,11 @@ export const storage_cl_GeneralSettings = {
 		}
 		//call functions without arg to toggle secific functionality
 		if (!clear) {
-			settingsCopyClick();
-			settingsCopySeparator();
 			settingsFontsize();
 			settingsDecimals();
 		}
 	},
 };
-function settingsCopyClick(obj = null) {
-	if (obj === null) {
-		dbID("idCb_settingsCopyClick").checked = globalValues.settings.copyClick; //set CB when loaded
-	} else {
-		globalValues.settings.copyClick = obj.checked;
-	}
-	KadDOM.enableBtn("idCb_settingsCopySeparator", globalValues.settings.copyClick); //disabel button, because it is not needed when you can not copy
-}
-
-function settingsCopySeparator(obj = null) {
-	if (obj === null) {
-		dbID("idCb_settingsCopySeparator").checked = globalValues.settings.copySeparator; //set CB when loaded
-	} else {
-		globalValues.settings.copySeparator = obj.checked;
-	}
-	dbID("idLbl_settingsCopySeparator").innerHTML = `Nummernformat: ' ${globalValues.copySeparatorSign} '`;
-}
 
 function settingsFontsize(obj = null) {
 	if (obj === null) {

@@ -520,7 +520,7 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	contentLayout.contentLength = 0;
-	if (contentGroupSort.length != Object.keys(contentLayout.navContent).length) console.log("Not all Groupnames contained in `contentGroupSort`");
+	if (contentGroupSort.length != KadUtils.objectLength(contentLayout.navContent)) console.log("Not all Groupnames contained in `contentGroupSort`");
 
 	for (let i = contentGroupSort.length - 1; i >= 0; i--) {
 		contentLayout.contentLength++;

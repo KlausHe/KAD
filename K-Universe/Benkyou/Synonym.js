@@ -1,4 +1,4 @@
-import { dbID, daEL, KadDOM, KadTable } from "../General/KadUtils.js";
+import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
 const synonymOptions = {
 	urlP1: "https://www.openthesaurus.de/synonyme/search?q=",
 	urlP2: "&format=application/json&similar=true&baseform=true",
@@ -66,7 +66,7 @@ function synonymCreateTable() {
 		});
 	}
 	let sets = [];
-	for (let i = 0; i < Object.keys(synonymOptions.data.synsets).length; i++) {
+	for (let i = 0; i < objectLength(synonymOptions.data.synsets); i++) {
 		sets = [...sets, ...synonymOptions.data.synsets[i].terms.map((index) => index.term)];
 	}
 	if (sets.length > 0) {
@@ -129,7 +129,7 @@ function synonymCreateTable() {
 				textAlign: "left",
 			},
 		});
-		for (let i = 0; i < Object.keys(synonymOptions.data.similarterms).length; i++) {
+		for (let i = 0; i < objectLength(synonymOptions.data.similarterms); i++) {
 			row = KadTable.insertRow("idTabBody_synonym2");
 			KadTable.addCell(row, {
 				names: ["synonym", "similarterms", i],
@@ -144,7 +144,7 @@ function synonymCreateTable() {
 					synonymGetData();
 				},
 			});
-			if (i < Object.keys(synonymOptions.data.similarterms).length - 1) {
+			if (i < objectLength(synonymOptions.data.similarterms) - 1) {
 				i++;
 				KadTable.addCell(row, {
 					names: ["synonym", "similarterms", i],
@@ -160,7 +160,7 @@ function synonymCreateTable() {
 					},
 				});
 			}
-			if (i < Object.keys(synonymOptions.data.similarterms).length - 1) {
+			if (i < objectLength(synonymOptions.data.similarterms) - 1) {
 				i++;
 				KadTable.addCell(row, {
 					names: ["synonym", "similarterms", i],

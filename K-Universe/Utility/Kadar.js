@@ -1,4 +1,4 @@
-import { daEL, dbID, KadTable, KadValue, KadDate } from "../General/KadUtils.js";
+import { daEL, dbID, objectLength, KadTable, KadValue, KadDate } from "../General/KadUtils.js";
 
 const kadarOptions = {
 	valA: null,
@@ -81,7 +81,7 @@ daEL(idBtn_kadarRefresh, "click", kadarCalculate);
 daEL(idBtn_kadarTrashB, "click", clearKadarTableBnow);
 
 export function clear_cl_Kadar() {
-  // createKadarPikaday("A");
+	// createKadarPikaday("A");
 	// createKadarPikaday("B");
 
 	kadarOptions.valA = null;
@@ -143,7 +143,7 @@ function kadarCalculate() {
 
 function kadarTable(tableID) {
 	KadTable.clear(tableID);
-	for (let i = 0; i < Object.keys(kadarOptions.calc).length; i++) {
+	for (let i = 0; i < objectLength(kadarOptions.calc); i++) {
 		const time = Object.keys(kadarOptions.calc)[i];
 		const row = KadTable.insertRow(tableID);
 

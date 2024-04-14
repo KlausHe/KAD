@@ -1,4 +1,4 @@
-import { daEL, dbID, dbIDStyle, dbCL, KadDOM, KadValue, KadTable } from "../General/KadUtils.js";
+import { daEL, dbID, dbIDStyle, dbCL, objectLength, KadDOM, KadValue, KadTable } from "../General/KadUtils.js";
 
 const pormulaOptions = {
 	valuesOrig: [3, 5, 8],
@@ -170,7 +170,7 @@ daEL(idVin_Pormula_y11, "input", idVin_Pormula_y11);
 export function clear_cl_Pormula() {
 	const selectParent = dbID("idDiv_PormulaTypeSelect");
 	KadDOM.clearFirstChild(selectParent);
-	for (let i = 0; i < Object.keys(pormulaOptions.types).length; i++) {
+	for (let i = 0; i < objectLength(pormulaOptions.types); i++) {
 		KadTable.addCell(
 			null,
 			{
@@ -306,7 +306,7 @@ function pormulaBestFit() {
 }
 
 function pormulaPolyFit() {
-	const polyI = Object.keys(pormulaOptions.types).length - 1;
+	const polyI = objectLength(pormulaOptions.types) - 1;
 	const polyName = Object.keys(pormulaOptions.types)[polyI];
 
 	let prevR = null;

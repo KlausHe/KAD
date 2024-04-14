@@ -1,4 +1,4 @@
-import { dbID, daEL, KadDOM, KadTable } from "../General/KadUtils.js";
+import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
 import { newsData } from "../News/News.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 import { globalP5 } from "../Main.js";
@@ -138,7 +138,7 @@ function analysisCreateTable() {
 				names: ["analysisPosScore", i],
 				type: "Lbl",
 				text: foundPos != null ? convertScore(data[foundPos].score) : "",
-				createCellClass: [Object.keys(data).length > 1 ? "clTab_borderThinRight" : null],
+				createCellClass: [objectLength(data) > 1 ? "clTab_borderThinRight" : null],
 				cellStyle: {
 					textAlign: "right",
 				},

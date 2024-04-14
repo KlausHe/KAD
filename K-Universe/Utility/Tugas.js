@@ -1,4 +1,4 @@
-import { daEL, deepClone, dbID, KadArray, KadDOM, KadTable } from "../General/KadUtils.js";
+import { daEL, deepClone, dbID, objectLength, KadArray, KadDOM, KadTable } from "../General/KadUtils.js";
 
 let tugasOptions = {};
 
@@ -49,7 +49,7 @@ function createTugas() {
 	//clear list
 	KadTable.clear(idTabBody_tugas);
 	let tempList = [];
-	for (let i = 0; i < Object.keys(tugasOptions).length; i++) {
+	for (let i = 0; i < objectLength(tugasOptions); i++) {
 		tempList.push({
 			name: Object.keys(tugasOptions)[i],
 			state: Object.values(tugasOptions)[i],

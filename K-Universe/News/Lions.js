@@ -1,4 +1,5 @@
 import * as KadUtils from "../General/KadUtils.js";
+import { socketPost } from "../General/KadServerCommunication.js";
 
 const lionsOptions = {
 	data: [],
@@ -11,7 +12,7 @@ export function clear_cl_Lions() {
 	KadUtils.KadDOM.resetInput("idVin_lionsInput", "1234");
 	KadUtils.dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
 	lionsOptions.data = [];
-	if (Object.keys(lionsOptions.data).length === 0) {
+	if (KadUtils.objectLength(lionsOptions.data) === 0) {
 		lionsRequestData();
 	}
 }
@@ -62,7 +63,7 @@ function lionsRequestNumber() {
 }
 
 function lionsRequestData() {
-	KadUtils.socketPost("Lions", null, lionsReturn);
+	socketPost("Lions", null, lionsReturn);
 }
 
 function lionsReturn(data) {

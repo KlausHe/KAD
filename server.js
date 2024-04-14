@@ -32,7 +32,6 @@ console.log(`Started @ Port: ${process.env.PORT}`);
 
 import { tabletojson } from "tabletojson";
 
-// const { generateRequestUrl, normaliseResponse } = require("google-translate-api-browser");
 import { generateRequestUrl, normaliseResponse } from "google-translate-api-browser";
 
 //----------------------------------Data----------------------------

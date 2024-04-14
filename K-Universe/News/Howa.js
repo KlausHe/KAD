@@ -1,4 +1,5 @@
 import * as KadUtils from "../General/KadUtils.js";
+import { socketPost } from "../General/KadServerCommunication.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
 import { globalValues } from "../Settings/Basics.js";
 
@@ -156,8 +157,7 @@ KadUtils.daEL(idSel_howaMapsCriteria, "change", howaChangeMap);
 KadUtils.daEL(idSel_howaMapsCountry, "change", howaChangeMap);
 
 export function clear_cl_Howa() {
-  KadUtils.KadDOM.resetInput("idVin_howaEntry", "Ort");
-
+	KadUtils.KadDOM.resetInput("idVin_howaEntry", "Ort");
 
 	if (howaOptions.intervalRefresh != null) {
 		clearInterval(howaOptions.intervalRefresh);
@@ -255,7 +255,7 @@ function howaReqestData() {
 		howaData.getTimer = null;
 	}
 	howaData.getTimer = setTimeout(() => {
-		KadUtils.socketPost("Howa", howaData.pos, howaReturn);
+		socketPost("Howa", howaData.pos, howaReturn);
 		howaData.getTimer = null;
 	}, 400);
 }

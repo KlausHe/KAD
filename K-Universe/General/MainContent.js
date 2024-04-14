@@ -774,9 +774,7 @@ export const rawContentGrid = {
 		contentGroup: "Global-Settings",
 		name: "GeneralSettings",
 		subgrid: [
-			["cl_SettingsCopyClick", "left"],
 			["cl_SettingsFontsize", "left"],
-			["cl_SettingsCopySeparator", "left"],
 			["cl_SettingsDecimals", "left"],
 		],
 	},

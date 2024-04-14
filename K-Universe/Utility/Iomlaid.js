@@ -1,4 +1,4 @@
-import { daEL, dbID, deepClone, error, KadDOM, KadTable, KadDate, KadValue } from "../General/KadUtils.js";
+import { daEL, dbID, deepClone, error, objectLength, KadDOM, KadTable, KadDate, KadValue } from "../General/KadUtils.js";
 import { Data_Currencies } from "../General/MainData.js";
 
 const iomlaidOptions = {
@@ -55,7 +55,7 @@ export function createIomlaidPikaday() {
 
 function iomlaidVinSet(val) {
 	iomlaidOptions.options.value = val.value == "" ? iomlaidOptions.optionsOrig.value : Number(val.value);
-	if (Object.keys(iomlaidOptions.data.latest).length == 0 || Object.keys(iomlaidOptions.data.historic).length == 0) {
+	if (objectLength(iomlaidOptions.data.latest) == 0 || objectLength(iomlaidOptions.data.historic) == 0) {
 		iomlaidCalculate();
 	} else {
 		iomlaidTable();

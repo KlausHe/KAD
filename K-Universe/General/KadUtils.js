@@ -1,5 +1,3 @@
-import { globalValues } from "../Settings/Basics.js";
-
 export function dbID(id) {
 	if (id instanceof Object) return id;
 	return document.getElementById(id);
@@ -19,52 +17,29 @@ export function dbCLStyle(id, loc = 0) {
 export function daEL(id, type, fn) {
 	dbID(id).addEventListener(type, fn);
 }
+export function objectLength(obj) {
+	return Object.keys(obj).length;
+}
 export function hostDebug() {
 	return ["local", "127.0.0.1"].some((s) => window.location.hostname.includes(s));
 }
 export function error(...errorText) {
 	throw new Error(errorText.join("; "));
 }
-export async function socketPost(app = null, data, callback) {
-	if (app == null) return;
-	if (typeof data != "object") {
-		error("NO OBJECT'", data);
-	}
-	const path = "K-Universe/";
-	const request = new Request(`${path}${app}/`, {
-		method: "POST",
-		body: data == null ? "" : JSON.stringify(data),
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-		},
-	});
-	const response = await fetch(request);
-	const obj = await response.json();
-	callback(obj);
-}
+
 export function deepClone(data) {
 	if (data === null || data === undefined) return data;
 	return JSON.parse(JSON.stringify(data));
 }
-export function copyToClipboard(text) {
-	if (!globalValues.settings.copyClick) return;
+export function copyToClipboard(text, enabled = true) {
+	if (!enabled) return;
+	if (!navigator.clipboard) return;
 	let val = text;
 	if (!isNaN(val) && Number.isFinite(Number(val))) {
 		val = val.toString().replace(/,/g, ""); //remove thousandscomma
-		val = !globalValues.settings.copyClick ? val.replace(".", ",") : val;
+		val = val.replace(".", ",");
 	}
-	if (!navigator.clipboard) {
-		// use old commandExec() way
-		let temp = document.createElement("input");
-		document.body.appendChild(temp);
-		temp.setAttribute("value", val);
-		temp.select();
-		document.execCommand("copy");
-		document.body.removeChild(temp);
-	} else {
-		navigator.clipboard.writeText(val);
-	}
+	navigator.clipboard.writeText(val);
 }
 export const KadCSS = {
 	getRoot(object, numberOnly = false, RemToPX = false) {
@@ -214,7 +189,7 @@ export const KadImage = {
 };
 export const KadValue = {
 	number(value = 1, { form = null, indicator = false, leadingDigits = 1, decimals = 1, currency = null, unit = null, notation = "standard" } = {}) {
-		const formating = form == null ? "de-DE" : globalValues.settings.copySeparator ? "de-DE" : "en-EN";
+		const formating = form == null ? "de-DE" : "," ? "de-DE" : "en-EN";
 		let options = {
 			useGrouping: indicator,
 			notation: notation,
@@ -440,7 +415,7 @@ export const KadString = {
 	firstLetterCap(s) {
 		if (s == "") return s;
 		if (typeof s != "string") return s;
-		return s[0].toUpperCase() + s.slice(1);
+		return s[0].toUpperCase() + s.slice(1).toLowerCase();
 	},
 	firstLetterLow(s) {
 		if (s == "") return s;
@@ -938,4 +913,85 @@ export const KadColor = {
 		k = Math.round(k * 100);
 		return [c, m, y, k];
 	},
+	RGBtoLuminance(RGB) {
+		let r = RGB[0] / 255;
+		let g = RGB[1] / 255;
+		let b = RGB[2] / 255;
+		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	},
 };
+export class KadDebug {
+	#lbl;
+	#text;
+	#startTime;
+	#lapTime;
+	#showLabel;
+	constructor({ label = "", showLabel = false } = {}) {
+		this.#lbl = label;
+		this.#showLabel = showLabel;
+		this.#startTime = this.#time();
+		this.#lapTime = [this.#startTime];
+		if (label) {
+			this.#newText();
+			this.#print();
+		}
+	}
+	#time() {
+		return new Date();
+	}
+	#print() {
+		console.log(this.#text);
+	}
+	#label() {
+		return this.#lbl && this.#showLabel ? `${this.#lbl} ` : "";
+	}
+	#newText(prompt) {
+		this.#text = "";
+		this.#addText(this.#label());
+		this.#addText(prompt);
+	}
+	#addText(t) {
+		if (t == undefined) return;
+		this.#text += `${t} `;
+	}
+	#elapsedtTime() {
+		return `${this.#time() - this.#startTime}ms`;
+	}
+	#intervalTime(num) {
+		return `${((this.#time() - this.#startTime) / num).toFixed(3)} / ${num}`;
+	}
+	#addLap() {
+		this.#lapTime.push(this.#time());
+	}
+
+	lap(prompt) {
+		this.#addLap();
+		this.#newText(prompt || "Lap:");
+		this.#addText(this.#lapTime.at(-1) - this.#lapTime.at(-2));
+		this.#addText("ms");
+		this.#print();
+	}
+
+	now(prompt) {
+		this.#newText(prompt);
+		this.#addText(this.#elapsedtTime());
+		this.#print();
+	}
+	reset() {
+		this.#startTime = this.#time();
+		this.#lapTime = [this.#startTime];
+	}
+
+	average(num, prompt = null) {
+		this.#newText(prompt);
+		this.#addText(this.#intervalTime(num));
+		this.#addText(`(${this.#elapsedtTime()})`);
+		this.#print();
+	}
+	startProfile() {
+		console.profile();
+	}
+	stopProfile() {
+		console.profileEnd();
+	}
+}

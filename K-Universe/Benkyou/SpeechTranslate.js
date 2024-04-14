@@ -1,4 +1,5 @@
-import { dbID, daEL, socketPost, KadDOM, KadArray } from "../General/KadUtils.js";
+import { dbID, daEL, KadDOM, KadArray } from "../General/KadUtils.js";
+import {  socketPost } from "../General/KadServerCommunication.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 
 const speechTranslateOptions = {
@@ -61,7 +62,6 @@ function speechTranslatePopulateLanguage() {
 function speechTranslatePopulateSpeech() {
 	dbID("idSel_speechSelectorFrom").innerHTML = "";
 	dbID("idSel_speechSelectorTo").innerHTML = "";
-	let lang = navigator.language.split("-")[0] || "de";
 	let fromIndex = dbID("idSel_translateSelectorFrom").selectedIndex;
 	let fromCode = dbID("idSel_translateSelectorFrom").options[fromIndex].dataset.code;
 	let toIndex = dbID("idSel_translateSelectorTo").selectedIndex;
@@ -129,6 +129,17 @@ function speechTranslateRequest(text) {
 		dbID("idArea_speechToText").value = "";
 		return;
 	}
+
+	SpeechAPI.translate("Je ne mangé pas six jours", { to: "en"}) // corsUrl: "http://cors-anywhere.herokuapp.com/" 
+		.then((res) => {
+			// I do not eat six days
+			console.log(res.text);
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	return;
 	let languages = speechLanguageChange();
 	socketPost(
 		"SpeechTranslate",
