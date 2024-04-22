@@ -1,143 +1,61 @@
+// API-Call: https://open-meteo.com/en/docs#current=temperature_2m,is_day,precipitation,rain,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation,rain,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=auto&forecast_days=14
+// https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,is_day,precipitation,rain,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation,rain,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=auto&forecast_days=14
+// GeoLocation
+// "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"
+//geoCoding
+// https://geocoding-api.open-meteo.com/v1/search?name=Berlin&count=3&language=de&format=json
+
+// Imags weather_code from openweathermap
+// https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
+
 import * as KadUtils from "../General/KadUtils.js";
-import { socketPost } from "../General/KadServerCommunication.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
 import { globalValues } from "../Settings/Basics.js";
 
-let howaData = {
-	dwdURL: "https://www.dwd.de/DWD/warnungen/warnapp_gemeinden/json/warnungen_gemeinde_map_",
-	data: [],
-	latOrig: 48.532815892352254,
-	lonOrig: 8.716694050959608,
-	pos: {},
-	getTimer: null,
-};
-
-const weaterMaps = {
+const noDWD = false;
+const weatherMaps = {
 	shown: false,
-	criteria: [
-		//
-		{
-			url: "gewitter",
-			name: "Gewitter",
-		},
-		{
-			url: "regen",
-			name: "Stark- oder Dauerregen",
-		},
-		{
-			url: "schnee",
-			name: "Schneefall",
-		},
-		{
-			url: "sturm",
-			name: "Wind (Sturm, Orkan)",
-		},
-		{
-			url: "nebel",
-			name: "Nebel",
-		},
-		{
-			url: "frost",
-			name: "Frost",
-		},
-		{
-			url: "glatteis",
-			name: "Glätte, Glatteis",
-		},
-		{
-			url: "tauwetter",
-			name: "Tauwetter",
-		},
-		{
-			url: "hitze",
-			name: "Hitze",
-		},
-		{
-			url: "uv",
-			name: "UV-Strahlung",
-		},
+	country: null,
+	criteria: null,
+	get dwdURL() {
+		return `https://www.dwd.de/DWD/warnungen/warnapp_gemeinden/json/warnungen_gemeinde_map_${this.country}_${this.criteria}.png`;
+	},
+	criteriaList: [
+		// url, Name
+		["gewitter", "Gewitter"],
+		["regen", "Stark- oder Dauerregen"],
+		["schnee", "Schneefall"],
+		["sturm", "Wind (Sturm, Orkan)"],
+		["nebel", "Nebel"],
+		["frost", "Frost"],
+		["glatteis", "Glätte, Glatteis"],
+		["tauwetter", "Tauwetter"],
+		["hitze", "Hitze"],
+		["uv", "UV-Strahlung"],
 	],
 };
 
-let howaGraph = null;
-const howaOptions = {
-	zoomed: false,
-	maxZoomedData: 9,
-	intervalRefresh: null,
-	graphTypes: [
-		{
-			label: "Temperatur",
-			yAxis: "temperature",
-			dbID: "idCb_howaTemperature",
-			checked: true,
-			dataPath: ["main", "temp"],
-			color: "black",
-		},
-		{
-			label: "Regen",
-			yAxis: "rain",
-			dbID: "idCb_howaRain",
-			checked: true,
-			dataPath: ["pop"],
-			color: "darkblue",
-		},
-		{
-			label: "Luftfeuchtigkeit",
-			yAxis: "humidity",
-			dbID: "idCb_howaHumidity",
-			checked: false,
-			dataPath: ["main", "humidity"],
-			color: "DarkMagenta",
-		},
-		{
-			label: "Luftdruck",
-			yAxis: "pressure",
-			dbID: "idCb_howaPressure",
-			checked: false,
-			dataPath: ["main", "pressure"],
-			color: "red",
-		},
-		{
-			label: "Windgeschwindigkeit",
-			yAxis: "windSpeed",
-			dbID: "idCb_howaWindSpeed",
-			checked: false,
-			dataPath: ["wind", "speed"],
-			color: "darkblue",
-		},
-		{
-			label: "Windrichtung",
-			yAxis: "windDirection",
-			dbID: "idCb_howaWindDirection",
-			checked: false,
-			dataPath: ["wind", "deg"],
-			color: "DarkMagenta",
-		},
-	],
-	datasetStyle: {
-		xAxisID: "howaDate",
-		fill: false,
-		pointStyle: "point",
-		borderWidth: 2,
-		pointRadius: 1,
-		showLine: true,
-		lineTension: 0.4,
+let howaOptions = {
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h };
 	},
-	get ticksStyle() {
-		return {
-			autoSkip: true,
-			fontSize: globalValues.mediaSizes.fontSize * 0.8,
-			autoSkipPadding: globalValues.mediaSizes.fontSize,
-			beginAtZero: false,
-		};
+	bgcCanvas: "skyblue",
+	data: { current: null, forecast: null },
+	graphData: null,
+	latOrig: 48.5328,
+	lonOrig: 8.7166,
+	latitude: 0,
+	longitude: 0,
+	city: null,
+	forecastDays: 14,
+	get urlGeoCoding() {
+		return `https://geocoding-api.open-meteo.com/v1/search?name=${this.city}&count=3&language=de&format=json`;
 	},
-	get gridLinesStyle() {
-		return {
-			gridLines: {
-				drawOnChartArea: true,
-				tickMarkLength: 5,
-			},
-		};
+	get urlCurrent() {
+		return `https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current=temperature_2m,weather_code,is_day&timezone=auto`;
+	},
+	get urlDaily() {
+		return `https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&daily=temperature_2m_min,temperature_2m_max,weather_code,precipitation_sum,wind_speed_10m_min,wind_speed_10m_max&timezone=auto&forecast_days=${this.forecastDays}`;
 	},
 };
 
@@ -145,46 +63,31 @@ KadUtils.daEL(idVin_howaEntry, "change", howaGetLocation);
 KadUtils.daEL(idVin_howaEntry, "focus", () => howaPopulateDatalist(idVin_howaEntry));
 KadUtils.daEL(idBtn_getGeoLocation, "click", howaGetCoordinates);
 KadUtils.daEL(idBtn_howaGetLocation, "click", howaGetLocation);
-KadUtils.daEL(idCb_howaTemperature, "click", howaOptionChange);
-KadUtils.daEL(idCb_howaPressure, "click", howaOptionChange);
-KadUtils.daEL(idCb_howaRain, "click", howaOptionChange);
-KadUtils.daEL(idCb_howaWindSpeed, "click", howaOptionChange);
-KadUtils.daEL(idCb_howaHumidity, "click", howaOptionChange);
-KadUtils.daEL(idCb_howaWindDirection, "click", howaOptionChange);
-KadUtils.daEL(idBtn_howaZoom, "click", () => howaZoom(idBtn_howaZoom));
-KadUtils.daEL(idBtn_howaMapsExpand, "click", howaMapsExpand);
 KadUtils.daEL(idSel_howaMapsCriteria, "change", howaChangeMap);
 KadUtils.daEL(idSel_howaMapsCountry, "change", howaChangeMap);
 
 export function clear_cl_Howa() {
 	KadUtils.KadDOM.resetInput("idVin_howaEntry", "Ort");
+	howaOptions.latitude = howaOptions.latOrig;
+	howaOptions.longitude = howaOptions.lonOrig;
+	howaOptions.city = null;
 
-	if (howaOptions.intervalRefresh != null) {
-		clearInterval(howaOptions.intervalRefresh);
-		howaOptions.intervalRefresh = null;
-	}
-	howaData.pos = {
-		location: null,
-		lat: howaData.latOrig,
-		lon: howaData.lonOrig,
-	};
-	//reset CB-Selections
-	for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-		KadUtils.dbID(howaOptions.graphTypes[i].dbID).checked = howaOptions.graphTypes[i].checked;
-	}
-
-	//populate MapSelectCriteria
-	for (let i = 0; i < weaterMaps.criteria.length; i++) {
-		KadUtils.dbID("idSel_howaMapsCriteria").options[i] = new Option(weaterMaps.criteria[i].name);
-	}
-
-	//populate MapSelectCountry
+	// populate MapSelectCountry
+	KadUtils.dbID("idSel_howaMapsCountry").options[0] = new Option("Deutschland");
 	for (let [index, land] of Data_Country_GermanDistrics.entries()) {
-		KadUtils.dbID("idSel_howaMapsCountry").options[index] = new Option(land.LandDE);
+		KadUtils.dbID("idSel_howaMapsCountry").options[index + 1] = new Option(land.LandDE);
 	}
-	KadUtils.dbIDStyle("idSel_howaMapsCriteria").display = "none";
-	KadUtils.dbIDStyle("idSel_howaMapsCountry").display = "none";
-	KadUtils.dbIDStyle("idImg_howaMapsImg").display = "none";
+
+	// populate MapSelectCriteria
+	for (let i = 0; i < weatherMaps.criteriaList.length; i++) {
+		KadUtils.dbID("idSel_howaMapsCriteria").options[i] = new Option(weatherMaps.criteriaList[i][1]);
+	}
+	KadUtils.dbID("idSel_howaMapsCriteria").options[1].selected = true;
+
+	caHO.noLoop();
+	caHO.background(globalValues.colors.elements.background);
+
+	howaChangeMap();
 	howaGetCoordinates();
 }
 
@@ -195,17 +98,17 @@ export const storage_cl_Howa = {
 		this.data = "Berlin";
 	},
 	get data() {
-		return howaData.pos.location;
+		return howaOptions.city;
 	},
 	set data(data) {
 		KadUtils.dbID("idVin_howaEntry").value = data;
-		howaGetLocation();
+		// howaGetLocation();
 	},
 };
 
 export function canvas_cl_Howa() {
-	howaRefreshGraph();
-	howaColorGraph();
+	caHO.resizeCanvas(howaOptions.canvas.w, howaOptions.canvas.h);
+	caHO.redraw();
 }
 
 function howaPopulateDatalist() {
@@ -217,9 +120,21 @@ function howaPopulateDatalist() {
 	}
 }
 
+// DWD stuff
+function howaChangeMap() {
+	if (noDWD) return;
+	const indexCountry = KadUtils.dbID("idSel_howaMapsCountry").options.selectedIndex;
+	const indexCriteria = KadUtils.dbID("idSel_howaMapsCriteria").options.selectedIndex;
+	weatherMaps.country = indexCountry == 0 ? "de" : Data_Country_GermanDistrics[indexCountry].dwd;
+	weatherMaps.criteria = weatherMaps.criteriaList[indexCriteria][0];
+	KadUtils.dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
+}
+
+// Forecast stuff
+
 function howaGetCoordinates() {
 	if ("geolocation" in navigator) {
-		howaData.pos.location = null;
+		howaOptions.city = null;
 		KadUtils.dbID("idVin_howaEntry").value = "";
 		KadUtils.dbIDStyle("idBtn_getGeoLocation").display = "initial";
 		navigator.geolocation.getCurrentPosition(howaNavigatorPosition, howaNavigatorError);
@@ -230,305 +145,138 @@ function howaGetCoordinates() {
 }
 
 function howaNavigatorPosition(data) {
-	howaData.pos.lat = data.coords.latitude || howaData.latOrig;
-	howaData.pos.lon = data.coords.longitude || howaData.lonOrig;
+	howaOptions.latitude = data.coords.latitude || howaOptions.latOrig;
+	howaOptions.longitude = data.coords.longitude || howaOptions.lonOrig;
 	howaReqestData();
 }
 
 function howaNavigatorError() {
 	KadUtils.dbID("idLbl_howaNow").textContent = "No Geolocation";
-	howaData.pos.lat = howaData.latOrig;
-	howaData.pos.lon = howaData.lonOrig;
+	howaOptions.latitude = howaOptions.latOrig;
+	howaOptions.longitude = howaOptions.lonOrig;
 	howaReqestData();
 }
 
 async function howaGetLocation() {
 	let input = KadUtils.dbID("idVin_howaEntry").value.trim();
 	if (input == "") return;
-	howaData.pos.location = input;
+	howaOptions.city = input;
+	const err = await howaGeocodingCity();
+	if (err) return;
 	howaReqestData();
 }
 
-function howaReqestData() {
-	if (howaData.getTimer != null) {
-		clearTimeout(howaData.getTimer);
-		howaData.getTimer = null;
+async function howaGeocodingCity() {
+	if (howaOptions.city == null) return;
+	let response = await fetch(howaOptions.urlGeoCoding);
+	let data = await response.json();
+	if (!data.results) {
+		KadUtils.dbID("idLbl_howaNow").textContent = "Stadt nicht gefunden";
+		return true;
 	}
-	howaData.getTimer = setTimeout(() => {
-		socketPost("Howa", howaData.pos, howaReturn);
-		howaData.getTimer = null;
-	}, 400);
+	howaOptions.latitude = data.results[0].latitude;
+	howaOptions.longitude = data.results[0].longitude;
+	return false;
 }
 
-function howaReturn(data) {
-	if (data.error) {
-		KadUtils.dbID("idLbl_howaNow").textContent = "Stadt nicht gefunden";
-		return;
-	}
-
-	if (data != null) {
-		howaData.pos.location = data.currentData.name;
-		howaData.data = [data.currentData, ...data.forecastData.list];
-	}
-	//start Interval
-	if (howaOptions.intervalRefresh === null) {
-		howaOptions.intervalRefresh = setInterval(howaReqestData, globalValues.intervalJSON);
-	}
-
-	KadUtils.dbID("idLbl_howaNow").textContent = `${howaData.pos.location}: ${howaData.data[0].main.temp}°C`;
-
-	/* Get suitable icon for howa */
-	const iconS = document.createElement("i");
-	KadUtils.dbID("idLbl_howaNow").appendChild(iconS);
-	iconS.id = "idI_howaIconNow";
-	iconS.classList.remove(...iconS.classList);
-	iconS.classList.add("wi");
-	const dayTime = KadUtils.KadDate.hourAsNumber() >= KadUtils.KadDate.hourAsNumber(howaData.data[0].sys.sunrise) && KadUtils.KadDate.hourAsNumber() < KadUtils.KadDate.hourAsNumber(howaData.data[0].sys.sunset) ? "day" : "night";
-	iconS.classList.add(`wi-owm-${dayTime}-${howaData.data[0].weather[0].id}`);
+async function howaReqestData() {
+	let responseCurrent = await fetch(howaOptions.urlCurrent);
+	howaOptions.data.current = await responseCurrent.json();
+	let responseForecast = await fetch(howaOptions.urlDaily);
+	howaOptions.data.forecast = await responseForecast.json();
+	KadUtils.dbID("idLbl_howaNow").textContent = `${howaOptions.city}: ${howaOptions.data.current.current.temperature_2m}°C`;
+	// howaOptions.data.current.weather_code: 85
+	// disabled: weather-icons.min.css
+	// const iconS = document.createElement("i");
+	// KadUtils.dbID("idLbl_howaNow").appendChild(iconS);
+	// iconS.id = "idI_howaIconNow";
+	// iconS.classList.remove(...iconS.classList);
+	// iconS.classList.add("wi");
+	// const dayTime = howaOptions.data.current.is_day? "day" : "night"
+	// iconS.classList.add(`wi-owm-${dayTime}-${howaOptions.data[0].weather[0].id}`);
 
 	//refresh Graph-data
-	howaRefreshGraph();
-	howaOptionChange();
-	howaColorGraph();
+	howaUpdateGraphData();
 }
 
-function howaZoom(obj) {
-	howaOptions.zoomed = !howaOptions.zoomed;
-	KadUtils.KadDOM.btnColor(obj, howaOptions.zoomed ? "positive" : null);
-	howaRefreshGraph();
-	howaGraph.update();
-}
-
-function howaMapsExpand() {
-	KadUtils.KadDOM.btnColor("idBtn_howaMapsExpand", weaterMaps.shown ? null : "positive");
-	if (weaterMaps.shown) {
-		KadUtils.dbIDStyle("idSel_howaMapsCriteria").display = "none";
-		KadUtils.dbIDStyle("idSel_howaMapsCountry").display = "none";
-		KadUtils.dbIDStyle("idImg_howaMapsImg").display = "none";
-	} else {
-		howaChangeMap();
+function howaUpdateGraphData() {
+	let data = [];
+	let point = howaOptions.data.forecast.daily;
+	for (let i = 0; i < howaOptions.forecastDays; i++) {
+		data.push([point.temperature_2m_min[i], point.temperature_2m_max[i]]);
 	}
-	weaterMaps.shown = !weaterMaps.shown;
-}
+	howaOptions.graphData = {
+		labels: point.time,
+		weatherCode: point.weather_code,
+		data: data,
+		min: range(point.temperature_2m_min, 0),
+		max: range(point.temperature_2m_max, 1),
+	};
+	howaDrawData();
 
-function howaChangeMap() {
-	const indexCountry = KadUtils.dbID("idSel_howaMapsCountry").options.selectedIndex;
-	const indexCriteria = KadUtils.dbID("idSel_howaMapsCriteria").options.selectedIndex;
-
-	const country = Data_Country_GermanDistrics[indexCountry].dwd;
-	const criteria = weaterMaps.criteria[indexCriteria].url;
-	KadUtils.dbID("idImg_howaMapsImg").src = `${howaData.dwdURL}${country}_${criteria}.png`;
-	KadUtils.dbIDStyle("idImg_howaMapsImg").display = "initial";
-	KadUtils.dbIDStyle("idSel_howaMapsCriteria").display = "initial";
-	KadUtils.dbIDStyle("idSel_howaMapsCountry").display = "initial";
-}
-
-function howaOptionChange() {
-	if (howaGraph != null) {
-		for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-			const dbIDName = howaOptions.graphTypes[i].dbID;
-			const yAxis = howaOptions.graphTypes[i].yAxis;
-			howaGraph.data.datasets[i].hidden = !KadUtils.dbID(dbIDName).checked;
-			const index = howaGraph.options.scales.yAxes.map((obj) => obj.id).indexOf(yAxis);
-			howaGraph.options.scales.yAxes[index].display = KadUtils.dbID(dbIDName).checked;
+	function range(arr, dir) {
+		const round = 1;
+		if (dir == 0) {
+			return Math.floor((Math.min(...arr) - 1) / round) * round;
+		} else {
+			return Math.ceil((Math.max(...arr) + 1) / round) * round;
 		}
-		howaGraph.update();
 	}
 }
 
-function howaCreateGraph() {
-	const ctx = document.getElementById("idCanv_howaGraph").getContext("2d");
-	howaGraph = new Chart(ctx, {
-		// The type of chart we want to create
-		type: "line",
-		// The data for our dataset
-		data: {
-			labels: howaData.data.map((data) => {
-				return KadUtils.KadDate.getDate(new Date(data.dt * 1000), { format: "WD HH h" });
-			}),
-			datasets: howaOptions.graphTypes.map((d, i) => {
-				return {
-					label: howaOptions.graphTypes[i].label,
-					yAxisID: howaOptions.graphTypes[i].yAxis,
-					backgroundColor: howaOptions.graphTypes[i].color,
-					borderColor: howaOptions.graphTypes[i].color,
-					...howaOptions.datasetStyle,
-				};
-			}),
-		},
-		// Configuration options go here
-		options: {
-			responsive: true,
-			maintainAspectRatio: false,
-			title: {
-				display: false,
-			},
-			legend: {
-				position: "bottom",
-				labels: {
-					filter: (legendItem, data) => {
-						return legendItem.index != 1;
-					},
-					usePointStyle: false,
-					padding: KadUtils.KadCSS.getRoot("padding", true, true),
-					boxWidth: globalValues.mediaSizes.size,
-				},
-				onClick: (e) => {},
-			},
-			tooltips: {
-				mode: "index",
-				intersect: true,
-				position: "average",
-			},
-			scales: {
-				xAxes: [
-					{
-						id: "howaDate",
-						position: "bottom",
-						display: true,
-						ticks: {
-							autoSkip: true,
-							autoSkipPadding: globalValues.mediaSizes.fontSize * 0.8,
-							fontSize: globalValues.mediaSizes.fontSize * 0.8,
-							beginAtZero: false,
-						},
-						...howaOptions.gridLinesStyle,
-					},
-				],
-				yAxes: [
-					{
-						id: "temperature",
-						type: "linear",
-						position: "left",
-						display: true,
-						ticks: {
-							callback: (value) => {
-								return `${value}°C`;
-							},
-							...howaOptions.ticksStyle,
-						},
-						...howaOptions.gridLinesStyle,
-					},
-					{
-						id: "rain",
-						type: "linear",
-						position: "left",
-						display: true,
-						ticks: {
-							callback: (value) => {
-								return `${value * 100}%`;
-							},
-							max: 1,
-							...howaOptions.ticksStyle,
-						},
-						...howaOptions.gridLinesStyle,
-					},
-					{
-						id: "humidity",
-						type: "linear",
-						position: "left",
-						display: false,
-						ticks: {
-							callback: (value) => {
-								return `${value}%`;
-							},
-							beginAtZero: true,
-							max: 100,
-							...howaOptions.ticksStyle,
-						},
-						...howaOptions.gridLinesStyle,
-					},
-					{
-						id: "pressure",
-						type: "linear",
-						position: "right",
-						display: false,
-						ticks: {
-							callback: (value) => {
-								return `${value}hPa`;
-							},
-							...howaOptions.ticksStyle,
-							fontSize: globalValues.mediaSizes.fontSize * 0.6,
-						},
-						...howaOptions.gridLinesStyle,
-					},
-					{
-						id: "windSpeed",
-						type: "linear",
-						position: "right",
-						display: false,
-						ticks: {
-							callback: (value) => {
-								return `${value}m/s`;
-							},
-							...howaOptions.ticksStyle,
-						},
-						...howaOptions.gridLinesStyle,
-					},
-					{
-						id: "windDirection",
-						type: "linear",
-						position: "right",
-						display: false,
-						ticks: {
-							callback: (value) => {
-								const arr = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "W"];
-								const corr = value + 22.5;
-								for (let i = arr.length - 1; i >= 0; i--) {
-									if (corr > i * 45) {
-										return arr[i];
-									}
-								}
-							},
-							...howaOptions.ticksStyle,
-							beginAtZero: true,
-							max: 360,
-							stepSize: 45,
-						},
-						...howaOptions.gridLinesStyle,
-					},
-				],
-			},
-		},
-	});
-}
+const caHO = new p5((c) => {
+	c.setup = function () {
+		c.canv = c.createCanvas(howaOptions.canvas.w, howaOptions.canvas.h);
+		c.canv.id("canvasHowa");
+		c.canv.parent("#idCanv_howa");
+		c.colorMode(c.HSL);
+		c.textAlign(c.CENTER, c.CENTER);
+		c.noLoop();
+		c.redraw();
+	};
+	c.draw = function () {
+		howaDrawData();
+	};
+}, "#idCanv_howa");
 
-function howaRefreshGraph() {
-	if (howaGraph === null) {
-		howaCreateGraph();
+function howaDrawData() {
+	caHO.background(howaOptions.bgcCanvas);
+	const graph = howaOptions.graphData;
+	if (graph == null) return;
+	const len = KadUtils.objectLength(graph.data);
+	const rowHeight = howaOptions.canvas.h / len;
+	const offsetTop = rowHeight * padding;
+	const barHeight = rowHeight - 2 * offsetTop;
+	const dayWidth = howaOptions.canvas.w * 0.08;
+	const tempWidth = howaOptions.canvas.w * 0.1;
+	const imgWidth = howaOptions.canvas.w * 0.1;
+
+	for (let i = 0; i < len; i++) {
+		const point = graph.data[i];
+
+		const y = offsetTop + rowHeight * i;
+
+		caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
+		caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
+		caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
+		caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
+
+		caHO.fill(globalValues.colors.elements.line);
+		caHO.textSize(globalValues.mediaSizes.fontSize);
+		caHO.text(KadUtils.KadDate.getDate(graph.labels[i], { format: "WD" }), dayWidth / 2, y + rowHeight / 2);
+		caHO.text(graph.weatherCode[i], dayWidth + tempWidth / 2, y + rowHeight / 2);
+		caHO.text(`${point[0]}°`, dayWidth + tempWidth + tempWidth / 2, y + rowHeight / 2);
+		caHO.text(`${point[1]}°`, howaOptions.canvas.w - tempWidth / 2, y + rowHeight / 2);
+
+		const x = howaMap(point[0]);
+		const barWidth = howaMap(point[1]);
+		caHO.fill("orange");
+		caHO.rect(x, y, barWidth - x, barHeight, 10);
 	}
-	howaGraph.data.labels = howaData.data.reduce((result, data, index) => {
-		if (howaOptions.zoomed && index >= howaOptions.maxZoomedData) {
-			return result;
-		}
-		result.push(KadUtils.KadDate.getDate(new Date(data.dt * 1000), { format: "WD HH h" }).replace(" h", "h"));
-		return result;
-	}, []);
 
-	for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-		howaGraph.data.datasets[i].data = howaData.data.reduce((result, d, index) => {
-			const pathArr = howaOptions.graphTypes[i].dataPath;
-			if (pathArr.length == 1) {
-				result.push(d[pathArr[0]]);
-			} else {
-				result.push(d[pathArr[0]][pathArr[1]]);
-			}
-			return result;
-		}, []);
+	function howaMap(p) {
+		return KadUtils.KadValue.mapping(p, graph.min, graph.max, dayWidth + tempWidth + imgWidth, howaOptions.canvas.w - tempWidth);
 	}
 }
 
-function howaColorGraph() {
-	const lCol = globalValues.colors.elements.line;
-	const tCol = KadUtils.KadColor.formatAsCSS(globalValues.colors.elements.text, "HSL");
-	howaGraph.options.legend.labels.fontColor = tCol;
-	howaGraph.options.scales.xAxes[0].ticks.fontColor = tCol;
-	howaGraph.options.scales.xAxes[0].gridLines.color = KadUtils.KadColor.formatAsCSS([...lCol, 0.2], "HSL");
-
-	for (let i = 0; i < howaOptions.graphTypes.length; i++) {
-		const alpha = KadUtils.KadValue.mapping(i, 0, howaOptions.graphTypes.length - 1, 0.8, 0.2, true);
-		howaGraph.options.scales.yAxes[i].gridLines.color = KadUtils.KadColor.formatAsCSS([...lCol, alpha], "HSL");
-		howaGraph.options.scales.yAxes[i].ticks.fontColor = howaOptions.graphTypes[i].color;
-	}
-	howaGraph.update();
-}
+const padding = 0.1;

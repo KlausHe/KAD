@@ -52,7 +52,7 @@ export const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: KadUtils.hostDebug() ? "Benkyou" : "Universe",
+	defaultPage: KadUtils.hostDebug() ? "cl_Howa" : "Universe",
 };
 
 export function createContentlayoutList() {

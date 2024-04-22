@@ -1,5 +1,7 @@
+import { translate } from "https://cdn.jsdelivr.net/npm/google-translate-api-browser@5.0.0/+esm";
+
 import { dbID, daEL, KadDOM, KadArray } from "../General/KadUtils.js";
-import {  socketPost } from "../General/KadServerCommunication.js";
+import { socketPost } from "../General/KadServerCommunication.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 
 const speechTranslateOptions = {
@@ -125,12 +127,13 @@ function speechSpeak(out) {
 }
 
 function speechTranslateRequest(text) {
+	console.log(isSupported("de"));
 	if (text === undefined || text == "") {
 		dbID("idArea_speechToText").value = "";
-		return;
+		// return;
 	}
 
-	SpeechAPI.translate("Je ne mangé pas six jours", { to: "en"}) // corsUrl: "http://cors-anywhere.herokuapp.com/" 
+	translate("Je ne mangé pas six jours", { to: "en" })
 		.then((res) => {
 			// I do not eat six days
 			console.log(res.text);
@@ -138,7 +141,6 @@ function speechTranslateRequest(text) {
 		.catch((err) => {
 			console.error(err);
 		});
-
 	return;
 	let languages = speechLanguageChange();
 	socketPost(

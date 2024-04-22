@@ -253,12 +253,7 @@ export const rawContentGrid = {
 		subgrid: [
 			["cl_HowaInput", "center", "end"],
 			["cl_HowaNow", "center", "end"],
-			["cl_HowaOptionsA", "left"],
-			["cl_HowaOptionsB", "left"],
-			["cl_HowaOptionsC", "left"],
 			["cl_HowaGraph", "center"],
-			["cl_HowaZoom", "center"],
-			["cl_HowaMapsExpand", "center"],
 			["cl_HowaMapsSelectCountry", "right"],
 			["cl_HowaMapsSelectCriteria", "left"],
 			["cl_HowaMapsImg", "center"],
