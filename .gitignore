@@ -1,6 +1,7 @@
 Collections
 node_modules
 .env
+delete
 .DS_Store
 test.js
 jsconfig.json

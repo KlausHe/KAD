@@ -2,7 +2,6 @@ import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.
 import { newsData } from "../News/News.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 import { globalP5 } from "../Main.js";
-import { nuncDiscipuli } from "../General/Account.js";
 
 const analysisOptions = {
 	data: null,

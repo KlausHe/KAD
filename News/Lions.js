@@ -1,5 +1,5 @@
 import * as KadUtils from "../General/KadUtils.js";
-import { socketPost } from "../General/KadServerCommunication.js";
+// import { socketPost } from "../General/KadServerCommunication.js";
 
 const lionsOptions = {
 	data: [],
@@ -63,6 +63,7 @@ function lionsRequestNumber() {
 }
 
 function lionsRequestData() {
+	return;
 	socketPost("Lions", null, lionsReturn);
 }
 

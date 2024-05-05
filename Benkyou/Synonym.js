@@ -1,7 +1,8 @@
 import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
 const synonymOptions = {
-	urlP1: "https://www.openthesaurus.de/synonyme/search?q=",
-	urlP2: "&format=application/json&similar=true&baseform=true",
+	get URL() {
+		return `https://www.openthesaurus.de/synonyme/search?q=${this.input}&format=application/json&similar=true&baseform=true`;
+	},
 	input: "",
 	data: {},
 };
@@ -28,7 +29,7 @@ function newSynonym() {
 
 async function synonymGetData() {
 	try {
-		let response = await fetch(`${synonymOptions.urlP1}${synonymOptions.input}${synonymOptions.urlP2}`);
+		let response = await fetch(synonymOptions.URL);
 		synonymOptions.data = await response.json();
 		dbID("idLbl_synonymSearchWord").textContent = synonymOptions.input;
 		synonymCreateTable();

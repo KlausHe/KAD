@@ -20,16 +20,15 @@ export const rawContentGrid = {
 			["cl_AnalysisTabResult", "center"],
 		],
 	},
-	cl_SpeechTranslate: {
+	cl_Speech: {
 		userSelected: true,
 		contentGroup: "Benkyou",
 		globalValString: "idArea_speechFromText",
-		name: "Discipuli",
-		heritage: ["latein", "Student"],
+		name: "Speech",
+		heritage: ["englisch", "Sprache"],
 		subgrid: [
 			["cl_SpeechLangSelect", "center"],
 			["cl_SpeechVoiceSelect", "center"],
-			["cl_SpeechOptions", "center"],
 			["cl_SpeechOutputArea", "center"],
 		],
 	},

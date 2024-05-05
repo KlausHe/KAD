@@ -7,7 +7,7 @@ export { clear_cl_UserGridLayout } from "./Settings/Usergridlayout.js";
 export { clear_cl_MaterialFilterSettings } from "./Settings/MaterialFilterSettings.js";
 //Benkyou
 export { clear_cl_Analysis } from "./Benkyou/Analysis.js";
-export { clear_cl_SpeechTranslate } from "./Benkyou/SpeechTranslate.js";
+export { clear_cl_Speech } from "./Benkyou/Speech.js";
 export { clear_cl_Synonym } from "./Benkyou/Synonym.js";
 export { clear_cl_WikiSearch } from "./Benkyou/WikiSearch.js";
 // //Games

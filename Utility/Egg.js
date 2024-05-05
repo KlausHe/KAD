@@ -1,4 +1,5 @@
-import { daEL, dbID, KadDOM , KadDate} from "../General/KadUtils.js";
+import { daEL, dbID, KadDOM, KadDate } from "../General/KadUtils.js";
+import { speechSpeakOutput } from "../Benkyou/Speech.js";
 
 const eggOptions = {
 	timerEggCount: null,

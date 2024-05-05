@@ -28,6 +28,7 @@
   <link href="CSS/CSSinputLayout.css" rel="stylesheet" type="text/css">
   <!-- <link href="CSS/CSSpikaday.css" rel="stylesheet" type="text/css"> -->
   <!-- <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css"> -->
+
   <script src="Data/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js" integrity="sha512-0k6FXllQktdobw8Nc8KQN2WtZrOuxpMn7jC2RKCF6LR7EdOhhrg3H5cBPxhs3CFzQVlO6ni1B9SDLUPhBs0Alg==" crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
@@ -80,24 +81,18 @@
         </div>
       </div>
     </section>
-    <section class="cl_SpeechTranslate" style="display:none;">
-      <div class="cl_subGrid_SpeechTranslate cl_subGrid">
+    <section class="cl_Speech" style="display:none;">
+      <div class="cl_subGrid_Speech cl_subGrid">
         <div class="cl_SpeechLangSelect" uiWrap="nowrap">
-          <select id="idSel_translateSelectorFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size3" uiRadius="none">from</label><button type="button" id="idBtn_TranslateSwitch" uiSize="size1" uiRadius="none">
-            <img src="Data/Images/SVG/code.svg"></img>
-          </button><label class="cl_info" uiSize="size3" uiRadius="left">to</label><select id="idSel_translateSelectorTo" uiSize="size6" uiRadius="none"></select>
+          <select id="idSel_speechLanguageFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size3" uiRadius="none">from</label><button type="button" id="idBtn_speechSwitch" uiSize="size1"
+            uiRadius="none"><img src="Data/Images/SVG/code.svg"></img>
+          </button><label class="cl_info" uiSize="size3" uiRadius="left">to</label><select id="idSel_speechLanguageTo" uiSize="size6" uiRadius="none"></select>
         </div>
         <div class="cl_SpeechVoiceSelect" uiWrap="nowrap">
-          <select id="idSel_speechSelectorFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size4" uiRadius="none">Voices</label><select id="idSel_speechSelectorTo" uiSize="size6" uiRadius="right"></select>
-        </div>
-        <div class="cl_SpeechOptions" uiWrap="nowrap">
           <button type="button" id="idBtn_speechSpeakFrom" uiSize="size1" uiType="transparent">
             <img class="img_OptRadio" src="Data/Images/SVG/radio.svg" style="filter:invert(var(--invBackground));"></img>
-          </button>
-          <button type="button" id="idBtn_speechTranslateOnly">Translate
-            only</button>
-          <button type="button" id="idBtn_speechTranslateSpeak">Translate&Speak</button>
-          <button type="button" id="idBtn_speechSpeakTo" uiSize="size1" uiType="transparent">
+          </button><select id="idSel_speechVoiceFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size4" uiRadius="none">Voices</label><select id="idSel_speechVoiceTo" uiSize="size6"
+            uiRadius="right"></select><button type="button" id="idBtn_speechSpeakTo" uiSize="size1" uiType="transparent">
             <img class="img_OptRadio" src="Data/Images/SVG/radio.svg" style="filter:invert(var(--invBackground));"></img>
           </button>
         </div>

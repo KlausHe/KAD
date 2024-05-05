@@ -62,7 +62,6 @@
 		". cl_HowaInput cl_HowaMapsSelectCountry cl_HowaMapsSelectCriteria ."
 		". cl_HowaNow cl_HowaMapsImg cl_HowaMapsImg ."
 		". cl_HowaGraph cl_HowaMapsImg cl_HowaMapsImg .";
-
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) var(--UIHeight2) auto;
 }
@@ -497,14 +496,13 @@
 	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto auto;
 }
 
-.cl_subGrid_SpeechTranslate {
+.cl_subGrid_Speech {
 	grid-template-areas:
 		". cl_SpeechLangSelect ."
 		". cl_SpeechVoiceSelect ."
-		". cl_SpeechOptions ."
 		". cl_SpeechOutputArea .";
 	grid-template-columns: 1fr auto 1fr;
-	grid-template-rows: var(--UIHeight1) var(--UIHeight1) var(--UIHeight1) auto;
+	grid-template-rows: var(--UIHeight1) var(--UIHeight1) auto;
 }
 
 .cl_subGrid_WikiSearch {
