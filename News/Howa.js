@@ -37,7 +37,7 @@ const weatherMaps = {
 
 let howaOptions = {
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h };
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h*0.8 };
 	},
 	bgcCanvas: "skyblue",
 	data: { current: null, forecast: null },
@@ -230,7 +230,7 @@ const caHO = new p5((c) => {
 		c.canv.id("canvasHowa");
 		c.canv.parent("#idCanv_howa");
 		c.colorMode(c.HSL);
-		c.textAlign(c.CENTER, c.CENTER);
+		c.textAlign(c.CENTER, c.BOTTOM);
 		c.noLoop();
 		c.redraw();
 	};
@@ -245,7 +245,7 @@ function howaDrawData() {
 	if (graph == null) return;
 	const len = KadUtils.objectLength(graph.data);
 	const rowHeight = howaOptions.canvas.h / len;
-	const offsetTop = rowHeight * padding;
+	const offsetTop = rowHeight * 0.25;
 	const barHeight = rowHeight - 2 * offsetTop;
 	const dayWidth = howaOptions.canvas.w * 0.08;
 	const tempWidth = howaOptions.canvas.w * 0.1;
@@ -278,5 +278,3 @@ function howaDrawData() {
 		return KadUtils.KadValue.mapping(p, graph.min, graph.max, dayWidth + tempWidth + imgWidth, howaOptions.canvas.w - tempWidth);
 	}
 }
-
-const padding = 0.1;

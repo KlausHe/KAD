@@ -52,7 +52,7 @@ export const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: KadUtils.hostDebug() ? "cl_Speech" : "Universe",
+	defaultPage: KadUtils.hostDebug() ? "cl_Iomlaid" : "Universe",
 };
 
 export function createContentlayoutList() {
@@ -296,7 +296,6 @@ export function createSubgrid() {
 
 		const dropIconParent = KadUtils.KadTable.createCell("Div", {
 			names: ["navIcon", gridKey],
-			type: "Div",
 			createClass: ["cl_DropdownParent"],
 			onclick: () => {
 				navClick(contGroup);
@@ -311,7 +310,6 @@ export function createSubgrid() {
 		dropIconParent.appendChild(dropIconImg);
 		const dropIconText = KadUtils.KadTable.createCell("Lbl", {
 			names: ["titleIcon", gridKey],
-			type: "Lbl",
 			text: `Gehe zu Kathegorie ${contGroup}.`,
 			createClass: ["clDropdown", "cl_DropdownInfo"],
 		});
@@ -320,7 +318,6 @@ export function createSubgrid() {
 		//name --> TITLE
 		const titleDiv = KadUtils.KadTable.createCell("Div", {
 			names: ["titleName", gridKey],
-			type: "Div",
 			createClass: ["cl_DropdownParent"],
 		});
 		parent.appendChild(titleDiv);
@@ -336,7 +333,6 @@ export function createSubgrid() {
 			if (heritage.length > 0) {
 				const dropNameText = KadUtils.KadTable.createCell("Lbl", {
 					names: ["titleDropName", gridKey],
-					type: "Lbl",
 					text: `\"${displayName}\" ist ${heritage[0]} und bedeutet \"${heritage[1]}\"`,
 					createClass: ["clDropdown", "clDropdownName"],
 				});
@@ -348,7 +344,6 @@ export function createSubgrid() {
 		if (contentObj.hasOwnProperty("info")) {
 			const dropInfoParent = KadUtils.KadTable.createCell("Div", {
 				names: ["titleInfo", gridKey],
-				type: "Div",
 				createClass: ["cl_DropdownParent"],
 			});
 			parent.appendChild(dropInfoParent);
@@ -360,7 +355,6 @@ export function createSubgrid() {
 			dropInfoParent.appendChild(dropInfoImg);
 			const dropInfoText = KadUtils.KadTable.createCell("Lbl", {
 				names: ["titleInfo", gridKey],
-				type: "Lbl",
 				text: contentObj.info,
 				createClass: ["clDropdown", "cl_DropdownInfo"],
 			});
@@ -373,7 +367,6 @@ export function createSubgrid() {
 				const dropSourceParent = KadUtils.KadTable.createCell("Div", {
 					names: ["titleSource", gridKey, key],
 					createClass: ["cl_DropdownParent"],
-					type: "Div",
 				});
 				parent.appendChild(dropSourceParent);
 				const dropSourceImg = KadUtils.KadTable.createCell("Img", {
@@ -387,7 +380,6 @@ export function createSubgrid() {
 				dropSourceParent.appendChild(dropSourceImg);
 				const dropSourceText = KadUtils.KadTable.createCell("Lbl", {
 					names: ["titleSource", "text", gridKey],
-					type: "Lbl",
 					text: `${key} von:<br>${value}<br>(Opens in a new Tab)`,
 					createClass: ["clDropdown", "cl_DropdownInfo"],
 					onclick: () => {
@@ -400,7 +392,6 @@ export function createSubgrid() {
 		//DEBUG-LABEL
 		const dropSpaceParent = KadUtils.KadTable.createCell("Div", {
 			names: ["titleSpace", gridKey],
-			type: "Div",
 			style: {
 				flex: 1,
 			},
@@ -411,7 +402,6 @@ export function createSubgrid() {
 			//UPLOAD
 			const titleUploadParent = KadUtils.KadTable.createCell("Div", {
 				names: ["gridtitle", "dbUL", gridKey],
-				type: "Div",
 				createClass: ["ULParent"],
 				style: {
 					display: "none",
@@ -420,7 +410,6 @@ export function createSubgrid() {
 			parent.appendChild(titleUploadParent);
 			const titleUploadBtn = KadUtils.KadTable.createCell("Btn", {
 				names: ["gridtitle", "dbUL", gridKey],
-				type: "Btn",
 				subGroup: "gridtitle",
 				img: "upload",
 				ui: {
@@ -436,7 +425,6 @@ export function createSubgrid() {
 			//DOWNLOAD
 			const titleDownloadParent = KadUtils.KadTable.createCell("Div", {
 				names: ["gridtitle", "dbDL", gridKey],
-				type: "Div",
 				createClass: ["DLParent"],
 				style: {
 					display: "none",
@@ -446,7 +434,6 @@ export function createSubgrid() {
 
 			const titleDownloadBtn = KadUtils.KadTable.createCell("Btn", {
 				names: ["gridtitle", "dbDL", gridKey],
-				type: "Btn",
 				subGroup: "gridtitle",
 				img: "download",
 				ui: {
@@ -463,12 +450,10 @@ export function createSubgrid() {
 		//fullscreen this subgrid
 		const titleFullParent = KadUtils.KadTable.createCell("Div", {
 			names: ["gridtitle", "full", gridKey],
-			type: "Div",
 		});
 		parent.appendChild(titleFullParent);
 		const titleFullBtn = KadUtils.KadTable.createCell("Btn", {
 			names: ["gridtitle", "full", gridKey],
-			type: "Btn",
 			subGroup: "gridtitle",
 			img: "fullscreen",
 			ui: {
@@ -484,12 +469,10 @@ export function createSubgrid() {
 		//clear --> refresh
 		const titleTrashParent = KadUtils.KadTable.createCell("Div", {
 			names: ["gridtitle", "trash", gridKey],
-			type: "Div",
 		});
 		parent.appendChild(titleTrashParent);
 		const titleTrashBtn = KadUtils.KadTable.createCell("Btn", {
 			names: ["gridtitle", "trash", gridKey],
-			type: "Btn",
 			subGroup: "gridtitle",
 			img: "trash",
 			ui: {
@@ -527,7 +510,6 @@ export function createNavbar() {
 		const obj = contentGroupSort[i];
 		const navParentDiv = KadUtils.KadTable.createCell("Div", {
 			names: ["navBar", obj],
-			type: "Div",
 			createClass: ["cl_navElements"],
 			idNoChild: true,
 			style: {
@@ -545,7 +527,6 @@ export function createNavbar() {
 		const navParentLbl = KadUtils.KadTable.createCell("Lbl", {
 			names: ["navBarLbl", obj],
 			createClass: ["cl_navNames"],
-			type: "Lbl",
 			idNoChild: true,
 			text: obj,
 		});
@@ -567,7 +548,6 @@ export function createFooter() {
 		const dropSourceParent = KadUtils.KadTable.createCell("Div", {
 			names: ["footerSource", index],
 			createClass: ["cl_DropdownParent", "clFooterCredits"],
-			type: "Div",
 			// title: `${name} von:\n${url}\n(Opens in a new Tab)`,
 		});
 		parent.appendChild(dropSourceParent);
@@ -583,7 +563,6 @@ export function createFooter() {
 		dropSourceParent.appendChild(dropSourceImg);
 		const dropSourceText = KadUtils.KadTable.createCell("Lbl", {
 			names: ["footerSource", index],
-			type: "Lbl",
 			text: `${name} von:<br>${url}<br>(Opens in a new Tab)`,
 			createClass: ["clDropup", "cl_DropdownInfo"],
 			onclick: () => {

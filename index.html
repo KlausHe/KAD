@@ -84,8 +84,8 @@
     <section class="cl_Speech" style="display:none;">
       <div class="cl_subGrid_Speech cl_subGrid">
         <div class="cl_SpeechLangSelect" uiWrap="nowrap">
-          <select id="idSel_speechLanguageFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size3" uiRadius="none">from</label><button type="button" id="idBtn_speechSwitch" uiSize="size1"
-            uiRadius="none"><img src="Data/Images/SVG/code.svg"></img>
+          <select id="idSel_speechLanguageFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size3" uiRadius="none">from</label><button type="button" id="idBtn_speechSwitch" uiSize="size1" uiRadius="none"><img
+              src="Data/Images/SVG/code.svg"></img>
           </button><label class="cl_info" uiSize="size3" uiRadius="left">to</label><select id="idSel_speechLanguageTo" uiSize="size6" uiRadius="none"></select>
         </div>
         <div class="cl_SpeechVoiceSelect" uiWrap="nowrap">
@@ -1242,22 +1242,25 @@
     </section>
     <section class="cl_Iomlaid" style="display:none;">
       <div class="cl_subGrid_Iomlaid cl_subGrid">
+        <div class="cl_IomlaidSelCur">
+          <select id="idSel_IomlaidCur"></select>
+        </div>
         <div class="cl_IomlaidVinCur" uiWrap="nowrap">
           <input type="number" id="idVin_IomlaidCur" uiSize="size6" uiRadius="left" min="0" step="0.01"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
-        <div class="cl_IomlaidSelCur">
-          <select name="idSel_IomlaidCur" id="idSel_IomlaidCur"></select>
+        <div class="cl_IomlaidVinDate">
+          <input type="date" id="idVin_IomlaidDate"></input>
         </div>
         <div class="cl_IomlaidTab clDiv_overviewTablesAuto">
           <table id="idTab_Iomlaid">
             <thead id="idTabHeader_Iomlaid" class="scrollTable">
               <tr>
                 <th id="idTabHeader_iomlaidRequestedAmount" rowspan="2" colspan="1"></th>
-                <th id="idTabHeader_iomlaidLatestDate" colspan="2"> Heute</th>
-                <th id="idTabHeader_iomlaidDatedDate" colspan="2"><button type="button" id="idBtn_iomlaidDate" uiSize="size6"></button></th>
+                <th id="idTabHeader_iomlaidLatestDate" colspan="2">Heute</th>
+                <th id="idTabHeader_iomlaidDatedDate" colspan="2"></th>
               </tr>
               <tr>
                 <th>Kurs</th>

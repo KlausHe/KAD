@@ -1,87 +1,85 @@
-import { daEL, dbID, deepClone, error, objectLength, KadDOM, KadTable, KadDate, KadValue } from "../General/KadUtils.js";
+// https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
+import { daEL, dbID, error, objectLength, KadDOM, KadTable, KadDate, KadValue } from "../General/KadUtils.js";
 import { Data_Currencies } from "../General/MainData.js";
 
 const iomlaidOptions = {
-	url: "https://api.exchangerate.host",
-	data: {},
-	options: {},
+	get URLnow() {
+		return `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${iomlaidOptions.baseCurrency.toLowerCase()}.min.json`;
+
+		// return `https://api.exchangerate.host${date}?base=${iomlaidOptions.baseCurrency}`;
+		// return `https://api.exchangerate.host${date}?base=${iomlaidOptions.baseCurrency}`;
+	},
+	get URLhistoric() {
+		return `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${this.date}/v1/currencies/${iomlaidOptions.baseCurrency.toLowerCase()}.min.json`;
+		// return `https://api.exchangerate.host${this.date}?base=${iomlaidOptions.baseCurrency}`;
+	},
+	latest: null,
+	historic: null,
+	dataReceived: false,
+	baseCurrency: null,
 	optionsOrig: {
-		base: "EUR",
+		baseCurrency: "EUR",
 		value: 10,
 		date: null,
 	},
+	value: 10,
+	date: null,
 	dateFormat: "YYYY-MM-DD",
 };
-let iomlaidPicker;
 
-daEL(idVin_IomlaidCur, "input", () => iomlaidVinSet(idVin_IomlaidCur));
-daEL(idSel_IomlaidCur, "change", () => iomlaidSelSet(idSel_IomlaidCur));
+daEL(idSel_IomlaidCur, "change", iomlaidCurrencyChange);
+daEL(idVin_IomlaidDate, "input", iomlaidDateChange);
+daEL(idVin_IomlaidCur, "input", iomlaidValueChange);
 
 export function clear_cl_Iomlaid() {
+	iomlaidOptions.dataReceived = false;
+	iomlaidOptions.latest = {};
+	iomlaidOptions.historic = {};
+	iomlaidOptions.baseCurrency = iomlaidOptions.optionsOrig.baseCurrency;
+
 	let dateStart = new Date();
 	dateStart.setDate(dateStart.getDate() - 365);
-	iomlaidOptions.data = {
-		latest: {},
-		historic: {},
-	};
-	iomlaidOptions.options = deepClone(iomlaidOptions.optionsOrig);
-	iomlaidOptions.options.date = KadDate.getDate(dateStart, { format: iomlaidOptions.dateFormat });
-
-	for (let [key, value] of Data_Currencies) {
-		let option1 = document.createElement("option");
-		option1.textContent = `${key} (${value})`;
-		option1.setAttribute("data-base", key);
-		dbID("idSel_IomlaidCur").appendChild(option1);
+	iomlaidOptions.optionsOrig.date = KadDate.getDate(dateStart, { format: iomlaidOptions.dateFormat });
+	iomlaidOptions.date = KadDOM.resetInput("idVin_IomlaidDate", iomlaidOptions.optionsOrig.date, { min: "2024-03-01" });
+	for (let currency of Data_Currencies) {
+		let option = document.createElement("option");
+		option.textContent = `${currency.cc} (${currency.name})`;
+		option.value = currency.cc;
+		if (currency.cc == "EUR") {
+			option.selected = true;
+		}
+		dbID("idSel_IomlaidCur").appendChild(option);
 	}
-	dbID("idSel_IomlaidCur").options[8].selected = true;
 
-	KadDOM.resetInput("idVin_IomlaidCur", iomlaidOptions.options.value);
-	dbID("idBtn_iomlaidDate").textContent = KadDate.getDate(iomlaidOptions.options.date);
-	iomlaidCalculate();
+	iomlaidOptions.value = KadDOM.resetInput("idVin_IomlaidCur", iomlaidOptions.optionsOrig.value);
+	iomlaidGetData();
 }
 
-export function createIomlaidPikaday() {
-	iomlaidPicker = new Pikaday({
-		field: dbID("idBtn_iomlaidDate"),
-		showTime: false,
-		i18n: Data_i18nDE,
-		minDate: new Date(2000, 1, 1),
-		maxDate: new Date(),
-		onSelect: function () {
-			iomlaidSelDate(iomlaidPicker._d);
-		},
-	});
+function iomlaidCurrencyChange() {
+	iomlaidOptions.baseCurrency = dbID(idSel_IomlaidCur).value;
+	iomlaidGetData();
+}
+function iomlaidDateChange() {
+	iomlaidOptions.date = KadDate.dateFromInput(idVin_IomlaidDate, iomlaidOptions.dateFormat);
+	iomlaidGetData();
 }
 
-function iomlaidVinSet(val) {
-	iomlaidOptions.options.value = val.value == "" ? iomlaidOptions.optionsOrig.value : Number(val.value);
-	if (objectLength(iomlaidOptions.data.latest) == 0 || objectLength(iomlaidOptions.data.historic) == 0) {
-		iomlaidCalculate();
-	} else {
-		iomlaidTable();
-	}
+function iomlaidValueChange() {
+	iomlaidOptions.value = KadDOM.numberFromInput(idVin_IomlaidCur, iomlaidOptions.optionsOrig.value);
+	iomlaidTable();
 }
 
-function iomlaidSelSet(sel) {
-	iomlaidOptions.options.base = sel.options[sel.selectedIndex].dataset.base;
-	iomlaidCalculate();
-}
-
-function iomlaidSelDate(date) {
-	iomlaidOptions.options.date = KadDate.getDate(date, { format: iomlaidOptions.dateFormat });
-	dbID("idBtn_iomlaidDate").textContent = KadDate.getDate(date);
-	iomlaidCalculate();
-}
-
-async function iomlaidCalculate() {
-	let date = KadDate.getDate(null, { format: iomlaidOptions.dateFormat });
+async function iomlaidGetData() {
+	iomlaidOptions.dataReceived = false;
 	try {
-		const fetches = [fetch(`${iomlaidOptions.url}/${date}?base=${iomlaidOptions.options.base}`), fetch(`${iomlaidOptions.url}/${iomlaidOptions.options.date}?base=${iomlaidOptions.options.base}`)];
-		// console.log(`${iomlaidOptions.url}/${date}?base=${iomlaidOptions.options.base}`, `${iomlaidOptions.url}/${iomlaidOptions.options.date}?base=${iomlaidOptions.options.base}`);
-		let results = await Promise.all(fetches);
+		let results = await Promise.all([fetch(iomlaidOptions.URLnow), fetch(iomlaidOptions.URLhistoric)]);
 		let data = await Promise.all(results.map((r) => r.json()));
-		iomlaidOptions.data.latest = data[0].success == false ? null : data[0];
-		iomlaidOptions.data.historic = data[1].success == false ? null : data[1];
+		iomlaidOptions.dataReceived = true;
+		iomlaidOptions.latest = data[0][iomlaidOptions.baseCurrency.toLowerCase()];
+		iomlaidOptions.historic = data[1][iomlaidOptions.baseCurrency.toLowerCase()];
+		dbID(idTabHeader_iomlaidDatedDate).textContent = data[1].date;
+		iomlaidOptions.date = KadDOM.resetInput("idVin_IomlaidDate", data[1].date);
+
 		iomlaidTable();
 	} catch (err) {
 		error("Could not receive data for", "'Iomlaid'", err);
@@ -89,66 +87,69 @@ async function iomlaidCalculate() {
 }
 
 function iomlaidTable() {
-	dbID("idTabHeader_iomlaidRequestedAmount").textContent = `Betrag: ${KadValue.number(iomlaidOptions.options.value, { currency: iomlaidOptions.options.base })}`;
+	if (!iomlaidOptions.dataReceived) return;
+	dbID("idTabHeader_iomlaidRequestedAmount").textContent = `Betrag: ${KadValue.number(iomlaidOptions.value, { currency: iomlaidOptions.baseCurrency })}`;
 	KadTable.clear("idTabBody_Iomlaid");
 	let i = 0;
+	for (let currency of Data_Currencies) {
+		const key = currency.cc;
+		const symbol = currency.symbol;
+		let row = KadTable.insertRow("idTabBody_Iomlaid");
+		// Währung
+		KadTable.addCell(row, {
+			names: ["iomlaidCurrency", i],
+			type: "Lbl",
+			text: `${currency.name} (${key})`,
+			createCellClass: ["clTab_borderThinRight"],
+			cellStyle: {
+				textAlign: "right",
+			},
+			copy: false,
+		});
 
-	for (let [key, value] of Data_Currencies) {
-		if (key != iomlaidOptions.options.base) {
-			let row = KadTable.insertRow("idTabBody_Iomlaid");
-			// Währung
-			KadTable.addCell(row, {
-				names: ["iomlaidCurrency", i],
-				type: "Lbl",
-				text: `${key} (${value})`,
-				createCellClass: ["clTab_borderThinRight"],
-				copy: true,
-			});
+		//latest Kurs
+		KadTable.addCell(row, {
+			names: ["iomlaidLatestChange", i],
+			type: "Lbl",
+			text: iomlaidOptions.latest == null ? "n.d." : KadValue.number(iomlaidOptions.latest[key.toLowerCase()], { decimals: 3 }),
+			cellStyle: {
+				textAlign: "right",
+			},
+			copy: true,
+		});
+		//latest Betrag
+		KadTable.addCell(row, {
+			names: ["iomlaidLatestRate", i],
+			type: "Lbl",
+			text: iomlaidOptions.latest == null ? "n.d." : `${KadValue.number(iomlaidOptions.latest[key.toLowerCase()] * iomlaidOptions.value)} ${symbol}`,
+			createCellClass: ["clTab_borderThinRight"],
+			cellStyle: {
+				textAlign: "right",
+			},
+			copy: true,
+		});
 
-			//latest Kurs
-			KadTable.addCell(row, {
-				names: ["iomlaidLatestChange", i],
-				type: "Lbl",
-				text: iomlaidOptions.data.latest == null ? "n.d." : KadValue.number(iomlaidOptions.data.latest.rates[key], { decimals: 3 }),
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: true,
-			});
-			//latest Betrag
-			KadTable.addCell(row, {
-				names: ["iomlaidLatestRate", i],
-				type: "Lbl",
-				text: iomlaidOptions.data.latest == null ? "n.d." : KadValue.number(iomlaidOptions.data.latest.rates[key] * iomlaidOptions.options.value, { currency: key }),
-				createCellClass: ["clTab_borderThinRight"],
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: true,
-			});
+		//historic Kurs
+		KadTable.addCell(row, {
+			names: ["iomlaidHistoricChange", i],
+			type: "Lbl",
+			text: iomlaidOptions.historic == null ? "n.d." : KadValue.number(iomlaidOptions.historic[key.toLowerCase()], { decimals: 3 }),
+			cellStyle: {
+				textAlign: "right",
+			},
+			copy: true,
+		});
 
-			//historic Kurs
-			KadTable.addCell(row, {
-				names: ["iomlaidHistoricChange", i],
-				type: "Lbl",
-				text: iomlaidOptions.data.historic == null ? "n.d." : KadValue.number(iomlaidOptions.data.historic.rates[key], { decimals: 3 }),
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: true,
-			});
-
-			//historic Betrag
-			KadTable.addCell(row, {
-				names: ["iomlaidHistoricRate", i],
-				type: "Lbl",
-				text: iomlaidOptions.data.historic == null ? "n.d." : KadValue.number(iomlaidOptions.data.historic.rates[key] * iomlaidOptions.options.value, { currency: key }),
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: true,
-			});
-		}
-		i++;
+		//historic Betrag
+		KadTable.addCell(row, {
+			names: ["iomlaidHistoricRate", i],
+			type: "Lbl",
+			text: iomlaidOptions.historic == null ? "n.d." : `${KadValue.number(iomlaidOptions.historic[key.toLowerCase()] * iomlaidOptions.value)} ${symbol}`,
+			cellStyle: {
+				textAlign: "right",
+			},
+			copy: true,
+		});
 	}
+	i++;
 }

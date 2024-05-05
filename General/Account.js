@@ -398,7 +398,6 @@ function createUserInfos() {
 	for (const [key, subObj] of Object.entries(AccData.infos)) {
 		const uInfoParent = KadUtils.KadTable.createCell("Div", {
 			names: ["uInfoParent", key],
-			type: "Div",
 			style: {
 				whiteSpace: "nowrap",
 			},
@@ -407,7 +406,6 @@ function createUserInfos() {
 
 		const uInfoBtn = KadUtils.KadTable.createCell("Lbl", {
 			names: ["uInfoLbl", key],
-			type: "Lbl",
 			createClass: ["cl_info"],
 			ui: {
 				uiRadius: "left",
@@ -427,7 +425,6 @@ function createUserInfos() {
 
 		const uInfoVin = KadUtils.KadTable.createCell("Vin", {
 			names: ["uInfoVin", key],
-			type: "Vin",
 			subGroup: "text",
 			ui: {
 				uiRadius: "none",
@@ -440,7 +437,6 @@ function createUserInfos() {
 		uInfoParent.appendChild(uInfoVin);
 		const uInfoDel = KadUtils.KadTable.createCell("Btn", {
 			names: ["uInfoDel", key],
-			type: "Btn",
 			subGroup: "button",
 			img: "trash",
 			ui: {

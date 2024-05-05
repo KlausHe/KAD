@@ -246,7 +246,7 @@ export const rawContentGrid = {
 		name: "Howa",
 		heritage: ["turkmenisch", "Wetter"],
 		source: {
-			Daten: "https://openweathermap.org",
+			Daten: "https://open-meteo.com",
 		},
 		info: "Wettervorhersage in 3 Stunden abständen für die nächsten 4 Tage.",
 		subgrid: [
@@ -625,14 +625,15 @@ export const rawContentGrid = {
 		contentGroup: "Utility",
 		globalValNumber: "idVin_IomlaidCur",
 		name: "Iomlaid",
-		deactivated: true,
+		deactivated: false,
 		heritage: ["schottisch-gälisch", "Austausch"],
 		source: {
-			Daten: "https://exchangerate.host",
+			Daten: "https://github.com/fawazahmed0/exchange-api",
 		},
 		subgrid: [
-			["cl_IomlaidSelCur", "right"],
-			["cl_IomlaidVinCur", "left"],
+			["cl_IomlaidSelCur", "center"],
+			["cl_IomlaidVinCur", "center"],
+			["cl_IomlaidVinDate", "center"],
 			["cl_IomlaidTab", "center"],
 		],
 	},

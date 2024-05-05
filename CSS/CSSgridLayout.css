@@ -243,7 +243,7 @@
 
 .cl_subGrid_Iomlaid {
 	grid-template-areas:
-		". cl_IomlaidSelCur cl_IomlaidVinCur . ."
+		". cl_IomlaidSelCur cl_IomlaidVinCur cl_IomlaidVinDate ."
 		". cl_IomlaidTab cl_IomlaidTab cl_IomlaidTab .";
 	grid-template-columns: 1fr auto auto auto 1fr;
 	grid-template-rows: var(--UIHeight1) auto;
