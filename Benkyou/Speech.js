@@ -162,25 +162,25 @@ async function speechTranslateRequest() {
 
 	dbID("idArea_speechToText").value = "Funktion is currently not implemented!";
 	translate("Je ne mangé pas six jours", { from: "fr", to: "en" })
-  .then((res) => {
-    // I do not eat six days
-    console.log(res.text);
-    dbID("idArea_speechToText").value = res.text;
+		.then((res) => {
+			// I do not eat six days
+			console.log("text:", res.text);
+			dbID("idArea_speechToText").value = res.text;
 		})
 		.catch((err) => {
 			console.error(err);
 		});
 
-  return;
+	return;
 
 	const f = speechOptions.fromCode == "ja" ? "jpn" : speechOptions.fromCode;
 	const t = speechOptions.toCode == "ja" ? "jpn" : speechOptions.toCode;
 	const url = generateRequestUrl(speechOptions.input, {
-    from: f,
+		from: f,
 		to: t,
 		raw: true,
 	});
-  
+
 	console.log(url);
 	let response = await fetch(url);
 	let data = await response.json();
