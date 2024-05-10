@@ -52,7 +52,7 @@ export const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: KadUtils.hostDebug() ? "cl_Iomlaid" : "Universe",
+	defaultPage: KadUtils.hostDebug() ? "cl_Speech" : "Universe",
 };
 
 export function createContentlayoutList() {
