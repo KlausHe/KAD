@@ -1,4 +1,5 @@
-import { generateRequestUrl, translate, normaliseResponse, isSupported } from "https://cdn.jsdelivr.net/npm/google-translate-api-browser@4.0.0/+esm";
+import { generateRequestUrl, translate, normaliseResponse, isSupported } from "https://unpkg.com/browse/google-translate-api-browser@5.0.0/";
+// import { generateRequestUrl, translate, normaliseResponse, isSupported } from "https://cdn.jsdelivr.net/npm/google-translate-api-browser@4.0.0/+esm";
 import { dbID, daEL, KadDOM, KadArray } from "../General/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 
