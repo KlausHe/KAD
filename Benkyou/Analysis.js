@@ -1,5 +1,4 @@
-// import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
-import { dbID, daEL, objectLength, KadDOM, KadTable } from "https://cdn.jsdelivr.net/gh/KlausHe/KadUtils/KadUtils.js";
+import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
 import { newsData } from "../News/News.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 import { globalP5 } from "../Main.js";
