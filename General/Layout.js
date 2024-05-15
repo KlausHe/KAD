@@ -269,7 +269,6 @@ function createAreaString(gridArray, rowLength) {
 export function createSubgrid() {
 	const dbList = [];
 	for (const dbDataObj of Object.values(DBData)) {
-		// dbList.push(dbDataObj.dbName);
 		dbList.push(dbDataObj.contentName);
 	}
 	for (const gridKey in contentGrid) {

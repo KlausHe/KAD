@@ -1,4 +1,5 @@
-import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
+// import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
+import { dbID, daEL, objectLength, KadDOM, KadTable } from "https://cdn.jsdelivr.net/gh/KlausHe/KadUtils/KadUtils.js";
 import { newsData } from "../News/News.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 import { globalP5 } from "../Main.js";
@@ -11,6 +12,7 @@ const analysisOptions = {
 daEL(idVin_analysisEntry, "input", () => analysisInput(null));
 daEL(idBtn_analyseNews, "click", analysisNews);
 daEL(idBtn_analyseWiki, "click", analysisWiki);
+daEL()
 
 export function clear_cl_Analysis() {
 	KadDOM.resetInput("idVin_analysisEntry", "Type text to analyze");
@@ -175,5 +177,5 @@ function analysisCreateTable() {
 }
 
 function convertScore(score) {
-	return Math.floor(score * 1000) / 100;
+	return Math.floor(score * 1000) / 10;
 }

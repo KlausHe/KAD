@@ -1,6 +1,6 @@
 {
         // "editor.fontWeight": "normal",
-        "editor.minimap.renderCharacters": true,
+        "editor.minimap.renderCharacters": false,
         "workbench.editor.tabCloseButton": "left",
         "liveServer.settings.port": 3002,
         "liveServer.settings.CustomBrowser": "firefox",

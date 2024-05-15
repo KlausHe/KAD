@@ -10,7 +10,7 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
 		},
-		info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -10, der beste ist 10",
+		info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -100, der beste ist 100",
 		subgrid: [
 			["cl_AnalysisInput", "right"],
 			["cl_AnalysisResult", "center"],
