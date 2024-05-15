@@ -1,5 +1,4 @@
 import { dbID, daEL, KadDOM, KadDate, KadTable } from "../General/KadUtils.js";
-// import { socketPost } from "../General/KadServerCommunication.js";
 import { Data_NewsCountries, Data_Country_CodesIso3166 } from "../General/MainData.js";
 
 export const newsData = {
@@ -62,15 +61,10 @@ export function clear_cl_News() {
 }
 
 function newsUpdateOptions() {
-	return;
-	socketPost(
-		"News",
-		{
-			category: dbID("idSel_newsCategory").value,
-			country: dbID("idSel_newsCountry").value,
-		},
-		newsReturn
-	);
+	return {
+		category: dbID("idSel_newsCategory").value,
+		country: dbID("idSel_newsCountry").value,
+	};
 }
 
 function newsError(errMsg) {
