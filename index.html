@@ -27,10 +27,9 @@
   <link href="CSS/CSSgridLayout.css" rel="stylesheet" type="text/css">
   <link href="CSS/CSSinputLayout.css" rel="stylesheet" type="text/css">
   <!-- <link href="CSS/CSSpikaday.css" rel="stylesheet" type="text/css"> -->
-  <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css">
+  <!-- <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css"> -->
 
   <script src="Data/p5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js" integrity="sha512-0k6FXllQktdobw8Nc8KQN2WtZrOuxpMn7jC2RKCF6LR7EdOhhrg3H5cBPxhs3CFzQVlO6ni1B9SDLUPhBs0Alg==" crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
   <script type="module" src="Main.js"></script>
@@ -82,24 +81,18 @@
         </div>
       </div>
     </section>
-    <section class="cl_SpeechTranslate" style="display:none;">
-      <div class="cl_subGrid_SpeechTranslate cl_subGrid">
+    <section class="cl_Speech" style="display:none;">
+      <div class="cl_subGrid_Speech cl_subGrid">
         <div class="cl_SpeechLangSelect" uiWrap="nowrap">
-          <select id="idSel_translateSelectorFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size3" uiRadius="none">from</label><button type="button" id="idBtn_TranslateSwitch" uiSize="size1" uiRadius="none">
-            <img src="Data/Images/SVG/code.svg"></img>
-          </button><label class="cl_info" uiSize="size3" uiRadius="left">to</label><select id="idSel_translateSelectorTo" uiSize="size6" uiRadius="none"></select>
+          <select id="idSel_speechLanguageFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size3" uiRadius="none">from</label><button type="button" id="idBtn_speechSwitch" uiSize="size1" uiRadius="none"><img
+              src="Data/Images/SVG/code.svg"></img>
+          </button><label class="cl_info" uiSize="size3" uiRadius="left">to</label><select id="idSel_speechLanguageTo" uiSize="size6" uiRadius="none"></select>
         </div>
         <div class="cl_SpeechVoiceSelect" uiWrap="nowrap">
-          <select id="idSel_speechSelectorFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size4" uiRadius="none">Voices</label><select id="idSel_speechSelectorTo" uiSize="size6" uiRadius="right"></select>
-        </div>
-        <div class="cl_SpeechOptions" uiWrap="nowrap">
           <button type="button" id="idBtn_speechSpeakFrom" uiSize="size1" uiType="transparent">
             <img class="img_OptRadio" src="Data/Images/SVG/radio.svg" style="filter:invert(var(--invBackground));"></img>
-          </button>
-          <button type="button" id="idBtn_speechTranslateOnly">Translate
-            only</button>
-          <button type="button" id="idBtn_speechTranslateSpeak">Translate&Speak</button>
-          <button type="button" id="idBtn_speechSpeakTo" uiSize="size1" uiType="transparent">
+          </button><select id="idSel_speechVoiceFrom" uiSize="size6" uiRadius="left"></select><label class="cl_info" uiSize="size4" uiRadius="none">Voices</label><select id="idSel_speechVoiceTo" uiSize="size6"
+            uiRadius="right"></select><button type="button" id="idBtn_speechSpeakTo" uiSize="size1" uiType="transparent">
             <img class="img_OptRadio" src="Data/Images/SVG/radio.svg" style="filter:invert(var(--invBackground));"></img>
           </button>
         </div>
@@ -446,8 +439,7 @@
     <section class="cl_Howa" style="display:none;">
       <div class="cl_subGrid_Howa cl_subGrid">
         <div class="cl_HowaGraph">
-          <div id="idDiv_howaGraph" style="width: calc(var(--UIWidth1)* 30); height: calc(var(--UIWidth1)* 10);">
-            <canvas id="idCanv_howaGraph"></canvas>
+          <div id="idCanv_howa">
           </div>
         </div>
         <div class="cl_HowaInput">
@@ -459,33 +451,11 @@
           <datalist id="idDlist_howaPlaces">
           </datalist>
         </div>
-        <div class="cl_HowaOptionsA" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_howaTemperature" data-id="temperature" checked>
-            </input>
-          </label><label class="cl_info" for="idCb_howaTemperature" uiSize="size8" uiRadius="right">Temperatur</label>
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_howaPressure" data-id="pressure" checked></input>
-          </label><label class="cl_info" for="idCb_howaPressure" uiSize="size8" uiRadius="right">Luftdruck</label>
-        </div>
-        <div class="cl_HowaOptionsB" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_howaRain" data-id="rain" checked>
-            </input>
-          </label><label class="cl_info" for="idCb_howaRain" uiSize="size8" uiRadius="right">Regen</label>
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_howaWindSpeed" data-id="windSpeed" checked></input>
-          </label><label class="cl_info" for="idCb_howaWindSpeed" uiSize="size8" uiRadius="right">Windgeschwindigkeit</label>
-        </div>
-        <div class="cl_HowaOptionsC" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_howaHumidity" data-id="humidity" checked></input>
-          </label><label class="cl_info" for="idCb_howaHumidity" uiSize="size8" uiRadius="right">Luftfeuchtigkeit</label>
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_howaWindDirection" data-id="windDirection" checked></input>
-          </label><label class="cl_info" for="idCb_howaWindDirection" uiSize="size8" uiRadius="right">Windrichtung</label>
-        </div>
         <div class="cl_HowaNow"> <label class="cl_outputLbl" id="idLbl_howaNow">...</label> </div>
-        <div class="cl_HowaZoom"><button id="idBtn_howaZoom">Zoom</button> </div>
-        <div class="cl_HowaMapsExpand"><button id="idBtn_howaMapsExpand" uiSize="size6">Warnkarten</button> </div>
         <div class="cl_HowaMapsSelectCriteria"><select id="idSel_howaMapsCriteria" uiSize="size8"></select> </div>
         <div class="cl_HowaMapsSelectCountry"><select id="idSel_howaMapsCountry" uiSize="size8"></select> </div>
         <div class="cl_HowaMapsImg">
-          <div id="idDiv_howaMapsImg"> <img imgSize="howaImg" id="idImg_howaMapsImg"></img></div>
+          <div id="idDiv_howaMapsImg"><img imgSize="howaImg" id="idImg_howaMapsImg"></img></div>
         </div>
       </div>
     </section>
@@ -1272,22 +1242,25 @@
     </section>
     <section class="cl_Iomlaid" style="display:none;">
       <div class="cl_subGrid_Iomlaid cl_subGrid">
+        <div class="cl_IomlaidSelCur">
+          <select id="idSel_IomlaidCur"></select>
+        </div>
         <div class="cl_IomlaidVinCur" uiWrap="nowrap">
           <input type="number" id="idVin_IomlaidCur" uiSize="size6" uiRadius="left" min="0" step="0.01"></input><button type="button" uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button type="button" uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button type="button" uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
-        <div class="cl_IomlaidSelCur">
-          <select name="idSel_IomlaidCur" id="idSel_IomlaidCur"></select>
+        <div class="cl_IomlaidVinDate">
+          <input type="date" id="idVin_IomlaidDate"></input>
         </div>
         <div class="cl_IomlaidTab clDiv_overviewTablesAuto">
           <table id="idTab_Iomlaid">
             <thead id="idTabHeader_Iomlaid" class="scrollTable">
               <tr>
                 <th id="idTabHeader_iomlaidRequestedAmount" rowspan="2" colspan="1"></th>
-                <th id="idTabHeader_iomlaidLatestDate" colspan="2"> Heute</th>
-                <th id="idTabHeader_iomlaidDatedDate" colspan="2"><button type="button" id="idBtn_iomlaidDate" uiSize="size6"></button></th>
+                <th id="idTabHeader_iomlaidLatestDate" colspan="2">Heute</th>
+                <th id="idTabHeader_iomlaidDatedDate" colspan="2"></th>
               </tr>
               <tr>
                 <th>Kurs</th>

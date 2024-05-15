@@ -55,7 +55,7 @@ export const netsaonaOptions = {
 			return Data.Data_HumanNames.all;
 		},
 		get Geld() {
-			return Array.from(Data.Data_Currencies.values());
+			return Data.Data_Currencies.map((cur) => `${cur.name} (${cur.symbol})`);
 		},
 		get Gender() {
 			return Data.Data_HumanNames.genders;

@@ -3,7 +3,7 @@ import { createNewNuncDiscipuli } from "./General/Account.js";
 import * as Layout from "./General/Layout.js";
 import { globalValues, displayColorSystem, colToggleColormode } from "./Settings/Basics.js";
 import { bgaClearBackground, bgaToggleReset } from "./General/BackgroundAnimation.js";
-import * as Clear from "../MainModulesClear.js";
+import * as Clear from "./MainModulesClear.js";
 
 // p5-Setup in Soundlibrary only!  Use Instance "globalP5" for general functionality
 export const globalP5 = new p5((c) => {

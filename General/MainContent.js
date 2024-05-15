@@ -10,7 +10,7 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
 		},
-		info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -10, der beste ist 10",
+		info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -100, der beste ist 100",
 		subgrid: [
 			["cl_AnalysisInput", "right"],
 			["cl_AnalysisResult", "center"],
@@ -20,16 +20,15 @@ export const rawContentGrid = {
 			["cl_AnalysisTabResult", "center"],
 		],
 	},
-	cl_SpeechTranslate: {
+	cl_Speech: {
 		userSelected: true,
 		contentGroup: "Benkyou",
 		globalValString: "idArea_speechFromText",
-		name: "Discipuli",
-		heritage: ["latein", "Student"],
+		name: "Speech",
+		heritage: ["englisch", "Sprache"],
 		subgrid: [
 			["cl_SpeechLangSelect", "center"],
 			["cl_SpeechVoiceSelect", "center"],
-			["cl_SpeechOptions", "center"],
 			["cl_SpeechOutputArea", "center"],
 		],
 	},
@@ -247,18 +246,13 @@ export const rawContentGrid = {
 		name: "Howa",
 		heritage: ["turkmenisch", "Wetter"],
 		source: {
-			Daten: "https://openweathermap.org",
+			Daten: "https://open-meteo.com",
 		},
 		info: "Wettervorhersage in 3 Stunden abständen für die nächsten 4 Tage.",
 		subgrid: [
 			["cl_HowaInput", "center", "end"],
 			["cl_HowaNow", "center", "end"],
-			["cl_HowaOptionsA", "left"],
-			["cl_HowaOptionsB", "left"],
-			["cl_HowaOptionsC", "left"],
 			["cl_HowaGraph", "center"],
-			["cl_HowaZoom", "center"],
-			["cl_HowaMapsExpand", "center"],
 			["cl_HowaMapsSelectCountry", "right"],
 			["cl_HowaMapsSelectCriteria", "left"],
 			["cl_HowaMapsImg", "center"],
@@ -631,14 +625,15 @@ export const rawContentGrid = {
 		contentGroup: "Utility",
 		globalValNumber: "idVin_IomlaidCur",
 		name: "Iomlaid",
-		deactivated: true,
+		deactivated: false,
 		heritage: ["schottisch-gälisch", "Austausch"],
 		source: {
-			Daten: "https://exchangerate.host",
+			Daten: "https://github.com/fawazahmed0/exchange-api",
 		},
 		subgrid: [
-			["cl_IomlaidSelCur", "right"],
-			["cl_IomlaidVinCur", "left"],
+			["cl_IomlaidSelCur", "center"],
+			["cl_IomlaidVinCur", "center"],
+			["cl_IomlaidVinDate", "center"],
 			["cl_IomlaidTab", "center"],
 		],
 	},
