@@ -4,6 +4,7 @@ export const rawContentGrid = {
 	//Benkyou
 	cl_Analysis: {
 		userSelected: true,
+		deactivated: true,
 		contentGroup: "Benkyou",
 		globalValString: "idVin_analysisEntry",
 		name: "Analysis-Analyse",
