@@ -1,27 +1,21 @@
-// API-Call: https://open-meteo.com/en/docs#current=temperature_2m,is_day,precipitation,rain,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation,rain,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=auto&forecast_days=14
-// https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,is_day,precipitation,rain,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation,rain,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=auto&forecast_days=14
-// GeoLocation
-// "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"
-//geoCoding
-// https://geocoding-api.open-meteo.com/v1/search?name=Berlin&count=3&language=de&format=json
-
 // Imags weather_code from openweathermap
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
+const reverseGeocoder = new BDCReverseGeocode();
 
 import * as KadUtils from "../General/KadUtils.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
 import { globalValues } from "../Settings/Basics.js";
 
-const noDWD = false;
 const weatherMaps = {
 	shown: false,
-	country: null,
+	district: null,
 	criteria: null,
 	get dwdURL() {
-		return `https://www.dwd.de/DWD/warnungen/warnapp_gemeinden/json/warnungen_gemeinde_map_${this.country}_${this.criteria}.png`;
+		let dist = Data_Country_GermanDistrics.filter((obj) => obj.abbr == this.district);
+		if (dist.length != 0) this.district = dist[0].dwd;
+		return `https://www.dwd.de/DWD/warnungen/warnapp_gemeinden/json/warnungen_gemeinde_map_${this.district}_${this.criteria}.png`;
 	},
 	criteriaList: [
-		// url, Name
 		["gewitter", "Gewitter"],
 		["regen", "Stark- oder Dauerregen"],
 		["schnee", "Schneefall"],
@@ -37,7 +31,7 @@ const weatherMaps = {
 
 let howaOptions = {
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h*0.8 };
+		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h * 0.8 };
 	},
 	bgcCanvas: "skyblue",
 	data: { current: null, forecast: null },
@@ -63,8 +57,8 @@ KadUtils.daEL(idVin_howaEntry, "change", howaGetLocation);
 KadUtils.daEL(idVin_howaEntry, "focus", () => howaPopulateDatalist(idVin_howaEntry));
 KadUtils.daEL(idBtn_getGeoLocation, "click", howaGetCoordinates);
 KadUtils.daEL(idBtn_howaGetLocation, "click", howaGetLocation);
+KadUtils.daEL(idSel_howaMapsDistrict, "change", howaChangeMap);
 KadUtils.daEL(idSel_howaMapsCriteria, "change", howaChangeMap);
-KadUtils.daEL(idSel_howaMapsCountry, "change", howaChangeMap);
 
 export function clear_cl_Howa() {
 	KadUtils.KadDOM.resetInput("idVin_howaEntry", "Ort");
@@ -72,17 +66,19 @@ export function clear_cl_Howa() {
 	howaOptions.longitude = howaOptions.lonOrig;
 	howaOptions.city = null;
 
-	// populate MapSelectCountry
-	KadUtils.dbID("idSel_howaMapsCountry").options[0] = new Option("Deutschland");
+	// populate MapSelectDistrict
+	KadUtils.dbID("idSel_howaMapsDistrict").options[0] = new Option("Deutschland", "de");
+	reverseGeocoder.localityLanguage = "de";
 	for (let [index, land] of Data_Country_GermanDistrics.entries()) {
-		KadUtils.dbID("idSel_howaMapsCountry").options[index + 1] = new Option(land.LandDE);
+		KadUtils.dbID("idSel_howaMapsDistrict").options[index + 1] = new Option(land.LandDE, land.abbr);
 	}
+	KadUtils.dbID("idSel_howaMapsDistrict").options[0].selected = true;
 
 	// populate MapSelectCriteria
 	for (let i = 0; i < weatherMaps.criteriaList.length; i++) {
-		KadUtils.dbID("idSel_howaMapsCriteria").options[i] = new Option(weatherMaps.criteriaList[i][1]);
+		KadUtils.dbID("idSel_howaMapsCriteria").options[i] = new Option(weatherMaps.criteriaList[i][1], weatherMaps.criteriaList[i][0]);
 	}
-	KadUtils.dbID("idSel_howaMapsCriteria").options[1].selected = true;
+	KadUtils.dbID("idSel_howaMapsCriteria").options[0].selected = true;
 
 	caHO.noLoop();
 	caHO.background(globalValues.colors.elements.background);
@@ -122,16 +118,12 @@ function howaPopulateDatalist() {
 
 // DWD stuff
 function howaChangeMap() {
-	if (noDWD) return;
-	const indexCountry = KadUtils.dbID("idSel_howaMapsCountry").options.selectedIndex;
-	const indexCriteria = KadUtils.dbID("idSel_howaMapsCriteria").options.selectedIndex;
-	weatherMaps.country = indexCountry == 0 ? "de" : Data_Country_GermanDistrics[indexCountry].dwd;
-	weatherMaps.criteria = weatherMaps.criteriaList[indexCriteria][0];
+	weatherMaps.district = KadUtils.dbID("idSel_howaMapsDistrict").value;
+	weatherMaps.criteria = KadUtils.dbID("idSel_howaMapsCriteria").value;
 	KadUtils.dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
 }
 
 // Forecast stuff
-
 function howaGetCoordinates() {
 	if ("geolocation" in navigator) {
 		howaOptions.city = null;
@@ -147,14 +139,14 @@ function howaGetCoordinates() {
 function howaNavigatorPosition(data) {
 	howaOptions.latitude = data.coords.latitude || howaOptions.latOrig;
 	howaOptions.longitude = data.coords.longitude || howaOptions.lonOrig;
-	howaReqestData();
+	howaCleanLocation();
 }
 
 function howaNavigatorError() {
 	KadUtils.dbID("idLbl_howaNow").textContent = "No Geolocation";
 	howaOptions.latitude = howaOptions.latOrig;
 	howaOptions.longitude = howaOptions.lonOrig;
-	howaReqestData();
+	howaCleanLocation();
 }
 
 async function howaGetLocation() {
@@ -163,7 +155,7 @@ async function howaGetLocation() {
 	howaOptions.city = input;
 	const err = await howaGeocodingCity();
 	if (err) return;
-	howaReqestData();
+	howaCleanLocation();
 }
 
 async function howaGeocodingCity() {
@@ -177,6 +169,22 @@ async function howaGeocodingCity() {
 	howaOptions.latitude = data.results[0].latitude;
 	howaOptions.longitude = data.results[0].longitude;
 	return false;
+}
+
+function howaCleanLocation() {
+	reverseGeocoder.getClientLocation({ latitude: howaOptions.latitude, longitude: howaOptions.longitude }, (result) => {
+		howaOptions.city = result.city;
+		weatherMaps.district = result.principalSubdivisionCode.split("-")[1].toLowerCase();
+		howaReqestData();
+
+		for (let node of KadUtils.dbID("idSel_howaMapsDistrict").options) {
+			if (node.value == weatherMaps.district) {
+				node.selected = true;
+				break;
+			}
+		}
+		KadUtils.dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
+	});
 }
 
 async function howaReqestData() {
@@ -264,7 +272,7 @@ function howaDrawData() {
 		caHO.fill(globalValues.colors.elements.line);
 		caHO.textSize(globalValues.mediaSizes.fontSize);
 		caHO.text(KadUtils.KadDate.getDate(graph.labels[i], { format: "WD" }), dayWidth / 2, y + rowHeight / 2);
-		caHO.text(graph.weatherCode[i], dayWidth + tempWidth / 2, y + rowHeight / 2);
+		caHO.text(`[${graph.weatherCode[i]}]`, dayWidth + tempWidth / 2, y + rowHeight / 2);
 		caHO.text(`${point[0]}°`, dayWidth + tempWidth + tempWidth / 2, y + rowHeight / 2);
 		caHO.text(`${point[1]}°`, howaOptions.canvas.w - tempWidth / 2, y + rowHeight / 2);
 

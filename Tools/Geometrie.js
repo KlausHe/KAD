@@ -1,4 +1,6 @@
-import { daEL, dbID, dbIDStyle, dbCL, KadValue, KadDOM, KadTable } from "../General/KadUtils.js";
+//  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
+
+import { daEL, dbID, dbCL, KadValue, KadDOM, KadTable } from "../General/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
 import { globalValues } from "../Settings/Basics.js";
 import { materialOptions } from "./Material.js";
@@ -49,47 +51,53 @@ const geometrieOptions = {
 };
 
 let geoObjects = {
-	get drawDim() {
+	get dim() {
+		const w = geometrieOptions.canvas.w;
 		const h = geometrieOptions.canvas.h;
 		return {
-			a: h / 4.5,
-			b: h / 3,
-			c: h / 9,
-			d: h / 3.6,
-			s: h / 36,
+			a: w * 0.35,
+			b: w * 0.08,
+			c: h * 0.35,
+			d: h * 0.08,
+			s: w * 0.06,
 		};
 	},
-	elements: ["Cuboid", "Cube", "Cylinder", "Pipe", "Sphere"],
-	names: ["Quader", "Würfel", "Zylinder", "Rohr", "Kugel"],
-	selectedGeo: "Cuboid",
+	strokeBody: 2,
+	strokeHair: 1,
+	elements: ["Quader", "Würfel", "Pyramide", "Dreieckspyramide", "Zylinder", "Rohr", "Kegel", "Kugel"],
+	get selected() {
+		return geoObjects[geoObjects.elements[geoObjects.elementIndex]];
+	},
+	elementIndexOrig: 5,
+	elementIndex: 2,
 	radState: false,
 	valA: null,
 	valB: null,
 	valC: null,
-	get lineCol() {
-		return globalValues.colors.elements.line;
-	},
-	get textCol() {
-		return globalValues.colors.elements.text;
-	},
-	get areaCol() {
-		return globalValues.colors.elements.baseColor;
+	get diameterActive() {
+		return this.radState ? 1 : 0.5;
 	},
 	get diameter() {
-		return this.radState ? { low: "r", cap: "R", factor: 1 } : { low: "d", cap: "D", factor: 0.5 };
+		return this.radState ? { low: "r", cap: "R" } : { low: "d", cap: "D" };
 	},
 	initiateShow() {
+		caGE.resetMatrix();
 		caGE.clear();
 		caGE.textSize(globalValues.mediaSizes.fontSize);
 		caGE.push();
 		caGE.translate(geometrieOptions.canvas.w / 2, geometrieOptions.canvas.h / 2);
-		caGE.strokeWeight(2);
-		caGE.fill(geoObjects.areaCol);
-		caGE.stroke(geoObjects.lineCol);
+		caGE.strokeWeight(geoObjects.strokeBody);
+		caGE.strokeCap(caGE.ROUND);
+		caGE.strokeJoin(caGE.ROUND);
+		caGE.fill(globalValues.colors.elements.baseColor);
+		caGE.stroke(globalValues.colors.elements.line);
 	},
-	Cuboid: {
+	Quader: {
 		lbl: ["a", "b", "c"],
 		vals: [223, 20, 10],
+		get radiusFactor() {
+			return [1, 1, 1];
+		},
 		cbRadiusEnable: false,
 		get circumference() {
 			return 2 * (geoObjects.valA + geoObjects.valB);
@@ -103,54 +111,49 @@ let geoObjects = {
 		get volume() {
 			return geoObjects.valA * geoObjects.valB * geoObjects.valC;
 		},
-		get mass() {
-			return geoObjects.valA * geoObjects.valB * geoObjects.valC * geometrieOptions.roh * 0.001;
-		},
 		show() {
+			let { a, b, c, d } = geoObjects.dim;
+			c = c / 2;
 			const shape = [
-				caGE.createVector(geoObjects.drawDim.b, -geoObjects.drawDim.c + geoObjects.drawDim.d / 2),
-				caGE.createVector(geoObjects.drawDim.a, geoObjects.drawDim.c + geoObjects.drawDim.d / 2),
-				caGE.createVector(-geoObjects.drawDim.b, geoObjects.drawDim.c + geoObjects.drawDim.d / 2),
-				caGE.createVector(-geoObjects.drawDim.a, -geoObjects.drawDim.c + geoObjects.drawDim.d / 2),
-				caGE.createVector(geoObjects.drawDim.b, -geoObjects.drawDim.c - geoObjects.drawDim.d / 2),
-				caGE.createVector(geoObjects.drawDim.a, geoObjects.drawDim.c - geoObjects.drawDim.d / 2),
-				caGE.createVector(-geoObjects.drawDim.b, geoObjects.drawDim.c - geoObjects.drawDim.d / 2),
-				caGE.createVector(-geoObjects.drawDim.a, -geoObjects.drawDim.c - geoObjects.drawDim.d / 2),
+				[a - b, c + d],
+				[a + b, c - d],
+				[-(a - b), c - d],
+				[-(a + b), c + d],
+				[a - b, -(c - d)],
+				[a + b, -(c + d)],
+				[-(a - b), -(c + d)],
+				[-(a + b), -(c - d)],
 			];
 			geoObjects.initiateShow();
+
 			//Grundfläche
 			caGE.beginShape();
 			for (let i = 0; i < 4; i++) {
-				caGE.vertex(shape[i].x, shape[i].y);
+				caGE.vertex(...shape[i]);
 			}
 			caGE.endShape(caGE.CLOSE);
+
 			for (let n = 0; n < 4; n++) {
 				const k = n + 4;
 				const l = ((n + 5) % 4) + 4;
-				caGE.line(shape[k].x, shape[k].y, shape[l].x, shape[l].y);
-				caGE.line(shape[n].x, shape[n].y, shape[k].x, shape[k].y);
+				caGE.line(...shape[k], ...shape[l]);
+				caGE.line(...shape[n], ...shape[k]);
 			}
-			//text
-			caGE.fill(geoObjects.textCol);
+
+			caGE.fill(globalValues.colors.elements.text);
 			caGE.noStroke();
-			caGE.textAlign(caGE.CENTER, caGE.TOP);
-			let x = (shape[1].x + shape[2].x) / 2;
-			let y = (shape[1].y + shape[2].y) / 2;
-			caGE.text(` ${this.lbl[0]}`, x, y);
-			caGE.textAlign(caGE.LEFT, caGE.CENTER);
-			x = (shape[0].x + shape[1].x) / 2;
-			y = (shape[0].y + shape[1].y) / 2;
-			caGE.text(` ${this.lbl[1]}`, x, y);
-			caGE.textAlign(caGE.LEFT, caGE.CENTER);
-			x = (shape[0].x + shape[4].x) / 2;
-			y = (shape[0].y + shape[4].y) / 2;
-			caGE.text(` ${this.lbl[2]}`, x, y);
+			patternText(this.lbl[0], shape[3], shape[0], caGE.CENTER, caGE.TOP);
+			patternText(this.lbl[1], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
+			patternText(this.lbl[2], shape[1], shape[5], caGE.LEFT, caGE.CENTER);
 			caGE.pop();
 		},
 	},
-	Cube: {
+	Würfel: {
 		lbl: ["a", "", ""],
 		vals: [10, null, null],
+		get radiusFactor() {
+			return [1, 1, 1];
+		},
 		cbRadiusEnable: false,
 		get circumference() {
 			return 4 * geoObjects.valA;
@@ -164,211 +167,381 @@ let geoObjects = {
 		get volume() {
 			return geoObjects.valA * geoObjects.valA * geoObjects.valA;
 		},
-		get mass() {
-			return geoObjects.valA * geoObjects.valA * geoObjects.valA * geometrieOptions.roh * 0.001;
-		},
 		show() {
+			const { a, b, c, d } = geoObjects.dim;
 			const shape = [
-				caGE.createVector(geoObjects.drawDim.b, -geoObjects.drawDim.c + geoObjects.drawDim.d),
-				caGE.createVector(geoObjects.drawDim.a, geoObjects.drawDim.c + geoObjects.drawDim.d),
-				caGE.createVector(-geoObjects.drawDim.b, geoObjects.drawDim.c + geoObjects.drawDim.d),
-				caGE.createVector(-geoObjects.drawDim.a, -geoObjects.drawDim.c + geoObjects.drawDim.d),
-				caGE.createVector(geoObjects.drawDim.b, -geoObjects.drawDim.c - geoObjects.drawDim.d),
-				caGE.createVector(geoObjects.drawDim.a, geoObjects.drawDim.c - geoObjects.drawDim.d),
-				caGE.createVector(-geoObjects.drawDim.b, geoObjects.drawDim.c - geoObjects.drawDim.d),
-				caGE.createVector(-geoObjects.drawDim.a, -geoObjects.drawDim.c - geoObjects.drawDim.d),
+				[a - b, c + d],
+				[a + b, c - d],
+				[-(a - b), c - d],
+				[-(a + b), c + d],
+				[a - b, -(c - d)],
+				[a + b, -(c + d)],
+				[-(a - b), -(c + d)],
+				[-(a + b), -(c - d)],
 			];
 			geoObjects.initiateShow();
 			//Grundfläche
 			caGE.beginShape();
 			for (let i = 0; i < 4; i++) {
-				caGE.vertex(shape[i].x, shape[i].y);
+				caGE.vertex(...shape[i]);
 			}
 			caGE.endShape(caGE.CLOSE);
 
 			for (let n = 0; n < 4; n++) {
 				let k = n + 4;
 				let l = ((n + 5) % 4) + 4;
-				caGE.line(shape[k].x, shape[k].y, shape[l].x, shape[l].y);
-				caGE.line(shape[n].x, shape[n].y, shape[k].x, shape[k].y);
+				caGE.line(...shape[k], ...shape[l]);
+				caGE.line(...shape[n], ...shape[k]);
 			}
+
+			caGE.fill(globalValues.colors.elements.text);
+			caGE.noStroke();
+			patternText(this.lbl[0], shape[3], shape[0], caGE.CENTER, caGE.TOP);
+			patternText(this.lbl[0], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
+			patternText(this.lbl[0], shape[1], shape[5], caGE.LEFT, caGE.CENTER);
+			caGE.pop();
+		},
+	},
+	Pyramide: {
+		lbl: ["a", "b", "h"],
+		vals: [10, 10, 10],
+		get radiusFactor() {
+			return [1, 1, 1];
+		},
+		cbRadiusEnable: false,
+		get circumference() {
+			return 4 * geoObjects.valA;
+		},
+		get basearea() {
+			return geoObjects.valA * geoObjects.valA;
+		},
+		get fullarea() {
+			const a = geoObjects.valA;
+			const b = geoObjects.valB;
+			const h = geoObjects.valC;
+			const h_a = Math.sqrt(h ** 2 + a ** 2 / 4);
+			return a * b + a * h_a + b * h_a;
+		},
+		get volume() {
+			return (geoObjects.valA * geoObjects.valB * geoObjects.valC) / 3;
+		},
+		show() {
+			const { a, b, c, d } = geoObjects.dim;
+			const shape = [
+				[a - b, c + d],
+				[a + b, c - d],
+				[-(a - b), c - d],
+				[-(a + b), c + d],
+				[0, -(c + d)],
+				[0, c],
+			];
+			geoObjects.initiateShow();
+			//Grundfläche
+			caGE.beginShape();
+			for (let i = 0; i < 4; i++) {
+				caGE.vertex(...shape[i]);
+			}
+			caGE.endShape(caGE.CLOSE);
+
+			for (let n = 0; n < 4; n++) {
+				caGE.line(...shape[n], ...shape[4]);
+			}
+			caGE.strokeWeight(geoObjects.strokeHair);
+			caGE.line(...shape[4], ...shape[5]);
+			caGE.strokeWeight(geoObjects.strokeBody);
 
 			//text
 			caGE.fill(globalValues.colors.elements.text);
 			caGE.noStroke();
-			caGE.textAlign(caGE.CENTER, caGE.TOP);
-			let x = (shape[1].x + shape[2].x) / 2;
-			let y = (shape[1].y + shape[2].y) / 2;
-			caGE.text(` ${this.lbl[0]}`, x, y);
-			caGE.textAlign(caGE.LEFT, caGE.CENTER);
-			x = (shape[0].x + shape[1].x) / 2;
-			y = (shape[0].y + shape[1].y) / 2;
-			caGE.text(` ${this.lbl[0]}`, x, y);
-			caGE.textAlign(caGE.LEFT, caGE.CENTER);
-			x = (shape[0].x + shape[4].x) / 2;
-			y = (shape[0].y + shape[4].y) / 2;
-			caGE.text(` ${this.lbl[0]}`, x, y);
+			patternText(this.lbl[0], shape[3], shape[0], caGE.CENTER, caGE.TOP);
+			patternText(this.lbl[1], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
+			patternText(this.lbl[2], shape[4], shape[5], caGE.LEFT, caGE.CENTER);
 			caGE.pop();
 		},
 	},
-	Cylinder: {
+	Dreieckspyramide: {
+		lbl: ["a", "h", ""],
+		vals: [10, 10, null],
+		get radiusFactor() {
+			return [1, 1, 1];
+		},
+		cbRadiusEnable: false,
+		get circumference() {
+			return 4 * geoObjects.valA;
+		},
+		get basearea() {
+			return (geoObjects.valA * geoObjects.valA) / 2;
+		},
+		get fullarea() {
+			const a = geoObjects.valA;
+			const h = geoObjects.valB;
+			return ((3 * a) / 4) * ((a / 3) * Math.sqrt(3) + Math.sqrt(4 * h ** 2 + a ** 2 / 3));
+		},
+		get volume() {
+			return ((geoObjects.valA ** 2 * geoObjects.valB) / 12) * Math.sqrt(3);
+		},
+		show() {
+			const { a, b, c, d } = geoObjects.dim;
+			const shape = [
+				[a + b, c + d],
+				[-b, c - d],
+				[-(a + b), c + d],
+				[0, -(c + d)],
+				[0, c],
+			];
+			geoObjects.initiateShow();
+			//Grundfläche
+			caGE.beginShape();
+			for (let i = 0; i < 3; i++) {
+				caGE.vertex(...shape[i]);
+			}
+			caGE.endShape(caGE.CLOSE);
+
+			for (let n = 0; n < 3; n++) {
+				caGE.line(...shape[n], ...shape[3]);
+			}
+			caGE.strokeWeight(geoObjects.strokeHair);
+			caGE.line(...shape[3], ...shape[4]);
+			caGE.strokeWeight(geoObjects.strokeBody);
+
+			//text
+			caGE.fill(globalValues.colors.elements.text);
+			caGE.noStroke();
+			patternText(this.lbl[0], shape[2], shape[0], caGE.CENTER, caGE.TOP);
+			patternText(this.lbl[1], shape[3], shape[4], caGE.LEFT, caGE.CENTER);
+			caGE.pop();
+		},
+	},
+	Zylinder: {
 		get lbl() {
-			return [geoObjects.diameter.low, "h", ""];
+			return [geoObjects.diameter.cap, "h", ""];
 		},
 		vals: [10, 10, null],
+		get radiusFactor() {
+			return [geoObjects.diameterActive, 1, 1];
+		},
 		cbRadiusEnable: true,
 		get circumference() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
 			return Math.PI * 2 * valA;
 		},
 		get basearea() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
 			return Math.PI * valA * valA;
 		},
 		get fullarea() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor; //valA === R
+			const valA = geoObjects.valA; //valA === R
 			return 2 * Math.PI * valA * (geoObjects.valB + valA);
 		},
 		get volume() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
 			return Math.PI * valA * valA * geoObjects.valB;
-		},
-		get mass() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
-			return Math.PI * valA * valA * geoObjects.valB * geometrieOptions.roh * 0.001;
 		},
 		show() {
 			geoObjects.initiateShow();
-			caGE.line(geoObjects.drawDim.b, geoObjects.drawDim.d, geoObjects.drawDim.b, -geoObjects.drawDim.d);
-			caGE.line(-geoObjects.drawDim.b, geoObjects.drawDim.d, -geoObjects.drawDim.b, -geoObjects.drawDim.d);
-			caGE.ellipse(0, geoObjects.drawDim.d, geoObjects.drawDim.b * 2, geoObjects.drawDim.c * 2);
+			let { a, b, c, d } = geoObjects.dim;
+			const shape = [
+				[a + b, c],
+				[a + b, -c],
+				[-(a + b), c],
+				[-(a + b), -c],
+				[0, c],
+				[0, c + d],
+			];
+
+			caGE.line(...shape[0], ...shape[1]);
+			caGE.line(...shape[2], ...shape[3]);
+			caGE.ellipse(0, c, (a + b) * 2, d * 2);
 			caGE.noFill();
-			caGE.ellipse(0, -geoObjects.drawDim.d, geoObjects.drawDim.b * 2, geoObjects.drawDim.c * 2);
+			caGE.ellipse(0, -c, (a + b) * 2, d * 2);
 
 			//text
 			caGE.fill(globalValues.colors.elements.text);
 			caGE.noStroke();
-			caGE.textAlign(caGE.CENTER, caGE.TOP);
-			caGE.text(` ${this.lbl[0]}`, 0, geoObjects.drawDim.c + geoObjects.drawDim.d + geoObjects.drawDim.s);
-			caGE.textAlign(caGE.LEFT, caGE.CENTER);
-			caGE.text(` ${this.lbl[1]}`, geoObjects.drawDim.b, 0);
+			patternText(this.lbl[0], shape[5], shape[5], caGE.CENTER, caGE.TOP);
+			patternText(this.lbl[1], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
 			caGE.pop();
 		},
 	},
-	Pipe: {
+	Rohr: {
 		get lbl() {
 			return [geoObjects.diameter.cap, "h", geoObjects.diameter.low];
 		},
 		vals: [10, 10, 5],
+		get radiusFactor() {
+			return [geoObjects.diameterActive, 1, geoObjects.diameterActive];
+		},
 		cbRadiusEnable: true,
 		get circumference() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
-			const valC = geoObjects.valC * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
+			const valC = geoObjects.valC;
 			return Math.PI * 2 * (valA + valC);
 		},
 		get basearea() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
-			const valC = geoObjects.valC * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
+			const valC = geoObjects.valC;
 			return Math.PI * (valA * valA - valC * valC);
 		},
 		get fullarea() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
-			const valC = geoObjects.valC * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
+			const valC = geoObjects.valC;
 			return 2 * Math.PI * (valA * valA - valC * valC + (valA + valC) * geoObjects.valB);
 		},
 		get volume() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
-			const valC = geoObjects.valC * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
+			const valC = geoObjects.valC;
 			return Math.PI * (valA * valA - valC * valC) * geoObjects.valB;
-		},
-		get mass() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
-			const valC = geoObjects.valC * geoObjects.diameter.factor;
-			return Math.PI * (valA * valA - valC * valC) * geoObjects.valB * geometrieOptions.roh * 0.001;
 		},
 		show() {
 			geoObjects.initiateShow();
-			const innerR = caGE.createVector(geoObjects.drawDim.b, geoObjects.drawDim.c);
-			const outerR = caGE.createVector(geoObjects.drawDim.b - geoObjects.drawDim.s, geoObjects.drawDim.c - geoObjects.drawDim.s);
+			let { a, b, c, d, s } = geoObjects.dim;
+
+			const innerE = [a + b - s, d - s / 2];
+			const outerE = [a + b, d];
 			//  coloured Ellipse
-			let shape = [];
-			const yOff = geoObjects.drawDim.d;
 			caGE.angleMode(caGE.DEGREES);
+
+			let shape = [];
 			//inner Boundary
 			for (let a = 0; a < 360; a += 10) {
-				shape.push(caGE.createVector(outerR.x * caGE.cos(a), yOff + outerR.y * caGE.sin(a)));
+				shape.push([outerE[0] * caGE.cos(a), c + outerE[1] * caGE.sin(a)]);
 			}
-			shape.push(caGE.createVector(outerR.x, yOff));
+			shape.push([outerE[0], c]);
 			//outer Boundary
 			for (let a = 360; a >= 0; a -= 10) {
-				shape.push(caGE.createVector(innerR.x * caGE.cos(a), yOff + innerR.y * caGE.sin(a)));
+				shape.push([innerE[0] * caGE.cos(a), c + innerE[1] * caGE.sin(a)]);
 			}
 			caGE.noStroke();
 			caGE.beginShape();
 			for (const v of shape) {
-				caGE.vertex(v.x, v.y);
+				caGE.vertex(...v);
 			}
 			caGE.endShape();
+
+			const outline = [
+				[a + b, c],
+				[a + b, -c],
+				[-(a + b), c],
+				[-(a + b), -c],
+				[a + b - s, c],
+				[a + b - s, -c + (s * 2) / 3],
+				[-(a + b - s), c],
+				[-(a + b - s), -c + (s * 2) / 3],
+				[0, c + d],
+			];
+
 			caGE.angleMode(caGE.RADIANS);
-			caGE.stroke(geoObjects.lineCol);
+			caGE.stroke(globalValues.colors.elements.line);
 			caGE.noFill();
-			caGE.ellipse(0, -geoObjects.drawDim.d, innerR.x * 2, innerR.y * 2);
-			caGE.ellipse(0, -geoObjects.drawDim.d, outerR.x * 2, outerR.y * 2);
-			caGE.ellipse(0, geoObjects.drawDim.d, innerR.x * 2, innerR.y * 2);
-			caGE.ellipse(0, geoObjects.drawDim.d, outerR.x * 2, outerR.y * 2);
-			caGE.line(geoObjects.drawDim.b - geoObjects.drawDim.s, geoObjects.drawDim.d, geoObjects.drawDim.b - geoObjects.drawDim.s, -geoObjects.drawDim.d + geoObjects.drawDim.s * 2);
-			caGE.line(geoObjects.drawDim.b, geoObjects.drawDim.d, geoObjects.drawDim.b, -geoObjects.drawDim.d);
-			caGE.line(-geoObjects.drawDim.b + geoObjects.drawDim.s, geoObjects.drawDim.d, -geoObjects.drawDim.b + geoObjects.drawDim.s, -geoObjects.drawDim.d + geoObjects.drawDim.s * 2);
-			caGE.line(-geoObjects.drawDim.b, geoObjects.drawDim.d, -geoObjects.drawDim.b, -geoObjects.drawDim.d);
+			caGE.ellipse(0, c, (a + b) * 2, d * 2);
+			caGE.ellipse(0, -c, (a + b) * 2, d * 2);
+			caGE.ellipse(0, -c, (a + b - s) * 2, (d - s / 2) * 2);      
+			caGE.line(...outline[0], ...outline[1]);
+			caGE.line(...outline[2], ...outline[3]);
+
+      caGE.strokeWeight(geoObjects.strokeHair);
+			caGE.ellipse(0, c, (a + b - s) * 2, (d - s / 2) * 2);
+			caGE.line(...outline[4], ...outline[5]);
+			caGE.line(...outline[6], ...outline[7]);
+			caGE.strokeWeight(geoObjects.strokeBody);
+
+			caGE.fill(globalValues.colors.elements.text);
+			caGE.noStroke();
+			patternText(this.lbl[0], outline[8], outline[8], caGE.CENTER, caGE.TOP);
+			patternText(this.lbl[1], outline[0], outline[1], caGE.LEFT, caGE.CENTER);
+			caGE.pop();
+		},
+	},
+	Kegel: {
+		get lbl() {
+			return [geoObjects.diameter.cap, "h", ""];
+		},
+		vals: [10, 10, null],
+		get radiusFactor() {
+			return [geoObjects.diameterActive, 1, 1];
+		},
+		cbRadiusEnable: true,
+		get circumference() {
+			const valA = geoObjects.valA;
+			return Math.PI * 2 * valA;
+		},
+		get basearea() {
+			const valA = geoObjects.valA;
+			return Math.PI * valA * valA;
+		},
+		get fullarea() {
+			const a = geoObjects.valA;
+			return Math.PI * a * (geoObjects.valB + a);
+		},
+		get volume() {
+			const a = geoObjects.valA;
+			return (Math.PI / 3) * a ** 2 * geoObjects.valB;
+		},
+		show() {
+			geoObjects.initiateShow();
+			let { a, b, c, d } = geoObjects.dim;
+			const shape = [
+				[a + b, c],
+				[0, -c],
+				[-(a + b), c],
+				[0, -c],
+				[0, c],
+				[0, c + d],
+			];
+
+			caGE.ellipse(0, c, (a + b) * 2, d * 2);
+			caGE.noFill();
+			caGE.line(...shape[0], ...shape[1]);
+			caGE.line(...shape[2], ...shape[3]);
+			caGE.strokeWeight(geoObjects.strokeHair);
+			caGE.line(...shape[3], ...shape[4]);
+			caGE.strokeWeight(geoObjects.strokeBody);
 
 			//text
 			caGE.fill(globalValues.colors.elements.text);
 			caGE.noStroke();
-			caGE.textAlign(caGE.CENTER, caGE.TOP);
-			caGE.text(` ${this.lbl[0]}`, 0, geoObjects.drawDim.c + geoObjects.drawDim.d + geoObjects.drawDim.s);
-			caGE.textAlign(caGE.CENTER, caGE.BOTTOM);
-			caGE.text(` ${this.lbl[2]}`, 0, geoObjects.drawDim.c + geoObjects.drawDim.d - geoObjects.drawDim.s);
-			caGE.textAlign(caGE.LEFT, caGE.CENTER);
-			caGE.text(` ${this.lbl[1]}`, geoObjects.drawDim.b, 0);
+			patternText(this.lbl[0], shape[5], shape[5], caGE.CENTER, caGE.TOP);
+			patternText(this.lbl[1], shape[3], shape[4], caGE.LEFT, caGE.CENTER);
 			caGE.pop();
 		},
 	},
-	Sphere: {
+	Kugel: {
 		get lbl() {
-			return [geoObjects.diameter.low, "", ""];
+			return [geoObjects.diameter.cap, "", ""];
 		},
 		vals: [10, null, null],
+		get radiusFactor() {
+			return [geoObjects.diameterActive, 1, 1];
+		},
 		cbRadiusEnable: true,
 		get circumference() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
 			return Math.PI * 2 * valA;
 		},
 		get basearea() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
 			return Math.PI * valA * valA;
 		},
 		get fullarea() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
 			return 4 * Math.PI * valA * valA;
 		},
 		get volume() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
+			const valA = geoObjects.valA;
 			return (4 / 3) * Math.PI * valA * valA * valA;
-		},
-		get mass() {
-			const valA = geoObjects.valA * geoObjects.diameter.factor;
-			return (4 / 3) * Math.PI * valA * valA * valA * geometrieOptions.roh * 0.001;
 		},
 		show() {
 			geoObjects.initiateShow();
-			caGE.ellipse(0, 0, geoObjects.drawDim.b * 2, geoObjects.drawDim.c * 2);
+			let { a, b, c, d } = geoObjects.dim;
+			caGE.ellipse(0, 0, (a + b) * 2, d * 2);
 			caGE.noFill();
-			caGE.ellipse(0, 0, geoObjects.drawDim.b * 2, geoObjects.drawDim.b * 2);
+			caGE.circle(0, 0, (a + b) * 2);
+
 			//text
 			caGE.fill(globalValues.colors.elements.text);
 			caGE.noStroke();
-			caGE.textAlign(caGE.CENTER, caGE.TOP);
-			caGE.text(` ${this.lbl[0]}`, 0, geoObjects.drawDim.c + geoObjects.drawDim.s);
+			const shape = [0, d];
+			patternText(this.lbl[0], shape, shape, caGE.CENTER, caGE.TOP);
 			caGE.pop();
 		},
 	},
@@ -380,6 +553,7 @@ daEL(idVin_Area_2, "input", geoBerechnung);
 daEL(idCb_geoRadius, "click", geoChangeDiameter);
 
 export function clear_cl_Geometrie() {
+	geoObjects.elementIndex = geoObjects.elementIndexOrig;
 	let parent = dbID("idDiv_GeometrieAreaSelect");
 	KadDOM.clearFirstChild(parent);
 
@@ -391,7 +565,7 @@ export function clear_cl_Geometrie() {
 				type: "Btn",
 				subGroup: " text",
 				createClass: ["clBtn_geometrieAreaSelect"],
-				text: geoObjects.names[i],
+				text: geoObjects.elements[i],
 				onclick: () => {
 					changeGeoObject(i);
 				},
@@ -399,7 +573,7 @@ export function clear_cl_Geometrie() {
 			parent
 		);
 	}
-	changeGeoObject(0);
+	changeGeoObject(geoObjects.elementIndex);
 	dbID("idCb_geoRadius").checked = false;
 
 	let num = document.getElementsByName("naDiv_Area").length;
@@ -412,11 +586,11 @@ function geoChangeDiameter() {
 	geoObjects.radState = dbID("idCb_geoRadius").checked;
 	let num = document.getElementsByName("naDiv_Area").length;
 	for (let i = 0; i < num; i++) {
-		if (geoObjects[geoObjects.selectedGeo].vals[i]) {
-			dbID(`idLbl_Vin_Area_${i}`).innerHTML = geoObjects[geoObjects.selectedGeo].lbl[i]; //LABEL
+		if (geoObjects.selected.vals[i]) {
+			dbID(`idLbl_Vin_Area_${i}`).innerHTML = geoObjects.selected.lbl[i]; //LABEL
 		}
 	}
-	geoObjects[geoObjects.selectedGeo].show();
+	geoObjects.selected.show();
 	geoBerechnung();
 }
 
@@ -434,43 +608,51 @@ const caGE = new p5((c) => {
 		c.noLoop();
 	};
 	c.draw = function () {
-		const name = geoObjects.selectedGeo;
-		geoObjects[name].show();
+		geoObjects.selected.show();
 	};
 }, "#idCanv_geometire");
 
-// //Draw Geometrie here
+function patternText(text, v1, v2, posLR, posTB) {
+	const x = (v1[0] + v2[0]) / 2 + 3;
+	const y = (v1[1] + v2[1]) / 2 + 3;
+	caGE.textAlign(posLR, posTB);
+	caGE.text(` ${text}`, x, y);
+}
+
 function changeGeoObject(index) {
+	geoObjects.elementIndex = index;
 	let cl = dbCL("clBtn_geometrieAreaSelect", null);
 	for (let i = 0; i < cl.length; i++) {
 		KadDOM.btnColor(cl[i]);
 	}
-	KadDOM.btnColor(cl[index], "positive");
-	geoObjects.selectedGeo = geoObjects.elements[index];
-	geoObjects[geoObjects.selectedGeo].show();
+	KadDOM.btnColor(cl[geoObjects.elementIndex], "positive");
+	geoObjects.selected.show();
 
 	let num = document.getElementsByName("naDiv_Area").length;
 	for (let i = 0; i < num; i++) {
-		if (geoObjects[geoObjects.selectedGeo].vals[i]) {
-			dbIDStyle(`idDiv_Area_${i}`).display = "initial";
-			dbID(`idLbl_Vin_Area_${i}`).textContent = geoObjects[geoObjects.selectedGeo].lbl[i]; //LABEL
-			dbID(`idVin_Area_${i}`).placeholder = geoObjects[geoObjects.selectedGeo].vals[i];
+		if (geoObjects.selected.vals[i]) {
+			KadDOM.enableBtn(`idVin_Area_${i}`, true);
+			dbID(`idLbl_Vin_Area_${i}`).textContent = geoObjects.selected.lbl[i]; //LABEL
+			dbID(`idVin_Area_${i}`).placeholder = geoObjects.selected.vals[i];
 		} else {
-			dbIDStyle(`idDiv_Area_${i}`).display = "none";
+			KadDOM.enableBtn(`idVin_Area_${i}`, false);
+			KadDOM.enableBtn(`idVin_Area_${i}`, false);
+			dbID(`idLbl_Vin_Area_${i}`).textContent = ""; //LABEL
+			dbID(`idVin_Area_${i}`).placeholder = "";
 		}
 	}
-	KadDOM.enableBtn(idCb_geoRadius, geoObjects[geoObjects.selectedGeo].cbRadiusEnable);
+	KadDOM.enableBtn(idCb_geoRadius, geoObjects.selected.cbRadiusEnable);
 	const cbEntry = dbID("idLbl_goeRadius").textContent;
-	dbID("idLbl_goeRadius").innerHTML = geoObjects[geoObjects.selectedGeo].cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
+	dbID("idLbl_goeRadius").innerHTML = geoObjects.selected.cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
 	geoBerechnung();
 }
 
 //---------------------------
 function geoBerechnung() {
-	let selectedObj = geoObjects[geoObjects.selectedGeo];
-	geoObjects.valA = KadDOM.numberFromInput("idVin_Area_0", selectedObj.vals[0]);
-	geoObjects.valB = KadDOM.numberFromInput("idVin_Area_1", selectedObj.vals[1]);
-	geoObjects.valC = KadDOM.numberFromInput("idVin_Area_2", selectedObj.vals[2]);
+	let selectedObj = geoObjects.selected;
+	geoObjects.valA = KadDOM.numberFromInput("idVin_Area_0", selectedObj.vals[0]) * selectedObj.radiusFactor[0];
+	geoObjects.valB = KadDOM.numberFromInput("idVin_Area_1", selectedObj.vals[1]) * selectedObj.radiusFactor[1];
+	geoObjects.valC = KadDOM.numberFromInput("idVin_Area_2", selectedObj.vals[2]) * selectedObj.radiusFactor[2];
 	geometrieOptions.result.circumference = KadValue.number(selectedObj.circumference, { decimals: 3 });
 	geometrieOptions.result.basearea = KadValue.number(selectedObj.basearea, { decimals: 3 });
 	geometrieOptions.result.fullarea = KadValue.number(selectedObj.fullarea, { decimals: 3 });
@@ -480,11 +662,11 @@ function geoBerechnung() {
 }
 
 export function geoUpdateMasse() {
-	let selectedObj = geoObjects[geoObjects.selectedGeo];
+	let selectedObj = geoObjects.selected;
 	geometrieOptions.result.mass = [];
 	for (let i = 0; i < geometrieOptions.matList.length; i++) {
-		geometrieOptions.roh = Data_Materials.Materials[geometrieOptions.matList[i]].roh;
-		const mass = KadValue.number(selectedObj.mass, { decimals: 4 });
+		let mass = Data_Materials.Materials[geometrieOptions.matList[i]].roh * 0.001 * selectedObj.volume;
+		mass = KadValue.number(mass, { decimals: 4 });
 		geometrieOptions.result.mass.push({
 			mass: mass,
 			matName: geometrieOptions.matList[i],

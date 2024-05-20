@@ -5,7 +5,7 @@ const usergridOptions = {
 	enableAll: false,
 	checkAllGroups: () => {
 		//usergridCheckGroup
-		for (const [groupKey, state] of Object.entries(usergridOptions.groups)) {
+		for (const groupKey of Object.keys(usergridOptions.groups)) {
 			let counter = 0;
 			const cbEnabled = dbCL(`clCb_disableUsergridSingle_${groupKey}`, null);
 			for (let i = 0; i < cbEnabled.length; i++) {

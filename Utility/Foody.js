@@ -151,7 +151,7 @@ export function clear_cl_Foody() {
 	foodyOptions.preheat = KadDOM.resetInput("idVin_foodyPreheat", foodyOptions.preheatOrig);
 	dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
 	for (let i = 0; i < foodyOptions.data.length; i++) {
-		dbID("idSel_foodyType").options[i] = new Option(`${foodyOptions.data[i].name} (${foodyOptions.data[i].time}min)`);
+		dbID("idSel_foodyType").options[i] = new Option(`${foodyOptions.data[i].name} (${foodyOptions.data[i].time}min)`, i);
 	}
 	const randomStart = KadRandom.randomIndex(foodyOptions.data);
 	dbID("idSel_foodyType").options[randomStart].selected = true;
@@ -159,7 +159,7 @@ export function clear_cl_Foody() {
 }
 
 function foodyStartChange() {
-	let index = dbID("idSel_foodyType").selectedIndex;
+	const index = dbID("idSel_foodyType").value;
 	foodyOptions.chosenFood = foodyOptions.data[index];
 	foodyOptions.timerState = !foodyOptions.timerState;
 	if (foodyOptions.timerState) {
@@ -196,7 +196,7 @@ function foodyCountdown() {
 	bar.setAttribute("value", foodyOptions.timeRemaining);
 	if (foodyOptions.timeRemaining <= 0) {
 		if (dbID("idCb_foodyVoiceOutput").checked) {
-			let index = dbID("idSel_foodyType").selectedIndex;
+			let index = dbID("idSel_foodyType").value;
 			let s = foodyOptions.data[index].numerus ? "sind" : "ist";
 			const sentence = `${foodyOptions.data[index].name} ${s} feritg!`;
 			speechSpeakOutput(sentence, "de");

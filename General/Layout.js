@@ -52,7 +52,7 @@ export const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: KadUtils.hostDebug() ? "cl_Howa" : "Universe",
+	defaultPage: KadUtils.hostDebug() ? "cl_Geometrie" : "Universe",
 };
 
 export function createContentlayoutList() {
@@ -79,10 +79,6 @@ export function resizeGrid() {
 	const winWidth = window.innerWidth;
 	const minWidth = globalValues.mediaSizes.divGridMinWidth;
 	const x = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols, floored division
-	// const gap = KadUtils.KadCSS.getRoot("gridGap", true);
-	// const margin = globalValues.mediaSizes.margin;
-	// const tryWidth = minWidth * x + (x - 1) * gap + margin * 2;
-	// const calcX = tryWidth < winWidth + gap + margin * 2 ? x : x;
 	const calcX = x; //tryWidth < winWidth + gap + margin * 2 ? x : x;
 	if (KadUtils.KadCSS.getRoot("gridRowLength", true) != calcX) {
 		KadUtils.KadCSS.setRoot("gridRowLength", calcX);
@@ -143,8 +139,6 @@ function navTitle() {
 		titleText = nuncDiscipuli.short;
 	} else if (contentLayout.prevNavContent == "GlobalSettings") {
 		titleText = "Settings";
-		// } else if (["AccountSettingsA", "AccountSettingsB"].includes(contentLayout.prevNavContent)) {
-		// 	titleText = "UserData";
 	} else if (contentLayout.prevNavContent == "Clear") {
 		titleText = bgaOptions.animations[bgaOptions.curr].constructor.name;
 	} else if (contentLayout.prevNavContent.includes("cl_")) {
@@ -170,9 +164,11 @@ function createGridLayout(layoutName) {
 		return;
 	}
 	for (const name of contentLayout.contentList) {
-		let contWidth = contentGrid[name].hasOwnProperty("width") ? contentGrid[name].width : 1;
+		KadUtils.errorCheck(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name);
+		let contWidth = contentGrid[name].size[0];
 		if (contWidth > rowLength) contWidth = rowLength;
-		let contHeight = contentGrid[name].hasOwnProperty("height") ? contentGrid[name].height : 1;
+		const contHeight = contentGrid[name].size[1];
+
 		let notPlaced = true;
 		let indexRow = 0;
 
@@ -210,8 +206,7 @@ function createGridLayout(layoutName) {
 			} // end main FOR (r)
 			indexRow++;
 			//safety
-			if (indexRow > 100) {
-				console.error("unable to find spot!");
+			if (KadUtils.errorCheck(indexRow > 100, "unable to find spot!")) {
 				break;
 			}
 		} // end WHILE
@@ -263,6 +258,7 @@ function createAreaString(gridArray, rowLength) {
 	}
 	gridString += '"';
 	gridString = gridString.slice(2); // remove fist '" ' from the string
+
 	KadUtils.dbIDStyle("id_contentGrid").gridTemplateAreas = gridString;
 }
 
@@ -272,19 +268,38 @@ export function createSubgrid() {
 		dbList.push(dbDataObj.contentName);
 	}
 	for (const gridKey in contentGrid) {
-		KadUtils.dbCL(gridKey).classList.add("cl_contentSubGrid");
-		KadUtils.dbCLStyle(gridKey).gridArea = gridKey;
+		const parentGrid = KadUtils.dbCL(gridKey);
 		const contentObj = contentGrid[gridKey];
 		const displayName = contentObj.name;
 
-		for (const content of contentObj.subgrid) {
-			KadUtils.dbCLStyle(content[0]).gridArea = content[0];
-			if (content[1]) KadUtils.dbCLStyle(content[0]).justifySelf = content[1];
-			if (content[2]) KadUtils.dbCLStyle(content[0]).alignSelf = content[2];
+		parentGrid.style.gridArea = gridKey;
+
+		const childDivArea = parentGrid.children[0].style;
+		childDivArea.gridTemplateRows = "";
+		for (let num of contentObj.maingrid.rows) {
+			if (num == 0) {
+				childDivArea.gridTemplateRows += "auto ";
+			} else {
+				childDivArea.gridTemplateRows += `var(--UIHeight${num}) `;
+			}
+		}
+		childDivArea.gridTemplateRows += "auto";
+
+		const arr = KadUtils.KadArray.createArray(contentObj.maingrid.areas[0].length, null, "auto").join(" ");
+		childDivArea.gridTemplateColumns = `1fr ${arr} 1fr`;
+
+		childDivArea.gridTemplateAreas = "";
+		for (const main of contentObj.maingrid.areas) {
+			childDivArea.gridTemplateAreas += `". ${main.join(" ")} ." `;
+		}
+
+		for (const sub of contentObj.subgrid) {
+			KadUtils.dbCLStyle(sub[0]).gridArea = sub[0];
+			if (sub[1]) KadUtils.dbCLStyle(sub[0]).justifySelf = sub[1];
+			if (sub[2]) KadUtils.dbCLStyle(sub[0]).alignSelf = sub[2];
 		}
 
 		// CERATE Title-bar
-		const parentGrid = KadUtils.dbCL(gridKey);
 		const parent = document.createElement("DIV");
 		parent.classList.add("cl_gridTitle"); //design sits inside this class!!!
 		parent.id = `idDiv_gridTitle_${gridKey}`;
@@ -502,7 +517,7 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	contentLayout.contentLength = 0;
-	if (contentGroupSort.length != KadUtils.objectLength(contentLayout.navContent)) console.log("Not all Groupnames contained in `contentGroupSort`");
+	KadUtils.errorCheck(contentGroupSort.length != KadUtils.objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupSort`");
 
 	for (let i = contentGroupSort.length - 1; i >= 0; i--) {
 		contentLayout.contentLength++;

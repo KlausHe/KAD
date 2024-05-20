@@ -1,6 +1,6 @@
 import { resetAll } from "../Main.js";
 import * as KadUtils from "../General/KadUtils.js";
-import { contentGrid, contentLayout, navClick } from "./Layout.js";
+import { contentLayout, navClick } from "./Layout.js";
 import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "./MainData.js";
 import * as DBData from "../MainModulesDBData.js";
 

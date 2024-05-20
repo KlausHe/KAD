@@ -5,41 +5,24 @@ const patternOptions = {
 		return globalValues.mediaSizes.canvasSize.w * 0.02;
 	},
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w * 1.5, h: globalValues.mediaSizes.canvasSize.h / 4 };
+		return { w: globalValues.mediaSizes.canvasSize.w * 1.5, h: globalValues.mediaSizes.canvasSize.h / 3 };
 	},
-	length: {
-		//0
-		val: null,
-		valOrig: 330,
-		name: "Gesamtlänge",
-	},
-	side: {
-		//1
-		val: null,
-		valOrig: 20,
-		name: "Seitenversatz",
-	},
-	numHoles: {
-		//4
-		val: null,
-		valOrig: 2,
-		name: "Punkte",
-	},
-	asym: {
-		//3
-		val: null,
-		valOrig: 0,
-		name: "Asymetrie",
-	},
-	propHoles: {
-		val: null,
-		valOrig: 3,
-		name: "Vorschlag",
-	},
-	holeDist: 200,
+	names: ["Gesamtlänge", "Seitenversatz", "Asymetrie", "Punkte", "Vorschlag"],
+	valOrig: [330, 20, 0, 3, 3],
+	size: 0,
+	side: 0,
+	asym: 0,
+	holes: 0,
+	propHoles: 0,
+	holeDist: 90,
 	absArr: [],
-	incArr: [],
 };
+
+daEL(idVin_Pattern0, "input", patternSize);
+daEL(idVin_Pattern1, "input", patternSide);
+daEL(idVin_Pattern2, "input", patternAsym);
+daEL(idVin_Pattern3, "input", patternHoles);
+daEL(idVin_Pattern4, "click", patternProp);
 
 const caPA = new p5((c) => {
 	c.setup = function () {
@@ -49,150 +32,139 @@ const caPA = new p5((c) => {
 		c.colorMode(c.HSL);
 		c.noLoop();
 	};
-}, "#idCanv_pattern");
+	c.draw = function () {
+		caPA.clear();
+		caPA.translate(patternOptions.margin, patternOptions.margin);
+		const w = patternOptions.canvas.w - 2 * patternOptions.margin;
+		const h = patternOptions.canvas.h - 2 * patternOptions.margin;
+		const offsetLineTop = 0.1;
+		const offsetContur = offsetLineTop + 0.15;
+		const offsetPoint = offsetContur + 0.2;
+		const offsetLineInc = offsetPoint + 0.2;
+		const offsetTextInc = offsetLineInc + 0.1;
+		const offsetLineAbs = offsetTextInc + 0.1;
+		const offsetTextAbs = offsetLineAbs + 0.05;
 
-daEL(idVin_Pattern0, "input", calcPattern);
-daEL(idVin_Pattern1, "input", calcPattern);
-daEL(idVin_Pattern2, "input", calcPattern);
-daEL(idVin_Pattern3, "input", calcPattern);
-daEL(idVin_Pattern4, "click", patternProp);
+		//Maincontur
+		patternLine([0, h * offsetContur], [w, h * offsetContur], 3);
+		patternLine([0, h * offsetContur], [0, h], 3);
+		patternLine([w, h * offsetContur], [w, h], 3);
+
+		//text Length top
+		patternText(KadValue.number(patternOptions.size, { decimals: 3 }), [w / 2, 0]);
+		patternArrowLine([0, h * offsetLineTop], [w, h * offsetLineTop]);
+		patternLine([0, 0], [0, h * offsetContur]);
+		patternLine([w, 0], [w, h * offsetContur]);
+
+		let prevX;
+		for (let i = 1; i < patternOptions.absArr.length; i++) {
+			const currX = (patternOptions.absArr[i] / patternOptions.size) * w;
+			prevX = (patternOptions.absArr[i - 1] / patternOptions.size) * w;
+
+			if (i < patternOptions.absArr.length - 1) {
+				patternPoint([currX, h * offsetPoint], 3, 10);
+				patternLine([currX, h * offsetPoint], [currX, h * offsetLineAbs]);
+				patternText(KadValue.number(patternOptions.absArr[i], { decimals: 3 }), [currX, h * offsetTextAbs]);
+			}
+			patternArrowLine([prevX, h * offsetLineInc], [currX, h * offsetLineInc]);
+			patternText(KadValue.number(patternOptions.absArr[i] - patternOptions.absArr[i - 1], { decimals: 3 }), [(prevX + currX) * 0.5, h * offsetTextInc]);
+		}
+	};
+}, "#idCanv_pattern");
 
 export function canvas_cl_Pattern() {
 	caPA.resizeCanvas(patternOptions.canvas.w, patternOptions.canvas.h);
-  drawPattern();
+	caPA.redraw();
 }
 
 export function clear_cl_Pattern() {
-	patternOptions.length.val = KadDOM.resetInput("idVin_Pattern0", patternOptions.length.valOrig);
-	patternOptions.side.val = KadDOM.resetInput("idVin_Pattern1", patternOptions.side.valOrig);
-	patternOptions.asym.val = KadDOM.resetInput("idVin_Pattern2", patternOptions.asym.valOrig);
-	patternOptions.numHoles.val = KadDOM.resetInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
+	patternOptions.size = KadDOM.resetInput("idVin_Pattern0", patternOptions.valOrig[0]);
+	patternOptions.side = KadDOM.resetInput("idVin_Pattern1", patternOptions.valOrig[1]);
+	patternOptions.asym = KadDOM.resetInput("idVin_Pattern2", patternOptions.valOrig[2]);
+	patternOptions.holes = KadDOM.resetInput("idVin_Pattern3", patternOptions.valOrig[3]);
 
-	dbID("idLbl_Pattern0").textContent = patternOptions.length.name; //gesamltänge
-	dbID("idLbl_Pattern1").textContent = patternOptions.side.name; //Seitenversatz
-	dbID("idLbl_Pattern2").textContent = patternOptions.asym.name; //Asymmetrie
-	dbID("idLbl_Pattern3").textContent = patternOptions.numHoles.name; //Punkte
+	dbID("idLbl_Pattern0").textContent = patternOptions.names[0]; //gesamltänge
+	dbID("idLbl_Pattern1").textContent = patternOptions.names[1]; //Seitenversatz
+	dbID("idLbl_Pattern2").textContent = patternOptions.names[2]; //Asymmetrie
+	dbID("idLbl_Pattern3").textContent = patternOptions.names[3]; //Punkte
+	calcPattern();
+}
+
+function patternSize() {
+	patternOptions.size = KadDOM.numberFromInput("idVin_Pattern0", patternOptions.valOrig[0]);
+	calcPattern();
+}
+function patternSide() {
+	patternOptions.side = KadDOM.numberFromInput("idVin_Pattern1", patternOptions.valOrig[1]);
+	calcPattern();
+}
+function patternAsym() {
+	patternOptions.asym = KadDOM.numberFromInput("idVin_Pattern2", patternOptions.valOrig[2]);
+	calcPattern();
+}
+function patternHoles() {
+	patternOptions.holes = KadDOM.numberFromInput("idVin_Pattern3", patternOptions.valOrig[3]);
+	calcPattern();
+}
+function patternProp() {
+	patternOptions.holes = patternOptions.propHoles;
+	dbID("idVin_Pattern3").value = patternOptions.propHoles;
 	calcPattern();
 }
 
 function calcPattern() {
-	patternOptions.length.val = KadDOM.numberFromInput("idVin_Pattern0", patternOptions.length.valOrig);
-	patternOptions.side.val = KadDOM.numberFromInput("idVin_Pattern1", patternOptions.side.valOrig);
-	patternOptions.asym.val = KadDOM.numberFromInput("idVin_Pattern2", patternOptions.asym.valOrig);
-	patternOptions.numHoles.val = KadDOM.numberFromInput("idVin_Pattern3", patternOptions.numHoles.valOrig);
+	//correct side if size < 2 * side
+	patternOptions.side = patternOptions.size <= 2 * patternOptions.side ? 0 : patternOptions.side;
+	dbID("idLbl_Pattern1").textContent = patternOptions.side;
 
-	//correct based on Length
-	patternOptions.side.val = patternOptions.length.val <= 2 * patternOptions.side.val ? 0 : patternOptions.side.val;
+	const correctedSize = patternOptions.size - 2 * patternOptions.side;
+	patternOptions.propHoles = 1 + Math.ceil((correctedSize - patternOptions.asym) / patternOptions.holeDist);
+	dbID("idVin_Pattern4").textContent = `${patternOptions.propHoles} Punkte`;
 
-	let minAbstand = patternOptions.length.val - 2 * patternOptions.side.val;
-	if (minAbstand > patternOptions.holeDist) {
-		patternOptions.propHoles.val = 1 + Math.ceil(minAbstand / patternOptions.holeDist);
-	} else {
-		patternOptions.propHoles.val = 2;
+	patternOptions.absArr = [0];
+	// const tempSize = patternOptions.holes % 2 == 0 ? correctedSize - patternOptions.asym : correctedSize;
+	const holeDistance = correctedSize / (patternOptions.holes - 1);
+
+	for (let i = 0; i < patternOptions.holes; i++) {
+		const asymAdd = i > patternOptions.holes * 0.5 ? 0 : patternOptions.asym;
+		patternOptions.absArr[i + 1] = patternOptions.side + i * holeDistance + asymAdd;
 	}
-	dbID("idVin_Pattern4").textContent = `${patternOptions.propHoles.val} Punkte`;
-
-	//Array
-	let incBasis = (patternOptions.length.val - 2 * patternOptions.side.val - patternOptions.asym.val) / (patternOptions.numHoles.val - 1);
-	patternOptions.incArr = [patternOptions.side.val];
-	patternOptions.absArr = [patternOptions.side.val];
-	for (let i = 1; i < patternOptions.numHoles.val; i++) {
-		if (patternOptions.numHoles.val % 2 !== 0) {
-			if (i == Math.floor(patternOptions.numHoles.val / 2) || i == Math.floor(patternOptions.numHoles.val / 2 + 1)) {
-				patternOptions.incArr.push(incBasis + patternOptions.asym.val / 2);
-			} else {
-				patternOptions.incArr.push(incBasis);
-			}
-		} else {
-			if (i == Math.floor(patternOptions.numHoles.val / 2)) {
-				patternOptions.incArr.push(incBasis + patternOptions.asym.val);
-			} else {
-				patternOptions.incArr.push(incBasis);
-			}
-		}
-		patternOptions.absArr.push(patternOptions.incArr[i] + patternOptions.absArr[i - 1]);
-	}
-	patternOptions.incArr.push(patternOptions.side.val);
-	patternOptions.absArr.push(patternOptions.incArr[patternOptions.numHoles.val] + patternOptions.absArr[patternOptions.numHoles.val - 1]);
-	drawPattern();
+	patternOptions.absArr.push(patternOptions.size);
+	caPA.redraw();
 }
 
-function patternProp() {
-	dbID("idVin_Pattern3").value = patternOptions.propHoles.val;
-	calcPattern();
+function patternPoint(pos, weight = 3, d = 10) {
+	// caPA.noStroke();
+	// caPA.fill(globalValues.colors.elements.line);
+	caPA.stroke(globalValues.colors.elements.line);
+	caPA.strokeWeight(weight);
+	caPA.noFill();
+	caPA.circle(...pos, d);
 }
 
-function drawPattern() {
-	caPA.clear();
-	const m = patternOptions.margin;
-	const w = patternOptions.canvas.w;
-	const h = patternOptions.canvas.h;
-	const r = globalValues.mediaSizes.radius;
+function patternLine(start, end, weight = 1) {
+	caPA.stroke(globalValues.colors.elements.line);
+	caPA.strokeWeight(weight);
+	caPA.line(...start, ...end);
+}
 
-	//text Length top
+function patternArrowLine(start, end, weight = 1) {
+	const arrowSizeX = 6;
+	patternLine(start, end, weight);
+	const sx = start[0];
+	const sy = start[1];
+	const ex = end[0];
+	const ey = end[1];
+	const arrowSizeY = arrowSizeX / 3;
+	caPA.triangle(...start, sx + arrowSizeX, sy - arrowSizeY, sx + arrowSizeX, sy + arrowSizeY);
+	caPA.triangle(...end, ex - arrowSizeX, ey - arrowSizeY, ex - arrowSizeX, ey + arrowSizeY);
+}
+
+function patternText(text, pos) {
 	caPA.textSize(globalValues.mediaSizes.fontSize);
-	caPA.textAlign(caPA.CENTER, caPA.CENTER);
+	caPA.textAlign(caPA.CENTER, caPA.TOP);
 	caPA.noStroke();
 	caPA.fill(globalValues.colors.elements.line);
 	caPA.strokeWeight(1);
-	caPA.text(KadValue.number(patternOptions.length.val, { decimals: 3 }), w / 2, h * 0.1);
-	//Maincontur
-	caPA.stroke(globalValues.colors.elements.line);
-	caPA.strokeWeight(4);
-	let offset = 0.3;
-	// caPA.line(m, h * offset, m, h);
-	// caPA.line(w - m, h * offset, w - m, h);
-	caPA.line(m, h * offset, w - m, h * offset);
-
-	caPA.strokeWeight(1);
-	//measure at top
-	offset = 0.1;
-	caPA.line(m, h * offset, m, h * 0.6);
-	caPA.line(w - m, h * offset, w - m, h * 0.6);
-	caPA.line(m, h * offset * 2, w - m, h * offset * 2);
-
-	//measure horizontal at bottom
-	offset = 0.45;
-	caPA.line(m, h * offset, w - m, h * offset);
-	// return;
-
-	//draw points and measurements in kleiner schrift
-	let absPos;
-	let incPos;
-	caPA.strokeWeight(1);
-
-	const dw = w - 2 * m;
-	const drawingScaling = dw / patternOptions.length.val;
-	for (let i = 0; i < patternOptions.absArr.length; i++) {
-		absPos = drawingScaling * patternOptions.absArr[i];
-		if (i == 0) {
-			incPos = absPos / 2;
-		} else {
-			incPos = drawingScaling * ((patternOptions.absArr[i] + patternOptions.absArr[i - 1]) / 2);
-		}
-		absPos += m;
-		incPos += m;
-
-		//draw line and circle
-		if (i < patternOptions.absArr.length - 1) {
-			caPA.noFill();
-			caPA.strokeWeight(1);
-			caPA.stroke(globalValues.colors.elements.line);
-			offset = 0.3;
-			caPA.line(absPos, h * offset, absPos, h * offset * 2.5);
-			caPA.strokeWeight(4);
-			caPA.circle(absPos, h * offset, 2 * r);
-		}
-
-		// draw ABS Text
-		if (patternOptions.side.val == 0 && (i == 0 || i == patternOptions.absArr.length - 1)) continue;
-		caPA.fill(globalValues.colors.elements.line);
-		caPA.noStroke();
-		if (i < patternOptions.absArr.length - 1 && patternOptions.absArr[i] != patternOptions.length.val) {
-			offset = 0.9;
-			caPA.text(KadValue.number(patternOptions.absArr[i], { decimals: 3 }), absPos, h * offset);
-		}
-		offset = 0.55;
-		caPA.text(KadValue.number(patternOptions.incArr[i], { decimals: 3 }), incPos, h * offset);
-	}
+	caPA.text(text, ...pos);
 }

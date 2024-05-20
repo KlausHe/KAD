@@ -31,7 +31,7 @@
 	--gridGap: 0.25rem;
 	--gridMarginSideFactor: 0.5;
 	--gridMarginSide: calc(var(--UIHeight1) * var(--gridMarginSideFactor));
-	--divGridMinWidthFactor: 28;
+	--divGridMinWidthFactor: 18;
 	--divGridMinWidth: calc(var(--UIHeight1) * var(--divGridMinWidthFactor));
 	--divGridMinHeight: calc(var(--UIHeight1) * 10);
 	--navOrientation: column;
@@ -331,6 +331,21 @@ tbody tr:last-child td {
 }
 
 /* Gird Design */
+section {
+	background-color: hsl(var(--bgcSubgrid) / var(--opacitySubgrid));
+	border-radius: var(--LayoutRadius);
+	min-height: var(--divGridMinHeight);
+	-webkit-transition: all var(--transitionTimeInfo) ease;
+	transition: all var(--transitionTimeInfo) ease;
+	overflow: hidden;
+	z-index: 4;
+}
+
+section:hover > .cl_gridTitle {
+	background-color: hsl(var(--bgcNavbar) / 1);
+	color: hsl(var(--txtNavbar));
+}
+
 .cl_contentGrid {
 	min-height: 100vh;
 	display: grid;

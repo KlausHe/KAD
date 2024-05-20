@@ -171,7 +171,7 @@ function sepakbolaRequest() {
 }
 
 function sepakbolaReturnError(error) {
-	console.log(error);
+	KadUtils.error("Sepakbola could not receive data:", error);
 }
 
 // async function sepakbolaGetData() {

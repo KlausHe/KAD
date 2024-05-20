@@ -4,7 +4,6 @@ export const rawContentGrid = {
 	//Benkyou
 	cl_Analysis: {
 		userSelected: true,
-		deactivated: true,
 		contentGroup: "Benkyou",
 		globalValString: "idVin_analysisEntry",
 		name: "Analysis-Analyse",
@@ -12,21 +11,38 @@ export const rawContentGrid = {
 			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
 		},
 		info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -100, der beste ist 100",
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_AnalysisInput", "cl_AnalysisResult"],
+				["cl_AnalysisInput", "cl_AnalysisProgress"],
+				// ["cl_AnalysisNews", "cl_AnalysisTabResult"],
+				["cl_AnalysisWiki", "cl_AnalysisTabResult"],
+			],
+			rows: [0, 0],
+		},
 		subgrid: [
 			["cl_AnalysisInput", "right"],
 			["cl_AnalysisResult", "center"],
 			["cl_AnalysisProgress", "center", "start"],
-			["cl_AnalysisNews", "right"],
+			// ["cl_AnalysisNews", "right"],
 			["cl_AnalysisWiki", "right"],
 			["cl_AnalysisTabResult", "center"],
 		],
 	},
 	cl_Speech: {
 		userSelected: true,
+		deactivated: false,
 		contentGroup: "Benkyou",
 		globalValString: "idArea_speechFromText",
 		name: "Speech",
 		heritage: ["englisch", "Sprache"],
+		size: [2, 1],
+		maingrid: {
+			areas: [["cl_SpeechLangSelect"], ["cl_SpeechVoiceSelect"], ["cl_SpeechOutputArea"]],
+			rows: [1, 1],
+		},
 		subgrid: [
 			["cl_SpeechLangSelect", "center"],
 			["cl_SpeechVoiceSelect", "center"],
@@ -43,6 +59,11 @@ export const rawContentGrid = {
 			Daten: "https://www.openthesaurus.de",
 		},
 		info: "Finde Synonyme für einen Begriff.",
+		size: [1, 2],
+		maingrid: {
+			areas: [["cl_SynonymInput"], ["cl_SynonymSearchword"], ["cl_SynonymTable"]],
+			rows: [1, 1],
+		},
 		subgrid: [
 			["cl_SynonymInput", "center"],
 			["cl_SynonymSearchword", "center"],
@@ -57,6 +78,16 @@ export const rawContentGrid = {
 		source: {
 			Code: "https://thecodingtrain.com/CodingChallenges/075-wikipedia-api.html",
 		},
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_WikiInput", "cl_WikiResultImage", "cl_WikiResultTitle"],
+				["cl_WikiLanguage", "cl_WikiResultImage", "cl_WikiResultTitle"],
+				["cl_WikiTable", "cl_WikiResultText", "cl_WikiResultText"],
+			],
+			rows: [1, 0],
+		},
 		subgrid: [
 			["cl_WikiInput", "left"],
 			["cl_WikiLanguage", "left"],
@@ -69,11 +100,21 @@ export const rawContentGrid = {
 	//Games
 	cl_Beatmachine: {
 		userSelected: true,
-		width: 2,
+		deactivated: true,
 		contentGroup: "Games",
 		name: "Beatmachine",
 		heritage: ["englisch", "Rhythmusmaschine"],
 		info: "Drumpattern im klassischen Stil erstellen",
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_BeatmachineOptionsA", "cl_BeatmachineOptionsB"],
+				["cl_BeatmachineOptionsC", "cl_BeatmachineOptionsD"],
+				["cl_BeatmachineTracks", "cl_BeatmachineTracks"],
+			],
+			rows: [1, 1],
+		},
 		subgrid: [
 			["cl_BeatmachineOptionsA", "left"],
 			["cl_BeatmachineOptionsB", "left"],
@@ -84,11 +125,19 @@ export const rawContentGrid = {
 	},
 	cl_Empat: {
 		userSelected: true,
-		height: 2,
 		contentGroup: "Games",
 		name: "Sambung Empat",
 		heritage: ["malaysisch", "verbinde vier"],
 		info: 'Klassisches 4-Gewinnt!Benutze die Maus, die Pfeiltasten oder die Zifferntasten zum bewegen. Mit "Enter" oder "Space" lässt sich ein Stein legen.',
+		size: [3, 3],
+		maingrid: {
+			areas: [
+				//
+				["cl_EmpatInputs"],
+				["cl_EmpatCanvas"],
+			],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_EmpatInputs", "center"],
 			["cl_EmpatCanvas", "center"],
@@ -96,7 +145,6 @@ export const rawContentGrid = {
 	},
 	cl_Ibhaluni: {
 		userSelected: true,
-		height: 2,
 		contentGroup: "Games",
 		name: "Ibhaluni",
 		heritage: ["zulu", "Ballon"],
@@ -104,6 +152,15 @@ export const rawContentGrid = {
 			Hintergrundbild: "https://opengameart.org/content/flappy-bird-background",
 		},
 		info: "Plopp die Ballons!",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_IbhaluniInputs"],
+				["cl_IbhaluniCanvas"],
+			],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_IbhaluniInputs", "center"],
 			["cl_IbhaluniCanvas", "center"],
@@ -118,6 +175,20 @@ export const rawContentGrid = {
 			Daten: "https://restcountries.com/",
 		},
 		info: "Erweitere dein Wissen in Geographie!",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_LinahaOptionsA", "cl_LinahaOptionsA"],
+				["cl_LinahaOptionsB", "cl_LinahaOptionsStart"],
+				["cl_LinahaOptionsC", "cl_LinahaOptionsStart"],
+				["cl_LinahaRounds", "cl_LinahaMap"],
+				["cl_LinahaScore", "cl_LinahaMap"],
+				["cl_LinahaQuestion", "cl_LinahaQuestion"],
+				["cl_LinahaAnswers", "cl_LinahaAnswers"],
+			],
+			rows: [1, 1, 1, 1, 1, 2],
+		},
 		subgrid: [
 			["cl_LinahaOptionsA", "center"],
 			["cl_LinahaOptionsB", "left"],
@@ -133,7 +204,6 @@ export const rawContentGrid = {
 	cl_Lotto: {
 		userSelected: true,
 		logReqUser: false,
-		width: 2,
 		contentGroup: "Games",
 		name: "Lotto",
 		source: {
@@ -141,6 +211,18 @@ export const rawContentGrid = {
 			Daten: "https://www.npmjs.com/package/norsk-tipping",
 		},
 		info: "Lotto / Eurojackpot",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_LottoOverview", "cl_LottoOptionsA"],
+				["cl_LottoOverview", "cl_LottoOptionsB"],
+				["cl_LottoCanvas", "cl_LottoSavedGame"],
+				["cl_LottoCanvas", "cl_LottoGetGames"],
+				["cl_LottoCanvas", "cl_LottoTabGames"],
+			],
+			rows: [1, 1, 1, 1],
+		},
 		subgrid: [
 			["cl_LottoOptionsA", "center"],
 			["cl_LottoOptionsB", "center"],
@@ -165,6 +247,20 @@ export const rawContentGrid = {
 			Zoo: "https://www.iconfinder.com/iconsets/zoo-line-welcome-to-zootopia",
 		},
 		info: "Klassisches Memory!",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_NumberyImages", "cl_NumberyInputs"],
+				["cl_NumberyImages", "cl_NumberyPairs"],
+				["cl_NumberyImages", "cl_NumberyPlayerNum"],
+				["cl_NumberyImages", "cl_NumberyCathegory"],
+				["cl_NumberyImages", "cl_NumberyPlayers"],
+				["cl_NumberyImages", "cl_NumberyResult"],
+				["cl_NumberyImages", "."],
+			],
+			rows: [1, 1, 1, 1, 0, 2],
+		},
 		subgrid: [
 			["cl_NumberyInputs", "left"],
 			["cl_NumberyPlayers", "left"],
@@ -177,8 +273,6 @@ export const rawContentGrid = {
 	},
 	cl_RayCaster: {
 		userSelected: true,
-		width: 2,
-		height: 2,
 		contentGroup: "Games",
 		name: "RayCaster",
 		source: {
@@ -186,6 +280,22 @@ export const rawContentGrid = {
 			Code2: "https://thecodingtrain.com/CodingChallenges/010.4-maze-dfs-p5.html",
 		},
 		info: 'Du bist der "blaue" und willst den grünen Punkt erreichen. Bewegen kannst du dich mit den Pfeiltasten. Drücke "x" um deine aktuelle Position zu markieren. Aber beachte: du hast nur 5 Markierungen!',
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_RayCasterCanvas", "cl_RayCasterInputs"],
+				["cl_RayCasterCanvas", "cl_RayCasterSize"],
+				["cl_RayCasterCanvas", "cl_RayCasterSpeed"],
+				["cl_RayCasterCanvas", "cl_RayCasterView"],
+				["cl_RayCasterCanvas", "cl_RayCasterOptionsA"],
+				["cl_RayCasterCanvas", "cl_RayCasterOptionsB"],
+				["cl_RayCasterCanvas", "cl_RayCasterOptionsC"],
+				["cl_RayCasterCanvas", "cl_RayCasterOptionsD"],
+				["cl_RayCasterCanvas", "."],
+			],
+			rows: [1, 1, 1, 1, 1, 1, 1, 1],
+		},
 		subgrid: [
 			["cl_RayCasterInputs", "left"],
 			["cl_RayCasterSpeed", "left"],
@@ -200,8 +310,6 @@ export const rawContentGrid = {
 	},
 	cl_Sudoku: {
 		userSelected: true,
-		width: 2,
-		height: 2,
 		contentGroup: "Games",
 		name: "Sudoku",
 		source: {
@@ -209,6 +317,19 @@ export const rawContentGrid = {
 			Puzzels: "https://www.kaggle.com/bryanpark/sudoku",
 		},
 		info: "Klassisches Sudoku-Puzzle.<br>Durch Eingabe einer Zahl mittels Tastatur kannst du die Zahl eintragen. Durch drücken der Leertaste kannst du die Eingabeart direkt wechseln. Mit SHIFT kannst du mehere Zellen gleichzeitig auswählen.",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_SudokuGetBoard", "cl_SudokuOptionsA"],
+				["cl_SudokuCanvas", "cl_SudokuOptionsB"],
+				["cl_SudokuCanvas", "cl_SudokuTimer"],
+				["cl_SudokuCanvas", "cl_SudokuInput"],
+				["cl_SudokuCanvas", "cl_SudokuOptionsC"],
+				["cl_SudokuCanvas", "cl_SudokuOverview"],
+			],
+			rows: [1, 1, 1, 4, 0],
+		},
 		subgrid: [
 			["cl_SudokuGetBoard", "center"],
 			["cl_SudokuTimer", "left"],
@@ -222,8 +343,6 @@ export const rawContentGrid = {
 	},
 	cl_Sweeper: {
 		userSelected: true,
-		width: 2,
-		height: 2,
 		contentGroup: "Games",
 		name: "Sweeper",
 		heritage: ["englisch", "Kehrmaschine"],
@@ -231,6 +350,15 @@ export const rawContentGrid = {
 			Code: "https://thecodingtrain.com/CodingChallenges/071-minesweeper.html",
 		},
 		info: "Klassisches Mine-Sweeper!",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_SweeperInputs", "cl_SweeperGrid", "cl_SweeperSweeps"],
+				["cl_SweeperCanvas", "cl_SweeperCanvas", "cl_SweeperCanvas"],
+			],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_SweeperCanvas", "center"],
 			["cl_SweeperInputs", "center"],
@@ -241,20 +369,29 @@ export const rawContentGrid = {
 	//News
 	cl_Howa: {
 		userSelected: true,
-		width: 2,
 		contentGroup: "News",
 		globalValString: "idVin_howaEntry",
 		name: "Howa",
 		heritage: ["turkmenisch", "Wetter"],
 		source: {
 			Daten: "https://open-meteo.com",
+			GeoLocation: "https://github.com/bigdatacloudapi/js-reverse-geocode-client",
 		},
 		info: "Wettervorhersage in 3 Stunden abständen für die nächsten 4 Tage.",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				["cl_HowaInput", "cl_HowaMapsSelectDistrict", "cl_HowaMapsSelectCriteria"],
+				["cl_HowaNow", "cl_HowaMapsImg", "cl_HowaMapsImg"],
+				["cl_HowaGraph", "cl_HowaMapsImg", "cl_HowaMapsImg"],
+			],
+			rows: [1, 2],
+		},
 		subgrid: [
 			["cl_HowaInput", "center", "end"],
 			["cl_HowaNow", "center", "end"],
 			["cl_HowaGraph", "center"],
-			["cl_HowaMapsSelectCountry", "right"],
+			["cl_HowaMapsSelectDistrict", "right"],
 			["cl_HowaMapsSelectCriteria", "left"],
 			["cl_HowaMapsImg", "center"],
 		],
@@ -269,6 +406,14 @@ export const rawContentGrid = {
 			Daten: "https://hirsau.lions.de/",
 		},
 		info: "Gewinner des Lions-Advendskalender 2021 - Edition Nagold",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				["cl_LionsInput", "cl_LionsOutput"],
+				["cl_LionsTable", "cl_LionsTable"],
+			],
+			rows: [2],
+		},
 		subgrid: [
 			["cl_LionsInput", "right", "center"],
 			["cl_LionsOutput", "left"],
@@ -277,11 +422,22 @@ export const rawContentGrid = {
 	},
 	cl_News: {
 		userSelected: true,
+		deactivated: true,
 		contentGroup: "News",
 		name: "News",
 		heritage: ["englisch", "Nachrichten"],
 		source: {
 			Daten: "https://newsdata.io",
+		},
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				["cl_NewsCountry", "cl_NewsResultImage", "cl_NewsResultTitle"],
+				["cl_NewsCategory", "cl_NewsResultImage", "cl_NewsResultTitle"],
+				["cl_NewsTable", "cl_NewsResultImage", "cl_NewsResultTitle"],
+				["cl_NewsTable", "cl_NewsResultText", "cl_NewsResultText"],
+			],
+			rows: [1, 1, 1],
 		},
 		subgrid: [
 			["cl_NewsCategory", "left"],
@@ -300,20 +456,32 @@ export const rawContentGrid = {
 			Daten: "https://www.der-Postillon.com",
 		},
 		info: "Alle Postillon News-Ticker zum durchklicken",
+		size: [2, 1],
+		maingrid: {
+			areas: [["cl_PostillionNumber"], ["cl_PostillionTable"]],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_PostillionTable", "center"],
 			["cl_PostillionNumber", "center"],
 		],
 	},
 	cl_Sepakbola: {
-		userSelected: false,
-		height: 2,
-		deactivated: true,
+		userSelected: true,
+		deactivated: false,
 		contentGroup: "News",
 		name: "Sepakbola",
 		heritage: ["javanisch", "Fußball"],
 		source: {
 			Daten: "https://www.openligadb.de",
+		},
+		size: [2, 3],
+		maingrid: {
+			areas: [
+				["cl_SepakbolaInputLiga", "cl_SepakbolaInputSeason", "cl_SepakbolaInputDay"],
+				["cl_SepakbolaTable", "cl_SepakbolaTable", "cl_SepakbolaMatches"],
+			],
+			rows: [1],
 		},
 		subgrid: [
 			["cl_SepakbolaInputLiga", "left"],
@@ -333,6 +501,11 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://rime.de/de/wiki/lochabstand-berechnen/",
 		},
+		size: [1, 1],
+		maingrid: {
+			areas: [["cl_BlechgeoVinDicke"], ["cl_BlechgeoVinRadius"], ["cl_BlechgeoVinForm"], ["cl_BlechgeoVinBreite"], ["cl_BlechgeoImg"], ["cl_BlechgeoLblResult"]],
+			rows: [1, 1, 1, 1, 0],
+		},
 		subgrid: [
 			["cl_BlechgeoVinDicke", "center"],
 			["cl_BlechgeoVinRadius", "center"],
@@ -351,6 +524,18 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://www.schweizer-fn.de/stoff/waermedehnung/waermedehnung.php#stahltabelle",
 		},
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				["cl_ExpansionMaterialsA", "cl_ExpansionMaterialSwitch", "cl_ExpansionMaterialsB"],
+				["cl_ExpansionVinLength", "cl_ExpansionVinLength", "cl_ExpansionVinLength"],
+				["cl_ExpansionVinTemperature", "cl_ExpansionVinTemperature", "cl_ExpansionVinTemperature"],
+				["cl_ExpansionVinBaseTemperature", "cl_ExpansionVinBaseTemperature", "cl_ExpansionVinBaseTemperature"],
+				["cl_ExpansionCBOptions", "cl_ExpansionCBOptions", "cl_ExpansionCBOptions"],
+				["cl_ExpansionList", "cl_ExpansionList", "cl_ExpansionList"],
+			],
+			rows: [1, 1, 1, 1, 2],
+		},
 		subgrid: [
 			["cl_ExpansionMaterialsA", "right"],
 			["cl_ExpansionMaterialSwitch", "center"],
@@ -367,11 +552,17 @@ export const rawContentGrid = {
 		contentGroup: "Tools",
 		globalValNumber: "idVin_Area_0",
 		name: "Geometrie",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				["cl_GeometrieAreaSelect", "cl_GeometrieTable"],
+				["cl_GeometrieOptions", "cl_GeometrieCanvas"],
+			],
+			rows: [0],
+			// rows: [1, 1, 1, 1, 1],
+		},
 		subgrid: [
 			["cl_GeometrieAreaSelect", "left"],
-			["cl_GeometrieAreaInputA", "center"],
-			["cl_GeometrieAreaInputB", "center"],
-			["cl_GeometrieAreaInputC", "center"],
 			["cl_GeometrieOptions", "center"],
 			["cl_GeometrieCanvas", "center", "start"],
 			["cl_GeometrieTable", "center"],
@@ -384,6 +575,11 @@ export const rawContentGrid = {
 		name: "Luas",
 		heritage: ["irisch", "Geschwindigkeit"],
 		info: "Geschwindigkeiten übersetzen und darstellen",
+		size: [1, 2],
+		maingrid: {
+			areas: [["cl_LuasVinAngularVin"], ["cl_LuasVinLinearVin"], ["cl_LuasOptAngularVin"], ["cl_LuasOptLinearVin"], ["cl_LuasCanvas"], ["cl_LuasResult"]],
+			rows: [1, 1, 1, 1, 0],
+		},
 		subgrid: [
 			["cl_LuasVinAngularVin", "left"],
 			["cl_LuasVinLinearVin", "left"],
@@ -401,6 +597,11 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://www.schweizer-fn.de/festigkeit/festigkeitswerte/stahl/stahl_start.php",
 		},
+		size: [3, 2],
+		maingrid: {
+			areas: [["cl_MaterialPropertyCb", "."], ["cl_MaterialList", "cl_MaterialList"], ["cl_MaterialSearchOptions", "cl_MaterialSearchOptions"], ["cl_MaterialSearchList cl_MaterialSearchList"]],
+			rows: [1, 0, 1],
+		},
 		subgrid: [
 			["cl_MaterialPropertyCb", "left"],
 			["cl_MaterialList", "left"],
@@ -416,7 +617,11 @@ export const rawContentGrid = {
 		contentGroup: "Tools",
 		globalValNumber: "idVin_middleA",
 		name: "Mittenberechnung",
-		info: "Berechnet mit: (b-a) / 2",
+		size: [1, 1],
+		maingrid: {
+			areas: [["cl_MiddleInput0"], ["cl_MiddleInput1"], ["cl_MiddleCanvas"], ["cl_MiddleMid"], ["cl_MiddleDiff"]],
+			rows: [1, 1, 0, 2],
+		},
 		subgrid: [
 			["cl_MiddleInput0", "center"],
 			["cl_MiddleInput1", "center"],
@@ -434,8 +639,18 @@ export const rawContentGrid = {
 		},
 		contentGroup: "Tools",
 		name: "Niska",
-		height: 2,
 		heritage: ["mazedonisch", "Gewinde"],
+		size: [2, 3],
+		maingrid: {
+			areas: [
+				["cl_NiskaHeaderInput", "cl_NiskaHeaderSelect"],
+				["cl_NiskaSize", "cl_NiskaSelect"],
+				["cl_NiskaPitch", "."],
+				["cl_NiskaStrengthClassA", "cl_NiskaStrengthClassB"],
+				["cl_NiskaList", "cl_NiskaList"],
+			],
+			rows: [1, 1, 1],
+		},
 		subgrid: [
 			["cl_NiskaHeaderInput", "center"],
 			["cl_NiskaHeaderSelect", "center"],
@@ -450,11 +665,15 @@ export const rawContentGrid = {
 	cl_Pattern: {
 		userSelected: true,
 		logReqUser: true,
-		width: 2,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_Pattern0",
 		name: "Pattern",
 		heritage: ["englisch", "Muster"],
+		size: [3, 1],
+		maingrid: {
+			areas: [["cl_PatternInputA"], ["cl_PatternInputB"], ["cl_PatternInputC"], ["cl_PatternInputD"], ["cl_PatternInputE"], ["cl_PatternCanvas"]],
+			rows: [1, 1, 1, 1, 1],
+		},
 		subgrid: [
 			["cl_PatternInputA", "center"],
 			["cl_PatternInputB", "center"],
@@ -466,7 +685,6 @@ export const rawContentGrid = {
 	},
 	cl_Pormula: {
 		userSelected: true,
-		width: 2,
 		contentGroup: "Tools",
 		name: "Pormula",
 		source: {
@@ -474,6 +692,21 @@ export const rawContentGrid = {
 		},
 		heritage: ["filipino", "Formel"],
 		info: "Gleichung aus Datenpunkten ermitteln.",
+		size: [3, 2],
+		maingrid: {
+			areas: [
+				["cl_PormulaAddInputs", "cl_PormulaTypeSelect", "cl_PormulaBestFit", "cl_PormulaPolyFit"],
+				["cl_PormulaInputs", "cl_PormulaTypeSelect", "cl_PormulaOrder", "cl_PormulaOrder"],
+				["cl_PormulaInputs", "cl_PormulaTypeSelect", "cl_PormulaPrecision", "cl_PormulaPrecision"],
+				["cl_PormulaInputs", "cl_PormulaTypeSelect", "cl_PormulaAccuracy", "cl_PormulaAccuracy"],
+				["cl_PormulaInputs", "cl_PormulaTypeSelect", "cl_PormulaLblResult", "cl_PormulaLblResult"],
+				["cl_PormulaInfo", "cl_PormulaInfo", "cl_PormulaPointEntryA", "cl_PormulaPointResultA"],
+				[".", ".", "cl_PormulaPointEntryB", "cl_PormulaPointResultB"],
+				[".", ".", "cl_PormulaPointEntryC", "cl_PormulaPointResultC"],
+				["cl_PormulaCanvas", "cl_PormulaCanvas", "cl_PormulaCanvas", "cl_PormulaCanvas"],
+			],
+			rows: [1, 1, 1, 1, 0, 0],
+		},
 		subgrid: [
 			["cl_PormulaBestFit", "center"],
 			["cl_PormulaTypeSelect", "center"],
@@ -499,14 +732,28 @@ export const rawContentGrid = {
 		contentGroup: "Tools",
 		globalValNumber: "idVin_Pytho_0",
 		name: "Pythagoras",
+		size: [1, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_PythagorasInput0"],
+				["cl_PythagorasInput1"],
+				["cl_PythagorasInput2"],
+				["cl_PythagorasInput3"],
+				["cl_PythagorasInput4"],
+				["cl_PythagorasInfo"],
+				["cl_PythagorasCanvas"],
+			],
+			rows: [1, 1, 1, 1, 1, 0],
+		},
 		subgrid: [
-			["cl_PythagorasInput0", "right"],
-			["cl_PythagorasInput1", "right"],
-			["cl_PythagorasInput2", "right"],
-			["cl_PythagorasInput3", "right"],
-			["cl_PythagorasInput4", "right"],
+			["cl_PythagorasInput0", "center"],
+			["cl_PythagorasInput1", "center"],
+			["cl_PythagorasInput2", "center"],
+			["cl_PythagorasInput3", "center"],
+			["cl_PythagorasInput4", "center"],
 			["cl_PythagorasInfo", "center"],
-			["cl_PythagorasCanvas", "left"],
+			["cl_PythagorasCanvas", "center"],
 		],
 	},
 	cl_Quickmath: {
@@ -514,6 +761,17 @@ export const rawContentGrid = {
 		contentGroup: "Tools",
 		globalValNumber: "idVin_quickkmathVal",
 		name: "Quickmath",
+		size: [1, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_QuickmathInput", "cl_QuickmathInput", "cl_QuickmathInput"],
+				["cl_QuickmathStart", "cl_QuickmathStart", "cl_QuickmathStart"],
+				["cl_QuickmathEnd", "cl_QuickmathEnd", "cl_QuickmathEnd"],
+				["cl_QuickmathListMultiply", "cl_QuickmathListDivide", "cl_QuickmathListPow"],
+			],
+			rows: [1, 1, 1],
+		},
 		subgrid: [
 			["cl_QuickmathInput", "center"],
 			["cl_QuickmathStart", "center"],
@@ -529,6 +787,11 @@ export const rawContentGrid = {
 		globalValNumber: "idVin_ranjeVal",
 		name: "Ranje",
 		heritage: ["Haiti-Kreolisch", "anordnen"],
+		size: [1, 1],
+		maingrid: {
+			areas: [["cl_RanjeInput"], ["cl_RanjeList"]],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_RanjeInput", "center"],
 			["cl_RanjeList", "center"],
@@ -544,6 +807,11 @@ export const rawContentGrid = {
 			Code: "https://stackoverflow.com/a/5918791",
 		},
 		info: "Diese Daten sind ohne deine Zustimmung im Browser verfügbar!",
+		size: [1, 1],
+		maingrid: {
+			areas: [["cl_BiktadATable"]],
+			rows: [0],
+		},
 		subgrid: [["cl_BiktadATable", "center"]],
 	},
 	cl_Boredom: {
@@ -553,6 +821,11 @@ export const rawContentGrid = {
 		heritage: ["englisch", "Langeweile"],
 		source: {
 			Daten: "https://www.boredapi.com/",
+		},
+		size: [1, 1],
+		maingrid: {
+			areas: [["cl_BoredomStart"], ["cl_BoredomAnswer"]],
+			rows: [1],
 		},
 		subgrid: [
 			["cl_BoredomStart", "center"],
@@ -566,6 +839,14 @@ export const rawContentGrid = {
 		heritage: ["englisch", "botanisch"],
 		source: {
 			Daten: "https://www.tabelle.info/kraeuter.html",
+		},
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				["cl_BotanicalsVinPlant", "cl_BotanicalsVinDiscomfort"],
+				["cl_BotanicalsTabResultPlant", "cl_BotanicalsTabResultDiscomfort"],
+			],
+			rows: [1],
 		},
 		subgrid: [
 			["cl_BotanicalsVinPlant", "center"],
@@ -582,6 +863,11 @@ export const rawContentGrid = {
 			Daten: "newton.ex.ac.uk/teaching/CDHW/egg/",
 		},
 		info: "1. Ausreichnd Wasser zum kochen bringen.<br>2. Ei in leicht kochendes Wasser legen, sodass es vollständig bedeckt ist.<br>3. Timer starten.<br>4. Fertiges Ei aus kochendem Wasser entnehmen. Achtung, das Wasser ist heiß, das Ei auch!<br>5. Nach belieben unter kaltem Wasser abschrecken",
+		size: [2, 1],
+		maingrid: {
+			areas: [["cl_EggMassValue"], ["cl_EggTempValue"], ["cl_EggYolkValue"], ["cl_EggStart"], ["cl_EggTime"], ["cl_EggTimeProgress"]],
+			rows: [1, 1, 1, 1, 0],
+		},
 		subgrid: [
 			["cl_EggMassValue", "center"],
 			["cl_EggTempValue", "center"],
@@ -597,6 +883,11 @@ export const rawContentGrid = {
 		name: "Foody",
 		heritage: ["vietnamesisch", "lecker"],
 		info: "Wie lange und wie warm muss es kochen oder backen?<br>Suche ein Gericht aus und starte den Timer!",
+		size: [2, 1],
+		maingrid: {
+			areas: [["cl_FoodyType"], ["cl_FoodyPreheat"], ["cl_FoodyStart"], ["cl_FoodyTime"], ["cl_FoodyTimeProgress"]],
+			rows: [1, 1, 1, 0],
+		},
 		subgrid: [
 			["cl_FoodyType", "left"],
 			["cl_FoodyPreheat", "left"],
@@ -616,6 +907,11 @@ export const rawContentGrid = {
 			Herkunft: "https://nationalize.io",
 			Gender: "https://genderize.io",
 		},
+		size: [1, 1],
+		maingrid: {
+			areas: [["cl_HverertuInput"], ["cl_HverertuTable"]],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_HverertuInput", "center"],
 			["cl_HverertuTable", "center"],
@@ -631,6 +927,15 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://github.com/fawazahmed0/exchange-api",
 		},
+		size: [3, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_IomlaidSelCur", "cl_IomlaidVinCur", "cl_IomlaidVinDate"],
+				["cl_IomlaidTab", "cl_IomlaidTab", "cl_IomlaidTab"],
+			],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_IomlaidSelCur", "center"],
 			["cl_IomlaidVinCur", "center"],
@@ -645,6 +950,15 @@ export const rawContentGrid = {
 		deactivated: true,
 		heritage: ["türkisch", "bis"],
 		info: "Berechne Zeiten",
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_KadarSelA", "cl_KadarLblNow", "cl_KadarSelB"],
+				["cl_KadarResultTable_Anow", "cl_KadarResultTable_AB", "cl_KadarResultTable_Bnow"],
+			],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_KadarSelA", "center"],
 			["cl_KadarSelB", "center"],
@@ -664,6 +978,16 @@ export const rawContentGrid = {
 			Code: "http://dougtesting.net/home",
 		},
 		info: "Glücksrad!<br>Gib Gewinne ein und drücke auf das Rad.",
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_KaihangaInput", "cl_KaihangaCanvas"],
+				["cl_KaihangaSegments", "cl_KaihangaCanvas"],
+				["cl_KaihangaSegments", "cl_KaihangaResult"],
+			],
+			rows: [0, 0],
+		},
 		subgrid: [
 			["cl_KaihangaInput", "left"],
 			["cl_KaihangaSegments", "left"],
@@ -674,9 +998,24 @@ export const rawContentGrid = {
 	cl_Kounselor: {
 		userSelected: true,
 		contentGroup: "Utility",
-		width: 1,
 		name: "Kounselor",
 		heritage: ["jiddisch", "Ratgeber"],
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_KounselorOutputA"],
+				["cl_KounselorOutputB"],
+				["cl_KounselorOptionsA"],
+				["cl_KounselorOptionsB"],
+				["cl_KounselorOptionsC"],
+				["cl_KounselorOptionsD"],
+				["cl_KounselorOptionsE"],
+				["cl_KounselorOptionsF"],
+				["cl_KounselorOptionsG"],
+			],
+			rows: [2, 2, 1, 1, 1, 1, 1, 1],
+		},
 		subgrid: [
 			["cl_KounselorOptionsA", "left"],
 			["cl_KounselorOptionsB", "left"],
@@ -695,6 +1034,21 @@ export const rawContentGrid = {
 		name: "Netsaona",
 		heritage: ["shona", "Zufall"],
 		info: "Zufallsgenerator für verschiedene Dinge!",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_NetsaonaOptionsA"],
+				["cl_NetsaonaOptionsB"],
+				["cl_NetsaonaOptionsC"],
+				["cl_NetsaonaOptionsD"],
+				["cl_NetsaonaOptionsE"],
+				["cl_NetsaonaOptionsF"],
+				["cl_NetsaonaOptionsG"],
+				["cl_NetsaonaOutput"],
+			],
+			rows: [1, 1, 1, 1, 1, 1, 1],
+		},
 		subgrid: [
 			["cl_NetsaonaOptionsA", "center"],
 			["cl_NetsaonaOptionsB", "center"],
@@ -712,6 +1066,19 @@ export const rawContentGrid = {
 		name: "Pelvelea",
 		heritage: ["khmer", "Zeit"],
 		info: "Wann kannst du nach Hause?!",
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_PelveleaStarttime"],
+				["cl_PelveleaBreaks"],
+				["cl_PelveleaWorktime"],
+				["cl_PelveleaResult"],
+				["cl_PelveleaProgress"],
+				["cl_PelveleaBreaktime"],
+			],
+			rows: [1, 1, 1, 2, 1],
+		},
 		subgrid: [
 			["cl_PelveleaStarttime", "center"],
 			["cl_PelveleaBreaks", "center"],
@@ -729,6 +1096,16 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://www.wbrnet.info/db/9964.html",
 		},
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_PlatLesenRegInput"],
+				["cl_PlatLesenNumInput"],
+				["cl_PlatLesenResult"],
+			],
+			rows: [0, 0],
+		},
 		subgrid: [
 			["cl_PlatLesenNumInput", "center"],
 			["cl_PlatLesenRegInput", "center"],
@@ -741,6 +1118,19 @@ export const rawContentGrid = {
 		globalValString: "idArea_thiontuInputEntry",
 		name: "Thiontu",
 		heritage: ["irisch", "umwandeln"],
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_ThiontuInputArea", "cl_ThiontuOutputArea"],
+				["cl_ThiontuOptions_A", "cl_ThiontuOptions_A"],
+				["cl_ThiontuOptions_B", "cl_ThiontuOptions_B"],
+				["cl_ThiontuOptions_C", "cl_ThiontuOptions_C"],
+				["cl_ThiontuOptions_D", "cl_ThiontuOptions_D"],
+				["cl_ThiontuOptions_E", "cl_ThiontuOptions_E"],
+			],
+			rows: [0, 1, 1, 1, 1],
+		},
 		subgrid: [
 			["cl_ThiontuInputArea", "right"],
 			["cl_ThiontuOutputArea", "left"],
@@ -758,6 +1148,16 @@ export const rawContentGrid = {
 		name: "Tugas",
 		heritage: ["indonesisch", "Pflicht"],
 		info: 'Füge Texte ein und drück "Enter". Klicke auf einen deiner Texte und er kopiert sich direkt in deine Zwischenablage!',
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_TugasInput", "cl_TugasList"],
+				["cl_TugasEnter", "cl_TugasList"],
+				[".", "cl_TugasList"],
+			],
+			rows: [0, 1],
+		},
 		subgrid: [
 			["cl_TugasInput", "center"],
 			["cl_TugasEnter", "center"],
@@ -769,6 +1169,15 @@ export const rawContentGrid = {
 		userSelected: true,
 		contentGroup: "Global-Settings",
 		name: "GeneralSettings",
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_SettingsFontsize"],
+				["cl_SettingsDecimals"],
+			],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_SettingsFontsize", "left"],
 			["cl_SettingsDecimals", "left"],
@@ -778,6 +1187,21 @@ export const rawContentGrid = {
 		userSelected: true,
 		contentGroup: "Global-Settings",
 		name: "ColorSettings",
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_ColourSettingsHeaderLight"],
+				["cl_ColourSettings_light_0"],
+				["cl_ColourSettings_light_1"],
+				["cl_ColourSettings_light_2"],
+				["cl_ColourSettingsHeaderDark"],
+				["cl_ColourSettings_dark_0"],
+				["cl_ColourSettings_dark_1"],
+				["cl_ColourSettings_dark_2"],
+			],
+			rows: [1, 1, 1, 1, 2, 1, 1],
+		},
 		subgrid: [
 			["cl_ColourSettingsHeaderLight", "center"],
 			["cl_ColourSettingsHeaderDark", "center", "end"],
@@ -791,9 +1215,17 @@ export const rawContentGrid = {
 	},
 	cl_UserGridLayout: {
 		userSelected: true,
-		height: 2,
 		contentGroup: "Global-Settings",
 		name: "User-Layout",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_UserGridOptions"],
+				["cl_UserGridTable"],
+			],
+			rows: [1],
+		},
 		subgrid: [
 			["cl_UserGridOptions", "center"],
 			["cl_UserGridTable", "center"],
@@ -802,15 +1234,35 @@ export const rawContentGrid = {
 	},
 	cl_MaterialFilterSettings: {
 		userSelected: true,
-		height: 2,
 		contentGroup: "Global-Settings",
 		name: "Materialfilter",
+		size: [2, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_MaterialFilterTable"],
+			],
+			rows: [],
+		},
 		subgrid: [["cl_MaterialFilterTable", "center"]],
 	},
 	cl_UserLogin: {
 		userSelected: true,
 		contentGroup: "Account-Settings",
 		name: "Login or Register",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_UserLogin_mail"],
+				["cl_UserLogin_pass"],
+				["cl_UserLogin_check"],
+				["cl_UserLogin_alert"],
+				["cl_UserLogin_submit"],
+				["cl_UserLogin_cancel"],
+			],
+			rows: [1, 1, 1, 0, 1],
+		},
 		subgrid: [
 			["cl_UserLogin_mail", "left"],
 			["cl_UserLogin_pass", "left"],
@@ -824,6 +1276,18 @@ export const rawContentGrid = {
 		userSelected: true,
 		contentGroup: "Account-Settings",
 		name: "Change or Logout",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_UserChange_user"],
+				["cl_UserChange_logout"],
+				["cl_UserChange_infos"],
+				["cl_UserChange_change"],
+				["cl_UserChange_cancel"],
+			],
+			rows: [2, 2, 0, 1],
+		},
 		subgrid: [
 			["cl_UserChange_user", "left"],
 			["cl_UserChange_infos", "left"],

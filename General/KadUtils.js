@@ -24,7 +24,14 @@ export function hostDebug() {
 	return ["local", "127.0.0.1"].some((s) => window.location.hostname.includes(s));
 }
 export function error(...errorText) {
-	throw new Error(errorText.join("; "));
+	throw new Error(errorText.join(" "));
+}
+export function errorCheck(state, ...message) {
+	if (state) {
+		error(...message);
+		return true;
+	}
+	return false;
 }
 
 export function deepClone(data) {
@@ -248,7 +255,8 @@ export const KadValue = {
 };
 export const KadArray = {
 	createArray(x, y = null, fillNum = null) {
-		if (y == null) return new Array(x).fill(0).map((n, i) => i);
+		if (y == null && fillNum == null) return new Array(x).fill(0).map((n, i) => i);
+		if (y == null && fillNum != null) return new Array(x).fill(fillNum);
 		let arrX = new Array(x);
 		for (let i = 0; i < arrX.length; i++) {
 			arrX[i] = fillNum == null ? (arrX[i] = new Array(y)) : new Array(y).fill(fillNum);

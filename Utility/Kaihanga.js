@@ -92,12 +92,12 @@ function kaihangaWheelUpdate() {
 
 function kaihangaStart(speed) {
 	if (kaihangaOptions.spinning == true) return;
+	kaihangaOptions.spinning = true;
 	kaihangaCreateRandomSet();
 	kaihangaUpdate();
 	kaihangaOptions.wheel.animation.spins = speed;
 	kaihangaOptions.wheel.animation.duration = 1 / (speed * 10);
 	kaihangaOptions.wheel.startAnimation();
-	kaihangaOptions.spinning = true;
 }
 
 function kaihangaResult(winner) {

@@ -63,9 +63,7 @@ export function clear_cl_Blech() {
 }
 
 function blechgeoFormChange() {
-	let index = dbID("idSel_blechgeoForm").selectedIndex;
-	let vinOption = dbID("idSel_blechgeoForm").options[index].text;
-	let key = blechOptions.geo[vinOption].imgPath;
+	const vinOption = dbID("idSel_blechgeoForm").value;
 	dbID("idImg_Blechgeometrie").src = blechOptions.geo[vinOption].imgPath;
 	KadDOM.enableBtn(idVin_blechgeoBreite, !blechOptions.geo[vinOption].breite);
 }

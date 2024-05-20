@@ -1,5 +1,5 @@
 import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
-import { newsData } from "../News/News.js";
+// import { newsData } from "../News/News.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 import { globalP5 } from "../Main.js";
 
@@ -8,8 +8,8 @@ const analysisOptions = {
 	searchInput: "",
 	results: {},
 };
-daEL(idVin_analysisEntry, "input", () => analysisInput(null));
-daEL(idBtn_analyseNews, "click", analysisNews);
+daEL(idVin_analysisEntry, "input", analysisInput);
+// daEL(idBtn_analyseNews, "click", analysisNews);
 daEL(idBtn_analyseWiki, "click", analysisWiki);
 
 export function clear_cl_Analysis() {
@@ -18,24 +18,22 @@ export function clear_cl_Analysis() {
 	KadTable.clear("idTabBody_analysisResult");
 }
 
-function analysisNews() {
-	dbID("idVin_analysisEntry").value = newsData.articles[newsData.currIndex].description;
-	analysisInput(newsData.articles[newsData.currIndex].description);
-}
+// function analysisNews() {
+// 	dbID("idVin_analysisEntry").value = newsData.articles[newsData.currIndex].description;
+// 	analysisInput(newsData.articles[newsData.currIndex].description);
+// }
 
 function analysisWiki() {
 	const data = storage_cl_WikiSearch.data;
 	if (data.content != null) {
 		let pagesID = Object.keys(data.content);
 		dbID("idVin_analysisEntry").value = data.content[pagesID].extract;
-		analysisInput(data.content[pagesID].extract);
+		analysisInput();
 	}
 }
 
-async function analysisInput(input = null) {
-	if (input === null) {
-		analysisOptions.searchInput = KadDOM.stringFromInput(idVin_analysisEntry);
-	}
+async function analysisInput() {
+	analysisOptions.searchInput = KadDOM.stringFromInput(idVin_analysisEntry);
 	if (analysisOptions.searchInput == "") {
 		dbID("idLbl_analysisResult").textContent = "~Average score~";
 		KadTable.clear("idTabBody_analysisResult");
@@ -50,7 +48,7 @@ async function analysisInput(input = null) {
 
 function analysisLoadData(data) {
 	analysisOptions.data = data;
-	analysisAnalyze();
+  analysisInput()
 }
 
 function analysisAnalyze() {
@@ -71,7 +69,6 @@ function analysisAnalyze() {
 		return !((!regexClean.test(word) && word === "") || word === undefined || word === "-" || word === "…");
 	});
 	for (let j = words.length - 1; j >= 0; j--) {
-		let score = 0;
 		let word = words[j];
 		word = word.toString().toLowerCase();
 		if (analysisOptions.data.hasOwnProperty(word)) {
@@ -95,7 +92,7 @@ function analysisAnalyze() {
 function analysisCreateOutput() {
 	if (analysisOptions.results.totalScore === null) {
 		dbID("idLbl_analysisResult").textContent = "~~~~~~~";
-		dbID("idProg_analysisProgress").setAttribute("value", 10);
+		dbID("idProg_analysisProgress").setAttribute("value", 100);
 		KadTable.clear("idTabBody_analysisResult");
 		KadTable.clear("idTabBody_analysisResult");
 	} else {
@@ -103,7 +100,7 @@ function analysisCreateOutput() {
 		const plural = analysisOptions.results.wordCount == 1 ? "Wort" : "Wörter";
 		const count = `(${analysisOptions.results.wordCount} ${plural})`;
 		dbID("idLbl_analysisResult").textContent = `Ø${score} ${count}`;
-		dbID("idProg_analysisProgress").setAttribute("value", score + 10);
+		dbID("idProg_analysisProgress").setAttribute("value", score + 100);
 		analysisCreateTable();
 	}
 }

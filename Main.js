@@ -35,31 +35,29 @@ function mainSetup() {
 	clearAllTiles();
 	Layout.resizeGrid();
 	Layout.navClick();
-	setTimeout(() => {
-		hideLoadingscreen();
-		clearGlobalValue();
-	}, 1000);
 	globalValues.globalInput.generateSpreadLists();
-	mainAttachGlobalEventlisteners();
 	KadUtils.KadDOM.resetInput(idVin_globalValue, "Mastervalue");
 	KadUtils.dbID("idLbl_navBar_KW").textContent = `KW ${KadUtils.KadDate.getWeekNumber()}`;
+	clearGlobalValue();
+	setTimeout(() => {
+		hideLoadingscreen();
+	}, 1000);
 }
 
-function mainAttachGlobalEventlisteners() {
-	// Navbar
-	KadUtils.daEL(idDiv_navBar_Trash, "click", resetAll);
-	KadUtils.daEL(idVin_globalValue, "input", globalValueChanged);
-	KadUtils.daEL(idVin_globalValue, "focus", globalValuePopulateDatalist);
-	KadUtils.daEL(idDiv_navBar_GlobalSettings, "click", () => Layout.navClick("GlobalSettings"));
-	KadUtils.daEL(idDiv_navBar_Colormode, "click", colToggleColormode);
-	// Footer
-	KadUtils.daEL(idDiv_clearBackground, "click", bgaClearBackground);
-	KadUtils.daEL(idCb_bgaReset, "click", () => bgaToggleReset(idCb_bgaReset));
-}
+// Navbar
+KadUtils.daEL(idDiv_navBar_Trash, "click", resetAll);
+KadUtils.daEL(idVin_globalValue, "input", globalValueChanged);
+KadUtils.daEL(idVin_globalValue, "focus", globalValuePopulateDatalist);
+KadUtils.daEL(idDiv_navBar_GlobalSettings, "click", () => Layout.navClick("GlobalSettings"));
+KadUtils.daEL(idDiv_navBar_Colormode, "click", colToggleColormode);
+// Footer
+KadUtils.daEL(idDiv_clearBackground, "click", bgaClearBackground);
+KadUtils.daEL(idCb_bgaReset, "click", () => bgaToggleReset(idCb_bgaReset));
 
 export function resetAll() {
 	createNewNuncDiscipuli();
 	displayColorSystem();
+	clearAllTiles();
 	clearGlobalValue();
 	Layout.navClick();
 }
