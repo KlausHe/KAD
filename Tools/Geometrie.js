@@ -435,11 +435,11 @@ let geoObjects = {
 			caGE.noFill();
 			caGE.ellipse(0, c, (a + b) * 2, d * 2);
 			caGE.ellipse(0, -c, (a + b) * 2, d * 2);
-			caGE.ellipse(0, -c, (a + b - s) * 2, (d - s / 2) * 2);      
+			caGE.ellipse(0, -c, (a + b - s) * 2, (d - s / 2) * 2);
 			caGE.line(...outline[0], ...outline[1]);
 			caGE.line(...outline[2], ...outline[3]);
 
-      caGE.strokeWeight(geoObjects.strokeHair);
+			caGE.strokeWeight(geoObjects.strokeHair);
 			caGE.ellipse(0, c, (a + b - s) * 2, (d - s / 2) * 2);
 			caGE.line(...outline[4], ...outline[5]);
 			caGE.line(...outline[6], ...outline[7]);
@@ -566,6 +566,9 @@ export function clear_cl_Geometrie() {
 				subGroup: " text",
 				createClass: ["clBtn_geometrieAreaSelect"],
 				text: geoObjects.elements[i],
+				ui: {
+					uisize: "size7",
+				},
 				onclick: () => {
 					changeGeoObject(i);
 				},

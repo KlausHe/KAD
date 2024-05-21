@@ -3,7 +3,6 @@ export const contentGroupSort = ["Universe", "News", "Benkyou", "Utility", "Tool
 export const rawContentGrid = {
 	//Benkyou
 	cl_Analysis: {
-		userSelected: true,
 		contentGroup: "Benkyou",
 		globalValString: "idVin_analysisEntry",
 		name: "Analysis-Analyse",
@@ -32,8 +31,7 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Speech: {
-		userSelected: true,
-		deactivated: false,
+		deactivated: true,
 		contentGroup: "Benkyou",
 		globalValString: "idArea_speechFromText",
 		name: "Speech",
@@ -50,7 +48,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Synonym: {
-		userSelected: true,
 		contentGroup: "Benkyou",
 		globalValString: "idVin_synonymEntry",
 		name: "Synonym",
@@ -71,7 +68,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_WikiSearch: {
-		userSelected: true,
 		contentGroup: "Benkyou",
 		globalValString: "idVin_wikiInput",
 		name: "Wiki-Search",
@@ -99,7 +95,6 @@ export const rawContentGrid = {
 	},
 	//Games
 	cl_Beatmachine: {
-		userSelected: true,
 		deactivated: true,
 		contentGroup: "Games",
 		name: "Beatmachine",
@@ -124,12 +119,11 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Empat: {
-		userSelected: true,
 		contentGroup: "Games",
 		name: "Sambung Empat",
 		heritage: ["malaysisch", "verbinde vier"],
 		info: 'Klassisches 4-Gewinnt!Benutze die Maus, die Pfeiltasten oder die Zifferntasten zum bewegen. Mit "Enter" oder "Space" lässt sich ein Stein legen.',
-		size: [3, 3],
+		size: [2, 2],
 		maingrid: {
 			areas: [
 				//
@@ -144,7 +138,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Ibhaluni: {
-		userSelected: true,
 		contentGroup: "Games",
 		name: "Ibhaluni",
 		heritage: ["zulu", "Ballon"],
@@ -167,7 +160,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Linaha: {
-		userSelected: true,
 		contentGroup: "Games",
 		name: "Linaha",
 		heritage: ["sesotho", "Länder"],
@@ -202,7 +194,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Lotto: {
-		userSelected: true,
 		logReqUser: false,
 		contentGroup: "Games",
 		name: "Lotto",
@@ -234,7 +225,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Numbery: {
-		userSelected: true,
 		contentGroup: "Games",
 		name: "Numbery",
 		heritage: ["indonesisch", "nummeriert"],
@@ -272,7 +262,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_RayCaster: {
-		userSelected: true,
 		contentGroup: "Games",
 		name: "RayCaster",
 		source: {
@@ -309,7 +298,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Sudoku: {
-		userSelected: true,
 		contentGroup: "Games",
 		name: "Sudoku",
 		source: {
@@ -342,7 +330,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Sweeper: {
-		userSelected: true,
 		contentGroup: "Games",
 		name: "Sweeper",
 		heritage: ["englisch", "Kehrmaschine"],
@@ -368,7 +355,6 @@ export const rawContentGrid = {
 	},
 	//News
 	cl_Howa: {
-		userSelected: true,
 		contentGroup: "News",
 		globalValString: "idVin_howaEntry",
 		name: "Howa",
@@ -397,7 +383,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Lions: {
-		userSelected: true,
 		deactivated: true,
 		contentGroup: "News",
 		name: "Lions",
@@ -421,7 +406,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_News: {
-		userSelected: true,
 		deactivated: true,
 		contentGroup: "News",
 		name: "News",
@@ -449,7 +433,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_PostillonTicker: {
-		userSelected: true,
 		contentGroup: "News",
 		name: "PostillonTicker",
 		source: {
@@ -467,7 +450,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Sepakbola: {
-		userSelected: true,
 		deactivated: false,
 		contentGroup: "News",
 		name: "Sepakbola",
@@ -493,7 +475,6 @@ export const rawContentGrid = {
 	},
 	//Tools
 	cl_Blechgeometrie: {
-		userSelected: true,
 		logReqUser: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_blechgeoDicke",
@@ -516,7 +497,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Expansion: {
-		userSelected: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_expansionLength",
 		name: "Expansion",
@@ -548,7 +528,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Geometrie: {
-		userSelected: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_Area_0",
 		name: "Geometrie",
@@ -569,7 +548,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Luas: {
-		userSelected: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_luasDiameter",
 		name: "Luas",
@@ -590,14 +568,13 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Material: {
-		userSelected: true,
 		logReqUser: true,
 		contentGroup: "Tools",
 		name: "Material",
 		source: {
 			Daten: "https://www.schweizer-fn.de/festigkeit/festigkeitswerte/stahl/stahl_start.php",
 		},
-		size: [3, 2],
+		size: [2, 2],
 		maingrid: {
 			areas: [["cl_MaterialPropertyCb", "."], ["cl_MaterialList", "cl_MaterialList"], ["cl_MaterialSearchOptions", "cl_MaterialSearchOptions"], ["cl_MaterialSearchList cl_MaterialSearchList"]],
 			rows: [1, 0, 1],
@@ -613,7 +590,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Middle: {
-		userSelected: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_middleA",
 		name: "Mittenberechnung",
@@ -631,7 +607,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Niska: {
-		userSelected: true,
 		source: {
 			Regelgewinde: "https://de.wikipedia.org/wiki/Metrisches_ISO-Gewinde",
 			Feingewinde: "http://gewindenormen.com",
@@ -663,13 +638,12 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Pattern: {
-		userSelected: true,
 		logReqUser: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_Pattern0",
 		name: "Pattern",
 		heritage: ["englisch", "Muster"],
-		size: [3, 1],
+		size: [2, 1],
 		maingrid: {
 			areas: [["cl_PatternInputA"], ["cl_PatternInputB"], ["cl_PatternInputC"], ["cl_PatternInputD"], ["cl_PatternInputE"], ["cl_PatternCanvas"]],
 			rows: [1, 1, 1, 1, 1],
@@ -684,7 +658,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Pormula: {
-		userSelected: true,
 		contentGroup: "Tools",
 		name: "Pormula",
 		source: {
@@ -692,7 +665,7 @@ export const rawContentGrid = {
 		},
 		heritage: ["filipino", "Formel"],
 		info: "Gleichung aus Datenpunkten ermitteln.",
-		size: [3, 2],
+		size: [2, 1],
 		maingrid: {
 			areas: [
 				["cl_PormulaAddInputs", "cl_PormulaTypeSelect", "cl_PormulaBestFit", "cl_PormulaPolyFit"],
@@ -728,7 +701,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Pythagoras: {
-		userSelected: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_Pytho_0",
 		name: "Pythagoras",
@@ -757,7 +729,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Quickmath: {
-		userSelected: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_quickkmathVal",
 		name: "Quickmath",
@@ -782,7 +753,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Ranje: {
-		userSelected: true,
 		contentGroup: "Tools",
 		globalValNumber: "idVin_ranjeVal",
 		name: "Ranje",
@@ -799,7 +769,6 @@ export const rawContentGrid = {
 	},
 	//Utility
 	cl_BiktadA: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "BiktadA",
 		heritage: ["schwedisch", "gebeichtet"],
@@ -815,7 +784,6 @@ export const rawContentGrid = {
 		subgrid: [["cl_BiktadATable", "center"]],
 	},
 	cl_Boredom: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Boredom",
 		heritage: ["englisch", "Langeweile"],
@@ -833,7 +801,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Botanicals: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Botanicals",
 		heritage: ["englisch", "botanisch"],
@@ -856,7 +823,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Egg: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Eierkochen",
 		source: {
@@ -878,7 +844,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Foody: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Foody",
 		heritage: ["vietnamesisch", "lecker"],
@@ -897,7 +862,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Hverertu: {
-		userSelected: true,
 		contentGroup: "Utility",
 		globalValString: "idVin_hverertuEntry",
 		name: "Hver Ertu",
@@ -918,7 +882,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Iomlaid: {
-		userSelected: true,
 		contentGroup: "Utility",
 		globalValNumber: "idVin_IomlaidCur",
 		name: "Iomlaid",
@@ -944,7 +907,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Kadar: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Kadar",
 		deactivated: true,
@@ -969,7 +931,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Kaihanga: {
-		userSelected: true,
 		contentGroup: "Utility",
 		globalValString: "idVin_kaihangaEntry",
 		name: "Kaihanga",
@@ -996,7 +957,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Kounselor: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Kounselor",
 		heritage: ["jiddisch", "Ratgeber"],
@@ -1029,7 +989,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Netsaona: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Netsaona",
 		heritage: ["shona", "Zufall"],
@@ -1061,7 +1020,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Pelvelea: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "Pelvelea",
 		heritage: ["khmer", "Zeit"],
@@ -1089,7 +1047,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_PlatLesen: {
-		userSelected: true,
 		contentGroup: "Utility",
 		name: "PlatLesen",
 		heritage: ["malaysisch", "Nummernschild"],
@@ -1113,7 +1070,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Thiontu: {
-		userSelected: true,
 		contentGroup: "Utility",
 		globalValString: "idArea_thiontuInputEntry",
 		name: "Thiontu",
@@ -1142,19 +1098,18 @@ export const rawContentGrid = {
 		],
 	},
 	cl_Tugas: {
-		userSelected: true,
 		contentGroup: "Utility",
 		globalValString: "idArea_tugasEntry",
 		name: "Tugas",
 		heritage: ["indonesisch", "Pflicht"],
 		info: 'Füge Texte ein und drück "Enter". Klicke auf einen deiner Texte und er kopiert sich direkt in deine Zwischenablage!',
-		size: [2, 1],
+		size: [1, 1],
 		maingrid: {
 			areas: [
 				//
-				["cl_TugasInput", "cl_TugasList"],
-				["cl_TugasEnter", "cl_TugasList"],
-				[".", "cl_TugasList"],
+				["cl_TugasInput"],
+				["cl_TugasEnter"],
+				["cl_TugasList"],
 			],
 			rows: [0, 1],
 		},
@@ -1166,7 +1121,6 @@ export const rawContentGrid = {
 	},
 	//Setings
 	cl_GeneralSettings: {
-		userSelected: true,
 		contentGroup: "Global-Settings",
 		name: "GeneralSettings",
 		size: [1, 1],
@@ -1184,7 +1138,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_ColorSettings: {
-		userSelected: true,
 		contentGroup: "Global-Settings",
 		name: "ColorSettings",
 		size: [1, 1],
@@ -1214,7 +1167,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_UserGridLayout: {
-		userSelected: true,
 		contentGroup: "Global-Settings",
 		name: "User-Layout",
 		size: [2, 2],
@@ -1233,7 +1185,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_MaterialFilterSettings: {
-		userSelected: true,
 		contentGroup: "Global-Settings",
 		name: "Materialfilter",
 		size: [2, 1],
@@ -1247,7 +1198,6 @@ export const rawContentGrid = {
 		subgrid: [["cl_MaterialFilterTable", "center"]],
 	},
 	cl_UserLogin: {
-		userSelected: true,
 		contentGroup: "Account-Settings",
 		name: "Login or Register",
 		size: [2, 2],
@@ -1273,7 +1223,6 @@ export const rawContentGrid = {
 		],
 	},
 	cl_UserChange: {
-		userSelected: true,
 		contentGroup: "Account-Settings",
 		name: "Change or Logout",
 		size: [2, 2],

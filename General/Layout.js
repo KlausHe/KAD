@@ -531,20 +531,20 @@ export function createNavbar() {
 			},
 			onclick: () => navClick(obj),
 		});
-		parent.insertBefore(navParentDiv, parent.children[0]);
 		const navParentImg = KadUtils.KadTable.createCell("Img", {
-			names: ["navBarIcon", "parent", obj],
+      names: ["navBarIcon", "parent", obj],
 			subGroup: "navbar",
 			img: `nav${obj}`,
 		});
 		navParentDiv.appendChild(navParentImg);
 		const navParentLbl = KadUtils.KadTable.createCell("Lbl", {
-			names: ["navBarLbl", obj],
+      names: ["navBarLbl", obj],
 			createClass: ["cl_navNames"],
 			idNoChild: true,
 			text: obj,
 		});
 		navParentDiv.appendChild(navParentLbl);
+    parent.insertBefore(navParentDiv, parent.children[0]);
 	}
 	KadUtils.dbID("idDiv_navBar_Universe").classList.add("navbarActive");
 	KadUtils.dbIDStyle("idDiv_navBar_User").display = "none";
@@ -562,7 +562,6 @@ export function createFooter() {
 		const dropSourceParent = KadUtils.KadTable.createCell("Div", {
 			names: ["footerSource", index],
 			createClass: ["cl_DropdownParent", "clFooterCredits"],
-			// title: `${name} von:\n${url}\n(Opens in a new Tab)`,
 		});
 		parent.appendChild(dropSourceParent);
 
