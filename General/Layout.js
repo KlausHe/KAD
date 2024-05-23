@@ -1,7 +1,7 @@
 import * as KadUtils from "./KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import { globalValues } from "../Settings/Basics.js";
-import { contentGroupSort, rawContentGrid, contentFooter } from "./MainContent.js";
+import { contentGroups, contentGroupsNav, rawContentGrid, contentFooter } from "./MainContent.js";
 import { nuncDiscipuli, loadDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
 import * as DBData from "../MainModulesDBData.js";
@@ -16,11 +16,16 @@ export let contentGrid = {};
 export const contentLayout = {
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
-		contentGrid = Object.fromEntries(
-			arr.filter((obj) => {
-				return contentCheckActive(obj[1]);
-			})
-		);
+		arr.sort((a, b) => {
+			return b[1].name < a[1].name ? 1 : -1;
+		});
+		let sorted = [];
+		for (let group of contentGroups) {
+			for (let i = 0; i < arr.length; i++) {
+				if (contentCheckActive(arr[i][1]) || arr[i][1].contentGroup == group) sorted.push(arr[i]);
+			}
+		}
+		contentGrid = Object.fromEntries(sorted);
 	},
 	navContent: {
 		Universe: [],
@@ -517,11 +522,11 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	contentLayout.contentLength = 0;
-	KadUtils.errorCheck(contentGroupSort.length != KadUtils.objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupSort`");
+	KadUtils.errorCheck(contentGroupsNav.length != KadUtils.objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
 
-	for (let i = contentGroupSort.length - 1; i >= 0; i--) {
+	for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
 		contentLayout.contentLength++;
-		const obj = contentGroupSort[i];
+		const obj = contentGroupsNav[i];
 		const navParentDiv = KadUtils.KadTable.createCell("Div", {
 			names: ["navBar", obj],
 			createClass: ["cl_navElements"],
@@ -532,19 +537,19 @@ export function createNavbar() {
 			onclick: () => navClick(obj),
 		});
 		const navParentImg = KadUtils.KadTable.createCell("Img", {
-      names: ["navBarIcon", "parent", obj],
+			names: ["navBarIcon", "parent", obj],
 			subGroup: "navbar",
 			img: `nav${obj}`,
 		});
 		navParentDiv.appendChild(navParentImg);
 		const navParentLbl = KadUtils.KadTable.createCell("Lbl", {
-      names: ["navBarLbl", obj],
+			names: ["navBarLbl", obj],
 			createClass: ["cl_navNames"],
 			idNoChild: true,
 			text: obj,
 		});
 		navParentDiv.appendChild(navParentLbl);
-    parent.insertBefore(navParentDiv, parent.children[0]);
+		parent.insertBefore(navParentDiv, parent.children[0]);
 	}
 	KadUtils.dbID("idDiv_navBar_Universe").classList.add("navbarActive");
 	KadUtils.dbIDStyle("idDiv_navBar_User").display = "none";

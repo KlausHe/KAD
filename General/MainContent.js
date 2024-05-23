@@ -1,11 +1,12 @@
-export const contentGroupSort = ["Universe", "News", "Benkyou", "Utility", "Tools", "Games", "User"];
+export const contentGroups = ["Global-Settings", "Account-Settings", "News", "Benkyou", "Utility", "Tools", "Games"];
+export const contentGroupsNav = ["Universe", "News", "Benkyou", "Utility", "Tools", "Games", "User"];
 
 export const rawContentGrid = {
 	//Benkyou
 	cl_Analysis: {
 		contentGroup: "Benkyou",
 		globalValString: "idVin_analysisEntry",
-		name: "Analysis-Analyse",
+		name: "Analysis",
 		source: {
 			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
 		},
