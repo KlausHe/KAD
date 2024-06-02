@@ -1,5 +1,5 @@
-import { daEL, KadDOM, KadRandom, KadArray } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { KadDOM, KadRandom, KadArray, initEL, log } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/General.js";
 import { timeoutCanvasFinished } from "../Main.js";
 
 const sweeperOptions = {
@@ -14,15 +14,15 @@ const sweeperOptions = {
 	cells: [],
 };
 
-daEL(idBtn_startSweeper, "click", sweeperStart);
-daEL(idVin_sweeperGrid, "input", () => sweeperGridChange(idVin_sweeperGrid));
-daEL(idVin_sweeperSweeps, "input", () => sweeperCellsChange(idVin_sweeperSweeps));
+initEL({ id: idBtn_startSweeper, fn: sweeperStart });
+initEL({ id: idVin_sweeperGrid, fn: () => sweeperGridChange(idVin_sweeperGrid), resetValue: sweeperOptions.gridSizeOrig });
+initEL({ id: idVin_sweeperSweeps, fn: () => sweeperCellsChange(idVin_sweeperSweeps), resetValue: sweeperOptions.sweepCellsOrig });
 
 export function clear_cl_Sweeper() {
 	//Clear on Start
 	sweeperOptions.cells = [];
-	sweeperOptions.gridSize = KadDOM.resetInput("idVin_sweeperGrid", sweeperOptions.gridSizeOrig);
-	sweeperOptions.sweepCells = KadDOM.resetInput("idVin_sweeperSweeps", sweeperOptions.sweepCellsOrig);
+	sweeperOptions.gridSize = idVin_sweeperGrid.KadReset();
+	sweeperOptions.sweepCells = idVin_sweeperSweeps.KadReset();
 	sweeperStartOver();
 }
 export function canvas_cl_Sweeper() {
@@ -101,7 +101,9 @@ function sweeperRevealSweeps() {
 	}
 }
 
-function sweeperMousePushed() {
+function sweeperMousePushed(event) {
+	log(event);
+
 	if (sweeperOptions.finished) {
 		sweeperStart();
 		return;
@@ -109,10 +111,10 @@ function sweeperMousePushed() {
 	let cellW = Math.floor(sweeperOptions.canvas.w / sweeperOptions.gridSize);
 	let i = Math.floor(caSW.mouseX / cellW);
 	let j = Math.floor(caSW.mouseY / cellW);
-	if (window.event.shiftKey) {
-		sweeperOptions.cells[i][j].flag();
-	} else {
+	if (event.button == 0) {
 		sweeperOptions.cells[i][j].clicked();
+	} else if (event.button == 2) {
+		sweeperOptions.cells[i][j].flag();
 	}
 	caSW.redraw();
 }

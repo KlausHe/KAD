@@ -1,4 +1,4 @@
-import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
+import { dbID, objectLength, KadDOM, KadTable, initEL } from "../General/KadUtils.js";
 const synonymOptions = {
 	get URL() {
 		return `https://www.openthesaurus.de/synonyme/search?q=${this.input}&format=application/json&similar=true&baseform=true`;
@@ -7,11 +7,11 @@ const synonymOptions = {
 	data: {},
 };
 
-daEL(idVin_synonymEntry, "change", newSynonym);
-daEL(idBtn_synonymEntry, "click", newSynonym);
+initEL({ id: idVin_synonymEntry, fn: newSynonym, resetValue: "Search for synonyms" });
+initEL({ id: idBtn_synonymEntry, fn: newSynonym });
 
 export function clear_cl_Synonym() {
-	KadDOM.resetInput("idVin_synonymEntry", "Search for synonyms");
+	idVin_synonymEntry.KadReset();
 	KadTable.clear("idTabHeader_synonym_baseform");
 	KadTable.clear("idTabHeader_synonym1");
 	KadTable.clear("idTabHeader_synonym2");
@@ -21,10 +21,9 @@ export function clear_cl_Synonym() {
 
 function newSynonym() {
 	synonymOptions.input = dbID("idVin_synonymEntry").value.toString().trim();
-	if (synonymOptions.input) {
-		dbID("idVin_synonymEntry").value = "";
-		synonymGetData();
-	}
+	if (!synonymOptions.input) return;
+	dbID("idVin_synonymEntry").value = "";
+	synonymGetData();
 }
 
 async function synonymGetData() {

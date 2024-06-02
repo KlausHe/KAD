@@ -1,7 +1,8 @@
 import * as KadUtils from "./General/KadUtils.js";
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import * as Layout from "./General/Layout.js";
-import { globalValues, displayColorSystem, colToggleColormode } from "./Settings/Basics.js";
+import { globalValues } from "./Settings/General.js";
+import { displayColorSystem, colToggleColormode, globalColors } from "./Settings/Color.js";
 import { bgaClearBackground, bgaToggleReset } from "./General/BackgroundAnimation.js";
 import * as Clear from "./MainModulesClear.js";
 
@@ -19,7 +20,7 @@ function mainSetup() {
 	if (KadUtils.hostDebug()) KadUtils.dbCLStyle("cl_Loading").display = "none";
 	Layout.contentLayout.createContentGrid();
 	htmlSetVinChange();
-	globalValues.colors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+	globalColors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
 
 	Layout.createContentlayoutList(); // First: create the LayoutLists
@@ -41,18 +42,22 @@ function mainSetup() {
 	clearGlobalValue();
 	setTimeout(() => {
 		hideLoadingscreen();
-	}, 1000);
+	}, 500);
 }
 
+// no rightclicking anywhere!
+document.oncontextmenu = function () {
+	return false;
+};
 // Navbar
-KadUtils.daEL(idDiv_navBar_Trash, "click", resetAll);
-KadUtils.daEL(idVin_globalValue, "input", globalValueChanged);
-KadUtils.daEL(idVin_globalValue, "focus", globalValuePopulateDatalist);
-KadUtils.daEL(idDiv_navBar_GlobalSettings, "click", () => Layout.navClick("GlobalSettings"));
-KadUtils.daEL(idDiv_navBar_Colormode, "click", colToggleColormode);
+KadUtils.initEL({ id: idDiv_navBar_Trash, fn: resetAll });
+KadUtils.initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: Layout.contentLayout.nameList });
+
+KadUtils.initEL({ id: idDiv_navBar_GlobalSettings, fn: () => Layout.navClick("GlobalSettings") });
+KadUtils.initEL({ id: idDiv_navBar_Colormode, fn: colToggleColormode });
 // Footer
-KadUtils.daEL(idDiv_clearBackground, "click", bgaClearBackground);
-KadUtils.daEL(idCb_bgaReset, "click", () => bgaToggleReset(idCb_bgaReset));
+KadUtils.initEL({ id: idDiv_clearBackground, fn: bgaClearBackground });
+KadUtils.initEL({ id: idCb_bgaReset, fn: () => bgaToggleReset(idCb_bgaReset) });
 
 export function resetAll() {
 	createNewNuncDiscipuli();
@@ -64,7 +69,7 @@ export function resetAll() {
 
 function clearAllTiles() {
 	for (const clearFunction of Object.values(Clear)) {
-		clearFunction();
+		if (clearFunction != undefined) clearFunction();
 	}
 }
 
@@ -129,15 +134,5 @@ function globalValueChanged(enter = null) {
 			let key = Object.entries(Layout.contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
 			Layout.toggelFullscreen(key);
 		}
-	}
-}
-
-function globalValuePopulateDatalist() {
-	const obj = KadUtils.dbID("idDlist_globalValue");
-	if (obj.childNodes.length > 1) return;
-	for (const name of Layout.contentLayout.nameList) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = name;
-		obj.appendChild(opt);
 	}
 }

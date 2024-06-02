@@ -1,5 +1,6 @@
-import { dbID, daEL, KadValue, KadDOM } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalColors } from "../Settings/Color.js";
+import { dbID, KadValue, KadDOM, initEL } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/General.js";
 
 const ibhaluniOptions = {
 	get canvas() {
@@ -18,14 +19,15 @@ const ibhaluniOptions = {
 	misses: 0,
 };
 
-daEL(idBtn_ibhaluniStart, "click", ibhaluniStart);
-daEL(idCb_ibhaluniSoundOutput, "change", ibhaluniToggleSound);
+initEL({ id: idBtn_ibhaluniStart, fn: ibhaluniStart, resetValue: "Start" });
+initEL({ id: idCb_ibhaluniSoundOutput, fn: ibhaluniToggleSound, resetValue: false });
 
 export function clear_cl_Ibhaluni() {
-	KadDOM.resetInput("idCb_ibhaluniSoundOutput", false);
+	idBtn_ibhaluniStart.KadReset();
+	idCb_ibhaluniSoundOutput.KadReset();
 	ibhaluniOptions.balloons = [];
 	caIB.noLoop();
-	caIB.background(globalValues.colors.elements.background);
+	caIB.background(globalColors.elements.background);
 }
 
 export function canvas_cl_Ibhaluni() {
@@ -72,7 +74,7 @@ const caIB = new p5((c) => {
 		c.cursor(c.CROSS);
 	};
 	c.draw = function () {
-		c.background(globalValues.colors.darkmodeOn ? ibhaluniOptions.backgroundNight : ibhaluniOptions.backgroundDay);
+		c.background(globalColors.darkmodeOn ? ibhaluniOptions.backgroundNight : ibhaluniOptions.backgroundDay);
 		for (let balloon of ibhaluniOptions.balloons) {
 			balloon.update();
 			balloon.check();
@@ -80,7 +82,7 @@ const caIB = new p5((c) => {
 		for (let i = ibhaluniOptions.balloons.length - 1; i >= 0; i--) {
 			ibhaluniOptions.balloons[i].show();
 		}
-		c.fill(globalValues.colors.elements.line);
+		c.fill(globalColors.elements.line);
 		c.textSize(globalValues.mediaSizes.fontSize);
 		c.textAlign(c.LEFT, c.TOP);
 		c.text(`score: ${ibhaluniOptions.score}`, 10, 10);
@@ -182,7 +184,6 @@ class IbhaluniObj {
 
 	update() {
 		if (this.poppingCounter > this.poppingSclLimits[1] && this.falling == false) {
-			this.playSound();
 			this.falling = true;
 			ibhaluniOptions.score++;
 		}
@@ -222,6 +223,7 @@ class IbhaluniObj {
 			const diX = (caIB.mouseX - this.x) / (this.xSize / 2);
 			const diY = (caIB.mouseY - this.y) / (this.ySize / 2);
 			if (diX * diX + diY * diY < 1) {
+				this.playSound();
 				this.popping = true;
 				return true;
 			}

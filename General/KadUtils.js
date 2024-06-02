@@ -14,24 +14,154 @@ export function dbCLStyle(id, loc = 0) {
 	if (loc === null) return [...document.getElementsByClassName(id)].map((s) => s.style);
 	return document.getElementsByClassName(id)[loc].style;
 }
+
+/**
+ *
+ *
+ * @export
+ * @param {{ id: any; action?: string; fn: function; selList: array; selGroup: string; selStartVal: any; selStartIndex?: number; dbList: array; resetValue: any; domOpts: any; }} [param0={}]
+ * @param {HTMLElement} param0.id
+ * @param {string} param0.action
+ * @param {function} param0.fn
+ * @param {array} param0.selList
+ * @param {array} param0.selGroup
+ * @param {string} param0.selStartVal
+ * @param {number} [param0.selStartIndex=0]
+ * @param {array} param0.dbList
+ * @param {string|number} param0.resetValue
+ * @param {object} param0.domOpts
+ * @returns {*}
+ */
+export function initEL({ id, action = null, fn, selList, selGroup, selStartVal, selStartIndex = 0, dbList, resetValue, domOpts } = {}) {
+	errorChecked(typeof id === "string", "Id is a string but should be an HTML-Object");
+	const typeAction = {
+		text: "input", // input change focus click
+		number: "input", // input change focus click
+		submit: "click", //click (default-type od "button")
+		button: "click", //click
+		"select-one": "change", // change focus
+		textarea: "input", // input change
+		checkbox: "click", // click
+		Div: "click", // click
+		Canv: "keydown", // keydown keyup
+	};
+	const idString = id.id;
+	const type = id.type ? id.type : idString.slice(2, idString.indexOf("_"));
+	daEL(id, action || typeAction[type], fn);
+
+	// fill "datalist"
+	if (dbList) {
+		id.addEventListener(
+			"focus",
+			() => {
+				const datalist = document.createElement("datalist");
+				datalist.id = `idDlist_${id.id}`;
+				id.parentNode.appendChild(datalist);
+				id.setAttribute("list", datalist.id);
+				for (const data of dbList) {
+					const opt = document.createElement("OPTION");
+					opt.textContent = data;
+					datalist.appendChild(opt);
+				}
+			},
+			{ once: true }
+		);
+	}
+	// fill "Select"
+	if (selList) {
+		makeSelList({ selList, selStartIndex, selStartVal });
+	}
+	// add reset-function
+	if (type == "select-one") {
+		id.KadReset = function ({ resetSelList, resetSelStartIndex, resetSelStartVal } = {}) {
+			if (resetSelList) makeSelList({ selList: resetSelList, selStartIndex: resetSelStartIndex, selStartVal: resetSelStartVal });
+			const index = resetSelStartIndex || selStartIndex;
+			id.options[index].selected = true;
+			return index;
+		};
+	} else {
+		id.KadReset = function (reset = null) {
+			let r = reset || resetValue;
+			KadDOM.resetInput(id, r, domOpts);
+			return r;
+		};
+	}
+
+	function makeSelList({ selList, selStartIndex, selStartVal } = {}) {
+		while (id.options.length > 0) {
+			id.remove(0);
+		}
+		let i = 0;
+		if (selGroup) {
+			id.options[0] = new Option(...selGroup);
+			i = 1;
+		}
+		for (let data of selList) {
+			let d = Array.isArray(data) ? data : [data];
+			id.options[i++] = new Option(...d);
+			if (selStartVal && data[0] == selStartVal) {
+				id.options[i].selected = true;
+			}
+		}
+		if (!selStartVal) id.options[selStartIndex].selected = true;
+	}
+}
+/*-------------------------- */
 export function daEL(id, type, fn) {
 	dbID(id).addEventListener(type, fn);
 }
+
 export function objectLength(obj) {
 	return Object.keys(obj).length;
 }
 export function hostDebug() {
-	return ["local", "127.0.0.1"].some((s) => window.location.hostname.includes(s));
+	return ["localhost", "127.0.0.1"].includes(window.location.hostname);
 }
-export function error(...errorText) {
-	throw new Error(errorText.join(" "));
+function getStackFunctionAt(level = 1) {
+	const levelString = Error().stack.split(/\r?\n|\r|\n/g)[level + 1];
+	let arr = levelString.split(/[@://]{1,}/);
+	const data = {
+		function: `${arr[0]}()`,
+		folder: arr[4],
+		file: arr[5],
+		line: arr[6],
+	};
+	return `${data.function} ${data.folder}/${data.file}: ${data.line}`;
 }
-export function errorCheck(state, ...message) {
+export function log(...logText) {
+	if (!hostDebug()) return;
+	console.group(`%c${getStackFunctionAt()}`, "background: white; color: black");
+	let text = "";
+	if (typeof logText === "object" && logText !== null) text = logText;
+	else text = logText.join(" ");
+	if (text) console.log(...text);
+	console.groupEnd();
+}
+export function checkedLog(state, ...logText) {
+	if (!hostDebug()) return;
 	if (state) {
-		error(...message);
+		console.group(`%c${getStackFunctionAt()}`, "background: green; color: white");
+		let text = logText.join(" ");
+		if (text) console.log(text);
+		console.groupEnd();
 		return true;
 	}
 	return false;
+}
+export function error(...errorText) {
+	if (!hostDebug()) return;
+	console.group(`%c${getStackFunctionAt()}`, "background: red; color: black");
+	let text = errorText.join(" ");
+	if (text) console.log(text);
+	throw console.groupEnd();
+}
+export function errorChecked(state, ...errorText) {
+	if (!hostDebug()) return;
+	if (!state) return;
+	console.group(`%c${getStackFunctionAt()}`, "background: red; color: black");
+	let text = errorText.join(" ");
+	if (text) console.log(text);
+	throw console.groupEnd();
 }
 
 export function deepClone(data) {
@@ -177,7 +307,7 @@ export const KadDOM = {
 		return obj.placeholder;
 	},
 	clearFirstChild(id) {
-		const obj = typeof id == "string" ? dbID(id) : id;
+		const obj = dbID(id);
 		while (obj.firstChild) {
 			obj.removeChild(obj.firstChild);
 		}

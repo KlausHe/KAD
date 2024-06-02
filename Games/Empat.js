@@ -1,6 +1,7 @@
-import { dbID, daEL, KadValue, KadArray, KadInteraction } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { dbID, KadValue, KadArray, KadInteraction, initEL } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/General.js";
 import { timeoutCanvasFinished } from "../Main.js";
+import { globalColors } from "../Settings/Color.js";
 //Vier gewinnt  empat kemenangan
 const empatOptions = {
 	get canvas() {
@@ -25,8 +26,8 @@ const empatOptions = {
 	players: [],
 };
 
-daEL(idBtn_empatStart, "click", empatStart);
-daEL(idCanv_empat, "keydown", empatKeyPushed);
+initEL({ id: idBtn_empatStart, fn: empatStart, resetValue: "Start" });
+initEL({ id: idCanv_empat, fn: empatKeyPushed });
 
 export function clear_cl_Empat() {
 	empatOptions.cells = [];
@@ -94,7 +95,6 @@ const caEM = new p5((c) => {
 		}
 	};
 }, "#idCanv_empat");
-
 
 function empatCheckWinner(cell) {
 	//check cols |||||
@@ -393,7 +393,7 @@ class EmpatCell {
 	}
 
 	show() {
-		caEM.fill(globalValues.colors.elements.baseColor);
+		caEM.fill(globalColors.elements.baseColor);
 		caEM.noStroke();
 		caEM.beginShape();
 		for (let i = 0; i < this.backgroundShape.length; i++) {
@@ -401,7 +401,7 @@ class EmpatCell {
 		}
 		caEM.endShape();
 		caEM.noFill();
-		caEM.stroke(globalValues.colors.elements.line);
+		caEM.stroke(globalColors.elements.line);
 		// caEM.stroke(0, 80);
 		caEM.strokeWeight(1);
 		caEM.ellipseMode(caEM.CENTER);
@@ -417,7 +417,7 @@ class EmpatCell {
 		if (false) {
 			// debug cell
 			caEM.noStroke();
-			caEM.fill(globalValues.colors.elements.line);
+			caEM.fill(globalColors.elements.line);
 			caEM.textAlign(caEM.CENTER, caEM.CENTER);
 			caEM.textSize(globalValues.mediaSizes.fontSize * 1.5);
 			caEM.text(`${this.i},${this.j}`, this.x, this.y);

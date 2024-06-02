@@ -2,9 +2,10 @@
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 const reverseGeocoder = new BDCReverseGeocode();
 
+import { globalColors } from "../Settings/Color.js";
 import * as KadUtils from "../General/KadUtils.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 
 const weatherMaps = {
 	shown: false,
@@ -53,35 +54,27 @@ let howaOptions = {
 	},
 };
 
-KadUtils.daEL(idVin_howaEntry, "change", howaGetLocation);
-KadUtils.daEL(idVin_howaEntry, "focus", () => howaPopulateDatalist(idVin_howaEntry));
-KadUtils.daEL(idBtn_getGeoLocation, "click", howaGetCoordinates);
-KadUtils.daEL(idBtn_howaGetLocation, "click", howaGetLocation);
-KadUtils.daEL(idSel_howaMapsDistrict, "change", howaChangeMap);
-KadUtils.daEL(idSel_howaMapsCriteria, "change", howaChangeMap);
+KadUtils.initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Ort", dbList: Data_Nummernschild.values() });
+KadUtils.initEL({ id: idBtn_getGeoLocation, fn: howaGetCoordinates });
+KadUtils.initEL({ id: idBtn_howaGetLocation, fn: howaGetLocation });
+KadUtils.initEL({
+	id: idSel_howaMapsDistrict,
+	fn: howaChangeMap,
+	selGroup: ["Deutschland", "de"],
+	selList: Data_Country_GermanDistrics.map((d) => [d.LandDE, d.abbr]),
+});
+KadUtils.initEL({ id: idSel_howaMapsCriteria, fn: howaChangeMap, selList: weatherMaps.criteriaList.map((d) => [d[1], d[0]]) });
 
 export function clear_cl_Howa() {
-	KadUtils.KadDOM.resetInput("idVin_howaEntry", "Ort");
+	idVin_howaEntry.KadReset();
+
 	howaOptions.latitude = howaOptions.latOrig;
 	howaOptions.longitude = howaOptions.lonOrig;
 	howaOptions.city = null;
-
-	// populate MapSelectDistrict
-	KadUtils.dbID("idSel_howaMapsDistrict").options[0] = new Option("Deutschland", "de");
 	reverseGeocoder.localityLanguage = "de";
-	for (let [index, land] of Data_Country_GermanDistrics.entries()) {
-		KadUtils.dbID("idSel_howaMapsDistrict").options[index + 1] = new Option(land.LandDE, land.abbr);
-	}
-	KadUtils.dbID("idSel_howaMapsDistrict").options[0].selected = true;
-
-	// populate MapSelectCriteria
-	for (let i = 0; i < weatherMaps.criteriaList.length; i++) {
-		KadUtils.dbID("idSel_howaMapsCriteria").options[i] = new Option(weatherMaps.criteriaList[i][1], weatherMaps.criteriaList[i][0]);
-	}
-	KadUtils.dbID("idSel_howaMapsCriteria").options[0].selected = true;
 
 	caHO.noLoop();
-	caHO.background(globalValues.colors.elements.background);
+	caHO.background(globalColors.elements.background);
 
 	howaChangeMap();
 	howaGetCoordinates();
@@ -98,22 +91,12 @@ export const storage_cl_Howa = {
 	},
 	set data(data) {
 		KadUtils.dbID("idVin_howaEntry").value = data;
-		// howaGetLocation();
 	},
 };
 
 export function canvas_cl_Howa() {
 	caHO.resizeCanvas(howaOptions.canvas.w, howaOptions.canvas.h);
 	caHO.redraw();
-}
-
-function howaPopulateDatalist() {
-	if (KadUtils.dbID("idDlist_howaPlaces").childNodes.length > 1) return;
-	for (const city of Data_Nummernschild.values()) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = city;
-		KadUtils.dbID("idDlist_howaPlaces").appendChild(opt);
-	}
 }
 
 // DWD stuff
@@ -162,12 +145,13 @@ async function howaGeocodingCity() {
 	if (howaOptions.city == null) return;
 	let response = await fetch(howaOptions.urlGeoCoding);
 	let data = await response.json();
-	if (!data.results) {
+	data = data.results.filter((d) => (d.country = "Deutschland"));
+	if (!data) {
 		KadUtils.dbID("idLbl_howaNow").textContent = "Stadt nicht gefunden";
 		return true;
 	}
-	howaOptions.latitude = data.results[0].latitude;
-	howaOptions.longitude = data.results[0].longitude;
+	howaOptions.latitude = data[0].latitude;
+	howaOptions.longitude = data[0].longitude;
 	return false;
 }
 
@@ -176,7 +160,7 @@ function howaCleanLocation() {
 		howaOptions.city = result.city;
 		weatherMaps.district = result.principalSubdivisionCode.split("-")[1].toLowerCase();
 		howaReqestData();
-
+		if (!Data_Country_GermanDistrics.map((d) => d.abbr).includes(weatherMaps.district)) weatherMaps.district = "de";
 		for (let node of KadUtils.dbID("idSel_howaMapsDistrict").options) {
 			if (node.value == weatherMaps.district) {
 				node.selected = true;
@@ -269,7 +253,7 @@ function howaDrawData() {
 		caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
 		caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
 
-		caHO.fill(globalValues.colors.elements.line);
+		caHO.fill(globalColors.elements.line);
 		caHO.textSize(globalValues.mediaSizes.fontSize);
 		caHO.text(KadUtils.KadDate.getDate(graph.labels[i], { format: "WD" }), dayWidth / 2, y + rowHeight / 2);
 		caHO.text(`[${graph.weatherCode[i]}]`, dayWidth + tempWidth / 2, y + rowHeight / 2);

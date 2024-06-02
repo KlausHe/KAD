@@ -1,5 +1,6 @@
-import { daEL, dbID, dbIDStyle, deepClone, KadDOM, KadValue } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalColors } from "../Settings/Color.js";
+import { daEL, dbID, dbIDStyle, deepClone, KadDOM, KadValue, log } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/General.js";
 
 const pythoOptions = {
 	p5Loaded: false,
@@ -12,6 +13,7 @@ const pythoOptions = {
 	greekAlpha: "\u03B1",
 	greekBeta: "\u03B2",
 	inputState: [0, 1],
+	inputStateOrig: [0, 1],
 	vals: [],
 	valsOrig: [3, 4],
 	errorShown: false,
@@ -25,13 +27,14 @@ daEL(idVin_Pytho_4, "input", () => pythoNewEntry(idVin_Pytho_4));
 
 export function clear_cl_Pythagoras() {
 	pythoOptions.vals = [];
+	pythoOptions.inputState = [...pythoOptions.inputStateOrig];
 	for (let i = 0; i < 5; i++) {
 		const val = pythoOptions.inputState.includes(i) ? pythoOptions.valsOrig[i] : "";
 		KadDOM.resetInput(`idVin_Pytho_${i}`, val);
 	}
-	pythoOptions.inputState = [0, 1];
 	pythoShowError();
 	pythoCalc();
+
 }
 
 export function canvas_cl_Pythagoras() {
@@ -90,68 +93,81 @@ function pythoCalc() {
 	pythoOptions.vals[A] = KadDOM.numberFromInput(`idVin_Pytho_${A}`);
 	pythoOptions.vals[B] = KadDOM.numberFromInput(`idVin_Pytho_${B}`);
 
-	if (A > 2) pythoOptions.vals[A] *= caPY.PI / 180; //convert dregrees to radians
-	if (B > 2) pythoOptions.vals[B] *= caPY.PI / 180; //convert dregrees to radians
+	if (B > 2) pythoOptions.vals[B] *= caPY.PI / 180;
+	if (A > 2) pythoOptions.vals[A] *= caPY.PI / 180;
 	const arr = deepClone(pythoOptions.inputState).sort();
+
+	let a = pythoOptions.vals[0];
+	let b = pythoOptions.vals[1];
+	let c = pythoOptions.vals[2];
+	let alpha = pythoOptions.vals[3];
+	let beta = pythoOptions.vals[4];
+
 	switch (arr.join("")) {
 		case "01": //a & b
-			pythoOptions.vals[2] = pythoTriHypo(pythoOptions.vals[0], pythoOptions.vals[1]); //c
-			pythoOptions.vals[3] = caPY.asin(pythoOptions.vals[0] / pythoOptions.vals[2]);
-			pythoOptions.vals[4] = pythoMinusNinety(pythoOptions.vals[3]); //Beta = 90-Alpha
+			c = pythoTriHypo(a, b);
+			alpha = caPY.asin(a / c);
+			beta = pythoMinusNinety(alpha);
 			break;
 		case "02": //a & c
-			if (pythoOptions.vals[2] <= pythoOptions.vals[0]) {
+			if (c <= a) {
 				pythoShowError("Hypotenuse ist zu klein!");
 				return;
 			}
-			pythoOptions.vals[1] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[0]); //c
-			pythoOptions.vals[4] = caPY.asin(pythoOptions.vals[1] / pythoOptions.vals[2]);
-			pythoOptions.vals[3] = pythoMinusNinety(pythoOptions.vals[4]); //Beta = 90-Alpha
+			b = pythoTriLength(c, a);
+			beta = caPY.asin(b / c);
+			alpha = pythoMinusNinety(beta);
 			break;
 		case "12": //b & c
-			if (pythoOptions.vals[2] <= pythoOptions.vals[1]) {
+			if (c <= b) {
 				pythoShowError("Hypotenuse ist zu klein!");
 				return;
 			}
-			pythoOptions.vals[0] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[1]); //c
-			pythoOptions.vals[3] = Math.asin(pythoOptions.vals[1] / pythoOptions.vals[2]);
-			pythoOptions.vals[4] = pythoMinusNinety(pythoOptions.vals[3]); //Beta = 90-Alpha
+			a = pythoTriLength(c, b);
+			alpha = Math.asin(b / c);
+			beta = pythoMinusNinety(alpha);
 			break;
 
 		//Alpha
 		case "03": //a & Alpha
-			pythoOptions.vals[2] = pythoOptions.vals[0] / Math.sin(pythoOptions.vals[3]);
-			pythoOptions.vals[1] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[0]); //c
-			pythoOptions.vals[4] = pythoMinusNinety(pythoOptions.vals[3]); //Beta = 90-Alpha
+			c = a / Math.sin(alpha);
+			b = pythoTriLength(c, a);
+			beta = pythoMinusNinety(alpha);
 			break;
 		case "13": //b & Alpha
-			pythoOptions.vals[2] = pythoOptions.vals[1] / Math.cos(pythoOptions.vals[3]);
-			pythoOptions.vals[0] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[1]); //c
-			pythoOptions.vals[4] = pythoMinusNinety(pythoOptions.vals[3]); //Beta = 90-Alpha
+			c = b / Math.cos(alpha);
+			a = pythoTriLength(c, b);
+			beta = pythoMinusNinety(alpha);
 			break;
 		case "23": //c & Alpha
-			pythoOptions.vals[0] = pythoOptions.vals[2] * Math.sin(pythoOptions.vals[3]);
-			pythoOptions.vals[1] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[0]); //c
-			pythoOptions.vals[4] = pythoMinusNinety(pythoOptions.vals[3]); //Beta = 90-Alpha
+			a = c * Math.sin(alpha);
+			b = pythoTriLength(c, a);
+			beta = pythoMinusNinety(alpha);
 			break;
 
 		//Beta
 		case "04": //a & Beta
-			pythoOptions.vals[2] = pythoOptions.vals[0] / Math.cos(pythoOptions.vals[4]);
-			pythoOptions.vals[1] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[0]); //c
-			pythoOptions.vals[3] = pythoMinusNinety(pythoOptions.vals[4]); //Beta = 90-Alpha
+			c = a / Math.cos(beta);
+			b = pythoTriLength(c, a);
+			alpha = pythoMinusNinety(beta);
 			break;
 		case "14": //b & Beta
-			pythoOptions.vals[2] = pythoOptions.vals[1] / Math.sin(pythoOptions.vals[4]);
-			pythoOptions.vals[0] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[1]); //c
-			pythoOptions.vals[3] = pythoMinusNinety(pythoOptions.vals[4]); //Beta = 90-Alpha
+			c = b / Math.sin(beta);
+			a = pythoTriLength(c, b);
+			alpha = pythoMinusNinety(beta);
 			break;
 		case "24": //c & Beta
-			pythoOptions.vals[0] = pythoOptions.vals[2] * Math.cos(pythoOptions.vals[4]);
-			pythoOptions.vals[1] = pythoTriLength(pythoOptions.vals[2], pythoOptions.vals[0]); //c
-			pythoOptions.vals[3] = pythoMinusNinety(pythoOptions.vals[4]); //Beta = 90-Alpha
+			a = c * Math.cos(beta);
+			b = pythoTriLength(c, a);
+			alpha = pythoMinusNinety(beta);
 			break;
 	}
+
+	pythoOptions.vals[0] = a;
+	pythoOptions.vals[1] = b;
+	pythoOptions.vals[2] = c;
+	pythoOptions.vals[3] = alpha;
+	pythoOptions.vals[4] = beta;
 
 	for (let i = 0; i < 5; i++) {
 		if (!pythoOptions.inputState.includes(i)) {
@@ -201,7 +217,7 @@ function drawPytho() {
 
 	const hyp = pythoTriHypo(drawWidth, drawHeight);
 	const beta = Math.asin(drawWidth / hyp);
-	const alpha = pythoMinusNinety(beta); //Beta = 90-Alpha
+	const alpha = pythoMinusNinety(beta);
 	caPY.clear();
 	caPY.strokeWeight(2);
 
@@ -209,21 +225,21 @@ function drawPytho() {
 	caPY.translate(pythoOptions.canvas.w - pythoOptions.margin, pythoOptions.canvas.h - pythoOptions.margin);
 	// Basics
 	caPY.noStroke();
-	caPY.fill(globalValues.colors.elements.line);
+	caPY.fill(globalColors.elements.line);
 	caPY.textSize(globalValues.mediaSizes.fontSize);
 	caPY.textAlign(caPY.RIGHT, caPY.TOP); //A
 	caPY.text(pythPoints[0].Up, pythPoints[0].x, pythPoints[0].y);
 	caPY.textAlign(caPY.LEFT, caPY.BOTTOM); //B
 	caPY.text(pythPoints[1].Up, pythPoints[1].x, pythPoints[1].y);
-	caPY.textAlign(caPY.LEFT, caPY.TOP); //C
+	caPY.textAlign(caPY.LEFT, caPY.TOP);
 	caPY.text(pythPoints[2].Up, pythPoints[2].x, pythPoints[2].y);
-	caPY.stroke(globalValues.colors.elements.line);
+	caPY.stroke(globalColors.elements.line);
 	caPY.noFill();
 	caPY.arc(pythPoints[2].x, pythPoints[2].y, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, caPY.PI, caPY.PI + caPY.HALF_PI); // C bottom right
 
 	//Coloured Stuff
 	// line "a"
-	let curColor = pythoOptions.inputState.includes(0) ? globalValues.colors.elements.baseColor : globalValues.colors.elements.line;
+	let curColor = pythoOptions.inputState.includes(0) ? globalColors.elements.baseColor : globalColors.elements.line;
 	caPY.stroke(curColor);
 	caPY.line(pythPoints[1].x, pythPoints[1].y, pythPoints[2].x, pythPoints[2].y); //BC
 	caPY.noStroke();
@@ -232,7 +248,7 @@ function drawPytho() {
 	caPY.text(pythPoints[0].Lo, pythPoints[1].x, (pythPoints[1].y + pythPoints[2].y) / 2);
 
 	// line "b"
-	curColor = pythoOptions.inputState.includes(1) ? globalValues.colors.elements.baseColor : globalValues.colors.elements.line;
+	curColor = pythoOptions.inputState.includes(1) ? globalColors.elements.baseColor : globalColors.elements.line;
 	caPY.stroke(curColor);
 	caPY.line(pythPoints[0].x, pythPoints[0].y, pythPoints[2].x, pythPoints[2].y); //AC
 	caPY.noStroke();
@@ -241,18 +257,18 @@ function drawPytho() {
 	caPY.text(pythPoints[1].Lo, (pythPoints[2].x + pythPoints[0].x) / 2, pythPoints[2].y + 5);
 
 	// line "c"
-	curColor = pythoOptions.inputState.includes(2) ? globalValues.colors.elements.baseColor : globalValues.colors.elements.line;
+	curColor = pythoOptions.inputState.includes(2) ? globalColors.elements.baseColor : globalColors.elements.line;
 	caPY.stroke(curColor);
 	caPY.line(pythPoints[0].x, pythPoints[0].y, pythPoints[1].x, pythPoints[1].y); //AB
 	caPY.noStroke();
 	caPY.fill(curColor);
-	caPY.textAlign(caPY.RIGHT, caPY.BOTTOM); //c
+	caPY.textAlign(caPY.RIGHT, caPY.BOTTOM);
 	caPY.text(pythPoints[2].Lo, (pythPoints[0].x + pythPoints[1].x) / 2, (pythPoints[0].y + pythPoints[1].y) / 2);
 
 	caPY.textFont(pythoOptions.greekFont);
 	caPY.textSize(globalValues.mediaSizes.fontSize * 0.8);
 	//Alpha
-	curColor = pythoOptions.inputState.includes(3) ? globalValues.colors.elements.baseColor : globalValues.colors.elements.line;
+	curColor = pythoOptions.inputState.includes(3) ? globalColors.elements.baseColor : globalColors.elements.line;
 	caPY.stroke(curColor);
 	caPY.noFill();
 	caPY.arc(pythPoints[0].x, pythPoints[0].y, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, caPY.TWO_PI - alpha, caPY.TWO_PI); // A bottom left
@@ -262,7 +278,7 @@ function drawPytho() {
 	caPY.text(`${pythoOptions.greekAlpha}`, pythPoints[0].x + 8, pythPoints[0].y);
 
 	//Beta
-	curColor = pythoOptions.inputState.includes(4) ? globalValues.colors.elements.baseColor : globalValues.colors.elements.line;
+	curColor = pythoOptions.inputState.includes(4) ? globalColors.elements.baseColor : globalColors.elements.line;
 	caPY.stroke(curColor);
 	caPY.noFill();
 	caPY.arc(pythPoints[1].x, pythPoints[1].y, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, caPY.HALF_PI, caPY.HALF_PI + beta); //B top right

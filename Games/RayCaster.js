@@ -1,5 +1,7 @@
-import { dbID, daEL, deepClone, KadDOM, KadInteraction } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalColors } from "../Settings/Color.js";
+import { dbID, daEL, deepClone, KadDOM, KadInteraction, initEL, log } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/General.js";
+import { timeoutCanvasFinished } from "../Main.js";
 
 const raycasterOptions = {
 	get canvas() {
@@ -18,74 +20,60 @@ const raycasterOptions = {
 	longDist: 0,
 	longCell: null,
 	modes: {
-		maze: true,
-		mazeOrig: false,
-		target: true,
+		maze: false,
+		mazeOrig: true,
+		target: false,
 		targetOrig: true,
-		poly: true,
-		polyOrig: true,
+		poly: false,
+		polyOrig: false,
 		spider: false,
 		spiderOrig: false,
 	},
 	speed: 1,
 	speedOrig: 3,
 	fovD: 1,
-	get fovDOrig() {
-		return this.boardSizeOrig;
-	},
+	fovDOrig: 8, // this.boardSizeOrig
 	segments: [],
 	polygons: [],
 	rayStart: [],
 	borders: [],
 };
 
-daEL(idBtn_generateRayMaze, "click", newRayMaze);
-daEL(idVin_rayMazeSize, "input", () => raySizeChange(idVin_rayMazeSize));
-daEL(idVin_rayMazeSpeed, "input", () => raySpeedChange(idVin_rayMazeSpeed));
-daEL(idCb_rayDebug, "click", rayDebugChange);
-daEL(idCb_rayPoly, "click", rayPolyChange);
-daEL(idCb_raySpider, "click", raySpiderChange);
-daEL(idCb_rayTarget, "click", rayTargetChange);
-daEL(idVin_rayMazeView, "input", () => rayViewChange(idVin_rayMazeView));
+initEL({ id: idBtn_generateRayMaze, fn: newRayMaze });
 
-daEL(idCanv_rayCaster, "keydown", keyPushedRayCaster);
-daEL(idCanv_rayCaster, "keyup", keyPushedRayCaster);
+initEL({ id: idVin_rayMazeSize, fn: raySizeChange, resetValue: raycasterOptions.boardSizeOrig });
+initEL({ id: idVin_rayMazeSpeed, fn: raySpeedChange, resetValue: raycasterOptions.speedOrig });
+initEL({ id: idVin_rayMazeView, fn: rayViewChange, resetValue: raycasterOptions.fovDOrig });
+initEL({ id: idCb_rayDebug, fn: rayDebugChange, resetValue: raycasterOptions.modes.mazeOrig });
+initEL({ id: idCb_rayTarget, fn: rayTargetChange, resetValue: raycasterOptions.modes.targetOrig });
+initEL({ id: idCb_rayPoly, fn: rayPolyChange, resetValue: raycasterOptions.modes.polyOrig });
+initEL({ id: idCb_raySpider, fn: raySpiderChange, resetValue: raycasterOptions.modes.spiderOrig });
+
+initEL({ id: idCanv_rayCaster, action: "keydown", fn: keyPushedRayCaster });
+initEL({ id: idCanv_rayCaster, action: "keyup", fn: keyPushedRayCaster });
 
 export function clear_cl_RayCaster() {
-	let boardWidth = raycasterOptions.canvas.w;
+	const boardWidth = raycasterOptions.canvas.w;
 	raycasterOptions.cellwidth = Math.floor(boardWidth / raycasterOptions.boardSize);
 	raycasterOptions.cols = Math.floor(boardWidth / raycasterOptions.cellwidth);
 	raycasterOptions.rows = Math.floor(raycasterOptions.canvas.h / raycasterOptions.cellwidth);
 
-	rayCasterReset();
-
-	raycasterOptions.boardSize = KadDOM.resetInput("idVin_rayMazeSize", raycasterOptions.boardSizeOrig);
-	raycasterOptions.speed = KadDOM.resetInput("idVin_rayMazeSpeed", raycasterOptions.speedOrig);
-	raycasterOptions.fovD = KadDOM.resetInput("idVin_rayMazeView", raycasterOptions.fovDOrig);
-
-	raycasterOptions.modes.maze = KadDOM.resetInput("idCb_rayDebug", raycasterOptions.modes.mazeOrig);
-	raycasterOptions.modes.target = KadDOM.resetInput("idCb_rayDebug", raycasterOptions.modes.targetOrig);
-	raycasterOptions.modes.poly = KadDOM.resetInput("idCb_rayDebug", raycasterOptions.modes.polyOrig);
-	raycasterOptions.modes.spider = KadDOM.resetInput("idCb_rayDebug", raycasterOptions.modes.spiderOrig);
+	raycasterOptions.boardSize = idVin_rayMazeSize.KadReset();
+	raycasterOptions.speed = idVin_rayMazeSpeed.KadReset();
+	raycasterOptions.fovD = idVin_rayMazeView.KadReset();
+	raycasterOptions.modes.maze = idCb_rayDebug.KadReset();
+	raycasterOptions.modes.target = idCb_rayTarget.KadReset();
+	raycasterOptions.modes.poly = idCb_rayPoly.KadReset();
+	raycasterOptions.modes.spider = idCb_raySpider.KadReset();
 
 	raycasterOptions.borders = [
-		{
-			a: caRC.createVector(0, 0),
-			b: caRC.createVector(boardWidth, 0),
-		},
-		{
-			a: caRC.createVector(boardWidth, 0),
-			b: caRC.createVector(boardWidth, raycasterOptions.canvas.h),
-		},
-		{
-			a: caRC.createVector(boardWidth, raycasterOptions.canvas.h),
-			b: caRC.createVector(0, raycasterOptions.height),
-		},
-		{
-			a: caRC.createVector(0, raycasterOptions.canvas.h),
-			b: caRC.createVector(0, 0),
-		},
+		{ a: caRC.createVector(0, 0), b: caRC.createVector(boardWidth, 0) },
+		{ a: caRC.createVector(boardWidth, 0), b: caRC.createVector(boardWidth, raycasterOptions.canvas.h) },
+		{ a: caRC.createVector(boardWidth, raycasterOptions.canvas.h), b: caRC.createVector(0, raycasterOptions.height) },
+		{ a: caRC.createVector(0, raycasterOptions.canvas.h), b: caRC.createVector(0, 0) },
 	];
+	newRayMaze();
+	caRC.redraw();
 	caRC.noLoop();
 }
 
@@ -115,42 +103,40 @@ function rayCasterReset() {
 	raycasterOptions.longDist = 0;
 }
 
-function raySizeChange(obj) {
-	raycasterOptions.boardSize = Number(obj.value);
-	KadInteraction.focus(idCanv_rayCaster, caRC);
-	setTimeout(() => {
-		raycasterOptions.cellwidthMaze();
-	}, 500);
-}
-
-function raySpeedChange(obj) {
-	raycasterOptions.speed = Number(obj.value);
+function raySizeChange() {
+	raycasterOptions.boardSize = KadDOM.numberFromInput(idVin_rayMazeSize);
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
-function rayViewChange(obj) {
-	raycasterOptions.fovD = raycasterOptions.boardSize * 0.1 * Number(obj.value);
+function raySpeedChange() {
+	raycasterOptions.speed = KadDOM.numberFromInput(idVin_rayMazeSpeed);
+	KadInteraction.focus(idCanv_rayCaster, caRC);
+}
+
+function rayViewChange() {
+	raycasterOptions.fovD = raycasterOptions.boardSize * 0.1 * KadDOM.numberFromInput(idVin_rayMazeView);
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
 function rayDebugChange() {
-	raycasterOptions.modes.maze = dbID("idCb_rayDebug").checked;
-	KadInteraction.focus(idCanv_rayCaster, caRC);
-}
-
-function raySpiderChange() {
-	raycasterOptions.modes.spider = dbID("idCb_raySpider").checked;
+	raycasterOptions.modes.maze = dbID(idCb_rayDebug).checked;
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
 function rayPolyChange() {
-	raycasterOptions.modes.poly = dbID("idCb_rayPoly").checked;
-	KadDOM.enableBtn("idCb_raySpider", !raycasterOptions.modes.poly);
+	raycasterOptions.modes.poly = dbID(idCb_rayPoly).checked;
+	KadDOM.enableBtn(idCb_raySpider, !raycasterOptions.modes.poly);
+	KadInteraction.focus(idCanv_rayCaster, caRC);
+}
+
+function raySpiderChange() {
+	raycasterOptions.modes.spider = dbID(idCb_raySpider).checked;
+	KadDOM.enableBtn(idCb_rayPoly, !raycasterOptions.modes.spider);
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
 function rayTargetChange() {
-	raycasterOptions.modes.target = dbID("idCb_rayTarget").checked;
+	raycasterOptions.modes.target = dbID(idCb_rayTarget).checked;
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
@@ -160,8 +146,8 @@ const caRC = new p5((c) => {
 		c.canv.id("canvasRayCaster");
 		c.canv.parent("#idCanv_rayCaster");
 		c.colorMode(c.HSL);
-		c.clear();
 		c.ellipseMode(c.CENTER);
+		c.clear();
 		caRC.noLoop();
 	};
 
@@ -175,6 +161,7 @@ const caRC = new p5((c) => {
 		let cell = raycasterOptions.cells[idI + idJ * raycasterOptions.rows];
 		if (cell === raycasterOptions.longCell) {
 			caRC.noLoop();
+			log(cell, raycasterOptions.longCell);
 			mazeRayFinished();
 			clear_cl_RayCaster();
 		} else if (cell) {
@@ -217,20 +204,21 @@ function raycasterDrawContent() {
 		let alpha = ((raycasterOptions.polygons.length - i) / raycasterOptions.polygons.length) * 255;
 		caRC.fill(330, 100, 50, alpha);
 		caRC.noStroke();
+		caRC.strokeWeight(1);
 
 		if (!raycasterOptions.modes.poly && raycasterOptions.modes.spider) {
 			// DRAW ALL RAYS
 			for (let j = 0; j < intersects.length; j++) {
 				let intersect = intersects[j];
 				// Draw red laser with dot
-				caRC.stroke(globalValues.colors.elements.btnNegative);
-				caRC.fill(globalValues.colors.elements.btnNegative);
+				caRC.stroke(globalColors.elements.btnNegative);
+				caRC.fill(globalColors.elements.btnNegative);
 				caRC.line(raycasterOptions.rayStart[i].x, raycasterOptions.rayStart[i].y, intersect.x, intersect.y);
 				caRC.circle(intersect.x, intersect.y, raycasterOptions.cellwidth / 4);
 				//loop throug all positions
 				for (let n = raycasterOptions.rayStart.length - 1; n >= 0; n--) {
 					alpha = ((raycasterOptions.rayStart.length - n) / raycasterOptions.rayStart.length) * 255;
-					let c = caRC.color(globalValues.colors.elements.btnNegative);
+					let c = caRC.color(globalColors.elements.btnNegative);
 					c.setAlpha(alpha);
 					caRC.fill(c);
 					caRC.circle(raycasterOptions.rayStart[n].x, raycasterOptions.rayStart[n].y, raycasterOptions.rayStart[0].radius * 2);
@@ -252,8 +240,8 @@ function raycasterDrawContent() {
 		}
 
 		if (raycasterOptions.modes.target) {
-			caRC.stroke(globalValues.colors.elements.line);
-			caRC.fill(globalValues.colors.elements.btnPositive);
+			caRC.stroke(globalColors.elements.line);
+			caRC.fill(globalColors.elements.btnPositive);
 			let mid = 0.5 * raycasterOptions.cellwidth;
 			let x = mid + raycasterOptions.cellwidth * raycasterOptions.longCell.i;
 			let y = mid + raycasterOptions.cellwidth * raycasterOptions.longCell.j;
@@ -275,7 +263,7 @@ function raycasterDrawContent() {
 	}
 }
 
-function mazeRayFinished(data) {
+function mazeRayFinished() {
 	timeoutCanvasFinished(caRC, {
 		textTop: "Congratulations!",
 		textBottom: "You finished!",
@@ -283,7 +271,6 @@ function mazeRayFinished(data) {
 }
 
 function newRayMaze() {
-	// clear_cl_RayCaster();
 	rayCasterReset();
 	for (let i = 0; i < raycasterOptions.rows; i++) {
 		for (let j = 0; j < raycasterOptions.cols; j++) {
@@ -408,14 +395,8 @@ function getSightPolygon(rayS) {
 
 		// Ray from center of screen to mouse
 		let ray = {
-			a: {
-				x: rayS.x,
-				y: rayS.y,
-			},
-			b: {
-				x: rayS.x + dx,
-				y: rayS.y + dy,
-			},
+			a: { x: rayS.x, y: rayS.y },
+			b: { x: rayS.x + dx, y: rayS.y + dy },
 			angle: angle,
 		};
 		// Find CLOSEST intersection
@@ -440,7 +421,6 @@ function getSightPolygon(rayS) {
 }
 
 function keyPushedRayCaster(event) {
-	event.preventDefault();
 	let keyInput = event.keyCode;
 	if (event.type === "keyup" && (keyInput == 88 || keyInput == 120)) {
 		//"X"
@@ -551,7 +531,7 @@ class RaycasterCell {
 
 	show() {
 		caRC.noFill();
-		caRC.stroke(globalValues.colors.elements.line);
+		caRC.stroke(globalColors.elements.line);
 		for (let i = 0; i < 4; i++) {
 			if (this.walls[i].existing) {
 				caRC.line(this.walls[i].a.x, this.walls[i].a.y, this.walls[i].b.x, this.walls[i].b.y);

@@ -1,5 +1,6 @@
+import { globalColors } from "../Settings/Color.js";
 import { daEL, dbID, dbIDStyle, KadDOM, KadTable, KadColor, KadRandom } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
 
 const kaihangaOptions = {
@@ -22,7 +23,7 @@ export function clear_cl_Kaihanga() {
 	KadTable.clear("idTabBody_Kaihanga");
 	caKA.noLoop();
 	caKA.clear();
-	kaihangaOptions.startColor = caKA.floor(caKA.random(5, globalValues.colors.array.length));
+	kaihangaOptions.startColor = caKA.floor(caKA.random(5, globalColors.array.length));
 	kaihangaCreateRandomSet();
 	kaihangaUpdate();
 	KadDOM.resetInput("idVin_kaihangaEntry", "Enter Options");
@@ -63,10 +64,10 @@ function mousePushedKaihanga() {
 //gameLogic
 function kaihangaWheelUpdate() {
 	let segOptions = [];
-	let colStart = 5 + KadRandom.randomIndex(globalValues.colors.array.slice(5, globalValues.colors.array.length));
-	const step = Math.floor(globalValues.colors.array.length / kaihangaOptions.entries.length);
+	let colStart = 5 + KadRandom.randomIndex(globalColors.array.slice(5, globalColors.array.length));
+	const step = Math.floor(globalColors.array.length / kaihangaOptions.entries.length);
 	for (let i = 0; i < kaihangaOptions.entries.length; i++) {
-		const col = globalValues.colors.array[(i * step + colStart) % globalValues.colors.array.length];
+		const col = globalColors.array[(i * step + colStart) % globalColors.array.length];
 		segOptions.push({
 			fillStyle: col,
 			strokeStyle: KadColor.stateAsArray(col, "HSL"),
@@ -84,7 +85,7 @@ function kaihangaWheelUpdate() {
 			duration: 2,
 			spins: 4,
 			callbackFinished: kaihangaResult,
-			backgroundColor: globalValues.colors.elements.background,
+			backgroundColor: globalColors.elements.background,
 		},
 	});
 	kaihangaOptions.wheel.draw();
@@ -226,7 +227,7 @@ class KaihangaWheel {
 		caKA.translate(kaihangaOptions.canvas.w / 2, kaihangaOptions.canvas.h / 2);
 		caKA.rotate((this.angle + 90) * -1);
 		caKA.noFill();
-		caKA.stroke(globalValues.colors.elements.line);
+		caKA.stroke(globalColors.elements.line);
 		caKA.strokeWeight(this.lineWeight);
 		//Segments
 		let seg = 360 / this.segments.length;
@@ -263,7 +264,7 @@ class KaihangaWheel {
 			let cy = this.innerR * 1.5;
 			caKA.translate(kaihangaOptions.canvas.w * 0.5, kaihangaOptions.canvas.h * 0.5 - this.outerR - this.lineWeight);
 			caKA.noStroke();
-			caKA.fill(globalValues.colors.elements.line);
+			caKA.fill(globalColors.elements.line);
 			caKA.push();
 			caKA.rotate(135);
 			caKA.rect(-cx, -cx, 2 * cx, cy, cx);

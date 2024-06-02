@@ -218,7 +218,7 @@ function openNavChange() {
 }
 
 //-----------------------ACTIONS------------------------------------
-KadUtils.daEL(idCb_userLogin_check, "change", accountPersistanceChange);
+KadUtils.daEL(idCb_userLogin_check, "click", accountPersistanceChange);
 KadUtils.daEL(idBtn_userLogin_login, "click", firebaseLogin);
 KadUtils.daEL(idBtn_userLogin_register, "click", firebaseRegister);
 KadUtils.daEL(idBtn_userChange_logout, "click", firebaseLogout);

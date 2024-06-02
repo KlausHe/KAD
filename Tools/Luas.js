@@ -1,5 +1,6 @@
+import { globalColors } from "../Settings/Color.js";
 import { daEL, dbID, dbIDStyle, KadDOM, KadValue } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 
 const luasOptions = {
 	get canvas() {
@@ -64,7 +65,7 @@ const caLU = new p5((c) => {
 
 	c.draw = function () {
 		caLU.clear();
-		c.stroke(globalValues.colors.elements.line);
+		c.stroke(globalColors.elements.line);
 		c.push();
 		c.translate(luasOptions.canvas.w * 0.5, luasOptions.canvas.h * 0.5);
 		c.rotate(270);

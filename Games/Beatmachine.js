@@ -1,6 +1,6 @@
-//use AudioContext() and AudioBuffer() 
+//use AudioContext() and AudioBuffer()
 
-import { dbID, dbIDStyle, dbCL, daEL,error, KadDOM, KadRandom } from "../General/KadUtils.js";
+import { dbID, dbIDStyle, dbCL, daEL, error, KadDOM, KadRandom, initEL } from "../General/KadUtils.js";
 
 const beatmachineOptions = {
 	BPMOrig: 105,
@@ -29,13 +29,13 @@ const beatmachineOptions = {
 	],
 };
 
-daEL(idBtn_beatmachineLoad, "click", () => beatmachineGetSounds(idBtn_beatmachineLoad));
-daEL(idBtn_transportPlayPause, "click", beatmachineTransport);
-daEL(idBtn_transportClear, "click", () => clear_cl_Beatmachine(idBtn_transportClear));
-daEL(idBtn_transportCreateBeat, "click", () => beatmachineCreateBeat(idBtn_transportCreateBeat));
-daEL(idBtn_transporteExpand, "click", () => beatmachineExpand(idBtn_transporteExpand));
-daEL(idBtn_transporteMute, "click", muteAll);
-daEL(idVin_beatmachine_BPM, "input", () => beatmachineBPMChange(idVin_beatmachine_BPM));
+initEL({ id: idBtn_beatmachineLoad, fn: () => beatmachineGetSounds(idBtn_beatmachineLoad) });
+initEL({ id: idBtn_transportPlayPause, fn: beatmachineTransport });
+initEL({ id: idBtn_transportClear, fn: () => clear_cl_Beatmachine(idBtn_transportClear) });
+initEL({ id: idBtn_transportCreateBeat, fn: () => beatmachineCreateBeat(idBtn_transportCreateBeat) });
+initEL({ id: idBtn_transporteExpand, fn: () => beatmachineExpand(idBtn_transporteExpand) });
+initEL({ id: idBtn_transporteMute, fn: muteAll });
+initEL({ id: idVin_beatmachine_BPM, fn: () => beatmachineBPMChange(idVin_beatmachine_BPM), resetValue: beatmachineOptions.BPMOrig });
 
 export function clear_cl_Beatmachine() {
 	// console.log("TODO");
@@ -48,7 +48,7 @@ export function clear_cl_Beatmachine() {
 	beatmachineOptions.BPM = beatmachineOptions.BPMOrig;
 	beatmachineOptions.expanding = false;
 	setBPMtoInterval(beatmachineOptions.BPM);
-	KadDOM.resetInput("idVin_beatmachine_BPM", beatmachineOptions.BPM);
+	idVin_beatmachine_BPM.KadReset();
 	beatmachineStop(true);
 	beatmachineCreateTracks();
 }
@@ -119,8 +119,8 @@ function beatmachineGetSounds() {
 			if (loadCounter == beatmachineOptions.tracks.length) {
 				console.log("all loaded");
 				beatmachineOptions.soundsLoaded = true;
-				dbIDStyle("idBtn_beatmachineLoad").display = "none";
-				dbIDStyle("idBtn_transportPlayPause").display = "initial";
+				dbIDStyle(idBtn_beatmachineLoad).display = "none";
+				dbIDStyle(idBtn_transportPlayPause).display = "initial";
 			}
 		}
 	}
@@ -163,7 +163,7 @@ function beatmachineCreateBeat() {
 }
 
 function beatmachineTransport() {
-  error("Beatmachine needs reworking. Stay tuned for the next update")
+	error("Beatmachine needs reworking. Stay tuned for the next update");
 	beatmachineOptions.curTime = 0;
 	console.log("transport");
 	if (beatmachineOptions.transportState === false) {

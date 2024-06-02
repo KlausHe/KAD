@@ -11,6 +11,7 @@ export { storage_cl_Material } from "./Tools/Material.js";
 export { storage_cl_Tugas } from "./Utility/Tugas.js";
 //Settings
 export { storage_cl_UserAcc } from "./General/Account.js";
-export { storage_cl_ColorSettings, storage_cl_GeneralSettings } from "./Settings/Basics.js";
+export { storage_cl_GeneralSettings } from "./Settings/General.js";
+export { storage_cl_ColorSettings } from "./Settings/Color.js";
 export { storage_cl_UserGridLayout } from "./Settings/Usergridlayout.js";
 export { storage_cl_MaterialFilterSettings } from "./Settings/MaterialFilterSettings.js";

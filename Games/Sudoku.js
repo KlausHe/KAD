@@ -1,6 +1,7 @@
-import { daEL, dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { daEL, dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate, initEL, log } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/General.js";
 import { globalP5 } from "../Main.js";
+import { globalColors } from "../Settings/Color.js";
 
 const sudokuOptions = {
 	get canvas() {
@@ -26,21 +27,29 @@ const sudokuOptions = {
 	timerStop: null,
 	curHighlight: null,
 	mode: 1,
-	errorCheck: false,
+	errorChecked: false,
 	pencilErase: false,
 };
 
-daEL(idBtn_sudokuPuzzle, "click", () => sudokuRequest(idBtn_sudokuPuzzle));
-daEL(idBtn_sudokuHCleaer, "click", sudokuClear);
-daEL(idBtn_sudokuTimer, "click", sudokuStopTimer);
-daEL(idBtn_sudokuWrite, "click", () => sudokuInputOptionChange(0));
-daEL(idBtn_sudokuPencil, "click", () => sudokuInputOptionChange(1));
-daEL(idBtn_sudokuValidate, "click", sudokuValidate);
-daEL(idBtn_sudokuHint, "click", sudokuHint);
-daEL(idCb_sudokuAutoCheck, "click", sudokuOptionChange);
-daEL(idCb_sudokuErasePencils, "click", sudokuOptionChange);
-daEL(idBtn_sudokuNumOverview_1, "click", () => sudokuGroupHighlight(idBtn_sudokuNumOverview_1));
-daEL(idCanv_sudoku, "keydown", sudokuKeyPressed);
+initEL({ id: idBtn_sudokuPuzzle, fn: sudokuRequest });
+initEL({ id: idBtn_sudokuClear, fn: sudokuClear });
+initEL({ id: idBtn_sudokuTimer, fn: sudokuStopTimer });
+initEL({ id: idBtn_sudokuWrite, fn: () => sudokuInputOptionChange(1) });
+initEL({ id: idBtn_sudokuPencil, fn: () => sudokuInputOptionChange(0) });
+initEL({ id: idBtn_sudokuValidate, fn: sudokuValidate });
+initEL({ id: idBtn_sudokuHint, fn: sudokuHint });
+initEL({ id: idCb_sudokuAutoCheck, fn: sudokuOptionChange, resetValue: sudokuOptions.errorChecked });
+initEL({ id: idCb_sudokuErasePencils, fn: sudokuOptionChange, resetValue: sudokuOptions.pencilErase });
+initEL({ id: idBtn_sudokuNumOverview_1, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_1) });
+initEL({ id: idBtn_sudokuNumOverview_2, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_2) });
+initEL({ id: idBtn_sudokuNumOverview_3, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_3) });
+initEL({ id: idBtn_sudokuNumOverview_4, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_4) });
+initEL({ id: idBtn_sudokuNumOverview_5, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_5) });
+initEL({ id: idBtn_sudokuNumOverview_6, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_6) });
+initEL({ id: idBtn_sudokuNumOverview_7, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_7) });
+initEL({ id: idBtn_sudokuNumOverview_8, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_8) });
+initEL({ id: idBtn_sudokuNumOverview_9, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_9) });
+initEL({ id: idCanv_sudoku, action: "keydown", fn: sudokuKeyPressed });
 
 export function clear_cl_Sudoku() {
 	sudokuOptions.curHighlight = null;
@@ -48,8 +57,8 @@ export function clear_cl_Sudoku() {
 	sudokuOptions.cells = [];
 	sudokuOptions.cellWidth = Math.floor(sudokuOptions.canvas.w / 9);
 	sudokuOptions.selCells = [{ i: 0, j: 0 }];
-	dbID("idCb_sudokuAutoCheck").checked = sudokuOptions.errorCheck;
-	dbID("idCb_sudokuErasePencils").checked = sudokuOptions.pencilErase;
+	idCb_sudokuAutoCheck.KadReset();
+	idCb_sudokuErasePencils.KadReset();
 	//print empty cells
 	for (let i = 0; i < 9; i++) {
 		sudokuOptions.cells[i] = [];
@@ -92,7 +101,7 @@ function sudokuLoadData(data) {
 	sudokuRequest();
 }
 
-function sudokuRequest(req) {
+function sudokuRequest() {
 	if (sudokuOptions.data === null) {
 		globalP5.loadJSON("./Data/DataLists/Sudoku1000.json", sudokuLoadData, "json");
 		return null;
@@ -120,9 +129,9 @@ function sudokuInputOptionChange(val = null) {
 }
 
 function sudokuOptionChange() {
-	sudokuOptions.errorCheck = dbID("idCb_sudokuAutoCheck").checked;
+	sudokuOptions.errorChecked = dbID("idCb_sudokuAutoCheck").checked;
 	sudokuOptions.pencilErase = dbID("idCb_sudokuErasePencils").checked;
-	if (!sudokuOptions.errorCheck) {
+	if (!sudokuOptions.errorChecked) {
 		for (let index = 0; index < 9 * 9; index++) {
 			const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
 			sudokuOptions.cells[i][j].error = false;
@@ -146,7 +155,7 @@ function sudokuValidate() {
 		alert("Everything looks good!");
 	} else {
 		dbID("idCb_sudokuAutoCheck").checked = true;
-		sudokuOptions.errorCheck = true;
+		sudokuOptions.errorChecked = true;
 	}
 	KadInteraction.focus(idCanv_sudoku, caSU);
 }
@@ -263,7 +272,7 @@ function sudokuShiftPressed() {
 }
 
 function sudokuGroupHighlight(obj) {
-	sudokuOptions.curHighlight = sudokuOptions.curHighlight == obj.getAttribute("alt") ? null : obj.getAttribute("alt");
+	sudokuOptions.curHighlight = obj.value;
 	caSU.redraw();
 	KadInteraction.focus(idCanv_sudoku, caSU);
 }
@@ -301,7 +310,7 @@ const caSU = new p5((c) => {
 		c.canv.mousePressed(sudokuMousePressed);
 		c.colorMode(c.HSL);
 		c.noLoop();
-		c.background(globalValues.colors.elements.background);
+		c.background(globalColors.elements.background);
 	};
 	c.draw = function () {
 		if (sudokuOptions.cells.length > 0) {
@@ -416,11 +425,11 @@ class SudokuCell {
 			drawn: [0, 0, 100],
 			correct: [0, 0, 100],
 			get error() {
-				return [...globalValues.colors.elements.btnNegative, 0.5];
+				return [...globalColors.elements.btnNegative, 0.5];
 			},
 			selected: [60, 100, 60],
 			get highlight() {
-				return [...globalValues.colors.elements.baseColor, 0.3];
+				return [...globalColors.elements.baseColor, 0.3];
 			},
 		};
 		this.colNum = {
@@ -433,10 +442,10 @@ class SudokuCell {
 			},
 			solved: [240, 100, 50],
 			get solution() {
-				return globalValues.colors.elements.baseColor;
+				return globalColors.elements.baseColor;
 			},
 			get hinted() {
-				return globalValues.colors.elements.btnPositive;
+				return globalColors.elements.btnPositive;
 			},
 		};
 		this.colNum.drawn = quest == "" ? this.colNum.solved : this.colNum.solution;
@@ -496,7 +505,7 @@ class SudokuCell {
 			}
 			this.mode = !sudokuOptions.mode;
 			//after changing to a cell check for errors!
-			if (sudokuOptions.errorCheck) {
+			if (sudokuOptions.errorChecked) {
 				sudokuErrors();
 			}
 		}
@@ -518,7 +527,7 @@ class SudokuCell {
 			this.pencils[val - 1].selected = !this.pencils[val - 1].selected;
 		}
 		let finished = sudokuCheckFinished();
-		if (!finished && sudokuOptions.errorCheck) {
+		if (!finished && sudokuOptions.errorChecked) {
 			sudokuErrors();
 		}
 		if (sudokuOptions.pencilErase && this.num != "") {

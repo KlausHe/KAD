@@ -1,6 +1,6 @@
-import { daEL, dbID, dbIDStyle, KadColor, KadDOM } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadDOM } from "../General/KadUtils.js";
 import { Data_RALColors } from "../General/MainData.js";
+import { globalColors } from "../Settings/Color.js";
 
 const kounselorOptions = {
 	curType: null,
@@ -104,16 +104,23 @@ const kounselorOptions = {
 	},
 };
 
+initEL({ id: idVin_kounselorRAL, fn: () => kounselorInput(idVin_kounselorRAL), resetValue: "RAL", dbList: Data_RALColors.map((d) => d.RAL) });
+initEL({ id: idVin_kounselorName, fn: () => kounselorInput(idVin_kounselorName), resetValue: "Name", dbList: Data_RALColors.map((d) => d.Name) });
+initEL({ id: idVin_kounselorHEX, fn: () => kounselorInput(idVin_kounselorHEX), resetValue: "HEX", dbList: Data_RALColors.map((d) => d.HEX) });
+initEL({ id: idVin_kounselorRGB, fn: () => kounselorInput(idVin_kounselorRGB), resetValue: "RGB", dbList: Data_RALColors.map((d) => d.RGB) });
+initEL({ id: idVin_kounselorHSL, fn: () => kounselorInput(idVin_kounselorHSL), resetValue: "HSL", dbList: Data_RALColors.map((d) => d.HSL) });
+initEL({ id: idVin_kounselorHSB, fn: () => kounselorInput(idVin_kounselorHSB), resetValue: "HSB", dbList: Data_RALColors.map((d) => d.HSB) });
+initEL({ id: idVin_kounselorCMYK, fn: () => kounselorInput(idVin_kounselorCMYK), resetValue: "CMYK", dbList: Data_RALColors.map((d) => d.CMYK) });
+
 export function clear_cl_Kounselor() {
 	for (const name of Object.keys(kounselorOptions.types)) {
 		const id = `idVin_kounselor${name}`;
-		daEL(id, "focus", () => kounselorPopulateDatalists(id));
-		daEL(id, "change", () => kounselorInput(id));
-		KadDOM.resetInput(id, name);
+		dbID(id).KadReset();
 		kounselorOptions.types[name].value = null;
 	}
+
 	kounselorOptions.curType = kounselorOptions.curTypeOrig;
-	kounselorOptions.types[kounselorOptions.curType].value = globalValues.colors.elements.baseColor;
+	kounselorOptions.types[kounselorOptions.curType].value = globalColors.elements.baseColor;
 	kounselorShowResults();
 }
 
@@ -121,20 +128,9 @@ export function canvas_cl_Kounselor() {
 	clear_cl_Kounselor();
 }
 
-function kounselorPopulateDatalists(obj) {
-	const type = dbID(obj).dataset.type;
-	if (dbID(`idDlist_kounselor${type}`).childNodes.length > 1) return;
-	for (const data of Data_RALColors) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = data[type];
-		dbID(`idDlist_kounselor${type}`).appendChild(opt);
-	}
-}
-
 function kounselorInput(vinObj) {
 	const obj = dbID(vinObj);
 	const input = KadDOM.stringFromInput(obj);
-	// let input = dbID(obj).value.trim();
 	if (input === "") return;
 	kounselorOptions.curType = obj.dataset.type;
 	kounselorOptions.types[kounselorOptions.curType].setValue(input);

@@ -4,6 +4,6 @@
         "workbench.editor.tabCloseButton": "left",
         "liveServer.settings.port": 3002,
         "liveServer.settings.CustomBrowser": "firefox",
-        "editor.snippetSuggestions": "top",
+        "editor.snippetSuggestions": "inline",
         "workbench.editor.tabActionLocation": "left"
 }

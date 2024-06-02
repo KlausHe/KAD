@@ -20,10 +20,10 @@ const expansionOptions = {
 	},
 };
 
-daEL(idSel_expansionMaterialA, "click", expansionEntryMaterial);
+daEL(idSel_expansionMaterialA, "change", expansionEntryMaterial);
 daEL(idSel_expansionMaterialA, "focus", expansionUpdateOptions);
 daEL(idBtn_expansionMaterialSwitch, "click", expansionSwitch);
-daEL(idSel_expansionMaterialB, "click", expansionEntryMaterial);
+daEL(idSel_expansionMaterialB, "change", expansionEntryMaterial);
 daEL(idSel_expansionMaterialB, "focus", expansionUpdateOptions);
 daEL(idBtn_expansionLength, "click", expansionEntryLength);
 daEL(idBtn_expansionBaseTemperature, "click", expansionEntryBaseTemperature);

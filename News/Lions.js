@@ -66,7 +66,7 @@ function lionsRequestData() {
 }
 
 function lionsReturn(data) {
-	if (KadUtils.errorCheck(data.error, "Lions could not acces the Winnerlist:", data.error)) return;
+	if (KadUtils.checkedLog(data.error, "Lions could not acces the Winnerlist:", data.error)) return;
 
 	lionsOptions.data = [];
 	for (let i = 1; i < data.length; i++) {

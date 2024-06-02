@@ -1,8 +1,9 @@
 //  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
 
+import { globalColors } from "../Settings/Color.js";
 import { daEL, dbID, dbCL, KadValue, KadDOM, KadTable } from "../General/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 import { materialOptions } from "./Material.js";
 
 const geometrieOptions = {
@@ -89,8 +90,8 @@ let geoObjects = {
 		caGE.strokeWeight(geoObjects.strokeBody);
 		caGE.strokeCap(caGE.ROUND);
 		caGE.strokeJoin(caGE.ROUND);
-		caGE.fill(globalValues.colors.elements.baseColor);
-		caGE.stroke(globalValues.colors.elements.line);
+		caGE.fill(globalColors.elements.baseColor);
+		caGE.stroke(globalColors.elements.line);
 	},
 	Quader: {
 		lbl: ["a", "b", "c"],
@@ -140,7 +141,7 @@ let geoObjects = {
 				caGE.line(...shape[n], ...shape[k]);
 			}
 
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			patternText(this.lbl[0], shape[3], shape[0], caGE.CENTER, caGE.TOP);
 			patternText(this.lbl[1], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
@@ -194,7 +195,7 @@ let geoObjects = {
 				caGE.line(...shape[n], ...shape[k]);
 			}
 
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			patternText(this.lbl[0], shape[3], shape[0], caGE.CENTER, caGE.TOP);
 			patternText(this.lbl[0], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
@@ -251,7 +252,7 @@ let geoObjects = {
 			caGE.strokeWeight(geoObjects.strokeBody);
 
 			//text
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			patternText(this.lbl[0], shape[3], shape[0], caGE.CENTER, caGE.TOP);
 			patternText(this.lbl[1], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
@@ -305,7 +306,7 @@ let geoObjects = {
 			caGE.strokeWeight(geoObjects.strokeBody);
 
 			//text
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			patternText(this.lbl[0], shape[2], shape[0], caGE.CENTER, caGE.TOP);
 			patternText(this.lbl[1], shape[3], shape[4], caGE.LEFT, caGE.CENTER);
@@ -356,7 +357,7 @@ let geoObjects = {
 			caGE.ellipse(0, -c, (a + b) * 2, d * 2);
 
 			//text
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			patternText(this.lbl[0], shape[5], shape[5], caGE.CENTER, caGE.TOP);
 			patternText(this.lbl[1], shape[0], shape[1], caGE.LEFT, caGE.CENTER);
@@ -431,7 +432,7 @@ let geoObjects = {
 			];
 
 			caGE.angleMode(caGE.RADIANS);
-			caGE.stroke(globalValues.colors.elements.line);
+			caGE.stroke(globalColors.elements.line);
 			caGE.noFill();
 			caGE.ellipse(0, c, (a + b) * 2, d * 2);
 			caGE.ellipse(0, -c, (a + b) * 2, d * 2);
@@ -445,7 +446,7 @@ let geoObjects = {
 			caGE.line(...outline[6], ...outline[7]);
 			caGE.strokeWeight(geoObjects.strokeBody);
 
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			patternText(this.lbl[0], outline[8], outline[8], caGE.CENTER, caGE.TOP);
 			patternText(this.lbl[1], outline[0], outline[1], caGE.LEFT, caGE.CENTER);
@@ -498,7 +499,7 @@ let geoObjects = {
 			caGE.strokeWeight(geoObjects.strokeBody);
 
 			//text
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			patternText(this.lbl[0], shape[5], shape[5], caGE.CENTER, caGE.TOP);
 			patternText(this.lbl[1], shape[3], shape[4], caGE.LEFT, caGE.CENTER);
@@ -538,7 +539,7 @@ let geoObjects = {
 			caGE.circle(0, 0, (a + b) * 2);
 
 			//text
-			caGE.fill(globalValues.colors.elements.text);
+			caGE.fill(globalColors.elements.text);
 			caGE.noStroke();
 			const shape = [0, d];
 			patternText(this.lbl[0], shape, shape, caGE.CENTER, caGE.TOP);

@@ -1,5 +1,6 @@
+import { globalColors } from "../Settings/Color.js";
 import { daEL, dbID, KadDOM, KadValue } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 const patternOptions = {
 	get margin() {
 		return globalValues.mediaSizes.canvasSize.w * 0.02;
@@ -134,16 +135,14 @@ function calcPattern() {
 }
 
 function patternPoint(pos, weight = 3, d = 10) {
-	// caPA.noStroke();
-	// caPA.fill(globalValues.colors.elements.line);
-	caPA.stroke(globalValues.colors.elements.line);
+	caPA.stroke(globalColors.elements.line);
 	caPA.strokeWeight(weight);
 	caPA.noFill();
 	caPA.circle(...pos, d);
 }
 
 function patternLine(start, end, weight = 1) {
-	caPA.stroke(globalValues.colors.elements.line);
+	caPA.stroke(globalColors.elements.line);
 	caPA.strokeWeight(weight);
 	caPA.line(...start, ...end);
 }
@@ -164,7 +163,7 @@ function patternText(text, pos) {
 	caPA.textSize(globalValues.mediaSizes.fontSize);
 	caPA.textAlign(caPA.CENTER, caPA.TOP);
 	caPA.noStroke();
-	caPA.fill(globalValues.colors.elements.line);
+	caPA.fill(globalColors.elements.line);
 	caPA.strokeWeight(1);
 	caPA.text(text, ...pos);
 }

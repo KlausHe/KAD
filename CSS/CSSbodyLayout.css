@@ -45,6 +45,9 @@
 	--UIHeight1: 1.5rem;
 	--UIHeight2: calc(var(--UIHeight1) * 2);
 	--UIHeight3: calc(var(--UIHeight1) * 3);
+	--UIHeight4: calc(var(--UIHeight1) * 4);
+	--UIHeight5: calc(var(--UIHeight1) * 5);
+	--UIHeight6: calc(var(--UIHeight1) * 6);
 
 	--UIWidth1: calc(var(--UIHeight1) * 1);
 	--UIWidth2: calc(var(--UIHeight1) * 2);

@@ -1,4 +1,4 @@
-import { dbID, daEL, objectLength, KadDOM, KadTable } from "../General/KadUtils.js";
+import { dbID, objectLength, KadDOM, KadTable, initEL } from "../General/KadUtils.js";
 // import { newsData } from "../News/News.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 import { globalP5 } from "../Main.js";
@@ -8,12 +8,13 @@ const analysisOptions = {
 	searchInput: "",
 	results: {},
 };
-daEL(idVin_analysisEntry, "input", analysisInput);
-// daEL(idBtn_analyseNews, "click", analysisNews);
-daEL(idBtn_analyseWiki, "click", analysisWiki);
+
+initEL({ id: idVin_analysisEntry, fn: analysisInput, resetValue: "Type text to analyze" });
+// initEL({ id: idBtn_analyseNews, fn: analysisNews });
+initEL({ id: idBtn_analyseWiki, fn: analysisWiki });
 
 export function clear_cl_Analysis() {
-	KadDOM.resetInput("idVin_analysisEntry", "Type text to analyze");
+	idVin_analysisEntry.KadReset(); //.resetInput("idVin_analysisEntry", "Type text to analyze");
 	dbID("idLbl_analysisResult").textContent = "~Average score~";
 	KadTable.clear("idTabBody_analysisResult");
 }
@@ -48,7 +49,7 @@ async function analysisInput() {
 
 function analysisLoadData(data) {
 	analysisOptions.data = data;
-  analysisInput()
+	analysisInput();
 }
 
 function analysisAnalyze() {

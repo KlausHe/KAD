@@ -1,11 +1,10 @@
 import * as KadUtils from "./KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 import { contentGroups, contentGroupsNav, rawContentGrid, contentFooter } from "./MainContent.js";
 import { nuncDiscipuli, loadDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
 import * as DBData from "../MainModulesDBData.js";
-// import * as Pikaday from "../Data/pikadayClock.js";
 
 function contentCheckActive(contentObj) {
 	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
@@ -33,20 +32,20 @@ export const contentLayout = {
 	},
 	origUniverse: [],
 	get GlobalSettings() {
-		if (!userLoggedIn()) return ["cl_GeneralSettings", "cl_ColorSettings"];
+		if (!userLoggedIn() && !KadUtils.hostDebug()) return ["cl_GeneralSettings", "cl_ColorSettings"];
 		return Object.keys(contentGrid).filter((key) => {
 			return contentGrid[key].contentGroup == "Global-Settings";
 		});
 	},
 	get getUniverse() {
 		return Object.keys(contentGrid).filter((key) => {
-			return contentGrid[key].contentGroup != "Account-Settings" && contentGrid[key].contentGroup != "Global-Settings";
+			return !contentLayout.settingsNames.includes(contentGrid[key].contentGroup);
 		});
 	},
 	get nameList() {
 		let list = [];
 		Object.values(contentGrid).forEach((obj) => {
-			if (obj.contentGroup == "Account-Settings" || obj.contentGroup == "Global-Settings") return;
+			if (contentLayout.settingsNames.includes(obj.contentGroup)) return;
 			if (!contentCheckActive(obj)) return;
 			list.push(obj.name);
 		});
@@ -57,7 +56,8 @@ export const contentLayout = {
 	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
-	defaultPage: KadUtils.hostDebug() ? "cl_Geometrie" : "Universe",
+	settingsNames: ["Account-Settings", "Global-Settings"],
+	defaultPage: KadUtils.hostDebug() ? "cl_RayCaster" : "Universe",
 };
 
 export function createContentlayoutList() {
@@ -169,7 +169,7 @@ function createGridLayout(layoutName) {
 		return;
 	}
 	for (const name of contentLayout.contentList) {
-		KadUtils.errorCheck(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name);
+		KadUtils.checkedLog(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name);
 		let contWidth = contentGrid[name].size[0];
 		if (contWidth > rowLength) contWidth = rowLength;
 		const contHeight = contentGrid[name].size[1];
@@ -211,7 +211,7 @@ function createGridLayout(layoutName) {
 			} // end main FOR (r)
 			indexRow++;
 			//safety
-			if (KadUtils.errorCheck(indexRow > 100, "unable to find spot!")) {
+			if (KadUtils.checkedLog(indexRow > 100, "unable to find spot!")) {
 				break;
 			}
 		} // end WHILE
@@ -246,6 +246,7 @@ function createContentList(layoutName) {
 function createAreaString(gridArray, rowLength) {
 	if (gridArray == []) {
 		KadUtils.dbIDStyle("id_contentGrid").gridTemplateAreas = "";
+		KadUtils.error("No Grid for gridTemplateAreas provided");
 		return;
 	}
 
@@ -263,7 +264,6 @@ function createAreaString(gridArray, rowLength) {
 	}
 	gridString += '"';
 	gridString = gridString.slice(2); // remove fist '" ' from the string
-
 	KadUtils.dbIDStyle("id_contentGrid").gridTemplateAreas = gridString;
 }
 
@@ -522,7 +522,7 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	contentLayout.contentLength = 0;
-	KadUtils.errorCheck(contentGroupsNav.length != KadUtils.objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
+	KadUtils.checkedLog(contentGroupsNav.length != KadUtils.objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
 
 	for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
 		contentLayout.contentLength++;

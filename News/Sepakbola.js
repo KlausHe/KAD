@@ -1,5 +1,5 @@
 import * as KadUtils from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 import { globalP5 } from "../Main.js";
 
 const sepakbolaOptions = {
@@ -103,7 +103,8 @@ export function clear_cl_Sepakbola() {
 	sepakbolaCreateDropdownSeasons();
 	sepakbolaCreateDropdownDays();
 	clearInterval(sepakbolaOptions.interval);
-	sepakbolaOptions.interval = setInterval(sepakbolaRequest, globalValues.intervalJSON);
+	sepakbolaOptions.interval = setInterval(sepakbolaRequest, 1000 * 60 * 60 * 1); // 1000 millis * 60 sec * 60 minutes * 2 hours
+
 	sepakbolaRequest();
 }
 

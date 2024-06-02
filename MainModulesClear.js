@@ -2,7 +2,8 @@
 export { clear_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
 export { clear_cl_UserLogin, clear_cl_UserChange } from "./General/Account.js";
 //Settings
-export { clear_cl_GeneralSettings, clear_cl_ColorSettings } from "./Settings/Basics.js";
+export { clear_cl_GeneralSettings } from "./Settings/General.js";
+export { clear_cl_ColorSettings } from "./Settings/Color.js";
 export { clear_cl_UserGridLayout } from "./Settings/Usergridlayout.js";
 export { clear_cl_MaterialFilterSettings } from "./Settings/MaterialFilterSettings.js";
 //Benkyou

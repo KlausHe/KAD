@@ -46,8 +46,8 @@ const usergridOptions = {
 	},
 };
 
-daEL("idBtn_toggleUserGrid", "click", usergridOptions.toggleAllGridDisable);
-daEL("idBtn_loaduserGridLayout", "click", saveUsergridLayout);
+daEL(idBtn_toggleUserGrid, "click", usergridOptions.toggleAllGridDisable);
+daEL(idBtn_loaduserGridLayout, "click", saveUsergridLayout);
 
 export function clear_cl_UserGridLayout() {
 	const tempArr = Object.keys(contentLayout.navContent);

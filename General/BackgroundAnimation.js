@@ -1,6 +1,6 @@
 import * as KadUtils from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
 import { contentLayout, navClick } from "../General/Layout.js";
+import { globalColors } from "../Settings/Color.js";
 
 export const bgaOptions = {
 	curr: 0,
@@ -128,7 +128,7 @@ class Clock {
 			// size based in width
 			this.size = caBA.width / 4;
 		}
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.fill(this.col);
 		caBA.noStroke();
@@ -165,7 +165,7 @@ class SegmentClock {
 		this.offsetHalf = this.offset / 2;
 		this.leng = this.offset * 0.9;
 		this.thickness = this.offset * 0.1;
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.rectMode(caBA.CENTER);
 		caBA.noStroke();
@@ -248,7 +248,7 @@ class Time {
 			// size based in width
 			this.size = caBA.width / 8;
 		}
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.fill(this.col);
 		caBA.noStroke();
@@ -272,7 +272,7 @@ class Cursordot {
 	}
 	reset() {
 		caBA.noStroke();
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.fill(this.col);
 	}
@@ -293,7 +293,7 @@ class Trail {
 		this.close = "";
 	}
 	reset() {
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.noFill();
 		caBA.stroke(this.col);
@@ -336,7 +336,7 @@ class Hilbert {
 	}
 	reset() {
 		this.Framerate = 30;
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.stroke(this.col);
 		caBA.strokeWeight(1);
@@ -409,7 +409,7 @@ class LanktonsAnt {
 		this.x = Math.floor(this.cols / 2);
 		this.y = Math.floor(this.rows / 2);
 		this.dir = Math.floor(Math.random() * 4);
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.fill(this.col);
 		caBA.noStroke();
@@ -476,7 +476,7 @@ class Cardioid {
 		this.fDir = 1;
 		this.factor = 1;
 		this.r = bgaOptions.maxRadius;
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.rectMode(caBA.CENTER);
 		caBA.ellipseMode(caBA.CENTER);
@@ -542,7 +542,7 @@ class AStar {
 		this.openSet = [];
 		this.openSet.push(this.startPoint);
 		this.closedSet = [];
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.rectMode(caBA.CENTER);
 		caBA.ellipseMode(caBA.CENTER);
@@ -599,9 +599,9 @@ class AStar {
 		for (let i = 0; i < this.cols; i++) {
 			this.grid[i].forEach((p) => p.show());
 		}
-		this.closedSet.forEach((p) => p.show(globalValues.colors.elements.btnNegative));
-		this.openSet.forEach((p) => p.show(globalValues.colors.elements.btnPositive));
-		this.endPoint.show(globalValues.colors.elements.baseColor);
+		this.closedSet.forEach((p) => p.show(globalColors.elements.btnNegative));
+		this.openSet.forEach((p) => p.show(globalColors.elements.btnPositive));
+		this.endPoint.show(globalColors.elements.baseColor);
 
 		let path = [];
 		let temp = this.current;
@@ -642,7 +642,7 @@ AStar.Spot = class {
 		this.neighbors = [];
 		this.previous = undefined;
 		this.wall = Math.random(1) < 0.2 ? true : false;
-		this.col = caBA.color(globalValues.colors.elements.text);
+		this.col = caBA.color(globalColors.elements.text);
 		this.col.setAlpha(bgaOptions.alpha);
 	}
 	show(col) {
@@ -711,7 +711,7 @@ class Flowfield {
 		for (let i = 0; i < this.particleCount; i++) {
 			this.particles[i] = new Flowfield.Particle();
 		}
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha * 0.1);
 		caBA.stroke(this.col);
 		caBA.strokeWeight(1);
@@ -946,7 +946,7 @@ class TenPrint {
 				};
 			}
 		}
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.stroke(this.col);
 		caBA.clear();
@@ -992,7 +992,7 @@ class GameOfLife {
 		}
 		this.gridPrev = null;
 		this.gridSTL = null;
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.noStroke();
 		caBA.fill(this.col);
@@ -1065,7 +1065,7 @@ class PongAI {
 	reset() {
 		this.leng = caBA.height / 4 < caBA.width / 6 ? caBA.height / 5 : caBA.width / 9; // size based in height : size based in width
 		this.thickness = this.leng * 0.1;
-		this.col = caBA.color(globalValues.colors.elements.baseColor);
+		this.col = caBA.color(globalColors.elements.baseColor);
 		this.col.setAlpha(bgaOptions.alpha);
 		caBA.fill(this.col);
 		caBA.rectMode(caBA.CENTER);

@@ -1,6 +1,7 @@
-import { daEL, dbID, dbCLStyle, KadDOM, KadDate, KadTable, KadRandom, KadColor } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { dbID, dbCLStyle, KadDOM, KadDate, KadTable, KadRandom, KadColor, initEL } from "../General/KadUtils.js";
+import { globalValues } from "../Settings/General.js";
 import { globalP5 } from "../Main.js";
+import { globalColors } from "../Settings/Color.js";
 
 const lottoOptions = {
 	url: "https://JohannesFriedrich.github.io/LottoNumberArchive/Lottonumbers_complete.json",
@@ -27,41 +28,39 @@ const lottoOptions = {
 				drawID: null,
 				tips: [],
 				star: [],
-			},  
-			loadedSets: {},
-			savedSet: {},
-		},
-		Eurojackpot: {
-			cols: 9,
-			rows: 6,
-			tipLength: 50, //1 - 50
-			tipStart: 1,
-			tipMax: 5,
-			starLength: 12, // 1-10
-			starStart: 1,
-			starMax: 2,
-			draw: {
-				drawID: null,
-				tips: [],
-				star: [],
 			},
 			loadedSets: {},
 			savedSet: {},
 		},
+		// Eurojackpot: {
+		// 	cols: 9,
+		// 	rows: 6,
+		// 	tipLength: 50, //1 - 50
+		// 	tipStart: 1,
+		// 	tipMax: 5,
+		// 	starLength: 12, // 1-10
+		// 	starStart: 1,
+		// 	starMax: 2,
+		// 	draw: {
+		// 		drawID: null,
+		// 		tips: [],
+		// 		star: [],
+		// 	},
+		// 	loadedSets: {},
+		// 	savedSet: {},
+		// },
 	},
 };
 
-daEL(idBtn_lottoReset, "click", lottoReset);
-daEL(idBtn_lottoRandom, "click", lottoRandom);
-daEL(idSel_lottoGame, "change", lottoGameSelect);
-daEL(idVin_lottoNumberOfGames, "input", lottoGetGames);
+initEL({ id: idBtn_lottoReset, fn: lottoReset });
+initEL({ id: idBtn_lottoRandom, fn: lottoRandom });
+initEL({ id: idSel_lottoGame, fn: lottoGameSelect, selList: Object.keys(lottoOptions.games), selStartIndex: 0 });
+initEL({ id: idVin_lottoNumberOfGames, fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
 
 export function clear_cl_Lotto() {
-	for (let i = 0; i < 1; i++) {
-		dbID("idSel_lottoGame").options[i] = new Option(Object.keys(lottoOptions.games)[i]);
-	}
-	KadDOM.resetInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
-	lottoOptions.selGame = Object.keys(lottoOptions.games)[0];
+	idVin_lottoNumberOfGames.KadReset();
+	const gameReset = idSel_lottoGame.KadReset();
+	lottoOptions.selGame = Object.keys(lottoOptions.games)[gameReset];
 	lottoOptions.randomiziation = 0;
 	clearTimeout(lottoOptions.randomTimeout);
 	createLotto(true);
@@ -400,13 +399,13 @@ class LottoCell {
 		caLO.strokeWeight(1);
 		let col;
 		if (this.selected() && this.drawed()) {
-			col = globalValues.colors.elements.btnPositive;
+			col = globalColors.elements.btnPositive;
 		} else if (this.selected()) {
-			col = globalValues.colors.elements.baseColor;
+			col = globalColors.elements.baseColor;
 		} else if (this.drawed()) {
-			col = globalValues.colors.elements.btnNegative;
+			col = globalColors.elements.btnNegative;
 		} else {
-			col = globalValues.colors.elements.btn;
+			col = globalColors.elements.btn;
 		}
 		let color = caLO.color(col);
 		if (lottoOptions.randomiziation > 0 && this.selected()) {

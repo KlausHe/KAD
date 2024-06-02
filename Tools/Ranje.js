@@ -1,22 +1,19 @@
-import { daEL, KadDOM, KadTable } from "../General/KadUtils.js";
+import { initEL, KadDOM, KadTable } from "../General/KadUtils.js";
 const ranjeOptions = {
 	value: 36,
-	results: [
-		[6, 6],
-		[1, 12],
-	],
+	results: [],
 };
 
-daEL(idVin_ranjeVal, "input", ranjeCalc);
+initEL({ id: idVin_ranjeVal, fn: ranjeCalc, resetValue: 36 });
 
 export function clear_cl_Ranje() {
-	KadDOM.resetInput("idVin_ranjeVal", 36);
+	idVin_ranjeVal.KadReset();
 	ranjeCalc();
 }
 
 function ranjeCalc() {
 	ranjeOptions.results = [];
-	ranjeOptions.value = KadDOM.numberFromInput("idVin_ranjeVal");
+	ranjeOptions.value = KadDOM.numberFromInput(idVin_ranjeVal);
 	for (let i = 2; i < ranjeOptions.value; i++) {
 		if (ranjeOptions.value % i === 0) {
 			ranjeOptions.results.push([i, Math.floor(ranjeOptions.value / i)]);

@@ -1,5 +1,6 @@
+import { globalColors } from "../Settings/Color.js";
 import { daEL, dbID, KadDOM, KadValue } from "../General/KadUtils.js";
-import { globalValues } from "../Settings/Basics.js";
+import { globalValues } from "../Settings/General.js";
 
 const middleOptions = {
 	get canvas() {
@@ -34,10 +35,10 @@ export function clear_cl_Middle() {
 		h: middleOptions.canvas.h * 0.5,
 		hText: middleOptions.canvas.h * 0.25,
 		get fillCol() {
-			return globalValues.colors.elements.btnPositive;
+			return globalColors.elements.btnPositive;
 		},
 		get fillText() {
-			return globalValues.colors.elements.btnPositiveText;
+			return globalColors.elements.btnPositiveText;
 		},
 	};
 	middleOptions.barB = {
@@ -45,10 +46,10 @@ export function clear_cl_Middle() {
 		h: middleOptions.canvas.h * 0.5,
 		hText: middleOptions.canvas.h * 0.75,
 		get fillCol() {
-			return globalValues.colors.elements.btnNegative;
+			return globalColors.elements.btnNegative;
 		},
 		get fillText() {
-			return globalValues.colors.elements.btnNegativeText;
+			return globalColors.elements.btnNegativeText;
 		},
 	};
 	calcMiddle();
@@ -88,12 +89,12 @@ function middleShowCanvas() {
 	middleDrawBalken(middleOptions.barA);
 	middleDrawBalken(middleOptions.barB);
 	//Mittenindikator
-	caMI.stroke(globalValues.colors.elements.baseColor);
+	caMI.stroke(globalColors.elements.baseColor);
 	caMI.strokeWeight(2);
 	caMI.line(middleOptions.middle + middleOptions.dims.w, 0, middleOptions.middle + middleOptions.dims.w, middleOptions.canvas.h);
 
 	//Mittelstrich
-	caMI.stroke(globalValues.colors.elements.line);
+	caMI.stroke(globalColors.elements.line);
 	caMI.line(middleOptions.middle, 0, middleOptions.middle, middleOptions.canvas.h);
 	// outer Rect
 	caMI.noFill();
@@ -114,13 +115,13 @@ function middleDrawBalken(bar) {
 		} else {
 			offset = 5;
 			caMI.textAlign(caMI.LEFT, caMI.CENTER);
-			caMI.fill(globalValues.colors.elements.text);
+			caMI.fill(globalColors.elements.text);
 		}
 	} else {
 		if (!fitA) {
 			offset = -5;
 			caMI.textAlign(caMI.RIGHT, caMI.CENTER);
-			caMI.fill(globalValues.colors.elements.text);
+			caMI.fill(globalColors.elements.text);
 		} else {
 			offset = 5;
 			caMI.textAlign(caMI.LEFT, caMI.CENTER);

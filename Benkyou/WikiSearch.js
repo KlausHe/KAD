@@ -1,4 +1,4 @@
-import { dbID, daEL, deepClone, KadDOM, KadRandom, KadTable } from "../General/KadUtils.js";
+import { dbID, daEL, deepClone, KadDOM, KadRandom, KadTable, initEL } from "../General/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 import { AccData } from "../General/Account.js";
 import { globalP5 } from "../Main.js";
@@ -28,15 +28,15 @@ const wikiOptions = {
 	},
 };
 
-daEL(idVin_wikiInput, "change", () => wikiSearchInput(null));
-daEL(idBtn_wikiInput, "click", () => wikiSearchInput(null));
-daEL(idSel_wikiLanguage, "change", wikiSearchLanguage);
+initEL({ id: idVin_wikiInput, fn: () => wikiSearchInput(null), resetValue: "Search on Wiki" });
+initEL({ id: idBtn_wikiInput, fn: () => wikiSearchInput(null) });
+initEL({ id: idSel_wikiLanguage, fn: wikiSearchLanguage });
 
-onclick = "newsShowNext(0)idDiv_wiki_Text";
+// onclick = "newsShowNext(0)idDiv_wiki_Text";
 
 export function clear_cl_WikiSearch() {
+	idVin_wikiInput.KadReset();
 	wikiOptions.random = null;
-	KadDOM.resetInput("idVin_wikiInput", "Search on Wiki");
 	dbID("idDiv_wiki_Title").textContent = "";
 	dbID("idDiv_wiki_Text").textContent = "";
 	dbID("idImg_Wiki_Image").src = "";
