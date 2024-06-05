@@ -1,9 +1,11 @@
-import { dbID, daEL, KadDOM, KadDate, KadTable } from "../General/KadUtils.js";
+import { dbID, KadDOM, KadDate, KadTable, initEL, log } from "../General/KadUtils.js";
 import { Data_NewsCountries, Data_Country_CodesIso3166 } from "../General/MainData.js";
 
 export const newsData = {
 	currIndex: 0,
 	articles: [],
+	category: null,
+	country: null,
 	categories: {
 		top: "Allgemeines",
 		business: "Business",
@@ -16,55 +18,29 @@ export const newsData = {
 		environment: "Umwelt",
 	},
 	default: {
-		category: "top",
-		country: "de",
+		category: "Allgemeines",
+		country: "Germany",
 	},
 };
 
-daEL(idSel_newsCategory, "change", newsUpdateOptions);
-daEL(idSel_newsCountry, "change", newsUpdateOptions);
-daEL(idDiv_News_Title, "click", news_URL);
-daEL(idDiv_News_Text, "click", newsShowNext);
+initEL({ id: idDiv_News_Title, fn: news_URL, resetValue: "Nachrichtentitel" });
+initEL({ id: idDiv_News_Text, fn: newsShowNext, resetValue: "Nachrichtentext" });
+initEL({ id: idSel_newsCategory, fn: newsGetData, selList: Object.entries(newsData.categories).map((v) => [v[1], v[0]]), selStartVal: newsData.default.category, selGroup: "Kategorie" });
+initEL({ id: idSel_newsCountry, fn: newsGetData, selList: Data_NewsCountries.map((v) => [Data_Country_CodesIso3166.get(v.toUpperCase()), v]), selStartVal: newsData.default.country, selGroup: "Land" });
 
 export function clear_cl_News() {
-	KadDOM.clearFirstChild("idSel_newsCountry");
-	KadDOM.clearFirstChild("idSel_newsCategory");
+	idDiv_News_Title.KadReset();
+	idDiv_News_Text.KadReset();
+	idSel_newsCountry.KadReset();
+	idSel_newsCategory.KadReset();
 	newsData.currIndex = 0;
-
-	let optGroup = document.createElement("optgroup");
-	optGroup.label = "Kategorie";
-	for (const [key, value] of Object.entries(newsData.categories)) {
-		const option = document.createElement("OPTION");
-		option.textContent = value;
-		option.value = key;
-		if (key == newsData.default.category) {
-			option.selected = true;
-		}
-		optGroup.appendChild(option);
-	}
-	dbID("idSel_newsCategory").appendChild(optGroup);
-
-	optGroup = document.createElement("optgroup");
-	optGroup.label = "Land";
-	for (const value of Data_NewsCountries) {
-		const option = document.createElement("OPTION");
-		option.textContent = Data_Country_CodesIso3166.get(value.toUpperCase());
-		option.value = value;
-		if (value == newsData.default.country) {
-			option.selected = true;
-		}
-		optGroup.appendChild(option);
-	}
-	dbID("idSel_newsCountry").appendChild(optGroup);
-
-	newsUpdateOptions();
 }
 
-function newsUpdateOptions() {
-	return {
-		category: dbID("idSel_newsCategory").value,
-		country: dbID("idSel_newsCountry").value,
-	};
+function newsGetData() {
+	newsData.category = idSel_newsCategory.value;
+	newsData.country = idSel_newsCountry.value;
+	log(newsData.category, newsData.country);
+	// get Data from network
 }
 
 function newsError(errMsg) {

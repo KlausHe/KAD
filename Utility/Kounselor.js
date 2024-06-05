@@ -168,7 +168,7 @@ function kounselorShowResults() {
 				KadDOM.resetInput(`idVin_kounselor${type}`, type);
 				continue;
 			}
-			KadDOM.resetInput(`idVin_kounselor${type}`, KadColor.formatAsCSS(kounselorOptions.types[type].value, type));
+			KadDOM.resetInput(`idVin_kounselor${type}`, KadColor.formatAsString(kounselorOptions.types[type].value, type));
 		}
 	}
 	const colorCSS = KadColor.formatAsCSS(kounselorOptions.types.HSL.value, "HSL");

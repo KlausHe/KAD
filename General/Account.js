@@ -1,5 +1,5 @@
 import { resetAll } from "../Main.js";
-import * as KadUtils from "../General/KadUtils.js";
+import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, initEL, log } from "../General/KadUtils.js";
 import { contentLayout, navClick } from "./Layout.js";
 import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "./MainData.js";
 import * as DBData from "../MainModulesDBData.js";
@@ -144,26 +144,14 @@ export const AccData = {
 
 // ------------CLEAR-------------
 export function clear_cl_UserLogin() {
-	nuncDiscipuli.cred.email = KadUtils.KadDOM.resetInput("idVin_userLogin_email", "E-Mail");
-	nuncDiscipuli.cred.uid = KadUtils.KadDOM.resetInput("idVin_userLogin_pass", "Passwort");
+	nuncDiscipuli.cred.email = idVin_userLogin_email.KadReset();
+	nuncDiscipuli.cred.uid = idVin_userLogin_pass.KadReset();
 
-	KadUtils.KadDOM.resetInput("idCb_userLogin_check", true);
+	idCb_userLogin_check.KadReset();
 	accountPersistanceChange();
-	KadUtils.dbID("idVin_userLogin_email").removeAttribute("disabled");
-	KadUtils.KadDOM.enableBtn("idBtn_userLogin_login", true);
-	KadUtils.dbID("idLbl_userLogin_alert").textContent = "";
-	KadUtils.dbID("idVin_userLogin_email").addEventListener("keyup", (event) => {
-		if (event.keyCode === 13) {
-			KadUtils.dbID("idVin_userLogin_pass").focus();
-			event.preventDefault();
-		}
-	});
-	KadUtils.dbID("idVin_userLogin_pass").addEventListener("keyup", (event) => {
-		if (event.keyCode === 13) {
-			KadUtils.dbID("idBtn_userLogin_login").click();
-			event.preventDefault();
-		}
-	});
+	dbID("idVin_userLogin_email").removeAttribute("disabled");
+	KadDOM.enableBtn("idBtn_userLogin_login", true);
+	dbID("idLbl_userLogin_alert").textContent = "";
 }
 
 export function clear_cl_UserChange() {
@@ -203,13 +191,36 @@ export function createNewNuncDiscipuli() {
 	}
 }
 
-KadUtils.daEL(idDiv_navBar_AccountLogin, "click", openNavLogin);
-KadUtils.daEL(idDiv_navBar_AccountChange, "click", openNavChange);
+initEL({
+	id: idVin_userLogin_email,
+	action: "keyup",
+	fn: (event) => {
+		if (event.keyCode === 13) {
+			dbID("idVin_userLogin_pass").focus();
+			event.preventDefault();
+		}
+	},
+	resetValue: "E-Mail",
+});
+initEL({
+	id: idVin_userLogin_pass,
+	action: "keyup",
+	fn: (event) => {
+		if (event.keyCode === 13) {
+			dbID("idBtn_userLogin_login").click();
+			event.preventDefault();
+		}
+	},
+	resetValue: "Passwort",
+});
+
+initEL({ id: idDiv_navBar_AccountLogin, fn: openNavLogin });
+initEL({ id: idDiv_navBar_AccountChange, fn: openNavChange });
 
 function openNavLogin() {
 	clear_cl_UserLogin();
 	navClick("cl_UserLogin");
-	KadUtils.dbID("idVin_userLogin_email").focus();
+	dbID("idVin_userLogin_email").focus();
 }
 
 function openNavChange() {
@@ -218,28 +229,28 @@ function openNavChange() {
 }
 
 //-----------------------ACTIONS------------------------------------
-KadUtils.daEL(idCb_userLogin_check, "click", accountPersistanceChange);
-KadUtils.daEL(idBtn_userLogin_login, "click", firebaseLogin);
-KadUtils.daEL(idBtn_userLogin_register, "click", firebaseRegister);
-KadUtils.daEL(idBtn_userChange_logout, "click", firebaseLogout);
-KadUtils.daEL(idBtn_userChange_change, "click", userChange);
-KadUtils.daEL(idBtn_userLogin_cancel, "click", loginCancel);
-KadUtils.daEL(idBtn_userChange_cancel, "click", changeCancel);
+initEL({ id: idCb_userLogin_check, fn: accountPersistanceChange, resetValue: true });
+initEL({ id: idBtn_userLogin_login, fn: firebaseLogin });
+initEL({ id: idBtn_userLogin_register, fn: firebaseRegister });
+initEL({ id: idBtn_userChange_logout, fn: firebaseLogout });
+initEL({ id: idBtn_userChange_change, fn: userChange });
+initEL({ id: idBtn_userLogin_cancel, fn: loginCancel });
+initEL({ id: idBtn_userChange_cancel, fn: changeCancel });
 
 function accountPersistanceChange() {
-	nuncDiscipuli.cred.keepLogin = KadUtils.dbID("idCb_userLogin_check").checked ? "Session" : "None"; // "SESSION";
+	nuncDiscipuli.cred.keepLogin = dbID("idCb_userLogin_check").checked ? "Session" : "None"; // "SESSION";
 }
 
 onAuthStateChanged(auth, (user) => {
 	const state = user != null;
 	nuncDiscipuli.cred.email = state ? user.email : null;
 	nuncDiscipuli.cred.uid = state ? user.uid : null;
-	KadUtils.dbIDStyle(idDiv_navBar_AccountLogin).display = state ? "none" : "block";
-	KadUtils.dbIDStyle(idDiv_navBar_AccountChange).display = state ? "block" : "none";
-	KadUtils.dbID(idLbl_userChange_user).textContent = state ? nuncDiscipuli.cred.email : "User";
+	dbIDStyle(idDiv_navBar_AccountLogin).display = state ? "none" : "block";
+	dbIDStyle(idDiv_navBar_AccountChange).display = state ? "block" : "none";
+	dbID(idLbl_userChange_user).textContent = state ? nuncDiscipuli.cred.email : "User";
 	if (state && !nuncDiscipuli.registering) loadDiscipuli(null);
 
-	let btnList = [...KadUtils.dbCLStyle("DLParent", null), ...KadUtils.dbCLStyle("ULParent", null)];
+	let btnList = [...dbCLStyle("DLParent", null), ...dbCLStyle("ULParent", null)];
 	for (const btn of btnList) {
 		btn.display = state ? "initial" : "none";
 	}
@@ -250,13 +261,13 @@ export function userLoggedIn() {
 }
 
 function firebaseLogin() {
-	const email = KadUtils.dbID(idVin_userLogin_email).value.trim();
-	const pass = KadUtils.dbID(idVin_userLogin_pass).value.trim();
+	const email = KadDOM.stringFromInput(idVin_userLogin_email);
+	const pass = KadDOM.stringFromInput(idVin_userLogin_pass);
 	// setPersistence(auth, nuncDiscipuli.cred.keepLogin);
 	nuncDiscipuli.logging = true;
 	signInWithEmailAndPassword(auth, email, pass)
 		.then(() => {
-			KadUtils.KadDOM.enableBtn("idBtn_userLogin_login", false);
+			KadDOM.enableBtn("idBtn_userLogin_login", false);
 		})
 		.catch((error) => {
 			userAccError(error);
@@ -265,9 +276,9 @@ function firebaseLogin() {
 
 function firebaseRegister() {
 	nuncDiscipuli.registering = true;
-	const email = KadUtils.dbID(idVin_userLogin_email).value.trim();
-	const pass = KadUtils.dbID(idVin_userLogin_pass).value.trim();
-	console.log("register", email, pass);
+	const email = KadDOM.stringFromInput(idVin_userLogin_email);
+	const pass = KadDOM.stringFromInput(idVin_userLogin_pass);
+	log("register", email, pass);
 	createUserWithEmailAndPassword(auth, email, pass)
 		.then((user) => {
 			nuncDiscipuli.registering = false;
@@ -281,13 +292,13 @@ function firebaseRegister() {
 function userRegister() {
 	createNewDatabase();
 	navClick("cl_UserChange");
-	KadUtils.KadDOM.enableBtn("idBtn_userLogin_login", false);
+	KadDOM.enableBtn("idBtn_userLogin_login", false);
 }
 
 function firebaseLogout() {
 	signOut(auth)
 		.then(() => {
-			KadUtils.dbIDStyle("idDiv_navBar_User").display = "none";
+			dbIDStyle("idDiv_navBar_User").display = "none";
 			resetAll();
 		})
 		.catch((error) => {
@@ -298,7 +309,7 @@ function firebaseLogout() {
 function userChange() {
 	for (let key of Object.keys(AccData.infos)) {
 		const id = `idVin_child_uInfoVin_${key}`;
-		const vinUser = KadUtils.dbID(id).value.trim();
+		const vinUser = KadDOM.stringFromInput(id);
 		if (vinUser != "") {
 			AccData.infos[key].data = vinUser;
 		}
@@ -306,7 +317,7 @@ function userChange() {
 	if (nuncDiscipuli.short === null) {
 		nuncDiscipuli.short = nuncDiscipuli.createShort();
 	}
-	KadUtils.dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
+	dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
 	saveDiscipuli("UserAcc");
 }
 
@@ -320,17 +331,17 @@ function changeCancel() {
 }
 
 function userAccSetUserBtn() {
-	KadUtils.dbIDStyle("idDiv_navBar_User").display = "initial";
+	dbIDStyle("idDiv_navBar_User").display = "initial";
 	if (nuncDiscipuli.short == null) AccData.infos.shortName.data = nuncDiscipuli.createShort();
-	KadUtils.dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
-	KadUtils.KadDOM.enableBtn("idBtn_userLogin_login", true);
+	dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
+	KadDOM.enableBtn("idBtn_userLogin_login", true);
 }
 
 function userAccError(error) {
-	KadUtils.KadDOM.enableBtn(idBtn_userLogin_login, true);
-	KadUtils.KadDOM.enableBtn(idBtn_userLogin_register, true);
-	console.log(error);
-	KadUtils.dbID(idLbl_userLogin_alert).textContent = "E-Mail oder Passwort falsch!";
+	KadDOM.enableBtn(idBtn_userLogin_login, true);
+	KadDOM.enableBtn(idBtn_userLogin_register, true);
+	log(error);
+	dbID(idLbl_userLogin_alert).textContent = "E-Mail oder Passwort falsch!";
 }
 
 //--------------Load Single DATA-------------
@@ -370,7 +381,7 @@ async function loadFromDatabase(categories) {
 		if (Object.keys(savedData).includes(category)) {
 			nuncDiscipuli.saveData(category, savedData[category]);
 		} else {
-			console.log("Currently not supported data from saved userdata:", category);
+			error("Currently not supported data from saved userdata:", category);
 		}
 	}
 	userAccSetUserBtn();
@@ -392,11 +403,11 @@ async function createNewDatabase() {
 }
 // ------------CREATE INFO-DIV-------------
 function createUserInfos() {
-	const parent = KadUtils.dbCL("cl_UserChange_infos");
-	KadUtils.KadDOM.clearFirstChild(parent);
+	const parent = dbCL("cl_UserChange_infos");
+	KadDOM.clearFirstChild(parent);
 	const loggedIn = userLoggedIn();
 	for (const [key, subObj] of Object.entries(AccData.infos)) {
-		const uInfoParent = KadUtils.KadTable.createCell("Div", {
+		const uInfoParent = KadTable.createCell("Div", {
 			names: ["uInfoParent", key],
 			style: {
 				whiteSpace: "nowrap",
@@ -404,7 +415,7 @@ function createUserInfos() {
 		});
 		parent.appendChild(uInfoParent);
 
-		const uInfoBtn = KadUtils.KadTable.createCell("Lbl", {
+		const uInfoBtn = KadTable.createCell("Lbl", {
 			names: ["uInfoLbl", key],
 			createClass: ["cl_info"],
 			ui: {
@@ -423,7 +434,7 @@ function createUserInfos() {
 			}
 		}
 
-		const uInfoVin = KadUtils.KadTable.createCell("Vin", {
+		const uInfoVin = KadTable.createCell("Vin", {
 			names: ["uInfoVin", key],
 			subGroup: "text",
 			ui: {
@@ -435,7 +446,7 @@ function createUserInfos() {
 			placeholder: ph,
 		});
 		uInfoParent.appendChild(uInfoVin);
-		const uInfoDel = KadUtils.KadTable.createCell("Btn", {
+		const uInfoDel = KadTable.createCell("Btn", {
 			names: ["uInfoDel", key],
 			subGroup: "button",
 			img: "trash",
@@ -459,8 +470,8 @@ function createUserInfos() {
 			dList.id = `dList_uInfo_${key}`;
 			uInfoVin.appendChild(dList);
 			for (let sug of subObj.suggestions) {
-				const opt = document.createElement("OPTION");
-				opt.textContent = sug;
+				const opt = new Option(sug);
+				// document.createElement("OPTION");
 				dList.appendChild(opt);
 			}
 		}

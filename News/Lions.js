@@ -1,17 +1,17 @@
-import * as KadUtils from "../General/KadUtils.js";
+import { KadDOM, KadTable, checkedLog, dbID, initEL, objectLength } from "../General/KadUtils.js";
 
 const lionsOptions = {
 	data: [],
 	num: null,
 };
 
-KadUtils.daEL(idVin_lionsInput, "input", () => lionsRequestNumber(idVin_lionsInput));
+initEL({ id: idVin_lionsInput, fn: lionsRequestNumber, resetValue: "1234" });
 
 export function clear_cl_Lions() {
-	KadUtils.KadDOM.resetInput("idVin_lionsInput", "1234");
-	KadUtils.dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
+	idVin_lionsInput.KadReset();
+	dbID("idLbl_lionsOutput").innerHTML = `Suche nach<br>deiner Kalendernummer`;
 	lionsOptions.data = [];
-	if (KadUtils.objectLength(lionsOptions.data) === 0) {
+	if (objectLength(lionsOptions.data) === 0) {
 		lionsRequestData();
 	}
 }
@@ -26,7 +26,7 @@ export const storage_cl_Lions = {
 		return lionsOptions.num;
 	},
 	set data(data) {
-		KadUtils.dbID("idVin_lionsInput").value = data;
+		dbID("idVin_lionsInput").value = data;
 		setTimeout(() => {
 			lionsRequestNumber();
 		}, 1000);
@@ -34,8 +34,8 @@ export const storage_cl_Lions = {
 };
 
 function lionsRequestNumber() {
-	const infoLbl = KadUtils.dbID("idLbl_lionsOutput");
-	lionsOptions.num = KadUtils.dbID("idVin_lionsInput").value.trim();
+	const infoLbl = dbID("idLbl_lionsOutput");
+	lionsOptions.num = KadDOM.numberFromInput("idVin_lionsInput");
 	if (lionsOptions.num == "" || isNaN(lionsOptions.num) || lionsOptions.num.length != 4) {
 		infoLbl.textContent = `...`;
 		infoLbl.classList.remove("cl_highlighted");
@@ -55,7 +55,7 @@ function lionsRequestNumber() {
 	}
 	infoLbl.innerHTML = `gewonnen am<br>${lionsOptions.data[index].date}`;
 	infoLbl.classList.add("cl_highlighted");
-	KadUtils.dbID("idTabBody_Lions").rows[index].scrollIntoView({
+	dbID("idTabBody_Lions").rows[index].scrollIntoView({
 		behavior: "smooth",
 		block: "center",
 	});
@@ -66,7 +66,7 @@ function lionsRequestData() {
 }
 
 function lionsReturn(data) {
-	if (KadUtils.checkedLog(data.error, "Lions could not acces the Winnerlist:", data.error)) return;
+	if (checkedLog(data.error, "Lions could not acces the Winnerlist:", data.error)) return;
 
 	lionsOptions.data = [];
 	for (let i = 1; i < data.length; i++) {
@@ -91,9 +91,9 @@ function lionsReturn(data) {
 
 function createLionsTable() {
 	//header
-	KadUtils.KadTable.clear("idTabHeader_Lions");
-	const rowTh = KadUtils.KadTable.insertRow("idTabHeader_Lions");
-	KadUtils.KadTable.addHeaderCell(rowTh, {
+	KadTable.clear("idTabHeader_Lions");
+	const rowTh = KadTable.insertRow("idTabHeader_Lions");
+	KadTable.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Date"],
 		type: "Lbl",
 		text: "Datum",
@@ -101,7 +101,7 @@ function createLionsTable() {
 			textAlign: "left",
 		},
 	});
-	KadUtils.KadTable.addHeaderCell(rowTh, {
+	KadTable.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Winner"],
 		type: "Lbl",
 		text: "Gewinner",
@@ -109,7 +109,7 @@ function createLionsTable() {
 			textAlign: "left",
 		},
 	});
-	KadUtils.KadTable.addHeaderCell(rowTh, {
+	KadTable.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Price"],
 		type: "Lbl",
 		text: "Preis",
@@ -118,10 +118,10 @@ function createLionsTable() {
 		},
 	});
 
-	KadUtils.KadTable.clear("idTabBody_Lions");
+	KadTable.clear("idTabBody_Lions");
 	for (const [index, obj] of lionsOptions.data.entries()) {
-		const row = KadUtils.KadTable.insertRow("idTabBody_Lions");
-		KadUtils.KadTable.addCell(row, {
+		const row = KadTable.insertRow("idTabBody_Lions");
+		KadTable.addCell(row, {
 			names: ["lions", "date", index],
 			type: "Lbl",
 			text: obj.date,
@@ -129,7 +129,7 @@ function createLionsTable() {
 				textAlign: "left",
 			},
 		});
-		KadUtils.KadTable.addCell(row, {
+		KadTable.addCell(row, {
 			names: ["lions", "winner", index],
 			type: "Lbl",
 			text: obj.num.join(", "),
@@ -137,7 +137,7 @@ function createLionsTable() {
 				textAlign: "left",
 			},
 		});
-		KadUtils.KadTable.addCell(row, {
+		KadTable.addCell(row, {
 			names: ["lions", "price", index],
 			type: "Lbl",
 			text: obj.price,

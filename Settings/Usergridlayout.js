@@ -1,4 +1,4 @@
-import { daEL, dbID, dbCL, KadDOM, KadTable } from "../General/KadUtils.js";
+import { daEL, dbID, dbCL, KadDOM, KadTable, initEL } from "../General/KadUtils.js";
 import { contentGrid, contentLayout } from "../General/Layout.js";
 
 const usergridOptions = {
@@ -46,8 +46,8 @@ const usergridOptions = {
 	},
 };
 
-daEL(idBtn_toggleUserGrid, "click", usergridOptions.toggleAllGridDisable);
-daEL(idBtn_loaduserGridLayout, "click", saveUsergridLayout);
+initEL({ id: idBtn_toggleUserGrid, fn: usergridOptions.toggleAllGridDisable });
+initEL({ id: idBtn_loaduserGridLayout, fn: saveUsergridLayout });
 
 export function clear_cl_UserGridLayout() {
 	const tempArr = Object.keys(contentLayout.navContent);

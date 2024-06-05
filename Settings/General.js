@@ -1,5 +1,6 @@
-import { dbID, daEL, KadCSS } from "../General/KadUtils.js";
+import { dbID, initEL, KadCSS, log } from "../General/KadUtils.js";
 import { contentGrid, resizeGrid } from "../General/Layout.js";
+import { colorUpdateCanvascolors } from "./Color.js";
 
 export const globalValues = {
 	mediaSizes: {
@@ -63,18 +64,12 @@ export const globalValues = {
 	},
 };
 
-daEL(idSel_settingsFontsize, "change", () => settingsFontsize(idSel_settingsFontsize));
-daEL(idSel_settingsDecimals, "change", () => settingsDecimals(idSel_settingsDecimals));
+initEL({ id: idSel_settingsFontsize, fn: settingsFontsize, selList: globalValues.fontSizeArray });
+initEL({ id: idSel_settingsDecimals, fn: settingsDecimals, selStartIndex: 4, selList: globalValues.decimalsArray });
 
 export function clear_cl_GeneralSettings() {
-	for (let i = 0; i < globalValues.fontSizeArray.length; i++) {
-		dbID("idSel_settingsFontsize").options[i] = new Option(globalValues.fontSizeArray[i], globalValues.fontSizeArray[i]);
-	}
-	dbID("idSel_settingsFontsize").options[4].selected = "true";
-	for (let i = 0; i < globalValues.decimalsArray.length; i++) {
-		dbID("idSel_settingsDecimals").options[i] = new Option(globalValues.decimalsArray[i], globalValues.decimalsArray[i]);
-	}
-	dbID("idSel_settingsDecimals").options[4].selected = "true";
+	idSel_settingsFontsize.KadReset();
+	idSel_settingsDecimals.KadReset();
 }
 
 export const storage_cl_GeneralSettings = {
@@ -105,11 +100,10 @@ export const storage_cl_GeneralSettings = {
 };
 
 function settingsFontsize(obj = null) {
-	if (obj === null) {
-		const opt = globalValues.fontSizeArray.indexOf(Number(globalValues.settings.fontSize));
-		dbID("idSel_settingsFontsize").options[opt].selected = true; //set FS when loaded
+	if (obj != null) {
+		globalValues.settings.fontSize = obj.target.value;
 	} else {
-		globalValues.settings.fontSize = obj.value;
+		idSel_settingsFontsize.KadReset({ resetSelStartVal: globalValues.settings.fontSize });
 	}
 	KadCSS.setRoot("fontSize", globalValues.settings.fontSize, "px");
 	colorUpdateCanvascolors();
@@ -121,7 +115,7 @@ function settingsDecimals(obj = null) {
 		const opt = globalValues.decimalsArray.indexOf(Number(globalValues.settings.decimals));
 		dbID("idSel_settingsDecimals").options[opt].selected = true; //set CB when loaded
 	} else {
-		globalValues.settings.decimals = obj.value;
+		globalValues.settings.decimals = obj.target.value;
 		alert("Änderung wird erst bei Neuberechnung übernommen!");
 	}
 }

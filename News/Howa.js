@@ -60,8 +60,8 @@ KadUtils.initEL({ id: idBtn_howaGetLocation, fn: howaGetLocation });
 KadUtils.initEL({
 	id: idSel_howaMapsDistrict,
 	fn: howaChangeMap,
-	selGroup: ["Deutschland", "de"],
-	selList: Data_Country_GermanDistrics.map((d) => [d.LandDE, d.abbr]),
+	selStartIndex: 0,
+	selList: [["Deutschland", "de"], ...Data_Country_GermanDistrics.map((d) => [d.LandDE, d.abbr])],
 });
 KadUtils.initEL({ id: idSel_howaMapsCriteria, fn: howaChangeMap, selList: weatherMaps.criteriaList.map((d) => [d[1], d[0]]) });
 

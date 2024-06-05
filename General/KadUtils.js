@@ -32,7 +32,7 @@ export function dbCLStyle(id, loc = 0) {
  * @param {object} param0.domOpts
  * @returns {*}
  */
-export function initEL({ id, action = null, fn, selList, selGroup, selStartVal, selStartIndex = 0, dbList, resetValue, domOpts } = {}) {
+export function initEL({ id, action = null, fn, selList = [], selGroup, selStartIndex = 0, selStartVal, dbList = [], resetValue, domOpts } = {}) {
 	errorChecked(typeof id === "string", "Id is a string but should be an HTML-Object");
 	const typeAction = {
 		text: "input", // input change focus click
@@ -40,13 +40,13 @@ export function initEL({ id, action = null, fn, selList, selGroup, selStartVal, 
 		submit: "click", //click (default-type od "button")
 		button: "click", //click
 		"select-one": "change", // change focus
+		select: "change", // change focus
 		textarea: "input", // input change
 		checkbox: "click", // click
-		Div: "click", // click
 		Canv: "keydown", // keydown keyup
+		DIV: "click", // click
 	};
-	const idString = id.id;
-	const type = id.type ? id.type : idString.slice(2, idString.indexOf("_"));
+	const type = id.type ? id.type : id.nodeName;
 	daEL(id, action || typeAction[type], fn);
 
 	// fill "datalist"
@@ -59,51 +59,62 @@ export function initEL({ id, action = null, fn, selList, selGroup, selStartVal, 
 				id.parentNode.appendChild(datalist);
 				id.setAttribute("list", datalist.id);
 				for (const data of dbList) {
-					const opt = document.createElement("OPTION");
-					opt.textContent = data;
-					datalist.appendChild(opt);
+					datalist.appendChild(new Option(data));
 				}
 			},
 			{ once: true }
 		);
 	}
 	// fill "Select"
-	if (selList) {
+	if (selList.length > 0) {
 		makeSelList({ selList, selStartIndex, selStartVal });
 	}
 	// add reset-function
-	if (type == "select-one") {
-		id.KadReset = function ({ resetSelList, resetSelStartIndex, resetSelStartVal } = {}) {
-			if (resetSelList) makeSelList({ selList: resetSelList, selStartIndex: resetSelStartIndex, selStartVal: resetSelStartVal });
+	if (["select-one", "select"].includes(type)) {
+		id.KadReset = function ({ resetSelList = [], resetSelStartIndex = null, resetSelStartVal = null } = {}) {
 			const index = resetSelStartIndex || selStartIndex;
-			id.options[index].selected = true;
+			if (resetSelList.length > 0) {
+				makeSelList({ selList: resetSelList, selStartIndex: index, selStartVal: resetSelStartVal });
+			} else {
+        let i = 0;
+				for (let data of selList) {
+          let d = Array.isArray(data) ? data : [data];
+					if (resetSelStartVal && d[0] == resetSelStartVal) {
+						id.options[i].selected = true;
+            break;
+					}
+					i++;
+				}
+			}
 			return index;
 		};
 	} else {
-		id.KadReset = function (reset = null) {
+		id.KadReset = function ({ reset = null } = {}) {
 			let r = reset || resetValue;
 			KadDOM.resetInput(id, r, domOpts);
 			return r;
 		};
 	}
 
-	function makeSelList({ selList, selStartIndex, selStartVal } = {}) {
+	function makeSelList({ selList = [], selStartIndex = 0, selStartVal = null } = {}) {
+		if (selList.length == 0) return;
 		while (id.options.length > 0) {
 			id.remove(0);
 		}
 		let i = 0;
 		if (selGroup) {
-			id.options[0] = new Option(...selGroup);
+			id.options[0] = new Option(selGroup);
 			i = 1;
 		}
 		for (let data of selList) {
 			let d = Array.isArray(data) ? data : [data];
-			id.options[i++] = new Option(...d);
-			if (selStartVal && data[0] == selStartVal) {
+			id.options[i] = new Option(...d);
+			if (selStartVal && d[0] == selStartVal) {
 				id.options[i].selected = true;
 			}
+			i++;
 		}
-		if (!selStartVal) id.options[selStartIndex].selected = true;
+		if (!selStartVal) id.selectedIndex = selStartIndex;
 	}
 }
 /*-------------------------- */
@@ -210,18 +221,22 @@ export const KadDOM = {
 	},
 	resetInput(id, ph = null, domOpts = null) {
 		const obj = dbID(id);
+		const type = obj.type ? obj.type : obj.nodeName;
 		if (obj.type == "checkbox") {
 			obj.checked = ph;
 			return ph;
 		}
-		obj.value = "";
+
 		if (ph != null) {
-			if (obj.type == "button") {
+			if (["submit", "button", "DIV"].includes(type)) {
 				obj.textContent = ph;
-			} else if (obj.type == "date") {
+			} else if (type == "date") {
+				obj.value = ph;
+			} else if (type == "color") {
 				obj.value = ph;
 			} else {
 				obj.placeholder = ph;
+				obj.value = "";
 			}
 		}
 		if (domOpts != null) {
@@ -999,7 +1014,7 @@ export const KadColor = {
 		const min = Math.min(...rgb);
 		let h = 0;
 		let s = 0;
-		let l = (ma + mi) / 2;
+		let l = (max + min) / 2;
 		if (max != min) {
 			const d = max - min;
 			if (r == max) {

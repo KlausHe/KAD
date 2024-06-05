@@ -1,6 +1,5 @@
-// import { generateRequestUrl, translate, normaliseResponse, isSupported } from "https://unpkg.com/browse/google-translate-api-browser@5.0.0/";
-import { generateRequestUrl, translate, normaliseResponse, isSupported } from "https://cdn.jsdelivr.net/npm/google-translate-api-browser@4.0.0/+esm";
-import { dbID, daEL,error, KadDOM, KadArray } from "../General/KadUtils.js";
+// import { createRequestBody, normaliseResponse, isLanguageSupported, translate } from "../Data/translateAPI.js";
+import { dbID, daEL, KadDOM, KadArray, log, error } from "../General/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 
 const speechOptions = {
@@ -157,26 +156,35 @@ function speechTranslate() {
 // }
 
 async function speechTranslateRequest() {
+	return;
 	// speechOptions.input;
-	// console.log(isSupported("de"));
 	// let languages = speechLanguageChange();
+	log(isLanguageSupported("de"));
 
-	dbID("idArea_speechToText").value = "Funktion is currently not implemented!";
-	translate("Je ne mangé pas six jours", { from: "fr", to: "en" })
+	// dbID("idArea_speechToText").value = "Funktion is currently not implemented!";
+	// translate("Je ne mangé pas six jours", { from: "fr", to: "en" })
+	// 	.then((res) => {
+	// 		// I do not eat six days
+	// 		console.log("text:", res.text);
+	// 		dbID("idArea_speechToText").value = res.text;
+	// 	})
+	// 	.catch((err) => {
+	// 		error("Error receiving data for translation:", err);
+	// 	});
+
+	translate(speechOptions.input, { to: "en" })
 		.then((res) => {
-			// I do not eat six days
-			console.log("text:", res.text);
-			dbID("idArea_speechToText").value = res.text;
+			console.log(res.text);
 		})
 		.catch((err) => {
-			error("Error receiving data for translation:",err);
-		});
+			console.error(err);
+		})
+		.finally(() => console.log(false));
 
 	return;
-
 	const f = speechOptions.fromCode == "ja" ? "jpn" : speechOptions.fromCode;
 	const t = speechOptions.toCode == "ja" ? "jpn" : speechOptions.toCode;
-	const url = generateRequestUrl(speechOptions.input, {
+	const url = createRequestBody(speechOptions.input, {
 		from: f,
 		to: t,
 		raw: true,

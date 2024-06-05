@@ -475,8 +475,8 @@ export const rawContentGrid = {
 			["cl_SepakbolaInputLiga", "left"],
 			["cl_SepakbolaInputSeason", "left"],
 			["cl_SepakbolaInputDay", "center"],
-			["cl_SepakbolaTable", "right"],
-			["cl_SepakbolaMatches", "left"],
+			["cl_SepakbolaTable", "left"],
+			["cl_SepakbolaMatches", "right"],
 		],
 	},
 	//Tools

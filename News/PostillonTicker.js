@@ -1,7 +1,7 @@
 import { globalP5 } from "../Main.js";
-import { dbID,daEL, KadTable, KadRandom } from "../General/KadUtils.js";
+import { dbID, initEL, KadTable, KadRandom } from "../General/KadUtils.js";
 
-daEL(idBtn_newsTickerNext, "click", postillonTickerNext);
+initEL({ id: idBtn_newsTickerNext, fn: postillonTickerNext });
 
 let postillonTickerOptions = {
 	num: null,

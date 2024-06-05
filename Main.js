@@ -1,8 +1,8 @@
-import * as KadUtils from "./General/KadUtils.js";
+import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL } from "./General/KadUtils.js";
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import * as Layout from "./General/Layout.js";
 import { globalValues } from "./Settings/General.js";
-import { displayColorSystem, colToggleColormode, globalColors } from "./Settings/Color.js";
+import { colToggleColormode } from "./Settings/Color.js";
 import { bgaClearBackground, bgaToggleReset } from "./General/BackgroundAnimation.js";
 import * as Clear from "./MainModulesClear.js";
 
@@ -17,10 +17,10 @@ export const globalP5 = new p5((c) => {
 window.onload = mainSetup;
 
 function mainSetup() {
-	if (KadUtils.hostDebug()) KadUtils.dbCLStyle("cl_Loading").display = "none";
+	if (hostDebug()) dbCLStyle("cl_Loading").display = "none";
 	Layout.contentLayout.createContentGrid();
 	htmlSetVinChange();
-	globalColors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+	// globalColors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
 
 	Layout.createContentlayoutList(); // First: create the LayoutLists
@@ -28,17 +28,13 @@ function mainSetup() {
 	Layout.createFooter();
 	Layout.createSubgrid();
 	Layout.contentLayout.prevNavContent = Layout.contentLayout.defaultPage;
-	//create Pikadays
-	// createIomlaidPikaday();
-	// createKadarPikaday("A");
-	// createKadarPikaday("B");
 
 	clearAllTiles();
 	Layout.resizeGrid();
 	Layout.navClick();
 	globalValues.globalInput.generateSpreadLists();
-	KadUtils.KadDOM.resetInput(idVin_globalValue, "Mastervalue");
-	KadUtils.dbID("idLbl_navBar_KW").textContent = `KW ${KadUtils.KadDate.getWeekNumber()}`;
+	KadDOM.resetInput(idVin_globalValue, "Mastervalue");
+	dbID("idLbl_navBar_KW").textContent = `KW ${KadDate.getWeekNumber()}`;
 	clearGlobalValue();
 	setTimeout(() => {
 		hideLoadingscreen();
@@ -50,18 +46,15 @@ document.oncontextmenu = function () {
 	return false;
 };
 // Navbar
-KadUtils.initEL({ id: idDiv_navBar_Trash, fn: resetAll });
-KadUtils.initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: Layout.contentLayout.nameList });
-
-KadUtils.initEL({ id: idDiv_navBar_GlobalSettings, fn: () => Layout.navClick("GlobalSettings") });
-KadUtils.initEL({ id: idDiv_navBar_Colormode, fn: colToggleColormode });
-// Footer
-KadUtils.initEL({ id: idDiv_clearBackground, fn: bgaClearBackground });
-KadUtils.initEL({ id: idCb_bgaReset, fn: () => bgaToggleReset(idCb_bgaReset) });
+initEL({ id: idDiv_navBar_Trash, fn: resetAll });
+initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: Layout.contentLayout.nameList });
+initEL({ id: idDiv_navBar_GlobalSettings, fn: () => Layout.navClick("GlobalSettings") });
+initEL({ id: idDiv_navBar_Colormode, fn: colToggleColormode });
+initEL({ id: idDiv_clearBackground, fn: bgaClearBackground });
+initEL({ id: idCb_bgaReset, fn: () => bgaToggleReset(idCb_bgaReset) });
 
 export function resetAll() {
 	createNewNuncDiscipuli();
-	displayColorSystem();
 	clearAllTiles();
 	clearGlobalValue();
 	Layout.navClick();
@@ -80,10 +73,10 @@ function htmlSetVinChange() {
 	envoked("vinChangeAdd", 1);
 
 	function envoked(name, dir) {
-		const obj = KadUtils.dbCL(`${name}`, null);
+		const obj = dbCL(`${name}`, null);
 		for (let btn of obj) {
 			btn.onclick = () => {
-				return KadUtils.KadDOM.vinChange(btn, dir);
+				return KadDOM.vinChange(btn, dir);
 			};
 			const name = dirName[dir + 1];
 			const img = document.createElement("img");
@@ -95,7 +88,7 @@ function htmlSetVinChange() {
 }
 
 function hideLoadingscreen() {
-	KadUtils.dbCL("cl_Loading").classList.add("cl_LoadingFinished");
+	dbCL("cl_Loading").classList.add("cl_LoadingFinished");
 }
 
 export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
@@ -114,7 +107,7 @@ export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" 
 
 function clearGlobalValue() {
 	globalValues.globalInput.value = "";
-	const obj = KadUtils.dbID("idVin_globalValue");
+	const obj = dbID("idVin_globalValue");
 	obj.value = "";
 	obj.addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
@@ -124,7 +117,7 @@ function clearGlobalValue() {
 }
 
 function globalValueChanged(enter = null) {
-	const obj = KadUtils.dbID("idVin_globalValue");
+	const obj = dbID("idVin_globalValue");
 	obj.classList.remove("cl_highlighted");
 	const arr = Layout.contentLayout.nameList;
 	globalValues.globalInput.value = obj.value;
