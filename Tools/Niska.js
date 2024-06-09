@@ -1,4 +1,4 @@
-import { daEL, dbID, KadDOM, KadValue, KadTable } from "../General/KadUtils.js";
+import { KadDOM, KadValue, KadTable, initEL } from "../General/KadUtils.js";
 //https://schraube-mutter.de/bohrtabelle-fuer-zylinderschrauben/
 const niskaOptions = {
 	size: {
@@ -12,6 +12,10 @@ const niskaOptions = {
 	select: {
 		index: 0,
 		indexOrig: 8,
+		types: {
+			Regelgewinde: "regel",
+			Feingewinde: "fein",
+		},
 		type: "",
 		typeOrig: "regel",
 		get offset() {
@@ -1127,11 +1131,10 @@ const niskaOptions = {
 		[980, 8, "DIN13-11"],
 		[1000, 8, "DIN13-11"],
 	],
-
 	strengthClass: {
 		val: [5.6, 6.8, 8.8, 10.9, 12.9],
-		index0: 0,
-		index1: 0,
+		index0: 2,
+		index1: 3,
 		indexOrig: 2,
 		re(id) {
 			let index = this[`index${id}`];
@@ -1157,7 +1160,6 @@ const niskaOptions = {
 		decimals: 3,
 		expoThreashold: 7,
 	},
-
 	results: {
 		headDiameter: {
 			name: "Kopfdurchmesser (DIN 912)",
@@ -1238,11 +1240,19 @@ const niskaOptions = {
 	},
 };
 
-daEL(idVin_niskaSize, "input", niskaCalc);
-daEL(idVin_niskaPitch, "input", niskaCalc);
-daEL(idSel_niskaSelect, "change", niskaCalc);
-daEL(idSel_niskaStrengthClassA, "change", niskaCalc);
-daEL(idSel_niskaStrengthClassB, "change", niskaCalc);
+initEL({ id: idVin_niskaSize, fn: niskaCalc, resetValue: niskaOptions.size.valOrig, domOpts: { min: 0 } });
+initEL({ id: idVin_niskaPitch, fn: niskaCalc, resetValue: niskaOptions.pitch.valOrig, domOpts: { min: 0 } });
+initEL({
+	id: idSel_niskaSelect,
+	fn: niskaCalc,
+	selGroup: {
+		Regelgewinde: niskaOptions.regel.map((val, index) => [`M${val[0]}x${val[1]}`, index]),
+		Feingewinde: niskaOptions.fein.map((val, index) => [`M${val[0]}x${val[1]}`, index]),
+	},
+	selStartIndex: niskaOptions.select.indexOrig,
+});
+initEL({ id: idSel_niskaStrengthClassA, fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index0 });
+initEL({ id: idSel_niskaStrengthClassB, fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index1 });
 
 export function clear_cl_Niska() {
 	niskaOptions.size.val = niskaOptions.size.valOrig;
@@ -1251,66 +1261,27 @@ export function clear_cl_Niska() {
 	niskaOptions.select.type = niskaOptions.select.typeOrig;
 	niskaOptions.strengthClass.index0 = niskaOptions.strengthClass.indexOrig;
 	niskaOptions.strengthClass.index1 = niskaOptions.strengthClass.indexOrig;
-	niskaOptions.size.val = KadDOM.resetInput("idVin_niskaSize", niskaOptions.size.valOrig, {
-		min: 0,
-	});
-	niskaOptions.pitch.val = KadDOM.resetInput("idVin_niskaPitch", niskaOptions.pitch.valOrig, {
-		min: 0,
-	});
-
-	KadDOM.clearFirstChild("idSel_niskaSelect");
-	let selInput = dbID("idSel_niskaSelect");
-	let optGroup = document.createElement("optgroup");
-	optGroup.label = "Regelgewinde";
-	for (const [index, val] of niskaOptions.regel.entries()) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = `M${val[0]}x${val[1]}`;
-		opt.value = index;
-		opt.setAttribute("data-type", "regel");
-		optGroup.appendChild(opt);
-	}
-	selInput.appendChild(optGroup);
-
-	optGroup = document.createElement("optgroup");
-	optGroup.label = "Feingewinde";
-	for (const [index, val] of niskaOptions.fein.entries()) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = `M${val[0]}x${val[1]} (${val[2]})`;
-		opt.value = index;
-		opt.setAttribute("data-type", "fein");
-		optGroup.appendChild(opt);
-	}
-	selInput.appendChild(optGroup);
-	selInput.options[niskaOptions.select.index].selected = true;
-
-	KadDOM.clearFirstChild("idSel_niskaStrengthClassA");
-	KadDOM.clearFirstChild("idSel_niskaStrengthClassB");
-	let selStrength0 = dbID("idSel_niskaStrengthClassA");
-	let selStrength1 = dbID("idSel_niskaStrengthClassB");
-	for (const val of niskaOptions.strengthClass.val) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = val;
-		opt.value = val;
-		let opt2 = opt.cloneNode(true);
-		selStrength0.appendChild(opt);
-		selStrength1.appendChild(opt2);
-	}
-	selStrength0.options[niskaOptions.strengthClass.index0].selected = true;
-	selStrength1.options[niskaOptions.strengthClass.index1].selected = true;
+	idVin_niskaSize.KadReset();
+	idVin_niskaPitch.KadReset();
+	idSel_niskaSelect.KadReset();
+	idSel_niskaStrengthClassA.KadReset();
+	idSel_niskaStrengthClassB.KadReset();
 
 	niskaCalc();
 }
 
 function niskaCalc() {
-	niskaOptions.size.val = KadDOM.numberFromInput("idVin_niskaSize");
-	niskaOptions.pitch.val = KadDOM.numberFromInput("idVin_niskaPitch");
-	niskaOptions.strengthClass.index0 = dbID("idSel_niskaStrengthClassA").selectedIndex;
+	niskaOptions.size.val = KadDOM.numberFromInput(idVin_niskaSize);
+	niskaOptions.pitch.val = KadDOM.numberFromInput(idVin_niskaPitch);
+	niskaOptions.strengthClass.index0 = idSel_niskaStrengthClassA.selectedIndex;
 	niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
-	niskaOptions.select.index = dbID("idSel_niskaSelect").selectedIndex;
-	niskaOptions.select.type = dbID("idSel_niskaSelect").options[niskaOptions.select.index].dataset.type;
+	niskaOptions.select.index = idSel_niskaSelect.selectedIndex;
+	let type = idSel_niskaSelect.options[niskaOptions.select.index].parentElement.label;
+	niskaOptions.select.type = niskaOptions.select.types[type];
+
 	niskaOptions.select.index -= niskaOptions.select.offset;
-	niskaOptions.strengthClass.index1 = dbID("idSel_niskaStrengthClassB").selectedIndex;
-	dbID("idLbl_niskaRegelInfo").textContent = niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde";
+	niskaOptions.strengthClass.index1 = idSel_niskaStrengthClassB.selectedIndex;
+	idLbl_niskaRegelInfo.textContent = niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde";
 	niskaHelpCalculation(niskaOptions.select.size, niskaOptions.select.pitch, 1);
 	niskaTable();
 }
@@ -1405,7 +1376,7 @@ function niskaTable() {
 			names: ["niska", "name", key],
 			type: "Lbl",
 			text: value.name,
-			createCellClass: ["clTab_borderThinRight"],
+			createCellClass: ["clTab_UIBorderThinRight"],
 			cellStyle: {
 				textAlign: "left",
 			},
@@ -1423,7 +1394,7 @@ function niskaTable() {
 			names: ["niska", "unit", key],
 			type: "Lbl",
 			text: value.unit,
-			createCellClass: ["clTab_borderThinRight"],
+			createCellClass: ["clTab_UIBorderThinRight"],
 			cellStyle: {
 				textAlign: "left",
 			},

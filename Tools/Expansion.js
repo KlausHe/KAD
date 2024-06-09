@@ -1,4 +1,4 @@
-import { daEL, dbID, KadDOM, KadArray, KadValue, KadTable } from "../General/KadUtils.js";
+import { initEL, dbID, KadDOM, KadArray, KadValue, KadTable, log } from "../General/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
 import { materialOptions } from "./Material.js";
 
@@ -9,109 +9,80 @@ const expansionOptions = {
 	exLength: [],
 	exTemperatures: [],
 	materials: {
+		matAOrig: 0,
+		matBOrig: 1,
 		matA: null,
 		matB: null,
 		compare: null,
 		deltaExpansion: [],
 	},
-	get matList() {
-		// return ["S275JR", "AlSi5Cu3", "X5CrNi18-10"];
-		return materialOptions.matList;
+	get expansionPopulateSelection() {
+		return {
+			"selected Materials": materialOptions.matList.filter((matName) => Data_Materials.Materials[matName].expansion).map((name) => [name, name]),
+			"general Materials": Object.keys(Data_Materials.Materials)
+				.filter((matName) => Data_Materials.Materials[matName].expansion != undefined)
+				.map((name) => [name, name]),
+		};
 	},
 };
 
-daEL(idSel_expansionMaterialA, "change", expansionEntryMaterial);
-daEL(idSel_expansionMaterialA, "focus", expansionUpdateOptions);
-daEL(idBtn_expansionMaterialSwitch, "click", expansionSwitch);
-daEL(idSel_expansionMaterialB, "change", expansionEntryMaterial);
-daEL(idSel_expansionMaterialB, "focus", expansionUpdateOptions);
-daEL(idBtn_expansionLength, "click", expansionEntryLength);
-daEL(idBtn_expansionBaseTemperature, "click", expansionEntryBaseTemperature);
-daEL(idBtn_expansionTemperature, "click", expansionEntryTemperature);
-daEL(idCb_expansionDifference, "click", expansionDifference);
-daEL(idCb_expansionCoefficient, "click", expansionCoefficient);
+initEL({
+	id: idSel_expansionMaterialA,
+	fn: expansionEntryMaterial,
+});
+initEL({
+	id: idSel_expansionMaterialB,
+	fn: expansionEntryMaterial,
+});
+initEL({ id: idSel_expansionMaterialA, action: "focus", fn: expansionUpdateOptions }, { once: true });
+initEL({ id: idSel_expansionMaterialB, action: "focus", fn: expansionUpdateOptions }, { once: true });
+
+initEL({ id: idBtn_expansionMaterialSwitch, fn: expansionSwitch });
+initEL({ id: idBtn_expansionLength, fn: expansionEntryLength });
+initEL({ id: idBtn_expansionBaseTemperature, fn: expansionEntryBaseTemperature });
+initEL({ id: idBtn_expansionTemperature, fn: expansionEntryTemperature });
+initEL({ id: idCb_expansionDifference, fn: expansionDifference });
+initEL({ id: idCb_expansionCoefficient, fn: expansionCoefficient, resetValue: false });
+
+initEL({ id: idVin_expansionLength, resetValue: expansionOptions.lengthOrig[0] });
+initEL({ id: idVin_expansionTemperature, resetValue: expansionOptions.tempsOrig[0] });
+initEL({ id: idVin_expansionBaseTemperature, resetValue: expansionOptions.baseTemp });
 
 export function clear_cl_Expansion() {
-	KadDOM.resetInput("idVin_expansionLength", expansionOptions.lengthOrig[0]);
-	KadDOM.resetInput("idVin_expansionTemperature", expansionOptions.tempsOrig[0]);
-	KadDOM.resetInput("idVin_expansionBaseTemperature", expansionOptions.baseTemp);
-	dbID("idCb_expansionCoefficient").checked = false;
+	idVin_expansionLength.KadReset();
+	idVin_expansionTemperature.KadReset();
+	idVin_expansionBaseTemperature.KadReset();
+	idCb_expansionCoefficient.KadReset();
 	expansionOptions.exLength = [...expansionOptions.lengthOrig];
 	expansionOptions.exTemp = [...expansionOptions.tempsOrig];
-	expansionPopulateSelection();
+	idSel_expansionMaterialA.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: expansionOptions.materials.matAOrig });
+	idSel_expansionMaterialB.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: expansionOptions.materials.matBOrig });
 	expansionEntryMaterial();
 }
 
-function expansionPopulateSelection() {
-	if (dbID("idSel_expansionMaterialA").options.length > 1) return;
-	dbID("idSel_expansionMaterialA").innerHTML = "";
-	dbID("idSel_expansionMaterialB").innerHTML = "";
-	dbID("idSel_expansionMaterialB").options[0] = new Option("---", 0);
-	let selOptGroup = document.createElement("optgroup");
-	selOptGroup.id = "idOptGroup_selectedMaterialsA";
-	selOptGroup.label = "selected Materials";
-	for (let i = 0; i < expansionOptions.matList.length; i++) {
-		if (Data_Materials.Materials[expansionOptions.matList[i]].expansion) {
-			const opt = document.createElement("OPTION");
-			opt.textContent = expansionOptions.matList[i];
-			opt.value = expansionOptions.matList[i];
-			selOptGroup.appendChild(opt);
-		}
-	}
-
-	let matOptGroup = document.createElement("optgroup");
-	matOptGroup.id = "idOptGroup_generalMaterialsA";
-	matOptGroup.label = "general Materials";
-	const matKeys = Object.keys(Data_Materials.Materials);
-	for (let i = 0; i < matKeys.length; i++) {
-		const matName = matKeys[i];
-		if (Data_Materials.Materials[matName].expansion) {
-			const opt = document.createElement("OPTION");
-			opt.textContent = matName;
-			opt.value = matName;
-			matOptGroup.appendChild(opt);
-		}
-	}
-	const selOptGroup2 = selOptGroup.cloneNode(true);
-	selOptGroup2.id = "idOptGroup_selectedMaterialsB";
-	const matOptGroup2 = matOptGroup.cloneNode(true);
-	matOptGroup2.id = "idOptGroup_generalMaterialsB";
-	dbID("idSel_expansionMaterialA").appendChild(selOptGroup);
-	dbID("idSel_expansionMaterialA").appendChild(matOptGroup);
-	dbID("idSel_expansionMaterialB").appendChild(selOptGroup2);
-	dbID("idSel_expansionMaterialB").appendChild(matOptGroup2);
+export function expansionUpdateMassDependecy() {
+	expansionUpdateOptions();
 }
 
-function expansionUpdateOptions() {
-	const groupA = dbID("idOptGroup_selectedMaterialsA");
-	const groupB = dbID("idOptGroup_selectedMaterialsB");
-	KadDOM.clearFirstChild("idOptGroup_selectedMaterialsA");
-	KadDOM.clearFirstChild("idOptGroup_selectedMaterialsB");
-	for (let i = 0; i < expansionOptions.matList.length; i++) {
-		if (Data_Materials.Materials[expansionOptions.matList[i]].expansion) {
-			const opt1 = document.createElement("OPTION");
-			opt1.textContent = expansionOptions.matList[i];
-			opt1.value = expansionOptions.matList[i];
-			const opt2 = opt1.cloneNode(true);
-			groupA.appendChild(opt1);
-			groupB.appendChild(opt2);
-		}
-	}
+export function expansionUpdateOptions() {
+	const tempSelA = idSel_expansionMaterialA.selectedIndex;
+	const tempSelB = idSel_expansionMaterialB.selectedIndex;
+	idSel_expansionMaterialA.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: tempSelA });
+	idSel_expansionMaterialB.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: tempSelB });
 }
 
 function expansionSwitch() {
-	const tempSelB = dbID("idSel_expansionMaterialB").selectedIndex;
-	const tempSelA = dbID("idSel_expansionMaterialA").selectedIndex;
-	if (tempSelB > 0) {
-		dbID("idSel_expansionMaterialA").options[tempSelB - 1].selected = true;
-		dbID("idSel_expansionMaterialB").options[tempSelA + 1].selected = true;
-	}
+	const tempSelB = idSel_expansionMaterialB.selectedIndex;
+	const tempSelA = idSel_expansionMaterialA.selectedIndex;
+	if (tempSelB < 0) return;
+	idSel_expansionMaterialA.options[tempSelB].selected = true;
+	idSel_expansionMaterialB.options[tempSelA].selected = true;
 	expansionEntryMaterial();
 }
 
 function expansionEntryMaterial() {
-	expansionOptions.materials.matA = dbID("idSel_expansionMaterialA").value;
-	expansionOptions.materials.matB = dbID("idSel_expansionMaterialB").value;
+	expansionOptions.materials.matA = idSel_expansionMaterialA.value;
+	expansionOptions.materials.matB = idSel_expansionMaterialB.value;
 	expansionOptions.materials.compare = expansionOptions.materials.matB == 0 || expansionOptions.materials.matA === expansionOptions.materials.matB ? false : true;
 	KadDOM.enableBtn(idCb_expansionDifference, !expansionOptions.materials.compare);
 
@@ -157,8 +128,8 @@ function expansionCoefficient() {
 }
 
 function expansionCalc() {
-	const checkedLength = dbID("idCb_expansionDifference").checked;
-	const checkedCoeff = dbID("idCb_expansionCoefficient").checked;
+	const checkedLength = idCb_expansionDifference.checked;
+	const checkedCoeff = idCb_expansionCoefficient.checked;
 	expansionOptions.materials.deltaExpansion = [];
 	for (let t = 0; t < expansionOptions.exTemp.length; t++) {
 		const dT = expansionOptions.exTemp[t] - expansionOptions.baseTemp;
@@ -252,7 +223,7 @@ function build_ExpansionTable() {
 				names: ["expansionVal", t, i],
 				type: "Lbl",
 				text: expansionOptions.materials.deltaExpansion[t][i],
-				createCellClass: ["clTab_borderThinRight"],
+				createCellClass: ["clTab_UIBorderThinRight"],
 				cellStyle: {
 					textAlign: "center",
 				},

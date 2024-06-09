@@ -100,7 +100,7 @@ function iomlaidTable() {
 			names: ["iomlaidCurrency", i],
 			type: "Lbl",
 			text: `${currency.name} (${key})`,
-			createCellClass: ["clTab_borderThinRight"],
+			createCellClass: ["clTab_UIBorderThinRight"],
 			cellStyle: {
 				textAlign: "right",
 			},
@@ -122,7 +122,7 @@ function iomlaidTable() {
 			names: ["iomlaidLatestRate", i],
 			type: "Lbl",
 			text: iomlaidOptions.latest == null ? "n.d." : `${KadValue.number(iomlaidOptions.latest[key.toLowerCase()] * iomlaidOptions.value)} ${symbol}`,
-			createCellClass: ["clTab_borderThinRight"],
+			createCellClass: ["clTab_UIBorderThinRight"],
 			cellStyle: {
 				textAlign: "right",
 			},

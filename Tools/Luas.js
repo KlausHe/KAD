@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { daEL, dbID, dbIDStyle, KadDOM, KadValue } from "../General/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadDOM, KadValue, log } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const luasOptions = {
@@ -21,24 +21,32 @@ const luasOptions = {
 	lastFramecount: 0,
 };
 
-daEL(idVin_luasVelAngular, "input", luasInputChange);
-daEL(idVin_luasDiameter, "input", luasInputChange);
-daEL(idSel_luasAngularUnit, "change", luasInputChange);
-daEL(idBtn_luasChangeDirection, "click", luasChangeDirection);
-daEL(idSel_luasLinearUnit, "change", luasInputChange);
-daEL(idBtn_luasChecker, "click", luasStart);
+initEL({ id: idVin_luasVelAngular, fn: luasInputChange, resetValue: 10 });
+initEL({ id: idVin_luasDiameter, fn: luasInputChange, resetValue: 10 });
+initEL({
+	id: idSel_luasAngularUnit,
+	fn: luasInputChange,
+	selList: [
+		["U/s", 1],
+		["U/min", 60],
+	],
+	selStartIndex: 1,
+});
+initEL({
+	id: idSel_luasLinearUnit,
+	fn: luasInputChange,
+	selList: ["mm", "cm", "dm", "m", "km"],
+});
+initEL({ id: idBtn_luasChangeDirection, fn: luasChangeDirection });
+initEL({ id: idBtn_luasChecker, fn: luasStart });
 //Canvas Stuff
 export function clear_cl_Luas() {
-	KadDOM.resetInput("idVin_luasVelAngular", 10);
-	KadDOM.resetInput("idVin_luasDiameter", 10);
+	idVin_luasVelAngular.KadReset();
+	idVin_luasDiameter.KadReset();
 
-	dbID("idSel_luasAngularUnit").options[0] = new Option("U/s", 1, false); // text, value
-	dbID("idSel_luasAngularUnit").options[1] = new Option("U/min", 60, false, true); // text, value
-	dbID("idSel_luasLinearUnit").options[0] = new Option("mm", 1, false, true); // text, value
-	dbID("idSel_luasLinearUnit").options[1] = new Option("cm", 1, false); // text, value
-	dbID("idSel_luasLinearUnit").options[2] = new Option("dm", 1, false); // text, value
-	dbID("idSel_luasLinearUnit").options[3] = new Option("m", 1, false); // text, value
-	dbID("idSel_luasLinearUnit").options[4] = new Option("km", 1, false); // text, value
+	idSel_luasAngularUnit.KadReset();
+	idSel_luasLinearUnit.KadReset();
+
 	luasInputChange();
 	luasOptions.radius = luasOptions.canvas.w * 0.5 * 0.9;
 	luasOptions.lastAngle = 0;
@@ -46,9 +54,9 @@ export function clear_cl_Luas() {
 	caLU.redraw();
 }
 export function canvas_cl_Luas() {
-  luasOptions.lastAngle = 0;
+	luasOptions.lastAngle = 0;
 	caLU.resizeCanvas(luasOptions.canvas.w, luasOptions.canvas.h);
-  caLU.redraw();
+	caLU.redraw();
 }
 
 const caLU = new p5((c) => {
@@ -105,13 +113,12 @@ function luasStart() {
 function luasInputChange() {
 	luasOptions.speedVin = KadDOM.numberFromInput("idVin_luasVelAngular");
 	luasOptions.diameterVin = KadDOM.numberFromInput("idVin_luasDiameter");
-	luasOptions.angularVin = Number(dbID("idSel_luasAngularUnit").value);
-	luasOptions.angularText = dbID("idSel_luasAngularUnit").options[dbID("idSel_luasAngularUnit").selectedIndex].textContent;
-	luasOptions.linearText = dbID("idSel_luasLinearUnit").options[dbID("idSel_luasLinearUnit").selectedIndex].textContent;
+	luasOptions.angularVin = Number(idSel_luasAngularUnit.value);
+	luasOptions.angularText = idSel_luasAngularUnit[idSel_luasAngularUnit.selectedIndex].text;
+	luasOptions.linearText = idSel_luasLinearUnit[idSel_luasLinearUnit.selectedIndex].text;
 	luasOptions.speedAngular = (luasOptions.speedVin * 360) / luasOptions.angularVin;
 	luasOptions.speedLinear = luasOptions.speedVin * Math.PI * luasOptions.diameterVin;
-
-	dbID("idLbl_luasResult").innerHTML = `Linear: ${KadValue.number(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.linearText}/${luasOptions.angularText.replace("U/", "")}`;
+	dbID("idLbl_luasResult").innerHTML = `Linear: ${KadValue.number(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.angularText.replace("U", luasOptions.linearText)}`;
 }
 
 function luasChangeDirection() {

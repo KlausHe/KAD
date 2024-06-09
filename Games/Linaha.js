@@ -205,7 +205,7 @@ function linahaCreateButtons() {
 					},
 					style: {
 						margin: KadCSS.getRoot("gridGap"),
-						border: KadCSS.getRoot("borderThin"),
+						border: KadCSS.getRoot("UIBorderThin"),
 					},
 					text: "...",
 					onclick: () => {

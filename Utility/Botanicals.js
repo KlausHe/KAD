@@ -55,7 +55,7 @@ function botanicalsPlantTable(plant) {
 				names: ["botanicalsDiscomfort", i],
 				type: "Lbl",
 				text: plant.discomfort[i],
-				createCellClass: [plant.effect && plant.effect[i] ? "clTab_borderThinRight" : null],
+				createCellClass: [plant.effect && plant.effect[i] ? "clTab_UIBorderThinRight" : null],
 				copy: true,
 			});
 		}
@@ -90,7 +90,7 @@ function botanicalsDiscomfortTable(plants) {
 			names: ["botanicalsPlants", i],
 			type: "Lbl",
 			text: plants[i],
-			createCellClass: [plants[i + 1] !== undefined ? "clTab_borderThinRight" : null],
+			createCellClass: [plants[i + 1] !== undefined ? "clTab_UIBorderThinRight" : null],
 			copy: true,
 		});
 

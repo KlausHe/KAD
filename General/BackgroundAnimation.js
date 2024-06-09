@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL, log } from "../General/KadUtils.js";
+import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL } from "../General/KadUtils.js";
 import { contentLayout, navClick } from "../General/Layout.js";
 import { globalColors } from "../Settings/Color.js";
 

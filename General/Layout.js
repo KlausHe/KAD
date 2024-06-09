@@ -3,7 +3,7 @@ import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
-import { KadArray, KadCSS, KadImage, KadTable, checkedLog, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, objectLength } from "./KadUtils.js";
+import { KadArray, KadCSS, KadImage, KadTable, checkedLog, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, objectLength } from "./KadUtils.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 function contentCheckActive(contentObj) {
@@ -57,7 +57,7 @@ export const contentLayout = {
 	prevNavContent: null,
 	prevNavFullscreen: null,
 	settingsNames: ["Account-Settings", "Global-Settings"],
-	defaultPage: hostDebug() ? "cl_ColorSettings" : "Universe",
+	defaultPage: hostDebug() ? "cl_Niska" : "Universe",
 };
 
 export function createContentlayoutList() {

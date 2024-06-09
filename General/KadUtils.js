@@ -19,20 +19,21 @@ export function dbCLStyle(id, loc = 0) {
  *
  *
  * @export
- * @param {{ id: any; action?: string; fn: function; selList: array; selGroup: string; selStartVal: any; selStartIndex?: number; dbList: array; resetValue: any; domOpts: any; }} [param0={}]
+ * @param {{ id: HTMLElement; action?: string; fn: function; selList?: array; selGroup: any; selStartIndex?: number; selStartVal: any; dbList?: array; resetValue: any; domOpts: any; }} [param0={}]
  * @param {HTMLElement} param0.id
- * @param {string} param0.action
+ * @param {string} [param0.action=null]
  * @param {function} param0.fn
- * @param {array} param0.selList
- * @param {array} param0.selGroup
- * @param {string} param0.selStartVal
+ * @param {array} [param0.selList=[]]
+ * @param {string} param0.selGroup
  * @param {number} [param0.selStartIndex=0]
- * @param {array} param0.dbList
+ * @param {string|number} param0.selStartVal
+ * @param {[]} [param0.dbList=[]]
  * @param {string|number} param0.resetValue
  * @param {object} param0.domOpts
- * @returns {*}
+ * @returns {string|number}
  */
-export function initEL({ id, action = null, fn, selList = [], selGroup, selStartIndex = 0, selStartVal, dbList = [], resetValue, domOpts } = {}) {
+
+export function initEL({ id, action = null, fn, selGroup = {}, selList = [], selStartIndex = 0, selStartVal, dbList = [], resetValue, domOpts } = {}) {
 	errorChecked(typeof id === "string", "Id is a string but should be an HTML-Object");
 	const typeAction = {
 		text: "input", // input change focus click
@@ -48,7 +49,6 @@ export function initEL({ id, action = null, fn, selList = [], selGroup, selStart
 	};
 	const type = id.type ? id.type : id.nodeName;
 	daEL(id, action || typeAction[type], fn);
-
 	// fill "datalist"
 	if (dbList) {
 		id.addEventListener(
@@ -67,21 +67,40 @@ export function initEL({ id, action = null, fn, selList = [], selGroup, selStart
 	}
 	// fill "Select"
 	if (selList.length > 0) {
+		while (id.options.length > 0) {
+			id.remove(0);
+		}
 		makeSelList({ selList, selStartIndex, selStartVal });
+	}
+
+	if (objectLength(selGroup) > 0) {
+		KadDOM.clearFirstChild(id);
+		for (let [groupName, selList] of Object.entries(selGroup)) {
+			makeGroupList({ groupName, selList, selStartIndex, selStartVal });
+		}
 	}
 	// add reset-function
 	if (["select-one", "select"].includes(type)) {
-		id.KadReset = function ({ resetSelList = [], resetSelStartIndex = null, resetSelStartVal = null } = {}) {
+		id.KadReset = function ({ resetSelGroup = {}, resetSelList = [], resetSelStartIndex = null, resetSelStartVal = null } = {}) {
 			const index = resetSelStartIndex || selStartIndex;
 			if (resetSelList.length > 0) {
+				while (id.options.length > 0) {
+					id.remove(0);
+				}
 				makeSelList({ selList: resetSelList, selStartIndex: index, selStartVal: resetSelStartVal });
+			} else if (objectLength(resetSelGroup) > 0) {
+				KadDOM.clearFirstChild(id);
+
+				for (let [groupName, selList] of Object.entries(resetSelGroup)) {
+					makeGroupList({ groupName, selList, selStartIndex: index, selStartVal: resetSelStartVal });
+				}
 			} else {
-        let i = 0;
+				let i = 0;
 				for (let data of selList) {
-          let d = Array.isArray(data) ? data : [data];
+					let d = Array.isArray(data) ? data : [data];
 					if (resetSelStartVal && d[0] == resetSelStartVal) {
 						id.options[i].selected = true;
-            break;
+						break;
 					}
 					i++;
 				}
@@ -96,16 +115,28 @@ export function initEL({ id, action = null, fn, selList = [], selGroup, selStart
 		};
 	}
 
+	function makeGroupList({ groupName = "", selList = [], selStartIndex = 0, selStartVal = null } = {}) {
+		if (selList.length == 0) return;
+		let optG;
+		if (groupName) {
+			optG = document.createElement("optgroup");
+			id.appendChild(optG);
+			optG.label = groupName;
+		}
+		for (let data of selList) {
+			let d = Array.isArray(data) ? data : [data];
+			const opt = new Option(...d);
+			optG.appendChild(opt);
+			if (selStartVal && d[0] == selStartVal) {
+				opt.selected = true;
+			}
+		}
+		if (!selStartVal) id.selectedIndex = selStartIndex;
+	}
+
 	function makeSelList({ selList = [], selStartIndex = 0, selStartVal = null } = {}) {
 		if (selList.length == 0) return;
-		while (id.options.length > 0) {
-			id.remove(0);
-		}
 		let i = 0;
-		if (selGroup) {
-			id.options[0] = new Option(selGroup);
-			i = 1;
-		}
 		for (let data of selList) {
 			let d = Array.isArray(data) ? data : [data];
 			id.options[i] = new Option(...d);
@@ -139,6 +170,11 @@ function getStackFunctionAt(level = 1) {
 	};
 	return `${data.function} ${data.folder}/${data.file}: ${data.line}`;
 }
+/**
+ *
+ * @param  {...any} logText
+ * @returns
+ */
 export function log(...logText) {
 	if (!hostDebug()) return;
 	console.group(`%c${getStackFunctionAt()}`, "background: white; color: black");
@@ -161,7 +197,7 @@ export function checkedLog(state, ...logText) {
 }
 export function error(...errorText) {
 	if (!hostDebug()) return;
-	console.group(`%c${getStackFunctionAt()}`, "background: red; color: black");
+	console.group(`%c${getStackFunctionAt()}`, "background: red; color: white");
 	let text = errorText.join(" ");
 	if (text) console.log(text);
 	throw console.groupEnd();
@@ -219,6 +255,36 @@ export const KadDOM = {
 	getImgPath(name) {
 		return `Data/Images/SVG/${name}.svg`;
 	},
+	htmlSetButtonType(id = null) {
+		if (id && dbID(id).nameTag == "BUTTON") {
+			dbID(id).type = "button";
+		} else {
+			const buttons = document.getElementsByTagName("button");
+			for (let button of buttons) {
+				button.type = "button";
+			}
+		}
+	},
+	htmlSetVinChange() {
+		const dirName = ["oSub", "trash", "oAdd"];
+		envoked("vinChangeSub", -1);
+		envoked("vinChangeTrash", 0);
+		envoked("vinChangeAdd", 1);
+
+		function envoked(name, dir) {
+			const obj = dbCL(`${name}`, null);
+			for (let btn of obj) {
+				btn.onclick = () => {
+					return KadDOM.vinChange(btn, dir);
+				};
+				const name = dirName[dir + 1];
+				const img = document.createElement("img");
+				img.classList.add(`img_${name}`);
+				img.setAttribute("alt", `${name}.svg`);
+				btn.appendChild(img);
+			}
+		}
+	},
 	resetInput(id, ph = null, domOpts = null) {
 		const obj = dbID(id);
 		const type = obj.type ? obj.type : obj.nodeName;
@@ -262,7 +328,7 @@ export const KadDOM = {
 		let obj = null;
 		let siblingList = Array.from(id.parentNode.children);
 		for (let i = siblingList.indexOf(id) - 1; i >= 0; i--) {
-			if (siblingList[i].type != "button") {
+			if (siblingList[i].type != "button" && siblingList[i].type != "submit") {
 				obj = siblingList[i];
 				break;
 			}
@@ -271,7 +337,7 @@ export const KadDOM = {
 		if (obj.disabled) return;
 		const dir = Number(v);
 		if (obj.type == "time") evaluateTime();
-		if (obj.type == "number") evaluateNumber();
+		if (["submit", "number"].includes(obj.type)) evaluateNumber();
 		obj.dispatchEvent(new Event("input"));
 		obj.focus();
 		function evaluateTime() {
@@ -313,12 +379,12 @@ export const KadDOM = {
 		if (noPlaceholder != null) return null;
 		return Number(obj.placeholder);
 	},
-	stringFromInput(id, failSafeVal = null, noPlaceholder = null) {
+	stringFromInput(id, failSafeVal = null, noPlaceholder = true) {
 		const obj = dbID(id);
 		const value = obj.value.trim();
 		if (value != "") return obj.value;
 		if (failSafeVal != null) return failSafeVal;
-		if (noPlaceholder != null) return null;
+		if (noPlaceholder != null) return "";
 		return obj.placeholder;
 	},
 	clearFirstChild(id) {

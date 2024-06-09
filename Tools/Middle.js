@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { daEL, dbID, KadDOM, KadValue } from "../General/KadUtils.js";
+import { dbID, initEL, KadDOM, KadValue } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const middleOptions = {
@@ -24,12 +24,12 @@ const caMI = new p5((c) => {
 	};
 }, "#idCanv_middle");
 
-daEL(idVin_middleA, "input", calcMiddle);
-daEL(idVin_middleB, "input", calcMiddle);
+initEL({ id: idVin_middleA, fn: calcMiddle, resetValue: 5 });
+initEL({ id: idVin_middleB, fn: calcMiddle, resetValue: 2 });
 
 export function clear_cl_Middle() {
-	KadDOM.resetInput("idVin_middleA", 5);
-	KadDOM.resetInput("idVin_middleB", 2);
+	idVin_middleA.KadReset();
+	idVin_middleB.KadReset();
 	middleOptions.barA = {
 		hStart: 0,
 		h: middleOptions.canvas.h * 0.5,
@@ -61,8 +61,8 @@ export function canvas_cl_Middle() {
 }
 
 function calcMiddle() {
-	const a = KadDOM.numberFromInput("idVin_middleA");
-	const b = KadDOM.numberFromInput("idVin_middleB");
+	const a = KadDOM.numberFromInput(idVin_middleA);
+	const b = KadDOM.numberFromInput(idVin_middleB);
 	middleOptions.barA.val = a;
 	middleOptions.barB.val = b;
 	middleOptions.barA.text = `a: ${middleOptions.barA.val}`;

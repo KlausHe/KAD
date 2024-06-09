@@ -6505,7 +6505,7 @@ export const Data_Materials = {
 		},
 		PEEK: {
 			WNr: "PEEK",
-			WName: "Teilkristalline Hochleistungskunststoffe",
+			WName: "Teilkristalline HLW",
 			matSort: 25,
 			matGroup: "Thermoplaste",
 			Dichte: 1.32,
@@ -6520,7 +6520,7 @@ export const Data_Materials = {
 		},
 		PEEKGF30: {
 			WNr: "PEEKGF30",
-			WName: "Teilkristalline Hochleistungskunststoffe",
+			WName: "Teilkristalline HLW",
 			matSort: 25,
 			matGroup: "Thermoplaste",
 			Dichte: 1.49,

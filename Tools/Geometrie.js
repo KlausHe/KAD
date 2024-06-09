@@ -1,7 +1,7 @@
 //  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
 
 import { globalColors } from "../Settings/Color.js";
-import { daEL, dbID, dbCL, KadValue, KadDOM, KadTable } from "../General/KadUtils.js";
+import { dbID, dbCL, KadValue, KadDOM, KadTable, initEL } from "../General/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
 import { globalValues } from "../Settings/General.js";
 import { materialOptions } from "./Material.js";
@@ -548,10 +548,10 @@ let geoObjects = {
 	},
 };
 
-daEL(idVin_Area_0, "input", geoBerechnung);
-daEL(idVin_Area_1, "input", geoBerechnung);
-daEL(idVin_Area_2, "input", geoBerechnung);
-daEL(idCb_geoRadius, "click", geoChangeDiameter);
+initEL({ id: idVin_Area_0, fn: geoBerechnung });
+initEL({ id: idVin_Area_1, fn: geoBerechnung });
+initEL({ id: idVin_Area_2, fn: geoBerechnung });
+initEL({ id: idCb_geoRadius, fn: geoChangeDiameter });
 
 export function clear_cl_Geometrie() {
 	geoObjects.elementIndex = geoObjects.elementIndexOrig;
@@ -654,18 +654,17 @@ function changeGeoObject(index) {
 //---------------------------
 function geoBerechnung() {
 	let selectedObj = geoObjects.selected;
-	geoObjects.valA = KadDOM.numberFromInput("idVin_Area_0", selectedObj.vals[0]) * selectedObj.radiusFactor[0];
-	geoObjects.valB = KadDOM.numberFromInput("idVin_Area_1", selectedObj.vals[1]) * selectedObj.radiusFactor[1];
-	geoObjects.valC = KadDOM.numberFromInput("idVin_Area_2", selectedObj.vals[2]) * selectedObj.radiusFactor[2];
+	geoObjects.valA = KadDOM.numberFromInput(idVin_Area_0, selectedObj.vals[0]) * selectedObj.radiusFactor[0];
+	geoObjects.valB = KadDOM.numberFromInput(idVin_Area_1, selectedObj.vals[1]) * selectedObj.radiusFactor[1];
+	geoObjects.valC = KadDOM.numberFromInput(idVin_Area_2, selectedObj.vals[2]) * selectedObj.radiusFactor[2];
 	geometrieOptions.result.circumference = KadValue.number(selectedObj.circumference, { decimals: 3 });
 	geometrieOptions.result.basearea = KadValue.number(selectedObj.basearea, { decimals: 3 });
 	geometrieOptions.result.fullarea = KadValue.number(selectedObj.fullarea, { decimals: 3 });
 	geometrieOptions.result.volume = KadValue.number(selectedObj.volume, { decimals: 3 });
-	geoUpdateMasse();
-	geoResultTable();
+	geoUpdateMassDependency();
 }
 
-export function geoUpdateMasse() {
+export function geoUpdateMassDependency() {
 	let selectedObj = geoObjects.selected;
 	geometrieOptions.result.mass = [];
 	for (let i = 0; i < geometrieOptions.matList.length; i++) {
@@ -676,9 +675,10 @@ export function geoUpdateMasse() {
 			matName: geometrieOptions.matList[i],
 		});
 	}
+	geoResultTable();
 }
 
-export function geoResultTable() {
+function geoResultTable() {
 	KadTable.clear("idTabBody_geometrieResults");
 	let unitObj = Object.keys(geometrieOptions.units);
 	let unitLength = unitObj.length - 1 + geometrieOptions.result.mass.length;

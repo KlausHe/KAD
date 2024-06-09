@@ -1,5 +1,6 @@
 export const contentGroups = ["Global-Settings", "Account-Settings", "News", "Benkyou", "Utility", "Tools", "Games"];
 export const contentGroupsNav = ["Universe", "News", "Benkyou", "Utility", "Tools", "Games", "User"];
+export const contentGroupsMaincontent = ["News", "Benkyou", "Utility", "Tools", "Games"];
 
 export const rawContentGrid = {
 	//Benkyou
@@ -582,17 +583,21 @@ export const rawContentGrid = {
 		},
 		size: [2, 2],
 		maingrid: {
-			areas: [["cl_MaterialPropertyCb", "."], ["cl_MaterialList", "cl_MaterialList"], ["cl_MaterialSearchOptions", "cl_MaterialSearchOptions"], ["cl_MaterialSearchList cl_MaterialSearchList"]],
-			rows: [1, 0, 1],
+			areas: [
+				//
+				["cl_MaterialPropertyCb", "."],
+				["cl_MaterialList", "cl_MaterialList"],
+				// ["cl_MaterialSearchOptions", "cl_MaterialSearchOptions"], // in DIALOG
+				// ["cl_MaterialSearchList cl_MaterialSearchList"], // in DIALOG
+			],
+			rows: [1],
+			// rows: [1, 0, 1],
 		},
 		subgrid: [
 			["cl_MaterialPropertyCb", "left"],
 			["cl_MaterialList", "left"],
-			["cl_MaterialSearchOptions", "left"],
-			// ["cl_MaterialSearchVin", "left"],
-			// ["cl_MaterialSearchSel", "left"],
-			// ["cl_MaterialSearchClose", "left"],
-			["cl_MaterialSearchList", "left"],
+			// ["cl_MaterialSearchOptions", "left"], // in DIALOG
+			// ["cl_MaterialSearchList", "left"], // in DIALOG
 		],
 	},
 	cl_Middle: {

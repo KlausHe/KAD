@@ -1,12 +1,12 @@
 import { resetAll } from "../Main.js";
-import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, initEL, log } from "../General/KadUtils.js";
+import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, initEL, error, log } from "../General/KadUtils.js";
 import { contentLayout, navClick } from "./Layout.js";
 import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "./MainData.js";
 import * as DBData from "../MainModulesDBData.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDHgM7J-2Q_W1Swp0Ozx6nY1QDoFcwEFwQ",
@@ -238,7 +238,8 @@ initEL({ id: idBtn_userLogin_cancel, fn: loginCancel });
 initEL({ id: idBtn_userChange_cancel, fn: changeCancel });
 
 function accountPersistanceChange() {
-	nuncDiscipuli.cred.keepLogin = dbID("idCb_userLogin_check").checked ? "Session" : "None"; // "SESSION";
+  nuncDiscipuli.cred.keepLogin = dbID("idCb_userLogin_check").checked ? browserSessionPersistence : browserLocalPersistence; // "Session" : "None";
+  log(nuncDiscipuli.cred.keepLogin)
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -263,7 +264,7 @@ export function userLoggedIn() {
 function firebaseLogin() {
 	const email = KadDOM.stringFromInput(idVin_userLogin_email);
 	const pass = KadDOM.stringFromInput(idVin_userLogin_pass);
-	// setPersistence(auth, nuncDiscipuli.cred.keepLogin);
+	setPersistence(auth, nuncDiscipuli.cred.keepLogin);
 	nuncDiscipuli.logging = true;
 	signInWithEmailAndPassword(auth, email, pass)
 		.then(() => {
@@ -278,7 +279,6 @@ function firebaseRegister() {
 	nuncDiscipuli.registering = true;
 	const email = KadDOM.stringFromInput(idVin_userLogin_email);
 	const pass = KadDOM.stringFromInput(idVin_userLogin_pass);
-	log("register", email, pass);
 	createUserWithEmailAndPassword(auth, email, pass)
 		.then((user) => {
 			nuncDiscipuli.registering = false;
@@ -337,11 +337,11 @@ function userAccSetUserBtn() {
 	KadDOM.enableBtn("idBtn_userLogin_login", true);
 }
 
-function userAccError(error) {
+function userAccError(err) {
 	KadDOM.enableBtn(idBtn_userLogin_login, true);
 	KadDOM.enableBtn(idBtn_userLogin_register, true);
-	log(error);
 	dbID(idLbl_userLogin_alert).textContent = "E-Mail oder Passwort falsch!";
+	error(err);
 }
 
 //--------------Load Single DATA-------------

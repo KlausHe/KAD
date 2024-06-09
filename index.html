@@ -50,6 +50,21 @@
   </nav>
   <section class="cl_Loading">KAD-UNIVERSE<br>LOADING...</section>
   <div class="cl_BackgroundAnimation" id="idCanv_backgroundAnimation"></div>
+  <dialog id="idDia_materialSelect">
+    <div class="cl_MaterialSearchOptions" id="idDiv_MaterialSearchOptions">
+      <input type="text" id="idVin_materialFilter"></input>
+      <select id="idSel_materialFilter"></select>
+      <button id="idBtn_materialSelectClose">Schließen</button>
+    </div>
+    <div class="cl_MaterialSearchList clDiv_overviewTablesMaterial" id="idDiv_MaterialSearchList">
+      <table id="idTab_MaterialSearchList">
+        <thead id="idTabHeader_MaterialSearchList" class="scrollTable">
+        </thead>
+        <tbody id="idTabBody_MaterialSearchList">
+        </tbody>
+      </table>
+    </div>
+  </dialog>
   <main id="id_contentGrid">
     <!-- Benkyou -->
     <section class="cl_Analysis" style="display:none;">
@@ -742,19 +757,6 @@
             </tbody>
           </table>
         </div>
-        <div class="cl_MaterialSearchOptions" id="idDiv_MaterialSearchOptions">
-          <input type="text" id="idVin_materialFilter"></input>
-          <select id="idSel_materialFilter"></select>
-          <button id="idBtn_materialFilter">Close</button>
-        </div>
-        <div class="cl_MaterialSearchList clDiv_overviewTablesMaterial" id="idDiv_MaterialSearchList">
-          <table id="idTab_MaterialSearchList">
-            <thead id="idTabHeader_MaterialSearchList" class="scrollTable">
-            </thead>
-            <tbody id="idTabBody_MaterialSearchList">
-            </tbody>
-          </table>
-        </div>
       </div>
     </section>
     <section class="cl_Middle" style="display:none;">
@@ -1129,7 +1131,7 @@
     <section class="cl_Boredom" style="display:none;">
       <div class="cl_subGrid_Boredom cl_subGrid">
         <div class="cl_BoredomStart">
-          <button id="idBtn_boredomStart">Was tun?</button>
+          <button id="idBtn_boredomStart" uiRadius="left">Was tun?</button><select id="idSel_boredomLanguage" uiSize="size6" uiRadius="right"></select>
         </div>
         <div class="cl_BoredomAnswer" uiWrap="nowrap">
           <textarea id="idArea_boredomAnswer"></textarea>
@@ -1585,8 +1587,8 @@
           </table>
         </div>
         <div class="cl_UserGridOptions">
-          <button id="idBtn_toggleUserGrid">Toggle all</button>
-          <button id="idBtn_loaduserGridLayout">Save</button>
+          <button id="idBtn_userGridToggleAll">Toggle all</button>
+          <button id="idBtn_userGridSaveLayout">Save</button>
         </div>
       </div>
     </section>

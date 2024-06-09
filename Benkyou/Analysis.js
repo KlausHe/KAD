@@ -135,7 +135,7 @@ function analysisCreateTable() {
 				names: ["analysisPosScore", i],
 				type: "Lbl",
 				text: foundPos != null ? convertScore(data[foundPos].score) : "",
-				createCellClass: [objectLength(data) > 1 ? "clTab_borderThinRight" : null],
+				createCellClass: [objectLength(data) > 1 ? "clTab_UIBorderThinRight" : null],
 				cellStyle: {
 					textAlign: "right",
 				},

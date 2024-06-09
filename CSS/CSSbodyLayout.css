@@ -77,8 +77,8 @@
 	--gridWidthGameCanvas: 36rem;
 	--gridHeightGameCanvas: 36rem;
 	/**/
-	--borderThin: 0.042rem solid hsl(var(--bgcNavbar));
-	--borderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
+	--UIBorderThin: 0.042rem solid hsl(var(--bgcNavbar));
+	--UIBorderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
 	--UIBorderRight: 0.5rem solid hsl(var(--bgcNavbar));
 	--UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
 	/* IMAGES */
@@ -114,19 +114,19 @@
 	box-sizing: border-box;
 }
 
-@font-face {
+/* @font-face {
 	font-family: "Work Sans";
 	font-style: normal;
 	font-weight: 300;
 	src: local("work-sans-v9-latin-300.woff"), local("work-sans-v9-latin-regular.woff"), url("../Data/Fonts/work-sans-v9-latin-300.woff") format("woff");
-}
+} */
 
 /* roboto-300 - latin */
 @font-face {
 	font-family: "Roboto";
 	font-style: normal;
 	font-weight: 300;
-	src: local(""), url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
+	src: url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
 }
 
 /* roboto-regular - latin */
@@ -134,7 +134,7 @@
 	font-family: "Roboto";
 	font-style: normal;
 	font-weight: 400;
-	src: local(""), url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
+	src: url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
 }
 
 body {
@@ -176,7 +176,7 @@ body {
 }
 
 main {
-	min-height: calc(100vh - (2 * var(--navbarHeight)) - var(--gridGap));
+	min-height: calc(100vh - (2 * var(--navbarHeight)) - 2 * var(--gridGap));
 	display: grid;
 	grid-template-rows: repeat(var(--gridRowLength), auto);
 	grid-gap: var(--padding);
@@ -219,6 +219,7 @@ thead th {
 	padding: var(--paddingVertical) var(--padding);
 }
 
+tbody th,
 thead tr:last-child th {
 	border-bottom: var(--UIBorderBottom);
 }
@@ -230,7 +231,7 @@ tbody {
 
 tbody td {
 	padding: var(--paddingVertical) var(--padding);
-	border-bottom: var(--borderThin);
+	border-bottom: var(--UIBorderThin);
 	position: relative;
 	transition: all var(--transitionTimeInfo) linear;
 }
@@ -265,8 +266,8 @@ tbody tr:last-child td {
 	/* padding: var(--padding) calc(var(--padding)*2); */
 }
 
-.clTab_borderThinRight {
-	border-right: var(--borderThin);
+.clTab_UIBorderThinRight {
+	border-right: var(--UIBorderThin);
 }
 
 .clTab_borderThickRight {
@@ -304,7 +305,7 @@ tbody tr:last-child td {
 .clDiv_overviewTablesAuto {
 	overflow-y: auto;
 	scrollbar-width: none;
-	max-height: 20.833rem;
+	max-height: 21rem;
 }
 
 .clDiv_overviewTablesAuto::-webkit-scrollbar {
@@ -312,11 +313,10 @@ tbody tr:last-child td {
 }
 
 .clDiv_overviewTablesMaterial {
-	overflow-x: auto;
 	overflow-y: auto;
-	max-height: 50rem;
-	max-width: 80%;
-	/* calc(var(--UIWidth13) * 3 */
+	scrollbar-width: none;
+	max-width: 95vw;
+	max-height: 95vh;
 }
 
 .clDiv_overviewTablesMaterial::-webkit-scrollbar {
@@ -324,12 +324,11 @@ tbody tr:last-child td {
 }
 
 .clTab_vertical {
-	-webkit-writing-mode: vertical-lr;
-	writing-mode: vertical-lr;
-	/* -moz-transform: rotate(180deg); */
-	/* transform: rotate(180deg); */
+	-webkit-writing-mode: vertical-rl;
+	writing-mode: vertical-rl;
+	word-wrap: break-word;
 	rotate: 180deg;
-	height: auto;
+	height: var(--UIWidth5);
 	min-width: var(--UIHeight1);
 }
 
@@ -435,7 +434,7 @@ h1 {
 	background-color: hsl(var(--bgcNavbar));
 	color: hsl(var(--txtNavbar));
 	border-radius: var(--LayoutRadius);
-	border: var(--borderThinInverse);
+	border: var(--UIBorderThinInverse);
 	padding: var(--padding);
 	text-align: center;
 	width: max-content;
@@ -455,7 +454,7 @@ h1 {
 	background-color: hsl(var(--bgcNavbar));
 	color: hsl(var(--txtNavbar));
 	border-radius: var(--LayoutRadius);
-	border: var(--borderThinInverse);
+	border: var(--UIBorderThinInverse);
 	padding: var(--padding);
 	text-align: center;
 	min-width: 16.667rem;
@@ -498,6 +497,15 @@ h1 {
 	border-radius: 50%;
 	margin: 0;
 	border: 0.083rem solid hsl(var(--txtBackground));
+}
+
+dialog {
+	background-color: hsl(var(--bgcBackground));
+	top: var(--navbarHeight);
+	margin: 1rem 1rem auto 1rem;
+	padding: var(--padding);
+	border: var(--UIBorderThin);
+	border-radius: var(--UIRadius);
 }
 
 nav,

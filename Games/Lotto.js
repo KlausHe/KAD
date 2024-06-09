@@ -201,7 +201,7 @@ async function lottoGetGames() {
 		lottoOptions.getGameTimer = null;
 	}
 	lottoOptions.getGameTimer = setTimeout(() => {
-		lottoOptions.numberOfLatestGames = KadDOM.numberFromInput("idVin_lottoNumberOfGames", lottoOptions.numberOfLatestGamesOrig);
+		lottoOptions.numberOfLatestGames = KadDOM.numberFromInput(idVin_lottoNumberOfGames, lottoOptions.numberOfLatestGamesOrig);
 		globalP5.loadJSON(lottoOptions.url, lottoReturn, "json");
 		lottoOptions.getGameTimer = null;
 	}, 800);

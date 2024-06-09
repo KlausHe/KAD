@@ -10,7 +10,7 @@ select {
 	text-decoration: none;
 	background-color: hsl(var(--bgcButton));
 	color: hsl(var(--txtButton));
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 	/* no padding!--> it shifts the Images in buttons to the side */
 	padding: 0;
@@ -91,14 +91,14 @@ img[imgSize="numbery"] {
 img[imgSize="howaImg"] {
 	width: var(--gridWidthGameCanvas);
 	height: auto;
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 }
 
 img[imgSize="thumbnail"] {
 	width: var(--UIHeight3);
 	aspect-ratio: 1/1;
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 	object-fit: cover;
 }
@@ -250,7 +250,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 	max-width: calc(var(--UIWidth6) - var(--padding));
 	height: var(--rangeHeight);
 	background-color: hsl(var(--bgcButton));
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 }
 
@@ -260,7 +260,7 @@ input[type="range"]::-webkit-slider-thumb {
 	height: var(--rangeThumbHeight);
 	background-color: hsl(var(--bgcNavbar));
 	cursor: pointer;
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 	margin-top: -4px;
 }
@@ -270,7 +270,7 @@ input[type="range"]::-moz-range-track {
 	max-width: calc(var(--UIWidth6) - var(--padding));
 	height: var(--rangeHeight);
 	background-color: hsl(var(--bgcButton));
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 }
 
@@ -279,7 +279,7 @@ input[type="range"]::-moz-range-thumb {
 	height: var(--rangeThumbHeight);
 	background-color: hsl(var(--bgcNavbar));
 	cursor: pointer;
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 }
 
@@ -310,7 +310,7 @@ input[imgBtn="subgrid"] {
 }
 
 .cl_numberyDiv {
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 	width: var(--UIHeight3);
 	height: var(--UIHeight3);
@@ -348,7 +348,7 @@ input[imgBtn="subgrid"] {
 	color: hsl(var(--txtBackground));
 	width: var(--UIWidth6);
 	line-height: 150%;
-	border: var(--borderThin);
+	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 	text-align: center;
 }
@@ -366,7 +366,7 @@ input[imgBtn="subgrid"] {
 	color: hsl(var(--txtNavbar));
 	border-radius: var(--LayoutRadius);
 	font-size: var(--fontSizeLarge);
-	border: var(--borderThinInverse);
+	border: var(--UIBorderThinInverse);
 	min-height: var(--UIHeight2);
 	min-width: var(--UIWidth12);
 	display: -webkit-box;
@@ -389,7 +389,7 @@ input[imgBtn="subgrid"] {
 
 .cl_outputText {
 	padding: var(--padding);
-	border-top: var(--borderThin);
+	border-top: var(--UIBorderThin);
 }
 
 .cl_BeatmachineBtn {

@@ -1,4 +1,4 @@
-import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL } from "./General/KadUtils.js";
+import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./General/KadUtils.js";
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import * as Layout from "./General/Layout.js";
 import { globalValues } from "./Settings/General.js";
@@ -19,7 +19,8 @@ window.onload = mainSetup;
 function mainSetup() {
 	if (hostDebug()) dbCLStyle("cl_Loading").display = "none";
 	Layout.contentLayout.createContentGrid();
-	htmlSetVinChange();
+	KadDOM.htmlSetVinChange();
+	KadDOM.htmlSetButtonType();
 	// globalColors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
 
@@ -66,27 +67,6 @@ function clearAllTiles() {
 	}
 }
 
-function htmlSetVinChange() {
-	const dirName = ["oSub", "trash", "oAdd"];
-	envoked("vinChangeSub", -1);
-	envoked("vinChangeTrash", 0);
-	envoked("vinChangeAdd", 1);
-
-	function envoked(name, dir) {
-		const obj = dbCL(`${name}`, null);
-		for (let btn of obj) {
-			btn.onclick = () => {
-				return KadDOM.vinChange(btn, dir);
-			};
-			const name = dirName[dir + 1];
-			const img = document.createElement("img");
-			img.classList.add(`img_${name}`);
-			img.setAttribute("alt", `${name}.svg`);
-			btn.appendChild(img);
-		}
-	}
-}
-
 function hideLoadingscreen() {
 	dbCL("cl_Loading").classList.add("cl_LoadingFinished");
 }
@@ -109,18 +89,22 @@ function clearGlobalValue() {
 	globalValues.globalInput.value = "";
 	const obj = dbID("idVin_globalValue");
 	obj.value = "";
-	obj.addEventListener("keyup", (event) => {
-		if (event.keyCode === 13) {
-			globalValueChanged(true);
-		}
-	});
+	obj.addEventListener(
+		"keyup",
+		(event) => {
+			if (event.keyCode === 13) {
+				globalValueChanged(true);
+			}
+		},
+		{ once: true }
+	);
 }
 
 function globalValueChanged(enter = null) {
 	const obj = dbID("idVin_globalValue");
 	obj.classList.remove("cl_highlighted");
-	const arr = Layout.contentLayout.nameList;
 	globalValues.globalInput.value = obj.value;
+	const arr = Layout.contentLayout.nameList;
 	if (arr.includes(obj.value)) {
 		obj.classList.add("cl_highlighted");
 		if (enter === true) {

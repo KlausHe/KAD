@@ -1,4 +1,4 @@
-import { KadDOM, KadTable, checkedLog, dbID, initEL, objectLength } from "../General/KadUtils.js";
+import { KadDOM, KadTable, checkedLog, dbID, initEL, log, objectLength } from "../General/KadUtils.js";
 
 const lionsOptions = {
 	data: [],
@@ -35,8 +35,8 @@ export const storage_cl_Lions = {
 
 function lionsRequestNumber() {
 	const infoLbl = dbID("idLbl_lionsOutput");
-	lionsOptions.num = KadDOM.numberFromInput("idVin_lionsInput");
-	if (lionsOptions.num == "" || isNaN(lionsOptions.num) || lionsOptions.num.length != 4) {
+	lionsOptions.num = KadDOM.numberFromInput(idVin_lionsInput);
+	if (lionsOptions.num == "" || lionsOptions.num == null || isNaN(lionsOptions.num) || lionsOptions.num.length != 4) {
 		infoLbl.textContent = `...`;
 		infoLbl.classList.remove("cl_highlighted");
 		return;
