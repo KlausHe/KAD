@@ -103,7 +103,7 @@ function settingsFontsize(obj = null) {
 	if (obj != null) {
 		globalValues.settings.fontSize = obj.target.value;
 	} else {
-		idSel_settingsFontsize.KadReset({ resetSelStartVal: globalValues.settings.fontSize });
+		idSel_settingsFontsize.KadReset({ selStartValue: globalValues.settings.fontSize });
 	}
 	KadCSS.setRoot("fontSize", globalValues.settings.fontSize, "px");
 	colorUpdateCanvascolors();

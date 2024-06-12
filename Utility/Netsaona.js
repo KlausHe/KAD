@@ -2,8 +2,6 @@ import { dbID, dbCL, KadRandom } from "../General/KadUtils.js";
 import * as Data from "../General/MainData.js";
 
 export const netsaonaOptions = {
-	selType: null,
-	selected: null,
 	data: {
 		get ID() {
 			return "abs";
@@ -95,7 +93,7 @@ export function clear_cl_Netsaona() {
 	for (let i = 0; i < clBtn.length; i++) {
 		const name = Object.keys(netsaonaOptions.data)[i];
 		clBtn[i].textContent = name;
-		clBtn[i].setAttribute("data-type", name);
+		clBtn[i].value = name;
 		clBtn[i].addEventListener(
 			"click",
 			() => {
@@ -108,8 +106,5 @@ export function clear_cl_Netsaona() {
 }
 
 function netsaonaGenerate(obj) {
-	netsaonaOptions.selType = obj.dataset.type;
-	netsaonaOptions.selected = KadRandom.randomObject(netsaonaOptions.data[netsaonaOptions.selType]);
-	dbID("idLbl_netsaonaOutput").textContent = netsaonaOptions.selected;
-	netsaonaOptions.selType = null;
+	dbID("idLbl_netsaonaOutput").textContent = KadRandom.randomObject(netsaonaOptions.data[obj.value]);
 }

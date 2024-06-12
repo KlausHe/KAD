@@ -1,4 +1,4 @@
-import { daEL, dbID, objectLength, KadTable, KadValue, KadDate } from "../General/KadUtils.js";
+import { initEL, dbID, objectLength, KadTable, KadValue, KadDate, log } from "../General/KadUtils.js";
 
 const kadarOptions = {
 	valA: null,
@@ -8,6 +8,10 @@ const kadarOptions = {
 	diffAB: null,
 	tableAB: "idTabBody_Kadar_AB",
 	diff: null,
+	format: "YYYY-MM-DDTHH:mm",
+	dateOrig(days) {
+		return KadDate.getDate(new Date().setDate(new Date().getDate() + days), { format: this.format });
+	},
 	calc: {
 		millis: {
 			text: (t) => {
@@ -76,54 +80,42 @@ const kadarOptions = {
 	},
 };
 
-daEL(idBtn_kadarTrashA, "click", clearKadarTableAnow);
-daEL(idBtn_kadarRefresh, "click", kadarCalculate);
-daEL(idBtn_kadarTrashB, "click", clearKadarTableBnow);
+initEL({ id: idVin_kadarDateA, fn: kadarDateSelectedA, resetValue: kadarOptions.dateOrig(-7), dateOpts: { dateObject: true } });
+initEL({ id: idVin_kadarDateB, fn: kadarDateSelectedB, resetValue: kadarOptions.dateOrig(7), dateOpts: { dateObject: true } });
+initEL({ id: idBtn_kadarTrashA, fn: clearKadarTableAnow });
+initEL({ id: idBtn_kadarRefresh, fn: kadarCalculate });
+initEL({ id: idBtn_kadarTrashB, fn: clearKadarTableBnow });
 
 export function clear_cl_Kadar() {
-	// createKadarPikaday("A");
-	// createKadarPikaday("B");
-
-	kadarOptions.valA = null;
-	kadarOptions.valB = null;
+	kadarOptions.valA = idVin_kadarDateA.KadReset();
+	kadarOptions.valB = idVin_kadarDateB.KadReset();
 	kadarOptions.valAB = null;
-	dbID("idBtn_kadarDateNow").textContent = KadDate.getDate();
-	KadTable.clear(kadarOptions.tableA);
-	KadTable.clear(kadarOptions.tableB);
-	KadTable.clear(kadarOptions.tableAB);
+	idLbl_kadarDateNow.textContent = KadDate.getDate();
+	kadarCalculate();
+}
+
+function kadarDateSelectedA() {
+	kadarOptions.valA = idVin_kadarDateA.KadGet();
+	kadarCalculate();
+}
+function kadarDateSelectedB() {
+	kadarOptions.valB = idVin_kadarDateB.KadGet();
+	kadarCalculate();
 }
 
 function clearKadarTableAnow() {
 	KadTable.clear(kadarOptions.tableA);
 	kadarOptions.valA = null;
-	dbID("idBtn_kadarDateA").textContent = "Start Datum";
 	kadarCalculate();
 }
 
 function clearKadarTableBnow() {
 	KadTable.clear(kadarOptions.tableB);
 	kadarOptions.valB = null;
-	dbID("idBtn_kadarDateB").textContent = "End Datum";
 	kadarCalculate();
 }
 
-function createKadarPikaday(loc) {
-	new Pikaday({
-		field: dbID(`idBtn_kadarDate${loc}`),
-		showTime: true,
-		firstDay: 1,
-		position: "top",
-		i18n: Data_i18nDE,
-		onSelect: (date) => {
-			kadarOptions[`val${loc}`] = date.getTime();
-			dbID(`idBtn_kadarDate${loc}`).textContent = KadDate.getDate(date);
-			kadarCalculate();
-		},
-	});
-}
-
 function kadarCalculate() {
-	//calculate Table A-Now
 	if (kadarOptions.valA != null) {
 		kadarOptions.diff = Math.abs(kadarOptions.valA - new Date().getTime());
 		kadarTable(kadarOptions.tableA);
@@ -136,7 +128,7 @@ function kadarCalculate() {
 		kadarOptions.diff = Math.abs(kadarOptions.valA - kadarOptions.valB);
 		kadarTable(kadarOptions.tableAB);
 	} else {
-		dbID("idBtn_kadarDateNow").textContent = KadDate.getDate();
+		idLbl_kadarDateNow.textContent = KadDate.getDate();
 		KadTable.clear(kadarOptions.tableAB);
 	}
 }

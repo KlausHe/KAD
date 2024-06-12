@@ -1,12 +1,15 @@
+import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, initEL, log } from "../General/KadUtils.js";
 import { resetAll } from "../Main.js";
-import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, initEL, error, log } from "../General/KadUtils.js";
+import * as DBData from "../MainModulesDBData.js";
 import { contentLayout, navClick } from "./Layout.js";
 import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "./MainData.js";
-import * as DBData from "../MainModulesDBData.js";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+//      LOCAL:  	browserLocalPersistence
+//      SESSION:  	browserSessionPersistence
+//      NONE: 	inMemoryPersistence
+import { collection, doc, getDoc, getFirestore, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDHgM7J-2Q_W1Swp0Ozx6nY1QDoFcwEFwQ",
@@ -191,28 +194,8 @@ export function createNewNuncDiscipuli() {
 	}
 }
 
-initEL({
-	id: idVin_userLogin_email,
-	action: "keyup",
-	fn: (event) => {
-		if (event.keyCode === 13) {
-			dbID("idVin_userLogin_pass").focus();
-			event.preventDefault();
-		}
-	},
-	resetValue: "E-Mail",
-});
-initEL({
-	id: idVin_userLogin_pass,
-	action: "keyup",
-	fn: (event) => {
-		if (event.keyCode === 13) {
-			dbID("idBtn_userLogin_login").click();
-			event.preventDefault();
-		}
-	},
-	resetValue: "Passwort",
-});
+initEL({ id: idVin_userLogin_email, resetValue: "E-Mail" });
+initEL({ id: idVin_userLogin_pass, resetValue: "Passwort" });
 
 initEL({ id: idDiv_navBar_AccountLogin, fn: openNavLogin });
 initEL({ id: idDiv_navBar_AccountChange, fn: openNavChange });
@@ -238,8 +221,7 @@ initEL({ id: idBtn_userLogin_cancel, fn: loginCancel });
 initEL({ id: idBtn_userChange_cancel, fn: changeCancel });
 
 function accountPersistanceChange() {
-  nuncDiscipuli.cred.keepLogin = dbID("idCb_userLogin_check").checked ? browserSessionPersistence : browserLocalPersistence; // "Session" : "None";
-  log(nuncDiscipuli.cred.keepLogin)
+	nuncDiscipuli.cred.keepLogin = dbID("idCb_userLogin_check").checked ? browserLocalPersistence : browserSessionPersistence;
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -262,8 +244,8 @@ export function userLoggedIn() {
 }
 
 function firebaseLogin() {
-	const email = KadDOM.stringFromInput(idVin_userLogin_email);
-	const pass = KadDOM.stringFromInput(idVin_userLogin_pass);
+	const email = idVin_userLogin_email.KadGet();
+	const pass = idVin_userLogin_pass.KadGet();
 	setPersistence(auth, nuncDiscipuli.cred.keepLogin);
 	nuncDiscipuli.logging = true;
 	signInWithEmailAndPassword(auth, email, pass)
@@ -277,8 +259,8 @@ function firebaseLogin() {
 
 function firebaseRegister() {
 	nuncDiscipuli.registering = true;
-	const email = KadDOM.stringFromInput(idVin_userLogin_email);
-	const pass = KadDOM.stringFromInput(idVin_userLogin_pass);
+	const email = idVin_userLogin_email.KadGet();
+	const pass = idVin_userLogin_pass.KadGet();
 	createUserWithEmailAndPassword(auth, email, pass)
 		.then((user) => {
 			nuncDiscipuli.registering = false;
@@ -309,7 +291,7 @@ function firebaseLogout() {
 function userChange() {
 	for (let key of Object.keys(AccData.infos)) {
 		const id = `idVin_child_uInfoVin_${key}`;
-		const vinUser = KadDOM.stringFromInput(id);
+		const vinUser = id.KadGet();
 		if (vinUser != "") {
 			AccData.infos[key].data = vinUser;
 		}

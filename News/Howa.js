@@ -54,7 +54,7 @@ let howaOptions = {
 	},
 };
 
-KadUtils.initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Ort", dbList: Data_Nummernschild.values() });
+KadUtils.initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Ort", dbList: Array.from(Data_Nummernschild.values()).sort() });
 KadUtils.initEL({ id: idBtn_getGeoLocation, fn: howaGetCoordinates });
 KadUtils.initEL({ id: idBtn_howaGetLocation, fn: howaGetLocation });
 KadUtils.initEL({

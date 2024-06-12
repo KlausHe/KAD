@@ -104,17 +104,17 @@ function rayCasterReset() {
 }
 
 function raySizeChange() {
-	raycasterOptions.boardSize = KadDOM.numberFromInput(idVin_rayMazeSize);
+	raycasterOptions.boardSize = idVin_rayMazeSize.KadGet();
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
 function raySpeedChange() {
-	raycasterOptions.speed = KadDOM.numberFromInput(idVin_rayMazeSpeed);
+	raycasterOptions.speed = idVin_rayMazeSpeed.KadGet();
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
 function rayViewChange() {
-	raycasterOptions.fovD = raycasterOptions.boardSize * 0.1 * KadDOM.numberFromInput(idVin_rayMazeView);
+	raycasterOptions.fovD = raycasterOptions.boardSize * 0.1 * idVin_rayMazeView.KadGet();
 	KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 

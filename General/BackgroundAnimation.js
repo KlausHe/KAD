@@ -16,7 +16,7 @@ export const bgaOptions = {
 //new: Stopwatch!
 export function clear_cl_BackgroundAnimation() {
 	bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Cursordot(), new Trail(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new GameOfLife(), new PongAI()];
-	idSel_bgaSelect.KadReset({ resetSelList: bgaOptions.animations.map((a) => a.constructor.name) });
+	idSel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name) });
 }
 
 export function bgaClearBackground() {

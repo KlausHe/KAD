@@ -19,14 +19,24 @@ export const newsData = {
 	},
 	default: {
 		category: "Allgemeines",
-		country: "Germany",
+		country: "de",
 	},
 };
 
 initEL({ id: idDiv_News_Title, fn: news_URL, resetValue: "Nachrichtentitel" });
 initEL({ id: idDiv_News_Text, fn: newsShowNext, resetValue: "Nachrichtentext" });
-initEL({ id: idSel_newsCategory, fn: newsGetData, selGroup: { Kategorie: Object.entries(newsData.categories).map((v) => [v[1], v[0]]) }, selStartVal: newsData.default.category }); 
-initEL({ id: idSel_newsCountry, fn: newsGetData, selGroup: { Land: Data_NewsCountries.map((v) => [Data_Country_CodesIso3166.get(v.toUpperCase()), v]) }, selStartVal: newsData.default.country });
+initEL({
+	id: idSel_newsCategory,
+	fn: newsGetData,
+	selGroup: { Kategorie: Object.entries(newsData.categories).map((v) => [v[1], v[0]]) },
+	selStartValue: newsData.default.category,
+});
+initEL({
+	id: idSel_newsCountry,
+	fn: newsGetData,
+	selGroup: { Land: Data_NewsCountries.map((v) => [Data_Country_CodesIso3166.get(v.toUpperCase()), v]) },
+	selStartValue: newsData.default.country,
+});
 
 export function clear_cl_News() {
 	idDiv_News_Title.KadReset();
@@ -39,7 +49,6 @@ export function clear_cl_News() {
 function newsGetData() {
 	newsData.category = idSel_newsCategory.value;
 	newsData.country = idSel_newsCountry.value;
-	log(newsData.category, newsData.country);
 	// get Data from network
 }
 

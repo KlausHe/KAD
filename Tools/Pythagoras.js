@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { daEL, dbID, dbIDStyle, deepClone, KadDOM, KadValue, log } from "../General/KadUtils.js";
+import { initEL, dbID, dbIDStyle, deepClone, KadDOM, KadValue, log } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const pythoOptions = {
@@ -15,26 +15,23 @@ const pythoOptions = {
 	inputState: [0, 1],
 	inputStateOrig: [0, 1],
 	vals: [],
-	valsOrig: [3, 4],
+	valsOrig: [3, 4, null, null, null],
 	errorShown: false,
 };
 
-daEL(idVin_Pytho_0, "input", () => pythoNewEntry(idVin_Pytho_0));
-daEL(idVin_Pytho_1, "input", () => pythoNewEntry(idVin_Pytho_1));
-daEL(idVin_Pytho_2, "input", () => pythoNewEntry(idVin_Pytho_2));
-daEL(idVin_Pytho_3, "input", () => pythoNewEntry(idVin_Pytho_3));
-daEL(idVin_Pytho_4, "input", () => pythoNewEntry(idVin_Pytho_4));
+initEL({ id: idVin_Pytho_0, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[0] });
+initEL({ id: idVin_Pytho_1, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[1] });
+initEL({ id: idVin_Pytho_2, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[2] });
+initEL({ id: idVin_Pytho_3, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[3] });
+initEL({ id: idVin_Pytho_4, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
 
 export function clear_cl_Pythagoras() {
-	pythoOptions.vals = [];
 	pythoOptions.inputState = [...pythoOptions.inputStateOrig];
 	for (let i = 0; i < 5; i++) {
-		const val = pythoOptions.inputState.includes(i) ? pythoOptions.valsOrig[i] : "";
-		KadDOM.resetInput(`idVin_Pytho_${i}`, val);
+		pythoOptions.vals[i] = dbID(`idVin_Pytho_${i}`).KadReset();
 	}
 	pythoShowError();
 	pythoCalc();
-
 }
 
 export function canvas_cl_Pythagoras() {
@@ -76,7 +73,7 @@ function pythoShowError(text = null) {
 }
 
 function pythoNewEntry(obj) {
-	const id = obj.id;
+	const id = obj.target.id;
 	const i = Number(id.slice(-1));
 	if (!pythoOptions.inputState.includes(i)) {
 		pythoOptions.inputState.unshift(i);
@@ -90,8 +87,8 @@ function pythoCalc() {
 	pythoOptions.vals = [];
 	const A = pythoOptions.inputState[0];
 	const B = pythoOptions.inputState[1];
-	pythoOptions.vals[A] = KadDOM.numberFromInput(`idVin_Pytho_${A}`);
-	pythoOptions.vals[B] = KadDOM.numberFromInput(`idVin_Pytho_${B}`);
+	pythoOptions.vals[A] = dbID(`idVin_Pytho_${A}`).KadGet();
+	pythoOptions.vals[B] = dbID(`idVin_Pytho_${B}`).KadGet();
 
 	if (B > 2) pythoOptions.vals[B] *= caPY.PI / 180;
 	if (A > 2) pythoOptions.vals[A] *= caPY.PI / 180;
@@ -171,7 +168,8 @@ function pythoCalc() {
 
 	for (let i = 0; i < 5; i++) {
 		if (!pythoOptions.inputState.includes(i)) {
-			KadDOM.resetInput(`idVin_Pytho_${i}`, i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3));
+			const val = i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3);
+			dbID(`idVin_Pytho_${i}`).KadReset({ resetValue: val });
 		}
 	}
 	if (pythoOptions.p5Loaded) {

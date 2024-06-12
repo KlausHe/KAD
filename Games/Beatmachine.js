@@ -29,17 +29,17 @@ const beatmachineOptions = {
 	],
 };
 
-initEL({ id: idBtn_beatmachineLoad, fn: () => beatmachineGetSounds(idBtn_beatmachineLoad) });
+initEL({ id: idBtn_beatmachineLoad, fn: beatmachineGetSounds });
 initEL({ id: idBtn_transportPlayPause, fn: beatmachineTransport });
-initEL({ id: idBtn_transportClear, fn: () => clear_cl_Beatmachine(idBtn_transportClear) });
-initEL({ id: idBtn_transportCreateBeat, fn: () => beatmachineCreateBeat(idBtn_transportCreateBeat) });
-initEL({ id: idBtn_transporteExpand, fn: () => beatmachineExpand(idBtn_transporteExpand) });
+initEL({ id: idBtn_transportClear, fn: clear_cl_Beatmachine });
+initEL({ id: idBtn_transportCreateBeat, fn: beatmachineCreateBeat });
+initEL({ id: idBtn_transporteExpand, fn: beatmachineExpand });
 initEL({ id: idBtn_transporteMute, fn: muteAll });
-initEL({ id: idVin_beatmachine_BPM, fn: () => beatmachineBPMChange(idVin_beatmachine_BPM), resetValue: beatmachineOptions.BPMOrig });
+initEL({ id: idVin_beatmachine_BPM, fn: beatmachineBPMChange, resetValue: beatmachineOptions.BPMOrig });
 
 export function clear_cl_Beatmachine() {
 	// console.log("TODO");
-	daEL(idBtn_beatmachineLoad, "click", () => beatmachineGetSounds(idBtn_beatmachineLoad));
+	initEL({ id: idBtn_beatmachineLoad, beatmachineGetSounds });
 	beatmachineOptions.soundsLoaded = false;
 	beatmachineOptions.curTime = 0;
 	beatmachineOptions.stepInterval = 0;
@@ -99,8 +99,9 @@ function setBPMtoInterval(val) {
 	beatmachineOptions.stepInterval = Math.round((60 / 4 / val) * 1000);
 }
 
-function beatmachineBPMChange(obj) {
-	let val = KadDOM.numberFromInput(obj);
+function beatmachineBPMChange(element) {
+	const obj = element.target;
+	let val = obj.KadGet();
 	val = val == "" ? obj.placeholder : Number(val);
 	setBPMtoInterval(val);
 	beatmachineOptions.stepIntervalChanged = true;

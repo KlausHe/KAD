@@ -1,4 +1,4 @@
-import { KadDOM, KadTable, checkedLog, dbID, initEL, log, objectLength } from "../General/KadUtils.js";
+import { KadDOM, KadTable, logChecked, dbID, initEL, log, objectLength } from "../General/KadUtils.js";
 
 const lionsOptions = {
 	data: [],
@@ -35,7 +35,7 @@ export const storage_cl_Lions = {
 
 function lionsRequestNumber() {
 	const infoLbl = dbID("idLbl_lionsOutput");
-	lionsOptions.num = KadDOM.numberFromInput(idVin_lionsInput);
+	lionsOptions.num = idVin_lionsInput.KadGet();
 	if (lionsOptions.num == "" || lionsOptions.num == null || isNaN(lionsOptions.num) || lionsOptions.num.length != 4) {
 		infoLbl.textContent = `...`;
 		infoLbl.classList.remove("cl_highlighted");
@@ -66,7 +66,7 @@ function lionsRequestData() {
 }
 
 function lionsReturn(data) {
-	if (checkedLog(data.error, "Lions could not acces the Winnerlist:", data.error)) return;
+	if (logChecked(data.error, "Lions could not acces the Winnerlist:", data.error)) return;
 
 	lionsOptions.data = [];
 	for (let i = 1; i < data.length; i++) {

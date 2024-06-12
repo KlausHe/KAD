@@ -15,8 +15,8 @@ const sweeperOptions = {
 };
 
 initEL({ id: idBtn_startSweeper, fn: sweeperStart });
-initEL({ id: idVin_sweeperGrid, fn: () => sweeperGridChange(idVin_sweeperGrid), resetValue: sweeperOptions.gridSizeOrig });
-initEL({ id: idVin_sweeperSweeps, fn: () => sweeperCellsChange(idVin_sweeperSweeps), resetValue: sweeperOptions.sweepCellsOrig });
+initEL({ id: idVin_sweeperGrid, fn: sweeperGridChange, resetValue: sweeperOptions.gridSizeOrig });
+initEL({ id: idVin_sweeperSweeps, fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
 
 export function clear_cl_Sweeper() {
 	//Clear on Start
@@ -36,13 +36,13 @@ function sweeperStartOver() {
 }
 
 function sweeperGridChange(obj) {
-	sweeperOptions.gridSize = KadDOM.numberFromInput(obj);
+	sweeperOptions.gridSize = obj.target.KadGet();
 	console.log(sweeperOptions.gridSize);
 	sweeperStartOver();
 }
 
 function sweeperCellsChange(obj) {
-	sweeperOptions.sweepCells = KadDOM.numberFromInput(obj);
+	sweeperOptions.sweepCells = obj.target.KadGet();
 	sweeperStartOver();
 }
 
@@ -102,8 +102,6 @@ function sweeperRevealSweeps() {
 }
 
 function sweeperMousePushed(event) {
-	log(event);
-
 	if (sweeperOptions.finished) {
 		sweeperStart();
 		return;

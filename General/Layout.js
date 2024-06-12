@@ -3,7 +3,7 @@ import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
-import { KadArray, KadCSS, KadImage, KadTable, checkedLog, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, objectLength } from "./KadUtils.js";
+import { KadArray, KadCSS, KadImage, KadTable, logChecked, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, objectLength } from "./KadUtils.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 function contentCheckActive(contentObj) {
@@ -13,6 +13,7 @@ function contentCheckActive(contentObj) {
 
 export let contentGrid = {};
 export const contentLayout = {
+	defaultPage: hostDebug() ? "cl_Tugas" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {
@@ -57,7 +58,6 @@ export const contentLayout = {
 	prevNavContent: null,
 	prevNavFullscreen: null,
 	settingsNames: ["Account-Settings", "Global-Settings"],
-	defaultPage: hostDebug() ? "cl_Niska" : "Universe",
 };
 
 export function createContentlayoutList() {
@@ -169,7 +169,7 @@ function createGridLayout(layoutName) {
 		return;
 	}
 	for (const name of contentLayout.contentList) {
-		checkedLog(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name);
+		logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name);
 		let contWidth = contentGrid[name].size[0];
 		if (contWidth > rowLength) contWidth = rowLength;
 		const contHeight = contentGrid[name].size[1];
@@ -211,7 +211,7 @@ function createGridLayout(layoutName) {
 			} // end main FOR (r)
 			indexRow++;
 			//safety
-			if (checkedLog(indexRow > 100, "unable to find spot!")) {
+			if (logChecked(indexRow > 100, "unable to find spot!")) {
 				break;
 			}
 		} // end WHILE
@@ -522,7 +522,7 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	contentLayout.contentLength = 0;
-	checkedLog(contentGroupsNav.length != objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
+	logChecked(contentGroupsNav.length != objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
 
 	for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
 		contentLayout.contentLength++;

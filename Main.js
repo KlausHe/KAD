@@ -1,10 +1,10 @@
-import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./General/KadUtils.js";
 import { createNewNuncDiscipuli } from "./General/Account.js";
-import * as Layout from "./General/Layout.js";
-import { globalValues } from "./Settings/General.js";
-import { colToggleColormode } from "./Settings/Color.js";
 import { bgaClearBackground, bgaToggleReset } from "./General/BackgroundAnimation.js";
+import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./General/KadUtils.js";
+import { contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
 import * as Clear from "./MainModulesClear.js";
+import { colToggleColormode } from "./Settings/Color.js";
+import { globalValues } from "./Settings/General.js";
 
 // p5-Setup in Soundlibrary only!  Use Instance "globalP5" for general functionality
 export const globalP5 = new p5((c) => {
@@ -18,21 +18,21 @@ window.onload = mainSetup;
 
 function mainSetup() {
 	if (hostDebug()) dbCLStyle("cl_Loading").display = "none";
-	Layout.contentLayout.createContentGrid();
+	contentLayout.createContentGrid();
 	KadDOM.htmlSetVinChange();
 	KadDOM.htmlSetButtonType();
 	// globalColors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
 
-	Layout.createContentlayoutList(); // First: create the LayoutLists
-	Layout.createNavbar();
-	Layout.createFooter();
-	Layout.createSubgrid();
-	Layout.contentLayout.prevNavContent = Layout.contentLayout.defaultPage;
+	createContentlayoutList(); // First: create the LayoutLists
+	createNavbar();
+	createFooter();
+	createSubgrid();
+	contentLayout.prevNavContent = contentLayout.defaultPage;
 
 	clearAllTiles();
-	Layout.resizeGrid();
-	Layout.navClick();
+	resizeGrid();
+	navClick();
 	globalValues.globalInput.generateSpreadLists();
 	KadDOM.resetInput(idVin_globalValue, "Mastervalue");
 	dbID("idLbl_navBar_KW").textContent = `KW ${KadDate.getWeekNumber()}`;
@@ -48,8 +48,8 @@ document.oncontextmenu = function () {
 };
 // Navbar
 initEL({ id: idDiv_navBar_Trash, fn: resetAll });
-initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: Layout.contentLayout.nameList });
-initEL({ id: idDiv_navBar_GlobalSettings, fn: () => Layout.navClick("GlobalSettings") });
+initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: contentLayout.nameList });
+initEL({ id: idDiv_navBar_GlobalSettings, fn: () => navClick("GlobalSettings") });
 initEL({ id: idDiv_navBar_Colormode, fn: colToggleColormode });
 initEL({ id: idDiv_clearBackground, fn: bgaClearBackground });
 initEL({ id: idCb_bgaReset, fn: () => bgaToggleReset(idCb_bgaReset) });
@@ -58,7 +58,7 @@ export function resetAll() {
 	createNewNuncDiscipuli();
 	clearAllTiles();
 	clearGlobalValue();
-	Layout.navClick();
+	navClick();
 }
 
 function clearAllTiles() {
@@ -104,12 +104,12 @@ function globalValueChanged(enter = null) {
 	const obj = dbID("idVin_globalValue");
 	obj.classList.remove("cl_highlighted");
 	globalValues.globalInput.value = obj.value;
-	const arr = Layout.contentLayout.nameList;
+	const arr = contentLayout.nameList;
 	if (arr.includes(obj.value)) {
 		obj.classList.add("cl_highlighted");
 		if (enter === true) {
-			let key = Object.entries(Layout.contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
-			Layout.toggelFullscreen(key);
+			let key = Object.entries(contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
+			toggelFullscreen(key);
 		}
 	}
 }

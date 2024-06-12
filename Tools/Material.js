@@ -28,10 +28,10 @@ export function clear_cl_Material() {
 	materialOptions.filterList = Object.keys(Data_Materials.Materials);
 	materialFilterOptions.select = [...materialFilterOptions.listOrig];
 	idSel_materialFilter.KadReset({
-		resetSelGroup: {
+		selGroup: {
 			"Alle Werkstoffe": [["Alle Werkstoffe", "all"], ...Array.from(new Set(Object.values(Data_Materials.Materials).map((mat) => mat.matGroup))).map((mat) => [mat, mat])],
 		},
-		resetSelStartIndex: 0,
+		selStartIndex: 0,
 	});
 	idVin_materialFilter.KadReset();
 	idCb_materialListFilter.KadReset();
@@ -203,9 +203,8 @@ function materialSearchSelectChange() {
 
 function materialSearchInput() {
 	materialOptions.filterList = [];
-	let val = KadDOM.stringFromInput("idVin_materialFilter").toLowerCase();
+	let val = idVin_materialFilter.KadGet().toLowerCase();
 	let search = val.split(/[*^\s]/g);
-	log(search);
 	for (const [key, value] of Object.entries(Data_Materials.Materials)) {
 		if (materialOptions.selMatGroup == "all" || value.matGroup == materialOptions.selMatGroup) {
 			if (search.length == 0) {

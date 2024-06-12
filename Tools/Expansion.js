@@ -29,10 +29,10 @@ const expansionOptions = {
 initEL({
 	id: idSel_expansionMaterialA,
 	fn: expansionEntryMaterial,
-});
-initEL({
-	id: idSel_expansionMaterialB,
-	fn: expansionEntryMaterial,
+  });
+  initEL({
+    id: idSel_expansionMaterialB,
+    fn: expansionEntryMaterial,
 });
 initEL({ id: idSel_expansionMaterialA, action: "focus", fn: expansionUpdateOptions }, { once: true });
 initEL({ id: idSel_expansionMaterialB, action: "focus", fn: expansionUpdateOptions }, { once: true });
@@ -55,8 +55,8 @@ export function clear_cl_Expansion() {
 	idCb_expansionCoefficient.KadReset();
 	expansionOptions.exLength = [...expansionOptions.lengthOrig];
 	expansionOptions.exTemp = [...expansionOptions.tempsOrig];
-	idSel_expansionMaterialA.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: expansionOptions.materials.matAOrig });
-	idSel_expansionMaterialB.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: expansionOptions.materials.matBOrig });
+	idSel_expansionMaterialA.KadReset({ selGroup: expansionOptions.expansionPopulateSelection, selStartIndex: expansionOptions.materials.matAOrig });
+	idSel_expansionMaterialB.KadReset({ selGroup: expansionOptions.expansionPopulateSelection, selStartIndex: expansionOptions.materials.matBOrig });
 	expansionEntryMaterial();
 }
 
@@ -65,10 +65,10 @@ export function expansionUpdateMassDependecy() {
 }
 
 export function expansionUpdateOptions() {
-	const tempSelA = idSel_expansionMaterialA.selectedIndex;
-	const tempSelB = idSel_expansionMaterialB.selectedIndex;
-	idSel_expansionMaterialA.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: tempSelA });
-	idSel_expansionMaterialB.KadReset({ resetSelGroup: expansionOptions.expansionPopulateSelection, resetSelStartIndex: tempSelB });
+	const tempSelA = idSel_expansionMaterialA.selectedIndex || 1;
+	const tempSelB = idSel_expansionMaterialB.selectedIndex || 2;
+	idSel_expansionMaterialA.KadReset({ selGroup: expansionOptions.expansionPopulateSelection, selStartIndex: tempSelA });
+	idSel_expansionMaterialB.KadReset({ selGroup: expansionOptions.expansionPopulateSelection, selStartIndex: tempSelB });
 }
 
 function expansionSwitch() {

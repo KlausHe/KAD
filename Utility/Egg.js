@@ -1,4 +1,4 @@
-import { daEL, dbID, KadDOM, KadDate } from "../General/KadUtils.js";
+import { initEL, dbID, KadDOM, KadDate } from "../General/KadUtils.js";
 import { speechSpeakOutput } from "../Benkyou/Speech.js";
 
 const eggOptions = {
@@ -59,25 +59,15 @@ const eggOptions = {
 	},
 };
 
-daEL(idVin_EggMass, "input", () => eggMassChange(idVin_EggMass));
-daEL(idVin_EggTemp, "input", () => eggTempChange(idVin_EggTemp));
-daEL(idVin_EggYolk, "input", () => eggYolkChange(idVin_EggYolk));
-daEL(idBtn_EggStart, "click", eggStartChange);
+initEL({ id: idVin_EggMass, fn: eggMassChange, resetValue: eggOptions.mass.valOrig, domOpts: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
+initEL({ id: idVin_EggTemp, fn: eggTempChange, resetValue: eggOptions.temp.valOrig, domOpts: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
+initEL({ id: idVin_EggYolk, fn: eggYolkChange, resetValue: eggOptions.yolk.valOrig, domOpts: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
+initEL({ id: idBtn_EggStart, fn: eggStartChange });
 
 export function clear_cl_Egg() {
-	eggOptions.mass.val = KadDOM.resetInput("idVin_EggMass", eggOptions.mass.valOrig, {
-		min: eggOptions.mass.min,
-		max: eggOptions.mass.max,
-	});
-
-	eggOptions.temp.val = KadDOM.resetInput("idVin_EggTemp", eggOptions.temp.valOrig, {
-		min: eggOptions.temp.min,
-		max: eggOptions.temp.max,
-	});
-	eggOptions.yolk.val = KadDOM.resetInput("idVin_EggYolk", eggOptions.yolk.valOrig, {
-		min: eggOptions.yolk.min,
-		max: eggOptions.yolk.max,
-	});
+	eggOptions.mass.val = idVin_EggMass.KadReset();
+	eggOptions.temp.val = idVin_EggTemp.KadReset();
+	eggOptions.yolk.val = idVin_EggYolk.KadReset();
 
 	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
 	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
@@ -87,19 +77,19 @@ export function clear_cl_Egg() {
 }
 
 function eggMassChange(obj) {
-	eggOptions.mass.val = KadDOM.numberFromInput(obj);
+	eggOptions.mass.val = obj.target.KadGet();
 	dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
 	eggRefrechInput();
 }
 
 function eggTempChange(obj) {
-	eggOptions.temp.val = KadDOM.numberFromInput(obj);
+	eggOptions.temp.val = obj.target.KadGet();
 	dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
 	eggRefrechInput();
 }
 
 function eggYolkChange(obj) {
-	eggOptions.yolk.val = KadDOM.numberFromInput(obj);
+	eggOptions.yolk.val = obj.target.KadGet();
 	dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
 	eggRefrechInput();
 }
@@ -110,13 +100,9 @@ function eggRefrechInput() {
 	eggCalculate();
 }
 function eggCalculate() {
-	let mEgg = eggOptions.mass.val;
-	let tEgg = eggOptions.temp.val;
-	let yEgg = eggOptions.yolk.val;
-
-	let tempFactor = 0.76 * ((tEgg - 100) / (yEgg - 100));
+	let tempFactor = 0.76 * ((eggOptions.temp.val - 100) / (eggOptions.yolk.val - 100));
 	tempFactor = Math.log(tempFactor);
-	let massFactor = 27.05089242 * Math.pow(mEgg, 2 / 3);
+	let massFactor = 27.05089242 * Math.pow(eggOptions.mass.val, 2 / 3);
 	eggOptions.timeTotal = massFactor * tempFactor;
 	eggOptions.timeRemaining = eggOptions.timeTotal;
 	eggShowTime();
@@ -130,13 +116,13 @@ function eggShowTime() {
 function eggStartChange() {
 	eggOptions.timerState = !eggOptions.timerState;
 	if (eggOptions.timerState) {
-		dbID("idBtn_EggStart").textContent = "Stop";
+		idBtn_EggStart.textContent = "Stop";
 		eggCalculate();
 		dbID("idProg_eggProgress").setAttribute("max", eggOptions.timeTotal);
 		eggCountdown();
 		eggOptions.timerEggCount = setInterval(eggCountdown, 1000);
 	} else {
-		dbID("idBtn_EggStart").textContent = "Start";
+		idBtn_EggStart.textContent = "Start";
 		clearInterval(eggOptions.timerEggCount);
 		let textStart = "Eieruhr";
 		dbID("idLbl_EggTime").textContent = textStart;

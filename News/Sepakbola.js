@@ -1,4 +1,4 @@
-import { KadArray, KadDate, KadTable, dbID, deepClone, error, initEL, log } from "../General/KadUtils.js";
+import { KadArray, KadDate, KadTable, dbID, deepClone, initEL } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -109,12 +109,12 @@ function sepakbolaDropdownSeasons() {
 	for (let j = yearNow; j - sepakbolaOptions.selectedLiga.firstSeason >= 0; j--) {
 		seasons.push([sepakbolaOptions.selectedLiga.format(j), j]);
 	}
-	idSel_sepakbolaSeason.KadReset({ resetSelList: seasons });
+	idSel_sepakbolaSeason.KadReset({ selList: seasons });
 	return yearNow;
 }
 function sepakbolaDropdownMatchdays() {
 	let list = KadArray.arrayFromNumber(sepakbolaOptions.selectedLiga.maxDays).map((d) => d + 1);
-	sepakbolaOptions.selected.matchday = idSel_sepakbolaMatchday.KadReset({ resetSelList: list });
+	sepakbolaOptions.selected.matchday = idSel_sepakbolaMatchday.KadReset({ selList: list });
 }
 
 function sepakbolaLigaChange() {

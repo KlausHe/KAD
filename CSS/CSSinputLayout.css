@@ -223,6 +223,12 @@ input[type="password"] {
 input[type="time"] {
 	width: var(--UIWidth4);
 }
+input[type="date"] {
+	width: var(--UIWidth6);
+}
+input[type="datetime-local"] {
+	width: var(--UIWidth8);
+}
 
 input[type="number"] {
 	appearance: none;

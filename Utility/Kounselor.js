@@ -104,18 +104,17 @@ const kounselorOptions = {
 	},
 };
 
-initEL({ id: idVin_kounselorRAL, fn: () => kounselorInput(idVin_kounselorRAL), resetValue: "RAL", dbList: Data_RALColors.map((d) => d.RAL) });
-initEL({ id: idVin_kounselorName, fn: () => kounselorInput(idVin_kounselorName), resetValue: "Name", dbList: Data_RALColors.map((d) => d.Name) });
-initEL({ id: idVin_kounselorHEX, fn: () => kounselorInput(idVin_kounselorHEX), resetValue: "HEX", dbList: Data_RALColors.map((d) => d.HEX) });
-initEL({ id: idVin_kounselorRGB, fn: () => kounselorInput(idVin_kounselorRGB), resetValue: "RGB", dbList: Data_RALColors.map((d) => d.RGB) });
-initEL({ id: idVin_kounselorHSL, fn: () => kounselorInput(idVin_kounselorHSL), resetValue: "HSL", dbList: Data_RALColors.map((d) => d.HSL) });
-initEL({ id: idVin_kounselorHSB, fn: () => kounselorInput(idVin_kounselorHSB), resetValue: "HSB", dbList: Data_RALColors.map((d) => d.HSB) });
-initEL({ id: idVin_kounselorCMYK, fn: () => kounselorInput(idVin_kounselorCMYK), resetValue: "CMYK", dbList: Data_RALColors.map((d) => d.CMYK) });
+initEL({ id: idVin_kounselorRAL, fn: kounselorInput, resetValue: "RAL", dbList: Data_RALColors.map((d) => d.RAL) });
+initEL({ id: idVin_kounselorName, fn: kounselorInput, resetValue: "Name", dbList: Data_RALColors.map((d) => d.Name) });
+initEL({ id: idVin_kounselorHEX, fn: kounselorInput, resetValue: "HEX", dbList: Data_RALColors.map((d) => d.HEX) });
+initEL({ id: idVin_kounselorRGB, fn: kounselorInput, resetValue: "RGB", dbList: Data_RALColors.map((d) => d.RGB) });
+initEL({ id: idVin_kounselorHSL, fn: kounselorInput, resetValue: "HSL", dbList: Data_RALColors.map((d) => d.HSL) });
+initEL({ id: idVin_kounselorHSB, fn: kounselorInput, resetValue: "HSB", dbList: Data_RALColors.map((d) => d.HSB) });
+initEL({ id: idVin_kounselorCMYK, fn: kounselorInput, resetValue: "CMYK", dbList: Data_RALColors.map((d) => d.CMYK) });
 
 export function clear_cl_Kounselor() {
 	for (const name of Object.keys(kounselorOptions.types)) {
-		const id = `idVin_kounselor${name}`;
-		dbID(id).KadReset();
+		dbID(`idVin_kounselor${name}`).KadReset();
 		kounselorOptions.types[name].value = null;
 	}
 
@@ -129,8 +128,8 @@ export function canvas_cl_Kounselor() {
 }
 
 function kounselorInput(vinObj) {
-	const obj = dbID(vinObj);
-	const input = KadDOM.stringFromInput(obj);
+	const obj = vinObj.target;
+	const input = obj.KadGet();
 	if (input === "") return;
 	kounselorOptions.curType = obj.dataset.type;
 	kounselorOptions.types[kounselorOptions.curType].setValue(input);

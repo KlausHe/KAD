@@ -61,8 +61,8 @@ export function canvas_cl_Middle() {
 }
 
 function calcMiddle() {
-	const a = KadDOM.numberFromInput(idVin_middleA);
-	const b = KadDOM.numberFromInput(idVin_middleB);
+	const a = idVin_middleA.KadGet()
+	const b = idVin_middleB.KadGet()
 	middleOptions.barA.val = a;
 	middleOptions.barB.val = b;
 	middleOptions.barA.text = `a: ${middleOptions.barA.val}`;

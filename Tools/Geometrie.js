@@ -654,9 +654,9 @@ function changeGeoObject(index) {
 //---------------------------
 function geoBerechnung() {
 	let selectedObj = geoObjects.selected;
-	geoObjects.valA = KadDOM.numberFromInput(idVin_Area_0, selectedObj.vals[0]) * selectedObj.radiusFactor[0];
-	geoObjects.valB = KadDOM.numberFromInput(idVin_Area_1, selectedObj.vals[1]) * selectedObj.radiusFactor[1];
-	geoObjects.valC = KadDOM.numberFromInput(idVin_Area_2, selectedObj.vals[2]) * selectedObj.radiusFactor[2];
+	geoObjects.valA = idVin_Area_0.KadGet(selectedObj.vals[0]) * selectedObj.radiusFactor[0];
+	geoObjects.valB = idVin_Area_1.KadGet(selectedObj.vals[1]) * selectedObj.radiusFactor[1];
+	geoObjects.valC = idVin_Area_2.KadGet(selectedObj.vals[2]) * selectedObj.radiusFactor[2];
 	geometrieOptions.result.circumference = KadValue.number(selectedObj.circumference, { decimals: 3 });
 	geometrieOptions.result.basearea = KadValue.number(selectedObj.basearea, { decimals: 3 });
 	geometrieOptions.result.fullarea = KadValue.number(selectedObj.fullarea, { decimals: 3 });

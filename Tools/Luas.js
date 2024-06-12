@@ -111,8 +111,8 @@ function luasStart() {
 }
 
 function luasInputChange() {
-	luasOptions.speedVin = KadDOM.numberFromInput("idVin_luasVelAngular");
-	luasOptions.diameterVin = KadDOM.numberFromInput("idVin_luasDiameter");
+	luasOptions.speedVin = idVin_luasVelAngular.KadGet();
+	luasOptions.diameterVin = idVin_luasDiameter.KadGet();
 	luasOptions.angularVin = Number(idSel_luasAngularUnit.value);
 	luasOptions.angularText = idSel_luasAngularUnit[idSel_luasAngularUnit.selectedIndex].text;
 	luasOptions.linearText = idSel_luasLinearUnit[idSel_luasLinearUnit.selectedIndex].text;

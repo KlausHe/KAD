@@ -1,4 +1,4 @@
-import { daEL, dbID, KadDate } from "../General/KadUtils.js";
+import { initEL, dbID, KadDate } from "../General/KadUtils.js";
 
 const pelveleaOptions = {
 	starttime: {
@@ -53,35 +53,33 @@ const pelveleaOptions = {
 	maxWorktime: false,
 };
 
-daEL(idVin_pelveleaStarttime, "input", () => pelveleaStarttime(idVin_pelveleaStarttime));
-daEL(idVin_pelveleaBreaks, "input", () => pelveleaBreaks(idVin_pelveleaBreaks));
-daEL(idVin_pelveleaWorktime, "input", () => pelveleaWorktime(idVin_pelveleaWorktime));
+initEL({ id: idVin_pelveleaStarttime, fn: pelveleaStarttime, resetValue: pelveleaOptions.starttime.valOrig });
+initEL({ id: idVin_pelveleaBreaks, fn: pelveleaBreaks, resetValue: pelveleaOptions.breaks.valOrig });
+initEL({ id: idVin_pelveleaWorktime, fn: pelveleaWorktime, resetValue: pelveleaOptions.worktime.valOrig });
 
 export function clear_cl_Pelvelea() {
 	clearTimeout(pelveleaOptions.timer);
 	pelveleaOptions.maxWorktime = false;
 	pelveleaOptions.timer = null;
-	pelveleaOptions.starttime.val = pelveleaOptions.starttime.valOrig;
-	dbID("idVin_pelveleaStarttime").value = pelveleaOptions.starttime.val;
-	pelveleaOptions.worktime.val = pelveleaOptions.worktime.valOrig;
-	dbID("idVin_pelveleaWorktime").value = pelveleaOptions.worktime.val;
-	pelveleaOptions.breaks.val = pelveleaOptions.breaks.valOrig;
-	dbID("idVin_pelveleaBreaks").value = pelveleaOptions.breaks.val;
+
+	pelveleaOptions.starttime.val = idVin_pelveleaStarttime.KadReset();
+	pelveleaOptions.breaks.val = idVin_pelveleaBreaks.KadReset();
+	pelveleaOptions.worktime.val = idVin_pelveleaWorktime.KadReset();
 	pelveleaCalculate();
 }
 
 function pelveleaStarttime(obj) {
-	pelveleaOptions.starttime.val = obj.value;
+	pelveleaOptions.starttime.val = obj.target.value;
 	pelveleaCalculate();
 }
 
 function pelveleaWorktime(obj) {
-	pelveleaOptions.worktime.val = obj.value;
+	pelveleaOptions.worktime.val = obj.target.value;
 	pelveleaCalculate();
 }
 
 function pelveleaBreaks(obj) {
-	pelveleaOptions.breaks.val = obj.value;
+	pelveleaOptions.breaks.val = obj.target.value;
 	pelveleaCalculate();
 }
 

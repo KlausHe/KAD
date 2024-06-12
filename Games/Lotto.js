@@ -1,4 +1,4 @@
-import { dbID, dbCLStyle, KadDOM, KadDate, KadTable, KadRandom, KadColor, initEL } from "../General/KadUtils.js";
+import { dbID, dbCLStyle, KadDOM, KadDate, KadTable, KadRandom, KadColor, initEL, log } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { globalP5 } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
@@ -54,13 +54,12 @@ const lottoOptions = {
 
 initEL({ id: idBtn_lottoReset, fn: lottoReset });
 initEL({ id: idBtn_lottoRandom, fn: lottoRandom });
-initEL({ id: idSel_lottoGame, fn: lottoGameSelect, selList: Object.keys(lottoOptions.games), selStartIndex: 0 });
+initEL({ id: idSel_lottoGame, fn: lottoGameSelect, selList: Object.keys(lottoOptions.games), selStartValue: "6aus49" });
 initEL({ id: idVin_lottoNumberOfGames, fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
 
 export function clear_cl_Lotto() {
 	idVin_lottoNumberOfGames.KadReset();
-	const gameReset = idSel_lottoGame.KadReset();
-	lottoOptions.selGame = Object.keys(lottoOptions.games)[gameReset];
+	lottoOptions.selGame = idSel_lottoGame.KadReset();
 	lottoOptions.randomiziation = 0;
 	clearTimeout(lottoOptions.randomTimeout);
 	createLotto(true);
@@ -201,7 +200,7 @@ async function lottoGetGames() {
 		lottoOptions.getGameTimer = null;
 	}
 	lottoOptions.getGameTimer = setTimeout(() => {
-		lottoOptions.numberOfLatestGames = KadDOM.numberFromInput(idVin_lottoNumberOfGames, lottoOptions.numberOfLatestGamesOrig);
+		lottoOptions.numberOfLatestGames = idVin_lottoNumberOfGames.KadGet(lottoOptions.numberOfLatestGamesOrig);
 		globalP5.loadJSON(lottoOptions.url, lottoReturn, "json");
 		lottoOptions.getGameTimer = null;
 	}, 800);

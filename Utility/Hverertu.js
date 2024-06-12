@@ -1,4 +1,4 @@
-import { daEL, dbID, KadDOM, KadTable } from "../General/KadUtils.js";
+import { initEL, dbID, KadDOM, KadTable } from "../General/KadUtils.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
 import { globalP5 } from "../Main.js";
 
@@ -29,17 +29,17 @@ const hverertuOptions = {
 		},
 	},
 };
-daEL(idVin_hverertuEntry, "change", hverertuGetData);
-daEL(idBtn_hverertuEntry, "click", hverertuGetData);
+initEL({ id: idVin_hverertuEntry, fn: hverertuGetData, resetValue: "Enter a Name" });
+initEL({ id: idBtn_hverertuEntry, fn: hverertuGetData });
 
 export function clear_cl_Hverertu() {
-	KadDOM.resetInput("idVin_hverertuEntry", "Enter a Name");
-	createHverertuTable();
+	idVin_hverertuEntry.KadReset();
 	hverertuOptions.input = "";
+	createHverertuTable();
 }
 
 function hverertuGetData() {
-	hverertuOptions.input = dbID("idVin_hverertuEntry").value.trim();
+	hverertuOptions.input = idVin_hverertuEntry.KadGet();
 	if (hverertuOptions.input == "") return;
 	for (let obj in hverertuOptions.data) {
 		hverertuOptions.data[obj].data;
@@ -53,7 +53,7 @@ function hverertuPassValue(id) {
 function hverertuAlter(data) {
 	hverertuOptions.data.Alter.value = data.age == null ? "keine Daten gefunden" : data.age;
 	hverertuPassValue("Alter");
-	dbID("idLbl_child_hverertuHeader_Value").innerHTML = data.name;
+	idLbl_child_hverertuHeader_Value.innerHTML = data.name;
 }
 
 function hverertuHerkunft(data) {
@@ -79,7 +79,6 @@ function hverertuGender(data) {
 }
 
 function createHverertuTable() {
-	//header
 	KadTable.clear("idTabHeader_Hverertu");
 	const rowTh = KadTable.insertRow("idTabHeader_Hverertu");
 	KadTable.addHeaderCell(rowTh, {
@@ -99,17 +98,13 @@ function createHverertuTable() {
 		},
 	});
 
-	// body
-
 	KadTable.clear("idTabBody_Hverertu");
-	// body
 	for (const objName in hverertuOptions.data) {
 		const row = KadTable.insertRow("idTabBody_Hverertu");
 		KadTable.addCell(row, {
 			names: ["hverertu", "description", objName],
 			type: "Lbl",
 			text: hverertuOptions.data[objName].description,
-			copy: true,
 			cellStyle: {
 				textAlign: "left",
 			},
@@ -118,7 +113,6 @@ function createHverertuTable() {
 			names: ["hverertu", "value", objName],
 			type: "Lbl",
 			text: "...",
-			copy: true,
 			cellStyle: {
 				textAlign: "left",
 			},

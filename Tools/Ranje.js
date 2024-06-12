@@ -13,7 +13,7 @@ export function clear_cl_Ranje() {
 
 function ranjeCalc() {
 	ranjeOptions.results = [];
-	ranjeOptions.value = KadDOM.numberFromInput(idVin_ranjeVal);
+	ranjeOptions.value = idVin_ranjeVal.KadGet();
 	for (let i = 2; i < ranjeOptions.value; i++) {
 		if (ranjeOptions.value % i === 0) {
 			ranjeOptions.results.push([i, Math.floor(ranjeOptions.value / i)]);

@@ -1,14 +1,15 @@
-import { daEL, deepClone, dbID, objectLength, KadArray, KadDOM, KadTable } from "../General/KadUtils.js";
+import { saveDiscipuli } from "../General/Account.js";
+import { initEL, deepClone, dbID, objectLength, KadArray, KadTable, log } from "../General/KadUtils.js";
 
 let tugasOptions = {};
 
-daEL(idArea_tugasEntry, "change", newTugas);
-daEL(idBtn_tugasEntry, "click", newTugas);
+initEL({ id: idArea_tugasEntry, action: "change", fn: tugasNewEntry, resetValue: "Paste to Tugas" });
+initEL({ id: idBtn_tugasEntry, fn: tugasNewEntry });
 
 export function clear_cl_Tugas() {
 	tugasOptions = {};
-	createTugas();
-	KadDOM.resetInput("idArea_tugasEntry", "Paste to Tugas");
+	idArea_tugasEntry.KadReset();
+	tugasCreateTable();
 }
 export const storage_cl_Tugas = {
 	dbName: "Tugas",
@@ -21,32 +22,30 @@ export const storage_cl_Tugas = {
 	},
 	set data(data) {
 		tugasOptions = deepClone(data);
-		createTugas();
+		tugasCreateTable();
 	},
 };
 
-function clearRowTugas(name) {
-	delete tugasOptions[name];
-	createTugas();
+function tugasClearRow(obj) {
+	delete tugasOptions[obj.target];
+	tugasCreateTable();
 }
 
-function editRowTugas(name) {
-	delete tugasOptions[name];
-	dbID("idArea_tugasEntry").value = name;
+function tugasEditRow(value) {
+	delete tugasOptions[value];
+	dbID("idArea_tugasEntry").value = value;
 }
 
-function newTugas() {
-	const value = dbID("idArea_tugasEntry").value.toString().trim();
+function tugasNewEntry() {
+	const value = idArea_tugasEntry.KadGet("", true);
 	if (value == "") return;
-
 	tugasOptions[value] = false;
-	dbID("idArea_tugasEntry").value = "";
-	createTugas();
+	idArea_tugasEntry.value = "";
+	tugasCreateTable();
 	saveDiscipuli("Tugas");
 }
 
-function createTugas() {
-	//clear list
+function tugasCreateTable() {
 	KadTable.clear(idTabBody_tugas);
 	let tempList = [];
 	for (let i = 0; i < objectLength(tugasOptions); i++) {
@@ -78,9 +77,7 @@ function createTugas() {
 			style: {
 				textAlign: "center",
 			},
-			onclick: () => {
-				clearRowTugas(entryValue);
-			},
+			onclick: tugasClearRow,
 		});
 
 		// EDIT
@@ -97,7 +94,7 @@ function createTugas() {
 				textAlign: "center",
 			},
 			onclick: () => {
-				editRowTugas(entryValue);
+				tugasEditRow(entryValue);
 				dbID("idArea_tugasEntry").focus();
 			},
 		});

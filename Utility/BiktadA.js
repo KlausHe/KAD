@@ -161,7 +161,6 @@ function createBiktadaTable() {
 			names: ["biktada", "description", objName],
 			type: "Lbl",
 			text: biktadaOptions.data[objName].description,
-			copy: true,
 			cellStyle: {
 				textAlign: "left",
 			},

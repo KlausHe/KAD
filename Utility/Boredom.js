@@ -1,4 +1,4 @@
-import { initEL, dbID, KadRandom, log } from "../General/KadUtils.js";
+import { initEL, KadRandom } from "../General/KadUtils.js";
 
 initEL({ id: idBtn_boredomStart, fn: boredomGetActivityindex });
 initEL({
@@ -15,8 +15,8 @@ const boredomOptions = {
 };
 export function clear_cl_Boredom() {
 	idSel_boredomLanguage.KadReset();
-	dbID("idArea_boredomAnswer").value = "";
-	dbID("idArea_boredomAnswer").placeholder = "Activitätengenerator...";
+	idArea_boredomAnswer.value = "";
+	idArea_boredomAnswer.placeholder = "Activitätengenerator...";
 	boredomStart();
 }
 
@@ -31,7 +31,7 @@ function boredomLanguageSelect() {
 }
 
 function boredomStart() {
-	dbID("idArea_boredomAnswer").value = `${boredomList[boredomOptions.language][boredomOptions.index]}.`;
+	idArea_boredomAnswer.value = `${boredomList[boredomOptions.language][boredomOptions.index]}.`;
 }
 const boredomList = {
 	de: [

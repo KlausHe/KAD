@@ -1,41 +1,19 @@
-import { daEL, dbID, KadDOM } from "../General/KadUtils.js";
+import { initEL, dbID } from "../General/KadUtils.js";
 import { Data_Nummernschild } from "../General/MainData.js";
 
-daEL(idVin_platLesenNum, "focus", platLesenPopulateOptions);
-daEL(idVin_platLesenNum, "change", () => platLesenInput(idVin_platLesenNum));
-daEL(idVin_platLesenReg, "focus", platLesenPopulateOptions);
-daEL(idVin_platLesenReg, "change", () => platLesenInput(idVin_platLesenReg));
+initEL({ id: idVin_platLesenReg, action: "focus", dbList: Array.from(Data_Nummernschild.values()) });
+initEL({ id: idVin_platLesenNum, action: "focus", dbList: Array.from(Data_Nummernschild.keys()).sort() });
+initEL({ id: idVin_platLesenReg, fn: platLesenInput, resetValue: "Region eingeben" });
+initEL({ id: idVin_platLesenNum, fn: platLesenInput, resetValue: "Kürzel eingeben" });
 
 export function clear_cl_PlatLesen() {
-	KadDOM.resetInput("idVin_platLesenReg", "Region eingeben");
-	KadDOM.resetInput("idVin_platLesenNum", "Kürzel eingeben");
+	idVin_platLesenReg.KadReset();
+	idVin_platLesenNum.KadReset();
 	platlesenResult('"AC"', '"Aachen"');
 }
 
-function platLesenPopulateOptions() {
-	const dlistNum = dbID("idDlist_platLesenNum");
-	const dlistReg = dbID("idDlist_platLesenReg");
-	if (dlistNum.childNodes.length > 1) return;
-	let regArr = [];
-	let i = 1;
-	for (const [key, value] of Data_Nummernschild) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = key;
-		dlistNum.appendChild(opt);
-		regArr.push(value);
-		i++;
-	}
-	i = 1;
-	regArr = regArr.sort();
-	for (let v of regArr) {
-		const opt = document.createElement("OPTION");
-		opt.textContent = v;
-		dlistReg.appendChild(opt);
-		i++;
-	}
-}
-
-function platLesenInput(obj) {
+function platLesenInput(btn) {
+	const obj = btn.target;
 	if (obj.value == "") platlesenResult('"AC"', '"Aachen"');
 	let to = null;
 	const input = obj.value.toString().toLowerCase();

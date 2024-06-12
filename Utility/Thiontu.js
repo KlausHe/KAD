@@ -1,4 +1,5 @@
-import { daEL, dbID, dbCL, KadDOM, KadString, KadRandom } from "../General/KadUtils.js";
+import { Data_Leetspeak } from "../General/MainData.js";
+import { initEL, dbID, dbCL, KadDOM, KadString, KadRandom } from "../General/KadUtils.js";
 const thiontuData = {
 	input: "",
 	inputRaw: "",
@@ -197,24 +198,18 @@ const thiontuData = {
 	},
 };
 
-daEL(idArea_thiontuInputEntry, "input", thiontuUpdate);
+initEL({ id: idArea_thiontuInputEntry, fn: thiontuUpdate, resetValue: "Type text to convert" });
 
 export function clear_cl_Thiontu() {
-	KadDOM.resetInput("idArea_thiontuInputEntry", "Type text to convert");
+	idArea_thiontuInputEntry.KadReset();
 	KadDOM.resetInput("idArea_thiontuOutputArea", "~~~~~~~~~~~");
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
 		KadDOM.enableBtn(clBtn[i], true);
-		clBtn[i].textContent = Object.values(thiontuData.opts)[i].btnName;
 		clBtn[i].id = `idBtn_thiontuToText_${Object.keys(thiontuData.opts)[i]}`;
-		clBtn[i].setAttribute("data-textto", Object.keys(thiontuData.opts)[i]);
-		clBtn[i].addEventListener(
-			"click",
-			() => {
-				thiontuOptionChange(clBtn[i]);
-			},
-			false
-		);
+		clBtn[i].textContent = Object.values(thiontuData.opts)[i].btnName;
+		clBtn[i].value = Object.keys(thiontuData.opts)[i];
+		clBtn[i].addEventListener("click", thiontuOptionChange, false);
 		if (i === 0) {
 			KadDOM.btnColor(clBtn[0], "positive");
 			thiontuData.selected = Object.keys(thiontuData.opts)[i];
@@ -224,7 +219,8 @@ export function clear_cl_Thiontu() {
 	}
 }
 
-function thiontuOptionChange(obj) {
+function thiontuOptionChange(btn) {
+	const obj = btn.target;
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
 		if (!clBtn[i].disabled) {
@@ -232,7 +228,7 @@ function thiontuOptionChange(obj) {
 		}
 	}
 	KadDOM.btnColor(obj, "positive");
-	thiontuData.selected = obj.dataset.textto;
+	thiontuData.selected = obj.value;
 	thiontuUpdate();
 }
 
@@ -243,8 +239,8 @@ function thiontuUpdate() {
 	//check text and disable buttons if input is not valid for them
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
-		KadDOM.enableBtn(clBtn[i], thiontuData.opts[clBtn[i].dataset.textto].enable);
-		if (thiontuData.opts[clBtn[i].dataset.textto].enable) {
+		KadDOM.enableBtn(clBtn[i], thiontuData.opts[clBtn[i].value].enable);
+		if (thiontuData.opts[clBtn[i].value].enable) {
 			KadDOM.enableBtn(clBtn[i], true);
 		} else {
 			KadDOM.enableBtn(clBtn[i], false);
@@ -255,7 +251,7 @@ function thiontuUpdate() {
 	//if selected is disabled, jump to ALL CAPS
 	if (!thiontuData.opts[thiontuData.selected].enable) {
 		KadDOM.btnColor(clBtn[0], "positive");
-		thiontuData.selected = clBtn[0].dataset.textto;
+		thiontuData.selected = clBtn[0].value;
 	}
 
 	let obj = dbID("idArea_thiontuOutputArea");

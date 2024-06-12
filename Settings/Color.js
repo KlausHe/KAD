@@ -157,17 +157,17 @@ export function colToggleColormode() {
 }
 
 function populateColorSelector() {
-	idVin_colorSetting_light_Navbar.KadReset({ reset: KadColor.colAsString(globalColors.lightmode.Navbar, "HSL", "HEX") });
+	idVin_colorSetting_light_Navbar.KadReset({ resetValue: KadColor.colAsString(globalColors.lightmode.Navbar, "HSL", "HEX") });
 	idLbl_colorSetting_light_Navbar.textContent = `Navbar (${KadColor.colAsString(globalColors.lightmode.Navbar, "HSL", "HEX")})`;
-	idVin_colorSetting_light_Gridtitle.KadReset({ reset: KadColor.colAsString(globalColors.lightmode.Gridtitle, "HSL", "HEX") });
+	idVin_colorSetting_light_Gridtitle.KadReset({ resetValue: KadColor.colAsString(globalColors.lightmode.Gridtitle, "HSL", "HEX") });
 	idLbl_colorSetting_light_Gridtitle.textContent = `Gridtitle (${KadColor.colAsString(globalColors.lightmode.Gridtitle, "HSL", "HEX")})`;
-	idVin_colorSetting_light_Background.KadReset({ reset: KadColor.colAsString(globalColors.lightmode.Background, "HSL", "HEX") });
+	idVin_colorSetting_light_Background.KadReset({ resetValue: KadColor.colAsString(globalColors.lightmode.Background, "HSL", "HEX") });
 	idLbl_colorSetting_light_Background.textContent = `Background (${KadColor.colAsString(globalColors.lightmode.Background, "HSL", "HEX")})`;
-	idVin_colorSetting_dark_Navbar.KadReset({ reset: KadColor.colAsString(globalColors.darkmode.Navbar, "HSL", "HEX") });
+	idVin_colorSetting_dark_Navbar.KadReset({ resetValue: KadColor.colAsString(globalColors.darkmode.Navbar, "HSL", "HEX") });
 	idLbl_colorSetting_dark_Navbar.textContent = `Navbar (${KadColor.colAsString(globalColors.lightmode.Navbar, "HSL", "HEX")})`;
-	idVin_colorSetting_dark_Gridtitle.KadReset({ reset: KadColor.colAsString(globalColors.darkmode.Gridtitle, "HSL", "HEX") });
+	idVin_colorSetting_dark_Gridtitle.KadReset({ resetValue: KadColor.colAsString(globalColors.darkmode.Gridtitle, "HSL", "HEX") });
 	idLbl_colorSetting_dark_Gridtitle.textContent = `Gridtitle (${KadColor.colAsString(globalColors.lightmode.Gridtitle, "HSL", "HEX")})`;
-	idVin_colorSetting_dark_Background.KadReset({ reset: KadColor.colAsString(globalColors.darkmode.Background, "HSL", "HEX") });
+	idVin_colorSetting_dark_Background.KadReset({ resetValue: KadColor.colAsString(globalColors.darkmode.Background, "HSL", "HEX") });
 	idLbl_colorSetting_dark_Background.textContent = `Background (${KadColor.colAsString(globalColors.lightmode.Background, "HSL", "HEX")})`;
 }
 

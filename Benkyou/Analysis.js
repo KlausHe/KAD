@@ -14,7 +14,7 @@ initEL({ id: idVin_analysisEntry, fn: analysisInput, resetValue: "Type text to a
 initEL({ id: idBtn_analyseWiki, fn: analysisWiki });
 
 export function clear_cl_Analysis() {
-	idVin_analysisEntry.KadReset(); //.resetInput("idVin_analysisEntry", "Type text to analyze");
+	idVin_analysisEntry.KadReset(); 
 	dbID("idLbl_analysisResult").textContent = "~Average score~";
 	KadTable.clear("idTabBody_analysisResult");
 }
@@ -34,7 +34,7 @@ function analysisWiki() {
 }
 
 async function analysisInput() {
-	analysisOptions.searchInput = KadDOM.stringFromInput(idVin_analysisEntry);
+	analysisOptions.searchInput = idVin_analysisEntry.KadGet();
 	if (analysisOptions.searchInput == "") {
 		dbID("idLbl_analysisResult").textContent = "~Average score~";
 		KadTable.clear("idTabBody_analysisResult");

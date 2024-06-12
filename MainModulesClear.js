@@ -28,7 +28,7 @@ export { clear_cl_News } from "./News/News.js";
 export { clear_cl_PostillonTicker } from "./News/PostillonTicker.js";
 export { clear_cl_Sepakbola } from "./News/Sepakbola.js";
 //Tools
-export { clear_cl_Blech } from "./Tools/Blech.js";
+export { clear_cl_Blechgeometrie } from "./Tools/Blechgeometrie.js";
 export { clear_cl_Expansion } from "./Tools/Expansion.js";
 export { clear_cl_Geometrie } from "./Tools/Geometrie.js";
 export { clear_cl_Luas } from "./Tools/Luas.js";

@@ -1,4 +1,4 @@
-import { daEL, KadValue, KadDOM, KadTable } from "../General/KadUtils.js";
+import { initEL, KadValue, KadTable } from "../General/KadUtils.js";
 const quickmathOptions = {
 	values: { val: 12, i: 42 },
 	objects: {
@@ -33,30 +33,30 @@ const quickmathOptions = {
 	},
 };
 
-daEL(idVin_quickkmathVal, "input", calcQuickmath);
-daEL(idVin_quickkmathStart, "input", calcQuickmath);
-daEL(idVin_quickkmathEnd, "input", calcQuickmath);
+initEL({ id: idVin_quickkmathVal, fn: calcQuickmath, resetValue: 25 });
+initEL({ id: idVin_quickkmathStart, fn: calcQuickmath, resetValue: 1 });
+initEL({ id: idVin_quickkmathEnd, fn: calcQuickmath, resetValue: 10 });
 
 export function clear_cl_Quickmath() {
-	KadDOM.resetInput("idVin_quickkmathVal", 25);
-	KadDOM.resetInput("idVin_quickkmathStart", 1);
-	KadDOM.resetInput("idVin_quickkmathEnd", 10);
+	idVin_quickkmathVal.KadReset();
+	idVin_quickkmathStart.KadReset();
+	idVin_quickkmathEnd.KadReset();
 	calcQuickmath();
 }
 
 function calcQuickmath() {
-	quickmathOptions.values.val = KadDOM.numberFromInput("idVin_quickkmathVal");
-	tableQuickmathCalculate("Multiply");
-	tableQuickmathCalculate("Divide");
-	tableQuickmathCalculate("Pow");
+	for (let op of Object.keys(quickmathOptions.objects)) {
+		tableQuickmathCalculate(op);
+	}
 }
 
 function tableQuickmathCalculate(op) {
 	const operation = op;
 	const obj = quickmathOptions.objects[operation];
 	KadTable.clear(obj.tabID);
-	const vinMin = KadDOM.numberFromInput("idVin_quickkmathStart");
-	const vinMax = KadDOM.numberFromInput("idVin_quickkmathEnd");
+	quickmathOptions.values.val = idVin_quickkmathVal.KadGet();
+	const vinMin = idVin_quickkmathStart.KadGet();
+	const vinMax = idVin_quickkmathEnd.KadGet();
 	const start = Math.min(vinMin, vinMax);
 	const end = Math.max(vinMin, vinMax) + 1;
 

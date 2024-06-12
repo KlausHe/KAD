@@ -1271,8 +1271,8 @@ export function clear_cl_Niska() {
 }
 
 function niskaCalc() {
-	niskaOptions.size.val = KadDOM.numberFromInput(idVin_niskaSize);
-	niskaOptions.pitch.val = KadDOM.numberFromInput(idVin_niskaPitch);
+	niskaOptions.size.val = idVin_niskaSize.KadGet()
+	niskaOptions.pitch.val = idVin_niskaPitch.KadGet()
 	niskaOptions.strengthClass.index0 = idSel_niskaStrengthClassA.selectedIndex;
 	niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
 	niskaOptions.select.index = idSel_niskaSelect.selectedIndex;

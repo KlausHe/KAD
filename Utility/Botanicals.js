@@ -1,16 +1,21 @@
-import { daEL, dbID, KadDOM, KadTable } from "../General/KadUtils.js";
+import { initEL, dbID, KadTable, log } from "../General/KadUtils.js";
 import { Data_Botanicals } from "../General/MainData.js";
 
-daEL(idSel_botanicalsPlant, "change", () => botanicalsPlantChange(idSel_botanicalsPlant));
-daEL(idSel_botanicalsPlant, "focus", () => botanicalsPopulateOptions(idSel_botanicalsPlant));
-daEL(idSel_botanicalsDiscomfort, "change", () => botanicalsDiscomfortChange(idSel_botanicalsDiscomfort));
-daEL(idSel_botanicalsDiscomfort, "focus", () => botanicalsPopulateOptions(idSel_botanicalsDiscomfort));
+initEL({
+	id: idSel_botanicalsPlant,
+	fn: botanicalsPlantChange,
+	selGroup: { "Pflanze wählen": Data_Botanicals.map((obj) => [obj.plant, obj.plant]) },
+});
+initEL({
+	id: idSel_botanicalsDiscomfort,
+	fn: botanicalsDiscomfortChange,
+	selGroup: { "Beschwerde wählen": botanicalsPopulateDiscomfort() },
+});
 
 export function clear_cl_Botanicals() {
-	KadDOM.clearFirstChild("idSel_botanicalsPlant");
-	KadDOM.clearFirstChild("idSel_botanicalsDiscomfort");
-	dbID("idSel_botanicalsPlant").options[0] = new Option("Pflanze wählen");
-	dbID("idSel_botanicalsDiscomfort").options[0] = new Option("Beschwerde wählen");
+	idSel_botanicalsPlant.KadReset();
+	idSel_botanicalsDiscomfort.KadReset();
+
 	KadTable.clear("idTabBody_botanicalsResultDiscomfort");
 	dbID("idTabHeader_BotanicalPlants").innerHTML = "Gewürze / Kräuter";
 	KadTable.clear("idTabBody_botanicalsResultPlant");
@@ -18,29 +23,28 @@ export function clear_cl_Botanicals() {
 	dbID("idTabHeader_BotanicalPlantEffect").innerHTML = "Wirkung";
 }
 
-function botanicalsPopulateOptions(type) {
-	if (dbID(type.id).options.length > 1) return;
-	if (type.id == "idSel_botanicalsPlant") {
-		Data_Botanicals.forEach((obj, index) => {
-			dbID("idSel_botanicalsPlant").options[index] = new Option(obj.plant);
-		});
-	} else {
-		let discomfortSet = new Set();
-		for (let dis of Data_Botanicals) {
-			dis.discomfort.forEach((item) => discomfortSet.add(item));
-		}
-		discomfortSet = Array.from(discomfortSet).sort();
-		discomfortSet.forEach((d, index) => {
-			dbID("idSel_botanicalsDiscomfort").options[index] = new Option(d);
-		});
-	}
+function botanicalsPopulateDiscomfort() {
+	let discomfortSet = new Set();
+	Data_Botanicals.forEach((dis) => dis.discomfort.forEach((item) => discomfortSet.add(item)));
+	discomfortSet = Array.from(discomfortSet).sort();
+	return discomfortSet;
 }
 
-function botanicalsPlantChange(sel) {
-	if (sel.selectedIndex > 0) {
-		const plant = Data_Botanicals[sel.selectedIndex - 1];
-		botanicalsPlantTable(plant);
-	}
+function botanicalsPlantChange(obj) {
+	const sel = obj.target;
+	const plant = Data_Botanicals[sel.selectedIndex - 1];
+	botanicalsPlantTable(plant);
+}
+
+function botanicalsDiscomfortChange(obj) {
+	const sel = obj.target;
+	let plantsArray = [];
+	Data_Botanicals.forEach((obj) => {
+		if (obj.discomfort.includes(sel.value)) {
+			plantsArray.push(obj.plant);
+		}
+	});
+	botanicalsDiscomfortTable(plantsArray);
 }
 
 function botanicalsPlantTable(plant) {
@@ -67,18 +71,6 @@ function botanicalsPlantTable(plant) {
 				copy: true,
 			});
 		}
-	}
-}
-
-function botanicalsDiscomfortChange(sel) {
-	if (sel.selectedIndex > 0) {
-		let plantsArray = [];
-		Data_Botanicals.forEach((obj) => {
-			if (obj.discomfort.includes(sel.value)) {
-				plantsArray.push(obj.plant);
-			}
-		});
-		botanicalsDiscomfortTable(plantsArray);
 	}
 }
 

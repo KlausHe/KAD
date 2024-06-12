@@ -19,38 +19,44 @@ export function dbCLStyle(id, loc = 0) {
  *
  *
  * @export
- * @param {{ id: HTMLElement; action?: string; fn: function; selList?: array; selGroup: any; selStartIndex?: number; selStartVal: any; dbList?: array; resetValue: any; domOpts: any; }} [param0={}]
+ * @param {{ id: HTMLElement; action?: string; fn: function; selList?: array; selGroup: any; selStartIndex?: number; selStartValue: any; dbList?: array; resetValue: any; domOpts: any; }} [param0={}]
  * @param {HTMLElement} param0.id
  * @param {string} [param0.action=null]
  * @param {function} param0.fn
  * @param {array} [param0.selList=[]]
  * @param {string} param0.selGroup
- * @param {number} [param0.selStartIndex=0]
- * @param {string|number} param0.selStartVal
+ * @param {number} [param0.selStartIndex=null]
+ * @param {string|number} [param0.selStartValue=null]
  * @param {[]} [param0.dbList=[]]
  * @param {string|number} param0.resetValue
  * @param {object} param0.domOpts
  * @returns {string|number}
  */
 
-export function initEL({ id, action = null, fn, selGroup = {}, selList = [], selStartIndex = 0, selStartVal, dbList = [], resetValue, domOpts } = {}) {
+export function initEL({ id, action = null, fn, selGroup = {}, selList = [], selStartIndex = null, selStartValue = null, dbList = [], resetValue = null, dateOpts = { format: null, dateObject: null }, domOpts } = {}) {
 	errorChecked(typeof id === "string", "Id is a string but should be an HTML-Object");
 	const typeAction = {
 		text: "input", // input change focus click
+		email: "input",
+		password: "input",
+		textarea: "input", // input change
 		number: "input", // input change focus click
 		submit: "click", //click (default-type od "button")
 		button: "click", //click
 		"select-one": "change", // change focus
 		select: "change", // change focus
-		textarea: "input", // input change
 		checkbox: "click", // click
+		date: "change",
+		"datetime-local": "change",
 		Canv: "keydown", // keydown keyup
 		DIV: "click", // click
 	};
+
 	const type = id.type ? id.type : id.nodeName;
 	daEL(id, action || typeAction[type], fn);
+
 	// fill "datalist"
-	if (dbList) {
+	if (dbList.length > 0) {
 		id.addEventListener(
 			"focus",
 			() => {
@@ -65,94 +71,147 @@ export function initEL({ id, action = null, fn, selGroup = {}, selList = [], sel
 			{ once: true }
 		);
 	}
+
 	// fill "Select"
-	if (selList.length > 0) {
-		while (id.options.length > 0) {
-			id.remove(0);
-		}
-		makeSelList({ selList, selStartIndex, selStartVal });
-	}
+	let list = selList;
+	let groupList = selGroup;
+	let startIndex = selStartIndex;
+	let startValue = selStartValue;
 
-	if (objectLength(selGroup) > 0) {
-		KadDOM.clearFirstChild(id);
-		for (let [groupName, selList] of Object.entries(selGroup)) {
-			makeGroupList({ groupName, selList, selStartIndex, selStartVal });
-		}
+	if (list.length > 0) {
+		makeSelList({ list });
 	}
-	// add reset-function
+	if (objectLength(groupList) > 0) {
+		makeGroupList({ groupList });
+	}
+	// add GET function
+	if (["number"].includes(type)) {
+		id.KadGet = function (failSafeVal = null, noPlaceholder = null) {
+			let fail = failSafeVal != null ? failSafeVal : resetValue;
+			return KadDOM.numberFromInput(id, fail, noPlaceholder);
+		};
+	}
+	if (["text", "email", "password", "textarea"].includes(type)) {
+		if (action == "focus") return;
+		id.KadGet = function (failSafeVal = null, noPlaceholder = null) {
+			let fail = failSafeVal != null ? failSafeVal : resetValue;
+			return KadDOM.stringFromInput(id, fail, noPlaceholder);
+		};
+	}
 	if (["select-one", "select"].includes(type)) {
-		id.KadReset = function ({ resetSelGroup = {}, resetSelList = [], resetSelStartIndex = null, resetSelStartVal = null } = {}) {
-			const index = resetSelStartIndex || selStartIndex;
-			if (resetSelList.length > 0) {
-				while (id.options.length > 0) {
-					id.remove(0);
-				}
-				makeSelList({ selList: resetSelList, selStartIndex: index, selStartVal: resetSelStartVal });
-			} else if (objectLength(resetSelGroup) > 0) {
-				KadDOM.clearFirstChild(id);
+		if (action == "focus") return;
+		id.KadGet = function ({ textContent = null, index = null } = {}) {
+			if (textContent) return id.textContent;
+			if (index) return id.selectedIndex;
+			return id.value;
+		};
+	}
+	let dateFormating = dateOpts;
+	if (["date", "datetime-local"].includes(type)) {
+		if (action == "focus") return;
+		id.KadGet = function ({ format = null, dateObject = null } = {}) {
+			dateFormating.format = format != null ? format : dateFormating.format;
+			dateFormating.dateObject = dateObject != null ? dateObject : dateFormating.dateObject;
+			if (dateFormating.format != null) return KadDate.getDate(id.value, dateFormating.format);
+			if (dateFormating.dateObject != null) return new Date(id.value);
+			return id.value;
+		};
+	}
 
-				for (let [groupName, selList] of Object.entries(resetSelGroup)) {
-					makeGroupList({ groupName, selList, selStartIndex: index, selStartVal: resetSelStartVal });
-				}
+	// add reset-function
+	let reset = resetValue;
+	if (["select-one", "select"].includes(type)) {
+		id.KadReset = function ({ selGroup = {}, selList = [], selStartIndex = null, selStartValue = null } = {}) {
+			startIndex = selStartIndex != null ? selStartIndex : startIndex;
+			startValue = selStartValue != null ? selStartValue : startValue;
+			if (selList.length > 0) {
+				KadDOM.clearFirstChild(id);
+				list = selList;
+				makeSelList({ list });
+			} else if (objectLength(selGroup) > 0) {
+				KadDOM.clearFirstChild(id);
+				groupList = selGroup;
+				makeGroupList({ groupList });
 			} else {
 				let i = 0;
 				for (let data of selList) {
 					let d = Array.isArray(data) ? data : [data];
-					if (resetSelStartVal && d[0] == resetSelStartVal) {
+					if (value && d[0] == value) {
 						id.options[i].selected = true;
 						break;
 					}
 					i++;
 				}
 			}
-			return index;
+			return checkReturn(startIndex, startValue);
+		};
+	} else if (["date", "datetime-local"].includes(type)) {
+		id.KadReset = function ({ format = null, dateObject = null } = {}) {
+			dateFormating.format = format != null ? format : dateFormating.format;
+			dateFormating.dateObject = dateObject != null ? dateObject : dateFormating.dateObject;
+			if (dateFormating.format != null) return KadDate.getDate(id.value, dateFormating.format);
+			if (dateFormating.dateObject != null) return new Date(id.value);
+			KadDOM.resetInput(id, reset, domOpts);
+			return id.value;
 		};
 	} else {
-		id.KadReset = function ({ reset = null } = {}) {
-			let r = reset || resetValue;
-			KadDOM.resetInput(id, r, domOpts);
-			return r;
+		id.KadReset = function ({ resetValue = null } = {}) {
+			reset = resetValue != null ? resetValue : reset;
+			KadDOM.resetInput(id, reset, domOpts);
+			return reset;
 		};
 	}
 
-	function makeGroupList({ groupName = "", selList = [], selStartIndex = 0, selStartVal = null } = {}) {
-		if (selList.length == 0) return;
-		let optG;
-		if (groupName) {
-			optG = document.createElement("optgroup");
-			id.appendChild(optG);
-			optG.label = groupName;
-		}
-		for (let data of selList) {
+	function makeSelList({ list = [] } = {}) {
+		KadDOM.clearFirstChild(id);
+		for (let data of list) {
 			let d = Array.isArray(data) ? data : [data];
 			const opt = new Option(...d);
-			optG.appendChild(opt);
-			if (selStartVal && d[0] == selStartVal) {
+			id.appendChild(opt);
+			if (startValue !== null && startValue == d[1]) {
 				opt.selected = true;
 			}
 		}
-		if (!selStartVal) id.selectedIndex = selStartIndex;
+		if (startIndex !== null) id.selectedIndex = startIndex;
 	}
 
-	function makeSelList({ selList = [], selStartIndex = 0, selStartVal = null } = {}) {
-		if (selList.length == 0) return;
-		let i = 0;
-		for (let data of selList) {
-			let d = Array.isArray(data) ? data : [data];
-			id.options[i] = new Option(...d);
-			if (selStartVal && d[0] == selStartVal) {
-				id.options[i].selected = true;
+	function makeGroupList({ groupList = {} } = {}) {
+		KadDOM.clearFirstChild(id);
+		for (let [groupName, list] of Object.entries(groupList)) {
+			let optG;
+			if (groupName) {
+				optG = document.createElement("optgroup");
+				id.appendChild(optG);
+				optG.label = groupName;
 			}
-			i++;
+			for (let data of list) {
+				let d = Array.isArray(data) ? data : [data];
+				const opt = new Option(...d);
+				optG.appendChild(opt);
+				if (startValue !== null && startValue == d[0]) opt.selected = true;
+			}
+			if (startIndex !== null) id.selectedIndex = startIndex;
 		}
-		if (!selStartVal) id.selectedIndex = selStartIndex;
+	}
+
+	function checkReturn(startIndex, startValue) {
+		let indexNull = startIndex === null;
+		let valueNull = startValue === null;
+		if (indexNull && valueNull) {
+			return 0;
+		} else if (!indexNull && valueNull) {
+			return startIndex;
+		} else if ((indexNull && !valueNull) || (!indexNull && !valueNull)) {
+			return startValue;
+		}
+		return null;
 	}
 }
+
 /*-------------------------- */
 export function daEL(id, type, fn) {
 	dbID(id).addEventListener(type, fn);
 }
-
 export function objectLength(obj) {
 	return Object.keys(obj).length;
 }
@@ -160,8 +219,9 @@ export function hostDebug() {
 	return ["localhost", "127.0.0.1"].includes(window.location.hostname);
 }
 function getStackFunctionAt(level = 1) {
-	const levelString = Error().stack.split(/\r?\n|\r|\n/g)[level + 1];
-	let arr = levelString.split(/[@://]{1,}/);
+	const levelString = Error().stack.split(/\r?\n|\r|\n/g);
+	const l = Math.min(Math.max(0, level + 1), levelString.length - 2);
+	let arr = levelString[l].split(/[@://]{1,}/);
 	const data = {
 		function: `${arr[0]}()`,
 		folder: arr[4],
@@ -184,7 +244,25 @@ export function log(...logText) {
 	if (text) console.log(...text);
 	console.groupEnd();
 }
-export function checkedLog(state, ...logText) {
+
+/**
+ *
+ *
+ * @export
+ * @param {number} depth
+ * @param {...{}} logText
+ */
+export function logLevel(depth, ...logText) {
+	if (!hostDebug()) return;
+	const level = typeof depth === "number" ? depth : 1;
+	console.group(`%c${getStackFunctionAt(level)}`, "background: white; color: black");
+	let text = "";
+	if (typeof logText === "object" && logText !== null) text = logText;
+	else text = logText.join(" ");
+	if (text) console.log(...text);
+	console.groupEnd();
+}
+export function logChecked(state, ...logText) {
 	if (!hostDebug()) return;
 	if (state) {
 		console.group(`%c${getStackFunctionAt()}`, "background: green; color: white");
@@ -292,22 +370,25 @@ export const KadDOM = {
 			obj.checked = ph;
 			return ph;
 		}
-
+		if (domOpts != null) {
+			for (let [key, val] of Object.entries(domOpts)) {
+				obj[key] = val;
+			}
+		}
 		if (ph != null) {
 			if (["submit", "button", "DIV"].includes(type)) {
 				obj.textContent = ph;
 			} else if (type == "date") {
+				obj.value = ph;
+			} else if (type == "time") {
+				obj.value = ph;
+			} else if (type == "datetime-local") {
 				obj.value = ph;
 			} else if (type == "color") {
 				obj.value = ph;
 			} else {
 				obj.placeholder = ph;
 				obj.value = "";
-			}
-		}
-		if (domOpts != null) {
-			for (let [key, val] of Object.entries(domOpts)) {
-				obj[key] = val;
 			}
 		}
 		return Number(obj.placeholder);
@@ -564,7 +645,7 @@ export const KadRandom = {
 };
 export const KadDate = {
 	getDate(date = null, { format = "DD.MM.YYYY", leadingDigit = true, reversed = false } = {}) {
-		const regexSplit = new RegExp(/([$-/:-?{-~!"^_`\ [\]])/);
+		const regexSplit = new RegExp(/([T$-/:-?{-~!"^_`\ [\]])/);
 		const conversions = {
 			date: date === null ? new Date() : new Date(date),
 			get YYYY() {
@@ -823,7 +904,7 @@ export const KadTable = {
 		UIOptions(cell, opt) {
 			opt.name = KadTable.createName(opt);
 			cell.id = `id${opt.type}_child${opt.name}`;
-			if (opt.hasOwnProperty("idNoChild")) cell.id = `id${opt.type}${opt.name}`;
+			if (opt.hasOwnProperty("idNoChild") && opt.idNoChild) cell.id = `id${opt.type}${opt.name}`;
 			if (opt.hasOwnProperty("datasets")) {
 				for (const [key, value] of Object.entries(opt.datasets)) {
 					cell.setAttribute(`data-${key}`, value);

@@ -1,17 +1,13 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
-import { daEL, dbID, error, KadDOM, KadTable, KadDate, KadValue } from "../General/KadUtils.js";
+import { initEL, dbID, error, KadDOM, KadTable, KadDate, KadValue, log } from "../General/KadUtils.js";
 import { Data_Currencies } from "../General/MainData.js";
 
 const iomlaidOptions = {
 	get URLnow() {
 		return `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${iomlaidOptions.baseCurrency.toLowerCase()}.min.json`;
-
-		// return `https://api.exchangerate.host${date}?base=${iomlaidOptions.baseCurrency}`;
-		// return `https://api.exchangerate.host${date}?base=${iomlaidOptions.baseCurrency}`;
 	},
 	get URLhistoric() {
 		return `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${this.date}/v1/currencies/${iomlaidOptions.baseCurrency.toLowerCase()}.min.json`;
-		// return `https://api.exchangerate.host${this.date}?base=${iomlaidOptions.baseCurrency}`;
 	},
 	latest: null,
 	historic: null,
@@ -24,39 +20,41 @@ const iomlaidOptions = {
 	},
 	value: 10,
 	date: null,
+	dateDatabase: "2024-03-03",
 	dateFormat: "YYYY-MM-DD",
+	get minDate() {
+		let past = KadDate.getDate(new Date().setFullYear(new Date().getFullYear() - 1), { format: iomlaidOptions.dateFormat });
+		return past < this.dateDatabase ? this.dateDatabase : past;
+	},
 };
 
-daEL(idSel_IomlaidCur, "change", iomlaidCurrencyChange);
-daEL(idVin_IomlaidDate, "input", iomlaidDateChange);
-daEL(idVin_IomlaidCur, "input", iomlaidValueChange);
+initEL({
+	id: idSel_IomlaidCur,
+	fn: iomlaidCurrencyChange,
+	selStartValue: iomlaidOptions.optionsOrig.baseCurrency,
+	selList: Data_Currencies.map((currency) => [`${currency.cc} (${currency.name})`, currency.cc]),
+});
+initEL({
+	id: idVin_IomlaidDate,
+	fn: iomlaidDateChange,
+	resetValue: iomlaidOptions.minDate,
+	domOpts: { min: iomlaidOptions.dateDatabase },
+});
+initEL({ id: idVin_IomlaidCur, fn: iomlaidValueChange, resetValue: iomlaidOptions.optionsOrig.value });
 
 export function clear_cl_Iomlaid() {
 	iomlaidOptions.dataReceived = false;
 	iomlaidOptions.latest = {};
 	iomlaidOptions.historic = {};
 	iomlaidOptions.baseCurrency = iomlaidOptions.optionsOrig.baseCurrency;
-
-	let dateStart = new Date();
-	dateStart.setDate(dateStart.getDate() - 365);
-	iomlaidOptions.optionsOrig.date = KadDate.getDate(dateStart, { format: iomlaidOptions.dateFormat });
-	iomlaidOptions.date = KadDOM.resetInput("idVin_IomlaidDate", iomlaidOptions.optionsOrig.date, { min: "2024-03-01" });
-	for (let currency of Data_Currencies) {
-		let option = document.createElement("option");
-		option.textContent = `${currency.cc} (${currency.name})`;
-		option.value = currency.cc;
-		if (currency.cc == "EUR") {
-			option.selected = true;
-		}
-		dbID("idSel_IomlaidCur").appendChild(option);
-	}
-
-	iomlaidOptions.value = KadDOM.resetInput("idVin_IomlaidCur", iomlaidOptions.optionsOrig.value);
+	iomlaidOptions.date = idVin_IomlaidDate.KadReset();
+	iomlaidOptions.value = idVin_IomlaidCur.KadReset();
+	idSel_IomlaidCur.KadReset();
 	iomlaidGetData();
 }
 
 function iomlaidCurrencyChange() {
-	iomlaidOptions.baseCurrency = dbID(idSel_IomlaidCur).value;
+	iomlaidOptions.baseCurrency = idSel_IomlaidCur.KadGet();
 	iomlaidGetData();
 }
 function iomlaidDateChange() {
@@ -65,21 +63,23 @@ function iomlaidDateChange() {
 }
 
 function iomlaidValueChange() {
-	iomlaidOptions.value = KadDOM.numberFromInput(idVin_IomlaidCur, iomlaidOptions.optionsOrig.value);
+	iomlaidOptions.value = idVin_IomlaidCur.KadGet();
 	iomlaidTable();
 }
 
 async function iomlaidGetData() {
 	iomlaidOptions.dataReceived = false;
+	idTabHeader_iomlaidDatedDate.textContent = "searching...";
 	try {
-		let results = await Promise.all([fetch(iomlaidOptions.URLnow), fetch(iomlaidOptions.URLhistoric)]);
-		let data = await Promise.all(results.map((r) => r.json()));
+		let resultNow = await fetch(iomlaidOptions.URLnow);
+		let dataNow = await resultNow.json();
+		let resultHistory = await fetch(iomlaidOptions.URLhistoric);
+		let dataHistory = await resultHistory.json();
 		iomlaidOptions.dataReceived = true;
-		iomlaidOptions.latest = data[0][iomlaidOptions.baseCurrency.toLowerCase()];
-		iomlaidOptions.historic = data[1][iomlaidOptions.baseCurrency.toLowerCase()];
-		dbID(idTabHeader_iomlaidDatedDate).textContent = data[1].date;
-		iomlaidOptions.date = KadDOM.resetInput("idVin_IomlaidDate", data[1].date);
-
+		iomlaidOptions.latest = dataNow[iomlaidOptions.baseCurrency.toLowerCase()];
+		iomlaidOptions.historic = dataHistory[iomlaidOptions.baseCurrency.toLowerCase()];
+		idTabHeader_iomlaidDatedDate.textContent = `Kurs vom ${dataHistory.date}`;
+		iomlaidOptions.date = idVin_IomlaidDate.KadReset({ resetValue: dataHistory.date });
 		iomlaidTable();
 	} catch (err) {
 		error("Could not receive data for", "'Iomlaid'", err);

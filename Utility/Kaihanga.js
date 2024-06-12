@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { daEL, dbID, dbIDStyle, KadDOM, KadTable, KadColor, KadRandom } from "../General/KadUtils.js";
+import { initEL, dbID, dbIDStyle, KadTable, KadColor, KadRandom } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
 
@@ -14,8 +14,8 @@ const kaihangaOptions = {
 	startColor: null,
 };
 
-daEL(idVin_kaihangaEntry, "change", kaihangaEntrySubmit);
-daEL(idBtn_kaihangaEntry, "click", kaihangaEntrySubmit);
+initEL({ id: idVin_kaihangaEntry, action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
+initEL({ id: idBtn_kaihangaEntry, fn: kaihangaEntrySubmit });
 
 export function clear_cl_Kaihanga() {
 	kaihangaOptions.entries = [];
@@ -26,7 +26,7 @@ export function clear_cl_Kaihanga() {
 	kaihangaOptions.startColor = caKA.floor(caKA.random(5, globalColors.array.length));
 	kaihangaCreateRandomSet();
 	kaihangaUpdate();
-	KadDOM.resetInput("idVin_kaihangaEntry", "Enter Options");
+	idVin_kaihangaEntry.KadReset();
 	dbID("idLbl_kaihangaResult").textContent = "Gewinner: ...";
 	dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
 	dbIDStyle("idCanv_kaihanga").cursor = "pointer";
@@ -112,7 +112,7 @@ function kaihangaClearRow(index) {
 }
 
 function kaihangaEntrySubmit() {
-	const value = KadDOM.stringFromInput("idVin_kaihangaEntry");
+	const value = idVin_kaihangaEntry.KadGet();
 	if (value == "") return;
 	kaihangaAddOption(value);
 }

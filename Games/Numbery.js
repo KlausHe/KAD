@@ -1,4 +1,4 @@
-import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadRandom, KadTable } from "../General/KadUtils.js";
+import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadRandom, KadTable, log } from "../General/KadUtils.js";
 import { nuncDiscipuli } from "../General/Account.js";
 import { globalColors } from "../Settings/Color.js";
 
@@ -17,7 +17,7 @@ const numberyOptions = {
 	cathegoryIndex: 0,
 	cathegories: [
 		["Amazon", 30],
-		["Camping", 26], 
+		["Camping", 26],
 		["Furniture", 42],
 		["Sport", 46],
 		["SeaAnimals", 20],
@@ -100,7 +100,7 @@ function numberyLayout() {
 }
 
 function numberyPlayerChange() {
-	let numPlayer = KadDOM.numberFromInput(idVin_numberyPlayer, numberyOptions.maxPlayerCount);
+	let numPlayer = idVin_numberyPlayer.KadGet(numberyOptions.maxPlayerCount);
 	numberyMakePlayers(numPlayer);
 	numberyScoreBoard();
 }
@@ -110,8 +110,8 @@ function numberyCathegorySelect() {
 
 	const index = Math.min(numberyOptions.pairsIndex, numberyOptions.availiablePairs.length - 1);
 	numberyOptions.pairsIndex = idSel_numberyPairs.KadReset({
-		resetSelList: numberyOptions.availiablePairs,
-		resetSelStartIndex: index,
+		selList: numberyOptions.availiablePairs,
+		selStartIndex: index,
 	});
 	numberyPairsChange();
 }

@@ -1,16 +1,16 @@
-import { daEL, dbID, KadDOM, KadDate, KadRandom } from "../General/KadUtils.js";
+import { initEL, dbID, KadDate, KadRandom } from "../General/KadUtils.js";
 import { speechSpeakOutput } from "../Benkyou/Speech.js";
 const foodyOptions = {
-	chosenFood: {},
-	timerState: false,
+	timerRunning: false,
 	timerCount: 0,
 	timeTotal: 0,
 	timeRemaining: 0,
+	foodIndex: 0,
+	get chosenFood() {
+		return this.data[this.foodIndex];
+	},
 	preheat: 0,
 	preheatOrig: 6,
-	get preheatLabel() {
-		return `${foodyOptions.preheat} min.`;
-	},
 	data: [
 		{
 			name: "Baguette",
@@ -142,28 +142,36 @@ const foodyOptions = {
 	],
 };
 
-daEL(idVin_foodyPreheat, "input", () => foodyPreheatChange(idVin_foodyPreheat));
-daEL(idBtn_foodyStart, "click", foodyStartChange);
+initEL({ id: idBtn_foodyStart, fn: foodyStartTimer });
+initEL({ id: idCb_foodyVoiceOutput, resetValue: false });
+initEL({ id: idVin_foodyPreheat, fn: foodyPreheatChange, resetValue: foodyOptions.preheatOrig });
+initEL({ id: idSel_foodyType, fn: foodyChangeFood, selStartIndex: 0, selList: foodyOptions.data.map((f, i) => [`${f.name} (${f.time}min)`, i]) });
 
 export function clear_cl_Foody() {
-	clearInterval(foodyOptions.timerCount);
-	foodyOptions.timerState = true;
-	foodyOptions.preheat = KadDOM.resetInput("idVin_foodyPreheat", foodyOptions.preheatOrig);
-	dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
-	for (let i = 0; i < foodyOptions.data.length; i++) {
-		dbID("idSel_foodyType").options[i] = new Option(`${foodyOptions.data[i].name} (${foodyOptions.data[i].time}min)`, i);
-	}
-	const randomStart = KadRandom.randomIndex(foodyOptions.data);
-	dbID("idSel_foodyType").options[randomStart].selected = true;
-	foodyStartChange();
+	resetCounter();
+	idCb_foodyVoiceOutput.KadReset();
+	foodyOptions.preheat = idVin_foodyPreheat.KadReset();
+	idSel_foodyType.KadReset({ selStartIndex: KadRandom.randomIndex(foodyOptions.data) });
+	foodyDisplayTime();
 }
 
+function foodyPreheatChange() {
+	foodyOptions.preheat = idVin_foodyPreheat.KadGet();
+}
+
+function foodyChangeFood() {
+	foodyOptions.foodIndex = idSel_foodyType.KadGet();
+}
+
+function foodyStartTimer() {
+	foodyOptions.timerRunning = !foodyOptions.timerRunning;
+	idBtn_foodyStart.textContent = foodyOptions.timerRunning ? "Stop" : "Start";
+}
+
+function foodyDisplayTime() {}
+
 function foodyStartChange() {
-	const index = dbID("idSel_foodyType").value;
-	foodyOptions.chosenFood = foodyOptions.data[index];
-	foodyOptions.timerState = !foodyOptions.timerState;
-	if (foodyOptions.timerState) {
-		dbID("idBtn_foodyStart").textContent = "Stop";
+	if (foodyOptions.timerRunning) {
 		let noTopfPreheat;
 		if (foodyOptions.chosenFood.temp != "Topf") {
 			noTopfPreheat = foodyOptions.preheat;
@@ -185,9 +193,9 @@ function foodyStartChange() {
 	}
 }
 
-function foodyPreheatChange() {
-	foodyOptions.preheat = dbID("idVin_foodyPreheat").value;
-	dbID("idLbl_foodyPreheat").textContent = foodyOptions.preheatLabel;
+function resetCounter() {
+	clearInterval(foodyOptions.timerCount);
+	foodyOptions.timerRunning = false;
 }
 
 function foodyCountdown() {
@@ -205,12 +213,7 @@ function foodyCountdown() {
 		clearInterval(foodyOptions.timerCount);
 		setTimeout(foodyStartChange, 10000);
 	} else {
-		let zubereitung;
-		if (foodyOptions.chosenFood.temp === "Topf") {
-			zubereitung = " (im Topf)";
-		} else {
-			zubereitung = " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
-		}
+		let zubereitung = foodyOptions.chosenFood.temp === "Topf" ? " (im Topf)" : " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
 		let obj = KadDate.secondsToObj(foodyOptions.timeRemaining);
 		dbID("idLbl_foodyTime").textContent = `${obj.h}:${obj.m}:${obj.s} ${zubereitung}`;
 	}
