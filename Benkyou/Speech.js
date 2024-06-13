@@ -1,5 +1,5 @@
 // import { createRequestBody, normaliseResponse, isLanguageSupported, translate } from "../Data/translateAPI.js";
-import { dbID, daEL, KadDOM, KadArray, log, error } from "../General/KadUtils.js";
+import { dbID, daEL, KadDOM, KadArray, log } from "../General/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 
 const speechOptions = {
@@ -22,6 +22,8 @@ daEL(idBtn_speechSpeakTo, "click", () => speechSpeak("To"));
 daEL(idArea_speechFromText, "input", speechTranslate);
 
 export function clear_cl_Speech() {
+	log("rework!");
+	return;
 	speechOptions.voices = [];
 	speechOptions.synthObj.cancel();
 	KadDOM.resetInput("idArea_speechFromText", "Text übersetzen");

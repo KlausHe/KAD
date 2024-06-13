@@ -120,7 +120,7 @@ function kaihangaEntrySubmit() {
 function kaihangaAddOption(value) {
 	if (kaihangaOptions.spinning) return;
 	kaihangaOptions.entries.push(value);
-	dbID("idVin_kaihangaEntry").value = "";
+	idVin_kaihangaEntry.value = "";
 	kaihangaUpdate();
 }
 

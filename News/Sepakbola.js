@@ -1,4 +1,4 @@
-import { KadArray, KadDate, KadTable, dbID, deepClone, initEL } from "../General/KadUtils.js";
+import { KadArray, KadDate, KadTable, dbID, deepClone, initEL, log } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -207,6 +207,14 @@ function sepakbolaMatchesReturn(data = null) {
 			type: "Lbl",
 			get text() {
 				if (!seasonSelected[i].matchIsFinished) {
+					let score = bets[seasonSelected[i].team1.teamName];
+					const min = Math.min(...score);
+					const max = Math.max(...score) - min;
+					const M = Math.round(((max - (score[1] - min)) / max) * 100);
+					const B = Math.round(((max - (score[2] - min)) / max) * 100);
+					const A = Math.round(((max - (score[0] - min)) / max) * 100);
+
+					return `${A} - ${M} - ${B}`;
 					return "-:-";
 				} else {
 					const goalLength = seasonSelected[i].goals.length;
@@ -235,6 +243,20 @@ function sepakbolaMatchesReturn(data = null) {
 		logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
 	}
 }
+const bets = {
+	Deutschland: [1.25, 6.0, 9.0],
+	Ungarn: [3.3, 3.3, 2.25],
+	Spanien: [1.87, 3.4, 4.33],
+	Italien: [1.37, 4.5, 8.5],
+	Polen: [5.75, 4.2, 1.52],
+	Slowenien: [5.25, 3.5, 1.69],
+	Serbien: [6.5, 4.75, 1.42],
+	Rumänien: [3.75, 3.5, 2.0],
+	Belgien: [1.41, 4.5, 7.0],
+	Österreich: [6.0, 4.5, 1.47],
+	Türkei: [1.72, 3.6, 4.75],
+	Portugal: [1.47, 4.2, 6.5],
+};
 
 function sepakbolaTableReturn(data) {
 	if (data.length == 0) return;

@@ -1,5 +1,5 @@
 import { contentGroupsMaincontent } from "../General/MainContent.js";
-import { dbID, dbCL, KadDOM, KadTable, initEL, log, deepClone } from "../General/KadUtils.js";
+import { dbID, dbCL, KadDOM, KadTable, initEL } from "../General/KadUtils.js";
 import { contentGrid, contentLayout } from "../General/Layout.js";
 
 const usergridOptions = {
@@ -49,7 +49,6 @@ export const storage_cl_UserGridLayout = {
 			for (let clObj of usergridOptions.groups[groupKey]) {
 				const clName = Object.keys(clObj)[0];
 				const state = data.includes(clName);
-        log(clName, state)
 				clObj[clName] = state;
 				dbID(`idVin_disableUsergridSingle_CB_${clName}`).checked = state;
 			}
