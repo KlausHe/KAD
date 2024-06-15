@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDOM, KadDate } from "../General/KadUtils.js";
+import { initEL, dbID, KadDate } from "../KadUtils/KadUtils.js";
 import { speechSpeakOutput } from "../Benkyou/Speech.js";
 
 const eggOptions = {

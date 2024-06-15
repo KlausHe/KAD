@@ -1,6 +1,6 @@
 //use AudioContext() and AudioBuffer()
 
-import { dbID, dbIDStyle, dbCL, daEL, error, KadDOM, KadRandom, initEL } from "../General/KadUtils.js";
+import { dbID, dbIDStyle, dbCL, daEL, error, KadDOM, KadRandom, initEL } from "../KadUtils/KadUtils.js";
 
 const beatmachineOptions = {
 	BPMOrig: 105,

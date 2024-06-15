@@ -1,4 +1,4 @@
-import { dbID, objectLength, KadDOM, KadTable, initEL } from "../General/KadUtils.js";
+import { dbID, objectLength, KadTable, initEL } from "../KadUtils/KadUtils.js";
 const synonymOptions = {
 	get URL() {
 		return `https://www.openthesaurus.de/synonyme/search?q=${this.input}&format=application/json&similar=true&baseform=true`;

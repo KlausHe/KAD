@@ -1,4 +1,4 @@
-import { dbID, initEL, KadDOM, log } from "../General/KadUtils.js";
+import { dbID, initEL, KadDOM } from "../KadUtils/KadUtils.js";
 
 const blechOptions = {
 	dicke: 3,

@@ -1,4 +1,4 @@
-import { dbID, daEL, deepClone, KadDOM, KadRandom, KadTable, initEL } from "../General/KadUtils.js";
+import { dbID, deepClone, KadDOM, KadRandom, KadTable, initEL } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 import { AccData } from "../General/Account.js";
 import { globalP5 } from "../Main.js";

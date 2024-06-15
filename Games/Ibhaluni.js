@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, KadValue, KadDOM, initEL } from "../General/KadUtils.js";
+import { dbID, KadValue, KadDOM, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const ibhaluniOptions = {

@@ -1,4 +1,4 @@
-import { dbID, initEL, KadCSS, log } from "../General/KadUtils.js";
+import { dbID, initEL, KadCSS } from "../KadUtils/KadUtils.js";
 import { contentGrid, resizeGrid } from "../General/Layout.js";
 import { colorUpdateCanvascolors } from "./Color.js";
 

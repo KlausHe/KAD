@@ -1,5 +1,5 @@
 import { saveDiscipuli } from "../General/Account.js";
-import { initEL, deepClone, dbID, objectLength, KadArray, KadTable, log } from "../General/KadUtils.js";
+import { initEL, deepClone, dbID, objectLength, KadArray, KadTable } from "../KadUtils/KadUtils.js";
 
 let tugasOptions = {};
 

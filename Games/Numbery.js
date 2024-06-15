@@ -1,4 +1,4 @@
-import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadRandom, KadTable, log } from "../General/KadUtils.js";
+import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadRandom, KadTable, log } from "../KadUtils/KadUtils.js";
 import { nuncDiscipuli } from "../General/Account.js";
 import { globalColors } from "../Settings/Color.js";
 

@@ -1,6 +1,55 @@
+// Übetragagungen
+// https://www.dazn.com/de-DE/news/fu%C3%9Fball/tv-plan-em-2024-europameisterschaft-fernsehen-ard-zdf-rtl-1f7dv60hqs0yn171aggxq9o1lb
 import { userLoggedIn } from "../General/Account.js";
-import { KadArray, KadDate, KadTable, dbID, deepClone, initEL } from "../General/KadUtils.js";
+import { KadArray, KadDate, KadTable, dbID, deepClone, hostDebug, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
+
+// Spanien:
+// Italien:
+const betMatchdays = [
+	{
+		Deutschland: [[1.25, 6.0, 9.0], "München", "ZDF"],
+		Ungarn: [[3.3, 3.3, 2.25], "Köln", "MagentaTV"],
+		Spanien: [[1.87, 3.4, 4.33], "Berlin", "ARD"],
+		Italien: [[1.37, 4.5, 8.5], "Dortmund", "ARD"],
+		Polen: [[5.75, 4.2, 1.52], "Hamburg", "RTL"],
+		Slowenien: [[5.25, 3.5, 1.69], "Stuttgart", "ZDF"],
+		Serbien: [[6.5, 4.75, 1.42], "Gelsenkirchen", "ZDF"],
+		Rumänien: [[3.75, 3.5, 2.0], "München", "RTL"],
+		Belgien: [[1.41, 4.5, 7.0], "Frankfurt", "ZDF"],
+		Österreich: [[6.0, 4.5, 1.47], "Düsseldorf", "ARD"],
+		Türkei: [[1.72, 3.6, 4.75], "Dortmund", "RTL"],
+		Portugal: [[1.47, 4.2, 6.5], "Leipzig", "ARD"],
+	},
+	{
+		Kroatien: [[], "Hamburg", "RTL"],
+		Deutschland: [[], "Stuttgart", "ARD"],
+		Schottland: [[], "Köln", "ARD"],
+		Slowenien: [[], "München", "MagentaTV"],
+		Dänemark: [[], "Frankfurt", "ZDF"],
+		Spanien: [[], "Gelsenkirchen", "ZDF"],
+		Slowakei: [[], "Düsseldorf", "RTL"],
+		Polen: [[], "Berlin", "ARD"],
+		Niederlande: [[], "Leipzig", "ARD"],
+		Georgien: [[], "Hamburg", "RTL"],
+		Türkei: [[], "Dortmund", "ZDF"],
+		Belgien: [[], "Köln", "ZDF"],
+	},
+	{
+		Schweiz: [[], "Frankfurt", "ARD"],
+		Schottland: [[], "Stuttgart", "MagentaTV"],
+		Kroatien: [[], "Leipzig", "ZDF"],
+		Albanien: [[], "Düsseldorf", "unbekannt"],
+		Niederlande: [[], "Berlin", "unbekannt"],
+		Frankreich: [[], "Dortmund", "unbekannt"],
+		England: [[], "Köln", "unbekannt"],
+		Dänemark: [[], "München", "unbekannt"],
+		Ukraine: [[], "Stuttgart", "unbekannt"],
+		Slowakei: [[], "Frankfurt", "unbekannt"],
+		Tschechien: [[], "Hamburg", "unbekannt"],
+		Georgien: [[], "Gelsenkirchen", "unbekannt"],
+	},
+];
 
 const sepakbolaOptions = {
 	get URLTable() {
@@ -136,19 +185,22 @@ function sepakbolaMatchdayChange() {
 }
 
 async function sepakbolaGetData() {
+	let dataTable = null;
+	let dataDay = null;
+	let dataMatches = null;
 	try {
 		let response = await fetch(sepakbolaOptions.URLTable);
-		let data = await response.json();
-		sepakbolaTableReturn(data);
+		dataTable = await response.json();
 		response = await fetch(sepakbolaOptions.URLLastday);
-		data = await response.json();
-		sepakbolaLastdayReturn(data);
+		dataDay = await response.json();
 		response = await fetch(sepakbolaOptions.URLMatches);
-		data = await response.json();
-		sepakbolaMatchesReturn(data);
+		dataMatches = await response.json();
 	} catch (err) {
 		console.error(err);
 	}
+	sepakbolaTableReturn(dataTable);
+	sepakbolaLastdayReturn(dataDay);
+	sepakbolaMatchesReturn(dataMatches);
 }
 
 function sepakbolaLastdayReturn(data) {
@@ -182,7 +234,7 @@ function sepakbolaMatchesReturn(data = null) {
 				names: ["sepakbolaMatchesHeader", i],
 				type: "Lbl",
 				text: KadDate.getDate(day, { format: "WD - DD.MM. - HH:mm" }),
-				colSpan: 4,
+				colSpan: 3,
 				cellStyle: {
 					textAlign: "center",
 				},
@@ -208,17 +260,15 @@ function sepakbolaMatchesReturn(data = null) {
 			type: "Lbl",
 			get text() {
 				if (!seasonSelected[i].matchIsFinished) {
-					if (!userLoggedIn()) {
+					if (!userLoggedIn() && !hostDebug()) {
 						return "-:-";
 					}
-					let score = bets[seasonSelected[i].team1.teamName];
-					const max = Math.max(...score);
-					const sum = score[0] + score[1] + score[2];
-					const M = Math.round(((sum - score[1]) / max) * 100);
-					const B = Math.round(((sum - score[2]) / max) * 100);
-					const A = Math.round(((sum - score[0]) / max) * 100);
+					if (betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][0].length == 0) {
+						return "-:-";
+					}
 
-					return `${A} - ${M} - ${B}`;
+					let score = betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][0];
+					return `${score[0]} - ${score[1]} - ${score[2]}`;
 				} else {
 					const goalLength = seasonSelected[i].goals.length;
 					if (goalLength == 0) {
@@ -228,6 +278,7 @@ function sepakbolaMatchesReturn(data = null) {
 					}
 				}
 			},
+			title: sepakbolaOptions.selected.ligaIndex != 0 ? "" : `${betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][1]} / ${betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][2]}`,
 			cellStyle: {
 				textAlign: "center",
 			},
@@ -246,69 +297,12 @@ function sepakbolaMatchesReturn(data = null) {
 		logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
 	}
 }
-const bets = {
-	Deutschland: [1.25, 6.0, 9.0],
-	Ungarn: [3.3, 3.3, 2.25],
-	Spanien: [1.87, 3.4, 4.33],
-	Italien: [1.37, 4.5, 8.5],
-	Polen: [5.75, 4.2, 1.52],
-	Slowenien: [5.25, 3.5, 1.69],
-	Serbien: [6.5, 4.75, 1.42],
-	Rumänien: [3.75, 3.5, 2.0],
-	Belgien: [1.41, 4.5, 7.0],
-	Österreich: [6.0, 4.5, 1.47],
-	Türkei: [1.72, 3.6, 4.75],
-	Portugal: [1.47, 4.2, 6.5],
-};
 
 function sepakbolaTableReturn(data) {
 	if (data.length == 0) return;
 	sepakbolaOptions.selectedLiga.table = data;
 
 	sepakbolaPushImages("table");
-	//header
-	KadTable.clear("idTabHeader_SepakbolaTable");
-	const rowTh = KadTable.insertRow("idTabHeader_SepakbolaTable");
-	KadTable.addHeaderCell(rowTh, {
-		names: ["sepakbolaTableHeader", "season"],
-		type: "Lbl",
-		text: "",
-		colSpan: 3,
-		cellStyle: {
-			textAlign: "left",
-		},
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["sepakbolaTableHeader", "Spiele"],
-		type: "Lbl",
-		text: "Sp",
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["sepakbolaTableHeader", "Sieg"],
-		type: "Lbl",
-		text: "S",
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["sepakbolaTableHeader", "Unentschieden"],
-		type: "Lbl",
-		text: "U",
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["sepakbolaTableHeader", "Niederlage"],
-		type: "Lbl",
-		text: "N",
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["sepakbolaTableHeader", "Diff"],
-		type: "Lbl",
-		text: "TD",
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["sepakbolaTableHeader", "Points"],
-		type: "Lbl",
-		text: "P",
-	});
-
 	// body
 	KadTable.clear("idTabBody_SepakbolaTable");
 	for (let i = 0; i < data.length; i++) {

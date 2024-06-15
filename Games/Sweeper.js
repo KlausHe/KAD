@@ -1,4 +1,4 @@
-import { KadDOM, KadRandom, KadArray, initEL, log } from "../General/KadUtils.js";
+import { KadDOM, KadRandom, KadArray, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { timeoutCanvasFinished } from "../Main.js";
 

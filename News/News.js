@@ -1,4 +1,4 @@
-import { dbID, KadDOM, KadDate, KadTable, initEL, log } from "../General/KadUtils.js";
+import { dbID, KadDOM, KadDate, KadTable, initEL } from "../KadUtils/KadUtils.js";
 import { Data_NewsCountries, Data_Country_CodesIso3166 } from "../General/MainData.js";
 
 export const newsData = {

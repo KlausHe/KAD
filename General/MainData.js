@@ -1,9 +1,3 @@
-export const Data_i18nDE = {
-	months: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
-	weekdays: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-	weekdaysShort: ["So.", "Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa."],
-};
-
 export const Data_Currencies = [
 	{ cc: "AED", symbol: "\u062f.\u0625;", name: "UAE dirham" },
 	{ cc: "AFN", symbol: "Afs", name: "Afghan afghani" },

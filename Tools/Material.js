@@ -1,4 +1,4 @@
-import { initEL, dbID, dbIDStyle, KadDOM, KadTable, log } from "../General/KadUtils.js";
+import { initEL, dbID, dbIDStyle,  KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
 import { materialFilterOptions, storage_cl_MaterialFilterSettings } from "../Settings/MaterialFilterSettings.js";
 import { geoUpdateMassDependency } from "./Geometrie.js";

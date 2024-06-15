@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDOM, KadTable } from "../General/KadUtils.js";
+import { initEL, dbID, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
 import { globalP5 } from "../Main.js";
 

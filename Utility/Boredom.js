@@ -1,4 +1,4 @@
-import { initEL, KadRandom } from "../General/KadUtils.js";
+import { initEL, KadRandom, log } from "../KadUtils/KadUtils.js";
 
 initEL({ id: idBtn_boredomStart, fn: boredomGetActivityindex });
 initEL({
@@ -21,7 +21,7 @@ export function clear_cl_Boredom() {
 }
 
 function boredomGetActivityindex() {
-	boredomOptions.index = KadRandom.randomIndex(boredomList);
+	boredomOptions.index = KadRandom.randomIndex(boredomList[boredomOptions.language]);
 	boredomStart();
 }
 

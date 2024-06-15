@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDate, KadRandom } from "../General/KadUtils.js";
+import { initEL, dbID, KadDate, KadRandom } from "../KadUtils/KadUtils.js";
 import { speechSpeakOutput } from "../Benkyou/Speech.js";
 const foodyOptions = {
 	timerRunning: false,

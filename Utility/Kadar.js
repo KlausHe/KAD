@@ -1,4 +1,4 @@
-import { initEL, dbID, objectLength, KadTable, KadValue, KadDate, log } from "../General/KadUtils.js";
+import { initEL, objectLength, KadTable, KadValue, KadDate } from "../KadUtils/KadUtils.js";
 
 const kadarOptions = {
 	valA: null,

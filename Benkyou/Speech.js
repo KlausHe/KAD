@@ -1,5 +1,5 @@
 // import { createRequestBody, normaliseResponse, isLanguageSupported, translate } from "../Data/translateAPI.js";
-import { dbID, daEL, KadDOM, KadArray, log } from "../General/KadUtils.js";
+import { dbID, daEL, KadDOM, KadArray, log } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 
 const speechOptions = {

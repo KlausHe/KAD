@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { initEL, dbID, dbIDStyle, KadTable, KadColor, KadRandom } from "../General/KadUtils.js";
+import { initEL, dbID, dbIDStyle, KadTable, KadColor, KadRandom, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
 

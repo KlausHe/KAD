@@ -1,4 +1,4 @@
-import { dbID, dbIDStyle, initEL, KadColor, KadDOM } from "../General/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadDOM } from "../KadUtils/KadUtils.js";
 import { Data_RALColors } from "../General/MainData.js";
 import { globalColors } from "../Settings/Color.js";
 

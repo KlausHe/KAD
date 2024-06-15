@@ -1,4 +1,4 @@
-import { initEL, KadValue, KadTable } from "../General/KadUtils.js";
+import { initEL, KadValue, KadTable } from "../KadUtils/KadUtils.js";
 const quickmathOptions = {
 	values: { val: 12, i: 42 },
 	objects: {

@@ -1,4 +1,4 @@
-import { dbID, KadTable, log } from "../General/KadUtils.js";
+import { dbID, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
 import { materialSelectedTable } from "../Tools/Material.js";
 export const materialFilterOptions = {

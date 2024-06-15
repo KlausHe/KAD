@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDOM, KadArray, KadValue, KadTable, log } from "../General/KadUtils.js";
+import { initEL, dbID, KadDOM, KadArray, KadValue, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
 import { materialOptions } from "./Material.js";
 
@@ -10,7 +10,7 @@ const expansionOptions = {
 	exTemperatures: [],
 	materials: {
 		matAOrig: 0,
-		matBOrig: 1,
+		matBOrig: 2,
 		matA: null,
 		matB: null,
 		compare: null,

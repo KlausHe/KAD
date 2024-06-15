@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDate } from "../General/KadUtils.js";
+import { initEL, dbID, KadDate } from "../KadUtils/KadUtils.js";
 
 const pelveleaOptions = {
 	starttime: {

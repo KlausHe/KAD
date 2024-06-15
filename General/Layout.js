@@ -3,7 +3,7 @@ import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
-import { KadArray, KadCSS, KadImage, KadTable, logChecked, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, objectLength } from "./KadUtils.js";
+import { KadArray, KadCSS, KadImage, KadTable, logChecked, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, objectLength } from "../KadUtils/KadUtils.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 function contentCheckActive(contentObj) {
@@ -13,7 +13,7 @@ function contentCheckActive(contentObj) {
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Sepakbola" : "Universe",
+	defaultPage: hostDebug() ? "cl_Botanicals" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {

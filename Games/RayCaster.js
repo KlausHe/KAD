@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, daEL, deepClone, KadDOM, KadInteraction, initEL, log } from "../General/KadUtils.js";
+import { dbID, daEL, deepClone, KadDOM, KadInteraction, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { timeoutCanvasFinished } from "../Main.js";
 

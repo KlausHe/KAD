@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL } from "../General/KadUtils.js";
+import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
 import { contentLayout, navClick } from "../General/Layout.js";
 import { globalColors } from "../Settings/Color.js";
 
@@ -17,6 +17,17 @@ export const bgaOptions = {
 export function clear_cl_BackgroundAnimation() {
 	bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Cursordot(), new Trail(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new GameOfLife(), new PongAI()];
 	idSel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name) });
+}
+
+export function canvas_cl_BackgroundAnimation() {
+  const g = KadCSS.getRoot("gridGap", true, true);
+  const n = KadCSS.getRoot("navbarHeight", true, true);
+  caBA.resizeCanvas(window.innerWidth, window.innerHeight - g - n);
+  if (bgaOptions.drawing) {
+    bgaOptions.animations[bgaOptions.curr].reset();
+  }
+  bgaOptions.maxRadius = Math.min(window.innerWidth, window.innerHeight) / 3;
+	caBA.redraw();
 }
 
 export function bgaClearBackground() {
@@ -99,7 +110,9 @@ const caBA = new p5((c) => {
 		}
 	};
 	c.windowResized = function () {
-		const g = KadCSS.getRoot("gridGap", true, true);
+    canvas_cl_BackgroundAnimation()
+    return 
+    const g = KadCSS.getRoot("gridGap", true, true);
 		const n = KadCSS.getRoot("navbarHeight", true, true);
 		c.resizeCanvas(window.innerWidth, window.innerHeight - g - n);
 		if (bgaOptions.drawing) {

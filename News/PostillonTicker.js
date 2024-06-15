@@ -1,5 +1,5 @@
 import { globalP5 } from "../Main.js";
-import { dbID, initEL, KadTable, KadRandom } from "../General/KadUtils.js";
+import { dbID, initEL, KadTable, KadRandom } from "../KadUtils/KadUtils.js";
 
 initEL({ id: idBtn_newsTickerNext, fn: postillonTickerNext });
 

@@ -1,4 +1,4 @@
-import { initEL, dbID, dbIDStyle, dbCL, objectLength, KadDOM, KadValue, KadTable, log } from "../General/KadUtils.js";
+import { initEL, dbID, dbIDStyle, dbCL, objectLength, KadDOM, KadValue, KadTable } from "../KadUtils/KadUtils.js";
 
 const pormulaOptions = {
 	valuesOrig: [3, 5, 8],
@@ -215,7 +215,7 @@ function pormulaDirInput(dir) {
 	pormulaOptions.data.size += dir;
 	pormulaOptions.data.size = KadValue.constrain(pormulaOptions.data.size, pormulaOptions.data.minSize, pormulaOptions.data.maxSize);
 	const parent = dbCL("clDiv_pormulaInput", null);
-  parent.forEach((p, i) => {
+	parent.forEach((p, i) => {
 		p.style.display = i < pormulaOptions.data.size ? "block" : "none";
 		if (dir == 1 && i == pormulaOptions.data.size - 1) {
 			dbID(`idVin_Pormula_x${i}`).value = dbID(`idVin_Pormula_x${i - 1}`).KadGet() + 1;

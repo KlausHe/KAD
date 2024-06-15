@@ -823,8 +823,8 @@ export const rawContentGrid = {
 		size: [2, 1],
 		maingrid: {
 			areas: [
-				["cl_BotanicalsVinPlant", "cl_BotanicalsVinDiscomfort"],
-				["cl_BotanicalsTabResultPlant", "cl_BotanicalsTabResultDiscomfort"],
+				["cl_BotanicalsVinDiscomfort", "cl_BotanicalsVinPlant"],
+				["cl_BotanicalsTabResultDiscomfort", "cl_BotanicalsTabResultPlant"],
 			],
 			rows: [1],
 		},

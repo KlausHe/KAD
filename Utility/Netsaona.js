@@ -1,4 +1,4 @@
-import { dbID, dbCL, KadRandom } from "../General/KadUtils.js";
+import { dbID, dbCL, KadRandom, log } from "../KadUtils/KadUtils.js";
 import * as Data from "../General/MainData.js";
 
 export const netsaonaOptions = {
@@ -30,10 +30,10 @@ export const netsaonaOptions = {
 			});
 		},
 		get Wochentag() {
-			return Data.Data_i18nDE.weekdays;
+			return ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
 		},
 		get Monat() {
-			return Data.Data_i18nDE.months;
+			return ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 		},
 		get Stadt() {
 			return Array.from(Data.Data_Nummernschild.values());

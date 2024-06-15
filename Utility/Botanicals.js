@@ -1,53 +1,51 @@
-import { initEL, dbID, KadTable, log } from "../General/KadUtils.js";
+import { initEL, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Botanicals } from "../General/MainData.js";
 
+const botanicalsOptions = {
+	plant: null,
+	discomfort: null,
+	plantOrig: "Anis",
+	discomfortOrig: "Blutniederdruck",
+};
 initEL({
 	id: idSel_botanicalsPlant,
 	fn: botanicalsPlantChange,
+	selStartValue: botanicalsOptions.plantOrig,
 	selGroup: { "Pflanze wählen": Data_Botanicals.map((obj) => [obj.plant, obj.plant]) },
 });
 initEL({
 	id: idSel_botanicalsDiscomfort,
 	fn: botanicalsDiscomfortChange,
+	selStartValue: botanicalsOptions.discomfortOrig,
 	selGroup: { "Beschwerde wählen": botanicalsPopulateDiscomfort() },
 });
 
 export function clear_cl_Botanicals() {
-	idSel_botanicalsPlant.KadReset();
-	idSel_botanicalsDiscomfort.KadReset();
-
-	KadTable.clear("idTabBody_botanicalsResultDiscomfort");
-	dbID("idTabHeader_BotanicalPlants").innerHTML = "Gewürze / Kräuter";
-	KadTable.clear("idTabBody_botanicalsResultPlant");
-	dbID("idTabHeader_BotanicalPlantDiscomfort").innerHTML = "Beschwerden";
-	dbID("idTabHeader_BotanicalPlantEffect").innerHTML = "Wirkung";
+	botanicalsOptions.plant = idSel_botanicalsPlant.KadReset({ selStartValue: botanicalsOptions.plantOrig });
+	botanicalsOptions.discomfort = idSel_botanicalsDiscomfort.KadReset({ selStartValue: botanicalsOptions.discomfortOrig });
+	botanicalsPlantTable();
+	botanicalsDiscomfortTable();
 }
 
 function botanicalsPopulateDiscomfort() {
 	let discomfortSet = new Set();
 	Data_Botanicals.forEach((dis) => dis.discomfort.forEach((item) => discomfortSet.add(item)));
 	discomfortSet = Array.from(discomfortSet).sort();
-	return discomfortSet;
+	return discomfortSet.map((d) => [d, d]);
 }
 
-function botanicalsPlantChange(obj) {
-	const sel = obj.target;
-	const plant = Data_Botanicals[sel.selectedIndex - 1];
-	botanicalsPlantTable(plant);
+function botanicalsPlantChange() {
+	botanicalsOptions.plant = idSel_botanicalsPlant.KadGet();
+	botanicalsPlantTable();
 }
 
-function botanicalsDiscomfortChange(obj) {
-	const sel = obj.target;
-	let plantsArray = [];
-	Data_Botanicals.forEach((obj) => {
-		if (obj.discomfort.includes(sel.value)) {
-			plantsArray.push(obj.plant);
-		}
-	});
-	botanicalsDiscomfortTable(plantsArray);
+function botanicalsDiscomfortChange() {
+	botanicalsOptions.discomfort = idSel_botanicalsDiscomfort.KadGet();
+	botanicalsDiscomfortTable();
 }
 
-function botanicalsPlantTable(plant) {
+function botanicalsPlantTable() {
+	const plant = Data_Botanicals.filter((p) => p.plant == botanicalsOptions.plant)[0];
 	KadTable.clear("idTabBody_botanicalsResultPlant");
 	let maxA = plant.discomfort ? plant.discomfort.length : 0;
 	let maxB = plant.effect ? plant.effect.length : 0;
@@ -59,8 +57,12 @@ function botanicalsPlantTable(plant) {
 				names: ["botanicalsDiscomfort", i],
 				type: "Lbl",
 				text: plant.discomfort[i],
+				onclick: () => {
+					idSel_botanicalsDiscomfort.KadReset({ selStartValue: plant.discomfort[i] });
+					botanicalsDiscomfortChange();
+				},
+				alias: true,
 				createCellClass: [plant.effect && plant.effect[i] ? "clTab_UIBorderThinRight" : null],
-				copy: true,
 			});
 		}
 		if (plant.effect && plant.effect[i]) {
@@ -68,32 +70,45 @@ function botanicalsPlantTable(plant) {
 				names: ["botanicalsEffect", i],
 				type: "Lbl",
 				text: plant.effect[i],
-				copy: true,
 			});
 		}
 	}
 }
 
-function botanicalsDiscomfortTable(plants) {
+function botanicalsDiscomfortTable() {
+	const discomfort = botanicalsOptions.discomfort;
+	let plantsArray = [];
+	Data_Botanicals.forEach((obj) => {
+		if (obj.discomfort.includes(discomfort)) {
+			plantsArray.push(obj.plant);
+		}
+	});
+
 	KadTable.clear("idTabBody_botanicalsResultDiscomfort");
-	for (let i = 0; i < plants.length; i++) {
+	for (let i = 0; i < plantsArray.length; i += 2) {
 		const row = KadTable.insertRow("idTabBody_botanicalsResultDiscomfort");
 		KadTable.addCell(row, {
 			names: ["botanicalsPlants", i],
 			type: "Lbl",
-			text: plants[i],
-			createCellClass: [plants[i + 1] !== undefined ? "clTab_UIBorderThinRight" : null],
-			copy: true,
+			text: plantsArray[i],
+			createCellClass: [plantsArray[i + 1] !== undefined ? "clTab_UIBorderThinRight" : null],
+			onclick: () => {
+				idSel_botanicalsPlant.KadReset({ selStartValue: plantsArray[i] });
+				botanicalsPlantChange();
+			},
+			alias: true,
 		});
 
-		if (plants[i + 1] !== undefined) {
-			i++;
-			KadTable.addCell(row, {
-				names: ["botanicalsPlants", i],
-				type: "Lbl",
-				text: plants[i],
-				copy: true,
-			});
-		}
+		if (plantsArray[i + 1] == undefined) continue;
+		KadTable.addCell(row, {
+			names: ["botanicalsPlants", i + 1],
+			type: "Lbl",
+			text: plantsArray[i + 1],
+			onclick: () => {
+				idSel_botanicalsPlant.KadReset({ selStartValue: plantsArray[i + 1] });
+				botanicalsPlantChange();
+			},
+			alias: true,
+		});
 	}
 }

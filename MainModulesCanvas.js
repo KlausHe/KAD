@@ -1,5 +1,5 @@
 // General
-// export { canvas_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
+export { canvas_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
 // //Games
 export { canvas_cl_Empat } from "./Games/Empat.js";
 export { canvas_cl_Ibhaluni } from "./Games/Ibhaluni.js";

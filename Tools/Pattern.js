@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, initEL, KadDOM, KadValue } from "../General/KadUtils.js";
+import { dbID, initEL, KadValue } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 const patternOptions = {
 	get margin() {

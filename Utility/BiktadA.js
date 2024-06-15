@@ -1,4 +1,4 @@
-import { dbID, KadTable } from "../General/KadUtils.js";
+import { dbID, KadTable } from "../KadUtils/KadUtils.js";
 import { globalP5 } from "../Main.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 

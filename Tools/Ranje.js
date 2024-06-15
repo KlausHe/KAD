@@ -1,4 +1,4 @@
-import { initEL, KadDOM, KadTable } from "../General/KadUtils.js";
+import { initEL, KadTable } from "../KadUtils/KadUtils.js";
 const ranjeOptions = {
 	value: 36,
 	results: [],

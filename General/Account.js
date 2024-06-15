@@ -1,4 +1,4 @@
-import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, initEL, log } from "../General/KadUtils.js";
+import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, initEL } from "../KadUtils/KadUtils.js";
 import { resetAll } from "../Main.js";
 import * as DBData from "../MainModulesDBData.js";
 import { contentLayout, navClick } from "./Layout.js";

@@ -1,5 +1,5 @@
 import { contentGroupsMaincontent } from "../General/MainContent.js";
-import { dbID, dbCL, KadDOM, KadTable, initEL } from "../General/KadUtils.js";
+import { dbID, dbCL, KadDOM, KadTable, initEL } from "../KadUtils/KadUtils.js";
 import { contentGrid, contentLayout } from "../General/Layout.js";
 
 const usergridOptions = {

@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, initEL, KadDOM, KadValue } from "../General/KadUtils.js";
+import { dbID, initEL, KadValue } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const middleOptions = {
@@ -61,8 +61,8 @@ export function canvas_cl_Middle() {
 }
 
 function calcMiddle() {
-	const a = idVin_middleA.KadGet()
-	const b = idVin_middleB.KadGet()
+	const a = idVin_middleA.KadGet();
+	const b = idVin_middleB.KadGet();
 	middleOptions.barA.val = a;
 	middleOptions.barB.val = b;
 	middleOptions.barA.text = `a: ${middleOptions.barA.val}`;

@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { initEL, dbID, dbIDStyle, deepClone, KadDOM, KadValue, log } from "../General/KadUtils.js";
+import { initEL, dbID, dbIDStyle, deepClone, KadValue } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const pythoOptions = {
