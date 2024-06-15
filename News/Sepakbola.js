@@ -1,4 +1,5 @@
-import { KadArray, KadDate, KadTable, dbID, deepClone, initEL, log } from "../General/KadUtils.js";
+import { userLoggedIn } from "../General/Account.js";
+import { KadArray, KadDate, KadTable, dbID, deepClone, initEL } from "../General/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -207,15 +208,17 @@ function sepakbolaMatchesReturn(data = null) {
 			type: "Lbl",
 			get text() {
 				if (!seasonSelected[i].matchIsFinished) {
+					if (!userLoggedIn()) {
+						return "-:-";
+					}
 					let score = bets[seasonSelected[i].team1.teamName];
-					const min = Math.min(...score);
-					const max = Math.max(...score) - min;
-					const M = Math.round(((max - (score[1] - min)) / max) * 100);
-					const B = Math.round(((max - (score[2] - min)) / max) * 100);
-					const A = Math.round(((max - (score[0] - min)) / max) * 100);
+					const max = Math.max(...score);
+					const sum = score[0] + score[1] + score[2];
+					const M = Math.round(((sum - score[1]) / max) * 100);
+					const B = Math.round(((sum - score[2]) / max) * 100);
+					const A = Math.round(((sum - score[0]) / max) * 100);
 
 					return `${A} - ${M} - ${B}`;
-					return "-:-";
 				} else {
 					const goalLength = seasonSelected[i].goals.length;
 					if (goalLength == 0) {
