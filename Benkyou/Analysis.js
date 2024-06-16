@@ -1,7 +1,5 @@
-import { dbID, objectLength, KadTable, initEL } from "../KadUtils/KadUtils.js";
-// import { newsData } from "../News/News.js";
+import { dbID, objectLength, KadTable, initEL, error, log } from "../KadUtils/KadUtils.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
-import { globalP5 } from "../Main.js";
 
 const analysisOptions = {
 	data: null,
@@ -10,19 +8,13 @@ const analysisOptions = {
 };
 
 initEL({ id: idVin_analysisEntry, fn: analysisInput, resetValue: "Type text to analyze" });
-// initEL({ id: idBtn_analyseNews, fn: analysisNews });
 initEL({ id: idBtn_analyseWiki, fn: analysisWiki });
 
 export function clear_cl_Analysis() {
-	idVin_analysisEntry.KadReset(); 
+	idVin_analysisEntry.KadReset();
 	dbID("idLbl_analysisResult").textContent = "~Average score~";
 	KadTable.clear("idTabBody_analysisResult");
 }
-
-// function analysisNews() {
-// 	dbID("idVin_analysisEntry").value = newsData.articles[newsData.currIndex].description;
-// 	analysisInput(newsData.articles[newsData.currIndex].description);
-// }
 
 function analysisWiki() {
 	const data = storage_cl_WikiSearch.data;
@@ -40,6 +32,14 @@ async function analysisInput() {
 		KadTable.clear("idTabBody_analysisResult");
 		return;
 	}
+	if (analysisOptions.data === null) {
+		try {
+			let response = await fetch("../Data/DataLists/AnalysisGerman.json");
+			analysisOptions.data = await response.json();
+		} catch (err) {
+			error(err);
+		}
+	}
 	analysisOptions.results = analysisAnalyze();
 	if (analysisOptions.results != null) {
 		analysisCreateOutput();
@@ -47,16 +47,7 @@ async function analysisInput() {
 	}
 }
 
-function analysisLoadData(data) {
-	analysisOptions.data = data;
-	analysisInput();
-}
-
 function analysisAnalyze() {
-	if (analysisOptions.data === null) {
-		globalP5.loadJSON("./Data/DataLists/AnalysisGerman.json", analysisLoadData, "json");
-		return null;
-	}
 	let results = {
 		totalScore: 0,
 		singleScores: 0,

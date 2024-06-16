@@ -4,52 +4,57 @@ import { userLoggedIn } from "../General/Account.js";
 import { KadArray, KadDate, KadTable, dbID, deepClone, hostDebug, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
-// Spanien:
-// Italien:
 const betMatchdays = [
 	{
-		Deutschland: [[1.25, 6.0, 9.0], "München", "ZDF"],
-		Ungarn: [[3.3, 3.3, 2.25], "Köln", "MagentaTV"],
-		Spanien: [[1.87, 3.4, 4.33], "Berlin", "ARD"],
-		Italien: [[1.37, 4.5, 8.5], "Dortmund", "ARD"],
-		Polen: [[5.75, 4.2, 1.52], "Hamburg", "RTL"],
-		Slowenien: [[5.25, 3.5, 1.69], "Stuttgart", "ZDF"],
-		Serbien: [[6.5, 4.75, 1.42], "Gelsenkirchen", "ZDF"],
-		Rumänien: [[3.75, 3.5, 2.0], "München", "RTL"],
-		Belgien: [[1.41, 4.5, 7.0], "Frankfurt", "ZDF"],
-		Österreich: [[6.0, 4.5, 1.47], "Düsseldorf", "ARD"],
-		Türkei: [[1.72, 3.6, 4.75], "Dortmund", "RTL"],
-		Portugal: [[1.47, 4.2, 6.5], "Leipzig", "ARD"],
+		Deutschland: [[1.25, 6.0, 9.0], "ZDF"],
+		Ungarn: [[3.3, 3.3, 2.25], "MagentaTV"],
+		Spanien: [[1.87, 3.4, 4.33], "ARD"],
+		Italien: [[1.37, 4.5, 8.5], "ARD"],
+		Polen: [[5.75, 4.2, 1.52], "RTL"],
+		Slowenien: [[5.25, 3.5, 1.69], "ZDF"],
+		Serbien: [[6.5, 4.75, 1.42], "ZDF"],
+		Rumänien: [[3.75, 3.5, 2.0], "RTL"],
+		Belgien: [[1.41, 4.5, 7.0], "ZDF"],
+		Österreich: [[6.0, 4.5, 1.47], "ARD"],
+		Türkei: [[1.72, 3.6, 4.75], "RTL"],
+		Portugal: [[1.47, 4.2, 6.5], "ARD"],
 	},
 	{
-		Kroatien: [[], "Hamburg", "RTL"],
-		Deutschland: [[], "Stuttgart", "ARD"],
-		Schottland: [[], "Köln", "ARD"],
-		Slowenien: [[], "München", "MagentaTV"],
-		Dänemark: [[], "Frankfurt", "ZDF"],
-		Spanien: [[], "Gelsenkirchen", "ZDF"],
-		Slowakei: [[], "Düsseldorf", "RTL"],
-		Polen: [[], "Berlin", "ARD"],
-		Niederlande: [[], "Leipzig", "ARD"],
-		Georgien: [[], "Hamburg", "RTL"],
-		Türkei: [[], "Dortmund", "ZDF"],
-		Belgien: [[], "Köln", "ZDF"],
+		Kroatien: [[], "RTL"],
+		Deutschland: [[], "ARD"],
+		Schottland: [[], "ARD"],
+		Slowenien: [[], "MagentaTV"],
+		Dänemark: [[], "ZDF"],
+		Spanien: [[], "ZDF"],
+		Slowakei: [[], "RTL"],
+		Polen: [[], "ARD"],
+		Niederlande: [[], "ARD"],
+		Georgien: [[], "RTL"],
+		Türkei: [[], "ZDF"],
+		Belgien: [[], "ZDF"],
 	},
 	{
-		Schweiz: [[], "Frankfurt", "ARD"],
-		Schottland: [[], "Stuttgart", "MagentaTV"],
-		Kroatien: [[], "Leipzig", "ZDF"],
-		Albanien: [[], "Düsseldorf", "unbekannt"],
-		Niederlande: [[], "Berlin", "unbekannt"],
-		Frankreich: [[], "Dortmund", "unbekannt"],
-		England: [[], "Köln", "unbekannt"],
-		Dänemark: [[], "München", "unbekannt"],
-		Ukraine: [[], "Stuttgart", "unbekannt"],
-		Slowakei: [[], "Frankfurt", "unbekannt"],
-		Tschechien: [[], "Hamburg", "unbekannt"],
-		Georgien: [[], "Gelsenkirchen", "unbekannt"],
+		Schweiz: [[], "ARD"],
+		Schottland: [[], "MagentaTV"],
+		Kroatien: [[], "ZDF"],
+		Albanien: [[], "-"],
+		Niederlande: [[], "-"],
+		Frankreich: [[], "-"],
+		England: [[], "-"],
+		Dänemark: [[], "-"],
+		Ukraine: [[], "-"],
+		Slowakei: [[], "-"],
+		Tschechien: [[], "-"],
+		Georgien: [[], "-"],
 	},
 ];
+
+const streams = {
+	ARD: "https://www.ardmediathek.de/live",
+	ZDF: "https://www.zdf.de/live-tv",
+	RTL: "https://www.2ix2.com/rtl-live/",
+	MagentaTV: "",
+};
 
 const sepakbolaOptions = {
 	get URLTable() {
@@ -226,7 +231,7 @@ function sepakbolaMatchesReturn(data = null) {
 	let prevDay = null;
 	KadTable.clear("idTabBody_SepakbolaMatches");
 	for (let i = 0; i < seasonSelected.length; i++) {
-		let day = new Date(seasonSelected[i].matchDateTimeUTC);
+		const day = new Date(seasonSelected[i].matchDateTimeUTC);
 		if (prevDay != day.getTime()) {
 			const rowTh = KadTable.insertRow("idTabBody_SepakbolaMatches");
 			prevDay = new Date(day.getTime()).getTime();
@@ -234,7 +239,7 @@ function sepakbolaMatchesReturn(data = null) {
 				names: ["sepakbolaMatchesHeader", i],
 				type: "Lbl",
 				text: KadDate.getDate(day, { format: "WD - DD.MM. - HH:mm" }),
-				colSpan: 3,
+				colSpan: 4,
 				cellStyle: {
 					textAlign: "center",
 				},
@@ -266,7 +271,6 @@ function sepakbolaMatchesReturn(data = null) {
 					if (betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][0].length == 0) {
 						return "-:-";
 					}
-
 					let score = betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][0];
 					return `${score[0]} - ${score[1]} - ${score[2]}`;
 				} else {
@@ -278,7 +282,6 @@ function sepakbolaMatchesReturn(data = null) {
 					}
 				}
 			},
-			title: sepakbolaOptions.selected.ligaIndex != 0 ? "" : `${betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][1]} / ${betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][2]}`,
 			cellStyle: {
 				textAlign: "center",
 			},
@@ -295,6 +298,15 @@ function sepakbolaMatchesReturn(data = null) {
 			},
 		});
 		logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
+		KadTable.addCell(row, {
+			names: ["sepakbolaMatchesLogo", "location", i],
+			type: "Lbl",
+			text: `${seasonSelected[i].location.locationCity} / ${sepakbolaOptions.selected.ligaIndex != 0 ? "" : betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][1]}`,
+			title: "click to open stream",
+			onclick: () => {
+				window.open(streams[betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][1]]);
+			},
+		});
 	}
 }
 

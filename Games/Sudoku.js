@@ -1,6 +1,5 @@
-import { daEL, dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate, initEL, log } from "../KadUtils/KadUtils.js";
+import { dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate, initEL, error } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
-import { globalP5 } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 
 const sudokuOptions = {
@@ -94,17 +93,17 @@ function sudokuClear() {
 	caSU.redraw();
 }
 
-function sudokuLoadData(data) {
-	sudokuOptions.nums = [];
-	sudokuOptions.data = data;
-	sudokuOptions.nums = Object.keys(data).map((n) => Number(n));
-	sudokuRequest();
-}
-
-function sudokuRequest() {
+async function sudokuRequest() {
 	if (sudokuOptions.data === null) {
-		globalP5.loadJSON("./Data/DataLists/Sudoku1000.json", sudokuLoadData, "json");
-		return null;
+		sudokuOptions.nums = [];
+		try {
+			let response = await fetch("../Data/DataLists/Sudoku1000.json");
+			sudokuOptions.data = await response.json();
+		} catch (err) {
+			error(err);
+		}
+		sudokuOptions.data = sudokuOptions.data;
+		sudokuOptions.nums = Object.keys(sudokuOptions.data).map((n) => Number(n));
 	}
 	sudokuOptions.curIndex = KadRandom.randomObject(sudokuOptions.availiableNums);
 	sudokuOptions.usedNums.push(sudokuOptions.curIndex);

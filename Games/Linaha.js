@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDOM, KadRandom, error, dbCL, KadValue, KadTable, KadCSS, dbIDStyle, KadColor, log } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, KadDOM, KadRandom, error, dbCL, KadValue, KadTable, KadCSS, dbIDStyle, KadColor } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
 
@@ -40,7 +40,7 @@ initEL({ id: idBtn_linahaStart, fn: linahaStart });
 
 export function clear_cl_Linaha() {
 	linahaDisableEntries(false);
-	
+
 	idSel_linahaSelectQ.KadReset();
 	idSel_linahaSelectA.KadReset();
 	idSel_linahaChoices.KadReset();
