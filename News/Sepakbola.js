@@ -1,60 +1,7 @@
 // Übetragagungen
 // https://www.dazn.com/de-DE/news/fu%C3%9Fball/tv-plan-em-2024-europameisterschaft-fernsehen-ard-zdf-rtl-1f7dv60hqs0yn171aggxq9o1lb
-import { userLoggedIn } from "../General/Account.js";
-import { KadArray, KadDate, KadTable, dbID, deepClone, hostDebug, initEL, log } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadTable, dbID, deepClone, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
-
-const betMatchdays = [
-	{
-		Deutschland: [[1.25, 6.0, 9.0], "ZDF"],
-		Ungarn: [[3.3, 3.3, 2.25], "MagentaTV"],
-		Spanien: [[1.87, 3.4, 4.33], "ARD"],
-		Italien: [[1.37, 4.5, 8.5], "ARD"],
-		Polen: [[5.75, 4.2, 1.52], "RTL"],
-		Slowenien: [[5.25, 3.5, 1.69], "ZDF"],
-		Serbien: [[6.5, 4.75, 1.42], "ZDF"],
-		Rumänien: [[3.75, 3.5, 2.0], "RTL"],
-		Belgien: [[1.41, 4.5, 7.0], "ZDF"],
-		Österreich: [[6.0, 4.5, 1.47], "ARD"],
-		Türkei: [[1.72, 3.6, 4.75], "RTL"],
-		Portugal: [[1.47, 4.2, 6.5], "ARD"],
-	},
-	{
-		Kroatien: [[], "RTL"],
-		Deutschland: [[], "ARD"],
-		Schottland: [[], "ARD"],
-		Slowenien: [[], "MagentaTV"],
-		Dänemark: [[], "ZDF"],
-		Spanien: [[], "ZDF"],
-		Slowakei: [[], "RTL"],
-		Polen: [[], "ARD"],
-		Niederlande: [[], "ARD"],
-		Georgien: [[], "RTL"],
-		Türkei: [[], "ZDF"],
-		Belgien: [[], "ZDF"],
-	},
-	{
-		Schweiz: [[], "ARD"],
-		Schottland: [[], "MagentaTV"],
-		Kroatien: [[], "ZDF"],
-		Albanien: [[], "-"],
-		Niederlande: [[], "-"],
-		Frankreich: [[], "-"],
-		England: [[], "-"],
-		Dänemark: [[], "-"],
-		Ukraine: [[], "-"],
-		Slowakei: [[], "-"],
-		Tschechien: [[], "-"],
-		Georgien: [[], "-"],
-	},
-];
-
-const streams = {
-	ARD: "https://www.ardmediathek.de/live",
-	ZDF: "https://www.zdf.de/live-tv",
-	RTL: "https://www.2ix2.com/rtl-live/",
-	MagentaTV: "",
-};
 
 const sepakbolaOptions = {
 	get URLTable() {
@@ -202,6 +149,7 @@ async function sepakbolaGetData() {
 		dataMatches = await response.json();
 	} catch (err) {
 		console.error(err);
+    return
 	}
 	sepakbolaTableReturn(dataTable);
 	sepakbolaLastdayReturn(dataDay);
@@ -265,14 +213,7 @@ function sepakbolaMatchesReturn(data = null) {
 			type: "Lbl",
 			get text() {
 				if (!seasonSelected[i].matchIsFinished) {
-					if (!userLoggedIn() && !hostDebug()) {
-						return "-:-";
-					}
-					if (betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][0].length == 0) {
-						return "-:-";
-					}
-					let score = betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][0];
-					return `${score[0]} - ${score[1]} - ${score[2]}`;
+					return "-:-";
 				} else {
 					const goalLength = seasonSelected[i].goals.length;
 					if (goalLength == 0) {
@@ -298,15 +239,6 @@ function sepakbolaMatchesReturn(data = null) {
 			},
 		});
 		logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
-		KadTable.addCell(row, {
-			names: ["sepakbolaMatchesLogo", "location", i],
-			type: "Lbl",
-			text: `${seasonSelected[i].location.locationCity} / ${sepakbolaOptions.selected.ligaIndex != 0 ? "" : betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][1]}`,
-			title: "click to open stream",
-			onclick: () => {
-				window.open(streams[betMatchdays[sepakbolaOptions.selected.matchday][seasonSelected[i].team1.teamName][1]]);
-			},
-		});
 	}
 }
 

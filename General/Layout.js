@@ -13,7 +13,7 @@ function contentCheckActive(contentObj) {
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Analysis" : "Universe",
+	defaultPage: hostDebug() ? "cl_Sepakbola" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {

@@ -270,3 +270,34 @@ function howaDrawData() {
 		return KadValue.mapping(p, graph.min, graph.max, dayWidth + tempWidth + imgWidth, howaOptions.canvas.w - tempWidth);
 	}
 }
+
+const howaWeatherIconList = [
+	{ 0: "clear" },
+	{ 1: "cloud" },
+	{ 2: "cloud" },
+	{ 3: "cloud" },
+	{ 45: "fog" },
+	{ 48: "fog" },
+	{ 51: "drizzle" },
+	{ 53: "drizzle" },
+	{ 55: "drizzle" },
+	{ 56: "drizzle" },
+	{ 57: "drizzle" },
+	{ 61: "rain" },
+	{ 63: "rain" },
+	{ 65: "rain" },
+	{ 66: "rain" },
+	{ 67: "rain" },
+	{ 71: "snow" },
+	{ 73: "snow" },
+	{ 75: "snow" },
+	{ 77: "snow" },
+	{ 80: "rain" },
+	{ 81: "rain" },
+	{ 82: "rain" },
+	{ 85: "snow" },
+	{ 86: "snow" },
+	{ 95: "lightning" },
+	{ 96: "lightning" },
+	{ 99: "lightning" },
+];
