@@ -1,4 +1,4 @@
-import {  KadTable, logChecked, dbID, initEL,  objectLength } from "../KadUtils/KadUtils.js";
+import { KadTable, dbID, initEL, logChecked, objectLength } from "../KadUtils/KadUtils.js";
 
 const lionsOptions = {
 	data: [],

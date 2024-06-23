@@ -1,4 +1,4 @@
-import { dbID, objectLength, KadTable, initEL, error, log } from "../KadUtils/KadUtils.js";
+import { KadTable, dbID, initEL, objectLength } from "../KadUtils/KadUtils.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 
 const analysisOptions = {
@@ -34,8 +34,8 @@ async function analysisInput() {
 	}
 	if (analysisOptions.data === null) {
 		try {
-			let response = await fetch("../Data/DataLists/AnalysisGerman.json");
-			analysisOptions.data = await response.json();
+			const { analyseData } = await import("../Data/DataLists/SentimentListGerman.js");
+			analysisOptions.data = analyseData;
 		} catch (err) {
 			error(err);
 		}
@@ -62,9 +62,8 @@ function analysisAnalyze() {
 	});
 	for (let j = words.length - 1; j >= 0; j--) {
 		let word = words[j];
-		word = word.toString().toLowerCase();
-		if (analysisOptions.data.hasOwnProperty(word)) {
-			const wordScore = Number(analysisOptions.data[word]);
+		if (analysisOptions.data.get(word)) {
+			const wordScore = analysisOptions.data.get(word);
 			results.wordCount++;
 			results.singleScores += wordScore;
 			if (!results.analysedWords.hasOwnProperty(word)) {

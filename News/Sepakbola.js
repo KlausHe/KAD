@@ -141,7 +141,7 @@ async function sepakbolaGetData() {
 	let dataDay = null;
 	let dataMatches = null;
 	try {
-		let response = await fetch(sepakbolaOptions.URLTable);
+		let response = await fetch(sepakbolaOptions.URLTable, { method: "GET" });
 		dataTable = await response.json();
 		response = await fetch(sepakbolaOptions.URLLastday);
 		dataDay = await response.json();
@@ -149,11 +149,11 @@ async function sepakbolaGetData() {
 		dataMatches = await response.json();
 	} catch (err) {
 		console.error(err);
-    return
+		return;
 	}
-	sepakbolaTableReturn(dataTable);
-	sepakbolaLastdayReturn(dataDay);
-	sepakbolaMatchesReturn(dataMatches);
+	if(dataTable != null) sepakbolaTableReturn(dataTable);
+	if(dataDay != null) sepakbolaLastdayReturn(dataDay);
+	if(dataMatches != null) sepakbolaMatchesReturn(dataMatches);
 }
 
 function sepakbolaLastdayReturn(data) {

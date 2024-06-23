@@ -3,6 +3,11 @@ export const contentGroupsNav = ["Universe", "News", "Benkyou", "Utility", "Tool
 export const contentGroupsMaincontent = ["News", "Benkyou", "Utility", "Tools", "Games"];
 
 export const rawContentGrid = {
+	cl_BackgroundAnimation: {
+    contentGroup: "Global-Settings",
+
+		deactivated: true,
+	},
 	//Benkyou
 	cl_Analysis: {
 		contentGroup: "Benkyou",

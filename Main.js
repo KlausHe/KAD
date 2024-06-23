@@ -1,7 +1,7 @@
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground, bgaToggleReset } from "./General/BackgroundAnimation.js";
-import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL } from "./KadUtils/KadUtils.js";
-import { contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
+import { contentCheckActive, contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
+import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
@@ -19,12 +19,12 @@ window.onload = mainSetup;
 function mainSetup() {
 	if (hostDebug()) dbCLStyle("cl_Loading").display = "none";
 	contentLayout.createContentGrid();
+	createContentlayoutList(); // First: create the LayoutLists
 	KadDOM.htmlSetVinChange();
 	KadDOM.htmlSetButtonType();
 	// globalColors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
 
-	createContentlayoutList(); // First: create the LayoutLists
 	createNavbar();
 	createFooter();
 	createSubgrid();
@@ -62,7 +62,10 @@ export function resetAll() {
 }
 
 function clearAllTiles() {
-	for (const clearFunction of Object.values(Clear)) {
+	for (const [clearName, clearFunction] of Object.entries(Clear)) {
+		const gridKey = clearName.replace("clear_", "");
+    log(gridKey,contentGrid[gridKey])
+		if (!contentCheckActive(contentGrid[gridKey])) continue;
 		if (clearFunction != undefined) clearFunction();
 	}
 }

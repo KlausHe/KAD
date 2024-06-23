@@ -1,19 +1,19 @@
+import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, logChecked, objectLength } from "../KadUtils/KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
-import { KadArray, KadCSS, KadImage, KadTable, logChecked, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, objectLength } from "../KadUtils/KadUtils.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
-function contentCheckActive(contentObj) {
+export function contentCheckActive(contentObj) {
 	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
 	return true;
 }
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Sepakbola" : "Universe",
+	defaultPage: hostDebug() ? "cl_Analysis" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {
@@ -40,7 +40,9 @@ export const contentLayout = {
 	},
 	get getUniverse() {
 		return Object.keys(contentGrid).filter((key) => {
-			return !contentLayout.settingsNames.includes(contentGrid[key].contentGroup);
+			const active = contentCheckActive(key);
+			const settings = contentLayout.settingsNames.includes(contentGrid[key].contentGroup);
+			return !settings && active;
 		});
 	},
 	get nameList() {
@@ -268,11 +270,10 @@ function createAreaString(gridArray, rowLength) {
 }
 
 export function createSubgrid() {
-	const dbList = [];
-	for (const dbDataObj of Object.values(DBData)) {
-		dbList.push(dbDataObj.contentName);
-	}
+	const databaseList = Object.values(DBData).map((obj) => obj.contentName);
 	for (const gridKey in contentGrid) {
+		if (!contentCheckActive(contentGrid[gridKey])) continue;
+
 		const parentGrid = dbCL(gridKey);
 		const contentObj = contentGrid[gridKey];
 		const displayName = contentObj.name;
@@ -281,11 +282,11 @@ export function createSubgrid() {
 
 		const childDivArea = parentGrid.children[0].style;
 		childDivArea.gridTemplateRows = "";
-		for (let num of contentObj.maingrid.rows) {
-			if (num == 0) {
+		for (let rows of contentObj.maingrid.rows) {
+			if (rows == 0) {
 				childDivArea.gridTemplateRows += "auto ";
 			} else {
-				childDivArea.gridTemplateRows += `var(--UIHeight${num}) `;
+				childDivArea.gridTemplateRows += `var(--UIHeight${rows}) `;
 			}
 		}
 		childDivArea.gridTemplateRows += "auto";
@@ -417,7 +418,7 @@ export function createSubgrid() {
 		});
 		parent.appendChild(dropSpaceParent);
 
-		if (dbList.includes(gridKey)) {
+		if (databaseList.includes(gridKey)) {
 			//UPLOAD
 			const titleUploadParent = KadTable.createCell("Div", {
 				names: ["gridtitle", "dbUL", gridKey],
