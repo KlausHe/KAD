@@ -62,9 +62,7 @@ export function resetAll() {
 }
 
 function clearAllTiles() {
-	for (const [clearName, clearFunction] of Object.entries(Clear)) {
-		const gridKey = clearName.replace("clear_", "");
-		if (!contentCheckActive(contentGrid[gridKey])) continue;
+	for (const  clearFunction of Object.values(Clear)) {
 		if (clearFunction != undefined) clearFunction();
 	}
 }

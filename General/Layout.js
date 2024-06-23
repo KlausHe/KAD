@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked, objectLength } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, logChecked, objectLength } from "../KadUtils/KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -7,10 +7,10 @@ import { bgaOptions } from "./BackgroundAnimation.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 export function contentCheckActive(contentObj) {
-	if (!hostDebug()) return true;
-	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated){
-    return false
-  }
+	if (hostDebug()) return true;
+	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) {
+		return false;
+	}
 	return true;
 }
 
@@ -25,7 +25,8 @@ export const contentLayout = {
 		let sorted = [];
 		for (let group of contentGroups) {
 			for (let i = 0; i < arr.length; i++) {
-				if (contentCheckActive(arr[i][1]) || arr[i][1].contentGroup == group) sorted.push(arr[i]);
+				if (!contentCheckActive(arr[i][1])) continue;
+				if (arr[i][1].contentGroup == group) sorted.push(arr[i]);
 			}
 		}
 		contentGrid = Object.fromEntries(sorted);
@@ -192,9 +193,7 @@ export function createGridLayout(layoutName) {
 					for (let x = 0; x < contWidth; x++) {
 						for (let y = 0; y < contHeight; y++) {
 							const index = indexR + x + y * rowLength;
-							if (gridArray[index] !== undefined) {
-								notPlaced = true;
-							}
+							if (gridArray[index] !== undefined) notPlaced = true;
 						}
 					}
 					if (!notPlaced) {

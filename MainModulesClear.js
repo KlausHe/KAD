@@ -1,5 +1,5 @@
 // General
-// export { clear_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
+export { clear_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
 export { clear_cl_UserLogin, clear_cl_UserChange } from "./General/Account.js";
 //Settings
 export { clear_cl_GeneralSettings } from "./Settings/General.js";
