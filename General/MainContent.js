@@ -3,21 +3,16 @@ export const contentGroupsNav = ["Universe", "News", "Benkyou", "Utility", "Tool
 export const contentGroupsMaincontent = ["News", "Benkyou", "Utility", "Tools", "Games"];
 
 export const rawContentGrid = {
-	cl_BackgroundAnimation: {
-    contentGroup: "Global-Settings",
-
-		deactivated: true,
-	},
 	//Benkyou
 	cl_Analysis: {
-		contentGroup: "Benkyou",
+    contentGroup: "Benkyou",
 		globalValString: "idVin_analysisEntry",
 		name: "Analysis",
 		source: {
-			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
+      Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
 		},
 		info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -100, der beste ist 100",
-		size: [2, 1],
+    size: [2, 1],
 		maingrid: {
 			areas: [
 				//
@@ -927,7 +922,7 @@ export const rawContentGrid = {
 	cl_Kadar: {
 		contentGroup: "Utility",
 		name: "Kadar",
-		deactivated: true,
+		deactivated: false,
 		heritage: ["türkisch", "bis"],
 		info: "Berechne Zeiten",
 		size: [2, 1],
@@ -1186,21 +1181,20 @@ export const rawContentGrid = {
 	},
 	cl_UserGridLayout: {
 		contentGroup: "Global-Settings",
-		deactivated: true,
+		deactivated: false,
 		name: "User-Layout",
-		size: [2, 2],
+		size: [3, 2],
 		maingrid: {
 			areas: [
-				//
-				["cl_UserGridOptions"],
-				["cl_UserGridTable"],
+				["cl_UserGridOptions", "cl_UserGridCanvas"],
+				["cl_UserGridTable", "cl_UserGridCanvas"],
 			],
 			rows: [1],
 		},
 		subgrid: [
 			["cl_UserGridOptions", "center"],
 			["cl_UserGridTable", "center"],
-			// ["cl_UserGridCanvas", "center"],
+			["cl_UserGridCanvas", "center"],
 		],
 	},
 	cl_MaterialFilterSettings: {

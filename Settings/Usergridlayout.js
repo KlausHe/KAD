@@ -1,12 +1,19 @@
 import { contentGroupsMaincontent } from "../General/MainContent.js";
-import { dbID, dbCL, KadDOM, KadTable, initEL } from "../KadUtils/KadUtils.js";
-import { contentGrid, contentLayout } from "../General/Layout.js";
+import { dbID, dbCL, KadDOM, KadTable, initEL, KadArray, hostDebug } from "../KadUtils/KadUtils.js";
+import { contentGrid, contentLayout, createGridLayout } from "../General/Layout.js";
+import { globalColors } from "./Color.js";
+import { globalValues } from "./General.js";
 
 const usergridOptions = {
+	get canvas() {
+		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h * 2 };
+	},
+	canvasCells: [],
 	columns: 3,
 	enableAll: true,
 	groups: {},
 	enableGroups: {},
+	usedGrid: hostDebug() ? "Utility" : "User",
 };
 
 initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
@@ -26,6 +33,7 @@ export function clear_cl_UserGridLayout() {
 	for (let groupKey of contentGroupsMaincontent) {
 		usergridCheckGroup(groupKey);
 	}
+	createBlockArray();
 }
 
 export const storage_cl_UserGridLayout = {
@@ -53,6 +61,7 @@ export const storage_cl_UserGridLayout = {
 				dbID(`idVin_disableUsergridSingle_CB_${clName}`).checked = state;
 			}
 		}
+		contentLayout.navContent.User = [...data];
 	},
 };
 
@@ -76,6 +85,7 @@ function usergridCheckGroup(groupKey) {
 	const state = somethingChecked === cbEnabled.length ? false : true;
 	dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = KadDOM.getImgPath(state ? "cCheck" : "cX");
 	usergridOptions.enableGroups[groupKey] = state;
+	caUG.redraw();
 }
 
 function usergridUpdateGroup(groupKey) {
@@ -168,3 +178,140 @@ function usergridCreateTable() {
 function saveUsergridLayout() {
 	dbID("idBtn_child_gridtitle_dbUL_cl_UserGridLayout").click();
 }
+
+export function canvas_cl_UserGridLayout() {
+	caUG.resizeCanvas(usergridOptions.canvas.w, usergridOptions.canvas.h);
+	caUG.redraw();
+}
+// w/h = 400 , 700
+
+const caUG = new p5((c) => {
+	c.setup = function () {
+		c.canv_UGird = c.createCanvas(usergridOptions.canvas.w, usergridOptions.canvas.h);
+		c.canv_UGird.id("CanvasUserGrid");
+		c.canv_UGird.parent("#idCanv_userGrid");
+		c.colorMode(c.HSL);
+		c.noLoop();
+		// c.background(globalColors.elements.bgcColor);
+		// c.canv_UGird.mouseMoved(mouseMovedUGrid);
+		// c.canv_UGird.mousePressed(mousePressedUGrid);
+		// c.canv_UGird.mouseReleased(mouseReleasedUGrid);
+		// c.canv_UGird.doubleClicked(mouseDoubleUGrid); // attach
+	};
+
+	c.draw = function () {
+		c.background("lightblue");
+
+		c.line(usergridOptions.canvas.w);
+		for (let cell of usergridOptions.canvasCells) {
+			cell.show();
+		}
+	};
+}, "#idCanv_userGrid");
+
+function createBlockArray() {
+	if (contentLayout.navContent[usergridOptions.usedGrid].length === 0) return;
+	usergridOptions.canvasCells = [];
+	const gridCols = contentLayout.navContent[usergridOptions.usedGrid].length; //getCssRoot("gridColLength", true);
+	const { rowLength, gridArray } = createGridLayout(usergridOptions.usedGrid);
+
+	const cellSize = [Math.floor(usergridOptions.canvas.w / rowLength), 50]; // Math.floor(usergridOptions.canvas.h / usergridOptions.canvasCols)
+	let existingNames = [];
+	for (let n = 0; n < gridArray.length; n++) {
+		const name = gridArray[n];
+		if (name == undefined) continue;
+		if (!existingNames.includes(name)) {
+			const { i, j } = KadArray.indexTo2DxyPosition(n, rowLength);
+			usergridOptions.canvasCells.push(new UGridCell(name, j, i, cellSize[0], cellSize[1]));
+			existingNames.push(name);
+		}
+	}
+	caUG.redraw();
+}
+
+class UGridCell {
+	constructor(name, px, py, cellW, cellH) {
+		this.name = contentGrid[name].name;
+		this.size = [contentGrid[name].size[0]*cellW, cellH*contentGrid[name].size[1]];
+		this.pos = [px * cellW, py * cellH];
+	}
+	margin = 5;
+
+	show() {
+		let bgcColor = "red"; // globalColors.elements.baseColor; // this.free ? (this.selected ? getCssRoot("bgcSubgrid") : getCssRoot("bgcNavbar")) : getCssRoot("bgcBackground");
+		let textColor = globalColors.elements.text; // this.free ? (this.selected ? getCssRoot("textColorSubgrid") : getCssRoot("textColorNavbar")) : getCssRoot("textColorBackground");
+		caUG.push();
+		caUG.translate(this.pos[0] + this.margin, this.pos[1] + this.margin);
+		//RECTANGLE
+		// caUG.noFill();
+		caUG.fill(bgcColor);
+		caUG.stroke(textColor);
+		caUG.strokeWeight(2);
+		caUG.rect(0, 0, this.size[0] - 2 * this.margin, this.size[1] - 2 * this.margin);
+		//TEXT
+		caUG.fill(textColor);
+		caUG.noStroke();
+		// caUG.textAlign(caUG.CENTER, caUG.CENTER);
+		caUG.textAlign(caUG.CENTER, caUG.CENTER);
+		caUG.text(this.name, this.size[0] / 2, this.size[1] / 2);
+		caUG.stroke(0, 0, 255);
+		caUG.strokeWeight(8);
+		caUG.pop();
+	}
+
+	// snap() {
+	//   this.posGrid.x = caUG.constrain(Math.floor((this.posCanvas.x / this.tileDim.x) + 0.5), 0, usergridOptions.canvasRows - (this.tileWH.x + 1));
+	//   this.posGrid.y = caUG.constrain(Math.floor((this.posCanvas.y / this.tileDim.y) + 0.5), 0, usergridOptions.canvasCols - (this.tileWH.y - 1));
+	//   this.posCanvas.x = this.posGrid.x * this.tileDim.x;
+	//   this.posCanvas.y = this.posGrid.y * this.tileDim.y;
+	// };
+
+	// contains(mouse) {
+	//   return (mouse.x > this.posCanvas.x && mouse.x < this.posCanvas.x + this.tileSize.x && mouse.y > this.posCanvas.y && mouse.y < this.posCanvas.y + this.tileSize.y);
+	// };
+}
+/*
+function mouseDoubleUGrid() {
+  let vMouse = caUG.createVector(caUG.mouseX, caUG.mouseY);
+  for (let i = 0; i < usergridOptions.canvasCells.length; i++) {
+    if (usergridOptions.canvasCells[i].contains(vMouse)) {
+      usergridOptions.canvasCells[i].free = !usergridOptions.canvasCells[i].free;
+      caUG.redraw();
+      break;
+    };
+  };
+};
+
+function mousePressedUGrid() {
+  usergridOptions.canvasMousePressed = true;
+  let vMouse = caUG.createVector(caUG.mouseX, caUG.mouseY);
+  for (let i = usergridOptions.canvasCells.length - 1; i >= 0; i--) {
+    if (usergridOptions.canvasCells[i].contains(vMouse) && usergridOptions.canvasCells[i].free) {
+      usergridOptions.canvasSelCell = i;
+      usergridOptions.canvasCells[i].selected = true;
+      usergridOptions.canvasCells[i].offset.set(p5.Vector.sub(usergridOptions.canvasCells[i].posCanvas, vMouse));
+      usergridOptions.canvasCells[i].posCenter.set(vMouse);
+      break;
+    };
+  };
+  caUG.redraw();
+};
+
+function mouseReleasedUGrid() {
+  usergridOptions.canvasCells[usergridOptions.canvasSelCell].selected = false;
+  usergridOptions.canvasMousePressed = false;
+  usergridOptions.canvasCells[usergridOptions.canvasSelCell].snap();
+  usergridOptions.canvasCells.push(usergridOptions.canvasCells.splice(usergridOptions.canvasSelCell, 1)[0]); //place Cell at the end of the createBlockArray
+  caUG.redraw();
+};
+
+function mouseMovedUGrid() {
+  if (usergridOptions.canvasMousePressed && usergridOptions.canvasCells[usergridOptions.canvasSelCell].free) {
+    let vMouse = caUG.createVector(caUG.mouseX, caUG.mouseY);
+    usergridOptions.canvasCells[usergridOptions.canvasSelCell].posCanvas.set(p5.Vector.add(vMouse, usergridOptions.canvasCells[usergridOptions.canvasSelCell].offset));
+    caUG.redraw();
+    // Wow, what a function!
+  };
+};
+
+*/

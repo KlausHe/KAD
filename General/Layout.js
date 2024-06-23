@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, logChecked, objectLength } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked, objectLength } from "../KadUtils/KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -7,13 +7,16 @@ import { bgaOptions } from "./BackgroundAnimation.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 export function contentCheckActive(contentObj) {
-	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
+	if (!hostDebug()) return true;
+	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated){
+    return false
+  }
 	return true;
 }
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Analysis" : "Universe",
+	defaultPage: hostDebug() ? "cl_Kadar" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {
@@ -55,8 +58,6 @@ export const contentLayout = {
 		return list;
 	},
 	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
-	contentList: [],
-	contentLength: 0,
 	prevNavContent: null,
 	prevNavFullscreen: null,
 	settingsNames: ["Account-Settings", "Global-Settings"],
@@ -117,10 +118,11 @@ export function navClick(layoutName = contentLayout.defaultPage) {
 	}
 	contentLayout.prevNavContent = layoutName || contentLayout.defaultPage;
 	navTitle();
-	createGridLayout(contentLayout.prevNavContent);
+	const { contentList, rowLength, gridArray } = createGridLayout(contentLayout.prevNavContent);
+	createAreaString({ contentList, rowLength, gridArray });
 
 	for (let objKey in contentGrid) {
-		const state = contentLayout.contentList.includes(objKey);
+		const state = contentList.includes(objKey);
 		dbCLStyle(objKey).display = state ? "initial" : "none";
 		dbCL(objKey).pointerEvents = state ? "auto" : "none";
 	}
@@ -154,23 +156,22 @@ function navTitle() {
 	document.title = `KAD-${titleText}`;
 }
 
-function createGridLayout(layoutName) {
-	contentLayout.contentList = createContentList(layoutName);
-	if (contentLayout.contentList == []) {
-		createAreaString([], 0);
+export function createGridLayout(layoutName) {
+	let contentList = layoutContentList(layoutName);
+	if (contentList == []) {
+		error("No Grid for gridTemplateAreas provided");
 		return;
 	}
 	// fill list with data
-	const rowLength = contentLayout.contentList.length == 1 ? 1 : KadCSS.getRoot("gridRowLength", true);
+	const rowLength = contentList.length == 1 ? 1 : KadCSS.getRoot("gridRowLength", true) + 1;
 	let gridArray = [];
 	if (rowLength === 1) {
-		for (const name of contentLayout.contentList) {
+		for (const name of contentList) {
 			gridArray.push(name);
 		}
-		createAreaString(gridArray, rowLength);
-		return;
+		return { contentList, rowLength, gridArray };
 	}
-	for (const name of contentLayout.contentList) {
+	for (const name of contentList) {
 		logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name);
 		let contWidth = contentGrid[name].size[0];
 		if (contWidth > rowLength) contWidth = rowLength;
@@ -218,34 +219,21 @@ function createGridLayout(layoutName) {
 			}
 		} // end WHILE
 	} // end Grid-Element
-	createAreaString(gridArray, rowLength);
+	return { contentList, rowLength, gridArray };
 }
 
-function createContentList(layoutName) {
-	if (layoutName === "Clear") {
-		// used in backgroundAnimations to clear all Tiles
-		return [];
-	}
-	if (layoutName.includes("cl_")) {
-		// fullscreen-subgrid
-		return [layoutName];
-	}
-	if (layoutName === "GlobalSettings") {
-		return contentLayout.GlobalSettings;
-	}
-	if (layoutName === "AccountSettings") {
-		return contentLayout.AccountSettings;
-	}
-	if (userLoggedIn()) {
-		return [...contentLayout.navContent[layoutName]];
-	}
-	const hostDeb = hostDebug();
+function layoutContentList(layoutName) {
+	if (layoutName === "Clear") return []; // used in backgroundAnimations to clear all Tiles
+	if (layoutName.includes("cl_")) return [layoutName]; // fullscreen-subgrid
+	if (layoutName === "GlobalSettings") return contentLayout.GlobalSettings;
+	if (layoutName === "AccountSettings") return contentLayout.AccountSettings;
+	if (userLoggedIn()) return [...contentLayout.navContent[layoutName]];
 	return [...contentLayout.navContent[layoutName]].filter((content) => {
-		return hostDeb ? true : contentGrid[content].logReqUser == undefined;
+		return hostDebug() ? true : contentGrid[content].logReqUser == undefined;
 	});
 }
 
-function createAreaString(gridArray, rowLength) {
+function createAreaString({ rowLength, gridArray } = {}) {
 	if (gridArray == []) {
 		dbIDStyle("id_contentGrid").gridTemplateAreas = "";
 		error("No Grid for gridTemplateAreas provided");
@@ -272,8 +260,6 @@ function createAreaString(gridArray, rowLength) {
 export function createSubgrid() {
 	const databaseList = Object.values(DBData).map((obj) => obj.contentName);
 	for (const gridKey in contentGrid) {
-		if (!contentCheckActive(contentGrid[gridKey])) continue;
-
 		const parentGrid = dbCL(gridKey);
 		const contentObj = contentGrid[gridKey];
 		const displayName = contentObj.name;
@@ -522,11 +508,11 @@ export function createNavbar() {
 	while (navElements.length > 0) {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
-	contentLayout.contentLength = 0;
+	let contentLength = 0;
 	logChecked(contentGroupsNav.length != objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
 
 	for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
-		contentLayout.contentLength++;
+		contentLength++;
 		const obj = contentGroupsNav[i];
 		const navParentDiv = KadTable.createCell("Div", {
 			names: ["navBar", obj],

@@ -1,4 +1,4 @@
-import { initEL, objectLength, KadTable, KadValue, KadDate } from "../KadUtils/KadUtils.js";
+import { initEL, objectLength, KadTable, KadValue, KadDate, log } from "../KadUtils/KadUtils.js";
 
 const kadarOptions = {
 	valA: null,
@@ -10,7 +10,7 @@ const kadarOptions = {
 	diff: null,
 	format: "YYYY-MM-DDTHH:mm",
 	dateOrig(days) {
-		return KadDate.getDate(new Date().setDate(new Date().getDate() + days), { format: this.format });
+return KadDate.getDate(new Date(new Date().getTime() + days * 86400000), { format: this.format });
 	},
 	calc: {
 		millis: {
@@ -80,15 +80,15 @@ const kadarOptions = {
 	},
 };
 
-initEL({ id: idVin_kadarDateA, fn: kadarDateSelectedA, resetValue: kadarOptions.dateOrig(-7), dateOpts: { dateObject: true } });
-initEL({ id: idVin_kadarDateB, fn: kadarDateSelectedB, resetValue: kadarOptions.dateOrig(7), dateOpts: { dateObject: true } });
+initEL({ id: idVin_kadarDateA, fn: kadarDateSelectedA, resetValue: kadarOptions.dateOrig(-7), dateOpts: { format: kadarOptions.format, dateObject: true } });
+initEL({ id: idVin_kadarDateB, fn: kadarDateSelectedB, resetValue: kadarOptions.dateOrig(7), dateOpts: { format: kadarOptions.format, dateObject: true } });
 initEL({ id: idBtn_kadarTrashA, fn: clearKadarTableAnow });
 initEL({ id: idBtn_kadarRefresh, fn: kadarCalculate });
 initEL({ id: idBtn_kadarTrashB, fn: clearKadarTableBnow });
 
 export function clear_cl_Kadar() {
-	kadarOptions.valA = idVin_kadarDateA.KadReset();
-	kadarOptions.valB = idVin_kadarDateB.KadReset();
+	kadarOptions.valA = idVin_kadarDateA.KadReset(); 
+	kadarOptions.valB = idVin_kadarDateB.KadReset(); 
 	kadarOptions.valAB = null;
 	idLbl_kadarDateNow.textContent = KadDate.getDate();
 	kadarCalculate();
@@ -96,6 +96,7 @@ export function clear_cl_Kadar() {
 
 function kadarDateSelectedA() {
 	kadarOptions.valA = idVin_kadarDateA.KadGet();
+  log(kadarOptions.valA)
 	kadarCalculate();
 }
 function kadarDateSelectedB() {
