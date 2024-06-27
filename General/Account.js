@@ -389,7 +389,8 @@ function createUserInfos() {
 	KadDOM.clearFirstChild(parent);
 	const loggedIn = userLoggedIn();
 	for (const [key, subObj] of Object.entries(AccData.infos)) {
-		const uInfoParent = KadTable.createCell("Div", {
+		const uInfoParent = KadTable.createCell( {
+      type:"Div",
 			names: ["uInfoParent", key],
 			style: {
 				whiteSpace: "nowrap",
@@ -397,7 +398,8 @@ function createUserInfos() {
 		});
 		parent.appendChild(uInfoParent);
 
-		const uInfoBtn = KadTable.createCell("Lbl", {
+		const uInfoBtn = KadTable.createCell( {
+      type:"Lbl",
 			names: ["uInfoLbl", key],
 			createClass: ["cl_info"],
 			ui: {
@@ -416,7 +418,8 @@ function createUserInfos() {
 			}
 		}
 
-		const uInfoVin = KadTable.createCell("Vin", {
+		const uInfoVin = KadTable.createCell( {
+      type:"Vin",
 			names: ["uInfoVin", key],
 			subGroup: "text",
 			ui: {
@@ -428,7 +431,8 @@ function createUserInfos() {
 			placeholder: ph,
 		});
 		uInfoParent.appendChild(uInfoVin);
-		const uInfoDel = KadTable.createCell("Btn", {
+		const uInfoDel = KadTable.createCell( {
+      type:"Btn",
 			names: ["uInfoDel", key],
 			subGroup: "button",
 			img: "trash",

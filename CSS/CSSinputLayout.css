@@ -89,7 +89,7 @@ img[imgSize="numbery"] {
 }
 
 img[imgSize="howaImg"] {
-	width: var(--gridWidthGameCanvas);
+	width: calc(var(--gridWidthGameCanvas) * 0.7);
 	height: auto;
 	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);

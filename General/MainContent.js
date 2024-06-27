@@ -370,8 +370,8 @@ export const rawContentGrid = {
 			Daten: "https://open-meteo.com",
 			GeoLocation: "https://github.com/bigdatacloudapi/js-reverse-geocode-client",
 		},
-		info: "Wettervorhersage in 3 Stunden abständen für die nächsten 4 Tage.",
-		size: [2, 2],
+		info: "Wettervorhersage für die nächsten Tage.",
+		size: [3, 2],
 		maingrid: {
 			areas: [
 				["cl_HowaInput", "cl_HowaMapsSelectDistrict", "cl_HowaMapsSelectCriteria"],
@@ -386,7 +386,7 @@ export const rawContentGrid = {
 			["cl_HowaGraph", "center"],
 			["cl_HowaMapsSelectDistrict", "right"],
 			["cl_HowaMapsSelectCriteria", "left"],
-			["cl_HowaMapsImg", "center"],
+			["cl_HowaMapsImg", "bottom"],
 		],
 	},
 	cl_Lions: {
@@ -1219,12 +1219,12 @@ export const rawContentGrid = {
 				//
 				["cl_UserLogin_mail"],
 				["cl_UserLogin_pass"],
-				["cl_UserLogin_check"],
 				["cl_UserLogin_alert"],
 				["cl_UserLogin_submit"],
+				["cl_UserLogin_check"],
 				["cl_UserLogin_cancel"],
 			],
-			rows: [1, 1, 1, 0, 1],
+			rows: [1, 1, 0, 1, 1],
 		},
 		subgrid: [
 			["cl_UserLogin_mail", "left"],

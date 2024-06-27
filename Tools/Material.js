@@ -70,8 +70,8 @@ export function materialSelectedTable() {
 	KadTable.clear("idTabHeader_Materiallisted");
 	const headerRow = KadTable.insertRow("idTabHeader_Materiallisted");
 	KadTable.addHeaderCell(headerRow, {
-		names: ["materialHeaderEdge"],
 		type: "Lbl",
+		names: ["materialHeaderEdge"],
 		text: "Eigenschaften",
 		colSpan: 3,
 		cellStyle: {
@@ -81,8 +81,8 @@ export function materialSelectedTable() {
 
 	for (let a = 0; a < materialOptions.matList.length; a++) {
 		KadTable.addHeaderCell(headerRow, {
-			names: ["materialHeaderTrash", a],
 			type: "Btn",
+			names: ["materialHeaderTrash", a],
 			subGroup: "subgrid",
 			img: "trash",
 			ui: {
@@ -101,8 +101,8 @@ export function materialSelectedTable() {
 	}
 
 	KadTable.addHeaderCell(headerRow, {
-		names: ["materialHeaderAdd"],
 		type: "Btn",
+		names: ["materialHeaderAdd"],
 		subGroup: "subgrid",
 		img: "oAdd",
 		ui: {
@@ -128,8 +128,8 @@ export function materialSelectedTable() {
 		const listItem = materialOptions.headerList[i];
 		const dataItem = Data_Materials.metadata[listItem];
 		KadTable.addCell(row, {
-			names: ["material", "bez", i],
 			type: "Lbl",
+			names: ["material", "bez", i],
 			text: dataItem.Bezeichnung,
 			style: {
 				maxWidth: "10rem",
@@ -139,16 +139,16 @@ export function materialSelectedTable() {
 			},
 		});
 		KadTable.addCell(row, {
-			names: ["material", "abbr", i],
 			type: "Lbl",
+			names: ["material", "abbr", i],
 			text: dataItem.abbr ? `[${dataItem.abbr}]` : "",
 			style: {
 				whiteSpace: "nowrap",
 			},
 		});
 		KadTable.addCell(row, {
-			names: ["material", "unit", i],
 			type: "Lbl",
+			names: ["material", "unit", i],
 			text: dataItem.Unit ? `[${dataItem.Unit}]` : "",
 		});
 
@@ -156,8 +156,8 @@ export function materialSelectedTable() {
 			const item = Data_Materials.Materials[materialOptions.matList[n]];
 			const value = item[listItem];
 			KadTable.addCell(row, {
-				names: ["material", "value", i, n],
 				type: "Lbl",
+				names: ["material", "value", i, n],
 				get text() {
 					if (listItem == "matSort" || listItem == "matZustand") {
 						return value != undefined ? `${value}*` : "-";

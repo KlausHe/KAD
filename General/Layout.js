@@ -299,7 +299,8 @@ export function createSubgrid() {
 		// nav-Icon
 		let contGroup = contentObj.contentGroup;
 
-		const dropIconParent = KadTable.createCell("Div", {
+		const dropIconParent = KadTable.createCell({
+			type: "Div",
 			names: ["navIcon", gridKey],
 			createClass: ["cl_DropdownParent"],
 			onclick: () => {
@@ -307,74 +308,43 @@ export function createSubgrid() {
 			},
 		});
 		parent.appendChild(dropIconParent);
-		const dropIconImg = KadTable.createCell("Img", {
-			names: ["navIcon", gridKey],
-			subGroup: "gridtitle",
-			img: `nav${contGroup}`,
-		});
+		const dropIconImg = KadTable.createCell({ type: "Img", names: ["navIcon", gridKey], subGroup: "gridtitle", img: `nav${contGroup}` });
 		dropIconParent.appendChild(dropIconImg);
-		const dropIconText = KadTable.createCell("Lbl", {
-			names: ["titleIcon", gridKey],
-			text: `Gehe zu Kathegorie ${contGroup}.`,
-			createClass: ["clDropdown", "cl_DropdownInfo"],
-		});
+		const dropIconText = KadTable.createCell({ type: "Lbl", names: ["titleIcon", gridKey], text: `Gehe zu Kathegorie ${contGroup}.`, createClass: ["clDropdown", "cl_DropdownInfo"] });
 		dropIconParent.appendChild(dropIconText);
 
 		//name --> TITLE
-		const titleDiv = KadTable.createCell("Div", {
-			names: ["titleName", gridKey],
-			createClass: ["cl_DropdownParent"],
-		});
+		const titleDiv = KadTable.createCell({ type: "Div", names: ["titleName", gridKey], createClass: ["cl_DropdownParent"] });
 		parent.appendChild(titleDiv);
-		const titleText = KadTable.createCell("H1", {
-			names: ["titleName", displayName],
-			text: displayName,
-		});
+		const titleText = KadTable.createCell({ type: "H1", names: ["titleName", displayName], text: displayName });
 		titleDiv.appendChild(titleText);
 
 		// NameHeritage --> DROPDOWN
 		if (contentObj.hasOwnProperty("heritage")) {
 			const heritage = contentObj.heritage;
 			if (heritage.length > 0) {
-				const dropNameText = KadTable.createCell("Lbl", {
-					names: ["titleDropName", gridKey],
-					text: `\"${displayName}\" ist ${heritage[0]} und bedeutet \"${heritage[1]}\"`,
-					createClass: ["clDropdown", "clDropdownName"],
-				});
+				const dropNameText = KadTable.createCell({ type: "Lbl", names: ["titleDropName", gridKey], text: `\"${displayName}\" ist ${heritage[0]} und bedeutet \"${heritage[1]}\"`, createClass: ["clDropdown", "clDropdownName"] });
 				titleDiv.appendChild(dropNameText);
 			}
 		}
 
 		// info --> DROPDOWN
 		if (contentObj.hasOwnProperty("info")) {
-			const dropInfoParent = KadTable.createCell("Div", {
-				names: ["titleInfo", gridKey],
-				createClass: ["cl_DropdownParent"],
-			});
+			const dropInfoParent = KadTable.createCell({ type: "Div", names: ["titleInfo", gridKey], createClass: ["cl_DropdownParent"] });
 			parent.appendChild(dropInfoParent);
-			const dropInfoImg = KadTable.createCell("Img", {
-				names: ["titleInfo", gridKey],
-				subGroup: "gridtitle",
-				img: "cInfo",
-			});
+			const dropInfoImg = KadTable.createCell({ type: "Img", names: ["titleInfo", gridKey], subGroup: "gridtitle", img: "cInfo" });
 			dropInfoParent.appendChild(dropInfoImg);
-			const dropInfoText = KadTable.createCell("Lbl", {
-				names: ["titleInfo", gridKey],
-				text: contentObj.info,
-				createClass: ["clDropdown", "cl_DropdownInfo"],
-			});
+			const dropInfoText = KadTable.createCell({ type: "Lbl", names: ["titleInfo", gridKey], text: contentObj.info, createClass: ["clDropdown", "cl_DropdownInfo"] });
 			dropInfoParent.appendChild(dropInfoText);
 		}
 
 		// source --> OPEN NEW WINDOW
 		if (contentObj.hasOwnProperty("source")) {
 			for (const [key, value] of Object.entries(contentObj.source)) {
-				const dropSourceParent = KadTable.createCell("Div", {
-					names: ["titleSource", gridKey, key],
-					createClass: ["cl_DropdownParent"],
-				});
+				const dropSourceParent = KadTable.createCell({ type: "Div", names: ["titleSource", gridKey, key], createClass: ["cl_DropdownParent"] });
 				parent.appendChild(dropSourceParent);
-				const dropSourceImg = KadTable.createCell("Img", {
+				const dropSourceImg = KadTable.createCell({
+					type: "Img",
 					names: ["titleSource", key],
 					subGroup: "url",
 					img: KadImage.getFavicon(value, globalValues.mediaSizes.imgSize),
@@ -383,7 +353,8 @@ export function createSubgrid() {
 					},
 				});
 				dropSourceParent.appendChild(dropSourceImg);
-				const dropSourceText = KadTable.createCell("Lbl", {
+				const dropSourceText = KadTable.createCell({
+					type: "Lbl",
 					names: ["titleSource", "text", gridKey],
 					text: `${key} von:<br>${value}<br>(Opens in a new Tab)`,
 					createClass: ["clDropdown", "cl_DropdownInfo"],
@@ -395,7 +366,8 @@ export function createSubgrid() {
 			}
 		}
 		//DEBUG-LABEL
-		const dropSpaceParent = KadTable.createCell("Div", {
+		const dropSpaceParent = KadTable.createCell({
+			type: "Div",
 			names: ["titleSpace", gridKey],
 			style: {
 				flex: 1,
@@ -405,7 +377,8 @@ export function createSubgrid() {
 
 		if (databaseList.includes(gridKey)) {
 			//UPLOAD
-			const titleUploadParent = KadTable.createCell("Div", {
+			const titleUploadParent = KadTable.createCell({
+				type: "Div",
 				names: ["gridtitle", "dbUL", gridKey],
 				createClass: ["ULParent"],
 				style: {
@@ -413,7 +386,8 @@ export function createSubgrid() {
 				},
 			});
 			parent.appendChild(titleUploadParent);
-			const titleUploadBtn = KadTable.createCell("Btn", {
+			const titleUploadBtn = KadTable.createCell({
+				type: "Btn",
 				names: ["gridtitle", "dbUL", gridKey],
 				subGroup: "gridtitle",
 				img: "upload",
@@ -428,7 +402,8 @@ export function createSubgrid() {
 			titleUploadParent.appendChild(titleUploadBtn);
 
 			//DOWNLOAD
-			const titleDownloadParent = KadTable.createCell("Div", {
+			const titleDownloadParent = KadTable.createCell({
+				type: "Div",
 				names: ["gridtitle", "dbDL", gridKey],
 				createClass: ["DLParent"],
 				style: {
@@ -437,7 +412,8 @@ export function createSubgrid() {
 			});
 			parent.appendChild(titleDownloadParent);
 
-			const titleDownloadBtn = KadTable.createCell("Btn", {
+			const titleDownloadBtn = KadTable.createCell({
+				type: "Btn",
 				names: ["gridtitle", "dbDL", gridKey],
 				subGroup: "gridtitle",
 				img: "download",
@@ -453,11 +429,10 @@ export function createSubgrid() {
 		}
 
 		//fullscreen this subgrid
-		const titleFullParent = KadTable.createCell("Div", {
-			names: ["gridtitle", "full", gridKey],
-		});
+		const titleFullParent = KadTable.createCell({ type: "Div", names: ["gridtitle", "full", gridKey] });
 		parent.appendChild(titleFullParent);
-		const titleFullBtn = KadTable.createCell("Btn", {
+		const titleFullBtn = KadTable.createCell({
+			type: "Btn",
 			names: ["gridtitle", "full", gridKey],
 			subGroup: "gridtitle",
 			img: "fullscreen",
@@ -472,11 +447,10 @@ export function createSubgrid() {
 		titleFullParent.appendChild(titleFullBtn);
 
 		//clear --> refresh
-		const titleTrashParent = KadTable.createCell("Div", {
-			names: ["gridtitle", "trash", gridKey],
-		});
+		const titleTrashParent = KadTable.createCell({ type: "Div", names: ["gridtitle", "trash", gridKey] });
 		parent.appendChild(titleTrashParent);
-		const titleTrashBtn = KadTable.createCell("Btn", {
+		const titleTrashBtn = KadTable.createCell({
+			type: "Btn",
 			names: ["gridtitle", "trash", gridKey],
 			subGroup: "gridtitle",
 			img: "trash",
@@ -513,7 +487,8 @@ export function createNavbar() {
 	for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
 		contentLength++;
 		const obj = contentGroupsNav[i];
-		const navParentDiv = KadTable.createCell("Div", {
+		const navParentDiv = KadTable.createCell({
+			type: "Div",
 			names: ["navBar", obj],
 			createClass: ["cl_navElements"],
 			idNoChild: true,
@@ -522,18 +497,9 @@ export function createNavbar() {
 			},
 			onclick: () => navClick(obj),
 		});
-		const navParentImg = KadTable.createCell("Img", {
-			names: ["navBarIcon", "parent", obj],
-			subGroup: "navbar",
-			img: `nav${obj}`,
-		});
+		const navParentImg = KadTable.createCell({ type: "Img", names: ["navBarIcon", "parent", obj], subGroup: "navbar", img: `nav${obj}` });
 		navParentDiv.appendChild(navParentImg);
-		const navParentLbl = KadTable.createCell("Lbl", {
-			names: ["navBarLbl", obj],
-			createClass: ["cl_navNames"],
-			idNoChild: true,
-			text: obj,
-		});
+		const navParentLbl = KadTable.createCell({ type: "Lbl", names: ["navBarLbl", obj], createClass: ["cl_navNames"], idNoChild: true, text: obj });
 		navParentDiv.appendChild(navParentLbl);
 		parent.insertBefore(navParentDiv, parent.children[0]);
 	}
@@ -550,13 +516,11 @@ export function createFooter() {
 	contentFooter.forEach((arr, index) => {
 		const name = arr[0];
 		const url = arr[1];
-		const dropSourceParent = KadTable.createCell("Div", {
-			names: ["footerSource", index],
-			createClass: ["cl_DropdownParent", "clFooterCredits"],
-		});
+		const dropSourceParent = KadTable.createCell({ type: "Div", names: ["footerSource", index], createClass: ["cl_DropdownParent", "clFooterCredits"] });
 		parent.appendChild(dropSourceParent);
 
-		const dropSourceImg = KadTable.createCell("Img", {
+		const dropSourceImg = KadTable.createCell({
+			type: "Img",
 			names: ["footerSource", index],
 			subGroup: "url",
 			img: KadImage.getFavicon(url, globalValues.mediaSizes.imgSize),
@@ -565,7 +529,8 @@ export function createFooter() {
 			},
 		});
 		dropSourceParent.appendChild(dropSourceImg);
-		const dropSourceText = KadTable.createCell("Lbl", {
+		const dropSourceText = KadTable.createCell({
+			type: "Lbl",
 			names: ["footerSource", index],
 			text: `${name} von:<br>${url}<br>(Opens in a new Tab)`,
 			createClass: ["clDropup", "cl_DropdownInfo"],
