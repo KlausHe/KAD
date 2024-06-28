@@ -482,7 +482,7 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	let contentLength = 0;
-	logChecked(contentGroupsNav.length != objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
+	// logChecked(contentGroupsNav.length != objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
 
 	for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
 		contentLength++;
