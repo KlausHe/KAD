@@ -413,26 +413,25 @@ export const rawContentGrid = {
 		],
 	},
 	cl_News: {
-		deactivated: true,
 		contentGroup: "News",
 		name: "News",
 		heritage: ["englisch", "Nachrichten"],
 		source: {
-			Daten: "https://newsdata.io",
+			Daten: "https://Tagesschau.de",
 		},
 		size: [2, 1],
 		maingrid: {
 			areas: [
-				["cl_NewsCountry", "cl_NewsResultImage", "cl_NewsResultTitle"],
-				["cl_NewsCategory", "cl_NewsResultImage", "cl_NewsResultTitle"],
+				["cl_NewsRegion", "cl_NewsResultImage", "cl_NewsResultTitle"],
+				["cl_NewsRessort", "cl_NewsResultImage", "cl_NewsResultTitle"],
 				["cl_NewsTable", "cl_NewsResultImage", "cl_NewsResultTitle"],
 				["cl_NewsTable", "cl_NewsResultText", "cl_NewsResultText"],
 			],
 			rows: [1, 1, 1],
 		},
 		subgrid: [
-			["cl_NewsCategory", "left"],
-			["cl_NewsCountry", "left"],
+			["cl_NewsRegion", "left"],
+			["cl_NewsRessort", "left"],
 			["cl_NewsTable", "left"],
 			["cl_NewsResultTitle", "center", "center"],
 			["cl_NewsResultText", "center"],

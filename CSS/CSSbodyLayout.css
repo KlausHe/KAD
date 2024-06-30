@@ -197,6 +197,9 @@ sup {
 	vertical-align: super;
 	font-size: 70%;
 }
+strong {
+	font-weight: bold;
+}
 
 /* Table */
 table {
@@ -295,7 +298,7 @@ tbody tr:last-child td {
 	overflow-y: auto;
 	scrollbar-width: none;
 	max-height: 16.667rem;
-	max-width: var(--UIWidth8);
+	max-width: var(--UIWidth12);
 }
 
 .clDiv_overviewTablesInput::-webkit-scrollbar {

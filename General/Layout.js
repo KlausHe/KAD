@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, logChecked, objectLength } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked, objectLength } from "../KadUtils/KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -16,7 +16,7 @@ export function contentCheckActive(contentObj) {
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Kadar" : "Universe",
+	defaultPage: hostDebug() ? "cl_News" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {

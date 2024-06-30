@@ -75,7 +75,6 @@ img[imgBtn="subgrid"] {
 img[imgBtn="gridtitle"] {
 	-webkit-filter: invert(var(--invGridtitle));
 	filter: invert(var(--invGridtitle));
-	/* cursor: default; */
 }
 
 img[imgSize="blech"] {
@@ -499,11 +498,13 @@ input[imgBtn="subgrid"] {
 }
 
 [uiSize~="outputTitle"] {
-	width: var(--UIWidth13);
+	width: var(--UIWidth17);
 }
 
 [uiSize~="outputText"] {
 	width: var(--UIWidth20);
+	max-height: var(--UIWidth20);
+	overflow-y: scroll;
 }
 
 [uiSize~="sudoku"] {
