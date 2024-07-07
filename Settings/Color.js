@@ -148,7 +148,7 @@ export function colorThemeChanged() {
 	}
 	setTimeout(() => {
 		colorUpdateCanvascolors();
-	}, KadCSS.getRoot("transitionTimeName", true) * 1000);
+	}, KadCSS.getRoot( {value: "transitionTimeName" }) * 1000);
 }
 
 export function colToggleColormode() {

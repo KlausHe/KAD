@@ -204,8 +204,8 @@ function linahaCreateButtons() {
 						uiType: linahaOptions.selA == 1 ? "transparent" : "",
 					},
 					style: {
-						margin: KadCSS.getRoot("gridGap"),
-						border: KadCSS.getRoot("UIBorderThin"),
+						margin: KadCSS.getRoot({ value: "gridGap", noUnit: false }),
+						border: KadCSS.getRoot({ value: "UIBorderThin", noUnit: false }),
 					},
 					text: "...",
 					onclick: () => {

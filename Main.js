@@ -1,6 +1,6 @@
 import { createNewNuncDiscipuli } from "./General/Account.js";
-import { bgaClearBackground, bgaToggleReset } from "./General/BackgroundAnimation.js";
-import { contentCheckActive, contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
+import { bgaClearBackground } from "./General/BackgroundAnimation.js";
+import { contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
 import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
@@ -52,7 +52,6 @@ initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: contentLayout.na
 initEL({ id: idDiv_navBar_GlobalSettings, fn: () => navClick("GlobalSettings") });
 initEL({ id: idDiv_navBar_Colormode, fn: colToggleColormode });
 initEL({ id: idDiv_clearBackground, fn: bgaClearBackground });
-initEL({ id: idCb_bgaReset, fn: () => bgaToggleReset(idCb_bgaReset) });
 
 export function resetAll() {
 	createNewNuncDiscipuli();
@@ -62,7 +61,7 @@ export function resetAll() {
 }
 
 function clearAllTiles() {
-	for (const  clearFunction of Object.values(Clear)) {
+	for (const clearFunction of Object.values(Clear)) {
 		if (clearFunction != undefined) clearFunction();
 	}
 }

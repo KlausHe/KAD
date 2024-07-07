@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadImage, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked, objectLength } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, getFavicon, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked } from "../KadUtils/KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -16,7 +16,7 @@ export function contentCheckActive(contentObj) {
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_News" : "Universe",
+	defaultPage: hostDebug() ? "cl_WikiSearch" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {
@@ -89,7 +89,7 @@ export function resizeGrid() {
 	const minWidth = globalValues.mediaSizes.divGridMinWidth;
 	const x = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols, floored division
 	const calcX = x; //tryWidth < winWidth + gap + margin * 2 ? x : x;
-	if (KadCSS.getRoot("gridRowLength", true) != calcX) {
+	if (KadCSS.getRoot({ value: "gridRowLength" }) != calcX) {
 		KadCSS.setRoot("gridRowLength", calcX);
 		navClick(contentLayout.prevNavContent);
 	}
@@ -164,7 +164,7 @@ export function createGridLayout(layoutName) {
 		return;
 	}
 	// fill list with data
-	const rowLength = contentList.length == 1 ? 1 : KadCSS.getRoot("gridRowLength", true) + 1;
+	const rowLength = contentList.length == 1 ? 1 : KadCSS.getRoot({ value: "gridRowLength" }) + 1;
 	let gridArray = [];
 	if (rowLength === 1) {
 		for (const name of contentList) {
@@ -347,7 +347,7 @@ export function createSubgrid() {
 					type: "Img",
 					names: ["titleSource", key],
 					subGroup: "url",
-					img: KadImage.getFavicon(value, globalValues.mediaSizes.imgSize),
+					img: getFavicon(value, globalValues.mediaSizes.imgSize),
 					onclick: () => {
 						window.open(value);
 					},
@@ -523,7 +523,7 @@ export function createFooter() {
 			type: "Img",
 			names: ["footerSource", index],
 			subGroup: "url",
-			img: KadImage.getFavicon(url, globalValues.mediaSizes.imgSize),
+			img: getFavicon(url, globalValues.mediaSizes.imgSize),
 			onclick: () => {
 				window.open(url);
 			},

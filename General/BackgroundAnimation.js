@@ -19,13 +19,13 @@ export function clear_cl_BackgroundAnimation() {
 }
 
 export function canvas_cl_BackgroundAnimation() {
-  const g = KadCSS.getRoot("gridGap", true, true);
-  const n = KadCSS.getRoot("navbarHeight", true, true);
-  caBA.resizeCanvas(window.innerWidth, window.innerHeight - g - n);
-  if (bgaOptions.drawing) {
-    bgaOptions.animations[bgaOptions.curr].reset();
-  }
-  bgaOptions.maxRadius = Math.min(window.innerWidth, window.innerHeight) / 3;
+	const g = KadCSS.getRoot({ value: "gridGap", RemToPx: true });
+	const n = KadCSS.getRoot({ value: "navbarHeight", RemToPx: true });
+	caBA.resizeCanvas(window.innerWidth, window.innerHeight - g - n);
+	if (bgaOptions.drawing) {
+		bgaOptions.animations[bgaOptions.curr].reset();
+	}
+	bgaOptions.maxRadius = Math.min(window.innerWidth, window.innerHeight) / 3;
 	caBA.redraw();
 }
 
@@ -48,10 +48,6 @@ function bgaClearGrid() {
 initEL({ id: idDiv_bgaToggle, fn: bgaToggle });
 initEL({ id: idSel_bgaSelect, fn: bgaSelectAnimation, selList: [1] });
 initEL({ id: idDiv_bgaClearGrid, fn: bgaClearGrid });
-
-export function bgaToggleReset(obj) {
-	bgaOptions.resetting = obj.checked;
-}
 
 function bgaStart() {
 	bgaOptions.animations[bgaOptions.curr].reset();
@@ -93,7 +89,7 @@ function bgaQuit() {
 
 const caBA = new p5((c) => {
 	c.setup = function () {
-		const n = KadCSS.getRoot("navbarHeight", true, true);
+		const n = KadCSS.getRoot({ value: "navbarHeight", RemToPx: true });
 		c.canv = c.createCanvas(window.innerWidth, window.innerHeight - n);
 		c.canv.id("canvasBackAnimation");
 		c.canv.parent("#idCanv_backgroundAnimation");
@@ -109,15 +105,7 @@ const caBA = new p5((c) => {
 		}
 	};
 	c.windowResized = function () {
-    canvas_cl_BackgroundAnimation()
-    return 
-    const g = KadCSS.getRoot("gridGap", true, true);
-		const n = KadCSS.getRoot("navbarHeight", true, true);
-		c.resizeCanvas(window.innerWidth, window.innerHeight - g - n);
-		if (bgaOptions.drawing) {
-			bgaOptions.animations[bgaOptions.curr].reset();
-		}
-		bgaOptions.maxRadius = Math.min(window.innerWidth, window.innerHeight) / 3;
+		canvas_cl_BackgroundAnimation();
 	};
 }, "#idCanv_backgroundAnimation");
 

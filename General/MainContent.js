@@ -418,6 +418,7 @@ export const rawContentGrid = {
 		heritage: ["englisch", "Nachrichten"],
 		source: {
 			Daten: "https://Tagesschau.de",
+			API: "https://github.com/bundesAPI/tagesschau-api",
 		},
 		size: [2, 1],
 		maingrid: {

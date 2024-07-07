@@ -1,6 +1,6 @@
 // Übetragagungen
 // https://www.dazn.com/de-DE/news/fu%C3%9Fball/tv-plan-em-2024-europameisterschaft-fernsehen-ard-zdf-rtl-1f7dv60hqs0yn171aggxq9o1lb
-import { KadArray, KadDate, KadTable, dbID, deepClone, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadTable, dbID, deepClone, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -141,15 +141,16 @@ async function sepakbolaGetData() {
 	let dataDay = null;
 	let dataMatches = null;
 	try {
-		let response = await fetch(sepakbolaOptions.URLTable, { method: "GET" });
+		let response = await fetch(sepakbolaOptions.URLTable);
 		dataTable = await response.json();
 		response = await fetch(sepakbolaOptions.URLLastday);
 		dataDay = await response.json();
 		response = await fetch(sepakbolaOptions.URLMatches);
 		dataMatches = await response.json();
 	} catch (err) {
-		console.error(err);
-		return;
+    if(err.name == "TypeError"){
+      return
+    }
 	}
 	if(dataTable != null) sepakbolaTableReturn(dataTable);
 	if(dataDay != null) sepakbolaLastdayReturn(dataDay);

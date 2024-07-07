@@ -1,8 +1,8 @@
-import { dbID, KadDOM, KadDate, KadTable, initEL, KadString, log, error } from "../KadUtils/KadUtils.js";
+import { dbID, KadDOM, KadDate, KadTable, initEL, KadString, log } from "../KadUtils/KadUtils.js";
 
 export const newsData = {
 	get articlesURL() {
-		return `https://www.tagesschau.de/api2/news/?region=${this.region}&ressort=${this.ressort}`;
+		return `https://www.tagesschau.de/api2u/news/?region=${this.region}&ressort=${this.ressort}`;
 	},
 	requestCount: [],
 	currIndex: 0,
@@ -42,8 +42,8 @@ function newsInputChanged() {
 	newsGetData();
 }
 
-function newsError(msg) {
-	dbID(idDiv_News_Title).textContent = msg;
+function newsError(...msg) {
+	dbID(idDiv_News_Title).textContent = msg.join(" ");
 	dbID(idDiv_News_Text).textContent = "";
 }
 
@@ -63,10 +63,17 @@ async function newsGetData() {
 	if (newsCheckRequestCount()) return;
 	try {
 		let response = await fetch(newsData.articlesURL);
-		let data = await response.json();
-		newsData.articles = data.news;
+		if (response.ok == true) {
+			let data = await response.json();
+			newsData.articles = data.news;
+		} else {
+			newsError("Fehler bei Datenabfrage. Stauts:", response.status);
+      log(err)
+      return
+		}
 	} catch (err) {
-		newsError(err);
+		newsError("Keine daten zum Anzeigen gefunden. Bitte später noch einmal verwuchen. Error: ", err);
+    return
 	}
 	newsData.articles = newsData.articles.filter((n) => n.type == "story");
 	newsData.currIndex = 0;
@@ -85,7 +92,7 @@ async function showNews() {
 		let data = await response.json();
 		newsData.articles[newsData.currIndex].content = data.content;
 	} catch (err) {
-		newsError(data.error);
+		newsError(err);
 	}
 
 	let cleandContent = newsData.articles[newsData.currIndex].content

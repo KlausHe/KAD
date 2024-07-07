@@ -1,4 +1,4 @@
-import { dbID, deepClone, KadDOM, KadRandom, KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { dbID, deepClone, KadDOM, KadRandom, KadTable, initEL, log, dbIDStyle } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 import { AccData } from "../General/Account.js";
 import { globalP5 } from "../Main.js";
@@ -40,7 +40,8 @@ export function clear_cl_WikiSearch() {
 	dbID("idDiv_wiki_Title").textContent = "";
 	dbID("idDiv_wiki_Text").textContent = "";
 	dbID("idImg_Wiki_Image").src = "";
-	dbID("idImg_Wiki_Image").removeAttribute("imgSize");
+	dbIDStyle("idImg_Wiki_Image").display = "none";
+
 	wikiOptions.search = { tab: null, content: null };
 	KadTable.clear("idTabBody_wikiTitleTable");
 	wikiSearchPopulateLanguage();
@@ -103,7 +104,7 @@ function wikiSearchInput(input = null, random = null) {
 		dbID("idDiv_wiki_Title").onclick = null;
 		dbID("idDiv_wiki_Text").textContent = "";
 		dbID("idImg_Wiki_Image").src = "";
-		dbID("idImg_Wiki_Image").removeAttribute("imgSize");
+		dbIDStyle("idImg_Wiki_Image").display = "none";
 	}
 }
 
@@ -189,10 +190,13 @@ function wikiShowSelectedImage(data, loaded) {
 		wikiOptions.search.image = data.query.pages;
 	}
 	let pagesID = Object.keys(wikiOptions.search.image);
+
+	let src = "";
+	let display = "none";
 	if (wikiOptions.search.image[pagesID].thumbnail) {
-		dbID("idImg_Wiki_Image").src = wikiOptions.search.image[pagesID].thumbnail.source;
-		dbID("idImg_Wiki_Image").setAttribute("imgSize", "outputThumbnail");
-	} else {
-		dbID("idImg_Wiki_Image").src = "";
+		src = wikiOptions.search.image[pagesID].thumbnail.source;
+		display = "initial";
 	}
+	dbID("idImg_Wiki_Image").src = src;
+	dbIDStyle("idImg_Wiki_Image").display = display;
 }

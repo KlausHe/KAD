@@ -63,7 +63,7 @@ export function clear_cl_Numbery() {
 	idVin_numberyPlayer.KadReset();
 	idSel_numberCategory.KadReset();
 	numberyOptions.pairs = numberyOptions.availiablePairs[idSel_numberyPairs.KadReset()];
-	numberyOptions.delay = KadCSS.getRoot("transitionTimeHide", true) * 1000;
+	numberyOptions.delay = KadCSS.getRoot({ value: "transitionTimeHide" }) * 1000;
 	dbID("idLbl_numberyResult").textContent = "...";
 	numberyMakePlayers(2);
 	numberyOptions.isPlaying = false;

@@ -5,25 +5,25 @@ import { colorUpdateCanvascolors } from "./Color.js";
 export const globalValues = {
 	mediaSizes: {
 		get size() {
-			return KadCSS.getRoot("UIHeight1", true, true);
+			return KadCSS.getRoot(  { value: "UIHeight1", RemToPx: true });
 		},
 		get fontSize() {
-			return KadCSS.getRoot("fontSize", true, true);
+			return KadCSS.getRoot({ value: "fontSize", RemToPx: true });
 		},
 		get radius() {
-			return KadCSS.getRoot("UIRadius", true, true);
+			return KadCSS.getRoot({ value: "UIRadius", RemToPx: true });
 		},
 		get divGridMinWidth() {
-			return Math.floor(this.size * KadCSS.getRoot("divGridMinWidthFactor", true));
+			return Math.floor(this.size * KadCSS.getRoot({ value: "divGridMinWidthFactor" }));
 		},
 		get gridMarginSide() {
-			return Math.floor(this.size * KadCSS.getRoot("gridMarginSide", true));
+			return Math.floor(this.size * KadCSS.getRoot({ value: "gridMarginSide" }));
 		},
 		get imgSize() {
-			return KadCSS.getRoot("imgSize", true, true);
+			return KadCSS.getRoot({ value: "imgSize", RemToPx: true });
 		},
 		get canvasSize() {
-			const val = KadCSS.getRoot("gridWidthGameCanvas", true, true);
+			const val = KadCSS.getRoot({ value: "gridWidthGameCanvas", RemToPx: true });
 			return { w: val, h: val };
 		},
 	},
