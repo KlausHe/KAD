@@ -44,7 +44,7 @@ export const storage_cl_MaterialFilterSettings = {
 function materialFilterBuildTable() {
 	KadTable.clear("idTabBody_MaterialFilterTable");
 	for (const key of Object.keys(Data_Materials.metadata)) {
-		const row = KadTable.insertRow("idTabBody_MaterialFilterTable");
+		const row = KadTable.createRow("idTabBody_MaterialFilterTable");
 		const cb = KadTable.addCell(row, {
 			names: ["settingsMaterialfilter", key],
 			type: "Vin",

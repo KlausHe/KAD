@@ -30,11 +30,11 @@ const linahaOptions = {
 	},
 };
 
-initEL({ id: idSel_linahaSelectQ, fn: () => linahaSelect(idSel_linahaSelectQ), selList: linahaOptions.optionsDisplayed, selStartIndex: 0 });
-initEL({ id: idSel_linahaSelectA, fn: () => linahaSelect(idSel_linahaSelectA), selList: linahaOptions.optionsDisplayed, selStartIndex: 1 });
+initEL({ id: idSel_linahaSelectQ, fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 0 });
+initEL({ id: idSel_linahaSelectA, fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 1 });
 initEL({ id: idBtn_linahaSelectSwitch, fn: linahaSwitchSelect });
-initEL({ id: idSel_linahaChoices, fn: () => linahaChoiceChange(idSel_linahaChoices), selStartIndex: 1, selList: linahaOptions.setOptions });
-initEL({ id: idVin_linahaRounds, fn: () => linahaRoundsChange(idVin_linahaRounds), resetValue: 5 });
+initEL({ id: idSel_linahaChoices, fn: linahaChoiceChange, selStartIndex: 1, selList: linahaOptions.setOptions });
+initEL({ id: idVin_linahaRounds, fn: linahaRoundsChange, resetValue: 5, domOpts: { min: 1, max: 10 } });
 initEL({ id: idBtn_linahaMap, fn: linahaOpenMap });
 initEL({ id: idBtn_linahaStart, fn: linahaStart });
 
@@ -63,7 +63,7 @@ function linahaCreateAvaible() {
 }
 
 function linahaSelect(obj) {
-	const tempSel = obj.selectedIndex;
+	const tempSel = obj.target.selectedIndex;
 	const tempIdent = `sel${obj.dataset.ident}`;
 	const sw = tempSel == linahaOptions.selA || tempSel == linahaOptions.selQ;
 
@@ -95,11 +95,11 @@ function linahaSwitchSelect() {
 }
 
 function linahaChoiceChange(sel) {
-	linahaOptions.setLength = sel.selectedIndex;
+	linahaOptions.setLength = sel.target.selectedIndex;
 }
 
-function linahaRoundsChange(btn) {
-	linahaOptions.selRounds = btn.value;
+function linahaRoundsChange(obj) {
+	linahaOptions.selRounds = obj.target.value;
 	dbID("idLbl_linahaQuestion").innerHTML = `Spiele ${linahaOptions.selRounds} Runden<br>Linaha!`;
 	linahaUpdateStats();
 }

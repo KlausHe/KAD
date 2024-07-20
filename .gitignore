@@ -1,23 +1,13 @@
-.Collections
+#Folder
 node_modules
 .env
-delete
-.DS_Store
-test.js
 jsconfig.json
-K-Universe/Data/Howa/css/weather-icons.css
-K-Universe/Data/Howa/css/weather-icons-wind.css
-K-Universe/Data/Images/Logo
+
+# File extensions
 *.drawio
 
-# General
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
+# macos-files that might appear in the root of a volume
+.DS_Store
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
@@ -25,9 +15,6 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-
 .AppleDouble
 .LSOverride
 .AppleDB
@@ -35,3 +22,10 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Projectspecific files and folders
+K-Universe/Data/Howa/css/weather-icons.css
+K-Universe/Data/Howa/css/weather-icons-wind.css
+K-Universe/Data/Images/Logo
+.Collections
+test.js

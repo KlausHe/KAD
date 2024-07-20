@@ -1,5 +1,5 @@
-import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, initEL } from "../KadUtils/KadUtils.js";
-import { resetAll } from "../Main.js";  
+import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, initEL, log } from "../KadUtils/KadUtils.js";
+import { resetAll } from "../Main.js";
 import * as DBData from "../MainModulesDBData.js";
 import { contentLayout, navClick } from "../General/Layout.js";
 import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "../General/MainData.js";
@@ -147,6 +147,7 @@ export const AccData = {
 
 // ------------CLEAR-------------
 export function clear_cl_UserLogin() {
+	nuncDiscipuli.logging = false;
 	nuncDiscipuli.cred.email = idVin_userLogin_email.KadReset();
 	nuncDiscipuli.cred.uid = idVin_userLogin_pass.KadReset();
 
@@ -231,7 +232,10 @@ onAuthStateChanged(auth, (user) => {
 	dbIDStyle(idDiv_navBar_AccountLogin).display = state ? "none" : "block";
 	dbIDStyle(idDiv_navBar_AccountChange).display = state ? "block" : "none";
 	dbID(idLbl_userChange_user).textContent = state ? nuncDiscipuli.cred.email : "User";
-	if (state && !nuncDiscipuli.registering) loadDiscipuli(null);
+	if (state && !nuncDiscipuli.registering) {
+		nuncDiscipuli.logging = true;
+		loadDiscipuli(null);
+	}
 
 	let btnList = [...dbCLStyle("DLParent", null), ...dbCLStyle("ULParent", null)];
 	for (const btn of btnList) {
@@ -244,10 +248,11 @@ export function userLoggedIn() {
 }
 
 function firebaseLogin() {
+	nuncDiscipuli.logging = true;
+	log("log in");
 	const email = idVin_userLogin_email.KadGet();
 	const pass = idVin_userLogin_pass.KadGet();
 	setPersistence(auth, nuncDiscipuli.cred.keepLogin);
-	nuncDiscipuli.logging = true;
 	signInWithEmailAndPassword(auth, email, pass)
 		.then(() => {
 			KadDOM.enableBtn("idBtn_userLogin_login", false);
@@ -306,6 +311,7 @@ function userChange() {
 function loginCancel() {
 	clear_cl_UserLogin();
 	navClick(contentLayout.defaultPage);
+	1;
 }
 function changeCancel() {
 	clear_cl_UserChange();
@@ -329,15 +335,20 @@ function userAccError(err) {
 //--------------Load Single DATA-------------
 export async function loadDiscipuli(category = null) {
 	if (!userLoggedIn()) return;
-	const categories = [];
+	let categories = [];
 	if (category !== null) {
-		categories.push(category);
+		categories = [category];
 	} else {
 		for (const dbDataObj of Object.values(DBData)) {
 			categories.push(dbDataObj.dbName);
 		}
 	}
-	loadFromDatabase(categories);
+	await loadFromDatabase(categories);
+	userAccSetUserBtn();
+	if (nuncDiscipuli.logging) {
+		nuncDiscipuli.logging = false;
+		navClick("User");
+	}
 }
 
 //--------------Save/Update Single DATA-------------
@@ -366,12 +377,6 @@ async function loadFromDatabase(categories) {
 			error("Currently not supported data from saved userdata:", category);
 		}
 	}
-	userAccSetUserBtn();
-
-	if (nuncDiscipuli.logging) {
-		nuncDiscipuli.logging = false;
-		navClick("User");
-	}
 }
 
 async function saveToDatabase(data) {
@@ -383,14 +388,15 @@ async function createNewDatabase() {
 	const colRef = collection(firestore, "User_Settings");
 	await setDoc(doc(colRef, nuncDiscipuli.cred.uid), nuncDiscipuli.getAllData());
 }
+
 // ------------CREATE INFO-DIV-------------
 function createUserInfos() {
 	const parent = dbCL("cl_UserChange_infos");
 	KadDOM.clearFirstChild(parent);
 	const loggedIn = userLoggedIn();
 	for (const [key, subObj] of Object.entries(AccData.infos)) {
-		const uInfoParent = KadTable.createCell( {
-      type:"Div",
+		const uInfoParent = KadTable.createCell({
+			type: "Div",
 			names: ["uInfoParent", key],
 			style: {
 				whiteSpace: "nowrap",
@@ -398,8 +404,8 @@ function createUserInfos() {
 		});
 		parent.appendChild(uInfoParent);
 
-		const uInfoBtn = KadTable.createCell( {
-      type:"Lbl",
+		const uInfoBtn = KadTable.createCell({
+			type: "Lbl",
 			names: ["uInfoLbl", key],
 			createClass: ["cl_info"],
 			ui: {
@@ -418,8 +424,8 @@ function createUserInfos() {
 			}
 		}
 
-		const uInfoVin = KadTable.createCell( {
-      type:"Vin",
+		const uInfoVin = KadTable.createCell({
+			type: "Vin",
 			names: ["uInfoVin", key],
 			subGroup: "text",
 			ui: {
@@ -431,8 +437,8 @@ function createUserInfos() {
 			placeholder: ph,
 		});
 		uInfoParent.appendChild(uInfoVin);
-		const uInfoDel = KadTable.createCell( {
-      type:"Btn",
+		const uInfoDel = KadTable.createCell({
+			type: "Btn",
 			names: ["uInfoDel", key],
 			subGroup: "button",
 			img: "trash",

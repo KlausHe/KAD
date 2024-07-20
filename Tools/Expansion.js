@@ -177,7 +177,7 @@ function build_ExpansionTable() {
 	// }
 
 	KadTable.clear("idTabHeader_ExpansionList");
-	const headerRow = KadTable.insertRow("idTabHeader_ExpansionList");
+	const headerRow = KadTable.createRow("idTabHeader_ExpansionList");
 
 	let headCell = document.createElement("th");
 	if (expansionOptions.materials.compare) {
@@ -204,7 +204,7 @@ function build_ExpansionTable() {
 	//clear list
 	KadTable.clear("idTabBody_ExpansionList");
 	for (let i = 0; i < expansionOptions.exLength.length; i++) {
-		const row = KadTable.insertRow("idTabBody_ExpansionList");
+		const row = KadTable.createRow("idTabBody_ExpansionList");
 		KadTable.addHeaderCell(row, {
 			names: ["expansionHeaderLength", i],
 			type: "Lbl",

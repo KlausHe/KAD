@@ -29,7 +29,7 @@ function tableRanjeCalculate() {
 	KadTable.clear("idTabHeader_ranjeList");
 	KadTable.clear("idTabBody_ranjeList");
 	for (let i = 0; i < ranjeOptions.results.length; i++) {
-		const row = KadTable.insertRow("idTabBody_ranjeList");
+		const row = KadTable.createRow("idTabBody_ranjeList");
 		KadTable.addCell(row, {
 			names: ["ranje", "op", i],
 			type: "Lbl",

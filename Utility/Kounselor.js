@@ -162,13 +162,9 @@ function kounselorConvert() {
 
 function kounselorShowResults() {
 	for (const type of Object.keys(kounselorOptions.types)) {
-		if (type != kounselorOptions.curType) {
-			if (kounselorOptions.types[type].value == null) {
-				KadDOM.resetInput(`idVin_kounselor${type}`, type);
-				continue;
-			}
-			KadDOM.resetInput(`idVin_kounselor${type}`, KadColor.formatAsString(kounselorOptions.types[type].value, type));
-		}
+		if (type == kounselorOptions.curType) continue;
+		const val = kounselorOptions.types[type].value == null ? type : KadColor.formatAsString(kounselorOptions.types[type].value, type);
+		dbID(`idVin_kounselor${type}`).KadReset({ resetValue: val });
 	}
 	const colorCSS = KadColor.formatAsCSS(kounselorOptions.types.HSL.value, "HSL");
 	dbIDStyle("idLbl_kounselorOutputA").background = colorCSS;

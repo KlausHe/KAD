@@ -104,7 +104,7 @@ function analysisCreateTable() {
 	});
 	for (let i = dataSorted.length - 1; i >= 0; i--) {
 		if (dataSorted.length > 0) {
-			let row = KadTable.insertRow("idTabBody_analysisResult");
+			let row = KadTable.createRow("idTabBody_analysisResult");
 			let foundPos = null;
 			for (let n = 0; n < dataSorted.length; n++) {
 				if (data[dataSorted[n]].score >= 0) {

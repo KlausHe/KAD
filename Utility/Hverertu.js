@@ -80,7 +80,7 @@ function hverertuGender(data) {
 
 function createHverertuTable() {
 	KadTable.clear("idTabHeader_Hverertu");
-	const rowTh = KadTable.insertRow("idTabHeader_Hverertu");
+	const rowTh = KadTable.createRow("idTabHeader_Hverertu");
 	KadTable.addHeaderCell(rowTh, {
 		names: ["hverertuHeader", "Description"],
 		type: "Lbl",
@@ -100,7 +100,7 @@ function createHverertuTable() {
 
 	KadTable.clear("idTabBody_Hverertu");
 	for (const objName in hverertuOptions.data) {
-		const row = KadTable.insertRow("idTabBody_Hverertu");
+		const row = KadTable.createRow("idTabBody_Hverertu");
 		KadTable.addCell(row, {
 			names: ["hverertu", "description", objName],
 			type: "Lbl",

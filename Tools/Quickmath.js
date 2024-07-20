@@ -62,7 +62,7 @@ function tableQuickmathCalculate(op) {
 
 	for (let i = start; i < end; i++) {
 		quickmathOptions.values.i = i;
-		const row = KadTable.insertRow(obj.tabID);
+		const row = KadTable.createRow(obj.tabID);
 		//vals
 		KadTable.addCell(row, {
 			names: ["quickmath", "op", operation, i],

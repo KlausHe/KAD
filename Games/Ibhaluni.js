@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, KadValue, KadDOM, initEL } from "../KadUtils/KadUtils.js";
+import { KadValue, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const ibhaluniOptions = {
@@ -38,12 +38,12 @@ export function canvas_cl_Ibhaluni() {
 function ibhaluniStart() {
 	if (ibhaluniOptions.started) {
 		ibhaluniOptions.started = false;
-		dbID("idBtn_ibhaluniStart").textContent = "Start";
+		idBtn_ibhaluniStart.KadReset({resetValue: "Start"});
 		caIB.noLoop();
 	} else {
 		ibhaluniOptions.started = true;
 		ibhaluniReset();
-		dbID("idBtn_ibhaluniStart").textContent = "Stop";
+		idBtn_ibhaluniStart.KadReset({resetValue: "Stop"});
 		caIB.loop();
 	}
 }
@@ -53,7 +53,7 @@ function ibhaluniReset() {
 	ibhaluniOptions.score = 0;
 	ibhaluniOptions.misses = 0;
 	if (ibhaluniOptions.sound === null) {
-		ibhaluniOptions.sound = new Audio("./Games/IbhaluniHH.mp3");
+		ibhaluniOptions.sound = new Audio("./Games/IbhaluniAssets/IbhaluniHH.mp3");
 	}
 	for (let i = 0; i < ibhaluniOptions.nums; i++) {
 		ibhaluniOptions.balloons.push(new IbhaluniObj());
@@ -68,8 +68,8 @@ const caIB = new p5((c) => {
 		c.canv.mousePressed(mousePushedIbhaluni);
 		c.colorMode(c.HSL);
 		c.noLoop();
-		ibhaluniOptions.backgroundDay = caIB.loadImage("Games/ib_BGday.png");
-		ibhaluniOptions.backgroundNight = caIB.loadImage("Games/ib_BGnight.png");
+		ibhaluniOptions.backgroundDay = caIB.loadImage("Games/IbhaluniAssets/ib_BGday.png");
+		ibhaluniOptions.backgroundNight = caIB.loadImage("Games/IbhaluniAssets/ib_BGnight.png");
 		c.redraw();
 		c.cursor(c.CROSS);
 	};
@@ -98,7 +98,7 @@ function mousePushedIbhaluni() {
 	}
 }
 function ibhaluniToggleSound() {
-	ibhaluniOptions.enableSound = dbID("idCb_ibhaluniSoundOutput").checked;
+	ibhaluniOptions.enableSound = idCb_ibhaluniSoundOutput.KadGet();
 }
 
 class IbhaluniObj {

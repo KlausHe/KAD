@@ -68,7 +68,7 @@ export function materialSelectedTable() {
 	}
 	materialOptions.matList = [...new Set(materialOptions.matList)].sort(); // delete duplicates
 	KadTable.clear("idTabHeader_Materiallisted");
-	const headerRow = KadTable.insertRow("idTabHeader_Materiallisted");
+	const headerRow = KadTable.createRow("idTabHeader_Materiallisted");
 	KadTable.addHeaderCell(headerRow, {
 		type: "Lbl",
 		names: ["materialHeaderEdge"],
@@ -124,7 +124,7 @@ export function materialSelectedTable() {
 	KadTable.clear("idTabBody_Materiallisted");
 
 	for (let i = 0; i < materialOptions.headerList.length; i++) {
-		let row = KadTable.insertRow("idTabBody_Materiallisted");
+		let row = KadTable.createRow("idTabBody_Materiallisted");
 		const listItem = materialOptions.headerList[i];
 		const dataItem = Data_Materials.metadata[listItem];
 		KadTable.addCell(row, {
@@ -219,9 +219,9 @@ function materialSearchInput() {
 
 function materialSearchTable() {
 	KadTable.clear("idTabHeader_MaterialSearchList");
-	const headerRow0 = KadTable.insertRow("idTabHeader_MaterialSearchList");
-	const headerRow1 = KadTable.insertRow("idTabHeader_MaterialSearchList");
-	const headerRow2 = KadTable.insertRow("idTabHeader_MaterialSearchList");
+	const headerRow0 = KadTable.createRow("idTabHeader_MaterialSearchList");
+	const headerRow1 = KadTable.createRow("idTabHeader_MaterialSearchList");
+	const headerRow2 = KadTable.createRow("idTabHeader_MaterialSearchList");
 	for (let i = 0; i < materialOptions.headerList.length; i++) {
 		KadTable.addHeaderCell(headerRow0, {
 			names: ["materialSearch", "bez", i],
@@ -259,7 +259,7 @@ function materialSearchTable() {
 
 	KadTable.clear("idTabBody_MaterialSearchList");
 	for (let i = 0; i < materialOptions.filterList.length; i++) {
-		let row = KadTable.insertRow("idTabBody_MaterialSearchList");
+		let row = KadTable.createRow("idTabBody_MaterialSearchList");
 		row.style.cursor = "pointer";
 		row.onclick = function () {
 			materialOptions.matList.push(materialOptions.filterList[i]);
@@ -299,7 +299,7 @@ function materialSearchTable() {
 			});
 		}
 	}
-	let row = KadTable.insertRow("idTabBody_MaterialSearchList");
+	let row = KadTable.createRow("idTabBody_MaterialSearchList");
 	row.insertCell(0);
 }
 

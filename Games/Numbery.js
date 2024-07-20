@@ -100,7 +100,7 @@ function numberyLayout() {
 }
 
 function numberyPlayerChange() {
-	let numPlayer = idVin_numberyPlayer.KadGet(numberyOptions.maxPlayerCount);
+	let numPlayer = idVin_numberyPlayer.KadGet({ failSafe: numberyOptions.maxPlayerCount });
 	numberyMakePlayers(numPlayer);
 	numberyScoreBoard();
 }
@@ -243,7 +243,7 @@ function numberyCheckFinished() {
 function numberyScoreBoard() {
 	KadTable.clear("idTabBody_Numbery");
 	for (let i = 0; i < numberyOptions.players.length; i++) {
-		const row = KadTable.insertRow("idTabBody_Numbery");
+		const row = KadTable.createRow("idTabBody_Numbery");
 		const isPlayer = i == numberyOptions.playerID;
 		// colored Box
 		KadTable.addCell(row, {

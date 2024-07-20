@@ -28,8 +28,8 @@ const wikiOptions = {
 	},
 };
 
-initEL({ id: idVin_wikiInput, fn: () => wikiSearchInput(null), resetValue: "Search on Wiki" });
-initEL({ id: idBtn_wikiInput, fn: () => wikiSearchInput(null) });
+initEL({ id: idVin_wikiInput, fn: wikiSearchInput, resetValue: "Search on Wiki" });
+initEL({ id: idBtn_wikiInput, fn: wikiSearchInput });
 initEL({ id: idSel_wikiLanguage, fn: wikiSearchLanguage });
 
 // onclick = "newsShowNext(0)idDiv_wiki_Text";
@@ -116,7 +116,7 @@ function wikiCreateTable(data) {
 	wikiOptions.resultTerms = data[1];
 	KadTable.clear("idTabBody_wikiTitleTable");
 	for (let i = 0; i < wikiOptions.resultTerms.length; i++) {
-		let row = KadTable.insertRow("idTabBody_wikiTitleTable");
+		let row = KadTable.createRow("idTabBody_wikiTitleTable");
 		// arrow
 		const arrow = KadTable.addCell(row, {
 			names: ["wikiContent", i],

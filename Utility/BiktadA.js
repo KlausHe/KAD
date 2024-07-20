@@ -135,7 +135,7 @@ function biktadaGetData() {
 function createBiktadaTable() {
 	//header
 	KadTable.clear("idTabHeader_BiktadA");
-	const rowTh = KadTable.insertRow("idTabHeader_BiktadA");
+	const rowTh = KadTable.createRow("idTabHeader_BiktadA");
 	KadTable.addHeaderCell(rowTh, {
 		names: ["biktadaHeader", "Description"],
 		type: "Lbl",
@@ -156,7 +156,7 @@ function createBiktadaTable() {
 	// body
 	KadTable.clear("idTabBody_BiktadA");
 	for (const objName in biktadaOptions.data) {
-		const row = KadTable.insertRow("idTabBody_BiktadA");
+		const row = KadTable.createRow("idTabBody_BiktadA");
 		KadTable.addCell(row, {
 			names: ["biktada", "description", objName],
 			type: "Lbl",

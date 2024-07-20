@@ -138,7 +138,7 @@ function kadarTable(tableID) {
 	KadTable.clear(tableID);
 	for (let i = 0; i < objectLength(kadarOptions.calc); i++) {
 		const time = Object.keys(kadarOptions.calc)[i];
-		const row = KadTable.insertRow(tableID);
+		const row = KadTable.createRow(tableID);
 
 		// time
 		KadTable.addCell(row, {

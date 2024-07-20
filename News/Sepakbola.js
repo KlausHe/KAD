@@ -182,7 +182,7 @@ function sepakbolaMatchesReturn(data = null) {
 	for (let i = 0; i < seasonSelected.length; i++) {
 		const day = new Date(seasonSelected[i].matchDateTimeUTC);
 		if (prevDay != day.getTime()) {
-			const rowTh = KadTable.insertRow("idTabBody_SepakbolaMatches");
+			const rowTh = KadTable.createRow("idTabBody_SepakbolaMatches");
 			prevDay = new Date(day.getTime()).getTime();
 			KadTable.addHeaderCell(rowTh, {
 				names: ["sepakbolaMatchesHeader", i],
@@ -195,7 +195,7 @@ function sepakbolaMatchesReturn(data = null) {
 			});
 		}
 
-		let row = KadTable.insertRow("idTabBody_SepakbolaMatches");
+		let row = KadTable.createRow("idTabBody_SepakbolaMatches");
 		//--  VereinsLogo1
 		const logo1 = KadTable.addCell(row, {
 			names: ["sepakbolaMatchesLogo", "logoT1", i],
@@ -252,7 +252,7 @@ function sepakbolaTableReturn(data) {
 	KadTable.clear("idTabBody_SepakbolaTable");
 	for (let i = 0; i < data.length; i++) {
 		if (data[i].teamInfoId == 5251) continue;
-		let row = KadTable.insertRow("idTabBody_SepakbolaTable");
+		let row = KadTable.createRow("idTabBody_SepakbolaTable");
 
 		//--  Platz
 		KadTable.addCell(row, {

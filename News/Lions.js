@@ -92,7 +92,7 @@ function lionsReturn(data) {
 function createLionsTable() {
 	//header
 	KadTable.clear("idTabHeader_Lions");
-	const rowTh = KadTable.insertRow("idTabHeader_Lions");
+	const rowTh = KadTable.createRow("idTabHeader_Lions");
 	KadTable.addHeaderCell(rowTh, {
 		names: ["lionsHeader", "Date"],
 		type: "Lbl",
@@ -120,7 +120,7 @@ function createLionsTable() {
 
 	KadTable.clear("idTabBody_Lions");
 	for (const [index, obj] of lionsOptions.data.entries()) {
-		const row = KadTable.insertRow("idTabBody_Lions");
+		const row = KadTable.createRow("idTabBody_Lions");
 		KadTable.addCell(row, {
 			names: ["lions", "date", index],
 			type: "Lbl",

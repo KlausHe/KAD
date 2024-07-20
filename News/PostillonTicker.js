@@ -39,7 +39,7 @@ function postillionCreate() {
 	KadTable.clear("idTabBody_postillionTable");
 	const list = postillonTickerOptions.data[postillonTickerOptions.num];
 	for (let i = 0; i < list.length; i++) {
-		const row = KadTable.insertRow("idTabBody_postillionTable");
+		const row = KadTable.createRow("idTabBody_postillionTable");
 		KadTable.addCell(row, {
 			names: ["postillon", i],
 			type: "Lbl",

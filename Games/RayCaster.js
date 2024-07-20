@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, daEL, deepClone, KadDOM, KadInteraction, initEL, log } from "../KadUtils/KadUtils.js";
+import { dbID, deepClone, KadDOM, KadInteraction, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { timeoutCanvasFinished } from "../Main.js";
 
@@ -30,13 +30,13 @@ const raycasterOptions = {
 		spiderOrig: false,
 	},
 	speed: 1,
-	speedOrig: 3,
+	speedOrig: 4,
 	fovD: 1,
 	fovDOrig: 8, // this.boardSizeOrig
-	segments: [],
 	polygons: [],
 	rayStart: [],
 	borders: [],
+	raySegments: [],
 };
 
 initEL({ id: idBtn_generateRayMaze, fn: newRayMaze });
@@ -94,6 +94,8 @@ function rayCasterReset() {
 			key38: "keyup",
 			key39: "keyup",
 			key40: "keyup",
+			dirSetX: false,
+			dirSetY: false,
 		},
 	];
 	raycasterOptions.polygons = [];
@@ -164,37 +166,45 @@ const caRC = new p5((c) => {
 			log(cell, raycasterOptions.longCell);
 			mazeRayFinished();
 			clear_cl_RayCaster();
-		} else if (cell) {
-			let newPosX = raycasterOptions.rayStart[0].x + raycasterOptions.rayStart[0].velX;
-			let newPosY = raycasterOptions.rayStart[0].y + raycasterOptions.rayStart[0].velY;
-
-			//Wallcollision - Lines
-			if (cell.walls[0].existing && newPosY - raycasterOptions.rayStart[0].radius < cell.walls[0].a.y) raycasterOptions.rayStart[0].velY = 0; // Top
-			if (cell.walls[2].existing && newPosY + raycasterOptions.rayStart[0].radius > cell.walls[2].a.y) raycasterOptions.rayStart[0].velY = 0; // Bottom
-			if (cell.walls[3].existing && newPosX - raycasterOptions.rayStart[0].radius < cell.walls[3].a.x) raycasterOptions.rayStart[0].velX = 0; // Left
-			if (cell.walls[1].existing && newPosX + raycasterOptions.rayStart[0].radius > cell.walls[1].a.x) raycasterOptions.rayStart[0].velX = 0; // Right
-
-			//Wallcollision - Edges
-			const rSq = raycasterOptions.rayStart[0].radius ** 2;
-			const dSqTLX = (newPosX - cell.edges.tl.x) ** 2;
-			const dSqTLY = (newPosY - cell.edges.tl.y) ** 2;
-			const dSqTRX = (newPosX - cell.edges.tr.x) ** 2;
-			const dSqTRY = (newPosY - cell.edges.tr.y) ** 2;
-			const dSqBLX = (newPosX - cell.edges.bl.x) ** 2;
-			const dSqBLY = (newPosY - cell.edges.bl.y) ** 2;
-			const dSqBRX = (newPosX - cell.edges.br.x) ** 2;
-			const dSqBRY = (newPosY - cell.edges.br.y) ** 2;
-
-			if (dSqTLX + dSqTLY < rSq || dSqTRX + dSqTRY < rSq || dSqBLX + dSqBLY < rSq || dSqBRX + dSqBRY < rSq) {
-				raycasterOptions.rayStart[0].velX = 0;
-				raycasterOptions.rayStart[0].velY = 0;
-			}
-
-			raycasterOptions.rayStart[0].x += raycasterOptions.rayStart[0].velX;
-			raycasterOptions.rayStart[0].y += raycasterOptions.rayStart[0].velY;
-			raycasterOptions.polygons[0] = getSightPolygon(raycasterOptions.rayStart[0]);
-			raycasterDrawContent(); //--------Draw content
+			return;
 		}
+
+		if (raycasterOptions.rayStart[0].dirSetX == 0) {
+			raycasterOptions.rayStart[0].velX *= 0.8;
+		} else {
+			raycasterOptions.rayStart[0].velX = raycasterOptions.rayStart[0].dirSetX;
+		}
+		if (raycasterOptions.rayStart[0].dirSetY == 0) {
+			raycasterOptions.rayStart[0].velY *= 0.8;
+		} else {
+			raycasterOptions.rayStart[0].velY = raycasterOptions.rayStart[0].dirSetY;
+		}
+
+		let newPosX = raycasterOptions.rayStart[0].x + raycasterOptions.rayStart[0].velX;
+		let newPosY = raycasterOptions.rayStart[0].y + raycasterOptions.rayStart[0].velY;
+
+		//Wallcollision - Lines
+		if (cell.walls[0].existing && newPosY - raycasterOptions.rayStart[0].radius < cell.walls[0].a.y) raycasterOptions.rayStart[0].velY = 0; // Top
+		if (cell.walls[2].existing && newPosY + raycasterOptions.rayStart[0].radius > cell.walls[2].a.y) raycasterOptions.rayStart[0].velY = 0; // Bottom
+		if (cell.walls[3].existing && newPosX - raycasterOptions.rayStart[0].radius < cell.walls[3].a.x) raycasterOptions.rayStart[0].velX = 0; // Left
+		if (cell.walls[1].existing && newPosX + raycasterOptions.rayStart[0].radius > cell.walls[1].a.x) raycasterOptions.rayStart[0].velX = 0; // Right
+
+		//Wallcollision - Edges
+		const rSq = raycasterOptions.rayStart[0].radius ** 2;
+		const dSqTL = (newPosX - cell.edges.tl.x) ** 2 + (newPosY - cell.edges.tl.y) ** 2;
+		const dSqTR = (newPosX - cell.edges.tr.x) ** 2 + (newPosY - cell.edges.tr.y) ** 2;
+		const dSqBL = (newPosX - cell.edges.bl.x) ** 2 + (newPosY - cell.edges.bl.y) ** 2;
+		const dSqBR = (newPosX - cell.edges.br.x) ** 2 + (newPosY - cell.edges.br.y) ** 2;
+
+		// if (dSqTL < rSq || dSqTR < rSq || dSqBL < rSq || dSqBR < rSq) {
+		// 	raycasterOptions.rayStart[0].velX = 0;
+		// 	raycasterOptions.rayStart[0].velY = 0;
+		// }
+
+		raycasterOptions.rayStart[0].x += raycasterOptions.rayStart[0].velX;
+		raycasterOptions.rayStart[0].y += raycasterOptions.rayStart[0].velY;
+		raycasterOptions.polygons[0] = getSightPolygon(raycasterOptions.rayStart[0]);
+		raycasterDrawContent();
 	};
 }, "#idCanv_rayCaster");
 
@@ -421,6 +431,7 @@ function getSightPolygon(rayS) {
 }
 
 function keyPushedRayCaster(event) {
+	event.preventDefault();
 	let keyInput = event.keyCode;
 	if (event.type === "keyup" && (keyInput == 88 || keyInput == 120)) {
 		//"X"
@@ -431,25 +442,20 @@ function keyPushedRayCaster(event) {
 			raycasterOptions.polygons.splice(raycasterOptions.polygons.length - 1, 1);
 		}
 	} else {
-		if (raycasterOptions.rayStart[0][`key${keyInput}`] != event.type) {
-			raycasterOptions.rayStart[0][`key${keyInput}`] = event.type;
+		if (event.type === "keydown" && (keyInput == 37 || keyInput == 39)) {
+			raycasterOptions.rayStart[0].dirSetX = keyInput - 38;
+		}
+		if (event.type === "keydown" && (keyInput == 38 || keyInput == 40)) {
+			raycasterOptions.rayStart[0].dirSetY = keyInput - 39;
 		}
 
-		if (raycasterOptions.rayStart[0].key37 === "keydown") {
-			raycasterOptions.rayStart[0].velX = raycasterOptions.speed * -1;
-		} else if (raycasterOptions.rayStart[0].key39 === "keydown") {
-			raycasterOptions.rayStart[0].velX = raycasterOptions.speed * 1;
-		} else if (raycasterOptions.rayStart[0].key37 === "keyup" && raycasterOptions.rayStart[0].key39 === "keyup") {
-			raycasterOptions.rayStart[0].velX = 0;
+		if (event.type === "keyup") {
+			if (raycasterOptions.rayStart[0].dirSetX < 0 && keyInput == 37) raycasterOptions.rayStart[0].dirSetX = 0;
+			if (raycasterOptions.rayStart[0].dirSetX > 0 && keyInput == 39) raycasterOptions.rayStart[0].dirSetX = 0;
+			if (raycasterOptions.rayStart[0].dirSetY < 0 && keyInput == 38) raycasterOptions.rayStart[0].dirSetY = 0;
+			if (raycasterOptions.rayStart[0].dirSetY > 0 && keyInput == 40) raycasterOptions.rayStart[0].dirSetY = 0;
 		}
-
-		if (raycasterOptions.rayStart[0].key38 === "keydown") {
-			raycasterOptions.rayStart[0].velY = raycasterOptions.speed * -1;
-		} else if (raycasterOptions.rayStart[0].key40 === "keydown") {
-			raycasterOptions.rayStart[0].velY = raycasterOptions.speed * 1;
-		} else if (raycasterOptions.rayStart[0].key38 === "keyup" && raycasterOptions.rayStart[0].key40 === "keyup") {
-			raycasterOptions.rayStart[0].velY = 0;
-		}
+		// raycasterOptions.rayStart[0][`key${keyInput}`] = event.type == "keydown";
 	}
 }
 

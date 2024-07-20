@@ -1344,7 +1344,7 @@ function niskaHelpCalculation(d, P, index) {
 function niskaTable() {
 	KadTable.clear("idTabHeader_niskaList");
 
-	const rowTh = KadTable.insertRow("idTabHeader_niskaList");
+	const rowTh = KadTable.createRow("idTabHeader_niskaList");
 	KadTable.addHeaderCell(rowTh, {
 		names: ["niska", "Header"],
 		type: "Lbl",
@@ -1371,7 +1371,7 @@ function niskaTable() {
 
 	KadTable.clear("idTabBody_niskaList");
 	for (let [key, value] of Object.entries(niskaOptions.results)) {
-		const row = KadTable.insertRow("idTabBody_niskaList");
+		const row = KadTable.createRow("idTabBody_niskaList");
 		KadTable.addCell(row, {
 			names: ["niska", "name", key],
 			type: "Lbl",

@@ -200,7 +200,7 @@ async function lottoGetGames() {
 		lottoOptions.getGameTimer = null;
 	}
 	lottoOptions.getGameTimer = setTimeout(() => {
-		lottoOptions.numberOfLatestGames = idVin_lottoNumberOfGames.KadGet(lottoOptions.numberOfLatestGamesOrig);
+		lottoOptions.numberOfLatestGames = idVin_lottoNumberOfGames.KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
 		globalP5.loadJSON(lottoOptions.url, lottoReturn, "json");
 		lottoOptions.getGameTimer = null;
 	}, 800);
@@ -212,7 +212,7 @@ function lottoReturn(d) {
 	KadTable.clear("idTabBody_Lotto");
 
 	if (d.length == 0) {
-		const rowTh = KadTable.insertRow("idTabHeader_Lotto");
+		const rowTh = KadTable.createRow("idTabHeader_Lotto");
 		KadTable.addHeaderCell(rowTh, {
 			names: ["lottoTableHeader", "date"],
 			type: "Lbl",
@@ -239,7 +239,7 @@ function lottoReturn(d) {
 	}
 
 	//header
-	const rowTh = KadTable.insertRow("idTabHeader_Lotto");
+	const rowTh = KadTable.createRow("idTabHeader_Lotto");
 	KadTable.addHeaderCell(rowTh, {
 		names: ["lottoTableHeader", "date"],
 		type: "Lbl",
@@ -265,7 +265,7 @@ function lottoReturn(d) {
 	});
 	// body
 	for (const [i, entry] of Object.entries(lottoOptions.games[lottoOptions.selGame].loadedSets)) {
-		let row = KadTable.insertRow("idTabBody_Lotto");
+		let row = KadTable.createRow("idTabBody_Lotto");
 		//--  date
 		KadTable.addCell(row, {
 			names: ["lottoTable", "date", i],

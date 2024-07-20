@@ -33,21 +33,21 @@ const sudokuOptions = {
 initEL({ id: idBtn_sudokuPuzzle, fn: sudokuRequest });
 initEL({ id: idBtn_sudokuClear, fn: sudokuClear });
 initEL({ id: idBtn_sudokuTimer, fn: sudokuStopTimer });
-initEL({ id: idBtn_sudokuWrite, fn: () => sudokuInputOptionChange(1) });
-initEL({ id: idBtn_sudokuPencil, fn: () => sudokuInputOptionChange(0) });
+initEL({ id: idBtn_sudokuWrite, fn: sudokuInputOptionChange });
+initEL({ id: idBtn_sudokuPencil, fn: sudokuInputOptionChange });
 initEL({ id: idBtn_sudokuValidate, fn: sudokuValidate });
 initEL({ id: idBtn_sudokuHint, fn: sudokuHint });
 initEL({ id: idCb_sudokuAutoCheck, fn: sudokuOptionChange, resetValue: sudokuOptions.errorChecked });
 initEL({ id: idCb_sudokuErasePencils, fn: sudokuOptionChange, resetValue: sudokuOptions.pencilErase });
-initEL({ id: idBtn_sudokuNumOverview_1, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_1) });
-initEL({ id: idBtn_sudokuNumOverview_2, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_2) });
-initEL({ id: idBtn_sudokuNumOverview_3, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_3) });
-initEL({ id: idBtn_sudokuNumOverview_4, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_4) });
-initEL({ id: idBtn_sudokuNumOverview_5, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_5) });
-initEL({ id: idBtn_sudokuNumOverview_6, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_6) });
-initEL({ id: idBtn_sudokuNumOverview_7, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_7) });
-initEL({ id: idBtn_sudokuNumOverview_8, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_8) });
-initEL({ id: idBtn_sudokuNumOverview_9, fn: () => sudokuGroupHighlight(idBtn_sudokuNumOverview_9) });
+initEL({ id: idBtn_sudokuNumOverview_1, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_2, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_3, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_4, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_5, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_6, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_7, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_8, fn: sudokuGroupHighlight });
+initEL({ id: idBtn_sudokuNumOverview_9, fn: sudokuGroupHighlight });
 initEL({ id: idCanv_sudoku, action: "keydown", fn: sudokuKeyPressed });
 
 export function clear_cl_Sudoku() {
@@ -68,7 +68,7 @@ export function clear_cl_Sudoku() {
 	sudokuSetBtnColor("");
 	sudokuSetDoneNumbers();
 	sudokuStartTimer(false);
-	sudokuOptions.mode = 1;
+	sudokuOptions.mode = 0;
 	caSU.clear();
 	sudokuInputOptionChange();
 	sudokuOptionChange();
@@ -118,10 +118,8 @@ async function sudokuRequest() {
 	KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
-function sudokuInputOptionChange(val = null) {
-	if (val != null) {
-		sudokuOptions.mode = val;
-	}
+function sudokuInputOptionChange() {
+	sudokuOptions.mode = !sudokuOptions.mode;
 	KadDOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
 	KadDOM.btnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "positive" : null);
 	KadInteraction.focus(idCanv_sudoku, caSU);
@@ -207,7 +205,6 @@ function sudokuKeyPressed(event) {
 	let keyInput = event.keyCode || window.event;
 	// let cell = {};
 	if (keyInput == 32) {
-		sudokuOptions.mode = !sudokuOptions.mode;
 		sudokuInputOptionChange();
 	} else if (keyInput == 8) {
 		//delete
@@ -271,7 +268,7 @@ function sudokuShiftPressed() {
 }
 
 function sudokuGroupHighlight(obj) {
-	sudokuOptions.curHighlight = obj.value;
+	sudokuOptions.curHighlight = obj.target.value;
 	caSU.redraw();
 	KadInteraction.focus(idCanv_sudoku, caSU);
 }

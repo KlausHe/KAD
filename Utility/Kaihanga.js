@@ -145,7 +145,7 @@ function kaihangaUpdate() {
 		kaihangaWheelUpdate();
 		KadTable.clear("idTabBody_Kaihanga");
 		for (let i = 0; i < kaihangaOptions.entries.length; i++) {
-			let row = KadTable.insertRow("idTabBody_Kaihanga");
+			let row = KadTable.createRow("idTabBody_Kaihanga");
 			row.id = `idRow_kaihanga_${i}`;
 			KadTable.addCell(row, {
 				names: ["kaihanga", i],

@@ -63,9 +63,9 @@ function blechgeoFormChange() {
 }
 
 function calcBlechGeo() {
-	blechOptions.s = idVin_blechgeoDicke.KadGet(blechOptions.dicke);
-	blechOptions.r = idVin_blechgeoRadius.KadGet(blechOptions.radius);
-	blechOptions.b = idVin_blechgeoBreite.KadGet(blechOptions.breite);
+	blechOptions.s = idVin_blechgeoDicke.KadGet({failSafe: blechOptions.dicke});
+	blechOptions.r = idVin_blechgeoRadius.KadGet({failSafe: blechOptions.radius});
+	blechOptions.b = idVin_blechgeoBreite.KadGet({failSafe: blechOptions.breite});
 	let selBlechForm = blechOptions.geo[dbID("idSel_blechgeoForm").value];
 	idImg_Blechgeometrie.src = blechOptions.geo[blechOptions.selectedGeo].imgPath;
 	dbID("idLbl_blechgeoResult").textContent = `Mindestabstand: ${selBlechForm.func}`;

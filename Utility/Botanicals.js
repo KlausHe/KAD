@@ -51,7 +51,7 @@ function botanicalsPlantTable() {
 	let maxB = plant.effect ? plant.effect.length : 0;
 	let maxLength = Math.max(maxA, maxB);
 	for (let i = 0; i < maxLength; i++) {
-		const row = KadTable.insertRow("idTabBody_botanicalsResultPlant");
+		const row = KadTable.createRow("idTabBody_botanicalsResultPlant");
 		if (plant.discomfort && plant.discomfort[i]) {
 			KadTable.addCell(row, {
 				names: ["botanicalsDiscomfort", i],
@@ -86,7 +86,7 @@ function botanicalsDiscomfortTable() {
 
 	KadTable.clear("idTabBody_botanicalsResultDiscomfort");
 	for (let i = 0; i < plantsArray.length; i += 2) {
-		const row = KadTable.insertRow("idTabBody_botanicalsResultDiscomfort");
+		const row = KadTable.createRow("idTabBody_botanicalsResultDiscomfort");
 		KadTable.addCell(row, {
 			names: ["botanicalsPlants", i],
 			type: "Lbl",

@@ -37,7 +37,7 @@ function tugasEditRow(value) {
 }
 
 function tugasNewEntry() {
-	const value = idArea_tugasEntry.KadGet("", true);
+	const value = idArea_tugasEntry.KadGet({ noPlaceholder: true });
 	if (value == "") return;
 	tugasOptions[value] = false;
 	idArea_tugasEntry.value = "";

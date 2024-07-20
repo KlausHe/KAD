@@ -19,6 +19,7 @@ window.onload = mainSetup;
 function mainSetup() {
 	if (hostDebug()) dbCLStyle("cl_Loading").display = "none";
 	contentLayout.createContentGrid();
+
 	createContentlayoutList(); // First: create the LayoutLists
 	KadDOM.htmlSetVinChange();
 	KadDOM.htmlSetButtonType();

@@ -92,19 +92,19 @@ export function clear_cl_Pattern() {
 }
 
 function patternSize() {
-	patternOptions.size = idVin_Pattern0.KadGet(patternOptions.valOrig[0]);
+	patternOptions.size = idVin_Pattern0.KadGet({failSafe: patternOptions.valOrig[0]});
 	calcPattern();
 }
 function patternSide() {
-	patternOptions.side = idVin_Pattern1.KadGet(patternOptions.valOrig[1]);
+	patternOptions.side = idVin_Pattern1.KadGet({failSafe: patternOptions.valOrig[1]});
 	calcPattern();
 }
 function patternAsym() {
-	patternOptions.asym = idVin_Pattern2.KadGet(patternOptions.valOrig[2]);
+	patternOptions.asym = idVin_Pattern2.KadGet({failSafe: patternOptions.valOrig[2]});
 	calcPattern();
 }
 function patternHoles() {
-	patternOptions.holes = idVin_Pattern3.KadGet(patternOptions.valOrig[3]);
+	patternOptions.holes = idVin_Pattern3.KadGet({failSafe: patternOptions.valOrig[3]});
 	calcPattern();
 }
 function patternProp() {

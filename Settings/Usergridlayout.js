@@ -104,7 +104,7 @@ function usergridToggleGroup(groupKey) {
 function usergridCreateTable() {
 	KadTable.clear("idTabBody_DisableUserGrid");
 	for (const groupKey in usergridOptions.groups) {
-		const rowTh = KadTable.insertRow("idTabBody_DisableUserGrid");
+		const rowTh = KadTable.createRow("idTabBody_DisableUserGrid");
 		rowTh.id = `idTabBody_DisableUserGrid_Group${groupKey}`;
 
 		KadTable.addHeaderCell(rowTh, {
@@ -139,7 +139,7 @@ function usergridCreateTable() {
 			},
 		});
 		for (let j = 0; j < usergridOptions.groups[groupKey].length; j += usergridOptions.columns) {
-			const row = KadTable.insertRow("idTabBody_DisableUserGrid");
+			const row = KadTable.createRow("idTabBody_DisableUserGrid");
 			for (let p = 0; p < usergridOptions.columns; p++) {
 				if (usergridOptions.groups[groupKey][j + p] != undefined) {
 					const clName = Object.keys(usergridOptions.groups[groupKey][j + p]);

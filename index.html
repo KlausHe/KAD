@@ -233,7 +233,7 @@
         </div>
         <div class="cl_LinahaOptionsC" uiWrap="nowrap">
           <label class="cl_info" uiSize="size3" uiRadius="left">Runden
-          </label><input type="number" id="idVin_linahaRounds" value="5" min="1" max="10" step="1" uiSize="size6" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_linahaRounds" uiSize="size6" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub"><img class="img_oSub"></img>
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -422,6 +422,18 @@
         </div>
         <div class="cl_SudokuCanvas">
           <div style="display:block;" id="idCanv_sudoku" tabindex="0"></div>
+        </div>
+      </div>
+    </section>
+    <section class="cl_Suika" style="display:none;">
+      <div class="cl_subGrid_Suika cl_subGrid">
+        <div class="cl_SuikaInputs">
+          <button id="idBtn_suikaStart"></button>
+          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_suikaSoundOutput"></input>
+          </label><label class="cl_info" for="idCb_suikaSoundOutput" uiRadius="right">Play Sound</label>
+        </div>
+        <div class="cl_SuikaCanvas">
+          <div style="display:block;" id="idCanv_suika" tabindex="0"></div>
         </div>
       </div>
     </section>

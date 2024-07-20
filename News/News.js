@@ -108,7 +108,7 @@ function newsCreateTable() {
 	KadTable.clear("idTabBody_newsTitleTable");
 	KadDOM.scrollToTop(idTabBody_newsTitleTable);
 	for (let i = 0; i < newsData.articles.length; i++) {
-		const row = KadTable.insertRow("idTabBody_newsTitleTable");
+		const row = KadTable.createRow("idTabBody_newsTitleTable");
 		row.id = `idRow_NewsTitle_${i}`;
 
 		// arrow

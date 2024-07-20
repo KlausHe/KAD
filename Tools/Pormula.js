@@ -248,8 +248,8 @@ function pormulaReadInputs() {
 	pormulaOptions.data.uniquePoints = [];
 	pormulaOptions.data.uniqueX = [];
 	for (let i = 0; i < pormulaOptions.data.size; i++) {
-		const x = dbID(`idVin_Pormula_x${i}`).KadGet(i, true);
-		const y = dbID(`idVin_Pormula_y${i}`).KadGet(pormulaOptions.valuesOrig[i], true);
+		const x = dbID(`idVin_Pormula_x${i}`).KadGet({ failSafe: i, noPlaceholder: true });
+		const y = dbID(`idVin_Pormula_y${i}`).KadGet({ failSafe: pormulaOptions.valuesOrig[i], noPlaceholder: true });
 		if (x != null && y != null) {
 			pormulaOptions.data.userPoints.push([x, y]);
 			if (!pormulaOptions.data.uniqueX.includes(x)) {

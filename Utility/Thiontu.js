@@ -199,10 +199,11 @@ const thiontuData = {
 };
 
 initEL({ id: idArea_thiontuInputEntry, fn: thiontuUpdate, resetValue: "Type text to convert" });
+initEL({ id: idArea_thiontuOutputArea, resetValue: "~~~~~~~~~~~"});
 
 export function clear_cl_Thiontu() {
 	idArea_thiontuInputEntry.KadReset();
-	KadDOM.resetInput("idArea_thiontuOutputArea", "~~~~~~~~~~~");
+  idArea_thiontuOutputArea.KadReset();
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
 		KadDOM.enableBtn(clBtn[i], true);
@@ -253,7 +254,5 @@ function thiontuUpdate() {
 		KadDOM.btnColor(clBtn[0], "positive");
 		thiontuData.selected = clBtn[0].value;
 	}
-
-	let obj = dbID("idArea_thiontuOutputArea");
-	obj.value = thiontuData.input == "" || thiontuData.input == 0 ? "" : thiontuData.opts[thiontuData.selected].func;
+	idArea_thiontuOutputArea.value = thiontuData.input == "" || thiontuData.input == 0 ? "" : thiontuData.opts[thiontuData.selected].func;
 }

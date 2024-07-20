@@ -94,7 +94,7 @@ function iomlaidTable() {
 	for (let currency of Data_Currencies) {
 		const key = currency.cc;
 		const symbol = currency.symbol;
-		let row = KadTable.insertRow("idTabBody_Iomlaid");
+		let row = KadTable.createRow("idTabBody_Iomlaid");
 		// Währung
 		KadTable.addCell(row, {
 			names: ["iomlaidCurrency", i],

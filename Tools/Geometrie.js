@@ -654,9 +654,9 @@ function changeGeoObject(index) {
 //---------------------------
 function geoBerechnung() {
 	let selectedObj = geoObjects.selected;
-	geoObjects.valA = idVin_Area_0.KadGet(selectedObj.vals[0]) * selectedObj.radiusFactor[0];
-	geoObjects.valB = idVin_Area_1.KadGet(selectedObj.vals[1]) * selectedObj.radiusFactor[1];
-	geoObjects.valC = idVin_Area_2.KadGet(selectedObj.vals[2]) * selectedObj.radiusFactor[2];
+	geoObjects.valA = idVin_Area_0.KadGet({ failSafe: selectedObj.vals[0] }) * selectedObj.radiusFactor[0];
+	geoObjects.valB = idVin_Area_1.KadGet({ failSafe: selectedObj.vals[1] }) * selectedObj.radiusFactor[1];
+	geoObjects.valC = idVin_Area_2.KadGet({ failSafe: selectedObj.vals[2] }) * selectedObj.radiusFactor[2];
 	geometrieOptions.result.circumference = KadValue.number(selectedObj.circumference, { decimals: 3 });
 	geometrieOptions.result.basearea = KadValue.number(selectedObj.basearea, { decimals: 3 });
 	geometrieOptions.result.fullarea = KadValue.number(selectedObj.fullarea, { decimals: 3 });
@@ -694,7 +694,7 @@ function geoResultTable() {
 			resultNum = i - unitObj.length + 1;
 			lblName = `${geometrieOptions.units[unitName].name} (${geometrieOptions.result.mass[resultNum].matName})`;
 		}
-		const row = KadTable.insertRow("idTabBody_geometrieResults");
+		const row = KadTable.createRow("idTabBody_geometrieResults");
 		//LBL Title
 		KadTable.addCell(row, {
 			names: ["geoResults", "title", i],
