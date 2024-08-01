@@ -5,14 +5,14 @@ export const contentGroupsMaincontent = ["News", "Benkyou", "Utility", "Tools", 
 export const rawContentGrid = {
 	//Benkyou
 	cl_Analysis: {
-    contentGroup: "Benkyou",
+		contentGroup: "Benkyou",
 		globalValString: "idVin_analysisEntry",
 		name: "Analysis",
 		source: {
-      Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
+			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
 		},
 		info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -100, der beste ist 100",
-    size: [2, 1],
+		size: [2, 1],
 		maingrid: {
 			areas: [
 				//
@@ -334,6 +334,38 @@ export const rawContentGrid = {
 			["cl_SudokuInput", "left", "center"],
 			["cl_SudokuOverview", "center", "start"],
 			["cl_SudokuCanvas", "center"],
+		],
+	},
+	cl_Suika: {
+		contentGroup: "Games",
+		name: "Suika",
+		heritage: ["japanisch", "Wassermelone"],
+		source: {
+			Code: "https://github.com/TomboFry/suika-game/blob/main/index.html",
+		},
+		info: "Reach the Suika!",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_SuikaCanvas", "cl_SuikaInputs"],
+				["cl_SuikaCanvas", "cl_SuikaScore"],
+				["cl_SuikaCanvas", "cl_SuikaHighscore"],
+				["cl_SuikaCanvas", "cl_SuikaNextFruit"],
+				["cl_SuikaCanvas", "cl_SuikaSound"],
+				["cl_SuikaCanvas", "cl_SuikaGameOver"],
+				["cl_SuikaCanvas", "."],
+			],
+			rows: [1, 1, 1, 2, 1, 0],
+		},
+		subgrid: [
+			["cl_SuikaInputs", "left"],
+			["cl_SuikaSound", "left"],
+			["cl_SuikaScore", "left"],
+			["cl_SuikaHighscore", "left"],
+			["cl_SuikaGameOver", "center"],
+			["cl_SuikaNextFruit", "left"],
+			["cl_SuikaCanvas", "right"],
 		],
 	},
 	cl_Sweeper: {

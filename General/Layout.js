@@ -16,7 +16,7 @@ export function contentCheckActive(contentObj) {
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "Games" : "Universe",
+	defaultPage: hostDebug() ? "cl_Suika" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {

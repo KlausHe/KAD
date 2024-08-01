@@ -20,6 +20,7 @@ export { clear_cl_Lotto } from "./Games/Lotto.js";
 export { clear_cl_Numbery } from "./Games/Numbery.js";
 export { clear_cl_RayCaster } from "./Games/RayCaster.js";
 export { clear_cl_Sudoku } from "./Games/Sudoku.js";
+export { clear_cl_Suika } from "./Games/Suika.js";
 export { clear_cl_Sweeper } from "./Games/Sweeper.js";
 // News
 export { clear_cl_Howa } from "./News/Howa.js";

@@ -8,6 +8,7 @@ export { canvas_cl_Lotto } from "./Games/Lotto.js";
 export { canvas_cl_Numbery } from "./Games/Numbery.js";
 export { canvas_cl_RayCaster } from "./Games/RayCaster.js";
 export { canvas_cl_Sudoku } from "./Games/Sudoku.js";
+export { canvas_cl_Suika } from "./Games/Suika.js";
 export { canvas_cl_Sweeper } from "./Games/Sweeper.js";
 // News
 export { canvas_cl_Howa } from "./News/Howa.js";

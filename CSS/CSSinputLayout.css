@@ -82,6 +82,11 @@ img[imgSize="blech"] {
 	height: 6.5rem;
 }
 
+img[imgSize="suika"] {
+  width: auto;
+	height: 80%;
+}
+
 img[imgSize="numbery"] {
 	width: 100%;
 	height: auto;
@@ -357,8 +362,10 @@ input[imgBtn="subgrid"] {
 	border-radius: var(--UIRadius);
 	text-align: center;
 }
+
 .cl_infoCB {
 	width: var(--UIWidth1);
+	line-height: 125%;
 }
 
 .cl_infoNav {
@@ -487,10 +494,12 @@ input[imgBtn="subgrid"] {
 
 [uiSize~="height2"] {
 	height: var(--UIHeight2);
+	line-height: 300%;
 }
 
 [uiSize~="height3"] {
 	height: var(--UIHeight3);
+	line-height: 450%;
 }
 
 [uiSize~="outputTable"] {
