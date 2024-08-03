@@ -531,6 +531,12 @@ input[imgBtn="subgrid"] {
 	height: calc(var(--UIHeight2) * 0.9);
 }
 
+[uiSize~="olympiaImg"] {
+	/* width: calc(var(--UIHeight1) * 1.7); */
+  width:auto;
+	height: var(--UIHeight1);
+}
+
 [uiRadius~="none"] {
 	border-radius: 0;
 }

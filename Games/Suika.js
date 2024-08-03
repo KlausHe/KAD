@@ -20,7 +20,6 @@ export function clear_cl_Suika() {
 	Game.wallPad = Game.resizeUnits(0.06875); //0.06875
 	Game.loseHeight = Game.resizeUnits(0.2);
 	Game.bottomHeight = Game.resizeUnits(0.05);
-
 	idBtn_suikaStart.KadReset();
 	idCb_suikaSoundOutput.KadReset();
 	Game.suikaInitEngine();
@@ -45,8 +44,11 @@ function suikaStart() {
 }
 
 function suikaReset() {
-	Game.showHighscore(Game.highscore);
+  Game.showHighscore(Game.highscore);
 	Game.gameOver(false);
+  Game.stateIndex = GameStates.READY;
+  Game.runner.enabled = true;
+  Game.initGame();
 	Game.startGame();
 }
 

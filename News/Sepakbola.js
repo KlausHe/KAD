@@ -1,7 +1,3 @@
-// https://api.olympics.kevle.xyz/medals
-
-// Übetragagungen
-// https://www.dazn.com/de-DE/news/fu%C3%9Fball/tv-plan-em-2024-europameisterschaft-fernsehen-ard-zdf-rtl-1f7dv60hqs0yn171aggxq9o1lb
 import { KadArray, KadDate, KadTable, dbID, deepClone, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -24,7 +20,7 @@ const sepakbolaOptions = {
 		matchday: 0,
 	},
 	selectedOrig: {
-		ligaIndex: 0,
+		ligaIndex: 1,
 		season: 0,
 		matchday: 0,
 	},

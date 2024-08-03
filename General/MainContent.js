@@ -512,6 +512,27 @@ export const rawContentGrid = {
 			["cl_SepakbolaMatches", "right"],
 		],
 	},
+	cl_Olympia: {
+		deactivated: false,
+		contentGroup: "News",
+		name: "Olympia",
+		heritage: ["griechisch", "Olympia"],
+		source: {
+			Daten: "https://api.olympics.kevle.xyz/medals",
+		},
+		size: [1, 2],
+		maingrid: {
+			areas: [
+				["cl_OlympiaUpdate"],
+				["cl_OlympiaTable"],
+			],
+			rows: [1],
+		},
+		subgrid: [
+			["cl_OlympiaUpdate", "center"],
+			["cl_OlympiaTable", "center"],
+		],
+	},
 	//Tools
 	cl_Blechgeometrie: {
 		logReqUser: true,

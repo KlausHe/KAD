@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDOM, KadRandom, error, dbCL, KadValue, KadTable, KadCSS, dbIDStyle, KadColor } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, KadDOM, KadRandom, error, dbCL, KadValue, KadTable, KadCSS, dbIDStyle, KadColor, log } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
 
@@ -222,6 +222,7 @@ function linahaCreateButtons() {
 function linahaShowData(domID, optionsID, dataIndex) {
 	if (dataIndex === null) return;
 	const obj = linahaOptions.data[dataIndex];
+  log(obj)
 	if (obj === null) return;
 	let retText;
 	switch (optionsID) {

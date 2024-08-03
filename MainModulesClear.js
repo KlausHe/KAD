@@ -26,6 +26,7 @@ export { clear_cl_Sweeper } from "./Games/Sweeper.js";
 export { clear_cl_Howa } from "./News/Howa.js";
 export { clear_cl_Lions } from "./News/Lions.js";
 export { clear_cl_News } from "./News/News.js";
+export { clear_cl_Olympia } from "./News/Olympia.js";
 export { clear_cl_PostillonTicker } from "./News/PostillonTicker.js";
 export { clear_cl_Sepakbola } from "./News/Sepakbola.js";
 //Tools
