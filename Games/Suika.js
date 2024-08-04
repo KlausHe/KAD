@@ -1,11 +1,18 @@
 import { globalValues } from "../Settings/General.js";
-import { dbID, initEL, log } from "../KadUtils/KadUtils.js";
+import { dbID, initEL } from "../KadUtils/KadUtils.js";
 
 const suikaOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.66 + 2 * Game.wallPad, h: globalValues.mediaSizes.canvasSize.w };
 	},
 	background: null,
+	playState: 3,
+	playStates: {
+		PLAYING: 1,
+		PAUSED: 2,
+		RESET: 3,
+	},
+	pausedBall: null,
 	bgcCanvas: "skyblue",
 	sounds: null,
 	enableSounds: false,
@@ -14,14 +21,18 @@ const suikaOptions = {
 };
 
 initEL({ id: idBtn_suikaStart, fn: suikaStart, resetValue: "Start" });
+initEL({ id: idBtn_suikaPause, fn: suikaPause, resetValue: "Pause" });
+initEL({ id: idBtn_suikaRestart, fn: suikaRestart, resetValue: "Restart" });
 initEL({ id: idCb_suikaSoundOutput, fn: suikaToggleSound, resetValue: false });
 
 export function clear_cl_Suika() {
+	idBtn_suikaStart.KadReset();
+	idBtn_suikaPause.KadReset();
+	idBtn_suikaRestart.KadReset();
+	idCb_suikaSoundOutput.KadReset();
 	Game.wallPad = Game.resizeUnits(0.06875); //0.06875
 	Game.loseHeight = Game.resizeUnits(0.2);
 	Game.bottomHeight = Game.resizeUnits(0.05);
-	idBtn_suikaStart.KadReset();
-	idCb_suikaSoundOutput.KadReset();
 	Game.suikaInitEngine();
 	Game.initGame();
 }
@@ -33,23 +44,38 @@ export function canvas_cl_Suika() {
 }
 
 function suikaStart() {
-	if (suikaOptions.started) {
-		suikaOptions.started = false;
-		idBtn_suikaStart.KadReset({ resetValue: "Start" });
-	} else {
-		suikaOptions.started = true;
-		suikaReset();
-		idBtn_suikaStart.KadReset({ resetValue: "Stop" });
+	if (suikaOptions.playState == suikaOptions.playStates.PLAYING) return;
+	if (suikaOptions.playState == suikaOptions.playStates.PAUSED) {
+		Game.previewBall = suikaOptions.pausedBall;
 	}
+	if (suikaOptions.playState == suikaOptions.playStates.RESET) {
+		Game.stateIndex = GameStates.READY;
+		Game.initGame();
+		Game.startGame();
+	}
+	Game.runner.enabled = true;
+	Game.showHighscore(Game.highscore);
+	Game.gameOver(false);
+	suikaOptions.playState = suikaOptions.playStates.PLAYING;
 }
 
-function suikaReset() {
-  Game.showHighscore(Game.highscore);
-	Game.gameOver(false);
-  Game.stateIndex = GameStates.READY;
-  Game.runner.enabled = true;
-  Game.initGame();
-	Game.startGame();
+function suikaPause() {
+	if (suikaOptions.playState != suikaOptions.playStates.PLAYING) return;
+	suikaOptions.playState = suikaOptions.playStates.PAUSED;
+	if (Game.previewBall) {
+		suikaOptions.pausedBall = Game.previewBall;
+	}
+	Game.runner.enabled = false;
+}
+
+function suikaRestart() {
+	suikaOptions.playState = suikaOptions.playStates.RESET;
+	Game.previewBall = null;
+
+	Render.stop(Game.render);
+	World.clear(Game.engine.world);
+	Engine.clear(Game.engine);
+	Game.render.textures = {};
 }
 
 function suikaToggleSound() {
@@ -65,7 +91,7 @@ function mulberry32(a) {
 	};
 }
 const rand = mulberry32(Date.now());
-const { Engine, Render, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
+const { Engine, Render, World, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
 const friction = {
 	friction: 0.006,
 	frictionStatic: 0.006,
@@ -100,7 +126,7 @@ const Game = {
 		pop9: new Audio(`${suikaOptions.soundsPath}/pop9.mp3`),
 		pop10: new Audio(`${suikaOptions.soundsPath}/pop10.mp3`),
 	},
-	stateIndex: GameStates.MENU,
+	stateIndex: GameStates.READY,
 	score: 0,
 	highscore: 0,
 	wallPad: null,
@@ -291,7 +317,7 @@ const Game = {
 		Composite.add(Game.engine.world, circle);
 		setTimeout(() => {
 			Composite.remove(Game.engine.world, circle);
-		}, 100);
+		}, 150);
 	},
 
 	loseGame: function () {
@@ -301,7 +327,6 @@ const Game = {
 		suikaStart();
 	},
 
-	// Returns an index, or null
 	lookupFruitIndex: function (radius) {
 		const sizeIndex = Game.fruitSizes.findIndex((size) => size.radius == radius);
 		if (sizeIndex === undefined) return null;

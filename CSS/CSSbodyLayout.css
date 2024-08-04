@@ -189,11 +189,13 @@ canvas {
 }
 
 sub {
+  line-height: 0;
 	vertical-align: sub;
 	font-size: 70%;
 }
 
 sup {
+  line-height: 0;
 	vertical-align: super;
 	font-size: 70%;
 }

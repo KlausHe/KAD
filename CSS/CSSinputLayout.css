@@ -494,12 +494,11 @@ input[imgBtn="subgrid"] {
 
 [uiSize~="height2"] {
 	height: var(--UIHeight2);
-	line-height: 300%;
+	/* line-height: 300%; */
 }
 
 [uiSize~="height3"] {
 	height: var(--UIHeight3);
-	line-height: 450%;
 }
 
 [uiSize~="outputTable"] {
@@ -532,7 +531,6 @@ input[imgBtn="subgrid"] {
 }
 
 [uiSize~="olympiaImg"] {
-	/* width: calc(var(--UIHeight1) * 1.7); */
   width:auto;
 	height: var(--UIHeight1);
 }

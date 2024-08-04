@@ -299,6 +299,35 @@ export const rawContentGrid = {
 			["cl_RayCasterCanvas", "center"],
 		],
 	},
+	cl_Storre: {
+		contentGroup: "Games",
+		name: "Storre",
+		heritage: ["dänisch", "größer"],
+		source: {
+			Daten: "https://restcountries.com/",
+		},
+		info: "Wer ist größer?",
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_StorreStartArea", "cl_StorreStartPopulation"],
+				["cl_StorreQuestionA", "cl_StorreQuestionB"],
+				["cl_StorreAnswerA", "cl_StorreAnswerB"],
+				["cl_StorreStreak", "cl_StorreStreak"],
+			],
+			rows: [1, 3, 1],
+		},
+		subgrid: [
+			["cl_StorreStartArea", "right"],
+			["cl_StorreStartPopulation", "left"],
+			["cl_StorreQuestionA", "right"],
+			["cl_StorreQuestionB", "left"],
+			["cl_StorreAnswerA", "right"],
+			["cl_StorreAnswerB", "left"],
+			["cl_StorreStreak", "center"],
+		],
+	},
 	cl_Sudoku: {
 		contentGroup: "Games",
 		name: "Sudoku",
@@ -499,14 +528,15 @@ export const rawContentGrid = {
 		size: [2, 3],
 		maingrid: {
 			areas: [
-				["cl_SepakbolaInputLiga", "cl_SepakbolaInputSeason", "cl_SepakbolaInputDay"],
-				["cl_SepakbolaTable", "cl_SepakbolaTable", "cl_SepakbolaMatches"],
+				["cl_SepakbolaInputLiga", "cl_SepakbolaInputDay"],
+				["cl_SepakbolaInputSeason", "."],
+				["cl_SepakbolaTable", "cl_SepakbolaMatches"],
 			],
-			rows: [1],
+			rows: [1,1],
 		},
 		subgrid: [
-			["cl_SepakbolaInputLiga", "left"],
-			["cl_SepakbolaInputSeason", "left"],
+			["cl_SepakbolaInputLiga", "center"],
+			["cl_SepakbolaInputSeason", "center"],
 			["cl_SepakbolaInputDay", "center"],
 			["cl_SepakbolaTable", "left"],
 			["cl_SepakbolaMatches", "right"],
@@ -522,10 +552,7 @@ export const rawContentGrid = {
 		},
 		size: [1, 2],
 		maingrid: {
-			areas: [
-				["cl_OlympiaUpdate"],
-				["cl_OlympiaTable"],
-			],
+			areas: [["cl_OlympiaUpdate"], ["cl_OlympiaTable"]],
 			rows: [1],
 		},
 		subgrid: [

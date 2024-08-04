@@ -1,6 +1,6 @@
 // https://api.olympics.kevle.xyz/medals
 
-import { KadArray, KadDate, KadTable, dbID, deepClone, initEL, log } from "../KadUtils/KadUtils.js";
+import {  KadTable, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const olympiaOptions = {
@@ -20,7 +20,6 @@ async function olympaUpdate() {
 	try {
 		let response = await fetch(olympiaOptions.URLMedals);
 		dataTable = await response.json();
-
 		response = await fetch(olympiaOptions.URLFlags);
 		dataFlags = await response.json();
 	} catch (err) {
