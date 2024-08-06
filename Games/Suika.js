@@ -251,7 +251,7 @@ const Game = {
 		}, 250);
 
 		Events.on(Game.mouseConstraint, "mouseup", function (e) {
-			Game.addFruit(e.mouse.position.x);
+			Game.addFruit(Math.min(suikaOptions.canvas.w - Game.wallPad - Game.previewBall.circleRadius, Math.max(Game.wallPad + Game.previewBall.circleRadius, e.mouse.position.x)));
 		});
 
 		Events.on(Game.mouseConstraint, "mousemove", function (e) {

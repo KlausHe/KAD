@@ -32,8 +32,6 @@ initEL({ id: idVin_wikiInput, fn: wikiSearchInput, resetValue: "Search on Wiki" 
 initEL({ id: idBtn_wikiInput, fn: wikiSearchInput });
 initEL({ id: idSel_wikiLanguage, fn: wikiSearchLanguage });
 
-// onclick = "newsShowNext(0)idDiv_wiki_Text";
-
 export function clear_cl_WikiSearch() {
 	idVin_wikiInput.KadReset();
 	wikiOptions.random = null;
@@ -58,9 +56,10 @@ export const storage_cl_WikiSearch = {
 	},
 	set data(data) {
 		wikiOptions.search = deepClone(data);
-		if (idVin_wikiInput.value != "") return;
+		if (idVin_wikiInput.KadGet() != "") return;
 		if (wikiOptions.search.tab != null) {
-			dbID("idVin_wikiInput").placeholder = wikiOptions.search.tab;
+			idVin_wikiInput.KadReset({ resetValue: wikiOptions.search.tab });
+			// dbID("idVin_wikiInput").placeholder = wikiOptions.search.tab;
 			wikiSearchInput(wikiOptions.search.tab);
 			if (wikiOptions.search.content) {
 				wikiShowSelectedText(wikiOptions.search.content, true);
@@ -74,8 +73,10 @@ export const storage_cl_WikiSearch = {
 			});
 			if (arr.length > 0) {
 				const autoSearch = KadRandom.randomObject(arr);
-				dbID("idVin_wikiInput").placeholder = autoSearch.data;
-				wikiSearchInput(autoSearch.data, true);
+				idVin_wikiInput.KadReset({ resetValue: autoSearch.data });
+				// dbID("idVin_wikiInput").placeholder = autoSearch.data;
+				wikiSearchInput(autoSearch.data);
+				wikiOptions.random = true;
 			}
 		}
 		KadTable.clear("idTabBody_wikiTitleTable");
@@ -95,9 +96,9 @@ function wikiSearchPopulateLanguage() {
 	});
 }
 
-function wikiSearchInput(input = null, random = null) {
-	wikiOptions.random = random;
-	wikiOptions.search.tab = input ? input.trim() : dbID(idVin_wikiInput).value.replace(/\s+/g, "_");
+function wikiSearchInput() {
+	wikiOptions.search.tab = idVin_wikiInput.KadGet().replace(/\s+/g, "_");
+	log(wikiOptions.search.tab);
 	if (wikiOptions.search.tab != null && wikiOptions.search.tab != "") {
 		globalP5.loadJSON(`${wikiOptions.searchUrl}${wikiOptions.search.tab}`, wikiCreateTable, "jsonp");
 		dbID("idDiv_wiki_Title").textContent = "Artikel wählen";

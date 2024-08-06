@@ -1,5 +1,5 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
-import { initEL, dbID, error,  KadTable, KadDate, KadValue, log } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, error, KadTable, KadDate, KadValue, log } from "../KadUtils/KadUtils.js";
 import { Data_Currencies } from "../General/MainData.js";
 
 const iomlaidOptions = {
@@ -70,20 +70,22 @@ function iomlaidValueChange() {
 async function iomlaidGetData() {
 	iomlaidOptions.dataReceived = false;
 	idTabHeader_iomlaidDatedDate.textContent = "searching...";
+	let dataNow = null;
+	let dataHistory = null;
 	try {
 		let resultNow = await fetch(iomlaidOptions.URLnow);
-		let dataNow = await resultNow.json();
+		dataNow = await resultNow.json();
 		let resultHistory = await fetch(iomlaidOptions.URLhistoric);
-		let dataHistory = await resultHistory.json();
-		iomlaidOptions.dataReceived = true;
-		iomlaidOptions.latest = dataNow[iomlaidOptions.baseCurrency.toLowerCase()];
-		iomlaidOptions.historic = dataHistory[iomlaidOptions.baseCurrency.toLowerCase()];
-		idTabHeader_iomlaidDatedDate.textContent = `Kurs vom ${dataHistory.date}`;
-		iomlaidOptions.date = idVin_IomlaidDate.KadReset({ resetValue: dataHistory.date });
-		iomlaidTable();
+		dataHistory = await resultHistory.json();
 	} catch (err) {
 		error("Could not receive data for", "'Iomlaid'", err);
 	}
+	iomlaidOptions.dataReceived = true;
+	iomlaidOptions.latest = dataNow[iomlaidOptions.baseCurrency.toLowerCase()];
+	iomlaidOptions.historic = dataHistory[iomlaidOptions.baseCurrency.toLowerCase()];
+	idTabHeader_iomlaidDatedDate.textContent = `Kurs vom ${dataHistory.date}`;
+	iomlaidOptions.date = idVin_IomlaidDate.KadReset({ resetValue: dataHistory.date });
+	iomlaidTable();
 }
 
 function iomlaidTable() {

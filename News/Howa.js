@@ -90,7 +90,7 @@ export const storage_cl_Howa = {
 		return howaOptions.city;
 	},
 	set data(data) {
-		dbID("idVin_howaEntry").value = data;
+		idVin_howaEntry.KadReset({ resetValue: data });
 	},
 };
 
@@ -110,7 +110,7 @@ function howaChangeMap() {
 function howaGetCoordinates() {
 	if ("geolocation" in navigator) {
 		howaOptions.city = null;
-		dbID("idVin_howaEntry").value = "";
+    idVin_howaEntry.KadReset({resetValue:""})
 		dbIDStyle("idBtn_getGeoLocation").display = "initial";
 		navigator.geolocation.getCurrentPosition(howaNavigatorPosition, howaNavigatorError);
 	} else {
@@ -133,7 +133,7 @@ function howaNavigatorError() {
 }
 
 async function howaGetLocation() {
-	let input = idVin_howaEntry.value.trim();
+	let input = idVin_howaEntry.KadGet();
 	if (input == "") return;
 	howaOptions.city = input;
 	const err = await howaGeocodingCity();

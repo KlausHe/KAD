@@ -158,10 +158,11 @@ async function linahaGetData() {
 	try {
 		let response = await fetch(url);
 		linahaOptions.data = await response.json();
-		linahaCreateButtons();
 	} catch (err) {
-		error("Could not receive data for", "'Linaha'", err);
+    error("Could not receive data for", "'Linaha'", err);
 	}
+  linahaCreateButtons();
+
 }
 
 function linahaCreateButtons() {

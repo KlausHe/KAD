@@ -68,12 +68,11 @@ async function newsGetData() {
 			newsData.articles = data.news;
 		} else {
 			newsError("Fehler bei Datenabfrage. Stauts:", response.status);
-      log(err)
-      return
+			return;
 		}
 	} catch (err) {
 		newsError("Keine daten zum Anzeigen gefunden. Bitte später noch einmal verwuchen. Error: ", err);
-    return
+		return;
 	}
 	newsData.articles = newsData.articles.filter((n) => n.type == "story");
 	newsData.currIndex = 0;
@@ -87,13 +86,14 @@ async function showNews() {
 
 	dbID(idImg_News_Image).src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];
 	if (newsCheckRequestCount()) return;
+	let data = null;
 	try {
 		let response = await fetch(newsData.articles[newsData.currIndex].details);
-		let data = await response.json();
-		newsData.articles[newsData.currIndex].content = data.content;
+		data = await response.json();
 	} catch (err) {
 		newsError(err);
 	}
+	newsData.articles[newsData.currIndex].content = data.content;
 
 	let cleandContent = newsData.articles[newsData.currIndex].content
 		.filter((obj) => obj.type == "text")
