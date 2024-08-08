@@ -93,10 +93,10 @@ function mulberry32(a) {
 const rand = mulberry32(Date.now());
 const { Engine, Render, World, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
 const friction = {
-	friction: 0.006,
-	frictionStatic: 0.006,
+	friction: 0.02,  //0.006
+	frictionStatic: 0.005, //0.006
 	frictionAir: 0,
-	restitution: 0.1,
+	restitution: 0.02,
 };
 
 const GameStates = {
@@ -223,7 +223,6 @@ const Game = {
 				fillStyle: "#0000AA",
 				opacity: 0.2,
 			},
-			...friction,
 		};
 
 		const gameStatics = [
@@ -304,7 +303,6 @@ const Game = {
 		const circle = Bodies.circle(x, y, r, {
 			isStatic: true,
 			collisionFilter: { mask: 0x0040 },
-			angle: rand() * (Math.PI * 2),
 			render: {
 				sprite: {
 					texture: `${suikaOptions.imagesPath}/pop.png`,
@@ -317,7 +315,7 @@ const Game = {
 		Composite.add(Game.engine.world, circle);
 		setTimeout(() => {
 			Composite.remove(Game.engine.world, circle);
-		}, 150);
+		}, 100);
 	},
 
 	loseGame: function () {

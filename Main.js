@@ -1,7 +1,7 @@
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground } from "./General/BackgroundAnimation.js";
 import { contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
-import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./KadUtils/KadUtils.js";
+import { KadDOM, KadDate, KadFile, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
@@ -41,7 +41,15 @@ function mainSetup() {
 	setTimeout(() => {
 		hideLoadingscreen();
 	}, 500);
+
+	// const urls = "ONE";
+	// const urls = ["ONE", "TWO", "THREE"];
+	// log(KadFile.loadUrlToJSON(urls, callB));
 }
+
+// function callB(data) {
+// 	log("CB:", data);
+// }
 
 // no rightclicking anywhere!
 document.oncontextmenu = function () {
