@@ -1,6 +1,6 @@
 // https://api.olympics.kevle.xyz/medals
 
-import {  KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { KadFile, KadTable, errorChecked, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const olympiaOptions = {
@@ -15,19 +15,10 @@ export function clear_cl_Olympia() {
 }
 
 async function olympaUpdate() {
-	let dataTable = null;
-	let dataFlags = null;
-	try {
-		let response = await fetch(olympiaOptions.URLMedals);
-		dataTable = await response.json();
-		response = await fetch(olympiaOptions.URLFlags);
-		dataFlags = await response.json();
-	} catch (err) {
-		if (err.name == "TypeError") {
-			return;
-		}
-	}
-  let flagObj = {}
+	const { dataTable, dataFlags, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataFlags"], urlArray: [olympiaOptions.URLMedals, olympiaOptions.URLFlags] });
+	if (errorChecked(error)) return;
+
+	let flagObj = {};
 	for (let obj of dataFlags) {
 		flagObj[obj.cca3] = obj.flags.svg;
 	}
@@ -61,7 +52,7 @@ function olympiaTableReturn(data) {
 			ui: {
 				uiSize: "olympiaImg",
 			},
-      cellStyle: {
+			cellStyle: {
 				textAlign: "center",
 			},
 		});

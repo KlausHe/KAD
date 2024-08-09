@@ -1,5 +1,5 @@
 import { globalValues } from "../Settings/General.js";
-import { dbID, initEL } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadRandom } from "../KadUtils/KadUtils.js";
 
 const suikaOptions = {
 	get canvas() {
@@ -82,21 +82,26 @@ function suikaToggleSound() {
 	suikaOptions.enableSounds = idCb_suikaSoundOutput.KadGet();
 }
 
-function mulberry32(a) {
-	return function () {
-		let t = (a += 0x6d2b79f5);
-		t = Math.imul(t ^ (t >>> 15), t | 1);
-		t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-		return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-	};
-}
-const rand = mulberry32(Date.now());
 const { Engine, Render, World, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
 const friction = {
-	friction: 0.02,  //0.006
-	frictionStatic: 0.005, //0.006
-	frictionAir: 0,
-	restitution: 0.02,
+	fruits: {
+		friction: 0.006, //0.006
+		frictionStatic: 0.02, //0.006
+		frictionAir: 0.01,
+		restitution: 0.02,
+	},
+  bottom: {
+    friction: 0.02, //0.006
+    frictionStatic: 0.02, //0.006
+    frictionAir: 0,
+    restitution: 0.02,
+  },
+	walls: {
+		friction: 0.02, //0.006
+		frictionStatic: 0.02, //0.006
+		frictionAir: 0,
+		restitution: 0.002,
+	},
 };
 
 const GameStates = {
@@ -163,7 +168,7 @@ const Game = {
 	currentFruitSize: 0,
 	nextFruitSize: 0,
 	setNextFruitSize: () => {
-		Game.nextFruitSize = Math.floor(rand() * 5);
+		Game.nextFruitSize = KadRandom.randomObject([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4]);
 		dbID(idImg_suikaNextFruit).src = `${suikaOptions.imagesPath}/circle${Game.nextFruitSize}.png`;
 	},
 	resizeUnits: (size) => {
@@ -215,7 +220,12 @@ const Game = {
 		const wallProps = {
 			isStatic: true,
 			render: { fillStyle: "#FFEEDB" },
-			...friction,
+			...friction.walls,
+		};
+		const bottomProps = {
+			isStatic: true,
+			render: { fillStyle: "#FFEEDB" },
+			...friction.bottom,
 		};
 		const topProp = {
 			isStatic: true,
@@ -228,7 +238,7 @@ const Game = {
 		const gameStatics = [
 			Bodies.rectangle(Game.wallPad / 2, suikaOptions.canvas.h / 2, Game.wallPad, suikaOptions.canvas.h, wallProps), // Left
 			Bodies.rectangle(suikaOptions.canvas.w - Game.wallPad / 2, suikaOptions.canvas.h / 2, Game.wallPad, suikaOptions.canvas.h, wallProps), // Right
-			Bodies.rectangle(suikaOptions.canvas.w / 2, suikaOptions.canvas.h + Game.wallPad / 2 - Game.bottomHeight, suikaOptions.canvas.w, Game.wallPad, wallProps), // Bottom
+			Bodies.rectangle(suikaOptions.canvas.w / 2, suikaOptions.canvas.h + Game.wallPad / 2 - Game.bottomHeight, suikaOptions.canvas.w, Game.wallPad, bottomProps), // Bottom
 			Bodies.rectangle(suikaOptions.canvas.w / 2, Game.loseHeight, suikaOptions.canvas.w, 6, topProp), // Top
 		];
 
@@ -336,7 +346,7 @@ const Game = {
 		const fruit = Game.fruitSizes[sizeIndex];
 		const imgSize = (1024 - 20) * 0.5; // 20px for image inaccuracies
 		const circle = Bodies.circle(x, y, fruit.radius, {
-			...friction,
+			...friction.fruits,
 			...extraConfig,
 			render: { sprite: { texture: fruit.img, xScale: fruit.radius / imgSize, yScale: fruit.radius / imgSize } }, //512
 		});

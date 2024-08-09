@@ -1,4 +1,4 @@
-import { dbIDStyle, hostDebug, initEL, KadDOM, KadRandom, KadTable, KadValue, log } from "../KadUtils/KadUtils.js";
+import { dbIDStyle, errorChecked, hostDebug, initEL, KadDOM, KadFile, KadRandom, KadTable, KadValue, log } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const storreOptions = {
@@ -62,15 +62,9 @@ function storreStartPopulation() {
 
 async function storreGetData() {
 	if (storreOptions.data == null) {
-		try {
-			let response = await fetch(storreOptions.url);
-			storreOptions.data = await response.json();
-		} catch (err) {
-			if (err.name == "TypeError") {
-				log(err);
-				return;
-			}
-		}
+		const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: storreOptions.url });
+		if (errorChecked(error, "Could not receive data for 'Storre'")) return;
+		storreOptions.data = data;
 	}
 	KadDOM.enableBtn(idBtn_storreQuestionA, true);
 	KadDOM.enableBtn(idBtn_storreQuestionB, true);

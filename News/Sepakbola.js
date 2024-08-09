@@ -1,4 +1,4 @@
-import { KadArray, KadDate, KadTable, dbID, deepClone, initEL, log } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadFile, KadTable, dbID, deepClone, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -135,24 +135,14 @@ function sepakbolaMatchdayChange() {
 }
 
 async function sepakbolaGetData() {
-	let dataTable = null;
-	let dataDay = null;
-	let dataMatches = null;
-	try {
-		let response = await fetch(sepakbolaOptions.URLTable);
-		dataTable = await response.json();
-		response = await fetch(sepakbolaOptions.URLLastday);
-		dataDay = await response.json();
-		response = await fetch(sepakbolaOptions.URLMatches);
-		dataMatches = await response.json();
-	} catch (err) {
-    if(err.name == "TypeError"){
-      return
-    }
-	}
-	if(dataTable != null) sepakbolaTableReturn(dataTable);
-	if(dataDay != null) sepakbolaLastdayReturn(dataDay);
-	if(dataMatches != null) sepakbolaMatchesReturn(dataMatches);
+	const { dataTable, dataDay, dataMatches, error } = await KadFile.loadUrlToJSON({
+		variableArray: ["dataTable", "dataDay", "dataMatches"],
+		urlArray: [sepakbolaOptions.URLTable, sepakbolaOptions.URLLastday, sepakbolaOptions.URLMatches],
+	});
+	if (errorChecked(error, "Could not receive data for 'Sepakbola'")) return;
+	if (dataTable != null) sepakbolaTableReturn(dataTable);
+	if (dataDay != null) sepakbolaLastdayReturn(dataDay);
+	if (dataMatches != null) sepakbolaMatchesReturn(dataMatches);
 }
 
 function sepakbolaLastdayReturn(data) {

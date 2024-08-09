@@ -1,5 +1,5 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
-import { initEL, dbID, error, KadTable, KadDate, KadValue, log } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, error, KadTable, KadDate, KadValue, log, KadFile, errorChecked } from "../KadUtils/KadUtils.js";
 import { Data_Currencies } from "../General/MainData.js";
 
 const iomlaidOptions = {
@@ -70,16 +70,13 @@ function iomlaidValueChange() {
 async function iomlaidGetData() {
 	iomlaidOptions.dataReceived = false;
 	idTabHeader_iomlaidDatedDate.textContent = "searching...";
-	let dataNow = null;
-	let dataHistory = null;
-	try {
-		let resultNow = await fetch(iomlaidOptions.URLnow);
-		dataNow = await resultNow.json();
-		let resultHistory = await fetch(iomlaidOptions.URLhistoric);
-		dataHistory = await resultHistory.json();
-	} catch (err) {
-		error("Could not receive data for", "'Iomlaid'", err);
-	}
+
+	const { error, dataNow, dataHistory } = await KadFile.loadUrlToJSON({
+		variableArray: ["dataNow", "dataHistory"],
+		urlArray: [iomlaidOptions.URLnow, iomlaidOptions.URLhistoric],
+	});
+	if (errorChecked(error, "Could not receive data for 'Iomlaid'")) return;
+
 	iomlaidOptions.dataReceived = true;
 	iomlaidOptions.latest = dataNow[iomlaidOptions.baseCurrency.toLowerCase()];
 	iomlaidOptions.historic = dataHistory[iomlaidOptions.baseCurrency.toLowerCase()];

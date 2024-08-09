@@ -8,15 +8,13 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export function contentCheckActive(contentObj) {
 	if (hostDebug()) return true;
-	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) {
-		return false;
-	}
+	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
 	return true;
 }
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Howa" : "Universe",
+	defaultPage: hostDebug() ? "cl_WikiSearch" : "Universe",
 	createContentGrid() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {

@@ -1,7 +1,6 @@
-import { dbID, deepClone, KadDOM, KadRandom, KadTable, initEL, log, dbIDStyle } from "../KadUtils/KadUtils.js";
+import { dbID, deepClone, KadDOM, KadRandom, KadTable, initEL, log, dbIDStyle, KadFile } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 import { AccData } from "../General/Account.js";
-import { globalP5 } from "../Main.js";
 
 const wikiOptions = {
 	get searchUrl() {
@@ -59,7 +58,6 @@ export const storage_cl_WikiSearch = {
 		if (idVin_wikiInput.KadGet() != "") return;
 		if (wikiOptions.search.tab != null) {
 			idVin_wikiInput.KadReset({ resetValue: wikiOptions.search.tab });
-			// dbID("idVin_wikiInput").placeholder = wikiOptions.search.tab;
 			wikiSearchInput(wikiOptions.search.tab);
 			if (wikiOptions.search.content) {
 				wikiShowSelectedText(wikiOptions.search.content, true);
@@ -74,7 +72,6 @@ export const storage_cl_WikiSearch = {
 			if (arr.length > 0) {
 				const autoSearch = KadRandom.randomObject(arr);
 				idVin_wikiInput.KadReset({ resetValue: autoSearch.data });
-				// dbID("idVin_wikiInput").placeholder = autoSearch.data;
 				wikiSearchInput(autoSearch.data);
 				wikiOptions.random = true;
 			}
@@ -98,9 +95,8 @@ function wikiSearchPopulateLanguage() {
 
 function wikiSearchInput() {
 	wikiOptions.search.tab = idVin_wikiInput.KadGet().replace(/\s+/g, "_");
-	log(wikiOptions.search.tab);
 	if (wikiOptions.search.tab != null && wikiOptions.search.tab != "") {
-		globalP5.loadJSON(`${wikiOptions.searchUrl}${wikiOptions.search.tab}`, wikiCreateTable, "jsonp");
+		KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.searchUrl}${wikiOptions.search.tab}`, callback: wikiCreateTable });
 		dbID("idDiv_wiki_Title").textContent = "Artikel wählen";
 		dbID("idDiv_wiki_Title").onclick = null;
 		dbID("idDiv_wiki_Text").textContent = "";
@@ -114,12 +110,12 @@ function wikiSearchLanguage() {
 }
 
 function wikiCreateTable(data) {
-	wikiOptions.resultTerms = data[1];
+	wikiOptions.resultTerms = data.data[1];
 	KadTable.clear("idTabBody_wikiTitleTable");
 	for (let i = 0; i < wikiOptions.resultTerms.length; i++) {
 		let row = KadTable.createRow("idTabBody_wikiTitleTable");
 		// arrow
-		const arrow = KadTable.addCell(row, {
+		KadTable.addCell(row, {
 			names: ["wikiContent", i],
 			type: "Img",
 			subGroup: "subgrid",
@@ -129,7 +125,7 @@ function wikiCreateTable(data) {
 					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = KadDOM.getImgPath("right");
 				}
 				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = KadDOM.getImgPath("search");
-				globalP5.loadJSON(wikiOptions.contentUrl + wikiOptions.resultTerms[i], wikiShowSelectedText, "jsonp");
+				KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.contentUrl}${wikiOptions.resultTerms[i]}`, callback: wikiShowSelectedText });
 				dbID("idDiv_wiki_Title").textContent = "searching...";
 				dbID("idDiv_wiki_Title").onclick = null;
 			},
@@ -147,8 +143,8 @@ function wikiCreateTable(data) {
 					dbID("idTabBody_wikiTitleTable").rows[j].cells[0].childNodes[0].src = KadDOM.getImgPath("right");
 				}
 				dbID("idTabBody_wikiTitleTable").rows[i].cells[0].childNodes[0].src = KadDOM.getImgPath("search");
-				globalP5.loadJSON(wikiOptions.contentUrl + wikiOptions.resultTerms[i], wikiShowSelectedText, "jsonp");
-				globalP5.loadJSON(wikiOptions.imageUrl + wikiOptions.resultTerms[i], wikiShowSelectedImage, "jsonp");
+				KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.contentUrl}${wikiOptions.resultTerms[i]}`, callback: wikiShowSelectedText });
+				KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.imageUrl}${wikiOptions.resultTerms[i]}`, callback: wikiShowSelectedImage });
 				dbID("idDiv_wiki_Title").textContent = "searching...";
 				dbID("idDiv_wiki_Title").onclick = null;
 			},
@@ -163,16 +159,16 @@ function wikiCreateTable(data) {
 
 function wikiQueryRandom() {
 	const term = KadRandom.randomObject(wikiOptions.resultTerms);
-	globalP5.loadJSON(wikiOptions.contentUrl + term, wikiShowSelectedText, "jsonp");
-	globalP5.loadJSON(wikiOptions.imageUrl + term, wikiShowSelectedImage, "jsonp");
+	KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.contentUrl}${term}`, callback: wikiShowSelectedText });
+	KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.imageUrl}${term}`, callback: wikiShowSelectedImage });
 }
 
 function wikiShowSelectedText(data, loaded) {
 	wikiOptions.random = null;
 	if (loaded) {
-		wikiOptions.search.content = data;
+		wikiOptions.search.content = data.data;
 	} else {
-		wikiOptions.search.content = data.query.pages;
+		wikiOptions.search.content = data.data.query.pages;
 	}
 	let pagesID = Object.keys(wikiOptions.search.content);
 	const title = wikiOptions.search.content[pagesID].title;
@@ -186,9 +182,9 @@ function wikiShowSelectedText(data, loaded) {
 
 function wikiShowSelectedImage(data, loaded) {
 	if (loaded) {
-		wikiOptions.search.image = data;
+		wikiOptions.search.image = data.data;
 	} else {
-		wikiOptions.search.image = data.query.pages;
+		wikiOptions.search.image = data.data.query.pages;
 	}
 	let pagesID = Object.keys(wikiOptions.search.image);
 

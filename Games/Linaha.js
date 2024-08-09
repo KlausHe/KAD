@@ -1,4 +1,4 @@
-import { initEL, dbID, KadDOM, KadRandom, error, dbCL, KadValue, KadTable, KadCSS, dbIDStyle, KadColor, log } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, KadDOM, KadRandom, error, dbCL, KadValue, KadTable, KadCSS, dbIDStyle, KadColor, log, errorChecked, KadFile } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
 
@@ -155,14 +155,10 @@ async function linahaGetData() {
 	for (const code of indexArr) {
 		url += `${code},`;
 	}
-	try {
-		let response = await fetch(url);
-		linahaOptions.data = await response.json();
-	} catch (err) {
-    error("Could not receive data for", "'Linaha'", err);
-	}
-  linahaCreateButtons();
-
+	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: url });
+	if (errorChecked(error, "Could not receive data for 'Linaha'")) return;
+	linahaOptions.data = data;
+	linahaCreateButtons();
 }
 
 function linahaCreateButtons() {
@@ -223,7 +219,6 @@ function linahaCreateButtons() {
 function linahaShowData(domID, optionsID, dataIndex) {
 	if (dataIndex === null) return;
 	const obj = linahaOptions.data[dataIndex];
-  log(obj)
 	if (obj === null) return;
 	let retText;
 	switch (optionsID) {

@@ -189,13 +189,13 @@ canvas {
 }
 
 sub {
-  line-height: 0;
+	line-height: 0;
 	vertical-align: sub;
 	font-size: 70%;
 }
 
 sup {
-  line-height: 0;
+	line-height: 0;
 	vertical-align: super;
 	font-size: 70%;
 }
@@ -442,8 +442,7 @@ h1 {
 	border: var(--UIBorderThinInverse);
 	padding: var(--padding);
 	text-align: center;
-	width: max-content;
-	max-width: 30rem;
+	width: calc(var(--divGridMinWidth) * 0.5);
 	z-index: 20;
 	opacity: 0;
 	-webkit-transition: opacity var(--transitionTimeInfo) ease-in-out;
@@ -462,7 +461,7 @@ h1 {
 	border: var(--UIBorderThinInverse);
 	padding: var(--padding);
 	text-align: center;
-	min-width: 16.667rem;
+	width: calc(var(--divGridMinWidth) * 0.5);
 	z-index: 20;
 	opacity: 0;
 	-webkit-transition: opacity var(--transitionTimeInfo) ease-in-out;

@@ -1,4 +1,4 @@
-import { KadTable, dbID, initEL, objectLength } from "../KadUtils/KadUtils.js";
+import { KadTable, dbID, error, initEL, objectLength } from "../KadUtils/KadUtils.js";
 import { storage_cl_WikiSearch } from "./WikiSearch.js";
 
 const analysisOptions = {

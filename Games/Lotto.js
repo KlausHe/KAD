@@ -1,6 +1,5 @@
-import { dbID, dbCLStyle, KadDOM, KadDate, KadTable, KadRandom, KadColor, initEL, log } from "../KadUtils/KadUtils.js";
+import { dbID, dbCLStyle, KadDate, KadTable, KadRandom, KadColor, initEL, KadFile } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
-import { globalP5 } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 
 const lottoOptions = {
@@ -201,7 +200,7 @@ async function lottoGetGames() {
 	}
 	lottoOptions.getGameTimer = setTimeout(() => {
 		lottoOptions.numberOfLatestGames = idVin_lottoNumberOfGames.KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
-		globalP5.loadJSON(lottoOptions.url, lottoReturn, "json");
+		KadFile.loadUrlToJSON({ variable: "data", url: lottoOptions.url, callback: lottoReturn });
 		lottoOptions.getGameTimer = null;
 	}, 800);
 }
@@ -210,8 +209,8 @@ function lottoReturn(d) {
 	lottoOptions.games[lottoOptions.selGame].loadedSets = {};
 	KadTable.clear("idTabHeader_Lotto");
 	KadTable.clear("idTabBody_Lotto");
-
-	if (d.length == 0) {
+	const lottoData = d.data;
+	if (lottoData.length == 0) {
 		const rowTh = KadTable.createRow("idTabHeader_Lotto");
 		KadTable.addHeaderCell(rowTh, {
 			names: ["lottoTableHeader", "date"],
@@ -225,7 +224,7 @@ function lottoReturn(d) {
 		return;
 	}
 
-	const data = d.data.reverse();
+	const data = lottoData.data.reverse();
 	for (let i = 0; i < lottoOptions.numberOfLatestGames; i++) {
 		let dateArr = data[i].date.split(".");
 		const date = new Date(dateArr[2], dateArr[1] - 1, dateArr[0]);

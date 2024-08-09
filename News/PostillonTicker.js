@@ -1,5 +1,4 @@
-import { globalP5 } from "../Main.js";
-import { dbID, initEL, KadTable, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadTable, KadRandom, KadFile, log } from "../KadUtils/KadUtils.js";
 
 initEL({ id: idBtn_newsTickerNext, fn: postillonTickerNext });
 
@@ -17,12 +16,12 @@ let postillonTickerOptions = {
 
 export function clear_cl_PostillonTicker() {
 	if (postillonTickerOptions.data == null) {
-		globalP5.loadJSON("./Data/DataLists/Newsticker.json", tickerLoadData, "json");
+		KadFile.loadUrlToJSON({ variable: "data", url: "./Data/DataLists/Newsticker.json", callback: tickerLoadData });
 	}
 	postillonTickerOptions.usedNums = [];
 }
 
-function tickerLoadData(data) {
+function tickerLoadData({data}) {
 	postillonTickerOptions.data = data.arr;
 	postillonTickerOptions.tickerNums = new Array(postillonTickerOptions.data.length).fill(0).map((n, i) => i);
 	postillonTickerNext();

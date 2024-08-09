@@ -6,14 +6,6 @@ import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
 
-// p5-Setup in Soundlibrary only!  Use Instance "globalP5" for general functionality
-export const globalP5 = new p5((c) => {
-	c.setup = function () {
-		c.noCanvas();
-		c.noLoop();
-	};
-});
-
 window.onload = mainSetup;
 
 function mainSetup() {
@@ -41,20 +33,12 @@ function mainSetup() {
 	setTimeout(() => {
 		hideLoadingscreen();
 	}, 500);
-
-	// const urls = "ONE";
-	// const urls = ["ONE", "TWO", "THREE"];
-	// log(KadFile.loadUrlToJSON(urls, callB));
 }
 
-// function callB(data) {
-// 	log("CB:", data);
-// }
-
 // no rightclicking anywhere!
-document.oncontextmenu = function () {
-	return false;
-};
+// document.oncontextmenu = function () {
+// 	return false;
+// };
 // Navbar
 initEL({ id: idDiv_navBar_Trash, fn: resetAll });
 initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: contentLayout.nameList });

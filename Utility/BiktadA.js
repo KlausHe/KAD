@@ -1,5 +1,4 @@
-import { dbID, KadTable } from "../KadUtils/KadUtils.js";
-import { globalP5 } from "../Main.js";
+import { dbID, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
 
 const biktadaOptions = {
@@ -74,7 +73,7 @@ const biktadaOptions = {
 			value: null,
 			description: "IP-Adresss",
 			get data() {
-				globalP5.loadJSON("https://api.ipify.org?format=json", "json", biktadaIPAdresse, biktadaIPError);
+				KadFile.loadUrlToJSON({ variable: "data", url: "https://api.ipify.org?format=json", callback: biktadaIPAdresse, errorCallback: biktadaIPError });
 			},
 		},
 		Platform: {
@@ -107,12 +106,12 @@ function biktadaGeoErr(err) {
 }
 
 function biktadaIPAdresse(data) {
-	biktadaOptions.data.IPAdresse.value = data.ip;
+	biktadaOptions.data.IPAdresse.value = data.data.ip;
 	biktadaPassValue("IPAdresse");
 }
 
 function biktadaIPError(data) {
-	biktadaOptions.data.IPAdresse.value = data;
+	biktadaOptions.data.IPAdresse.value = data.error;
 	biktadaPassValue("IPAdresse");
 }
 

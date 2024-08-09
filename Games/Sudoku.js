@@ -1,4 +1,4 @@
-import { dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate, initEL, error } from "../KadUtils/KadUtils.js";
+import { dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate, initEL, errorChecked } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { globalColors } from "../Settings/Color.js";
 
@@ -96,13 +96,9 @@ function sudokuClear() {
 async function sudokuRequest() {
 	if (sudokuOptions.data === null) {
 		sudokuOptions.nums = [];
-		try {
-			let response = await fetch("../Data/DataLists/Sudoku1000.json");
-			sudokuOptions.data = await response.json();
-		} catch (err) {
-			error(err);
-		}
-		sudokuOptions.data = sudokuOptions.data;
+		const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: "../Data/DataLists/Sudoku1000.json" });
+		if (errorChecked(error, "Error retrieving Sudoku puzzles!")) return;
+		sudokuOptions.data = data;
 		sudokuOptions.nums = Object.keys(sudokuOptions.data).map((n) => Number(n));
 	}
 	sudokuOptions.curIndex = KadRandom.randomObject(sudokuOptions.availiableNums);

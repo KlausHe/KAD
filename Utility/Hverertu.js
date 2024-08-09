@@ -1,6 +1,5 @@
-import { initEL, dbID, KadTable } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, KadTable, KadFile } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
-import { globalP5 } from "../Main.js";
 
 const hverertuOptions = {
 	input: "",
@@ -10,21 +9,21 @@ const hverertuOptions = {
 			value: null,
 			description: "Alter (geschätzt)",
 			get data() {
-				globalP5.loadJSON(`https://api.agify.io/?name=${hverertuOptions.input}`, hverertuAlter, "json");
+        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.agify.io/?name=${hverertuOptions.input}`, callback: hverertuAlter });
 			},
 		},
 		Gender: {
-			value: null,
+      value: null,
 			description: "Geschlecht",
 			get data() {
-				globalP5.loadJSON(`https://api.genderize.io?name=${hverertuOptions.input}`, hverertuGender, "json");
+        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.genderize.io?name=${hverertuOptions.input}`, callback: hverertuGender });
 			},
 		},
 		Herkunft: {
-			value: null,
+      value: null,
 			description: "Herkunft (nach Wahrscheinlichkeit)",
 			get data() {
-				globalP5.loadJSON(`https://api.nationalize.io?name=${hverertuOptions.input}`, hverertuHerkunft, "json");
+        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.nationalize.io?name=${hverertuOptions.input}`, callback: hverertuHerkunft });
 			},
 		},
 	},
@@ -50,13 +49,13 @@ function hverertuPassValue(id) {
 	dbID(`idLbl_child_hverertu_value_${id}`).innerHTML = hverertuOptions.data[id].value;
 }
 
-function hverertuAlter(data) {
+function hverertuAlter({data}) {
 	hverertuOptions.data.Alter.value = data.age == null ? "keine Daten gefunden" : data.age;
 	hverertuPassValue("Alter");
 	idLbl_child_hverertuHeader_Value.innerHTML = data.name;
 }
 
-function hverertuHerkunft(data) {
+function hverertuHerkunft({data}) {
 	if (data.country.length == 0) {
 		hverertuOptions.data.Herkunft.value = "keine Daten gefunden";
 	} else {
@@ -68,7 +67,7 @@ function hverertuHerkunft(data) {
 	hverertuPassValue("Herkunft");
 }
 
-function hverertuGender(data) {
+function hverertuGender({data}) {
 	if (data.gender == null) {
 		hverertuOptions.data.Gender.value = "keine Daten gefunden";
 	} else {

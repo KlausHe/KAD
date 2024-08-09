@@ -1,4 +1,4 @@
-import { dbID, objectLength, KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { dbID, objectLength, KadTable, initEL, KadFile, errorChecked } from "../KadUtils/KadUtils.js";
 const synonymOptions = {
 	get URL() {
 		return `https://www.openthesaurus.de/synonyme/search?q=${this.input}&format=application/json&similar=true&baseform=true`;
@@ -7,7 +7,7 @@ const synonymOptions = {
 	data: {},
 };
 
-initEL({ id: idVin_synonymEntry, fn: newSynonym, resetValue: "Search for synonyms" });
+initEL({ id: idVin_synonymEntry, fn: newSynonym, resetValue: "Search for synonyms" }); // action: "change",
 initEL({ id: idBtn_synonymEntry, fn: newSynonym });
 
 export function clear_cl_Synonym() {
@@ -20,21 +20,19 @@ export function clear_cl_Synonym() {
 }
 
 function newSynonym() {
-	synonymOptions.input = dbID("idVin_synonymEntry").value.toString().trim();
+	synonymOptions.input = idVin_synonymEntry.KadGet();
 	if (!synonymOptions.input) return;
-	dbID("idVin_synonymEntry").value = "";
 	synonymGetData();
 }
 
 async function synonymGetData() {
-	try {
-		let response = await fetch(synonymOptions.URL);
-		synonymOptions.data = await response.json();
+	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: synonymOptions.URL });
+	if (errorChecked(error)) {
+		dbID("idLbl_synonymSearchWord").textContent = "---";
+	} else {
+		synonymOptions.data = data;
 		dbID("idLbl_synonymSearchWord").textContent = synonymOptions.input;
 		synonymCreateTable();
-	} catch (err) {
-		dbID("idLbl_synonymSearchWord").textContent = "---";
-		KadUtils.error("Could not receive data for 'Synonym':", err);
 	}
 }
 
@@ -89,7 +87,10 @@ function synonymCreateTable() {
 				cellStyle: {
 					textAlign: "left",
 				},
-				copy: true,
+				cellOnclick: () => {
+					synonymOptions.input = sets[i];
+					synonymGetData();
+				},
 			});
 			if (i < sets.length - 1) {
 				i++;
@@ -100,7 +101,10 @@ function synonymCreateTable() {
 					cellStyle: {
 						textAlign: "left",
 					},
-					copy: true,
+					cellOnclick: () => {
+						synonymOptions.input = sets[i];
+						synonymGetData();
+					},
 				});
 			}
 			if (i < sets.length - 1) {
@@ -112,7 +116,10 @@ function synonymCreateTable() {
 					cellStyle: {
 						textAlign: "left",
 					},
-					copy: true,
+					cellOnclick: () => {
+						synonymOptions.input = sets[i];
+						synonymGetData();
+					},
 				});
 			}
 		}
