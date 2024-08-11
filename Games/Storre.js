@@ -3,7 +3,7 @@ import { globalColors } from "../Settings/Color.js";
 
 const storreOptions = {
 	get url() {
-		return `https://restcountries.com/v3.1/all?fields=translations,flags,${storreOptions.dataType}`;
+		return `https://restcountries.com/v3.1/all?fields=translations,flags,population,area`;
 	},
 	data: [],
 	dataType: "area",

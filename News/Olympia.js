@@ -1,35 +1,55 @@
 // https://api.olympics.kevle.xyz/medals
 
-import { KadFile, KadTable, errorChecked, initEL } from "../KadUtils/KadUtils.js";
-import { globalValues } from "../Settings/General.js";
+import { KadDOM, KadFile, KadTable, KadValue, dbID, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
 	URLMedals: `https://api.olympics.kevle.xyz/medals`,
-	URLFlags: `https://restcountries.com/v3.1/all?fields=cca3,flags`,
+	URLFlags: `https://restcountries.com/v3.1/all?fields=cca3,flags,population`,
+	data: null,
+	specific: false,
 };
-
 initEL({ id: idBtn_olympiaUpdate, fn: olympaUpdate });
+initEL({ id: idBtn_olympiaSpecific, fn: olympiaSpecific });
 
 export function clear_cl_Olympia() {
 	olympaUpdate();
 }
 
 async function olympaUpdate() {
-	const { dataTable, dataFlags, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataFlags"], urlArray: [olympiaOptions.URLMedals, olympiaOptions.URLFlags] });
+	olympiaOptions.data = null;
+	const { dataTable, dataCountries, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataCountries"], urlArray: [olympiaOptions.URLMedals, olympiaOptions.URLFlags] });
 	if (errorChecked(error)) return;
 
-	let flagObj = {};
-	for (let obj of dataFlags) {
-		flagObj[obj.cca3] = obj.flags.svg;
+	let countrieObj = {};
+	for (let obj of dataCountries) {
+		countrieObj[obj.cca3] = { flag: obj.flags.svg, population: obj.population };
 	}
 	for (let rang of dataTable.results) {
-		rang.flag = flagObj[rang.country.iso_alpha_3];
+		if (rang.country.iso_alpha_3 === undefined) continue;
+		rang.flag = countrieObj[rang.country.iso_alpha_3].flag;
+		rang.population = countrieObj[rang.country.iso_alpha_3].population;
 	}
-	olympiaTableReturn(dataTable.results);
+	olympiaOptions.data = dataTable.results;
+	olympiaTableReturn();
 }
 
-function olympiaTableReturn(data) {
-	if (data.length == 0) return;
+function olympiaSpecific(obj) {
+	olympiaOptions.specific = !olympiaOptions.specific;
+	KadDOM.btnColor(idBtn_olympiaSpecific, olympiaOptions.specific ? "positive" : null);
+	olympiaTableReturn();
+}
+
+function olympiaTableReturn() {
+	if (olympiaOptions.data.length == 0) return;
+	const data = olympiaOptions.data;
+	KadTable.clear("idTabBody_OlympiaTable");
+
+	const headerNames = ["Gold", "Silver", "Bronze", "Total"];
+	for (let name of headerNames) {
+		const text = olympiaOptions.specific ? `${name}<br>/ppm` : name;
+		dbID(`idTabHeader_Olympia${name}`).innerHTML = text;
+	}
+
 	KadTable.clear("idTabBody_OlympiaTable");
 	for (let i = 0; i < data.length; i++) {
 		let row = KadTable.createRow("idTabBody_OlympiaTable");
@@ -42,7 +62,6 @@ function olympiaTableReturn(data) {
 				textAlign: "center",
 			},
 		});
-
 		// image
 		KadTable.addCell(row, {
 			names: ["olympia", "flag", i],
@@ -72,54 +91,44 @@ function olympiaTableReturn(data) {
 		KadTable.addCell(row, {
 			names: ["olympia", "gold", i],
 			type: "Lbl",
-			text: data[i].medals.gold,
+			text: olympiaFactor(data[i].medals.gold, data[i].population),
 			cellStyle: {
-				textAlign: "left",
+				textAlign: "center",
 			},
 		});
 		//--  Silber
 		KadTable.addCell(row, {
 			names: ["olympia", "silver", i],
 			type: "Lbl",
-			text: data[i].medals.silver,
+			text: olympiaFactor(data[i].medals.silver, data[i].population),
 			cellStyle: {
-				textAlign: "left",
+				textAlign: "center",
 			},
 		});
 		//--  bronce
 		KadTable.addCell(row, {
 			names: ["olympia", "bronze", i],
 			type: "Lbl",
-			text: data[i].medals.bronze,
+			text: olympiaFactor(data[i].medals.bronze, data[i].population),
 			cellStyle: {
-				textAlign: "left",
+				textAlign: "center",
 			},
 		});
 		//--  total
 		KadTable.addCell(row, {
 			names: ["olympia", "total", i],
 			type: "Lbl",
-			text: data[i].medals.total,
+			text: olympiaFactor(data[i].medals.total, data[i].population),
 			cellStyle: {
-				textAlign: "left",
+				textAlign: "center",
 			},
 		});
 	}
 }
 
-function sepakbolaCreateImage(url) {
-	const size = globalValues.mediaSizes.imgSize;
-	const img = new Image();
-	//shrink URL-image-size
-	let urlArr = url;
-	if (urlArr.includes("px")) {
-		urlArr = url.split("px");
-		let index = urlArr[0].lastIndexOf("/");
-		urlArr[0] = urlArr[0].slice(0, index + 1);
-		urlArr = `${urlArr[0]}${size}px${urlArr[1]}`;
+function olympiaFactor(value, population) {
+	if (olympiaOptions.specific) {
+		return KadValue.number((value / population) * 1000000, { decimals: 3 });
 	}
-	img.src = urlArr;
-	img.setAttribute("referrerpolicy", "no-referrer");
-	img.setAttribute("uiSize", "img");
-	return img;
+	return value;
 }

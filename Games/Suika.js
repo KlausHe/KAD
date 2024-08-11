@@ -3,7 +3,7 @@ import { dbID, initEL, KadRandom } from "../KadUtils/KadUtils.js";
 
 const suikaOptions = {
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w * 0.66 + 2 * Game.wallPad, h: globalValues.mediaSizes.canvasSize.w };
+		return { w: globalValues.mediaSizes.canvasSize.w  - 2 * Game.wallPad, h: globalValues.mediaSizes.canvasSize.w + 2 * Game.wallPad};
 	},
 	background: null,
 	playState: 3,
@@ -85,22 +85,22 @@ function suikaToggleSound() {
 const { Engine, Render, World, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
 const friction = {
 	fruits: {
-		friction: 0.006, //0.006
-		frictionStatic: 0.02, //0.006
-		frictionAir: 0.01,
-		restitution: 0.02,
-	},
-  bottom: {
-    friction: 0.02, //0.006
-    frictionStatic: 0.02, //0.006
-    frictionAir: 0,
-    restitution: 0.02,
-  },
-	walls: {
-		friction: 0.02, //0.006
-		frictionStatic: 0.02, //0.006
+		friction: 0.006,
+		frictionStatic: 0.006,
 		frictionAir: 0,
-		restitution: 0.002,
+		restitution: 0.1,
+	},
+	bottom: {
+		friction: 0.006,
+		frictionStatic: 0.006,
+		frictionAir: 0,
+		restitution: 0.1,
+	},
+	walls: {
+		friction: 0.006,
+		frictionStatic: 0.006,
+		frictionAir: 0,
+		restitution: 0.1,
 	},
 };
 

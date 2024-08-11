@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, getFavicon, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, getFavicon, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked, objectLength } from "../KadUtils/KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -11,11 +11,30 @@ export function contentCheckActive(contentObj) {
 	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
 	return true;
 }
+function logNamed(obj = {}) {
+	for (let key in obj) {
+		const value = obj[key];
+		log(key, value);
+	}
+}
+function test() {
+    const { defaultPage, navContent, origUniverse, GlobalSettings, nameList, getUniverse, AccountSettings,settingsNames } = contentLayout;
+	logNamed({
+		defaultPage,
+		navContent,
+		origUniverse,
+		nameList,
+		getUniverse,
+		// GlobalSettings,
+		// AccountSettings,
+		// settingsNames,
+	});
+}
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_WikiSearch" : "Universe",
-	createContentGrid() {
+	defaultPage: hostDebug() ? "cl_Olympia" : "Universe",
+	createContentData() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {
 			return b[1].name < a[1].name ? 1 : -1;
@@ -28,6 +47,7 @@ export const contentLayout = {
 			}
 		}
 		contentGrid = Object.fromEntries(sorted);
+
 	},
 	navContent: {
 		Universe: [],
@@ -480,8 +500,6 @@ export function createNavbar() {
 		navElements[0].parentNode.removeChild(navElements[0]);
 	}
 	let contentLength = 0;
-	// logChecked(contentGroupsNav.length != objectLength(contentLayout.navContent), "Not all Groupnames contained in `contentGroupsNav`");
-
 	for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
 		contentLength++;
 		const obj = contentGroupsNav[i];

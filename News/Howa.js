@@ -1,9 +1,8 @@
 // Imags weather_code from openweathermap
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 const reverseGeocoder = new BDCReverseGeocode();
-
 import { globalColors } from "../Settings/Color.js";
-import { initEL, KadDate, KadValue, dbID, dbIDStyle, objectLength } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadValue, dbID, dbIDStyle, objectLength, KadFile, errorChecked, log } from "../KadUtils/KadUtils.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -72,10 +71,7 @@ export function clear_cl_Howa() {
 	howaOptions.longitude = howaOptions.lonOrig;
 	howaOptions.city = null;
 	reverseGeocoder.localityLanguage = "de";
-
 	caHO.noLoop();
-	caHO.background(globalColors.elements.background);
-
 	howaChangeMap();
 	howaGetCoordinates();
 }
@@ -110,7 +106,7 @@ function howaChangeMap() {
 function howaGetCoordinates() {
 	if ("geolocation" in navigator) {
 		howaOptions.city = null;
-    idVin_howaEntry.KadReset({resetValue:""})
+		idVin_howaEntry.KadReset({ resetValue: "" });
 		dbIDStyle("idBtn_getGeoLocation").display = "initial";
 		navigator.geolocation.getCurrentPosition(howaNavigatorPosition, howaNavigatorError);
 	} else {
@@ -126,7 +122,7 @@ function howaNavigatorPosition(data) {
 }
 
 function howaNavigatorError() {
-	dbID("idLbl_howaNow").textContent = "No Geolocation";
+	dbID("idP_howaCurrentText").textContent = "No Geolocation";
 	howaOptions.latitude = howaOptions.latOrig;
 	howaOptions.longitude = howaOptions.lonOrig;
 	howaCleanLocation();
@@ -143,15 +139,15 @@ async function howaGetLocation() {
 
 async function howaGeocodingCity() {
 	if (howaOptions.city == null) return;
-	let response = await fetch(howaOptions.urlGeoCoding);
-	let data = await response.json();
-	data = data.results.filter((d) => (d.country = "Deutschland"));
-	if (!data) {
-		dbID("idLbl_howaNow").textContent = "Stadt nicht gefunden";
+	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: howaOptions.urlGeoCoding });
+	if (errorChecked(error, "Could not load Geocoding!")) return;
+	let dataSorted = data.results.filter((d) => (d.country = "Deutschland"));
+	if (!dataSorted) {
+		dbID("idP_howaCurrentText").textContent = "Stadt nicht gefunden";
 		return true;
 	}
-	howaOptions.latitude = data[0].latitude;
-	howaOptions.longitude = data[0].longitude;
+	howaOptions.latitude = dataSorted[0].latitude;
+	howaOptions.longitude = dataSorted[0].longitude;
 	return false;
 }
 
@@ -172,22 +168,16 @@ function howaCleanLocation() {
 }
 
 async function howaReqestData() {
-	let responseCurrent = await fetch(howaOptions.urlCurrent);
-	howaOptions.data.current = await responseCurrent.json();
-	let responseForecast = await fetch(howaOptions.urlDaily);
-	howaOptions.data.forecast = await responseForecast.json();
-	dbID("idLbl_howaNow").textContent = `${howaOptions.city}: ${howaOptions.data.current.current.temperature_2m}°C`;
-	// howaOptions.data.current.weather_code: 85
-	// disabled: weather-icons.min.css
-	// const iconS = document.createElement("i");
-	// dbID("idLbl_howaNow").appendChild(iconS);
-	// iconS.id = "idI_howaIconNow";
-	// iconS.classList.remove(...iconS.classList);
-	// iconS.classList.add("wi");
-	// const dayTime = howaOptions.data.current.is_day? "day" : "night"
-	// iconS.classList.add(`wi-owm-${dayTime}-${howaOptions.data[0].weather[0].id}`);
+	const { responseCurrent, responseForecast, error } = await KadFile.loadUrlToJSON({
+		variableArray: ["responseCurrent", "responseForecast"],
+		urlArray: [howaOptions.urlCurrent, howaOptions.urlDaily],
+	});
+	if (errorChecked(error, "Could not load Geocoding!")) return;
+	howaOptions.data.current = responseCurrent;
+	howaOptions.data.forecast = responseForecast;
+	dbID("idP_howaCurrentText").textContent = `${howaOptions.city}: ${howaOptions.data.current.current.temperature_2m}°C`;
+	dbID("idImg_howaCurrentImage").src = `./Data/Howa/OWM/${howaWeatherIcons.data[howaOptions.data.current.current.weather_code]}.png`;
 
-	//refresh Graph-data
 	howaUpdateGraphData();
 }
 
@@ -204,8 +194,7 @@ function howaUpdateGraphData() {
 		min: range(point.temperature_2m_min, 0),
 		max: range(point.temperature_2m_max, 1),
 	};
-	howaDrawData();
-
+	caHO.redraw();
 	function range(arr, dir) {
 		const round = 1;
 		if (dir == 0) {
@@ -217,12 +206,19 @@ function howaUpdateGraphData() {
 }
 
 const caHO = new p5((c) => {
+	c.preload = function () {
+		for (let value of Object.values(howaWeatherIcons.data)) {
+			if (howaWeatherIcons.images.hasOwnProperty(value)) continue;
+			howaWeatherIcons.images[value] = c.loadImage(`./Data/Howa/OWM/${value}.png`);
+		}
+	};
 	c.setup = function () {
 		c.canv = c.createCanvas(howaOptions.canvas.w, howaOptions.canvas.h);
 		c.canv.id("canvasHowa");
 		c.canv.parent("#idCanv_howa");
 		c.colorMode(c.HSL);
 		c.textAlign(c.CENTER, c.BOTTOM);
+		c.imageMode(c.CENTER);
 		c.noLoop();
 		c.redraw();
 	};
@@ -247,16 +243,14 @@ function howaDrawData() {
 		const point = graph.data[i];
 
 		const y = offsetTop + rowHeight * i;
-
-		caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
-		caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
-		caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
-		caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
-
+		// caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
+		// caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
+		// caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
+		// caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
 		caHO.fill(globalColors.elements.line);
 		caHO.textSize(globalValues.mediaSizes.fontSize);
 		caHO.text(KadDate.getDate(graph.labels[i], { format: "WD" }), dayWidth / 2, y + rowHeight / 2);
-		caHO.text(`[${graph.weatherCode[i]}]`, dayWidth + tempWidth / 2, y + rowHeight / 2);
+		caHO.image(howaWeatherIcons.imageFromCode(graph.weatherCode[i]), dayWidth + tempWidth / 2, y + rowHeight / 4, rowHeight / 2, rowHeight / 2);
 		caHO.text(`${point[0]}°`, dayWidth + tempWidth + tempWidth / 2, y + rowHeight / 2);
 		caHO.text(`${point[1]}°`, howaOptions.canvas.w - tempWidth / 2, y + rowHeight / 2);
 
@@ -271,33 +265,40 @@ function howaDrawData() {
 	}
 }
 
-const howaWeatherIconList = [
-	{ 0: "clear" },
-	{ 1: "cloud" },
-	{ 2: "cloud" },
-	{ 3: "cloud" },
-	{ 45: "fog" },
-	{ 48: "fog" },
-	{ 51: "drizzle" },
-	{ 53: "drizzle" },
-	{ 55: "drizzle" },
-	{ 56: "drizzle" },
-	{ 57: "drizzle" },
-	{ 61: "rain" },
-	{ 63: "rain" },
-	{ 65: "rain" },
-	{ 66: "rain" },
-	{ 67: "rain" },
-	{ 71: "snow" },
-	{ 73: "snow" },
-	{ 75: "snow" },
-	{ 77: "snow" },
-	{ 80: "rain" },
-	{ 81: "rain" },
-	{ 82: "rain" },
-	{ 85: "snow" },
-	{ 86: "snow" },
-	{ 95: "lightning" },
-	{ 96: "lightning" },
-	{ 99: "lightning" },
-];
+const howaWeatherIcons = {
+	imageFromCode(code) {
+		const name = howaWeatherIcons.data[code];
+		return howaWeatherIcons.images[name];
+	},
+	images: {},
+	data: {
+		0: "clear",
+		1: "clear",
+		2: "cloud",
+		3: "cloud",
+		45: "clear",
+		48: "fog",
+		51: "drizzle",
+		53: "drizzle",
+		55: "drizzle",
+		56: "drizzle",
+		57: "drizzle",
+		61: "rain",
+		63: "rain",
+		65: "rain",
+		66: "rain",
+		67: "rain",
+		71: "snow",
+		73: "snow",
+		75: "snow",
+		77: "snow",
+		80: "rain",
+		81: "rain",
+		82: "rain",
+		85: "snow",
+		86: "snow",
+		95: "lightning",
+		96: "lightning",
+		99: "lightning",
+	},
+};
