@@ -1,4 +1,4 @@
-import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadRandom, KadTable, log } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadInteraction, KadRandom, KadTable, log } from "../KadUtils/KadUtils.js";
 import { nuncDiscipuli } from "../General/Account.js";
 import { globalColors } from "../Settings/Color.js";
 
@@ -60,6 +60,7 @@ initEL({
 initEL({ id: idBtn_startNumbery, fn: numberyToggleStart });
 
 export function clear_cl_Numbery() {
+	KadInteraction.removeContextmenu(idDiv_numberyImages);
 	idVin_numberyPlayer.KadReset();
 	idSel_numberCategory.KadReset();
 	numberyOptions.pairs = numberyOptions.availiablePairs[idSel_numberyPairs.KadReset()];

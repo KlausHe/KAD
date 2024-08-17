@@ -30,6 +30,7 @@ initEL({ id: idBtn_empatStart, fn: empatStart, resetValue: "Start" });
 initEL({ id: idCanv_empat, fn: empatKeyPushed });
 
 export function clear_cl_Empat() {
+	KadInteraction.removeContextmenu(idCanv_empat);
 	empatOptions.cells = [];
 	empatOptions.winCells = [];
 	empatOptions.curPlayer = 0;

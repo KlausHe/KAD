@@ -1,7 +1,7 @@
 //  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
 
 import { globalColors } from "../Settings/Color.js";
-import { dbID, dbCL, KadValue, KadDOM, KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { dbID, dbCL, KadValue, KadDOM, KadTable, initEL, KadInteraction } from "../KadUtils/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
 import { globalValues } from "../Settings/General.js";
 import { materialOptions } from "./Material.js";
@@ -554,6 +554,7 @@ initEL({ id: idVin_Area_2, fn: geoBerechnung });
 initEL({ id: idCb_geoRadius, fn: geoChangeDiameter });
 
 export function clear_cl_Geometrie() {
+	KadInteraction.removeContextmenu(idCanv_geometire);
 	geoObjects.elementIndex = geoObjects.elementIndexOrig;
 	let parent = dbID("idDiv_GeometrieAreaSelect");
 	KadDOM.clearFirstChild(parent);

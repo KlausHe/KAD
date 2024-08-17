@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, initEL, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const middleOptions = {
@@ -28,6 +28,7 @@ initEL({ id: idVin_middleA, fn: calcMiddle, resetValue: 5 });
 initEL({ id: idVin_middleB, fn: calcMiddle, resetValue: 2 });
 
 export function clear_cl_Middle() {
+	KadInteraction.removeContextmenu(idCanv_middle);
 	idVin_middleA.KadReset();
 	idVin_middleB.KadReset();
 	middleOptions.barA = {

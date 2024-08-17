@@ -1,5 +1,5 @@
 import { contentGroupsMaincontent } from "../General/MainContent.js";
-import { dbID, dbCL, KadDOM, KadTable, initEL, KadArray, hostDebug } from "../KadUtils/KadUtils.js";
+import { dbID, dbCL, KadDOM, KadTable, initEL, KadArray, hostDebug, KadInteraction } from "../KadUtils/KadUtils.js";
 import { contentGrid, contentLayout, createGridLayout } from "../General/Layout.js";
 import { globalColors } from "./Color.js";
 import { globalValues } from "./General.js";
@@ -20,6 +20,7 @@ initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
 initEL({ id: idBtn_userGridSaveLayout, fn: saveUsergridLayout });
 
 export function clear_cl_UserGridLayout() {
+	KadInteraction.removeContextmenu(idCanv_userGrid);
 	usergridOptions.groups = {};
 	usergridOptions.enableGroups = {};
 

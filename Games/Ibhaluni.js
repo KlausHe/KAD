@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { KadInteraction, KadValue, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const ibhaluniOptions = {
@@ -23,6 +23,7 @@ initEL({ id: idBtn_ibhaluniStart, fn: ibhaluniStart, resetValue: "Start" });
 initEL({ id: idCb_ibhaluniSoundOutput, fn: ibhaluniToggleSound, resetValue: false });
 
 export function clear_cl_Ibhaluni() {
+	KadInteraction.removeContextmenu(idCanv_ibhaluni);
 	idBtn_ibhaluniStart.KadReset();
 	idCb_ibhaluniSoundOutput.KadReset();
 	ibhaluniOptions.balloons = [];

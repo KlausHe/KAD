@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { initEL, dbID, dbIDStyle, deepClone, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, dbIDStyle, deepClone, KadValue, KadInteraction } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const pythoOptions = {
@@ -26,6 +26,7 @@ initEL({ id: idVin_Pytho_3, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig
 initEL({ id: idVin_Pytho_4, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
 
 export function clear_cl_Pythagoras() {
+	KadInteraction.removeContextmenu(idCanv_pytho);
 	pythoOptions.inputState = [...pythoOptions.inputStateOrig];
 	for (let i = 0; i < 5; i++) {
 		pythoOptions.vals[i] = dbID(`idVin_Pytho_${i}`).KadReset();

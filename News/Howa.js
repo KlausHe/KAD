@@ -2,7 +2,7 @@
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 const reverseGeocoder = new BDCReverseGeocode();
 import { globalColors } from "../Settings/Color.js";
-import { initEL, KadDate, KadValue, dbID, dbIDStyle, objectLength, KadFile, errorChecked, log } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadValue, dbID, dbIDStyle, objectLength, KadFile, errorChecked, log, KadInteraction } from "../KadUtils/KadUtils.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -65,8 +65,8 @@ initEL({
 initEL({ id: idSel_howaMapsCriteria, fn: howaChangeMap, selList: weatherMaps.criteriaList.map((d) => [d[1], d[0]]) });
 
 export function clear_cl_Howa() {
+	KadInteraction.removeContextmenu(idCanv_howa);
 	idVin_howaEntry.KadReset();
-
 	howaOptions.latitude = howaOptions.latOrig;
 	howaOptions.longitude = howaOptions.lonOrig;
 	howaOptions.city = null;

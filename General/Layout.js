@@ -33,7 +33,7 @@ function test() {
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Olympia" : "Universe",
+	defaultPage: hostDebug() ? "cl_Suika" : "Universe",
 	createContentData() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {

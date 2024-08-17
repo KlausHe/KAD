@@ -51,6 +51,7 @@ initEL({ id: idBtn_sudokuNumOverview_9, fn: sudokuGroupHighlight });
 initEL({ id: idCanv_sudoku, action: "keydown", fn: sudokuKeyPressed });
 
 export function clear_cl_Sudoku() {
+  KadInteraction.removeContextmenu(idCanv_sudoku)
 	sudokuOptions.curHighlight = null;
 	sudokuOptions.usedNums = [];
 	sudokuOptions.cells = [];

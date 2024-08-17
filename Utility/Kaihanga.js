@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { initEL, dbID, dbIDStyle, KadTable, KadColor, KadRandom, log } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, dbIDStyle, KadTable, KadColor, KadRandom, log, KadInteraction } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
 
@@ -18,6 +18,7 @@ initEL({ id: idVin_kaihangaEntry, action: "change", fn: kaihangaEntrySubmit, res
 initEL({ id: idBtn_kaihangaEntry, fn: kaihangaEntrySubmit });
 
 export function clear_cl_Kaihanga() {
+	KadInteraction.removeContextmenu(idCanv_kaihanga);
 	kaihangaOptions.entries = [];
 	kaihangaOptions.spinning = false;
 	KadTable.clear("idTabBody_Kaihanga");
@@ -98,6 +99,7 @@ function kaihangaStart(speed) {
 	kaihangaUpdate();
 	kaihangaOptions.wheel.animation.spins = speed;
 	kaihangaOptions.wheel.animation.duration = 1 / (speed * 10);
+	log(kaihangaOptions.wheel);
 	kaihangaOptions.wheel.startAnimation();
 }
 
@@ -204,6 +206,7 @@ class KaihangaWheel {
 	}
 
 	startAnimation() {
+		this.angle = this.winnerAngle / 360;
 		this.winnerAngle = caKA.random(0, 360);
 		this.winner = caKA.floor((this.winnerAngle * this.segments.length) / 360);
 		caKA.loop();

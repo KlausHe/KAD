@@ -1,4 +1,4 @@
-import { KadDOM, KadRandom, KadArray, initEL, log } from "../KadUtils/KadUtils.js";
+import {  KadRandom, KadArray, initEL, KadInteraction } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { timeoutCanvasFinished } from "../Main.js";
 
@@ -19,7 +19,7 @@ initEL({ id: idVin_sweeperGrid, fn: sweeperGridChange, resetValue: sweeperOption
 initEL({ id: idVin_sweeperSweeps, fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
 
 export function clear_cl_Sweeper() {
-	//Clear on Start
+	KadInteraction.removeContextmenu(idCanv_sweeper);
 	sweeperOptions.cells = [];
 	sweeperOptions.gridSize = idVin_sweeperGrid.KadReset();
 	sweeperOptions.sweepCells = idVin_sweeperSweeps.KadReset();

@@ -1,11 +1,12 @@
 import { globalValues } from "../Settings/General.js";
-import { dbID, initEL, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadInteraction, KadRandom, log } from "../KadUtils/KadUtils.js";
 
 const suikaOptions = {
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w  - 2 * Game.wallPad, h: globalValues.mediaSizes.canvasSize.w + 2 * Game.wallPad};
+		return { w: globalValues.mediaSizes.canvasSize.w - 2 * Game.wallPad, h: globalValues.mediaSizes.canvasSize.w * 1.5 }; //+ 2 * Game.wallPad
 	},
 	background: null,
+	loadedEngine: null,
 	playState: 3,
 	playStates: {
 		PLAYING: 1,
@@ -18,14 +19,23 @@ const suikaOptions = {
 	enableSounds: false,
 	soundsPath: "./Games/SuikaAssets/sounds",
 	imagesPath: "./Games/SuikaAssets/images",
+	friction: {
+		friction: 0.006,
+		frictionStatic: 0.01,
+		frictionAir: 0.01,
+		restitution: 0.6,
+	},
+	mass: 20,
+	gravity: 0.7,
 };
 
 initEL({ id: idBtn_suikaStart, fn: suikaStart, resetValue: "Start" });
 initEL({ id: idBtn_suikaPause, fn: suikaPause, resetValue: "Pause" });
-initEL({ id: idBtn_suikaRestart, fn: suikaRestart, resetValue: "Restart" });
+initEL({ id: idBtn_suikaRestart, fn: suikaRestart, resetValue: "Reset" });
 initEL({ id: idCb_suikaSoundOutput, fn: suikaToggleSound, resetValue: false });
 
 export function clear_cl_Suika() {
+	KadInteraction.removeContextmenu(idCanv_suika);
 	idBtn_suikaStart.KadReset();
 	idBtn_suikaPause.KadReset();
 	idBtn_suikaRestart.KadReset();
@@ -33,7 +43,9 @@ export function clear_cl_Suika() {
 	Game.wallPad = Game.resizeUnits(0.06875); //0.06875
 	Game.loseHeight = Game.resizeUnits(0.2);
 	Game.bottomHeight = Game.resizeUnits(0.05);
-	Game.suikaInitEngine();
+	if (!suikaOptions.loadedEngine) {
+		Game.suikaInitEngine();
+	}
 	Game.initGame();
 }
 
@@ -49,7 +61,7 @@ function suikaStart() {
 		Game.previewBall = suikaOptions.pausedBall;
 	}
 	if (suikaOptions.playState == suikaOptions.playStates.RESET) {
-		Game.stateIndex = GameStates.READY;
+		Game.stateIndex = Game.states.READY;
 		Game.initGame();
 		Game.startGame();
 	}
@@ -83,35 +95,14 @@ function suikaToggleSound() {
 }
 
 const { Engine, Render, World, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
-const friction = {
-	fruits: {
-		friction: 0.006,
-		frictionStatic: 0.006,
-		frictionAir: 0,
-		restitution: 0.1,
-	},
-	bottom: {
-		friction: 0.006,
-		frictionStatic: 0.006,
-		frictionAir: 0,
-		restitution: 0.1,
-	},
-	walls: {
-		friction: 0.006,
-		frictionStatic: 0.006,
-		frictionAir: 0,
-		restitution: 0.1,
-	},
-};
-
-const GameStates = {
-	MENU: 0,
-	READY: 1,
-	DROP: 2,
-	LOSE: 3,
-};
 
 const Game = {
+	states: {
+		MENU: 0,
+		READY: 1,
+		DROP: 2,
+		LOSE: 3,
+	},
 	engine: null,
 	runner: null,
 	render: null,
@@ -131,7 +122,7 @@ const Game = {
 		pop9: new Audio(`${suikaOptions.soundsPath}/pop9.mp3`),
 		pop10: new Audio(`${suikaOptions.soundsPath}/pop10.mp3`),
 	},
-	stateIndex: GameStates.READY,
+	stateIndex: 1,
 	score: 0,
 	highscore: 0,
 	wallPad: null,
@@ -205,6 +196,8 @@ const Game = {
 			},
 		});
 		this.render.mouse = this.mouse;
+		suikaOptions.loadedEngine = true;
+		this.engine.world.gravity.y = suikaOptions.gravity;
 	},
 	initGame: function () {
 		Render.run(Game.render);
@@ -212,6 +205,9 @@ const Game = {
 		Game.fruitsMerged = Array.apply(null, Array(Game.fruitSizes.length)).map(() => 0);
 	},
 
+	getMousePositionX: () => {
+		return Math.min(suikaOptions.canvas.w - Game.wallPad - Game.previewBall.circleRadius, Math.max(Game.wallPad + Game.previewBall.circleRadius, Game.render.mouse.position.x));
+	},
 	startGame: function () {
 		if (suikaOptions.enableSounds) {
 			Game.sounds.click.play();
@@ -220,12 +216,12 @@ const Game = {
 		const wallProps = {
 			isStatic: true,
 			render: { fillStyle: "#FFEEDB" },
-			...friction.walls,
+			...suikaOptions.friction,
 		};
 		const bottomProps = {
 			isStatic: true,
 			render: { fillStyle: "#FFEEDB" },
-			...friction.bottom,
+			...suikaOptions.friction,
 		};
 		const topProp = {
 			isStatic: true,
@@ -256,17 +252,17 @@ const Game = {
 		Composite.add(Game.engine.world, Game.previewBall);
 
 		setTimeout(() => {
-			Game.stateIndex = GameStates.READY;
-		}, 250);
+			Game.stateIndex = Game.states.READY;
+		}, 200);
 
-		Events.on(Game.mouseConstraint, "mouseup", function (e) {
-			Game.addFruit(Math.min(suikaOptions.canvas.w - Game.wallPad - Game.previewBall.circleRadius, Math.max(Game.wallPad + Game.previewBall.circleRadius, e.mouse.position.x)));
+		Events.on(Game.mouseConstraint, "mouseup", function () {
+			Game.addFruit(Game.getMousePositionX());
 		});
 
-		Events.on(Game.mouseConstraint, "mousemove", function (e) {
-			if (Game.stateIndex !== GameStates.READY) return;
+		Events.on(Game.mouseConstraint, "mousemove", function () {
+			if (Game.stateIndex !== Game.states.READY) return;
 			if (Game.previewBall === null) return;
-			Game.previewBall.position.x = Math.min(suikaOptions.canvas.w - Game.wallPad - Game.previewBall.circleRadius, Math.max(Game.wallPad + Game.previewBall.circleRadius, e.mouse.position.x));
+			Game.previewBall.position.x = Game.getMousePositionX();
 		});
 
 		Events.on(Game.engine, "collisionStart", function (e) {
@@ -329,7 +325,7 @@ const Game = {
 	},
 
 	loseGame: function () {
-		Game.stateIndex = GameStates.LOSE;
+		Game.stateIndex = Game.states.LOSE;
 		Game.runner.enabled = false;
 		Game.gameOver(true);
 		suikaStart();
@@ -344,10 +340,11 @@ const Game = {
 
 	generateFruitBody: function (x, y, sizeIndex, extraConfig = {}) {
 		const fruit = Game.fruitSizes[sizeIndex];
-		const imgSize = (1024 - 20) * 0.5; // 20px for image inaccuracies
+		const imgSize = 1024 * 0.5;
 		const circle = Bodies.circle(x, y, fruit.radius, {
-			...friction.fruits,
+			...suikaOptions.friction,
 			...extraConfig,
+			mass: suikaOptions.mass,
 			render: { sprite: { texture: fruit.img, xScale: fruit.radius / imgSize, yScale: fruit.radius / imgSize } }, //512
 		});
 		circle.sizeIndex = sizeIndex;
@@ -356,9 +353,9 @@ const Game = {
 	},
 
 	addFruit: function (x) {
-		if (Game.stateIndex !== GameStates.READY) return;
+		if (Game.stateIndex !== Game.states.READY) return;
 
-		Game.stateIndex = GameStates.DROP;
+		Game.stateIndex = Game.states.DROP;
 		const latestFruit = Game.generateFruitBody(x, Game.loseHeight * 0.5, Game.currentFruitSize);
 		Composite.add(Game.engine.world, latestFruit);
 
@@ -367,16 +364,16 @@ const Game = {
 		Game.calculateScore();
 
 		Composite.remove(Game.engine.world, Game.previewBall);
-		Game.previewBall = Game.generateFruitBody(Game.render.mouse.position.x, Game.loseHeight * 0.5, Game.currentFruitSize, {
+		Game.previewBall = Game.generateFruitBody(Game.getMousePositionX(), Game.loseHeight * 0.5, Game.currentFruitSize, {
 			isStatic: true,
 			collisionFilter: { mask: 0x0040 },
 		});
 
 		setTimeout(() => {
-			if (Game.stateIndex === GameStates.DROP) {
+			if (Game.stateIndex === Game.states.DROP) {
 				Composite.add(Game.engine.world, Game.previewBall);
-				Game.stateIndex = GameStates.READY;
+				Game.stateIndex = Game.states.READY;
 			}
-		}, 500);
+		}, 400);
 	},
 };

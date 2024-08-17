@@ -3,6 +3,7 @@ import { bgaClearBackground } from "./General/BackgroundAnimation.js";
 import { contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
 import { KadDOM, KadDate, KadFile, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
+import * as Canvas from "./MainModulesCanvas.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
 
@@ -35,10 +36,6 @@ function mainSetup() {
 	}, 500);
 }
 
-// no rightclicking anywhere!
-// document.oncontextmenu = function () {
-// 	return false;
-// };
 // Navbar
 initEL({ id: idDiv_navBar_Trash, fn: resetAll });
 initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: contentLayout.nameList });
@@ -59,6 +56,15 @@ function clearAllTiles() {
 	}
 }
 
+function removeRightClickFromCanvased() {
+	for (const canvasFunction of Object.values(Canvas)) {
+		canvasFunction();
+    // no rightclicking anywhere!
+// document.oncontextmenu = function () {
+// 	return false;
+// };
+	}
+}
 function hideLoadingscreen() {
 	dbCL("cl_Loading").classList.add("cl_LoadingFinished");
 }

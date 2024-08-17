@@ -53,6 +53,7 @@ initEL({ id: idCanv_rayCaster, action: "keydown", fn: keyPushedRayCaster });
 initEL({ id: idCanv_rayCaster, action: "keyup", fn: keyPushedRayCaster });
 
 export function clear_cl_RayCaster() {
+	KadInteraction.removeContextmenu(idCanv_rayCaster);
 	const boardWidth = raycasterOptions.canvas.w;
 	raycasterOptions.cellwidth = Math.floor(boardWidth / raycasterOptions.boardSize);
 	raycasterOptions.cols = Math.floor(boardWidth / raycasterOptions.cellwidth);

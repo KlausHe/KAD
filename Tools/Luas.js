@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, dbIDStyle, initEL, KadDOM, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadDOM, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const luasOptions = {
@@ -41,6 +41,7 @@ initEL({ id: idBtn_luasChangeDirection, fn: luasChangeDirection });
 initEL({ id: idBtn_luasChecker, fn: luasStart });
 //Canvas Stuff
 export function clear_cl_Luas() {
+	KadInteraction.removeContextmenu(idCanv_luas);
 	idVin_luasVelAngular.KadReset();
 	idVin_luasDiameter.KadReset();
 

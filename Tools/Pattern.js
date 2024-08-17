@@ -1,5 +1,5 @@
 import { globalColors } from "../Settings/Color.js";
-import { dbID, initEL, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 const patternOptions = {
 	get margin() {
@@ -24,6 +24,20 @@ initEL({ id: idVin_Pattern1, fn: patternSide, resetValue: patternOptions.valOrig
 initEL({ id: idVin_Pattern2, fn: patternAsym, resetValue: patternOptions.valOrig[2] });
 initEL({ id: idVin_Pattern3, fn: patternHoles, resetValue: patternOptions.valOrig[3] });
 initEL({ id: idBtn_Pattern4, fn: patternProp });
+
+export function clear_cl_Pattern() {
+	KadInteraction.removeContextmenu(idCanv_pattern);
+	patternOptions.size = idVin_Pattern0.KadReset();
+	patternOptions.side = idVin_Pattern1.KadReset();
+	patternOptions.asym = idVin_Pattern2.KadReset();
+	patternOptions.holes = idVin_Pattern3.KadReset();
+
+	dbID("idLbl_Pattern0").textContent = patternOptions.names[0]; //gesamltänge
+	dbID("idLbl_Pattern1").textContent = patternOptions.names[1]; //Seitenversatz
+	dbID("idLbl_Pattern2").textContent = patternOptions.names[2]; //Asymmetrie
+	dbID("idLbl_Pattern3").textContent = patternOptions.names[3]; //Punkte
+	calcPattern();
+}
 
 const caPA = new p5((c) => {
 	c.setup = function () {
@@ -78,33 +92,20 @@ export function canvas_cl_Pattern() {
 	caPA.redraw();
 }
 
-export function clear_cl_Pattern() {
-	patternOptions.size = idVin_Pattern0.KadReset();
-	patternOptions.side = idVin_Pattern1.KadReset();
-	patternOptions.asym = idVin_Pattern2.KadReset();
-	patternOptions.holes = idVin_Pattern3.KadReset();
-
-	dbID("idLbl_Pattern0").textContent = patternOptions.names[0]; //gesamltänge
-	dbID("idLbl_Pattern1").textContent = patternOptions.names[1]; //Seitenversatz
-	dbID("idLbl_Pattern2").textContent = patternOptions.names[2]; //Asymmetrie
-	dbID("idLbl_Pattern3").textContent = patternOptions.names[3]; //Punkte
-	calcPattern();
-}
-
 function patternSize() {
-	patternOptions.size = idVin_Pattern0.KadGet({failSafe: patternOptions.valOrig[0]});
+	patternOptions.size = idVin_Pattern0.KadGet({ failSafe: patternOptions.valOrig[0] });
 	calcPattern();
 }
 function patternSide() {
-	patternOptions.side = idVin_Pattern1.KadGet({failSafe: patternOptions.valOrig[1]});
+	patternOptions.side = idVin_Pattern1.KadGet({ failSafe: patternOptions.valOrig[1] });
 	calcPattern();
 }
 function patternAsym() {
-	patternOptions.asym = idVin_Pattern2.KadGet({failSafe: patternOptions.valOrig[2]});
+	patternOptions.asym = idVin_Pattern2.KadGet({ failSafe: patternOptions.valOrig[2] });
 	calcPattern();
 }
 function patternHoles() {
-	patternOptions.holes = idVin_Pattern3.KadGet({failSafe: patternOptions.valOrig[3]});
+	patternOptions.holes = idVin_Pattern3.KadGet({ failSafe: patternOptions.valOrig[3] });
 	calcPattern();
 }
 function patternProp() {

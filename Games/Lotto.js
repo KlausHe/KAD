@@ -1,4 +1,4 @@
-import { dbID, dbCLStyle, KadDate, KadTable, KadRandom, KadColor, initEL, KadFile } from "../KadUtils/KadUtils.js";
+import { dbID, dbCLStyle, KadDate, KadTable, KadRandom, KadColor, initEL, KadFile, KadInteraction } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 import { globalColors } from "../Settings/Color.js";
 
@@ -57,6 +57,8 @@ initEL({ id: idSel_lottoGame, fn: lottoGameSelect, selList: Object.keys(lottoOpt
 initEL({ id: idVin_lottoNumberOfGames, fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
 
 export function clear_cl_Lotto() {
+	KadInteraction.removeContextmenu(idCanv_lotto);
+
 	idVin_lottoNumberOfGames.KadReset();
 	lottoOptions.selGame = idSel_lottoGame.KadReset();
 	lottoOptions.randomiziation = 0;
