@@ -515,7 +515,9 @@
             <img src="Data/Images/SVG/down.svg"></img>
           </button>
         </div>
-        <div class="cl_HowaNow" uiWrap="nowrap"><label class="cl_outputLbl"><p id="idP_howaCurrentText"></p><img id="idImg_howaCurrentImage" uiSize="size1" src=""></img></label></div>
+        <div class="cl_HowaNow" uiWrap="nowrap"><label class="cl_outputLbl">
+            <p id="idP_howaCurrentText"></p><img id="idImg_howaCurrentImage" uiSize="size1" src=""></img>
+          </label></div>
         <div class="cl_HowaMapsSelectCriteria"><select id="idSel_howaMapsCriteria" uiSize="size8"></select> </div>
         <div class="cl_HowaMapsSelectDistrict"><select id="idSel_howaMapsDistrict" uiSize="size8"></select> </div>
         <div class="cl_HowaMapsImg">
@@ -584,6 +586,25 @@
         </div>
       </div>
     </section>
+
+    <section class="cl_Pafadoj" style="display:none;">
+      <div class="cl_subGrid_Pafadoj cl_subGrid">
+        <div class="cl_PafadojUpdate" uiWrap="nowrap">
+          <label class="cl_info" uiSize="size3" uiRadius="left">Jahr</label><select id="idSel_pafadojSelect" uiSize="size5" uiRadius="right"></select>
+        </div>
+        <div class="cl_PafadojTable clDiv_overviewTablesAuto">
+          <table id="idTab_PafadojTable">
+            <thead id="idTabHeader_PafadojTable" class="scrollTable">
+              <tr>
+              </tr>
+            </thead>
+            <tbody id="idTabBody_PafadojTable">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <section class="cl_Sepakbola" style="display:none;">
       <div class="cl_subGrid_Sepakbola cl_subGrid">
         <div class="cl_SepakbolaInputLiga">
@@ -630,6 +651,8 @@
         <div class="cl_OlympiaUpdate" uiWrap="nowrap">
           <button id="idBtn_olympiaUpdate">Update</button>
           <button id="idBtn_olympiaSpecific">Relativ</button>
+          <button id="idBtn_olympiaSortMedals">Sort by Medal</button>
+          <button id="idBtn_olympiaSortTotal">Sort by Total</button>
         </div>
         <div class="cl_OlympiaTable clDiv_overviewTablesAuto">
           <table id="idTab_OlympiaTable">
@@ -637,10 +660,11 @@
               <tr>
                 <th>Rang</th>
                 <th colspan="2" style="text-align: left;">Land</th>
-                <th id="idTabHeader_OlympiaGold">Gold</th>
-                <th id="idTabHeader_OlympiaSilver">Silber</th>
-                <th id="idTabHeader_OlympiaBronze">Bronze</th>
-                <th id="idTabHeader_OlympiaTotal">Gesamt</th>
+                <th id="idTabHeader_OlympiaGold"></th>
+                <th id="idTabHeader_OlympiaSilver"></th>
+                <th id="idTabHeader_OlympiaBronze"></th>
+                <th id="idTabHeader_OlympiaTotal"></th>
+                <th id="idTabHeader_OlympiaPopulation">Einwohner</th>
               </tr>
             </thead>
             <tbody id="idTabBody_OlympiaTable">

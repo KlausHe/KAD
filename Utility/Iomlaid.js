@@ -1,5 +1,5 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
-import { initEL, dbID, error, KadTable, KadDate, KadValue, log, KadFile, errorChecked } from "../KadUtils/KadUtils.js";
+import { initEL, dbID, KadTable, KadDate, KadValue, KadFile, errorChecked } from "../KadUtils/KadUtils.js";
 import { Data_Currencies } from "../General/MainData.js";
 
 const iomlaidOptions = {

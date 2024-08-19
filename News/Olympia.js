@@ -1,25 +1,35 @@
 // https://api.olympics.kevle.xyz/medals
 
-import { KadDOM, KadFile, KadTable, KadValue, dbID, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDOM, KadFile, KadTable, KadValue, dbID, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
 	URLMedals: `https://api.olympics.kevle.xyz/medals`,
 	URLFlags: `https://restcountries.com/v3.1/all?fields=cca3,flags,population`,
 	data: null,
 	specific: false,
+	headerNames: ["Gold", "Silver", "Bronze", "Total"],
+	sortTotal: false,
+	sortMedals: false,
 };
-initEL({ id: idBtn_olympiaUpdate, fn: olympaUpdate });
+initEL({ id: idBtn_olympiaUpdate, fn: olympiaUpdate });
 initEL({ id: idBtn_olympiaSpecific, fn: olympiaSpecific });
+initEL({ id: idBtn_olympiaSortMedals, fn: olympiaSortByMedals });
+initEL({ id: idBtn_olympiaSortTotal, fn: olympiaSortByTotal });
 
 export function clear_cl_Olympia() {
-	olympaUpdate();
+	olympiaUpdate();
 }
 
-async function olympaUpdate() {
+async function olympiaUpdate() {
 	olympiaOptions.data = null;
 	const { dataTable, dataCountries, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataCountries"], urlArray: [olympiaOptions.URLMedals, olympiaOptions.URLFlags] });
 	if (errorChecked(error)) return;
-
+	dataTable.results.splice(
+		dataTable.results.findIndex((item) => {
+			return item.country.code == "EOR";
+		}),
+		1
+	);
 	let countrieObj = {};
 	for (let obj of dataCountries) {
 		countrieObj[obj.cca3] = { flag: obj.flags.svg, population: obj.population };
@@ -28,14 +38,34 @@ async function olympaUpdate() {
 		if (rang.country.iso_alpha_3 === undefined) continue;
 		rang.flag = countrieObj[rang.country.iso_alpha_3].flag;
 		rang.population = countrieObj[rang.country.iso_alpha_3].population;
+		rang.specific = {};
+		for (let name of olympiaOptions.headerNames) {
+			rang.specific[name.toLowerCase()] = (rang.medals[name.toLowerCase()] / rang.population) * 1000000;
+		}
 	}
 	olympiaOptions.data = dataTable.results;
 	olympiaTableReturn();
 }
 
-function olympiaSpecific(obj) {
+function olympiaSpecific() {
 	olympiaOptions.specific = !olympiaOptions.specific;
 	KadDOM.btnColor(idBtn_olympiaSpecific, olympiaOptions.specific ? "positive" : null);
+	olympiaTableReturn();
+}
+
+function olympiaSortByTotal() {
+	olympiaOptions.sortTotal = !olympiaOptions.sortTotal;
+	const dataset = olympiaOptions.specific ? "specific" : "medals";
+	olympiaOptions.data = KadArray.sortArrayByKey(olympiaOptions.data, [dataset, "total"], olympiaOptions.sortTotal);
+	olympiaTableReturn();
+}
+
+function olympiaSortByMedals() {
+	olympiaOptions.sortMedals = !olympiaOptions.sortMedals;
+	const dataset = olympiaOptions.specific ? "specific" : "medals";
+	for (let type of ["bronze", "silver", "gold"]) {
+		olympiaOptions.data = KadArray.sortArrayByKey(olympiaOptions.data, [dataset, type], olympiaOptions.sortMedals);
+	}
 	olympiaTableReturn();
 }
 
@@ -44,9 +74,8 @@ function olympiaTableReturn() {
 	const data = olympiaOptions.data;
 	KadTable.clear("idTabBody_OlympiaTable");
 
-	const headerNames = ["Gold", "Silver", "Bronze", "Total"];
-	for (let name of headerNames) {
-		const text = olympiaOptions.specific ? `${name}<br>/ppm` : name;
+	for (let name of olympiaOptions.headerNames) {
+		const text = olympiaOptions.specific ? `${name}<br>/population` : name;
 		dbID(`idTabHeader_Olympia${name}`).innerHTML = text;
 	}
 
@@ -57,7 +86,7 @@ function olympiaTableReturn() {
 		KadTable.addCell(row, {
 			names: ["olympia", "place", i],
 			type: "Lbl",
-			text: i + 1,
+			text: data[i].rank,
 			cellStyle: {
 				textAlign: "center",
 			},
@@ -86,49 +115,26 @@ function olympiaTableReturn() {
 				textAlign: "left",
 			},
 		});
+		// --Medals
+		for (let name of olympiaOptions.headerNames) {
+			KadTable.addCell(row, {
+				names: ["olympia", name, i],
+				type: "Lbl",
+				text: olympiaOptions.specific ? KadValue.number(data[i].specific[name.toLowerCase()], { decimals: 3 }) : data[i].medals[name.toLowerCase()],
+				cellStyle: {
+					textAlign: "center",
+				},
+			});
+		}
 
-		//--  Gold
+		// --Population
 		KadTable.addCell(row, {
-			names: ["olympia", "gold", i],
+			names: ["olympia", "population", i],
 			type: "Lbl",
-			text: olympiaFactor(data[i].medals.gold, data[i].population),
+			text: KadValue.number(data[i].population, {indicator:true}),
 			cellStyle: {
-				textAlign: "center",
-			},
-		});
-		//--  Silber
-		KadTable.addCell(row, {
-			names: ["olympia", "silver", i],
-			type: "Lbl",
-			text: olympiaFactor(data[i].medals.silver, data[i].population),
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-		//--  bronce
-		KadTable.addCell(row, {
-			names: ["olympia", "bronze", i],
-			type: "Lbl",
-			text: olympiaFactor(data[i].medals.bronze, data[i].population),
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-		//--  total
-		KadTable.addCell(row, {
-			names: ["olympia", "total", i],
-			type: "Lbl",
-			text: olympiaFactor(data[i].medals.total, data[i].population),
-			cellStyle: {
-				textAlign: "center",
+				textAlign: "right",
 			},
 		});
 	}
-}
-
-function olympiaFactor(value, population) {
-	if (olympiaOptions.specific) {
-		return KadValue.number((value / population) * 1000000, { decimals: 3 });
-	}
-	return value;
 }

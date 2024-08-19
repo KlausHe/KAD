@@ -516,6 +516,24 @@ export const rawContentGrid = {
 			["cl_PostillionTable", "center"],
 			["cl_PostillionNumber", "center"],
 		],
+	},	
+  cl_Pafadoj: {
+		deactivated: false,
+		contentGroup: "News",
+		name: "Pafadoj",
+		heritage: ["esperanto", "Schießerei"],
+		source: {
+			Daten: "hhttps://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States",
+		},
+		size: [1, 2],
+		maingrid: {
+			areas: [["cl_PafadojUpdate"], ["cl_PafadojTable"]],
+			rows: [1],
+		},
+		subgrid: [
+			["cl_PafadojUpdate", "center"],
+			["cl_PafadojTable", "center"],
+		],
 	},
 	cl_Sepakbola: {
 		deactivated: false,
@@ -548,9 +566,9 @@ export const rawContentGrid = {
 		name: "Olympia",
 		heritage: ["griechisch", "Olympia"],
 		source: {
-			Daten: "https://api.olympics.kevle.xyz/medals",
+			Daten: "https://github.com/kevle1/paris-2024-olympic-api",
 		},
-		size: [1, 2],
+		size: [2, 1],
 		maingrid: {
 			areas: [["cl_OlympiaUpdate"], ["cl_OlympiaTable"]],
 			rows: [1],

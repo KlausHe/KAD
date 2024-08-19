@@ -27,13 +27,28 @@ const sepakbolaOptions = {
 	images: {},
 	interval: null,
 	liga: [
+		// {
+		// 	name: "EM 2024",
+		// 	urlName: "em",
+		// 	firstSeason: 2024,
+		// 	maxDays: 7,
+		// 	format(year) {
+		// 		return year;
+		// 	},
+		// 	get currentSeason() {
+		// 		return new Date().getFullYear();
+		// 	},
+		// 	seasons: [],
+		// 	table: [],
+		// 	matches: [],
+		// },
 		{
-			name: "EM 2024",
-			urlName: "em",
-			firstSeason: 2024,
-			maxDays: 7,
+			name: "DFB-Pokal 2024",
+			urlName: "dfb",
+			firstSeason: 2023,
+			maxDays: 6,
 			format(year) {
-				return year;
+				return `${year}\/${year + 1}`;
 			},
 			get currentSeason() {
 				return new Date().getFullYear();
@@ -163,7 +178,7 @@ function sepakbolaMatchesReturn(data = null) {
 	}
 	let matches = sepakbolaOptions.selectedLiga.matches;
 	dbID("idTabHeader_SepakbolaMatches").innerHTML = `${sepakbolaOptions.selected.matchday + 1}. Spieltag`;
-	const seasonSelected = matches[sepakbolaOptions.selected.matchday];
+  const seasonSelected = matches[sepakbolaOptions.selected.matchday];
 	sepakbolaPushImages("match");
 	let prevDay = null;
 	KadTable.clear("idTabBody_SepakbolaMatches");
@@ -194,7 +209,7 @@ function sepakbolaMatchesReturn(data = null) {
 				textAlign: "right",
 			},
 		});
-		logo1.appendChild(sepakbolaOptions.images[seasonSelected[i].team1.teamId].cloneNode());
+		if (seasonSelected[i].team1.teamIconUrl) logo1.appendChild(sepakbolaOptions.images[seasonSelected[i].team1.teamId].cloneNode());
 
 		//--  GOAL1 : Goal2
 		KadTable.addCell(row, {
@@ -227,7 +242,8 @@ function sepakbolaMatchesReturn(data = null) {
 				textAlign: "left",
 			},
 		});
-		logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
+		if (seasonSelected[i].team2.teamIconUrl) logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
+
 	}
 }
 
@@ -258,7 +274,7 @@ function sepakbolaTableReturn(data) {
 			type: "Lbl",
 			text: "",
 		});
-		logo.appendChild(sepakbolaOptions.images[data[i].teamInfoId]);
+		if (sepakbolaOptions.images[data[i].teamInfoId]) logo.appendChild(sepakbolaOptions.images[data[i].teamInfoId]);
 
 		//--  Team Name
 		KadTable.addCell(row, {
@@ -359,6 +375,7 @@ function sepakbolaPushImages(arr) {
 }
 
 function sepakbolaCreateImage(url) {
+	if (url == null) return;
 	const size = globalValues.mediaSizes.imgSize;
 	const img = new Image();
 	//shrink URL-image-size
