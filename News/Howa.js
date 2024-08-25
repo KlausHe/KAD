@@ -2,7 +2,7 @@
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 const reverseGeocoder = new BDCReverseGeocode();
 import { globalColors } from "../Settings/Color.js";
-import { initEL, KadDate, KadValue, dbID, dbIDStyle, objectLength, KadFile, errorChecked, log, KadInteraction } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadValue, dbID, dbIDStyle, objectLength, KadFile, errorChecked, KadInteraction } from "../KadUtils/KadUtils.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
 import { globalValues } from "../Settings/General.js";
 

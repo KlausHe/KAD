@@ -18,7 +18,6 @@ export const rawContentGrid = {
 				//
 				["cl_AnalysisInput", "cl_AnalysisResult"],
 				["cl_AnalysisInput", "cl_AnalysisProgress"],
-				// ["cl_AnalysisNews", "cl_AnalysisTabResult"],
 				["cl_AnalysisWiki", "cl_AnalysisTabResult"],
 			],
 			rows: [0, 0],
@@ -27,9 +26,29 @@ export const rawContentGrid = {
 			["cl_AnalysisInput", "right"],
 			["cl_AnalysisResult", "center"],
 			["cl_AnalysisProgress", "center", "start"],
-			// ["cl_AnalysisNews", "right"],
 			["cl_AnalysisWiki", "right"],
 			["cl_AnalysisTabResult", "center"],
+		],
+	},
+  cl_Barvoslepy: {
+    contentGroup: "Benkyou",
+		name: "Barvoslepy",
+    heritage: ["tschechisch", "Farbenblind"],
+    source: {
+			Code: "https://github.com/MaPePeR/jsColorblindSimulator",
+		},
+		size: [2, 5],
+		maingrid: {
+			areas: [
+				["cl_BarvoslepyUpload","cl_BarvoslepySelect"],
+				["cl_BarvoslepyCanvas","cl_BarvoslepyCanvas"],
+			],
+			rows: [1],
+		},
+		subgrid: [
+      ["cl_BarvoslepyUpload", "right"],
+			["cl_BarvoslepySelect", "left"],
+			["cl_BarvoslepyCanvas", "center", "start"],
 		],
 	},
 	cl_Speech: {
@@ -525,7 +544,7 @@ export const rawContentGrid = {
 		source: {
 			Daten: "hhttps://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States",
 		},
-		size: [1, 2],
+		size: [2, 1],
 		maingrid: {
 			areas: [["cl_PafadojUpdate"], ["cl_PafadojTable"]],
 			rows: [1],
@@ -815,7 +834,7 @@ export const rawContentGrid = {
 		contentGroup: "Tools",
 		globalValNumber: "idVin_Pytho_0",
 		name: "Pythagoras",
-		size: [1, 2],
+		size: [1, 1],
 		maingrid: {
 			areas: [
 				//
@@ -1185,7 +1204,7 @@ export const rawContentGrid = {
 		globalValString: "idArea_thiontuInputEntry",
 		name: "Thiontu",
 		heritage: ["irisch", "umwandeln"],
-		size: [1, 1],
+		size: [2, 1],
 		maingrid: {
 			areas: [
 				//

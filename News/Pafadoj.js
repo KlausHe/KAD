@@ -1,5 +1,4 @@
-
-import { KadFile, KadTable, errorChecked, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadFile, KadTable, errorChecked, initEL } from "../KadUtils/KadUtils.js";
 
 const pafadojOptions = {
 	get URL() {
@@ -20,6 +19,7 @@ const pafadojOptions = {
 	data: [],
 	dataTotal: {},
 	sumHeader: ["Dead", "Injured", "Total"],
+	sort: {},
 };
 
 initEL({ id: idSel_pafadojSelect, fn: pafadojUpdate, selStartValue: 2024, selList: Object.keys(pafadojOptions.headers).map((year) => [year, year]) });
@@ -39,7 +39,7 @@ async function pafadojUpdate() {
 	for (let row of dataTable[0]) {
 		let dataObj = {};
 		for (let head of pafadojOptions.headers[pafadojOptions.date][1]) {
-			dataObj[head] = row[head];
+			dataObj[head] = Number(row[head]) || row[head];
 			if (pafadojOptions.sumHeader.includes(head)) {
 				pafadojOptions.dataTotal[head] += Number(row[head]);
 			}
@@ -63,6 +63,9 @@ function pafadojTableReturn() {
 			cellStyle: {
 				textAlign: "left",
 			},
+			onclick: () => {
+				pafadojSort(head);
+			},
 		});
 	}
 
@@ -80,4 +83,10 @@ function pafadojTableReturn() {
 			});
 		}
 	}
+}
+
+function pafadojSort(type) {
+	pafadojOptions.sort[type] = !pafadojOptions.sort[type];
+	pafadojOptions.data = KadArray.sortArrayByKey(pafadojOptions.data, type, pafadojOptions.sort[type]);
+	pafadojTableReturn();
 }

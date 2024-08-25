@@ -20,7 +20,8 @@ select {
 input:hover,
 button:hover,
 textarea:hover,
-select:hover {
+select:hover,
+label[for]:hover {
 	background-color: hsl(var(--bgcNavbar) / 0.6);
 	color: hsl(var(--txtNavbar));
 	transition-duration: 0.1s;
@@ -224,6 +225,9 @@ input[type="password"] {
 	padding: var(--padding);
 }
 
+input[type="file"] {
+  display:none;
+}
 input[type="time"] {
 	width: var(--UIWidth4);
 }

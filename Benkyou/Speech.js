@@ -22,7 +22,6 @@ daEL(idBtn_speechSpeakTo, "click", () => speechSpeak("To"));
 daEL(idArea_speechFromText, "input", speechTranslate);
 
 export function clear_cl_Speech() {
-	log("rework!");
 	return;
 	speechOptions.voices = [];
 	speechOptions.synthObj.cancel();
