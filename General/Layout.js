@@ -11,25 +11,6 @@ export function contentCheckActive(contentObj) {
 	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
 	return true;
 }
-function logNamed(obj = {}) {
-	for (let key in obj) {
-		const value = obj[key];
-		log(key, value);
-	}
-}
-function test() {
-    const { defaultPage, navContent, origUniverse, GlobalSettings, nameList, getUniverse, AccountSettings,settingsNames } = contentLayout;
-	logNamed({
-		defaultPage,
-		navContent,
-		origUniverse,
-		nameList,
-		getUniverse,
-		// GlobalSettings,
-		// AccountSettings,
-		// settingsNames,
-	});
-}
 
 export let contentGrid = {};
 export const contentLayout = {
@@ -47,7 +28,6 @@ export const contentLayout = {
 			}
 		}
 		contentGrid = Object.fromEntries(sorted);
-
 	},
 	navContent: {
 		Universe: [],
@@ -285,11 +265,17 @@ export function createSubgrid() {
 
 		const childDivArea = parentGrid.children[0].style;
 		childDivArea.gridTemplateRows = "";
-		for (let rows of contentObj.maingrid.rows) {
-			if (rows == 0) {
+		let rows = [];
+		if (contentObj.maingrid.rows.length == 0) {
+			rows = ["auto"];
+		} else {
+			rows = contentObj.maingrid.rows;
+		}
+		for (let row of rows) {
+			if (row == 0) {
 				childDivArea.gridTemplateRows += "auto ";
 			} else {
-				childDivArea.gridTemplateRows += `var(--UIHeight${rows}) `;
+				childDivArea.gridTemplateRows += `var(--UIHeight${row}) `;
 			}
 		}
 		childDivArea.gridTemplateRows += "auto";

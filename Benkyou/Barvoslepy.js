@@ -1,13 +1,10 @@
-import { dbID, dbIDStyle, initEL } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadDOM, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 // barvoslepy
 const barvoslepyOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
-	},
-	imgWidth() {
-		return;
 	},
 	image: null,
 	differenceEpsilon: 10,
@@ -17,22 +14,22 @@ const barvoslepyOptions = {
 			return color;
 		},
 		Protanopia(color) {
-			return barvoslepyBrettel(color, "protan", 1.0);
+			return barvoslepyBrettel(color, "protan");
 		},
 		Protanomaly(color) {
-			return barvoslepyBrettel(color, "protan", 0.6);
+			return barvoslepyBrettel(color, "protan", 1);
 		},
 		Deuteranopia(color) {
-			return barvoslepyBrettel(color, "deutan", 1.0);
+			return barvoslepyBrettel(color, "deutan");
 		},
 		Deuteranomaly(color) {
-			return barvoslepyBrettel(color, "deutan", 0.6);
+			return barvoslepyBrettel(color, "deutan", 1);
 		},
 		Tritanopia(color) {
-			return barvoslepyBrettel(color, "tritan", 1.0);
+			return barvoslepyBrettel(color, "tritan");
 		},
 		Tritanomaly(color) {
-			return barvoslepyBrettel(color, "tritan", 0.6);
+			return barvoslepyBrettel(color, "tritan", 1);
 		},
 	},
 	brettelParams: {
@@ -52,14 +49,24 @@ const barvoslepyOptions = {
 			separationPlaneNormal: [0.0396, -0.02831, -0.01129],
 		},
 	},
+	severity: 60,
+	showState: null,
+	showStates: {
+		Original: false,
+		Positive: false,
+		Negative: false,
+	},
 };
 
 initEL({ id: idFile_barvoslepyUpload, action: "change", fn: barvoslepyLoadFile });
-initEL({ id: idSel_barvoslepySelect, fn: barvoslepyFilter, selStartValue: "Tritanopia", selList: Object.keys(barvoslepyOptions.brettelFunctions).map((v) => [v, v]) });
+initEL({ id: idSel_barvoslepySelect, fn: barvoslepyFilter, selStartValue: KadRandom.randomObject(Object.keys(barvoslepyOptions.brettelFunctions)), selList: Object.keys(barvoslepyOptions.brettelFunctions).map((v) => [v, v]) });
+initEL({ id: idVin_barvoslepySeverity, fn: barvoslepySeverity, resetValue: 60 });
+initEL({ id: idBtn_barvoslepyOriginal, fn: barvoslepyShow, resetValue: "Original" });
+initEL({ id: idBtn_barvoslepyPositive, fn: barvoslepyShow, resetValue: "Positive" });
+initEL({ id: idBtn_barvoslepyNegative, fn: barvoslepyShow, resetValue: "Negative" });
 
 export function clear_cl_Barvoslepy() {
 	idSel_barvoslepySelect.KadReset();
-	dbIDStyle(idImg_barvoslepy).transitionDuration = "0s";
 	barvoslepyOptions.image = new Image();
 	barvoslepyOptions.image.src = `./Benkyou/DSC_1275.JPG`;
 	barvoslepyOptions.image.onload = barvoslepyImageLoaded;
@@ -70,10 +77,29 @@ export function clear_cl_Barvoslepy() {
 		barvoslepyOptions.sRGBToLinearRGBLookup[i] = fv < 0.04045 ? fv / 12.92 : Math.pow((fv + 0.055) / 1.055, 2.4);
 	}
 }
+function barvoslepySeverity() {
+	barvoslepyOptions.severity = idVin_barvoslepySeverity.KadGet();
+	barvoslepyFilter();
+}
+function barvoslepyShow(btn) {
+	const thisType = btn.target.textContent;
+	const thisState = !barvoslepyOptions.showStates[thisType];
+	barvoslepyOptions.showState = thisState ? thisType : null;
+
+	for (let type of Object.keys(barvoslepyOptions.showStates)) {
+		if (type == thisType) {
+			barvoslepyOptions.showStates[type] = thisState;
+			KadDOM.btnColor(`idBtn_barvoslepy${type}`, thisState ? "colored" : null);
+		} else {
+			barvoslepyOptions.showStates[type] = false;
+			KadDOM.btnColor(`idBtn_barvoslepy${type}`, null);
+		}
+	}
+	barvoslepyFilter();
+}
+
 function barvoslepyImageLoaded(source) {
 	barvoslepyOptions.image = source.target;
-	dbID(idImg_barvoslepy).src = barvoslepyOptions.image.src;
-	dbIDStyle(idImg_barvoslepy).width = `${Math.min(barvoslepyOptions.image.width, barvoslepyOptions.canvas.w)}px`;
 	barvoslepyFilter();
 }
 function barvoslepyLoadFile(file) {
@@ -83,7 +109,6 @@ function barvoslepyLoadFile(file) {
 		const img = new Image();
 		img.onload = barvoslepyImageLoaded;
 		img.src = file.target.result;
-		// dbID(idImg_barvoslepy).src = file.target.result;
 	};
 	fileReader.readAsDataURL(selectedFile);
 }
@@ -95,65 +120,47 @@ function barvoslepyFilter() {
 	const ratio = w / h;
 
 	const canvasFiltered = dbID(idCanv_barvoslepyCanvas);
-	const canvasDifferencePositive = dbID(idCanv_barvoslepyDifferencePositive);
-	const canvasDifferenceNegative = dbID(idCanv_barvoslepyDifferenceNegative);
-
 	const canvasWidth = Math.min(barvoslepyOptions.image.width, barvoslepyOptions.canvas.w);
 	const canvasHeight = Math.round(canvasWidth / ratio);
 	canvasFiltered.width = canvasWidth;
 	canvasFiltered.height = canvasHeight;
-	canvasDifferencePositive.width = canvasWidth;
-	canvasDifferencePositive.height = canvasHeight;
-	canvasDifferenceNegative.width = canvasWidth;
-	canvasDifferenceNegative.height = canvasHeight;
-
 	const ctxFiltered = canvasFiltered.getContext("2d");
-	const ctxDifferencePositive = canvasDifferencePositive.getContext("2d");
-	const ctxDifferenceNegative = canvasDifferenceNegative.getContext("2d");
 	ctxFiltered.drawImage(barvoslepyOptions.image, 0, 0, w, h, 0, 0, canvasWidth, canvasHeight);
-	ctxDifferencePositive.drawImage(barvoslepyOptions.image, 0, 0, w, h, 0, 0, canvasWidth, canvasHeight);
-	ctxDifferenceNegative.drawImage(barvoslepyOptions.image, 0, 0, w, h, 0, 0, canvasWidth, canvasHeight);
 	let pixelsFiltered = ctxFiltered.getImageData(0, 0, w, h);
-	let pixelsDifferencePositive = ctxDifferencePositive.getImageData(0, 0, w, h);
-	let pixelsDifferenceNegative = ctxDifferenceNegative.getImageData(0, 0, w, h);
 
 	for (let i = 0; i < pixelsFiltered.data.length; i += 4) {
 		const pixelFiltered = [pixelsFiltered.data[i], pixelsFiltered.data[i + 1], pixelsFiltered.data[i + 2]];
 		const filteredRGB = barvoslepyOptions.brettelFunctions[type](pixelFiltered);
-		pixelsFiltered.data[i + 0] = filteredRGB[0];
-		pixelsFiltered.data[i + 1] = filteredRGB[1];
-		pixelsFiltered.data[i + 2] = filteredRGB[2];
-
-		const diff = barvoslepyDifferencePixel(i, pixelsDifferencePositive.data, pixelsFiltered.data);
-		pixelsDifferencePositive.data[i + 0] = diff ? filteredRGB[0] : 0;
-		pixelsDifferencePositive.data[i + 1] = diff ? filteredRGB[1] : 0;
-		pixelsDifferencePositive.data[i + 2] = diff ? filteredRGB[2] : 0;
-
-    pixelsDifferenceNegative.data[i + 0] = diff ? 0:filteredRGB[0] ;
-    pixelsDifferenceNegative.data[i + 1] = diff ? 0:filteredRGB[1] ;
-    pixelsDifferenceNegative.data[i + 2] = diff ? 0:filteredRGB[2] ;
-
-		// pixelsDifferenceNegative.data[i + 0] = !barvoslepyDifference(pixelsDifferenceNegative.data[i + 0], pixelsFiltered.data[i + 0]) ? 255 : 0;
-		// pixelsDifferenceNegative.data[i + 1] = !barvoslepyDifference(pixelsDifferenceNegative.data[i + 1], pixelsFiltered.data[i + 1]) ? 255 : 0;
-		// pixelsDifferenceNegative.data[i + 2] = !barvoslepyDifference(pixelsDifferenceNegative.data[i + 2], pixelsFiltered.data[i + 2]) ? 255 : 0;
+		if (barvoslepyOptions.showState == null) {
+			pixelsFiltered.data[i + 0] = filteredRGB[0];
+			pixelsFiltered.data[i + 1] = filteredRGB[1];
+			pixelsFiltered.data[i + 2] = filteredRGB[2];
+		}
+		if (barvoslepyOptions.showState == "Positive") {
+			const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
+			pixelsFiltered.data[i + 0] = diff ? filteredRGB[0] : 0;
+			pixelsFiltered.data[i + 1] = diff ? filteredRGB[1] : 0;
+			pixelsFiltered.data[i + 2] = diff ? filteredRGB[2] : 0;
+		}
+		if (barvoslepyOptions.showState == "Negative") {
+			const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
+			pixelsFiltered.data[i + 0] = diff ? 0 : filteredRGB[0];
+			pixelsFiltered.data[i + 1] = diff ? 0 : filteredRGB[1];
+			pixelsFiltered.data[i + 2] = diff ? 0 : filteredRGB[2];
+		}
 	}
 	ctxFiltered.putImageData(pixelsFiltered, 0, 0);
-	ctxDifferencePositive.putImageData(pixelsDifferencePositive, 0, 0);
-	ctxDifferenceNegative.putImageData(pixelsDifferenceNegative, 0, 0);
 }
 
-function barvoslepyDifferencePixel(i, pixOrig, pixFiltered) {
+function barvoslepyDifferencePixel(pixOrig, pixFiltered) {
 	let count = 0;
 	for (let n = 0; n < 3; n++) {
-		if (Math.abs(pixOrig[i + n] - pixFiltered[i + n]) > barvoslepyOptions.differenceEpsilon) count++;
+		if (Math.abs(pixOrig[n] - pixFiltered[n]) > barvoslepyOptions.differenceEpsilon) count++;
 	}
 	return count == 0;
 }
-function barvoslepyDifference(pixOrig, pixFiltered) {
-	return Math.abs(pixOrig - pixFiltered) > barvoslepyOptions.differenceEpsilon;
-}
 
-function barvoslepyBrettel(color, type, severity) {
+function barvoslepyBrettel(color, type, severity = null) {
 	let rgb = [0, 0, 0];
 	rgb[0] = barvoslepyOptions.sRGBToLinearRGBLookup[color[0]];
 	rgb[1] = barvoslepyOptions.sRGBToLinearRGBLookup[color[1]];
@@ -173,9 +180,10 @@ function barvoslepyBrettel(color, type, severity) {
 	cvd[2] = rgbCvdFromRgb[6] * rgb[0] + rgbCvdFromRgb[7] * rgb[1] + rgbCvdFromRgb[8] * rgb[2];
 
 	// Apply the severity factor as a linear interpolation. It's the same to do it in the RGB space or in the LMS space since it's a linear transform.
-	cvd[0] = cvd[0] * severity + rgb[0] * (1.0 - severity);
-	cvd[1] = cvd[1] * severity + rgb[1] * (1.0 - severity);
-	cvd[2] = cvd[2] * severity + rgb[2] * (1.0 - severity);
+	const localSeverity = severity == null ? Math.floor(barvoslepyOptions.severity / 100) : 1.0;
+	cvd[0] = cvd[0] * localSeverity + rgb[0] * (1.0 - localSeverity);
+	cvd[1] = cvd[1] * localSeverity + rgb[1] * (1.0 - localSeverity);
+	cvd[2] = cvd[2] * localSeverity + rgb[2] * (1.0 - localSeverity);
 
 	// Go back to sRGB
 	const sRGB = [];

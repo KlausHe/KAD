@@ -102,15 +102,31 @@
 
     <section class="cl_Barvoslepy" style="display:none;">
       <div class="cl_subGrid_Barvoslepy cl_subGrid">
-        <div class="cl_BarvoslepySelect">
-          <select id="idSel_barvoslepySelect" uiSize="size6" ></select>
-        </div>
         <div class="cl_BarvoslepyUpload">
-          <input type="file" id="idFile_barvoslepyUpload"></input><label class="cl_info" id="idLbl_barvoslepyUpload" for="idFile_barvoslepyUpload">Upload</label>
+          <input type="file" id="idFile_barvoslepyUpload"></input><label class="cl_info" id="idLbl_barvoslepyUpload" for="idFile_barvoslepyUpload" uiSize="size10">Upload</label>
+        </div>
+        <div class="cl_BarvoslepySelect">
+          <select id="idSel_barvoslepySelect" uiSize="size10"></select>
+        </div>
+        <div class="cl_BarvoslepySeverity">
+          <label class="cl_info" uiSize="size4" uiRadius="left">Severity [%]
+          </label><input type="number" id="idVin_barvoslepySeverity" min="0" max="100" step="1" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_BarvoslepyOriginal">
+          <button id="idBtn_barvoslepyOriginal"></button>
+        </div>
+        <div class="cl_BarvoslepyPositive">
+          <button id="idBtn_barvoslepyPositive">Differenz Positiv</button>
+        </div>
+        <div class="cl_BarvoslepyNegative">
+          <button id="idBtn_barvoslepyNegative">Differenz Negativ</button>
         </div>
         <div class="cl_BarvoslepyCanvas" uiFlex="vertical">
-            <img id="idImg_barvoslepy" style="vertical-align: top"></img><canvas id="idCanv_barvoslepyCanvas"></canvas>
-            <canvas id="idCanv_barvoslepyDifferencePositive"></canvas><canvas id="idCanv_barvoslepyDifferenceNegative"></canvas>
+          <!-- <img id="idImg_barvoslepy" style="vertical-align: top"></img> -->
+          <canvas id="idCanv_barvoslepyCanvas"></canvas>
         </div>
       </div>
     </section>

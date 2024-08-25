@@ -30,24 +30,30 @@ export const rawContentGrid = {
 			["cl_AnalysisTabResult", "center"],
 		],
 	},
-  cl_Barvoslepy: {
-    contentGroup: "Benkyou",
+	cl_Barvoslepy: {
+		contentGroup: "Benkyou",
 		name: "Barvoslepy",
-    heritage: ["tschechisch", "Farbenblind"],
-    source: {
+		heritage: ["tschechisch", "Farbenblind"],
+		source: {
 			Code: "https://github.com/MaPePeR/jsColorblindSimulator",
 		},
-		size: [2, 5],
+		size: [2, 2],
 		maingrid: {
 			areas: [
-				["cl_BarvoslepyUpload","cl_BarvoslepySelect"],
-				["cl_BarvoslepyCanvas","cl_BarvoslepyCanvas"],
+				["cl_BarvoslepyUpload", "cl_BarvoslepyOriginal"],
+				["cl_BarvoslepySelect", "cl_BarvoslepyPositive"],
+				["cl_BarvoslepySeverity", "cl_BarvoslepyNegative"],
+				["cl_BarvoslepyCanvas", "cl_BarvoslepyCanvas"],
 			],
-			rows: [1],
+			rows: [1, 1, 1],
 		},
 		subgrid: [
-      ["cl_BarvoslepyUpload", "right"],
-			["cl_BarvoslepySelect", "left"],
+			["cl_BarvoslepyUpload", "right"],
+			["cl_BarvoslepySelect", "right"],
+			["cl_BarvoslepySeverity", "right"],
+			["cl_BarvoslepyOriginal", "left"],
+			["cl_BarvoslepyPositive", "left"],
+			["cl_BarvoslepyNegative", "left"],
 			["cl_BarvoslepyCanvas", "center", "start"],
 		],
 	},
@@ -535,8 +541,8 @@ export const rawContentGrid = {
 			["cl_PostillionTable", "center"],
 			["cl_PostillionNumber", "center"],
 		],
-	},	
-  cl_Pafadoj: {
+	},
+	cl_Pafadoj: {
 		deactivated: false,
 		contentGroup: "News",
 		name: "Pafadoj",
@@ -569,7 +575,7 @@ export const rawContentGrid = {
 				["cl_SepakbolaInputSeason", "."],
 				["cl_SepakbolaTable", "cl_SepakbolaMatches"],
 			],
-			rows: [1,1],
+			rows: [1, 1],
 		},
 		subgrid: [
 			["cl_SepakbolaInputLiga", "center"],
