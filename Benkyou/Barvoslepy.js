@@ -4,31 +4,36 @@ import { globalValues } from "../Settings/General.js";
 // barvoslepy
 const barvoslepyOptions = {
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
+		return { w: globalValues.mediaSizes.canvasSize.w , h: globalValues.mediaSizes.canvasSize.h };
 	},
 	image: null,
-	differenceEpsilon: 10,
+	differenceEpsilon: 5,
 	sRGBToLinearRGBLookup: [],
+	Abstufungen: [
+		["Rotsehschwäche", "Protanomalie"],
+		["Rotblindheit", "Protanopie"],
+		["Grünsehschwäche", "Deuteranomalie"],
+		["Grünblindheit", "Deuteranopie"],
+		["Blausehschwäche", "Tritanomalie"],
+		["Blaublindheit", "Tritanopie"],
+	],
 	brettelFunctions: {
-		Normal(color) {
-			return color;
+		Protanomalie(color) {
+			return barvoslepyBrettel(color, "protan", barvoslepyOptions.severity);
 		},
-		Protanopia(color) {
-			return barvoslepyBrettel(color, "protan");
-		},
-		Protanomaly(color) {
+		Protanopie(color) {
 			return barvoslepyBrettel(color, "protan", 1);
 		},
-		Deuteranopia(color) {
-			return barvoslepyBrettel(color, "deutan");
+		Deuteranomalie(color) {
+			return barvoslepyBrettel(color, "deutan", barvoslepyOptions.severity);
 		},
-		Deuteranomaly(color) {
+		Deuteranopie(color) {
 			return barvoslepyBrettel(color, "deutan", 1);
 		},
-		Tritanopia(color) {
-			return barvoslepyBrettel(color, "tritan");
+		Tritanomalie(color) {
+			return barvoslepyBrettel(color, "tritan", barvoslepyOptions.severity);
 		},
-		Tritanomaly(color) {
+		Tritanopie(color) {
 			return barvoslepyBrettel(color, "tritan", 1);
 		},
 	},
@@ -49,7 +54,12 @@ const barvoslepyOptions = {
 			separationPlaneNormal: [0.0396, -0.02831, -0.01129],
 		},
 	},
-	severity: 60,
+	severity: 0.5,
+	previewImagesSelected: null,
+	previewImages: [
+		["Venedig", "./Benkyou/BarvoslepyAssets/Venice.JPG"],
+		["Ishihara", "./Benkyou/BarvoslepyAssets/Ishihara.png"],
+	],
 	showState: null,
 	showStates: {
 		Original: false,
@@ -59,33 +69,84 @@ const barvoslepyOptions = {
 };
 
 initEL({ id: idFile_barvoslepyUpload, action: "change", fn: barvoslepyLoadFile });
-initEL({ id: idSel_barvoslepySelect, fn: barvoslepyFilter, selStartValue: KadRandom.randomObject(Object.keys(barvoslepyOptions.brettelFunctions)), selList: Object.keys(barvoslepyOptions.brettelFunctions).map((v) => [v, v]) });
-initEL({ id: idVin_barvoslepySeverity, fn: barvoslepySeverity, resetValue: 60 });
+initEL({
+	id: idSel_barvoslepySelectImage,
+	fn: barvoslepyImagePreview,
+	selStartValue: KadRandom.randomObject(barvoslepyOptions.previewImages.map((v) => v[0])),
+	selList: barvoslepyOptions.previewImages.map((v) => [v[0], v[1]]),
+});
+initEL({
+	id: idSel_barvoslepySelectWeakness,
+	fn: barvoslepySelectWeakness,
+	selStartValue: KadRandom.randomObject(barvoslepyOptions.Abstufungen.map((v) => v[0])),
+	selList: barvoslepyOptions.Abstufungen.map((v) => [v[0], v[1]]),
+});
+initEL({
+	id: idVin_barvoslepySeverity,
+	fn: barvoslepySeverity,
+	resetValue: 50,
+	domOpts: {
+		min: 0,
+		max: 95,
+		step: 5,
+	},
+});
+initEL({
+	id: idVin_barvoslepyEpsilon,
+	fn: barvoslepyEpsilon,
+	resetValue: 5,
+	domOpts: {
+		min: 0,
+		max: 15,
+		step: 1,
+	},
+});
 initEL({ id: idBtn_barvoslepyOriginal, fn: barvoslepyShow, resetValue: "Original" });
 initEL({ id: idBtn_barvoslepyPositive, fn: barvoslepyShow, resetValue: "Positive" });
 initEL({ id: idBtn_barvoslepyNegative, fn: barvoslepyShow, resetValue: "Negative" });
+initEL({ id: idBtn_barvoslepyApply, fn: barvoslepyFilter, resetValue: "Anwenden" });
 
 export function clear_cl_Barvoslepy() {
-	idSel_barvoslepySelect.KadReset();
-	barvoslepyOptions.image = new Image();
-	barvoslepyOptions.image.src = `./Benkyou/DSC_1275.JPG`;
-	barvoslepyOptions.image.onload = barvoslepyImageLoaded;
-
+	idSel_barvoslepySelectImage.KadReset();
+  idSel_barvoslepySelectWeakness.KadReset({selStartValue: KadRandom.randomObject(barvoslepyOptions.Abstufungen.map((v) => v[0]))})
+	barvoslepyOptions.differenceEpsilon = idVin_barvoslepyEpsilon.KadReset();
+  let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
+	KadDOM.enableBtn(idVin_barvoslepySeverity, typeIndex % 2 == 0);
+	barvoslepyImagePreview();
 	barvoslepyOptions.sRGBToLinearRGBLookup = [];
 	for (let i = 0; i < 256; i++) {
 		const fv = i / 255.0;
 		barvoslepyOptions.sRGBToLinearRGBLookup[i] = fv < 0.04045 ? fv / 12.92 : Math.pow((fv + 0.055) / 1.055, 2.4);
 	}
 }
+
+function barvoslepyImagePreview() {
+	barvoslepyOptions.previewImagesSelected = idSel_barvoslepySelectImage.KadGet();
+	barvoslepyOptions.image = new Image();
+	barvoslepyOptions.image.src = barvoslepyOptions.previewImagesSelected;
+	barvoslepyOptions.image.onload = barvoslepyImageLoaded;
+}
+
 function barvoslepySeverity() {
-	barvoslepyOptions.severity = idVin_barvoslepySeverity.KadGet();
+	barvoslepyOptions.severity = idVin_barvoslepySeverity.KadGet() / 100;
 	barvoslepyFilter();
 }
+
+function barvoslepySelectWeakness() {
+	let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
+	KadDOM.enableBtn(idVin_barvoslepySeverity, typeIndex % 2 == 0);
+	barvoslepyFilter();
+}
+
+function barvoslepyEpsilon() {
+	barvoslepyOptions.differenceEpsilon = idVin_barvoslepyEpsilon.KadGet();
+	barvoslepyFilter();
+}
+
 function barvoslepyShow(btn) {
 	const thisType = btn.target.textContent;
 	const thisState = !barvoslepyOptions.showStates[thisType];
 	barvoslepyOptions.showState = thisState ? thisType : null;
-
 	for (let type of Object.keys(barvoslepyOptions.showStates)) {
 		if (type == thisType) {
 			barvoslepyOptions.showStates[type] = thisState;
@@ -102,6 +163,7 @@ function barvoslepyImageLoaded(source) {
 	barvoslepyOptions.image = source.target;
 	barvoslepyFilter();
 }
+
 function barvoslepyLoadFile(file) {
 	let selectedFile = file.target.files[0];
 	let fileReader = new FileReader();
@@ -114,11 +176,15 @@ function barvoslepyLoadFile(file) {
 }
 
 function barvoslepyFilter() {
-	let type = idSel_barvoslepySelect.KadGet();
+	const type = idSel_barvoslepySelectWeakness.KadGet();
+	const typeText = idSel_barvoslepySelectWeakness.KadGet({ textContent: true });
+	const typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
+	let severity = typeIndex % 2 == 0 ? ` ${Math.floor(barvoslepyOptions.severity * 100)}%` : "";
+	idLbl_barvoslepyApply.textContent = `${typeText}${severity}`;
+
 	const w = barvoslepyOptions.image.width;
 	const h = barvoslepyOptions.image.height;
 	const ratio = w / h;
-
 	const canvasFiltered = dbID(idCanv_barvoslepyCanvas);
 	const canvasWidth = Math.min(barvoslepyOptions.image.width, barvoslepyOptions.canvas.w);
 	const canvasHeight = Math.round(canvasWidth / ratio);
@@ -160,7 +226,7 @@ function barvoslepyDifferencePixel(pixOrig, pixFiltered) {
 	return count == 0;
 }
 
-function barvoslepyBrettel(color, type, severity = null) {
+function barvoslepyBrettel(color, type, severity) {
 	let rgb = [0, 0, 0];
 	rgb[0] = barvoslepyOptions.sRGBToLinearRGBLookup[color[0]];
 	rgb[1] = barvoslepyOptions.sRGBToLinearRGBLookup[color[1]];
@@ -180,10 +246,9 @@ function barvoslepyBrettel(color, type, severity = null) {
 	cvd[2] = rgbCvdFromRgb[6] * rgb[0] + rgbCvdFromRgb[7] * rgb[1] + rgbCvdFromRgb[8] * rgb[2];
 
 	// Apply the severity factor as a linear interpolation. It's the same to do it in the RGB space or in the LMS space since it's a linear transform.
-	const localSeverity = severity == null ? Math.floor(barvoslepyOptions.severity / 100) : 1.0;
-	cvd[0] = cvd[0] * localSeverity + rgb[0] * (1.0 - localSeverity);
-	cvd[1] = cvd[1] * localSeverity + rgb[1] * (1.0 - localSeverity);
-	cvd[2] = cvd[2] * localSeverity + rgb[2] * (1.0 - localSeverity);
+	cvd[0] = cvd[0] * severity + rgb[0] * (1.0 - severity);
+	cvd[1] = cvd[1] * severity + rgb[1] * (1.0 - severity);
+	cvd[2] = cvd[2] * severity + rgb[2] * (1.0 - severity);
 
 	// Go back to sRGB
 	const sRGB = [];

@@ -103,14 +103,24 @@
     <section class="cl_Barvoslepy" style="display:none;">
       <div class="cl_subGrid_Barvoslepy cl_subGrid">
         <div class="cl_BarvoslepyUpload">
-          <input type="file" id="idFile_barvoslepyUpload"></input><label class="cl_info" id="idLbl_barvoslepyUpload" for="idFile_barvoslepyUpload" uiSize="size10">Upload</label>
+          <input type="file" id="idFile_barvoslepyUpload"></input><label class="cl_info" id="idLbl_barvoslepyUpload" for="idFile_barvoslepyUpload" uiSize="size11">Upload</label>
         </div>
-        <div class="cl_BarvoslepySelect">
-          <select id="idSel_barvoslepySelect" uiSize="size10"></select>
+        <div class="cl_BarvoslepySelectImage">
+          <label class="cl_info" uiRadius="left" uiSize="size4">Testbild</label><select id="idSel_barvoslepySelectImage" uiSize="size7"></select>
+        </div>
+        <div class="cl_BarvoslepySelectWeakness">
+          <label class="cl_info" uiRadius="left" uiSize="size4">Schwäche</label><select id="idSel_barvoslepySelectWeakness" uiSize="size7"></select>
         </div>
         <div class="cl_BarvoslepySeverity">
-          <label class="cl_info" uiSize="size4" uiRadius="left">Severity [%]
-          </label><input type="number" id="idVin_barvoslepySeverity" min="0" max="100" step="1" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          <label class="cl_info" uiSize="size5" uiRadius="left">Severity [%]
+          </label><input type="number" id="idVin_barvoslepySeverity"  uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_BarvoslepyEpsilon">
+          <label class="cl_info" uiSize="size5" uiRadius="left">Epsilon
+          </label><input type="number" id="idVin_barvoslepyEpsilon" min="1" max="10" step="1" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -119,13 +129,18 @@
           <button id="idBtn_barvoslepyOriginal"></button>
         </div>
         <div class="cl_BarvoslepyPositive">
-          <button id="idBtn_barvoslepyPositive">Differenz Positiv</button>
+          <button id="idBtn_barvoslepyPositive"></button>
         </div>
         <div class="cl_BarvoslepyNegative">
-          <button id="idBtn_barvoslepyNegative">Differenz Negativ</button>
+          <button id="idBtn_barvoslepyNegative"></button>
+        </div>
+        <div class="cl_BarvoslepyApply">
+          <button id="idBtn_barvoslepyApply"></button>
+        </div>
+        <div class="cl_BarvoslepyOverview">
+          <label class="cl_info" id="idLbl_barvoslepyApply" uiSize="size12" uiRadius="left"></label>
         </div>
         <div class="cl_BarvoslepyCanvas" uiFlex="vertical">
-          <!-- <img id="idImg_barvoslepy" style="vertical-align: top"></img> -->
           <canvas id="idCanv_barvoslepyCanvas"></canvas>
         </div>
       </div>

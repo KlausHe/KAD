@@ -155,7 +155,7 @@ function navTitle() {
 	document.title = `KAD-${titleText}`;
 }
 
-export function createGridLayout(layoutName) {
+export function createGridLayout(layoutName = contentLayout.defaultPage ) {
 	let contentList = layoutContentList(layoutName);
 	if (contentList == []) {
 		error("No Grid for gridTemplateAreas provided");

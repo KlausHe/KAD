@@ -214,8 +214,7 @@ function createBlockArray() {
 	if (contentLayout.navContent[usergridOptions.usedGrid].length === 0) return;
 	usergridOptions.canvasCells = [];
 	const gridCols = contentLayout.navContent[usergridOptions.usedGrid].length; //getCssRoot("gridColLength", true);
-	const { rowLength, gridArray } = createGridLayout(usergridOptions.usedGrid);
-
+	const { rowLength, gridArray } = createGridLayout("Universe"); //usergridOptions.usedGrid
 	const cellSize = [Math.floor(usergridOptions.canvas.w / rowLength), 50]; // Math.floor(usergridOptions.canvas.h / usergridOptions.canvasCols)
 	let existingNames = [];
 	for (let n = 0; n < gridArray.length; n++) {
@@ -233,7 +232,7 @@ function createBlockArray() {
 class UGridCell {
 	constructor(name, px, py, cellW, cellH) {
 		this.name = contentGrid[name].name;
-		this.size = [contentGrid[name].size[0]*cellW, cellH*contentGrid[name].size[1]];
+		this.size = [contentGrid[name].size[0] * cellW, cellH * contentGrid[name].size[1]];
 		this.pos = [px * cellW, py * cellH];
 	}
 	margin = 5;
