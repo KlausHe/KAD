@@ -1,4 +1,4 @@
-import { KadArray, KadFile, KadTable, errorChecked, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadFile, KadTable, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
 
 const pafadojOptions = {
 	get URL() {
@@ -33,12 +33,14 @@ async function pafadojUpdate() {
 	pafadojOptions.date = idSel_pafadojSelect.KadGet();
 	const { dataTable, error } = await KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL });
 	if (errorChecked(error)) return;
+	dataTable;
 	pafadojOptions.data = [];
 	pafadojOptions.dataTotal = { Dead: 0, Injured: 0, Total: 0 };
 
 	for (let row of dataTable[0]) {
 		let dataObj = {};
 		for (let head of pafadojOptions.headers[pafadojOptions.date][1]) {
+			row[head] = Number.isNaN(Number(row[head])) ? row[head] : Number(row[head]);
 			dataObj[head] = Number(row[head]) || row[head];
 			if (pafadojOptions.sumHeader.includes(head)) {
 				pafadojOptions.dataTotal[head] += Number(row[head]);
@@ -88,5 +90,6 @@ function pafadojTableReturn() {
 function pafadojSort(type) {
 	pafadojOptions.sort[type] = !pafadojOptions.sort[type];
 	pafadojOptions.data = KadArray.sortArrayByKey(pafadojOptions.data, type, pafadojOptions.sort[type]);
+	log(pafadojOptions.data);
 	pafadojTableReturn();
 }
