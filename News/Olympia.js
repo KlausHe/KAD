@@ -1,32 +1,41 @@
-// https://api.olympics.kevle.xyz/medals
 
-import { KadArray, KadDOM, KadFile, KadTable, KadValue, dbID, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDOM, KadFile, KadTable, KadValue, dbID, errorChecked, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
 	URLMedals: `https://api.olympics.kevle.xyz/medals`,
+	URLParalympics: `https://api.olympics.kevle.xyz/paralympics/medals`,
 	URLFlags: `https://restcountries.com/v3.1/all?fields=cca3,flags,population`,
 	data: null,
 	specific: false,
 	headerNames: ["Gold", "Silver", "Bronze", "Total"],
 	sortTotal: false,
 	sortMedals: false,
+	events: ["Paralympics", "Olympia"],
 };
-initEL({ id: idBtn_olympiaUpdate, fn: olympiaUpdate });
+
+initEL({
+	id: idSel_olympiaEvent,
+	fn: olympiaUpdate,
+	selStartIndex: 0,
+	selList: olympiaOptions.events.map((v) => [v, v]),
+});
 initEL({ id: idBtn_olympiaSpecific, fn: olympiaSpecific });
 initEL({ id: idBtn_olympiaSortMedals, fn: olympiaSortByMedals });
 initEL({ id: idBtn_olympiaSortTotal, fn: olympiaSortByTotal });
 
 export function clear_cl_Olympia() {
+	idSel_olympiaEvent.KadReset();
 	olympiaUpdate();
 }
 
 async function olympiaUpdate() {
 	olympiaOptions.data = null;
-	const { dataTable, dataCountries, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataCountries"], urlArray: [olympiaOptions.URLMedals, olympiaOptions.URLFlags] });
+	const url = idSel_olympiaEvent.KadGet({ index: true }) == 0 ? olympiaOptions.URLParalympics : olympiaOptions.URLMedals;
+	const { dataTable, dataCountries, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataCountries"], urlArray: [url, olympiaOptions.URLFlags] });
 	if (errorChecked(error)) return;
 	dataTable.results.splice(
 		dataTable.results.findIndex((item) => {
-			return item.country.code == "EOR";
+			return item.country.code == "EOR" || item.country.code == "RPT";
 		}),
 		1
 	);
@@ -75,7 +84,7 @@ function olympiaTableReturn() {
 	KadTable.clear("idTabBody_OlympiaTable");
 
 	for (let name of olympiaOptions.headerNames) {
-		const text = olympiaOptions.specific ? `${name}<br>/population` : name;
+		const text = olympiaOptions.specific ? `${name}<br>/Einwohner` : name;
 		dbID(`idTabHeader_Olympia${name}`).innerHTML = text;
 	}
 
@@ -86,7 +95,7 @@ function olympiaTableReturn() {
 		KadTable.addCell(row, {
 			names: ["olympia", "place", i],
 			type: "Lbl",
-			text: data[i].rank,
+			text: i + 1,
 			cellStyle: {
 				textAlign: "center",
 			},
@@ -109,7 +118,7 @@ function olympiaTableReturn() {
 		KadTable.addCell(row, {
 			names: ["olympia", "country", i],
 			type: "Lbl",
-			text: data[i].country.name,
+			text: `${data[i].country.name} (${data[i].rank})`,
 			title: data[i].country.name,
 			cellStyle: {
 				textAlign: "left",
@@ -131,7 +140,7 @@ function olympiaTableReturn() {
 		KadTable.addCell(row, {
 			names: ["olympia", "population", i],
 			type: "Lbl",
-			text: KadValue.number(data[i].population, {indicator:true}),
+			text: KadValue.number(data[i].population, { indicator: true }),
 			cellStyle: {
 				textAlign: "right",
 			},
