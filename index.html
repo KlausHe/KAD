@@ -25,10 +25,7 @@
 
   <link href="CSS/CSSbodyLayout.css" rel="stylesheet" type="text/css">
   <link href="CSS/CSSinputLayout.css" rel="stylesheet" type="text/css">
-  <!-- <link href="CSS/CSSgridLayout.css" rel="stylesheet" type="text/css"> -->
-  <!-- <link href="CSS/CSSpikaday.css" rel="stylesheet" type="text/css"> -->
   <!-- <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css"> -->
-
 
   <script src="Data/p5.min.js"></script>
   <script src="Data/matter.min.js"></script>
@@ -112,8 +109,8 @@
           <label class="cl_info" uiRadius="left" uiSize="size4">Schwäche</label><select id="idSel_barvoslepySelectWeakness" uiSize="size7"></select>
         </div>
         <div class="cl_BarvoslepySeverity">
-          <label class="cl_info" uiSize="size5" uiRadius="left">Severity [%]
-          </label><input type="number" id="idVin_barvoslepySeverity"  uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          <label class="cl_info" uiSize="size5" uiRadius="left">Schaden [%]
+          </label><input type="number" id="idVin_barvoslepySeverity" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -134,13 +131,10 @@
         <div class="cl_BarvoslepyNegative">
           <button id="idBtn_barvoslepyNegative"></button>
         </div>
-        <div class="cl_BarvoslepyApply">
-          <button id="idBtn_barvoslepyApply"></button>
-        </div>
         <div class="cl_BarvoslepyOverview">
           <label class="cl_info" id="idLbl_barvoslepyApply" uiSize="size12" uiRadius="left"></label>
         </div>
-        <div class="cl_BarvoslepyCanvas" uiFlex="vertical">
+        <div class="cl_BarvoslepyCanvas">
           <canvas id="idCanv_barvoslepyCanvas"></canvas>
         </div>
       </div>
@@ -310,11 +304,10 @@
     </section>
     <section class="cl_Lotto" style="display:none;">
       <div class="cl_subGrid_Lotto cl_subGrid">
-        <div class="cl_LottoOptionsA">
-          <button id="idBtn_lottoReset" uiSize="size6">Reset</button>
-          <button id="idBtn_lottoRandom" uiSize="size6">Random</button>
+        <div class="cl_LottoOptionsA" uiWrap="nowrap">
+          <button id="idBtn_lottoReset" uiSize="size6">Reset</button><button id="idBtn_lottoRandom" uiSize="size6">Random</button>
         </div>
-        <div class="cl_LottoOptionsB">
+        <div class="cl_LottoOptionsB" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Spiel</label><select id="idSel_lottoGame" uiRadius="right" uiSize="size6"></select>
         </div>
         <div class="cl_LottoSavedGame" uiWrap="nowrap" style="display:none;">
@@ -635,6 +628,9 @@
     </section>
     <section class="cl_Pafadoj" style="display:none;">
       <div class="cl_subGrid_Pafadoj cl_subGrid">
+        <div class="cl_PafadojInfo">
+          <label class="cl_outputLbl" id="idLbl_pafadojInfo">Massenschießereien<br>in den USA</label>
+        </div>
         <div class="cl_PafadojUpdate" uiWrap="nowrap">
           <label class="cl_info" uiSize="size3" uiRadius="left">Jahr</label><select id="idSel_pafadojSelect" uiSize="size5" uiRadius="right"></select>
         </div>
@@ -694,7 +690,7 @@
     <section class="cl_Olympia" style="display:none;">
       <div class="cl_subGrid_Olympia cl_subGrid">
         <div class="cl_OlympiaUpdate" uiWrap="nowrap">
-          <select id="idSel_olympiaEvent"  uiSize="size6"></select>
+          <select id="idSel_olympiaEvent" uiSize="size6"></select>
           <button id="idBtn_olympiaSpecific">Relativ</button>
           <button id="idBtn_olympiaSortMedals">Sort by Medal</button>
           <button id="idBtn_olympiaSortTotal">Sort by Total</button>
@@ -723,14 +719,14 @@
       <div class="cl_subGrid_Blechgeometrie cl_subGrid">
         <div class="cl_BlechgeoVinDicke" uiWrap="nowrap">
           <label class="cl_info" uiSize="size6" uiRadius="left">Blechdicke
-          </label><input type="number" id="idVin_blechgeoDicke" step="any" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_blechgeoDicke" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_BlechgeoVinRadius" uiWrap="nowrap">
           <label class="cl_info" uiSize="size6" uiRadius="left">Biegeradius
-          </label><input type="number" id="idVin_blechgeoRadius" step="any" min="0" uiRadius="left"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_blechgeoRadius" min="0" uiRadius="left"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -741,7 +737,7 @@
         </div>
         <div class="cl_BlechgeoVinBreite" uiWrap="nowrap">
           <label class="cl_info" uiSize="size6" uiRadius="left">Breite
-          </label><input type="number" id="idVin_blechgeoBreite" step="any" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_blechgeoBreite" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -823,19 +819,19 @@
             </label><label class="cl_info" id="idLbl_goeRadius" for="idCb_geoRadius" uiRadius="right">Radius verwenden</label>
           </div>
           <div name="naDiv_Area" id="idDiv_Area_0" uiWrap="nowrap">
-            <label class="cl_infoCB" id="idLbl_Vin_Area_0" uiRadius="left"></label><input type="number" id="idVin_Area_0" uiRadius="none" step="any" min="0"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <label class="cl_infoCB" id="idLbl_Vin_Area_0" uiRadius="left"></label><input type="number" id="idVin_Area_0" uiRadius="none" min="0"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
             </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
             </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
             </button>
           </div>
           <div name="naDiv_Area" id="idDiv_Area_1" uiWrap="nowrap">
-            <label class="cl_infoCB" id="idLbl_Vin_Area_1" uiRadius="left"></label><input type="number" id="idVin_Area_1" uiRadius="none" step="any" min="0"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <label class="cl_infoCB" id="idLbl_Vin_Area_1" uiRadius="left"></label><input type="number" id="idVin_Area_1" uiRadius="none" min="0"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
             </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
             </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
             </button>
           </div>
           <div name="naDiv_Area" id="idDiv_Area_2" uiWrap="nowrap">
-            <label class="cl_infoCB" id="idLbl_Vin_Area_2" uiRadius="left"></label><input type="number" id="idVin_Area_2" uiRadius="none" step="any" min="0"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+            <label class="cl_infoCB" id="idLbl_Vin_Area_2" uiRadius="left"></label><input type="number" id="idVin_Area_2" uiRadius="none" min="0"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
             </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
             </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
             </button>
@@ -859,14 +855,14 @@
       <div class="cl_subGrid_Luas cl_subGrid">
         <div class="cl_LuasVinAngularVin" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Winkelgeschw...
-          </label><input type="number" id="idVin_luasVelAngular" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_luasVelAngular" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_LuasVinLinearVin" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Durchmesser
-          </label><input type="number" id="idVin_luasDiameter" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_luasDiameter" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -914,14 +910,14 @@
       <div class="cl_subGrid_Middle cl_subGrid">
         <div class="cl_MiddleInput0" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Länge "a"
-          </label><input type="number" id="idVin_middleA" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_middleA" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_MiddleInput1" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Länge "b"
-          </label><input type="number" id="idVin_middleB" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_middleB" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -985,28 +981,28 @@
       <div class="cl_subGrid_Pattern cl_subGrid">
         <div class="cl_PatternInputA" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern0" uiRadius="left">
-          </label><input type="number" id="idVin_Pattern0" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pattern0" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PatternInputB" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern1" uiRadius="left">
-          </label><input type="number" id="idVin_Pattern1" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pattern1" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PatternInputC" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern2" uiRadius="left">
-          </label><input type="number" id="idVin_Pattern2" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pattern2" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PatternInputD" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_Pattern3" uiRadius="left">
-          </label><input type="number" id="idVin_Pattern3" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pattern3" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -1052,69 +1048,69 @@
         </div>
         <div class="cl_PormulaInputs" id="idDiv_pormulaInputs" uiWrap="nowrap">
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">y<sub>1</sub></label><input type="number" id="idVin_Pormula_y0" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">x<sub>1</sub></label><input type="number" id="idVin_Pormula_x0" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>1</sub></label><input type="number" id="idVin_Pormula_y0" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>1</sub></label><input type="number" id="idVin_Pormula_x0" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>2</sub></label><input type="number" id="idVin_Pormula_x1" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>2</sub></label><input type="number" id="idVin_Pormula_y1" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>2</sub></label><input type="number" id="idVin_Pormula_x1" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>2</sub></label><input type="number" id="idVin_Pormula_y1" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>3</sub></label><input type="number" id="idVin_Pormula_x2" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>3</sub></label><input type="number" id="idVin_Pormula_y2" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>3</sub></label><input type="number" id="idVin_Pormula_x2" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>3</sub></label><input type="number" id="idVin_Pormula_y2" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>4</sub></label><input type="number" id="idVin_Pormula_x3" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>4</sub></label><input type="number" id="idVin_Pormula_y3" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>4</sub></label><input type="number" id="idVin_Pormula_x3" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>4</sub></label><input type="number" id="idVin_Pormula_y3" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>5</sub></label><input type="number" id="idVin_Pormula_x4" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>5</sub></label><input type="number" id="idVin_Pormula_y4" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>5</sub></label><input type="number" id="idVin_Pormula_x4" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>5</sub></label><input type="number" id="idVin_Pormula_y4" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>6</sub></label><input type="number" id="idVin_Pormula_x5" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>6</sub></label><input type="number" id="idVin_Pormula_y5" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>6</sub></label><input type="number" id="idVin_Pormula_x5" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>6</sub></label><input type="number" id="idVin_Pormula_y5" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>7</sub></label><input type="number" id="idVin_Pormula_x6" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>7</sub></label><input type="number" id="idVin_Pormula_y6" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>7</sub></label><input type="number" id="idVin_Pormula_x6" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>7</sub></label><input type="number" id="idVin_Pormula_y6" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>8</sub></label><input type="number" id="idVin_Pormula_x7" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>8</sub></label><input type="number" id="idVin_Pormula_y7" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>8</sub></label><input type="number" id="idVin_Pormula_x7" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>8</sub></label><input type="number" id="idVin_Pormula_y7" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>9</sub></label><input type="number" id="idVin_Pormula_x8" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>9</sub></label><input type="number" id="idVin_Pormula_y8" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>9</sub></label><input type="number" id="idVin_Pormula_x8" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>9</sub></label><input type="number" id="idVin_Pormula_y8" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>10</sub></label><input type="number" id="idVin_Pormula_x9" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>10</sub></label><input type="number" id="idVin_Pormula_y9" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>10</sub></label><input type="number" id="idVin_Pormula_x9" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>10</sub></label><input type="number" id="idVin_Pormula_y9" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>11</sub></label><input type="number" id="idVin_Pormula_x10" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>11</sub></label><input type="number" id="idVin_Pormula_y10" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>11</sub></label><input type="number" id="idVin_Pormula_x10" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>11</sub></label><input type="number" id="idVin_Pormula_y10" uiRadius="right"></input>
           </div>
           <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>12</sub></label><input type="number" id="idVin_Pormula_x11" step="any" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>12</sub></label><input type="number" id="idVin_Pormula_y11" step="any" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">x<sub>12</sub></label><input type="number" id="idVin_Pormula_x11" uiRadius="right"></input>
+            <label class="cl_infoCB" uiRadius="left">y<sub>12</sub></label><input type="number" id="idVin_Pormula_y11" uiRadius="right"></input>
           </div>
         </div>
         <div class="cl_PormulaPointEntryA" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">x<sub>1</sub>
-          </label><input type="number" uiSize="size3" id="idVin_pormulaPointEntryA" step="any" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeSub">
+          </label><input type="number" uiSize="size3" id="idVin_pormulaPointEntryA" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PormulaPointEntryB" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">x<sub>2</sub>
-          </label><input type="number" uiSize="size3" id="idVin_pormulaPointEntryB" step="any" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeSub">
+          </label><input type="number" uiSize="size3" id="idVin_pormulaPointEntryB" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PormulaPointEntryC" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">x<sub>3</sub>
-          </label><input type="number" uiSize="size3" id="idVin_pormulaPointEntryC" step="any" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeSub">
+          </label><input type="number" uiSize="size3" id="idVin_pormulaPointEntryC" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
@@ -1151,35 +1147,35 @@
       <div class="cl_subGrid_Pythagoras cl_subGrid">
         <div class="cl_PythagorasInput0" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">a
-          </label><input type="number" id="idVin_Pytho_0" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pytho_0" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PythagorasInput1" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">b
-          </label><input type="number" id="idVin_Pytho_1" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pytho_1" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PythagorasInput2" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">c
-          </label><input type="number" id="idVin_Pytho_2" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pytho_2" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PythagorasInput3" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">α
-          </label><input type="number" id="idVin_Pytho_3" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pytho_3" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_PythagorasInput4" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">β
-          </label><input type="number" id="idVin_Pytho_4" min="0" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_Pytho_4" min="0" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -1197,21 +1193,21 @@
       <div class="cl_subGrid_Quickmath cl_subGrid">
         <div class="cl_QuickmathInput" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Faktor
-          </label><input type="number" id="idVin_quickkmathVal" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_quickkmathVal" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_QuickmathStart" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Untere Grenze
-          </label><input type="number" id="idVin_quickkmathStart" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_quickkmathStart" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_QuickmathEnd" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Obere Grenze
-          </label><input type="number" id="idVin_quickkmathEnd" step="any" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_quickkmathEnd" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>

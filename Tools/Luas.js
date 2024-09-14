@@ -1,5 +1,5 @@
-import { globalColors } from "../Settings/Color.js";
 import { dbID, dbIDStyle, initEL, KadDOM, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
 const luasOptions = {

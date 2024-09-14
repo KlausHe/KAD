@@ -1,7 +1,7 @@
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground } from "./General/BackgroundAnimation.js";
 import { contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
-import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL, log } from "./KadUtils/KadUtils.js";
+import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";

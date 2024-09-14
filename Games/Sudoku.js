@@ -1,6 +1,6 @@
-import { dbID, KadRandom, KadDOM, KadArray, KadInteraction, KadDate, initEL, errorChecked } from "../KadUtils/KadUtils.js";
-import { globalValues } from "../Settings/General.js";
+import { dbID, errorChecked, initEL, KadArray, KadDate, KadDOM, KadFile, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
+import { globalValues } from "../Settings/General.js";
 
 const sudokuOptions = {
 	get canvas() {
@@ -51,7 +51,7 @@ initEL({ id: idBtn_sudokuNumOverview_9, fn: sudokuGroupHighlight });
 initEL({ id: idCanv_sudoku, action: "keydown", fn: sudokuKeyPressed });
 
 export function clear_cl_Sudoku() {
-  KadInteraction.removeContextmenu(idCanv_sudoku)
+	KadInteraction.removeContextmenu(idCanv_sudoku);
 	sudokuOptions.curHighlight = null;
 	sudokuOptions.usedNums = [];
 	sudokuOptions.cells = [];
@@ -98,16 +98,16 @@ async function sudokuRequest() {
 	if (sudokuOptions.data === null) {
 		sudokuOptions.nums = [];
 		const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: "../Data/DataLists/Sudoku1000.json" });
-		if (errorChecked(error, "Error retrieving Sudoku puzzles!")) return;
+		if (errorChecked(error, "Could not receive data for 'Sudoku'.", error)) return;
 		sudokuOptions.data = data;
-		sudokuOptions.nums = Object.keys(sudokuOptions.data).map((n) => Number(n));
+		sudokuOptions.nums = KadArray.createIndexedArray(sudokuOptions.data.length);
 	}
 	sudokuOptions.curIndex = KadRandom.randomObject(sudokuOptions.availiableNums);
 	sudokuOptions.usedNums.push(sudokuOptions.curIndex);
 	for (let index = 0; index < 9 * 9; index++) {
 		const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
-		const puzzle = sudokuOptions.board.puzzle[index].replace(0, "");
-		const solution = sudokuOptions.board.solution[index];
+		const puzzle = sudokuOptions.board[0][index];
+		const solution = sudokuOptions.board[1][index];
 		sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, puzzle, solution);
 	}
 	sudokuStartTimer(true);
@@ -405,13 +405,13 @@ class SudokuCell {
 		this.w = w;
 		this.x = i * w;
 		this.y = j * w;
-		this.solution = quest != "";
+		this.solution = quest != 0;
 		this.solutionNum = sol;
-		this.num = quest == "" ? "" : sol;
+		this.num = quest == 0 ? "" : sol;
 		this.selected = false;
 		this.solved = false;
 		this.mode = 1; //1 ==  big letters, 0 = pencilmarks!
-		this.correct = quest != "";
+		this.correct = quest != 0;
 		this.error = false;
 		this.highlighted = false;
 		this.colCell = {
@@ -441,7 +441,7 @@ class SudokuCell {
 				return globalColors.elements.btnPositive;
 			},
 		};
-		this.colNum.drawn = quest == "" ? this.colNum.solved : this.colNum.solution;
+		this.colNum.drawn = quest == 0 ? this.colNum.solved : this.colNum.solution;
 		this.createPencils();
 	}
 

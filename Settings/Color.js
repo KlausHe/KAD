@@ -1,4 +1,4 @@
-import { dbIDStyle, initEL, deepClone, KadDOM, KadCSS, KadColor } from "../KadUtils/KadUtils.js";
+import { dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM } from "../KadUtils/KadUtils.js";
 import * as Canvas from "../MainModulesCanvas.js";
 
 export const globalColors = {
@@ -148,7 +148,7 @@ export function colorThemeChanged() {
 	}
 	setTimeout(() => {
 		colorUpdateCanvascolors();
-	}, KadCSS.getRoot( {value: "transitionTimeName" }) * 1000);
+	}, KadCSS.getRoot({ value: "transitionTimeName" }) * 1000);
 }
 
 export function colToggleColormode() {

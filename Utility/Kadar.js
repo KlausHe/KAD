@@ -1,4 +1,4 @@
-import { initEL, objectLength, KadTable, KadValue, KadDate, log } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadTable, KadValue, log, objectLength } from "../KadUtils/KadUtils.js";
 
 const kadarOptions = {
 	valA: null,
@@ -10,7 +10,7 @@ const kadarOptions = {
 	diff: null,
 	format: "YYYY-MM-DDTHH:mm",
 	dateOrig(days) {
-return KadDate.getDate(new Date(new Date().getTime() + days * 86400000), { format: this.format });
+		return KadDate.getDate(new Date(new Date().getTime() + days * 86400000), { format: this.format });
 	},
 	calc: {
 		millis: {
@@ -87,8 +87,8 @@ initEL({ id: idBtn_kadarRefresh, fn: kadarCalculate });
 initEL({ id: idBtn_kadarTrashB, fn: clearKadarTableBnow });
 
 export function clear_cl_Kadar() {
-	kadarOptions.valA = idVin_kadarDateA.KadReset(); 
-	kadarOptions.valB = idVin_kadarDateB.KadReset(); 
+	kadarOptions.valA = idVin_kadarDateA.KadReset();
+	kadarOptions.valB = idVin_kadarDateB.KadReset();
 	kadarOptions.valAB = null;
 	idLbl_kadarDateNow.textContent = KadDate.getDate();
 	kadarCalculate();
@@ -96,7 +96,7 @@ export function clear_cl_Kadar() {
 
 function kadarDateSelectedA() {
 	kadarOptions.valA = idVin_kadarDateA.KadGet();
-  log(kadarOptions.valA)
+	log(kadarOptions.valA);
 	kadarCalculate();
 }
 function kadarDateSelectedB() {

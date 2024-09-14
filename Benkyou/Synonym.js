@@ -1,4 +1,4 @@
-import { dbID, objectLength, KadTable, initEL, KadFile, errorChecked } from "../KadUtils/KadUtils.js";
+import { KadFile, KadTable, dbID, errorChecked, initEL, objectLength } from "../KadUtils/KadUtils.js";
 const synonymOptions = {
 	get URL() {
 		return `https://www.openthesaurus.de/synonyme/search?q=${this.input}&format=application/json&similar=true&baseform=true`;
@@ -27,7 +27,7 @@ function newSynonym() {
 
 async function synonymGetData() {
 	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: synonymOptions.URL });
-	if (errorChecked(error)) {
+	if (errorChecked(error, "Could not receive data for 'Synonym'.", error)) {
 		dbID("idLbl_synonymSearchWord").textContent = "---";
 	} else {
 		synonymOptions.data = data;

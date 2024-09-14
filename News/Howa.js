@@ -1,9 +1,9 @@
 // Imags weather_code from openweathermap
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 const reverseGeocoder = new BDCReverseGeocode();
-import { globalColors } from "../Settings/Color.js";
-import { initEL, KadDate, KadValue, dbID, dbIDStyle, objectLength, KadFile, errorChecked, KadInteraction } from "../KadUtils/KadUtils.js";
 import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
+import { dbID, dbIDStyle, errorChecked, initEL, KadDate, KadFile, KadInteraction, KadValue, objectLength } from "../KadUtils/KadUtils.js";
+import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
 const weatherMaps = {
@@ -97,8 +97,8 @@ export function canvas_cl_Howa() {
 
 // DWD stuff
 function howaChangeMap() {
-	weatherMaps.district = dbID("idSel_howaMapsDistrict").value;
-	weatherMaps.criteria = dbID("idSel_howaMapsCriteria").value;
+	weatherMaps.district = idSel_howaMapsDistrict.KadGet();
+	weatherMaps.criteria = idSel_howaMapsCriteria.KadGet();
 	dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
 }
 
@@ -140,7 +140,7 @@ async function howaGetLocation() {
 async function howaGeocodingCity() {
 	if (howaOptions.city == null) return;
 	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: howaOptions.urlGeoCoding });
-	if (errorChecked(error, "Could not load Geocoding!")) return;
+	if (errorChecked(error, "Could not load Geocoding!", error)) return;
 	let dataSorted = data.results.filter((d) => (d.country = "Deutschland"));
 	if (!dataSorted) {
 		dbID("idP_howaCurrentText").textContent = "Stadt nicht gefunden";
@@ -172,7 +172,7 @@ async function howaReqestData() {
 		variableArray: ["responseCurrent", "responseForecast"],
 		urlArray: [howaOptions.urlCurrent, howaOptions.urlDaily],
 	});
-	if (errorChecked(error, "Could not load Geocoding!")) return;
+	if (errorChecked(error, "Could not load Geocoding!", error)) return;
 	howaOptions.data.current = responseCurrent;
 	howaOptions.data.forecast = responseForecast;
 	dbID("idP_howaCurrentText").textContent = `${howaOptions.city}: ${howaOptions.data.current.current.temperature_2m}°C`;

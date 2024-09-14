@@ -1,6 +1,6 @@
-import { dbID, dbCLStyle, KadDate, KadTable, KadRandom, KadColor, initEL, KadFile, KadInteraction } from "../KadUtils/KadUtils.js";
-import { globalValues } from "../Settings/General.js";
+import { dbCLStyle, dbID, initEL, KadColor, KadDate, KadFile, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
+import { globalValues } from "../Settings/General.js";
 
 const lottoOptions = {
 	url: "https://JohannesFriedrich.github.io/LottoNumberArchive/Lottonumbers_complete.json",
@@ -160,7 +160,7 @@ function lottoReset() {
 }
 
 function lottoGameSelect() {
-	lottoOptions.selGame = idSel_lottoGame.value;
+	lottoOptions.selGame = idSel_lottoGame.KadGet();
 	lottoGetGames();
 }
 

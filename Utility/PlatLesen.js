@@ -1,5 +1,5 @@
-import { initEL, dbID } from "../KadUtils/KadUtils.js";
 import { Data_Nummernschild } from "../General/MainData.js";
+import { dbID, initEL } from "../KadUtils/KadUtils.js";
 
 initEL({ id: idVin_platLesenReg, action: "focus", dbList: Array.from(Data_Nummernschild.values()) });
 initEL({ id: idVin_platLesenNum, action: "focus", dbList: Array.from(Data_Nummernschild.keys()).sort() });

@@ -32,8 +32,7 @@ export function clear_cl_Pafadoj() {
 async function pafadojUpdate() {
 	pafadojOptions.date = idSel_pafadojSelect.KadGet();
 	const { dataTable, error } = await KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL });
-	if (errorChecked(error)) return;
-	dataTable;
+	if (errorChecked(error, "Could not receive data for 'Pafadoj'.", error)) return;
 	pafadojOptions.data = [];
 	pafadojOptions.dataTotal = { Dead: 0, Injured: 0, Total: 0 };
 

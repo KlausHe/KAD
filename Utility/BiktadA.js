@@ -1,5 +1,5 @@
-import { dbID, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
+import { dbID, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 
 const biktadaOptions = {
 	ieAlert: null,

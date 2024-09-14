@@ -1,5 +1,5 @@
-import { initEL, dbID, KadDOM, KadArray, KadValue, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
+import { dbID, initEL, KadArray, KadDOM, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { materialOptions } from "./Material.js";
 
 const expansionOptions = {
@@ -29,10 +29,10 @@ const expansionOptions = {
 initEL({
 	id: idSel_expansionMaterialA,
 	fn: expansionEntryMaterial,
-  });
-  initEL({
-    id: idSel_expansionMaterialB,
-    fn: expansionEntryMaterial,
+});
+initEL({
+	id: idSel_expansionMaterialB,
+	fn: expansionEntryMaterial,
 });
 initEL({ id: idSel_expansionMaterialA, action: "focus", fn: expansionUpdateOptions }, { once: true });
 initEL({ id: idSel_expansionMaterialB, action: "focus", fn: expansionUpdateOptions }, { once: true });
@@ -81,8 +81,8 @@ function expansionSwitch() {
 }
 
 function expansionEntryMaterial() {
-	expansionOptions.materials.matA = idSel_expansionMaterialA.value;
-	expansionOptions.materials.matB = idSel_expansionMaterialB.value;
+	expansionOptions.materials.matA = idSel_expansionMaterialA.KadGet();
+	expansionOptions.materials.matB = idSel_expansionMaterialB.KadGet();
 	expansionOptions.materials.compare = expansionOptions.materials.matB == 0 || expansionOptions.materials.matA === expansionOptions.materials.matB ? false : true;
 	KadDOM.enableBtn(idCb_expansionDifference, !expansionOptions.materials.compare);
 

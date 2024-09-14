@@ -74,8 +74,8 @@
 	--rangeHeight: 0.833rem;
 	--rangeThumbWidth: 0.5rem;
 	--rangeThumbHeight: 1.25rem;
-	--gridWidthGameCanvas: 36rem;
-	--gridHeightGameCanvas: 36rem;
+	--gridWidthGameCanvas: 30rem;
+	--gridHeightGameCanvas: 30rem;
 	/**/
 	--UIBorderThin: 0.042rem solid hsl(var(--bgcNavbar));
 	--UIBorderThinInverse: 0.042rem solid hsl(var(--txtNavbar));

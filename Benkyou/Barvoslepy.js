@@ -4,11 +4,11 @@ import { globalValues } from "../Settings/General.js";
 // barvoslepy
 const barvoslepyOptions = {
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w , h: globalValues.mediaSizes.canvasSize.h };
+		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
 	},
 	image: null,
 	differenceEpsilon: 5,
-	sRGBToLinearRGBLookup: [],
+	conversionTable: [],
 	Abstufungen: [
 		["Rotsehschwäche", "Protanomalie"],
 		["Rotblindheit", "Protanopie"],
@@ -72,7 +72,7 @@ initEL({ id: idFile_barvoslepyUpload, action: "change", fn: barvoslepyLoadFile }
 initEL({
 	id: idSel_barvoslepySelectImage,
 	fn: barvoslepyImagePreview,
-	selStartValue: KadRandom.randomObject(barvoslepyOptions.previewImages.map((v) => v[0])),
+	selStartValue: "Venedig", // KadRandom.randomObject(barvoslepyOptions.previewImages.map((v) => v[0])),
 	selList: barvoslepyOptions.previewImages.map((v) => [v[0], v[1]]),
 });
 initEL({
@@ -101,22 +101,22 @@ initEL({
 		step: 1,
 	},
 });
-initEL({ id: idBtn_barvoslepyOriginal, fn: barvoslepyShow, resetValue: "Original" });
-initEL({ id: idBtn_barvoslepyPositive, fn: barvoslepyShow, resetValue: "Positive" });
-initEL({ id: idBtn_barvoslepyNegative, fn: barvoslepyShow, resetValue: "Negative" });
-initEL({ id: idBtn_barvoslepyApply, fn: barvoslepyFilter, resetValue: "Anwenden" });
+initEL({ id: idBtn_barvoslepyOriginal, fn: () => barvoslepyShow("Original"), resetValue: "Original" });
+initEL({ id: idBtn_barvoslepyPositive, fn: () => barvoslepyShow("Positive"), resetValue: "Positive" });
+initEL({ id: idBtn_barvoslepyNegative, fn: () => barvoslepyShow("Negative"), resetValue: "Negative" });
+initEL({ id: idCanv_barvoslepyCanvas, action: "click", fn: () => barvoslepyShow("Original") });
 
 export function clear_cl_Barvoslepy() {
 	idSel_barvoslepySelectImage.KadReset();
-  idSel_barvoslepySelectWeakness.KadReset({selStartValue: KadRandom.randomObject(barvoslepyOptions.Abstufungen.map((v) => v[0]))})
+	idSel_barvoslepySelectWeakness.KadReset();
 	barvoslepyOptions.differenceEpsilon = idVin_barvoslepyEpsilon.KadReset();
-  let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
+	let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
 	KadDOM.enableBtn(idVin_barvoslepySeverity, typeIndex % 2 == 0);
 	barvoslepyImagePreview();
-	barvoslepyOptions.sRGBToLinearRGBLookup = [];
+	barvoslepyOptions.conversionTable = [];
 	for (let i = 0; i < 256; i++) {
 		const fv = i / 255.0;
-		barvoslepyOptions.sRGBToLinearRGBLookup[i] = fv < 0.04045 ? fv / 12.92 : Math.pow((fv + 0.055) / 1.055, 2.4);
+		barvoslepyOptions.conversionTable[i] = fv < 0.04045 ? fv / 12.92 : Math.pow((fv + 0.055) / 1.055, 2.4);
 	}
 }
 
@@ -143,8 +143,8 @@ function barvoslepyEpsilon() {
 	barvoslepyFilter();
 }
 
-function barvoslepyShow(btn) {
-	const thisType = btn.target.textContent;
+function barvoslepyShow(t) {
+	const thisType = t; //btn.target.textContent;
 	const thisState = !barvoslepyOptions.showStates[thisType];
 	barvoslepyOptions.showState = thisState ? thisType : null;
 	for (let type of Object.keys(barvoslepyOptions.showStates)) {
@@ -193,70 +193,65 @@ function barvoslepyFilter() {
 	const ctxFiltered = canvasFiltered.getContext("2d");
 	ctxFiltered.drawImage(barvoslepyOptions.image, 0, 0, w, h, 0, 0, canvasWidth, canvasHeight);
 	let pixelsFiltered = ctxFiltered.getImageData(0, 0, w, h);
-
-	for (let i = 0; i < pixelsFiltered.data.length; i += 4) {
-		const pixelFiltered = [pixelsFiltered.data[i], pixelsFiltered.data[i + 1], pixelsFiltered.data[i + 2]];
-		const filteredRGB = barvoslepyOptions.brettelFunctions[type](pixelFiltered);
-		if (barvoslepyOptions.showState == null) {
-			pixelsFiltered.data[i + 0] = filteredRGB[0];
-			pixelsFiltered.data[i + 1] = filteredRGB[1];
-			pixelsFiltered.data[i + 2] = filteredRGB[2];
+	if (barvoslepyOptions.showState != "Original") {
+		for (let i = 0; i < pixelsFiltered.data.length; i += 4) {
+			const pixelFiltered = [pixelsFiltered.data[i], pixelsFiltered.data[i + 1], pixelsFiltered.data[i + 2]];
+			const filteredRGB = barvoslepyOptions.brettelFunctions[type](pixelFiltered);
+			if (barvoslepyOptions.showState == null) {
+				pixelsFiltered.data[i + 0] = filteredRGB[0];
+				pixelsFiltered.data[i + 1] = filteredRGB[1];
+				pixelsFiltered.data[i + 2] = filteredRGB[2];
+			} else if (barvoslepyOptions.showState == "Positive") {
+				const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
+				pixelsFiltered.data[i + 0] = diff ? filteredRGB[0] : 0;
+				pixelsFiltered.data[i + 1] = diff ? filteredRGB[1] : 0;
+				pixelsFiltered.data[i + 2] = diff ? filteredRGB[2] : 0;
+			} else if (barvoslepyOptions.showState == "Negative") {
+				const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
+				pixelsFiltered.data[i + 0] = diff ? 0 : filteredRGB[0];
+				pixelsFiltered.data[i + 1] = diff ? 0 : filteredRGB[1];
+				pixelsFiltered.data[i + 2] = diff ? 0 : filteredRGB[2];
+			}
 		}
-		if (barvoslepyOptions.showState == "Positive") {
-			const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
-			pixelsFiltered.data[i + 0] = diff ? filteredRGB[0] : 0;
-			pixelsFiltered.data[i + 1] = diff ? filteredRGB[1] : 0;
-			pixelsFiltered.data[i + 2] = diff ? filteredRGB[2] : 0;
-		}
-		if (barvoslepyOptions.showState == "Negative") {
-			const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
-			pixelsFiltered.data[i + 0] = diff ? 0 : filteredRGB[0];
-			pixelsFiltered.data[i + 1] = diff ? 0 : filteredRGB[1];
-			pixelsFiltered.data[i + 2] = diff ? 0 : filteredRGB[2];
-		}
+		ctxFiltered.putImageData(pixelsFiltered, 0, 0);
 	}
-	ctxFiltered.putImageData(pixelsFiltered, 0, 0);
 }
 
 function barvoslepyDifferencePixel(pixOrig, pixFiltered) {
-	let count = 0;
 	for (let n = 0; n < 3; n++) {
-		if (Math.abs(pixOrig[n] - pixFiltered[n]) > barvoslepyOptions.differenceEpsilon) count++;
+		if (Math.abs(pixOrig[n] - pixFiltered[n]) > barvoslepyOptions.differenceEpsilon) return true;
 	}
-	return count == 0;
+	return false;
 }
 
 function barvoslepyBrettel(color, type, severity) {
-	let rgb = [0, 0, 0];
-	rgb[0] = barvoslepyOptions.sRGBToLinearRGBLookup[color[0]];
-	rgb[1] = barvoslepyOptions.sRGBToLinearRGBLookup[color[1]];
-	rgb[2] = barvoslepyOptions.sRGBToLinearRGBLookup[color[2]];
-	const rgbCvdFromRgb_1 = barvoslepyOptions.brettelParams[type]["rgbCvdFromRgb_1"];
-	const rgbCvdFromRgb_2 = barvoslepyOptions.brettelParams[type]["rgbCvdFromRgb_2"];
+	const R = barvoslepyOptions.conversionTable[color[0]];
+	const G = barvoslepyOptions.conversionTable[color[1]];
+	const B = barvoslepyOptions.conversionTable[color[2]];
+
 	const separationPlaneNormal = barvoslepyOptions.brettelParams[type]["separationPlaneNormal"];
 
 	// Check on which plane we should project by comparing wih the separation plane normal.
-	const dotWithSepPlane = rgb[0] * separationPlaneNormal[0] + rgb[1] * separationPlaneNormal[1] + rgb[2] * separationPlaneNormal[2];
-	const rgbCvdFromRgb = dotWithSepPlane >= 0 ? rgbCvdFromRgb_1 : rgbCvdFromRgb_2;
+	const dotWithSepPlane = R * separationPlaneNormal[0] + G * separationPlaneNormal[1] + B * separationPlaneNormal[2];
+	const rgbCvdFromRgb = dotWithSepPlane >= 0 ? barvoslepyOptions.brettelParams[type]["rgbCvdFromRgb_1"] : barvoslepyOptions.brettelParams[type]["rgbCvdFromRgb_2"];
 
 	// Transform to the full dichromat projection plane.
-	let cvd = [0, 0, 0];
-	cvd[0] = rgbCvdFromRgb[0] * rgb[0] + rgbCvdFromRgb[1] * rgb[1] + rgbCvdFromRgb[2] * rgb[2];
-	cvd[1] = rgbCvdFromRgb[3] * rgb[0] + rgbCvdFromRgb[4] * rgb[1] + rgbCvdFromRgb[5] * rgb[2];
-	cvd[2] = rgbCvdFromRgb[6] * rgb[0] + rgbCvdFromRgb[7] * rgb[1] + rgbCvdFromRgb[8] * rgb[2];
+	// const cvd = [0, 0, 0];
+	const cvdR = (rgbCvdFromRgb[0] * R + rgbCvdFromRgb[1] * G + rgbCvdFromRgb[2] * B) * severity;
+	const cvdG = (rgbCvdFromRgb[3] * R + rgbCvdFromRgb[4] * G + rgbCvdFromRgb[5] * B) * severity;
+	const cvdB = (rgbCvdFromRgb[6] * R + rgbCvdFromRgb[7] * G + rgbCvdFromRgb[8] * B) * severity;
 
 	// Apply the severity factor as a linear interpolation. It's the same to do it in the RGB space or in the LMS space since it's a linear transform.
-	cvd[0] = cvd[0] * severity + rgb[0] * (1.0 - severity);
-	cvd[1] = cvd[1] * severity + rgb[1] * (1.0 - severity);
-	cvd[2] = cvd[2] * severity + rgb[2] * (1.0 - severity);
+	const invServerity = 1 - severity;
+	const cvd = [cvdR + R * invServerity, cvdG + G * invServerity, cvdB + B * invServerity];
 
 	// Go back to sRGB
 	const sRGB = [];
 	for (let c of cvd) {
 		if (c <= 0) sRGB.push(0);
 		else if (c >= 1) sRGB.push(255);
-		else if (c < 0.0031308) sRGB.push(0.5 + c * 12.92 * 255);
-		else sRGB.push(0 + 255 * (Math.pow(c, 1 / 2.4) * 1.055 - 0.055));
+		else if (c < 0.0031308) sRGB.push(0.5 + c * 3294.6); // 12.92 * 255 = 3294.6
+		else sRGB.push(255 * (Math.pow(c, 0.4166666667) * 1.055 - 0.055)); // 1/2.4 = 0,4166666667
 	}
 	return sRGB;
 }

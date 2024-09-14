@@ -1,11 +1,11 @@
-import { dbID, initEL, KadCSS } from "../KadUtils/KadUtils.js";
 import { contentGrid, resizeGrid } from "../General/Layout.js";
+import { dbID, initEL, KadCSS } from "../KadUtils/KadUtils.js";
 import { colorUpdateCanvascolors } from "./Color.js";
 
 export const globalValues = {
 	mediaSizes: {
 		get size() {
-			return KadCSS.getRoot(  { value: "UIHeight1", RemToPx: true });
+			return KadCSS.getRoot({ value: "UIHeight1", RemToPx: true });
 		},
 		get fontSize() {
 			return KadCSS.getRoot({ value: "fontSize", RemToPx: true });

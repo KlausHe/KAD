@@ -1,5 +1,5 @@
-import { initEL, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Botanicals } from "../General/MainData.js";
+import { initEL, KadTable } from "../KadUtils/KadUtils.js";
 
 const botanicalsOptions = {
 	plant: null,

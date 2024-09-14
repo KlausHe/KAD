@@ -84,7 +84,7 @@ img[imgSize="blech"] {
 }
 
 img[imgSize="suika"] {
-  width: auto;
+	width: auto;
 	height: 80%;
 }
 
@@ -226,7 +226,7 @@ input[type="password"] {
 }
 
 input[type="file"] {
-  display:none;
+	display: none;
 }
 input[type="time"] {
 	width: var(--UIWidth4);
@@ -535,7 +535,7 @@ input[imgBtn="subgrid"] {
 }
 
 [uiSize~="olympiaImg"] {
-  width:auto;
+	width: auto;
 	height: var(--UIHeight1);
 }
 

@@ -1,4 +1,4 @@
-import { KadValue, KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 //https://schraube-mutter.de/bohrtabelle-fuer-zylinderschrauben/
 const niskaOptions = {
 	size: {

@@ -1,7 +1,7 @@
-import { globalColors } from "../Settings/Color.js";
-import { dbID, deepClone, KadDOM, KadInteraction, initEL, log } from "../KadUtils/KadUtils.js";
-import { globalValues } from "../Settings/General.js";
+import { dbID, deepClone, initEL, KadDOM, KadInteraction, log } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
+import { globalColors } from "../Settings/Color.js";
+import { globalValues } from "../Settings/General.js";
 
 const raycasterOptions = {
 	get canvas() {

@@ -1,4 +1,4 @@
-import { dbID, initEL, KadDOM } from "../KadUtils/KadUtils.js";
+import { initEL, KadDOM } from "../KadUtils/KadUtils.js";
 
 const blechOptions = {
 	dicke: 3,
@@ -44,6 +44,7 @@ const blechOptions = {
 initEL({ id: idVin_blechgeoDicke, fn: calcBlechGeo, resetValue: blechOptions.dicke });
 initEL({ id: idVin_blechgeoRadius, fn: calcBlechGeo, resetValue: blechOptions.radius });
 initEL({ id: idVin_blechgeoBreite, fn: calcBlechGeo, resetValue: blechOptions.breite });
+initEL({ id: idLbl_blechgeoResult, resetValue: `Mindestabstand: ...` });
 initEL({ id: idSel_blechgeoForm, fn: blechgeoFormChange, selStartValue: blechOptions.selectedGeo, selList: Object.keys(blechOptions.geo).map((geo) => [geo, geo]) });
 
 export function clear_cl_Blechgeometrie() {
@@ -51,22 +52,22 @@ export function clear_cl_Blechgeometrie() {
 	idVin_blechgeoRadius.KadReset();
 	idVin_blechgeoBreite.KadReset();
 	idSel_blechgeoForm.KadReset();
+	idLbl_blechgeoResult.KadReset();
 	blechgeoFormChange();
 	calcBlechGeo();
-	dbID("idLbl_blechgeoResult").innerHTML = `Mindestabstand: ...`;
 }
 
 function blechgeoFormChange() {
-	blechOptions.selectedGeo = idSel_blechgeoForm.value;
+	blechOptions.selectedGeo = idSel_blechgeoForm.KadGet();
 	KadDOM.enableBtn(idVin_blechgeoBreite, !blechOptions.geo[blechOptions.selectedGeo].breite);
 	calcBlechGeo();
 }
 
 function calcBlechGeo() {
-	blechOptions.s = idVin_blechgeoDicke.KadGet({failSafe: blechOptions.dicke});
-	blechOptions.r = idVin_blechgeoRadius.KadGet({failSafe: blechOptions.radius});
-	blechOptions.b = idVin_blechgeoBreite.KadGet({failSafe: blechOptions.breite});
-	let selBlechForm = blechOptions.geo[dbID("idSel_blechgeoForm").value];
+	blechOptions.s = idVin_blechgeoDicke.KadGet({ failSafe: blechOptions.dicke });
+	blechOptions.r = idVin_blechgeoRadius.KadGet({ failSafe: blechOptions.radius });
+	blechOptions.b = idVin_blechgeoBreite.KadGet({ failSafe: blechOptions.breite });
+	let selBlechForm = blechOptions.geo[idSel_blechgeoForm.KadGet()];
 	idImg_Blechgeometrie.src = blechOptions.geo[blechOptions.selectedGeo].imgPath;
-	dbID("idLbl_blechgeoResult").textContent = `Mindestabstand: ${selBlechForm.func}`;
+	idLbl_blechgeoResult.KadSetText(`Mindestabstand: ${selBlechForm.func}`);
 }

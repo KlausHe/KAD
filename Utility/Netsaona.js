@@ -1,5 +1,5 @@
-import { dbID, dbCL, KadRandom, log } from "../KadUtils/KadUtils.js";
 import * as Data from "../General/MainData.js";
+import { dbCL, dbID, KadRandom } from "../KadUtils/KadUtils.js";
 
 export const netsaonaOptions = {
 	data: {
@@ -39,7 +39,7 @@ export const netsaonaOptions = {
 			return Array.from(Data.Data_Nummernschild.values());
 		},
 		get Land() {
-			return Array.from(Data.Data_Country_CodesIso3166.values());
+			return Data.Data_Country_CodesIso3166.map((item) => item.name);
 		},
 		get Bundesland() {
 			return Data.Data_Country_GermanDistrics.map((o) => {

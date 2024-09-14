@@ -1,23 +1,23 @@
-
 import { KadArray, KadDOM, KadFile, KadTable, KadValue, dbID, errorChecked, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
-	URLMedals: `https://api.olympics.kevle.xyz/medals`,
-	URLParalympics: `https://api.olympics.kevle.xyz/paralympics/medals`,
 	URLFlags: `https://restcountries.com/v3.1/all?fields=cca3,flags,population`,
 	data: null,
 	specific: false,
 	headerNames: ["Gold", "Silver", "Bronze", "Total"],
 	sortTotal: false,
 	sortMedals: false,
-	events: ["Paralympics", "Olympia"],
+	events: [
+		["Olympia", `https://api.olympics.kevle.xyz/medals`],
+		["Paralympics", `https://api.olympics.kevle.xyz/paralympics/medals`, true],
+	],
 };
 
 initEL({
 	id: idSel_olympiaEvent,
 	fn: olympiaUpdate,
 	selStartIndex: 0,
-	selList: olympiaOptions.events.map((v) => [v, v]),
+	selList: olympiaOptions.events.map((v) => [v[0], v[0], v[2] || null]),
 });
 initEL({ id: idBtn_olympiaSpecific, fn: olympiaSpecific });
 initEL({ id: idBtn_olympiaSortMedals, fn: olympiaSortByMedals });
@@ -30,9 +30,10 @@ export function clear_cl_Olympia() {
 
 async function olympiaUpdate() {
 	olympiaOptions.data = null;
-	const url = idSel_olympiaEvent.KadGet({ index: true }) == 0 ? olympiaOptions.URLParalympics : olympiaOptions.URLMedals;
+	const index = idSel_olympiaEvent.KadGet({ index: true });
+	const url = olympiaOptions.events[index][1];
 	const { dataTable, dataCountries, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataCountries"], urlArray: [url, olympiaOptions.URLFlags] });
-	if (errorChecked(error)) return;
+	if (errorChecked(error, "Could not receive data for 'Olympia'.", error)) return;
 	dataTable.results.splice(
 		dataTable.results.findIndex((item) => {
 			return item.country.code == "EOR" || item.country.code == "RPT";

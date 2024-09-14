@@ -1,5 +1,5 @@
+import { dbID, initEL, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
-import { dbID, initEL, KadInteraction, KadRandom, log } from "../KadUtils/KadUtils.js";
 
 const suikaOptions = {
 	get canvas() {

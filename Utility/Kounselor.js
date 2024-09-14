@@ -1,5 +1,5 @@
-import { dbID, dbIDStyle, initEL, KadColor, KadDOM, KadInteraction } from "../KadUtils/KadUtils.js";
 import { Data_RALColors } from "../General/MainData.js";
+import { dbID, dbIDStyle, initEL, KadColor } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const kounselorOptions = {
@@ -60,7 +60,6 @@ const kounselorOptions = {
 				if (kounselorOptions.types.RGB.value == null) {
 					kounselorOptions.types.RGB.value = KadColor.get(this.value, "HSL", "RGB");
 				}
-				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
 					this.value = KadColor.get(kounselorOptions.types.RGB.value, "RGB", "HSL");
 				}
@@ -78,7 +77,6 @@ const kounselorOptions = {
 				if (kounselorOptions.types.RGB.value == null) {
 					kounselorOptions.types.RGB.value = KadColor.get(this.value, "HSB", "RGB");
 				}
-				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
 					this.value = KadColor.get(kounselorOptions.types.RGB.value, "RGB", "HSB");
 				}
@@ -95,7 +93,6 @@ const kounselorOptions = {
 				if (kounselorOptions.types.RGB.value == null) {
 					kounselorOptions.types.RGB.value = KadColor.get(this.value, "CMYK", "RGB");
 				}
-				let RGB = kounselorOptions.types.RGB.value;
 				if (this.value == null) {
 					this.value = KadColor.get(kounselorOptions.types.RGB.value, "RGB", "CMYK");
 				}
@@ -117,7 +114,6 @@ export function clear_cl_Kounselor() {
 		dbID(`idVin_kounselor${name}`).KadReset();
 		kounselorOptions.types[name].value = null;
 	}
-
 	kounselorOptions.curType = kounselorOptions.curTypeOrig;
 	kounselorOptions.types[kounselorOptions.curType].value = globalColors.elements.baseColor;
 	kounselorShowResults();

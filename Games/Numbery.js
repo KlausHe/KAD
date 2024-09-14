@@ -1,5 +1,5 @@
-import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadInteraction, KadRandom, KadTable, log } from "../KadUtils/KadUtils.js";
 import { nuncDiscipuli } from "../General/Account.js";
+import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const numberyOptions = {
@@ -119,7 +119,7 @@ function numberyCathegorySelect() {
 
 function numberyPairsChange() {
 	numberyOptions.pairsIndex = idSel_numberyPairs.selectedIndex;
-	numberyOptions.pairs = idSel_numberyPairs.value;
+	numberyOptions.pairs = idSel_numberyPairs.KadGet();
 	startNumbery();
 }
 

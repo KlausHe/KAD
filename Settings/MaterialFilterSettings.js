@@ -1,5 +1,5 @@
-import { dbID, KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
+import { dbID, KadTable } from "../KadUtils/KadUtils.js";
 import { materialSelectedTable } from "../Tools/Material.js";
 export const materialFilterOptions = {
 	listOrig: ["WName", "WNr", "matGroup", "R_eR_p2", "R_m", "S_b_W", "A"],

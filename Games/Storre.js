@@ -1,10 +1,7 @@
-import { dbIDStyle, errorChecked, hostDebug, initEL, KadDOM, KadFile, KadRandom, KadTable, KadValue, log } from "../KadUtils/KadUtils.js";
-import { globalColors } from "../Settings/Color.js";
+import { errorChecked, hostDebug, initEL, KadDOM, KadFile, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 
 const storreOptions = {
-	get url() {
-		return `https://restcountries.com/v3.1/all?fields=translations,flags,population,area`;
-	},
+	url: `https://restcountries.com/v3.1/all?fields=translations,flags,population,area`,
 	data: [],
 	dataType: "area",
 	streak: 0,

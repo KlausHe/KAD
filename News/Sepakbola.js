@@ -1,4 +1,4 @@
-import { KadArray, KadDate, KadFile, KadTable, dbID, deepClone, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadFile, KadTable, dbID, deepClone, errorChecked, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -140,7 +140,7 @@ function sepakbolaLigaChange() {
 }
 
 function sepakbolaSeasonChange() {
-	sepakbolaOptions.selected.season = idSel_sepakbolaSeason.value;
+	sepakbolaOptions.selected.season = idSel_sepakbolaSeason.KadGet();
 	sepakbolaGetData();
 }
 
@@ -154,7 +154,7 @@ async function sepakbolaGetData() {
 		variableArray: ["dataTable", "dataDay", "dataMatches"],
 		urlArray: [sepakbolaOptions.URLTable, sepakbolaOptions.URLLastday, sepakbolaOptions.URLMatches],
 	});
-	if (errorChecked(error, "Could not receive data for 'Sepakbola'")) return;
+	if (errorChecked(error, "Could not receive data for 'Sepakbola'", error)) return;
 	if (dataTable != null) sepakbolaTableReturn(dataTable);
 	if (dataDay != null) sepakbolaLastdayReturn(dataDay);
 	if (dataMatches != null) sepakbolaMatchesReturn(dataMatches);
@@ -178,7 +178,7 @@ function sepakbolaMatchesReturn(data = null) {
 	}
 	let matches = sepakbolaOptions.selectedLiga.matches;
 	dbID("idTabHeader_SepakbolaMatches").innerHTML = `${sepakbolaOptions.selected.matchday + 1}. Spieltag`;
-  const seasonSelected = matches[sepakbolaOptions.selected.matchday];
+	const seasonSelected = matches[sepakbolaOptions.selected.matchday];
 	sepakbolaPushImages("match");
 	let prevDay = null;
 	KadTable.clear("idTabBody_SepakbolaMatches");
@@ -243,7 +243,6 @@ function sepakbolaMatchesReturn(data = null) {
 			},
 		});
 		if (seasonSelected[i].team2.teamIconUrl) logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
-
 	}
 }
 

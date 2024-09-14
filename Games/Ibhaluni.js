@@ -1,5 +1,5 @@
-import { globalColors } from "../Settings/Color.js";
 import { KadInteraction, KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
 const ibhaluniOptions = {
@@ -39,12 +39,12 @@ export function canvas_cl_Ibhaluni() {
 function ibhaluniStart() {
 	if (ibhaluniOptions.started) {
 		ibhaluniOptions.started = false;
-		idBtn_ibhaluniStart.KadReset({resetValue: "Start"});
+		idBtn_ibhaluniStart.KadReset({ resetValue: "Start" });
 		caIB.noLoop();
 	} else {
 		ibhaluniOptions.started = true;
 		ibhaluniReset();
-		idBtn_ibhaluniStart.KadReset({resetValue: "Stop"});
+		idBtn_ibhaluniStart.KadReset({ resetValue: "Stop" });
 		caIB.loop();
 	}
 }

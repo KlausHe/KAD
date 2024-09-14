@@ -1,5 +1,5 @@
 import { Data_Leetspeak } from "../General/MainData.js";
-import { initEL, dbID, dbCL, KadDOM, KadString, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbCL, initEL, KadDOM, KadRandom, KadString } from "../KadUtils/KadUtils.js";
 const thiontuData = {
 	input: "",
 	inputRaw: "",
@@ -199,11 +199,11 @@ const thiontuData = {
 };
 
 initEL({ id: idArea_thiontuInputEntry, fn: thiontuUpdate, resetValue: "Type text to convert" });
-initEL({ id: idArea_thiontuOutputArea, resetValue: "~~~~~~~~~~~"});
+initEL({ id: idArea_thiontuOutputArea, resetValue: "~~~~~~~~~~~" });
 
 export function clear_cl_Thiontu() {
 	idArea_thiontuInputEntry.KadReset();
-  idArea_thiontuOutputArea.KadReset();
+	idArea_thiontuOutputArea.KadReset();
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);
 	for (let i = 0; i < clBtn.length; i++) {
 		KadDOM.enableBtn(clBtn[i], true);
@@ -234,8 +234,8 @@ function thiontuOptionChange(btn) {
 }
 
 function thiontuUpdate() {
-	thiontuData.inputRaw = dbID("idArea_thiontuInputEntry").value;
-	thiontuData.input = dbID("idArea_thiontuInputEntry").value.trim();
+	thiontuData.inputRaw = idArea_thiontuInputEntry.KadGet();
+	thiontuData.input = idArea_thiontuInputEntry.KadGet();
 
 	//check text and disable buttons if input is not valid for them
 	const clBtn = dbCL("clBtn_ThiontuOptions", null);

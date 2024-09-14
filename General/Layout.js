@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, getFavicon, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, hostDebug, log, logChecked, objectLength } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, getFavicon, hostDebug, logChecked } from "../KadUtils/KadUtils.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -14,7 +14,7 @@ export function contentCheckActive(contentObj) {
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Barvoslepy" : "Universe",
+	defaultPage: hostDebug() ? "cl_Sudoku" : "Universe",
 	createContentData() {
 		let arr = Array.from(Object.entries(rawContentGrid));
 		arr.sort((a, b) => {
@@ -155,7 +155,7 @@ function navTitle() {
 	document.title = `KAD-${titleText}`;
 }
 
-export function createGridLayout(layoutName = contentLayout.defaultPage ) {
+export function createGridLayout(layoutName = contentLayout.defaultPage) {
 	let contentList = layoutContentList(layoutName);
 	if (contentList == []) {
 		error("No Grid for gridTemplateAreas provided");

@@ -1,12 +1,12 @@
-import { globalColors } from "../Settings/Color.js";
 import { dbID, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 const patternOptions = {
 	get margin() {
 		return globalValues.mediaSizes.canvasSize.w * 0.02;
 	},
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w * 1.5, h: globalValues.mediaSizes.canvasSize.h / 3 };
+		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h / 4 };
 	},
 	names: ["Gesamtlänge", "Seitenversatz", "Asymetrie", "Punkte", "Vorschlag"],
 	valOrig: [330, 20, 0, 3, 3],

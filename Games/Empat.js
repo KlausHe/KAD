@@ -1,7 +1,7 @@
-import { dbID, KadValue, KadArray, KadInteraction, initEL } from "../KadUtils/KadUtils.js";
-import { globalValues } from "../Settings/General.js";
+import { dbID, initEL, KadArray, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
+import { globalValues } from "../Settings/General.js";
 //Vier gewinnt  empat kemenangan
 const empatOptions = {
 	get canvas() {

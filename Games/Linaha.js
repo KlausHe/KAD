@@ -1,10 +1,9 @@
-import { initEL, dbID, KadDOM, KadRandom, error, dbCL, KadValue, KadTable, KadCSS, dbIDStyle, KadColor, log, errorChecked, KadFile } from "../KadUtils/KadUtils.js";
-import { globalColors } from "../Settings/Color.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
+import { dbCL, dbID, dbIDStyle, errorChecked, initEL, KadColor, KadCSS, KadDOM, KadFile, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { globalColors } from "../Settings/Color.js";
 
 const linahaOptions = {
 	url: "https://restcountries.com/v3.1/alpha?codes=",
-	// urlFields: "?fields=translations,flag,capital,population,area", // not working with "codes" only with "all"
 	setLength: 1,
 	setOptions: [2, 4, 6, 9, 12],
 	setLayout: {
@@ -58,13 +57,13 @@ export function clear_cl_Linaha() {
 }
 
 function linahaCreateAvaible() {
-	linahaOptions.avaibleCodeIndex = Array.from(Data_Country_CodesIso3166.keys());
+	linahaOptions.avaibleCodeIndex = Data_Country_CodesIso3166.map((item) => item.alpha2);
 	linahaOptions.avaibleCodeIndex = KadRandom.shuffleData(linahaOptions.avaibleCodeIndex);
 }
 
 function linahaSelect(obj) {
 	const tempSel = obj.target.selectedIndex;
-	const tempIdent = `sel${obj.dataset.ident}`;
+	const tempIdent = `sel${obj.target.dataset.ident}`;
 	const sw = tempSel == linahaOptions.selA || tempSel == linahaOptions.selQ;
 
 	if (!sw) {
@@ -156,7 +155,7 @@ async function linahaGetData() {
 		url += `${code},`;
 	}
 	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: url });
-	if (errorChecked(error, "Could not receive data for 'Linaha'")) return;
+	if (errorChecked(error, "Could not receive data for 'Linaha'.", error)) return;
 	linahaOptions.data = data;
 	linahaCreateButtons();
 }

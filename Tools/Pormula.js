@@ -1,4 +1,4 @@
-import { initEL, dbID, dbIDStyle, dbCL, objectLength, KadDOM, KadValue, KadTable } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, dbIDStyle, initEL, KadDOM, KadTable, KadValue, objectLength } from "../KadUtils/KadUtils.js";
 
 const pormulaOptions = {
 	valuesOrig: [3, 5, 8],

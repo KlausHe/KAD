@@ -1,8 +1,8 @@
+import { contentLayout, navClick } from "../General/Layout.js";
+import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "../General/MainData.js";
 import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, initEL, log } from "../KadUtils/KadUtils.js";
 import { resetAll } from "../Main.js";
 import * as DBData from "../MainModulesDBData.js";
-import { contentLayout, navClick } from "../General/Layout.js";
-import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "../General/MainData.js";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";

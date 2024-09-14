@@ -1,6 +1,6 @@
-import {  KadRandom, KadArray, initEL, KadInteraction } from "../KadUtils/KadUtils.js";
-import { globalValues } from "../Settings/General.js";
+import { initEL, KadArray, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
+import { globalValues } from "../Settings/General.js";
 
 const sweeperOptions = {
 	get canvas() {

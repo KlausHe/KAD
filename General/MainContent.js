@@ -43,8 +43,8 @@ export const rawContentGrid = {
 				["cl_BarvoslepyUpload", "cl_BarvoslepyOriginal"],
 				["cl_BarvoslepySelectImage", "cl_BarvoslepyPositive"],
 				["cl_BarvoslepySelectWeakness", "cl_BarvoslepyNegative"],
-				["cl_BarvoslepySeverity", "cl_BarvoslepyApply"],
-				["cl_BarvoslepyEpsilon", "cl_BarvoslepyApply"],
+				["cl_BarvoslepySeverity", "cl_BarvoslepyNegative"],
+				["cl_BarvoslepyEpsilon", "cl_BarvoslepyNegative"],
 				["cl_BarvoslepyOverview", "cl_BarvoslepyOverview"],
 				["cl_BarvoslepyCanvas", "cl_BarvoslepyCanvas"],
 			],
@@ -59,7 +59,6 @@ export const rawContentGrid = {
 			["cl_BarvoslepyOriginal", "left"],
 			["cl_BarvoslepyPositive", "left"],
 			["cl_BarvoslepyNegative", "left"],
-			["cl_BarvoslepyApply", "left"],
 			["cl_BarvoslepyOverview", "center"],
 			["cl_BarvoslepyCanvas", "center", "start"],
 		],
@@ -236,7 +235,7 @@ export const rawContentGrid = {
 			Daten: "https://www.npmjs.com/package/norsk-tipping",
 		},
 		info: "Lotto / Eurojackpot",
-		size: [2, 2],
+		size: [3, 2],
 		maingrid: {
 			areas: [
 				//
@@ -271,7 +270,7 @@ export const rawContentGrid = {
 			Zoo: "https://www.iconfinder.com/iconsets/zoo-line-welcome-to-zootopia",
 		},
 		info: "Klassisches Memory!",
-		size: [2, 2],
+		size: [3, 2],
 		maingrid: {
 			areas: [
 				//
@@ -559,10 +558,11 @@ export const rawContentGrid = {
 		},
 		size: [2, 1],
 		maingrid: {
-			areas: [["cl_PafadojUpdate"], ["cl_PafadojTable"]],
-			rows: [1],
+			areas: [["cl_PafadojInfo"], ["cl_PafadojUpdate"], ["cl_PafadojTable"]],
+			rows: [0, 1],
 		},
 		subgrid: [
+			["cl_PafadojInfo", "center"],
 			["cl_PafadojUpdate", "center"],
 			["cl_PafadojTable", "center"],
 		],

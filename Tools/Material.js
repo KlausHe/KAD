@@ -1,8 +1,8 @@
-import { initEL, dbID, dbIDStyle,  KadTable } from "../KadUtils/KadUtils.js";
 import { Data_Materials } from "../General/MainData.js";
+import { dbID, dbIDStyle, initEL, KadTable } from "../KadUtils/KadUtils.js";
 import { materialFilterOptions, storage_cl_MaterialFilterSettings } from "../Settings/MaterialFilterSettings.js";
-import { geoUpdateMassDependency } from "./Geometrie.js";
 import { expansionUpdateMassDependecy } from "./Expansion.js";
+import { geoUpdateMassDependency } from "./Geometrie.js";
 
 export const materialOptions = {
 	matListOrig: ["S275JR", "AlSi5Cu3", "X5CrNi18-10"],
@@ -197,7 +197,7 @@ function geoUpdateMassDependencies() {
 }
 
 function materialSearchSelectChange() {
-	materialOptions.selMatGroup = dbID(idSel_materialFilter).value;
+	materialOptions.selMatGroup = idSel_materialFilter.KadGet();
 	materialSearchInput();
 }
 

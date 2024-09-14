@@ -1,5 +1,5 @@
-import { initEL, dbID, KadDate, KadRandom } from "../KadUtils/KadUtils.js";
 import { speechSpeakOutput } from "../Benkyou/Speech.js";
+import { dbID, initEL, KadDate, KadRandom } from "../KadUtils/KadUtils.js";
 const foodyOptions = {
 	timerRunning: false,
 	timerCount: 0,
@@ -204,7 +204,7 @@ function foodyCountdown() {
 	bar.setAttribute("value", foodyOptions.timeRemaining);
 	if (foodyOptions.timeRemaining <= 0) {
 		if (dbID("idCb_foodyVoiceOutput").checked) {
-			let index = dbID("idSel_foodyType").value;
+			let index = idSel_foodyType.KadGet();
 			let s = foodyOptions.data[index].numerus ? "sind" : "ist";
 			const sentence = `${foodyOptions.data[index].name} ${s} feritg!`;
 			speechSpeakOutput(sentence, "de");

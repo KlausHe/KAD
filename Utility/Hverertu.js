@@ -1,5 +1,5 @@
-import { initEL, dbID, KadTable, KadFile } from "../KadUtils/KadUtils.js";
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
+import { dbID, initEL, KadFile, KadTable, log } from "../KadUtils/KadUtils.js";
 
 const hverertuOptions = {
 	input: "",
@@ -9,21 +9,21 @@ const hverertuOptions = {
 			value: null,
 			description: "Alter (geschätzt)",
 			get data() {
-        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.agify.io/?name=${hverertuOptions.input}`, callback: hverertuAlter });
+				KadFile.loadUrlToJSON({ variable: "data", url: `https://api.agify.io/?name=${hverertuOptions.input}`, callback: hverertuAlter });
 			},
 		},
 		Gender: {
-      value: null,
+			value: null,
 			description: "Geschlecht",
 			get data() {
-        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.genderize.io?name=${hverertuOptions.input}`, callback: hverertuGender });
+				KadFile.loadUrlToJSON({ variable: "data", url: `https://api.genderize.io?name=${hverertuOptions.input}`, callback: hverertuGender });
 			},
 		},
 		Herkunft: {
-      value: null,
+			value: null,
 			description: "Herkunft (nach Wahrscheinlichkeit)",
 			get data() {
-        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.nationalize.io?name=${hverertuOptions.input}`, callback: hverertuHerkunft });
+				KadFile.loadUrlToJSON({ variable: "data", url: `https://api.nationalize.io?name=${hverertuOptions.input}`, callback: hverertuHerkunft });
 			},
 		},
 	},
@@ -49,25 +49,29 @@ function hverertuPassValue(id) {
 	dbID(`idLbl_child_hverertu_value_${id}`).innerHTML = hverertuOptions.data[id].value;
 }
 
-function hverertuAlter({data}) {
+function hverertuAlter({ data }) {
 	hverertuOptions.data.Alter.value = data.age == null ? "keine Daten gefunden" : data.age;
 	hverertuPassValue("Alter");
 	idLbl_child_hverertuHeader_Value.innerHTML = data.name;
 }
 
-function hverertuHerkunft({data}) {
+function hverertuHerkunft({ data }) {
+	log(data);
 	if (data.country.length == 0) {
 		hverertuOptions.data.Herkunft.value = "keine Daten gefunden";
 	} else {
 		hverertuOptions.data.Herkunft.value = data.country.map((obj) => {
-			return Data_Country_CodesIso3166.get(obj.country_id);
+			for (let item of Data_Country_CodesIso3166) {
+				if (item.alpha2 == obj.country_id) return item.name;
+			}
 		});
+		log(hverertuOptions.data.Herkunft.value);
 	}
 	hverertuOptions.data.Herkunft.value = `${hverertuOptions.data.Herkunft.value}`.replace(/,/g, ", ");
 	hverertuPassValue("Herkunft");
 }
 
-function hverertuGender({data}) {
+function hverertuGender({ data }) {
 	if (data.gender == null) {
 		hverertuOptions.data.Gender.value = "keine Daten gefunden";
 	} else {

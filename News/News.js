@@ -1,4 +1,4 @@
-import { dbID, KadDOM, KadDate, KadTable, initEL, KadString, log, KadFile, errorChecked } from "../KadUtils/KadUtils.js";
+import { KadDOM, KadDate, KadFile, KadString, KadTable, dbID, errorChecked, initEL } from "../KadUtils/KadUtils.js";
 
 export const newsData = {
 	get articlesURL() {
@@ -14,7 +14,7 @@ export const newsData = {
 };
 
 initEL({ id: idDiv_News_Title, resetValue: "Nachrichtentitel" });
-initEL({ id: idDiv_News_Text, resetValue: "Nachrichtentext" });
+initEL({ id: idDiv_News_Text, resetValue: "Nachrichtentext", animatedText: { animate: false, singleLetter: false } });
 initEL({
 	id: idSel_newsRegion,
 	fn: newsInputChanged,
@@ -43,8 +43,8 @@ function newsInputChanged() {
 }
 
 function newsError(...msg) {
-	dbID(idDiv_News_Title).textContent = msg.join(" ");
-	dbID(idDiv_News_Text).textContent = "";
+	idDiv_News_Title.KadSetText(msg.join(" "));
+	idDiv_News_Text.KadSetText("");
 }
 
 function newsCheckRequestCount() {
@@ -61,9 +61,9 @@ function newsCheckRequestCount() {
 
 async function newsGetData() {
 	if (newsCheckRequestCount()) return;
-  const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articlesURL });
-	if (errorChecked(error, "Could not receive data for 'Overview/News'")) return;
-  newsData.articles = data.news;
+	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articlesURL });
+	if (errorChecked(error, "Could not receive data for 'Overview/News'", error)) return;
+	newsData.articles = data.news;
 	newsData.articles = newsData.articles.filter((n) => n.type == "story");
 	newsData.currIndex = 0;
 	newsCreateTable();
@@ -77,15 +77,15 @@ async function showNews() {
 	dbID(idImg_News_Image).src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];
 	if (newsCheckRequestCount()) return;
 	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articles[newsData.currIndex].details });
-	if (errorChecked(error, "Could not receive data for 'Article/News'")) return;
-  newsData.articles[newsData.currIndex].content = data.content;
+	if (errorChecked(error, "Could not receive data for 'Article/News'", error)) return;
+	newsData.articles[newsData.currIndex].content = data.content;
 
 	let cleandContent = newsData.articles[newsData.currIndex].content
 		.filter((obj) => obj.type == "text")
 		.map((obj) => `${obj.value}<br><br>`)
 		.join(" ");
-	dbID(idDiv_News_Text).innerHTML = cleandContent;
 	KadDOM.scrollToTop(idDiv_News_Text);
+	idDiv_News_Text.KadSetHTML(cleandContent);
 	newsUpdateTableIcons();
 }
 
