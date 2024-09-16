@@ -1,4 +1,4 @@
-import { contentGrid, resizeGrid } from "../General/Layout.js";
+import { resizeGrid } from "../General/Layout.js";
 import { dbID, initEL, KadCSS } from "../KadUtils/KadUtils.js";
 import { colorUpdateCanvascolors } from "./Color.js";
 
@@ -33,35 +33,6 @@ export const globalValues = {
 	},
 	fontSizeArray: [6, 8, 10, 11, 12, 14, 16, 18, 20, 24, 26, 32],
 	decimalsArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-	globalInput: {
-		generateSpreadLists() {
-			this.globalValString = [];
-			this.globalValNumber = [];
-			for (let obj in contentGrid) {
-				if (contentGrid[obj].hasOwnProperty("globalValString")) this.globalValString.push(contentGrid[obj].globalValString);
-				if (contentGrid[obj].hasOwnProperty("globalValNumber")) this.globalValNumber.push(contentGrid[obj].globalValNumber);
-			}
-		},
-		globalValString: [],
-		globalValNumber: [],
-		input: null,
-		get value() {
-			return this.input;
-		},
-		set value(v) {
-			let val = v.trim();
-			this.input = val == "" ? "" : isNaN(val) ? val : Number(val);
-			this.spreadVal();
-		},
-		spreadVal() {
-			let arr = isNaN(this.value) ? globalValues.globalInput.globalValString : globalValues.globalInput.globalValNumber;
-			for (const id of arr) {
-				const obj = dbID(id);
-				obj.value = globalValues.globalInput.value;
-				obj.dispatchEvent(new Event("input"));
-			}
-		},
-	},
 };
 
 initEL({ id: idSel_settingsFontsize, fn: settingsFontsize, selList: globalValues.fontSizeArray });

@@ -1,4 +1,5 @@
-import { KadArray, KadCSS, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, getFavicon, hostDebug, logChecked } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, errorChecked, getFavicon, hostDebug, logChecked } from "../KadUtils/KadUtils.js";
+import { updateMasterSelect } from "../Main.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -6,34 +7,16 @@ import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Acc
 import { bgaOptions } from "./BackgroundAnimation.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
-export function contentCheckActive(contentObj) {
-	if (hostDebug()) return true;
-	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
-	return true;
-}
-
 export let contentGrid = {};
 export const contentLayout = {
 	defaultPage: hostDebug() ? "cl_Sudoku" : "Universe",
-	createContentData() {
-		let arr = Array.from(Object.entries(rawContentGrid));
-		arr.sort((a, b) => {
-			return b[1].name < a[1].name ? 1 : -1;
-		});
-		let sorted = [];
-		for (let group of contentGroups) {
-			for (let i = 0; i < arr.length; i++) {
-				if (!contentCheckActive(arr[i][1])) continue;
-				if (arr[i][1].contentGroup == group) sorted.push(arr[i]);
-			}
-		}
-		contentGrid = Object.fromEntries(sorted);
-	},
-	navContent: {
-		Universe: [],
-		User: [],
-	},
+	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
+	prevNavContent: null,
+	prevNavFullscreen: null,
+	settingsNames: ["Account-Settings", "Global-Settings"],
 	origUniverse: [],
+	navContent: {},
+	namelistContent: {},
 	get GlobalSettings() {
 		if (!userLoggedIn() && !hostDebug()) return ["cl_GeneralSettings", "cl_ColorSettings"];
 		return Object.keys(contentGrid).filter((key) => {
@@ -41,30 +24,50 @@ export const contentLayout = {
 		});
 	},
 	get getUniverse() {
-		return Object.keys(contentGrid).filter((key) => {
-			const active = contentCheckActive(key);
+		const list = Object.keys(contentGrid).filter((key) => {
+			const active = true; //contentCheckActive(key);
 			const settings = contentLayout.settingsNames.includes(contentGrid[key].contentGroup);
 			return !settings && active;
 		});
-	},
-	get nameList() {
-		let list = [];
-		Object.values(contentGrid).forEach((obj) => {
-			if (contentLayout.settingsNames.includes(obj.contentGroup)) return;
-			if (!contentCheckActive(obj)) return;
-			list.push(obj.name);
-		});
 		return list;
 	},
-	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
-	prevNavContent: null,
-	prevNavFullscreen: null,
-	settingsNames: ["Account-Settings", "Global-Settings"],
+	createContentData() {
+		let arr = Array.from(Object.entries(rawContentGrid)).filter((key) => contentCheckActive(key[1]));
+		arr.sort((a, b) => {
+			return b[1].name < a[1].name ? 1 : -1;
+		});
+		let sorted = [];
+		for (let group of contentGroups) {
+			for (let i = 0; i < arr.length; i++) {
+				if (arr[i][1].contentGroup == group) sorted.push(arr[i]);
+			}
+		}
+		contentGrid = Object.fromEntries(sorted);
+	},
 };
 
+export function contentCheckActive(contentObj) {
+	// if (hostDebug()) return true;
+	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
+	return true;
+}
+
+export function layoutCheckCORSandDisableModule(error, moduleName) {
+	if (errorChecked(error, `Could not receive data for ${moduleName}!\n\nDeactivating the module!\n\n`, error)) {
+		contentGrid[`cl_${moduleName}`].deactivated = true;
+		contentLayout.createContentData();
+		createContentlayoutList();
+		updateMasterSelect();
+		return true;
+	}
+	return false;
+}
+
 export function createContentlayoutList() {
+	contentLayout.navContent = { Universe: [], User: [] };
 	contentLayout.navContent.Universe = contentLayout.getUniverse;
 	contentLayout.origUniverse = [...contentLayout.navContent.Universe];
+	contentLayout.namelistContent = {};
 	for (const objKey of contentLayout.navContent.Universe) {
 		const group = contentGrid[objKey].contentGroup;
 		if (contentLayout.navContent[group] === undefined) {
@@ -74,8 +77,10 @@ export function createContentlayoutList() {
 		}
 	}
 	for (const [key, val] of Object.entries(contentLayout.navContent)) {
+		contentLayout.namelistContent[key];
 		if (key != "Universe" && key != "User") {
 			contentLayout.navContent[key] = val.sort();
+			contentLayout.namelistContent[key] = val.map((val) => [val.replace("cl_", ""), val]).sort();
 		}
 	}
 }
@@ -133,12 +138,9 @@ export function navClick(layoutName = contentLayout.defaultPage) {
 			dbID(`idDiv_navBar_${obj}`).classList.remove("navbarActive");
 		}
 	}
-	const scrollOptions = {
-		top: 0,
-		behavior: "smooth",
-	};
-	document.body.scrollTo(scrollOptions); // For Safari
-	document.documentElement.scrollTo(scrollOptions); // For Safari
+	setTimeout(() => {
+		KadDOM.scrollToTop(id_contentGrid);
+	}, 500);
 }
 
 function navTitle() {

@@ -35,10 +35,10 @@
   <script type="module" src="Main.js"></script>
 </head>
 
-<body>
+<body id="id_body">
   <nav id="idNav_navElements">
-    <input type="text" id="idVin_globalValue" class="cl_centeredPH" list="idDlist_globalValue"></input>
-    <!-- <datalist id="idDlist_globalValue"></datalist> -->
+
+    <select id="idSel_globalValue" uiSize="size6"></select>
     <label class="cl_infoNav" id="idLbl_navBar_KW" uiSize="size3"></label>
     <div class="cl_navUser" id="idDiv_navBar_AccountLogin"><img uiFilter="invNavbar" src="Data/Images/SVG/uBasic.svg"></img></div>
     <div class="cl_navUser" id="idDiv_navBar_AccountChange" style="display:none;"><img uiFilter="invNavbar" src="Data/Images/SVG/uCheck.svg"></img></div>
@@ -562,24 +562,6 @@
         <div class="cl_HowaMapsSelectDistrict"><select id="idSel_howaMapsDistrict" uiSize="size8"></select> </div>
         <div class="cl_HowaMapsImg">
           <div id="idDiv_howaMapsImg"><img imgSize="howaImg" id="idImg_howaMapsImg"></img></div>
-        </div>
-      </div>
-    </section>
-    <section class="cl_Lions" style="display:none;">
-      <div class="cl_subGrid_Lions cl_subGrid">
-        <div class="cl_LionsInput">
-          <input type="number" id="idVin_lionsInput"></input>
-        </div>
-        <div class="cl_LionsOutput">
-          <label class="cl_outputLbl" id="idLbl_lionsOutput">...</label>
-        </div>
-        <div class="cl_LionsTable clDiv_overviewTablesAuto" uiSize="outputTable">
-          <table id="idTab_Lions">
-            <thead id="idTabHeader_Lions" class="scrollTable">
-            </thead>
-            <tbody id="idTabBody_Lions">
-            </tbody>
-          </table>
         </div>
       </div>
     </section>

@@ -1,7 +1,8 @@
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground } from "./General/BackgroundAnimation.js";
-import { contentGrid, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid, toggelFullscreen } from "./General/Layout.js";
-import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL } from "./KadUtils/KadUtils.js";
+import { contentCheckActive, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid } from "./General/Layout.js";
+import { contentGroupsMaincontent } from "./General/MainContent.js";
+import { KadDOM, KadDate, dbCL, dbCLStyle, hostDebug, initEL } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
@@ -11,11 +12,9 @@ window.onload = mainSetup;
 function mainSetup() {
 	if (hostDebug()) dbCLStyle("cl_Loading").display = "none";
 	contentLayout.createContentData();
-
 	createContentlayoutList(); // First: create the LayoutLists
 	KadDOM.htmlSetVinChange();
 	KadDOM.htmlSetButtonType();
-	// globalColors.darkmodeOn = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 	createNewNuncDiscipuli();
 
 	createNavbar();
@@ -26,10 +25,8 @@ function mainSetup() {
 	clearAllTiles();
 	resizeGrid();
 	navClick();
-	globalValues.globalInput.generateSpreadLists();
-	KadDOM.resetInput(idVin_globalValue, "Mastervalue");
-	dbID("idLbl_navBar_KW").textContent = `KW ${KadDate.getWeekNumber()}`;
-	clearGlobalValue();
+	updateMasterSelect();
+	idLbl_navBar_KW.KadSetText(`KW ${KadDate.getWeekNumber()}`);
 	setTimeout(() => {
 		hideLoadingscreen();
 	}, 500);
@@ -37,21 +34,22 @@ function mainSetup() {
 
 // Navbar
 initEL({ id: idDiv_navBar_Trash, fn: resetAll });
-initEL({ id: idVin_globalValue, fn: globalValueChanged, dbList: contentLayout.nameList });
+initEL({ id: idSel_globalValue, fn: globalValueChanged });
 initEL({ id: idDiv_navBar_GlobalSettings, fn: () => navClick("GlobalSettings") });
 initEL({ id: idDiv_navBar_Colormode, fn: colToggleColormode });
 initEL({ id: idDiv_clearBackground, fn: bgaClearBackground });
+initEL({ id: idLbl_navBar_KW });
 
 export function resetAll() {
 	createNewNuncDiscipuli();
 	clearAllTiles();
-	clearGlobalValue();
 	navClick();
 }
 
 function clearAllTiles() {
 	for (const clearFunction of Object.values(Clear)) {
-		if (clearFunction != undefined) clearFunction();
+		const name = clearFunction.name.replace("clear_", "");
+		if (clearFunction != undefined && contentCheckActive(name)) clearFunction();
 	}
 }
 
@@ -73,31 +71,10 @@ export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" 
 	}, 200);
 }
 
-function clearGlobalValue() {
-	globalValues.globalInput.value = "";
-	const obj = dbID("idVin_globalValue");
-	obj.value = "";
-	obj.addEventListener(
-		"keyup",
-		(event) => {
-			if (event.keyCode === 13) {
-				globalValueChanged(true);
-			}
-		},
-		{ once: true }
-	);
+export function updateMasterSelect() {
+	idSel_globalValue.KadReset({ selStartValue: "Benkyou", selGroup: { Groups: contentGroupsMaincontent, ...contentLayout.namelistContent } });
 }
 
-function globalValueChanged(enter = null) {
-	const obj = dbID("idVin_globalValue");
-	obj.classList.remove("cl_highlighted");
-	globalValues.globalInput.value = obj.value;
-	const arr = contentLayout.nameList;
-	if (arr.includes(obj.value)) {
-		obj.classList.add("cl_highlighted");
-		if (enter === true) {
-			let key = Object.entries(contentGrid).filter((arr) => arr[1].name == obj.value)[0][0];
-			toggelFullscreen(key);
-		}
-	}
+function globalValueChanged() {
+	navClick(idSel_globalValue.KadGet());
 }

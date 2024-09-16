@@ -1,6 +1,7 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
+import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
 import { Data_Currencies } from "../General/MainData.js";
-import { dbID, errorChecked, initEL, KadDate, KadFile, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadDate, KadFile, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 
 const iomlaidOptions = {
 	get URLnow() {
@@ -75,7 +76,7 @@ async function iomlaidGetData() {
 		variableArray: ["dataNow", "dataHistory"],
 		urlArray: [iomlaidOptions.URLnow, iomlaidOptions.URLhistoric],
 	});
-	if (errorChecked(error, "Could not receive data for 'Iomlaid'", error)) return;
+	if (layoutCheckCORSandDisableModule(error, "Iomlaid")) return;
 
 	iomlaidOptions.dataReceived = true;
 	iomlaidOptions.latest = dataNow[iomlaidOptions.baseCurrency.toLowerCase()];

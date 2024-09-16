@@ -1,4 +1,5 @@
-import { KadArray, KadFile, KadTable, errorChecked, initEL, log } from "../KadUtils/KadUtils.js";
+import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
+import { KadArray, KadFile, KadTable, initEL, log } from "../KadUtils/KadUtils.js";
 
 const pafadojOptions = {
 	get URL() {
@@ -32,7 +33,7 @@ export function clear_cl_Pafadoj() {
 async function pafadojUpdate() {
 	pafadojOptions.date = idSel_pafadojSelect.KadGet();
 	const { dataTable, error } = await KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL });
-	if (errorChecked(error, "Could not receive data for 'Pafadoj'.", error)) return;
+	if (layoutCheckCORSandDisableModule(error, "Pafadoj")) return;
 	pafadojOptions.data = [];
 	pafadojOptions.dataTotal = { Dead: 0, Injured: 0, Total: 0 };
 

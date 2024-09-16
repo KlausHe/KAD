@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
-import { dbID, initEL, KadFile, KadTable, log } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 
 const hverertuOptions = {
 	input: "",
@@ -56,7 +56,6 @@ function hverertuAlter({ data }) {
 }
 
 function hverertuHerkunft({ data }) {
-	log(data);
 	if (data.country.length == 0) {
 		hverertuOptions.data.Herkunft.value = "keine Daten gefunden";
 	} else {
@@ -65,7 +64,6 @@ function hverertuHerkunft({ data }) {
 				if (item.alpha2 == obj.country_id) return item.name;
 			}
 		});
-		log(hverertuOptions.data.Herkunft.value);
 	}
 	hverertuOptions.data.Herkunft.value = `${hverertuOptions.data.Herkunft.value}`.replace(/,/g, ", ");
 	hverertuPassValue("Herkunft");

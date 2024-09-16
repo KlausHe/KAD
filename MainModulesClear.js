@@ -1,12 +1,11 @@
-
 // General
+export { clear_cl_UserChange, clear_cl_UserLogin } from "./General/Account.js";
 export { clear_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
-export { clear_cl_UserLogin, clear_cl_UserChange } from "./General/Account.js";
 //Settings
-export { clear_cl_GeneralSettings } from "./Settings/General.js";
 export { clear_cl_ColorSettings } from "./Settings/Color.js";
-export { clear_cl_UserGridLayout } from "./Settings/Usergridlayout.js";
+export { clear_cl_GeneralSettings } from "./Settings/General.js";
 export { clear_cl_MaterialFilterSettings } from "./Settings/MaterialFilterSettings.js";
+export { clear_cl_UserGridLayout } from "./Settings/Usergridlayout.js";
 //Benkyou
 export { clear_cl_Analysis } from "./Benkyou/Analysis.js";
 export { clear_cl_Barvoslepy } from "./Benkyou/Barvoslepy.js";
@@ -27,7 +26,6 @@ export { clear_cl_Suika } from "./Games/Suika.js";
 export { clear_cl_Sweeper } from "./Games/Sweeper.js";
 // News
 export { clear_cl_Howa } from "./News/Howa.js";
-export { clear_cl_Lions } from "./News/Lions.js";
 export { clear_cl_News } from "./News/News.js";
 export { clear_cl_Olympia } from "./News/Olympia.js";
 export { clear_cl_Pafadoj } from "./News/Pafadoj.js";

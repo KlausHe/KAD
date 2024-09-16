@@ -1,4 +1,5 @@
-import { KadArray, KadDate, KadFile, KadTable, dbID, deepClone, errorChecked, initEL } from "../KadUtils/KadUtils.js";
+import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
+import { KadArray, KadDate, KadFile, KadTable, dbID, deepClone, initEL } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -154,7 +155,8 @@ async function sepakbolaGetData() {
 		variableArray: ["dataTable", "dataDay", "dataMatches"],
 		urlArray: [sepakbolaOptions.URLTable, sepakbolaOptions.URLLastday, sepakbolaOptions.URLMatches],
 	});
-	if (errorChecked(error, "Could not receive data for 'Sepakbola'", error)) return;
+
+	if (layoutCheckCORSandDisableModule(error, "Sepakbola")) return;
 	if (dataTable != null) sepakbolaTableReturn(dataTable);
 	if (dataDay != null) sepakbolaLastdayReturn(dataDay);
 	if (dataMatches != null) sepakbolaMatchesReturn(dataMatches);

@@ -1,4 +1,4 @@
-import { dbID, dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable, log } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
@@ -99,7 +99,6 @@ function kaihangaStart(speed) {
 	kaihangaUpdate();
 	kaihangaOptions.wheel.animation.spins = speed;
 	kaihangaOptions.wheel.animation.duration = 1 / (speed * 10);
-	log(kaihangaOptions.wheel);
 	kaihangaOptions.wheel.startAnimation();
 }
 

@@ -1,12 +1,10 @@
 export const contentGroups = ["Global-Settings", "Account-Settings", "News", "Benkyou", "Utility", "Tools", "Games"];
 export const contentGroupsNav = ["Universe", "News", "Benkyou", "Utility", "Tools", "Games", "User"];
 export const contentGroupsMaincontent = ["News", "Benkyou", "Utility", "Tools", "Games"];
-
 export const rawContentGrid = {
 	//Benkyou
 	cl_Analysis: {
 		contentGroup: "Benkyou",
-		globalValString: "idVin_analysisEntry",
 		name: "Analysis",
 		source: {
 			Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
@@ -66,7 +64,6 @@ export const rawContentGrid = {
 	cl_Speech: {
 		deactivated: true,
 		contentGroup: "Benkyou",
-		globalValString: "idArea_speechFromText",
 		name: "Speech",
 		heritage: ["englisch", "Sprache"],
 		size: [2, 1],
@@ -82,7 +79,6 @@ export const rawContentGrid = {
 	},
 	cl_Synonym: {
 		contentGroup: "Benkyou",
-		globalValString: "idVin_synonymEntry",
 		name: "Synonym",
 		heritage: ["deutsch", "Ersatzwort"],
 		source: {
@@ -102,7 +98,6 @@ export const rawContentGrid = {
 	},
 	cl_WikiSearch: {
 		contentGroup: "Benkyou",
-		globalValString: "idVin_wikiInput",
 		name: "Wiki-Search",
 		source: {
 			Code: "https://thecodingtrain.com/CodingChallenges/075-wikipedia-api.html",
@@ -455,7 +450,6 @@ export const rawContentGrid = {
 	//News
 	cl_Howa: {
 		contentGroup: "News",
-		globalValString: "idVin_howaEntry",
 		name: "Howa",
 		heritage: ["turkmenisch", "Wetter"],
 		source: {
@@ -479,29 +473,6 @@ export const rawContentGrid = {
 			["cl_HowaMapsSelectDistrict", "right"],
 			["cl_HowaMapsSelectCriteria", "left"],
 			["cl_HowaMapsImg", "bottom"],
-		],
-	},
-	cl_Lions: {
-		deactivated: true,
-		contentGroup: "News",
-		name: "Lions",
-		heritage: ["englisch", "Löwen"],
-		source: {
-			Daten: "https://hirsau.lions.de/",
-		},
-		info: "Gewinner des Lions-Advendskalender 2021 - Edition Nagold",
-		size: [2, 2],
-		maingrid: {
-			areas: [
-				["cl_LionsInput", "cl_LionsOutput"],
-				["cl_LionsTable", "cl_LionsTable"],
-			],
-			rows: [2],
-		},
-		subgrid: [
-			["cl_LionsInput", "right", "center"],
-			["cl_LionsOutput", "left"],
-			["cl_LionsTable", "center"],
 		],
 	},
 	cl_News: {
@@ -614,7 +585,6 @@ export const rawContentGrid = {
 	cl_Blechgeometrie: {
 		logReqUser: true,
 		contentGroup: "Tools",
-		globalValNumber: "idVin_blechgeoDicke",
 		name: "Blechgeometrie",
 		source: {
 			Daten: "https://rime.de/de/wiki/lochabstand-berechnen/",
@@ -635,7 +605,6 @@ export const rawContentGrid = {
 	},
 	cl_Expansion: {
 		contentGroup: "Tools",
-		globalValNumber: "idVin_expansionLength",
 		name: "Expansion",
 		heritage: ["englisch", "Ausdehnung"],
 		source: {
@@ -666,7 +635,6 @@ export const rawContentGrid = {
 	},
 	cl_Geometrie: {
 		contentGroup: "Tools",
-		globalValNumber: "idVin_Area_0",
 		name: "Geometrie",
 		size: [2, 2],
 		maingrid: {
@@ -686,7 +654,6 @@ export const rawContentGrid = {
 	},
 	cl_Luas: {
 		contentGroup: "Tools",
-		globalValNumber: "idVin_luasDiameter",
 		name: "Luas",
 		heritage: ["irisch", "Geschwindigkeit"],
 		info: "Geschwindigkeiten übersetzen und darstellen",
@@ -732,7 +699,6 @@ export const rawContentGrid = {
 	},
 	cl_Middle: {
 		contentGroup: "Tools",
-		globalValNumber: "idVin_middleA",
 		name: "Middle",
 		heritage: ["englisch", "Mitte"],
 		size: [1, 1],
@@ -782,7 +748,6 @@ export const rawContentGrid = {
 	cl_Pattern: {
 		logReqUser: true,
 		contentGroup: "Tools",
-		globalValNumber: "idVin_Pattern0",
 		name: "Pattern",
 		heritage: ["englisch", "Muster"],
 		size: [2, 1],
@@ -846,7 +811,6 @@ export const rawContentGrid = {
 	},
 	cl_Pythagoras: {
 		contentGroup: "Tools",
-		globalValNumber: "idVin_Pytho_0",
 		name: "Pythagoras",
 		size: [1, 1],
 		maingrid: {
@@ -874,7 +838,6 @@ export const rawContentGrid = {
 	},
 	cl_Quickmath: {
 		contentGroup: "Tools",
-		globalValNumber: "idVin_quickkmathVal",
 		name: "Quickmath",
 		size: [1, 2],
 		maingrid: {
@@ -898,7 +861,6 @@ export const rawContentGrid = {
 	},
 	cl_Ranje: {
 		contentGroup: "Tools",
-		globalValNumber: "idVin_ranjeVal",
 		name: "Ranje",
 		heritage: ["Haiti-Kreolisch", "anordnen"],
 		size: [1, 1],
@@ -1007,7 +969,6 @@ export const rawContentGrid = {
 	},
 	cl_Hverertu: {
 		contentGroup: "Utility",
-		globalValString: "idVin_hverertuEntry",
 		name: "Hver Ertu",
 		heritage: ["isländisch", "Wer bist du"],
 		source: {
@@ -1027,7 +988,6 @@ export const rawContentGrid = {
 	},
 	cl_Iomlaid: {
 		contentGroup: "Utility",
-		globalValNumber: "idVin_IomlaidCur",
 		name: "Iomlaid",
 		deactivated: false,
 		heritage: ["schottisch-gälisch", "Austausch"],
@@ -1076,7 +1036,6 @@ export const rawContentGrid = {
 	},
 	cl_Kaihanga: {
 		contentGroup: "Utility",
-		globalValString: "idVin_kaihangaEntry",
 		name: "Kaihanga",
 		heritage: ["maori", "Hersteller"],
 		source: {
@@ -1215,7 +1174,6 @@ export const rawContentGrid = {
 	},
 	cl_Thiontu: {
 		contentGroup: "Utility",
-		globalValString: "idArea_thiontuInputEntry",
 		name: "Thiontu",
 		heritage: ["irisch", "umwandeln"],
 		size: [2, 1],
@@ -1243,7 +1201,6 @@ export const rawContentGrid = {
 	},
 	cl_Tugas: {
 		contentGroup: "Utility",
-		globalValString: "idArea_tugasEntry",
 		name: "Tugas",
 		heritage: ["indonesisch", "Pflicht"],
 		info: 'Füge Texte ein und drück "Enter". Klicke auf einen deiner Texte und er kopiert sich direkt in deine Zwischenablage!',
@@ -1390,7 +1347,6 @@ export const rawContentGrid = {
 		],
 	},
 };
-
 export const contentFooter = [
 	["Icons", "https://www.iconfinder.com/search/icons?family=feather"],
 	["Canvas-Library", "https://p5js.org/"],
