@@ -33,7 +33,6 @@ let howaOptions = {
 	get canvas() {
 		return { w: globalValues.mediaSizes.canvasSize.w * 0.75, h: globalValues.mediaSizes.canvasSize.h * 0.8 };
 	},
-	bgcCanvas: "skyblue",
 	data: { current: null, forecast: null },
 	graphData: null,
 	latOrig: 48.5328,
@@ -53,7 +52,7 @@ let howaOptions = {
 	},
 };
 
-initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Ort", dbList: Array.from(Data_Nummernschild.values()).sort() });
+initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Search", dbList: Array.from(Data_Nummernschild.values()).sort() });
 initEL({ id: idBtn_getGeoLocation, fn: howaGetCoordinates });
 initEL({ id: idBtn_howaGetLocation, fn: howaGetLocation });
 initEL({
@@ -86,7 +85,7 @@ export const storage_cl_Howa = {
 		return howaOptions.city;
 	},
 	set data(data) {
-		idVin_howaEntry.KadReset({ resetValue: data });
+		idVin_howaEntry.KadReset(); //{ resetValue: data }
 	},
 };
 
@@ -106,7 +105,7 @@ function howaChangeMap() {
 function howaGetCoordinates() {
 	if ("geolocation" in navigator) {
 		howaOptions.city = null;
-		idVin_howaEntry.KadReset({ resetValue: "" });
+		idVin_howaEntry.KadReset({ resetValue: "Device-location used!" });
 		dbIDStyle("idBtn_getGeoLocation").display = "initial";
 		navigator.geolocation.getCurrentPosition(howaNavigatorPosition, howaNavigatorError);
 	} else {
@@ -228,7 +227,7 @@ const caHO = new p5((c) => {
 }, "#idCanv_howa");
 
 function howaDrawData() {
-	caHO.background(howaOptions.bgcCanvas);
+	caHO.clear();
 	const graph = howaOptions.graphData;
 	if (graph == null) return;
 	const len = objectLength(graph.data);
@@ -241,8 +240,8 @@ function howaDrawData() {
 
 	for (let i = 0; i < len; i++) {
 		const point = graph.data[i];
-
 		const y = offsetTop + rowHeight * i;
+		//  //  debug lines
 		// caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
 		// caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
 		// caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);

@@ -7,7 +7,7 @@ const synonymOptions = {
 	data: {},
 };
 
-initEL({ id: idVin_synonymEntry, fn: newSynonym, resetValue: "Search for synonyms" }); // action: "change",
+initEL({ id: idVin_synonymEntry, fn: newSynonym, resetValue: "Search for synonyms" });
 initEL({ id: idBtn_synonymEntry, fn: newSynonym });
 
 export function clear_cl_Synonym() {

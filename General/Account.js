@@ -9,7 +9,7 @@ import { browserLocalPersistence, browserSessionPersistence, createUserWithEmail
 //      LOCAL:  	browserLocalPersistence
 //      SESSION:  	browserSessionPersistence
 //      NONE: 	inMemoryPersistence
-import { collection, doc, getDoc, getFirestore, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, doc, getDoc, getFirestore, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDHgM7J-2Q_W1Swp0Ozx6nY1QDoFcwEFwQ",

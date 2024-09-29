@@ -11,7 +11,6 @@ const kaihangaOptions = {
 	entries: [],
 	wheel: null,
 	spinning: false,
-	startColor: null,
 };
 
 initEL({ id: idVin_kaihangaEntry, action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
@@ -24,7 +23,6 @@ export function clear_cl_Kaihanga() {
 	KadTable.clear("idTabBody_Kaihanga");
 	caKA.noLoop();
 	caKA.clear();
-	kaihangaOptions.startColor = caKA.floor(caKA.random(5, globalColors.array.length));
 	kaihangaCreateRandomSet();
 	kaihangaUpdate();
 	idVin_kaihangaEntry.KadReset();
@@ -65,10 +63,10 @@ function mousePushedKaihanga() {
 //gameLogic
 function kaihangaWheelUpdate() {
 	let segOptions = [];
-	let colStart = 5 + KadRandom.randomIndex(globalColors.array.slice(5, globalColors.array.length));
-	const step = Math.floor(globalColors.array.length / kaihangaOptions.entries.length);
+	const colStart = KadRandom.randomIndex(globalColors.colorOptions);
+	const step = Math.floor(globalColors.colorOptions.length / kaihangaOptions.entries.length);
 	for (let i = 0; i < kaihangaOptions.entries.length; i++) {
-		const col = globalColors.array[(i * step + colStart) % globalColors.array.length];
+		const col = globalColors.colorOptions[(i * step + colStart) % globalColors.colorOptions.length];
 		segOptions.push({
 			fillStyle: col,
 			strokeStyle: KadColor.stateAsArray(col, "HSL"),

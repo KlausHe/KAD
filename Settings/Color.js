@@ -1,15 +1,76 @@
-import { dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM, KadString, log } from "../KadUtils/KadUtils.js";
 import * as Canvas from "../MainModulesCanvas.js";
+
+const colorSettingsOptions = {
+	modeNames: ["light", "dark"],
+	colorAreas: ["Navbar", "Gridtitle", "Background"],
+	defaultMode: ["automatic", "light", "dark"],
+	selectedDefaultModeIndex: 0,
+	get currentMode() {
+		return globalColors.darkmodeOn ? colorSettingsOptions.modeNames[1] : colorSettingsOptions.modeNames[0];
+	},
+	get mode() {
+		return globalColors.darkmodeOn ? this.dark : this.light;
+	},
+	light: {
+		Navbar: [240, 52, 54],
+		Gridtitle: [240, 52, 54],
+		Background: [100, 5, 89], //[52, 53, 70]
+	},
+	dark: {
+		Navbar: [223, 11, 18],
+		Gridtitle: [180, 25, 24],
+		Background: [180, 25, 24],
+	},
+	modesOrig: {
+		light: {
+			Navbar: [240, 52, 54],
+			Gridtitle: [240, 52, 54],
+			Background: [100, 5, 89], //[52, 53, 70]
+		},
+		dark: {
+			Navbar: [223, 11, 18],
+			Gridtitle: [180, 25, 24],
+			Background: [180, 25, 24],
+		},
+	},
+};
 
 export const globalColors = {
 	darkmodeOn: false,
-	get modeName() {
-		return this.darkmodeOn ? "dark" : "light";
+	elements: {
+		get background() {
+			return [...colorSettingsOptions.mode.Background];
+		},
+		get baseColor() {
+			return [...colorSettingsOptions.mode.Navbar];
+		},
+		get text() {
+			return [...KadColor.stateAsArray(colorSettingsOptions.mode.Background, "HSL")];
+		},
+		get textNavbar() {
+			return [...KadColor.stateAsArray(colorSettingsOptions.mode.Background, "HSL")];
+		},
+		get line() {
+			return [...KadColor.stateAsArray(colorSettingsOptions.mode.Background, "HSL")];
+		},
+		get btn() {
+			return [0, 0, 100];
+		},
+		get btnPositive() {
+			return [120, 100, 50];
+		},
+		get btnNegative() {
+			return [0, 100, 45];
+		},
+		get btnPositiveText() {
+			return [0, 0, 0];
+		},
+		get btnNegativeText() {
+			return [0, 0, 100];
+		},
 	},
-	get mode() {
-		return this.darkmodeOn ? this.darkmode : this.lightmode;
-	},
-	array: [
+	colorOptionsFull: [
 		[0, 0, 100],
 		[0, 0, 90],
 		[0, 0, 82],
@@ -29,79 +90,47 @@ export const globalColors = {
 		[0, 29, 49],
 		[275, 52, 54],
 	],
-	modesOrig: {
-		lightmode: {
-			Navbar: [240, 52, 54],
-			Gridtitle: [240, 52, 54],
-			Background: [100, 5, 89], //[52, 53, 70]
-		},
-		darkmode: {
-			Navbar: [223, 11, 18],
-			Gridtitle: [180, 25, 24],
-			Background: [180, 25, 24],
-		},
-	},
-	lightmode: {
-		Navbar: [240, 52, 54],
-		Gridtitle: [240, 52, 54],
-		Background: [100, 5, 89], //[52, 53, 70]
-	},
-	darkmode: {
-		Navbar: [223, 11, 18],
-		Gridtitle: [180, 25, 24],
-		Background: [180, 25, 24],
-	},
-	elements: {
-		get background() {
-			return [...globalColors.mode.Background];
-		},
-		get baseColor() {
-			return [...globalColors.mode.Navbar];
-		},
-		get text() {
-			return [...KadColor.stateAsArray(globalColors.mode.Background, "HSL")];
-		},
-		get textNavbar() {
-			return [...KadColor.stateAsArray(globalColors.mode.Background, "HSL")];
-		},
-		get line() {
-			return [...KadColor.stateAsArray(globalColors.mode.Background, "HSL")];
-		},
-		get btn() {
-			return [0, 0, 100];
-		},
-		get btnPositive() {
-			return [120, 100, 50];
-		},
-		get btnNegative() {
-			return [0, 100, 45];
-		},
-		get btnPositiveText() {
-			return [0, 0, 0];
-		},
-		get btnNegativeText() {
-			return [0, 0, 100];
-		},
+	get colorOptions() {
+		return globalColors.colorOptionsFull.slice(5);
 	},
 };
 
-initEL({ id: idVin_colorSetting_light_Navbar, action: "input", fn: colorChange, resetValue: KadColor.colAsString(globalColors.modesOrig.lightmode.Navbar, "HSL", "HEX") });
-initEL({ id: idVin_colorSetting_light_Gridtitle, action: "input", fn: colorChange, resetValue: KadColor.colAsString(globalColors.modesOrig.lightmode.Gridtitle, "HSL", "HEX") });
-initEL({ id: idVin_colorSetting_light_Background, action: "input", fn: colorChange, resetValue: KadColor.colAsString(globalColors.modesOrig.lightmode.Background, "HSL", "HEX") });
-initEL({ id: idVin_colorSetting_dark_Navbar, action: "input", fn: colorChange, resetValue: KadColor.colAsString(globalColors.modesOrig.darkmode.Navbar, "HSL", "HEX") });
-initEL({ id: idVin_colorSetting_dark_Gridtitle, action: "input", fn: colorChange, resetValue: KadColor.colAsString(globalColors.modesOrig.darkmode.Gridtitle, "HSL", "HEX") });
-initEL({ id: idVin_colorSetting_dark_Background, action: "input", fn: colorChange, resetValue: KadColor.colAsString(globalColors.modesOrig.darkmode.Background, "HSL", "HEX") });
+initEL({ id: idSel_colorSettingsDefault, fn: colorDefaultMode, selList: colorSettingsOptions.defaultMode.map((l) => [KadString.firstLetterCap(l), l]) });
+for (let area of colorSettingsOptions.colorAreas) {
+	for (let mode of colorSettingsOptions.modeNames) {
+		initEL({
+			id: dbID(`idVin_colorSetting_${mode}_${area}`),
+			action: "input",
+			fn: colorChange,
+			dataset: [
+				["mode", mode],
+				["area", area],
+			],
+			resetValue: KadColor.colAsString(colorSettingsOptions.modesOrig[mode][area], "HSL", "HEX"),
+		});
+		initEL({
+			id: dbID(`idLbl_colorSetting_${mode}_${area}`),
+			action: "input",
+			fn: colorChange,
+			dataset: [
+				["mode", mode],
+				["area", area],
+			],
+			resetValue: KadColor.colAsString(colorSettingsOptions.modesOrig[mode][area], "HSL", "HEX"),
+		});
+	}
+}
 
 if (window.matchMedia) {
-	window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-		globalColors.darkmodeOn = event.matches;
-		colorThemeChanged();
+	window.matchMedia("(prefers-color-scheme: darkmode)").addEventListener("change", (event) => {
+		colorDefaultMode();
 	});
 }
 
 export function clear_cl_ColorSettings() {
-	globalColors.lightmode = deepClone(globalColors.modesOrig.lightmode);
-	globalColors.darkmode = deepClone(globalColors.modesOrig.darkmode);
+	colorSettingsOptions.light = deepClone(colorSettingsOptions.modesOrig.light);
+	colorSettingsOptions.dark = deepClone(colorSettingsOptions.modesOrig.dark);
+	colorSettingsOptions.selectedDefaultModeIndex = 0;
 	colorThemeChanged();
 	populateColorSelector();
 }
@@ -113,33 +142,36 @@ export const storage_cl_ColorSettings = {
 		this.data = null;
 	},
 	get data() {
+		//#A9C7C6
 		return {
-			lightmode: deepClone(globalColors.lightmode),
-			darkmode: deepClone(globalColors.darkmode),
+			lightmode: deepClone(colorSettingsOptions.light),
+			darkmode: deepClone(colorSettingsOptions.dark),
+			selectedDefaultModeIndex: idSel_colorSettingsDefault.KadGet({ index: true }),
 		};
 	},
 	set data(data) {
 		if (data == null) {
-			globalColors.lightmode = deepClone(globalColors.modesOrig.lightmode);
-			globalColors.darkmode = deepClone(globalColors.modesOrig.darkmode);
+			colorSettingsOptions.light = deepClone(colorSettingsOptions.modesOrig.light);
+			colorSettingsOptions.dark = deepClone(colorSettingsOptions.modesOrig.dark);
+			colorSettingsOptions.selectedDefaultModeIndex = 0;
 			return;
 		}
-		globalColors.lightmode = deepClone(data.lightmode);
-		globalColors.darkmode = deepClone(data.darkmode);
-		colorThemeChanged();
+		colorSettingsOptions.light = deepClone(data.lightmode);
+		colorSettingsOptions.dark = deepClone(data.darkmode);
+		idSel_colorSettingsDefault.KadReset({ selStartIndex: data.selectedDefaultModeIndex });
+		colorDefaultMode();
 		populateColorSelector();
 	},
 };
 
 export function colorThemeChanged() {
 	idImg_userNav_colormode.src = KadDOM.getImgPath(globalColors.darkmodeOn ? "sun" : "moon");
-	for (let theme of ["light", "dark"]) {
-		for (let [name, col] of Object.entries(globalColors[`${theme}mode`])) {
+	for (let theme of colorSettingsOptions.modeNames) {
+		for (let [name, col] of Object.entries(colorSettingsOptions[theme])) {
 			const selID = `idLbl_colorSetting_${theme}_${name}`;
 			dbIDStyle(selID).background = KadColor.formatAsCSS(col, "HSL");
 			dbIDStyle(selID).color = KadColor.stateAsCSS(col, "HSL");
-
-			if (globalColors.modeName == theme) {
+			if (colorSettingsOptions.currentMode == theme) {
 				KadCSS.setRoot(`bgc${name}`, KadColor.formatAsString(col, "HSL"));
 				KadCSS.setRoot(`txt${name}`, KadColor.stateAsString(col, "HSL"));
 				KadCSS.setRoot(`inv${name}`, KadColor.stateAsBool(col, "HSL"));
@@ -148,42 +180,48 @@ export function colorThemeChanged() {
 	}
 	setTimeout(() => {
 		colorUpdateCanvascolors();
-	}, KadCSS.getRoot({ value: "transitionTimeName" }) * 1000);
+	}, KadCSS.getRoot({ value: "transitionTimeName" }) * 500);
 }
-
+function colorDefaultMode() {
+	colorSettingsOptions.selectedDefaultModeIndex = idSel_colorSettingsDefault.KadGet({ index: true });
+	if (colorSettingsOptions.selectedDefaultModeIndex == 0) {
+		globalColors.darkmodeOn = window.matchMedia("(prefers-color-scheme:dark)").matches;
+	} else {
+		globalColors.darkmodeOn = !!(colorSettingsOptions.selectedDefaultModeIndex - 1);
+	}
+	colorThemeChanged();
+}
 export function colToggleColormode() {
 	globalColors.darkmodeOn = !globalColors.darkmodeOn;
 	colorThemeChanged();
 }
 
 function populateColorSelector() {
-	idVin_colorSetting_light_Navbar.KadReset({ resetValue: KadColor.colAsString(globalColors.lightmode.Navbar, "HSL", "HEX") });
-	idLbl_colorSetting_light_Navbar.textContent = `Navbar (${KadColor.colAsString(globalColors.lightmode.Navbar, "HSL", "HEX")})`;
-	idVin_colorSetting_light_Gridtitle.KadReset({ resetValue: KadColor.colAsString(globalColors.lightmode.Gridtitle, "HSL", "HEX") });
-	idLbl_colorSetting_light_Gridtitle.textContent = `Gridtitle (${KadColor.colAsString(globalColors.lightmode.Gridtitle, "HSL", "HEX")})`;
-	idVin_colorSetting_light_Background.KadReset({ resetValue: KadColor.colAsString(globalColors.lightmode.Background, "HSL", "HEX") });
-	idLbl_colorSetting_light_Background.textContent = `Background (${KadColor.colAsString(globalColors.lightmode.Background, "HSL", "HEX")})`;
-	idVin_colorSetting_dark_Navbar.KadReset({ resetValue: KadColor.colAsString(globalColors.darkmode.Navbar, "HSL", "HEX") });
-	idLbl_colorSetting_dark_Navbar.textContent = `Navbar (${KadColor.colAsString(globalColors.lightmode.Navbar, "HSL", "HEX")})`;
-	idVin_colorSetting_dark_Gridtitle.KadReset({ resetValue: KadColor.colAsString(globalColors.darkmode.Gridtitle, "HSL", "HEX") });
-	idLbl_colorSetting_dark_Gridtitle.textContent = `Gridtitle (${KadColor.colAsString(globalColors.lightmode.Gridtitle, "HSL", "HEX")})`;
-	idVin_colorSetting_dark_Background.KadReset({ resetValue: KadColor.colAsString(globalColors.darkmode.Background, "HSL", "HEX") });
-	idLbl_colorSetting_dark_Background.textContent = `Background (${KadColor.colAsString(globalColors.lightmode.Background, "HSL", "HEX")})`;
+	const optionStrings = globalColors.colorOptionsFull.map((c) => KadColor.colAsString(c, "HSL", "HEX"));
+	for (let area of colorSettingsOptions.colorAreas) {
+		for (let mode of colorSettingsOptions.modeNames) {
+			const color = KadColor.colAsString(colorSettingsOptions[mode][area], "HSL", "HEX");
+			dbID(`idVin_colorSetting_${mode}_${area}`).KadReset({ resetValue: color, dbList: optionStrings });
+			dbID(`idLbl_colorSetting_${mode}_${area}`).KadSetText(`${area} (${color})`);
+		}
+	}
 }
 
 function colorChange(obj) {
-	const theme = obj.target.dataset.theme;
-	const name = obj.target.dataset.name;
-	const value = obj.target.value;
-	globalColors[`${theme}mode`][name] = KadColor.colAsArray(value, "HEX", "HSL");
-	const col = globalColors[`${theme}mode`][name];
-	dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).background = KadColor.formatAsCSS(col, "HSL");
-	dbIDStyle(`idLbl_colorSetting_${theme}_${name}`).color = KadColor.stateAsCSS(col, "HSL");
+	const mode = obj.target.dataset.mode;
+	const area = obj.target.dataset.area;
+	const hexColor = obj.target.value.toUpperCase();
 
-	if (theme == globalColors.modeName) {
-		KadCSS.setRoot(`bgc${name}`, KadColor.formatAsString(col, "HSL"));
-		KadCSS.setRoot(`txt${name}`, KadColor.stateAsString(col, "HSL"));
-		KadCSS.setRoot(`inv${name}`, KadColor.stateAsBool(col, "HSL"));
+	colorSettingsOptions[mode][area] = KadColor.colAsArray(hexColor, "HEX", "HSL");
+	const col = colorSettingsOptions[mode][area];
+	dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).background = KadColor.formatAsCSS(col, "HSL");
+	dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).color = KadColor.stateAsCSS(col, "HSL");
+	dbID(`idLbl_colorSetting_${mode}_${area}`).KadSetText(`${area} (${hexColor})`);
+
+	if (mode == colorSettingsOptions.currentMode) {
+		KadCSS.setRoot(`bgc${area}`, KadColor.formatAsString(col, "HSL"));
+		KadCSS.setRoot(`txt${area}`, KadColor.stateAsString(col, "HSL"));
+		KadCSS.setRoot(`inv${area}`, KadColor.stateAsBool(col, "HSL"));
 		colorUpdateCanvascolors();
 	}
 }

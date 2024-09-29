@@ -399,7 +399,7 @@ let geoObjects = {
 
 			const innerE = [a + b - s, d - s / 2];
 			const outerE = [a + b, d];
-			//  coloured Ellipse
+			//  colored Ellipse
 			caGE.angleMode(caGE.DEGREES);
 
 			let shape = [];

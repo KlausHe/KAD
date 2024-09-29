@@ -281,19 +281,20 @@ function numberyScoreBoard() {
 function numberyMakePlayers(numPlayer) {
 	numberyOptions.players = [];
 	numberyOptions.playerID = 0;
-	let colStart = 5 + KadRandom.randomIndex(globalColors.array.slice(5, globalColors.array.length));
-	const step = Math.floor(globalColors.array.length / numPlayer);
+
+	const colStart = KadRandom.randomIndex(globalColors.colorOptions);
+	const step = Math.floor(globalColors.colorOptions.length / numPlayer);
 	for (let i = 0; i < numPlayer; i++) {
-		const colID = (i * step + colStart) % globalColors.array.length;
-		numberyOptions.players.push(new NumberyPlayer(i, colID));
+		const color = globalColors.colorOptions[(i * step + colStart) % globalColors.colorOptions.length];
+		numberyOptions.players.push(new NumberyPlayer(i, color));
 	}
 }
 
 class NumberyPlayer {
-	constructor(i, colID) {
+	constructor(i, color) {
 		this.id = i;
 		this.name = this.id == 0 ? nuncDiscipuli.short || `Player 1` : (this.name = `Player ${this.id + 1}`);
-		this.col = globalColors.array[colID];
+		this.col = color;
 		this.score = 0;
 	}
 	scored() {

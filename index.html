@@ -549,8 +549,7 @@
           </div>
         </div>
         <div class="cl_HowaInput">
-          <input type="text" name="location" id="idVin_howaEntry" uiSize="size10" uiRadius="left" list="idDlist_howaPlaces"></input><button id="idBtn_getGeoLocation" uiSize="size1" uiRadius="none"><img
-              src="Data/Images/SVG/location.svg"></img>
+          <input type="text" name="location" id="idVin_howaEntry" uiSize="size10" uiRadius="left"></input><button id="idBtn_getGeoLocation" uiSize="size1" uiRadius="none"><img src="Data/Images/SVG/location.svg"></img>
           </button><button id="idBtn_howaGetLocation" uiSize="size1" uiRadius="right">
             <img src="Data/Images/SVG/down.svg"></img>
           </button>
@@ -1582,14 +1581,10 @@
     <section class="cl_PlatLesen" style="display:none;">
       <div class="cl_subGrid_PlatLesen cl_subGrid">
         <div class="cl_PlatLesenNumInput">
-          <label class="cl_info" uiRadius="left">Nummernschild</label><input type="text" id="idVin_platLesenNum" list="idDlist_platLesenNum" data-type="NUM" uiSize="size6" uiRadius="right"></input>
-          <!-- <datalist id="idDlist_platLesenNum">
-          </datalist> -->
+          <label class="cl_info" uiRadius="left">Nummernschild</label><input type="text" id="idVin_platLesenNum" data-type="NUM" uiSize="size6" uiRadius="right"></input>
         </div>
         <div class="cl_PlatLesenRegInput">
-          <label class="cl_info" uiRadius="left">Region</label><input type="text" id="idVin_platLesenReg" list="idDlist_platLesenReg" data-type="REG" uiSize="size6" uiRadius="right"></input>
-          <!-- <datalist id="idDlist_platLesenReg">
-          </datalist> -->
+          <label class="cl_info" uiRadius="left">Region</label><input type="text" id="idVin_platLesenReg" data-type="REG" uiSize="size6" uiRadius="right"></input>
         </div>
         <div class="cl_PlatLesenResult">
           <label class="cl_outputLbl" id="idLbl_platLesenResult">Region</label>
@@ -1666,35 +1661,38 @@
     </section>
     <section class="cl_ColorSettings" style="display:none;">
       <div class="cl_subGrid_ColorSettings cl_subGrid">
-        <div class="cl_ColourSettingsHeaderLight">
+        <div class="cl_ColorSettingsDefault">
+          <select id="idSel_colorSettingsDefault" uiSize="size10"></select>
+        </div>
+        <div class="cl_ColorSettingsHeaderLight">
           <label class="cl_info" uiSize="size10" uiAlign="center">Light-Mode</label>
         </div>
-        <div class="cl_ColourSettings_light_0">
+        <div class="cl_ColorSettings_light_0">
           <label class="cl_info" id="idLbl_colorSetting_light_Navbar" uiSize="size9" uiRadius="left">
-          </label><input id="idVin_colorSetting_light_Navbar" type="color" data-theme="light" data-name="Navbar" uiRadius="right" uiSize="size1"></input>
+          </label><input id="idVin_colorSetting_light_Navbar" type="color" uiRadius="right" uiSize="size1"></input>
         </div>
-        <div class="cl_ColourSettings_light_1">
+        <div class="cl_ColorSettings_light_1">
           <label class="cl_info" id="idLbl_colorSetting_light_Gridtitle" uiSize="size9" uiRadius="left">
-          </label><input id="idVin_colorSetting_light_Gridtitle" type="color" data-theme="light" data-name="Gridtitle" uiRadius="right" uiSize="size1"></input>
+          </label><input id="idVin_colorSetting_light_Gridtitle" type="color" uiRadius="right" uiSize="size1"></input>
         </div>
-        <div class="cl_ColourSettings_light_2">
+        <div class="cl_ColorSettings_light_2">
           <label class="cl_info" id="idLbl_colorSetting_light_Background" uiSize="size9" uiRadius="left">
-          </label><input id="idVin_colorSetting_light_Background" type="color" data-theme="light" data-name="Background" uiRadius="right" uiSize="size1"></input>
+          </label><input id="idVin_colorSetting_light_Background" type="color" uiRadius="right" uiSize="size1"></input>
         </div>
-        <div class="cl_ColourSettingsHeaderDark">
+        <div class="cl_ColorSettingsHeaderDark">
           <label class="cl_info" uiSize="size10" uiAlign="center">Dark-Mode</label>
         </div>
-        <div class="cl_ColourSettings_dark_0">
+        <div class="cl_ColorSettings_dark_0">
           <label class="cl_info" id="idLbl_colorSetting_dark_Navbar" uiSize="size9" uiRadius="left">
-          </label><input id="idVin_colorSetting_dark_Navbar" type="color" data-theme="dark" data-name="Navbar" uiRadius="right" uiSize="size1"></input>
+          </label><input id="idVin_colorSetting_dark_Navbar" type="color" uiRadius="right" uiSize="size1"></input>
         </div>
-        <div class="cl_ColourSettings_dark_1">
+        <div class="cl_ColorSettings_dark_1">
           <label class="cl_info" id="idLbl_colorSetting_dark_Gridtitle" uiSize="size9" uiRadius="left">
-          </label><input id="idVin_colorSetting_dark_Gridtitle" type="color" data-theme="dark" data-name="Gridtitle" uiRadius="right" uiSize="size1"></input>
+          </label><input id="idVin_colorSetting_dark_Gridtitle" type="color" uiRadius="right" uiSize="size1"></input>
         </div>
-        <div class="cl_ColourSettings_dark_2">
+        <div class="cl_ColorSettings_dark_2">
           <label class="cl_info" id="idLbl_colorSetting_dark_Background" uiSize="size9" uiRadius="left">
-          </label><input id="idVin_colorSetting_dark_Background" type="color" data-theme="dark" data-name="Background" uiRadius="right" uiSize="size1"></input>
+          </label><input id="idVin_colorSetting_dark_Background" type="color" uiRadius="right" uiSize="size1"></input>
         </div>
       </div>
     </section>

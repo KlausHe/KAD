@@ -236,7 +236,7 @@ function drawPytho() {
 	caPY.noFill();
 	caPY.arc(pythPoints[2].x, pythPoints[2].y, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, caPY.PI, caPY.PI + caPY.HALF_PI); // C bottom right
 
-	//Coloured Stuff
+	//Colored Stuff
 	// line "a"
 	let curColor = pythoOptions.inputState.includes(0) ? globalColors.elements.baseColor : globalColors.elements.line;
 	caPY.stroke(curColor);

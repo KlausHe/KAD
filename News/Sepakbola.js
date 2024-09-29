@@ -155,7 +155,6 @@ async function sepakbolaGetData() {
 		variableArray: ["dataTable", "dataDay", "dataMatches"],
 		urlArray: [sepakbolaOptions.URLTable, sepakbolaOptions.URLLastday, sepakbolaOptions.URLMatches],
 	});
-
 	if (layoutCheckCORSandDisableModule(error, "Sepakbola")) return;
 	if (dataTable != null) sepakbolaTableReturn(dataTable);
 	if (dataDay != null) sepakbolaLastdayReturn(dataDay);

@@ -9,7 +9,7 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Sudoku" : "Universe",
+	defaultPage: hostDebug() ? "cl_Howa" : "Universe",
 	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
 	prevNavContent: null,
 	prevNavFullscreen: null,
@@ -25,9 +25,8 @@ export const contentLayout = {
 	},
 	get getUniverse() {
 		const list = Object.keys(contentGrid).filter((key) => {
-			const active = true; //contentCheckActive(key);
 			const settings = contentLayout.settingsNames.includes(contentGrid[key].contentGroup);
-			return !settings && active;
+			return !settings;
 		});
 		return list;
 	},
@@ -47,7 +46,7 @@ export const contentLayout = {
 };
 
 export function contentCheckActive(contentObj) {
-	// if (hostDebug()) return true;
+	if (hostDebug()) return true;
 	if (contentObj.hasOwnProperty("deactivated") && contentObj.deactivated) return false;
 	return true;
 }

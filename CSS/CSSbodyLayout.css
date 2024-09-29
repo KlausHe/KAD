@@ -471,7 +471,7 @@ h1 {
 	pointer-events: none;
 }
 
-.cl_selColourSettings {
+.cl_selColorSettings {
 	display: -webkit-box;
 	display: flex;
 	-webkit-box-orient: vertical;
