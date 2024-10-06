@@ -1,4 +1,4 @@
-import { dbID, dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable, log } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
@@ -11,6 +11,7 @@ const kaihangaOptions = {
 	entries: [],
 	wheel: null,
 	spinning: false,
+	colStart: 0,
 };
 
 initEL({ id: idVin_kaihangaEntry, action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
@@ -18,6 +19,7 @@ initEL({ id: idBtn_kaihangaEntry, fn: kaihangaEntrySubmit });
 
 export function clear_cl_Kaihanga() {
 	KadInteraction.removeContextmenu(idCanv_kaihanga);
+	kaihangaOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
 	kaihangaOptions.entries = [];
 	kaihangaOptions.spinning = false;
 	KadTable.clear("idTabBody_Kaihanga");
@@ -63,13 +65,11 @@ function mousePushedKaihanga() {
 //gameLogic
 function kaihangaWheelUpdate() {
 	let segOptions = [];
-	const colStart = KadRandom.randomIndex(globalColors.colorOptions);
-	const step = Math.floor(globalColors.colorOptions.length / kaihangaOptions.entries.length);
 	for (let i = 0; i < kaihangaOptions.entries.length; i++) {
-		const col = globalColors.colorOptions[(i * step + colStart) % globalColors.colorOptions.length];
+		const col = globalColors.colorOptions[(i + kaihangaOptions.colStart) % globalColors.colorOptions.length];
 		segOptions.push({
 			fillStyle: col,
-			strokeStyle: KadColor.stateAsArray(col, "HSL"),
+			strokeStyle: KadColor.stateAsArray({ colorArray: col, type: "HSL" }),
 			text: kaihangaOptions.entries[i],
 			num: i,
 		});

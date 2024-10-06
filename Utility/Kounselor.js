@@ -159,12 +159,12 @@ function kounselorConvert() {
 function kounselorShowResults() {
 	for (const type of Object.keys(kounselorOptions.types)) {
 		if (type == kounselorOptions.curType) continue;
-		const val = kounselorOptions.types[type].value == null ? type : KadColor.formatAsString(kounselorOptions.types[type].value, type);
+		const val = kounselorOptions.types[type].value == null ? type : KadColor.formatAsString({ colorArray: kounselorOptions.types[type].value, type });
 		dbID(`idVin_kounselor${type}`).KadReset({ resetValue: val });
 	}
-	const colorCSS = KadColor.formatAsCSS(kounselorOptions.types.HSL.value, "HSL");
+	const colorCSS = KadColor.formatAsCSS({ colorArray: kounselorOptions.types.HSL.value, type: "HSL" });
 	dbIDStyle("idLbl_kounselorOutputA").background = colorCSS;
 	dbIDStyle("idLbl_kounselorOutputB").background = colorCSS;
-	dbIDStyle("idLbl_kounselorOutputA").color = KadColor.stateAsCSS(kounselorOptions.types.HSL.value, "HSL");
-	dbIDStyle("idLbl_kounselorOutputB").color = KadColor.stateAsCSS(kounselorOptions.types.HSL.value, "HSL", true);
+	dbIDStyle("idLbl_kounselorOutputA").color = KadColor.stateAsCSS({ colorArray: kounselorOptions.types.HSL.value, type: "HSL" });
+	dbIDStyle("idLbl_kounselorOutputB").color = KadColor.stateAsCSS({ colorArray: kounselorOptions.types.HSL.value, type: "HSL", invert: true });
 }

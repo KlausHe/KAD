@@ -402,7 +402,7 @@ class LanktonsAnt {
 	reset() {
 		this.cols = Math.floor(caBA.width / this.resolution);
 		this.rows = Math.floor(caBA.height / this.resolution);
-		this.grid = KadArray.createArray(this.cols, this.rows, 0);
+		this.grid = KadArray.createArray({ x: this.cols, y: this.rows, fillNumber: 0 });
 		this.x = Math.floor(this.cols / 2);
 		this.y = Math.floor(this.rows / 2);
 		this.dir = Math.floor(Math.random() * 4);
@@ -981,7 +981,7 @@ class GameOfLife {
 		this.resetting = null;
 		this.cols = Math.floor(caBA.width / this.resolution);
 		this.rows = Math.floor(caBA.height / this.resolution);
-		this.gridCurr = KadArray.createArray(this.cols, this.rows);
+		this.gridCurr = KadArray.createArray({ x: this.cols, y: this.rows });
 		for (let i = 0; i < this.cols; i++) {
 			for (let j = 0; j < this.rows; j++) {
 				this.gridCurr[i][j] = Math.random() > 0.7;
@@ -1006,7 +1006,7 @@ class GameOfLife {
 			}
 		}
 		// logic
-		let gridNext = KadArray.createArray(this.cols, this.rows);
+		let gridNext = KadArray.createArray({ x: this.cols, y: this.rows });
 		for (let i = 0; i < this.cols; i++) {
 			for (let j = 0; j < this.rows; j++) {
 				const state = this.gridCurr[i][j];

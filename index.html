@@ -96,27 +96,25 @@
         </div>
       </div>
     </section>
-
     <section class="cl_Barvoslepy" style="display:none;">
       <div class="cl_subGrid_Barvoslepy cl_subGrid">
         <div class="cl_BarvoslepyUpload">
-          <input type="file" id="idFile_barvoslepyUpload"></input><label class="cl_info" id="idLbl_barvoslepyUpload" for="idFile_barvoslepyUpload" uiSize="size11">Upload</label>
+          <input type="file" id="idFile_barvoslepyUpload"></input><label class="cl_info" id="idLbl_barvoslepyUpload" for="idFile_barvoslepyUpload" uiSize="size13">Upload</label>
         </div>
         <div class="cl_BarvoslepySelectImage">
-          <label class="cl_info" uiRadius="left" uiSize="size4">Testbild</label><select id="idSel_barvoslepySelectImage" uiSize="size7"></select>
+          <label class="cl_info" uiRadius="left" uiSize="size6">Testbild</label><select id="idSel_barvoslepySelectImage" uiSize="size7"></select>
         </div>
         <div class="cl_BarvoslepySelectWeakness">
-          <label class="cl_info" uiRadius="left" uiSize="size4">Schwäche</label><select id="idSel_barvoslepySelectWeakness" uiSize="size7"></select>
+          <label class="cl_info" uiRadius="left" uiSize="size6">Schwäche</label><select id="idSel_barvoslepySelectWeakness" uiSize="size7"></select>
         </div>
         <div class="cl_BarvoslepySeverity">
-          <label class="cl_info" uiSize="size5" uiRadius="left">Schaden [%]
-          </label><input type="number" id="idVin_barvoslepySeverity" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
+          <label class="cl_info" uiSize="size7" uiRadius="left">Beschädigung[%]</label><input type="number" id="idVin_barvoslepySeverity" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_BarvoslepyEpsilon">
-          <label class="cl_info" uiSize="size5" uiRadius="left">Epsilon
+          <label class="cl_info" uiSize="size7" uiRadius="left">Epsilon
           </label><input type="number" id="idVin_barvoslepyEpsilon" min="1" max="10" step="1" uiRadius="none"></input><button uiSize="size1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="size1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="size1" uiRadius="right" class="vinChangeAdd">
@@ -131,15 +129,20 @@
         <div class="cl_BarvoslepyNegative">
           <button id="idBtn_barvoslepyNegative"></button>
         </div>
+        <div class="cl_BarvoslepyWhite">
+          <button id="idBtn_barvoslepyWhite"></button>
+        </div>
+        <div class="cl_BarvoslepyBlack">
+          <button id="idBtn_barvoslepyBlack"></button>
+        </div>
         <div class="cl_BarvoslepyOverview">
-          <label class="cl_info" id="idLbl_barvoslepyApply" uiSize="size12" uiRadius="left"></label>
+          <label class="cl_info" id="idLbl_barvoslepyApply" uiSize="size14"></label>
         </div>
         <div class="cl_BarvoslepyCanvas">
           <canvas id="idCanv_barvoslepyCanvas"></canvas>
         </div>
       </div>
     </section>
-
     <section class="cl_Speech" style="display:none;">
       <div class="cl_subGrid_Speech cl_subGrid">
         <div class="cl_SpeechLangSelect" uiWrap="nowrap">

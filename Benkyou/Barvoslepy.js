@@ -1,5 +1,5 @@
-import { dbID, initEL, KadDOM, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
+import { dbID, initEL, KadDOM, KadRandom } from "../KadUtils/KadUtils.js";
 
 // barvoslepy
 const barvoslepyOptions = {
@@ -65,6 +65,7 @@ const barvoslepyOptions = {
 		Original: false,
 		Positive: false,
 		Negative: false,
+		Black: false,
 	},
 };
 
@@ -102,8 +103,10 @@ initEL({
 	},
 });
 initEL({ id: idBtn_barvoslepyOriginal, fn: () => barvoslepyShow("Original"), resetValue: "Original" });
-initEL({ id: idBtn_barvoslepyPositive, fn: () => barvoslepyShow("Positive"), resetValue: "Positive" });
-initEL({ id: idBtn_barvoslepyNegative, fn: () => barvoslepyShow("Negative"), resetValue: "Negative" });
+initEL({ id: idBtn_barvoslepyPositive, fn: () => barvoslepyShow("Positive"), resetValue: "Max is black" });
+initEL({ id: idBtn_barvoslepyNegative, fn: () => barvoslepyShow("Negative"), resetValue: "Max is white" });
+initEL({ id: idBtn_barvoslepyWhite, fn: () => barvoslepyShow("White"), resetValue: "Diff is white" });
+initEL({ id: idBtn_barvoslepyBlack, fn: () => barvoslepyShow("Black"), resetValue: "Diff is black" });
 initEL({ id: idCanv_barvoslepyCanvas, action: "click", fn: () => barvoslepyShow("Original") });
 
 export function clear_cl_Barvoslepy() {
@@ -144,7 +147,7 @@ function barvoslepyEpsilon() {
 }
 
 function barvoslepyShow(t) {
-	const thisType = t; //btn.target.textContent;
+	const thisType = t;
 	const thisState = !barvoslepyOptions.showStates[thisType];
 	barvoslepyOptions.showState = thisState ? thisType : null;
 	for (let type of Object.keys(barvoslepyOptions.showStates)) {
@@ -193,24 +196,39 @@ function barvoslepyFilter() {
 	const ctxFiltered = canvasFiltered.getContext("2d");
 	ctxFiltered.drawImage(barvoslepyOptions.image, 0, 0, w, h, 0, 0, canvasWidth, canvasHeight);
 	let pixelsFiltered = ctxFiltered.getImageData(0, 0, w, h);
+	let maxDiffs = [0, 0, 0];
+	let maxDiffArray = [];
 	if (barvoslepyOptions.showState != "Original") {
 		for (let i = 0; i < pixelsFiltered.data.length; i += 4) {
 			const pixelFiltered = [pixelsFiltered.data[i], pixelsFiltered.data[i + 1], pixelsFiltered.data[i + 2]];
 			const filteredRGB = barvoslepyOptions.brettelFunctions[type](pixelFiltered);
 			if (barvoslepyOptions.showState == null) {
-				pixelsFiltered.data[i + 0] = filteredRGB[0];
-				pixelsFiltered.data[i + 1] = filteredRGB[1];
-				pixelsFiltered.data[i + 2] = filteredRGB[2];
-			} else if (barvoslepyOptions.showState == "Positive") {
-				const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
-				pixelsFiltered.data[i + 0] = diff ? filteredRGB[0] : 0;
-				pixelsFiltered.data[i + 1] = diff ? filteredRGB[1] : 0;
-				pixelsFiltered.data[i + 2] = diff ? filteredRGB[2] : 0;
-			} else if (barvoslepyOptions.showState == "Negative") {
-				const diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
-				pixelsFiltered.data[i + 0] = diff ? 0 : filteredRGB[0];
-				pixelsFiltered.data[i + 1] = diff ? 0 : filteredRGB[1];
-				pixelsFiltered.data[i + 2] = diff ? 0 : filteredRGB[2];
+				for (let n = 0; n < 3; n++) {
+					pixelsFiltered.data[i + n] = filteredRGB[n];
+				}
+			} else if (["Positive", "Negative", "Test"].includes(barvoslepyOptions.showState)) {
+				for (let n = 0; n < 3; n++) {
+					maxDiffArray[i + n] = pixelFiltered[n] - filteredRGB[n];
+					maxDiffs[n] = Math.max(maxDiffs[n], maxDiffArray[i + n]);
+				}
+			} else if (["White", "Black"].includes(barvoslepyOptions.showState)) {
+				let diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
+				if (barvoslepyOptions.showState == "White") diff = !diff;
+				for (let n = 0; n < 3; n++) {
+					pixelsFiltered.data[i + n] = diff ? 0 : 255;
+				}
+			}
+		}
+		if (["Positive", "Negative"].includes(barvoslepyOptions.showState)) {
+			let maxDiff = Math.max(...maxDiffs);
+			for (let i = 0; i < pixelsFiltered.data.length; i += 4) {
+				let color = 255 * (Math.max(maxDiffArray[i + 0], maxDiffArray[i + 1], maxDiffArray[i + 2]) / maxDiff);
+				if (barvoslepyOptions.showState == "Positive") {
+					color = 255 - color;
+				}
+				pixelsFiltered.data[i + 0] = color;
+				pixelsFiltered.data[i + 1] = color;
+				pixelsFiltered.data[i + 2] = color;
 			}
 		}
 		ctxFiltered.putImageData(pixelsFiltered, 0, 0);

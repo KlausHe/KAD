@@ -412,7 +412,7 @@ class LottoCell {
 			color.setAlpha(0.5);
 		}
 		caLO.fill(color);
-		caLO.stroke(KadColor.stateAsArray(col, "HSL"));
+		caLO.stroke(KadColor.stateAsArray({ colorArray: col, type: "HSL" }));
 		if (this.type === "tips") {
 			caLO.circle(0, 0, this.w * 0.8);
 			caLO.noFill();
@@ -433,7 +433,7 @@ class LottoCell {
 		}
 		caLO.textAlign(caLO.CENTER, caLO.CENTER);
 		caLO.noStroke();
-		caLO.stroke(KadColor.stateAsArray(col, "HSL"));
+		caLO.stroke(KadColor.stateAsArray({ colorArray: col, type: "HSL" }));
 		caLO.textSize(globalValues.mediaSizes.fontSize);
 		caLO.text(this.num, 0, 2);
 		caLO.pop();

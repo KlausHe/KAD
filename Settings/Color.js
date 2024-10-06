@@ -46,13 +46,13 @@ export const globalColors = {
 			return [...colorSettingsOptions.mode.Navbar];
 		},
 		get text() {
-			return [...KadColor.stateAsArray(colorSettingsOptions.mode.Background, "HSL")];
+			return [...KadColor.stateAsArray({ colorArray: colorSettingsOptions.mode.Background, type: "HSL" })];
 		},
 		get textNavbar() {
-			return [...KadColor.stateAsArray(colorSettingsOptions.mode.Background, "HSL")];
+			return [...KadColor.stateAsArray({ colorArray: colorSettingsOptions.mode.Background, type: "HSL" })];
 		},
 		get line() {
-			return [...KadColor.stateAsArray(colorSettingsOptions.mode.Background, "HSL")];
+			return [...KadColor.stateAsArray({ colorArray: colorSettingsOptions.mode.Background, type: "HSL" })];
 		},
 		get btn() {
 			return [0, 0, 100];
@@ -106,7 +106,7 @@ for (let area of colorSettingsOptions.colorAreas) {
 				["mode", mode],
 				["area", area],
 			],
-			resetValue: KadColor.colAsString(colorSettingsOptions.modesOrig[mode][area], "HSL", "HEX"),
+			resetValue: KadColor.colAsString({ colorArray: colorSettingsOptions.modesOrig[mode][area], from: "HSL", to: "HEX" }),
 		});
 		initEL({
 			id: dbID(`idLbl_colorSetting_${mode}_${area}`),
@@ -116,7 +116,7 @@ for (let area of colorSettingsOptions.colorAreas) {
 				["mode", mode],
 				["area", area],
 			],
-			resetValue: KadColor.colAsString(colorSettingsOptions.modesOrig[mode][area], "HSL", "HEX"),
+			resetValue: KadColor.colAsString({ colorArray: colorSettingsOptions.modesOrig[mode][area], from: "HSL", to: "HEX" }),
 		});
 	}
 }
@@ -169,12 +169,12 @@ export function colorThemeChanged() {
 	for (let theme of colorSettingsOptions.modeNames) {
 		for (let [name, col] of Object.entries(colorSettingsOptions[theme])) {
 			const selID = `idLbl_colorSetting_${theme}_${name}`;
-			dbIDStyle(selID).background = KadColor.formatAsCSS(col, "HSL");
-			dbIDStyle(selID).color = KadColor.stateAsCSS(col, "HSL");
+			dbIDStyle(selID).background = KadColor.formatAsCSS({ colorArray: col, type: "HSL" });
+			dbIDStyle(selID).color = KadColor.stateAsCSS({ colorArray: col, type: "HSL" });
 			if (colorSettingsOptions.currentMode == theme) {
-				KadCSS.setRoot(`bgc${name}`, KadColor.formatAsString(col, "HSL"));
-				KadCSS.setRoot(`txt${name}`, KadColor.stateAsString(col, "HSL"));
-				KadCSS.setRoot(`inv${name}`, KadColor.stateAsBool(col, "HSL"));
+				KadCSS.setRoot({ variable: `bgc${name}`, value: KadColor.formatAsString({ colorArray: col, type: "HSL" }) });
+				KadCSS.setRoot({ variable: `txt${name}`, value: KadColor.stateAsString({ colorArray: col, type: "HSL" }) });
+				KadCSS.setRoot({ variable: `inv${name}`, value: KadColor.stateAsBool({ colorArray: col, type: "HSL" }) });
 			}
 		}
 	}
@@ -197,10 +197,10 @@ export function colToggleColormode() {
 }
 
 function populateColorSelector() {
-	const optionStrings = globalColors.colorOptionsFull.map((c) => KadColor.colAsString(c, "HSL", "HEX"));
+	const optionStrings = globalColors.colorOptionsFull.map((c) => KadColor.colAsString({ colorArray: c, from: "HSL", to: "HEX" }));
 	for (let area of colorSettingsOptions.colorAreas) {
 		for (let mode of colorSettingsOptions.modeNames) {
-			const color = KadColor.colAsString(colorSettingsOptions[mode][area], "HSL", "HEX");
+			const color = KadColor.colAsString({ colorArray: colorSettingsOptions[mode][area], from: "HSL", to: "HEX" });
 			dbID(`idVin_colorSetting_${mode}_${area}`).KadReset({ resetValue: color, dbList: optionStrings });
 			dbID(`idLbl_colorSetting_${mode}_${area}`).KadSetText(`${area} (${color})`);
 		}
@@ -212,16 +212,16 @@ function colorChange(obj) {
 	const area = obj.target.dataset.area;
 	const hexColor = obj.target.value.toUpperCase();
 
-	colorSettingsOptions[mode][area] = KadColor.colAsArray(hexColor, "HEX", "HSL");
+	colorSettingsOptions[mode][area] = KadColor.colAsArray({ colorArray: hexColor, from: "HEX", to: "HSL" });
 	const col = colorSettingsOptions[mode][area];
-	dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).background = KadColor.formatAsCSS(col, "HSL");
-	dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).color = KadColor.stateAsCSS(col, "HSL");
+	dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).background = KadColor.formatAsCSS({ colorArray: col, type: "HSL" });
+	dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).color = KadColor.stateAsCSS({ colorArray: col, type: "HSL" });
 	dbID(`idLbl_colorSetting_${mode}_${area}`).KadSetText(`${area} (${hexColor})`);
 
 	if (mode == colorSettingsOptions.currentMode) {
-		KadCSS.setRoot(`bgc${area}`, KadColor.formatAsString(col, "HSL"));
-		KadCSS.setRoot(`txt${area}`, KadColor.stateAsString(col, "HSL"));
-		KadCSS.setRoot(`inv${area}`, KadColor.stateAsBool(col, "HSL"));
+		KadCSS.setRoot({ variable: `bgc${area}`, value: KadColor.formatAsString({ colorArray: col, type: "HSL" }) });
+		KadCSS.setRoot({ variable: `txt${area}`, value: KadColor.stateAsString({ colorArray: col, type: "HSL" }) });
+		KadCSS.setRoot({ variable: `inv${area}`, value: KadColor.stateAsBool({ colorArray: col, type: "HSL" }) });
 		colorUpdateCanvascolors();
 	}
 }

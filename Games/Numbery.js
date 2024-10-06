@@ -9,6 +9,7 @@ const numberyOptions = {
 	get player() {
 		return this.players[this.playerID];
 	},
+	colStart: 0,
 	pairs: null,
 	pairsIndex: 3,
 	cells: [],
@@ -61,6 +62,7 @@ initEL({ id: idBtn_startNumbery, fn: numberyToggleStart });
 
 export function clear_cl_Numbery() {
 	KadInteraction.removeContextmenu(idDiv_numberyImages);
+	numberyOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
 	idVin_numberyPlayer.KadReset();
 	idSel_numberCategory.KadReset();
 	numberyOptions.pairs = numberyOptions.availiablePairs[idSel_numberyPairs.KadReset()];
@@ -201,11 +203,11 @@ function numberyCheckTwo() {
 	const cells = [numberyOptions.cells[numberyOptions.cellCurrSel[0]], numberyOptions.cells[numberyOptions.cellCurrSel[1]]];
 	if (cells[0].svg.dataset.imgID == cells[1].svg.dataset.imgID) {
 		numberyOptions.player.scored();
-		const c = KadColor.stateAsBool(numberyOptions.player.col, "HSL");
+		const c = KadColor.stateAsBool({ colorArray: numberyOptions.player.col, type: "HSL" });
 		for (let cell of cells) {
 			cell.div.classList.add("numbery_Div");
 			cell.svg.classList.add("numbery_Svg");
-			cell.div.style.setProperty("--col", KadColor.formatAsString(numberyOptions.player.col, "HSL"));
+			cell.div.style.setProperty("--col", KadColor.formatAsString({ colorArray: numberyOptions.player.col, type: "HSL" }));
 			cell.svg.style.setProperty("--inv", c);
 		}
 	} else {
@@ -230,13 +232,13 @@ function numberyCheckFinished() {
 	}
 	numberyToggleStart();
 	const result = dbID("idLbl_numberyResult");
-	let maxScored = KadArray.sortArrayByKey(numberyOptions.players, "score", true);
+	let maxScored = KadArray.sortArrayByKey({ array: numberyOptions.players, keys: "score", inverse: true });
 	if (maxScored[0].score == maxScored[1].score) {
 		result.textContent = `Unentschieden mit ${maxScored[0].score} Punkten`;
 	} else {
 		result.textContent = `${maxScored[0].name} won!`;
-		result.style.setProperty("--bgcNavbar", KadColor.formatAsString(maxScored[0].col, "HSL"));
-		result.style.setProperty("--txtNavbar", KadColor.stateAsString(maxScored[0].col, "HSL"));
+		result.style.setProperty("--bgcNavbar", KadColor.formatAsString({ colorArray: maxScored[0].col, type: "HSL" }));
+		result.style.setProperty("--txtNavbar", KadColor.stateAsString({ colorArray: maxScored[0].col, type: "HSL" }));
 	}
 	return true;
 }
@@ -282,10 +284,8 @@ function numberyMakePlayers(numPlayer) {
 	numberyOptions.players = [];
 	numberyOptions.playerID = 0;
 
-	const colStart = KadRandom.randomIndex(globalColors.colorOptions);
-	const step = Math.floor(globalColors.colorOptions.length / numPlayer);
 	for (let i = 0; i < numPlayer; i++) {
-		const color = globalColors.colorOptions[(i * step + colStart) % globalColors.colorOptions.length];
+		const color = globalColors.colorOptions[(i + numberyOptions.colStart) % globalColors.colorOptions.length];
 		numberyOptions.players.push(new NumberyPlayer(i, color));
 	}
 }

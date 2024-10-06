@@ -54,7 +54,7 @@ function tugasCreateTable() {
 			state: Object.values(tugasOptions)[i],
 		});
 	}
-	const sortedList = KadArray.sortArrayByKey(tempList, "name", false, true);
+	const sortedList = KadArray.sortArrayByKey({ array: tempList, keys: "name", caseSensitive: true });
 
 	//create list
 	for (let i = 0; i < sortedList.length; i++) {

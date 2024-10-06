@@ -76,7 +76,7 @@ function settingsFontsize(obj = null) {
 	} else {
 		idSel_settingsFontsize.KadReset({ selStartValue: globalValues.settings.fontSize });
 	}
-	KadCSS.setRoot("fontSize", `${globalValues.settings.fontSize}px`);
+	KadCSS.setRoot({ varabel: "fontSize", value: globalValues.settings.fontSize, dim: "px" });
 	colorUpdateCanvascolors();
 	resizeGrid();
 }

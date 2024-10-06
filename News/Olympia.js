@@ -66,7 +66,7 @@ function olympiaSpecific() {
 function olympiaSortByTotal() {
 	olympiaOptions.sortTotal = !olympiaOptions.sortTotal;
 	const dataset = olympiaOptions.specific ? "specific" : "medals";
-	olympiaOptions.data = KadArray.sortArrayByKey(olympiaOptions.data, [dataset, "total"], olympiaOptions.sortTotal);
+	olympiaOptions.data = KadArray.sortArrayByKey({ array: olympiaOptions.data, keys: [dataset, "total"], inverse: olympiaOptions.sortTotal });
 	olympiaTableReturn();
 }
 
@@ -74,7 +74,7 @@ function olympiaSortByMedals() {
 	olympiaOptions.sortMedals = !olympiaOptions.sortMedals;
 	const dataset = olympiaOptions.specific ? "specific" : "medals";
 	for (let type of ["bronze", "silver", "gold"]) {
-		olympiaOptions.data = KadArray.sortArrayByKey(olympiaOptions.data, [dataset, type], olympiaOptions.sortMedals);
+		olympiaOptions.data = KadArray.sortArrayByKey({ array: olympiaOptions.data, keys: [dataset, type], inverse: olympiaOptions.sortMedals });
 	}
 	olympiaTableReturn();
 }

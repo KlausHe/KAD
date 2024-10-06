@@ -36,7 +36,7 @@ export function clear_cl_Speech() {
 		return;
 	} else {
 		speechTranslatePopulateLanguage();
-		speechOptions.voices = KadArray.sortArrayByKey(voicesUnsorted, "lang", false, true);
+		speechOptions.voices = KadArray.sortArrayByKey({ array: voicesUnsorted, keys: "lang", caseSensitive: true });
 		speechHandleLanguageSelect();
 	}
 }

@@ -1,19 +1,22 @@
 import { contentGrid, contentLayout, createGridLayout } from "../General/Layout.js";
 import { contentGroupsMaincontent } from "../General/MainContent.js";
-import { dbCL, dbID, hostDebug, initEL, KadArray, KadDOM, KadInteraction, KadTable } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, hostDebug, initEL, KadArray, KadColor, KadDOM, KadInteraction, KadTable, log } from "../KadUtils/KadUtils.js";
 import { globalColors } from "./Color.js";
 import { globalValues } from "./General.js";
 
 const usergridOptions = {
 	get canvas() {
-		return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h * 2 };
+		return { w: globalValues.mediaSizes.canvasSize.w, h: this.height };
 	},
+	height: 100,
+	cellHeight: 40,
 	canvasCells: [],
 	columns: 3,
 	enableAll: true,
 	groups: {},
 	enableGroups: {},
 	usedGrid: hostDebug() ? "Utility" : "User",
+	groupColors: {},
 };
 
 initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
@@ -31,10 +34,14 @@ export function clear_cl_UserGridLayout() {
 	usergridCreateTable();
 
 	//separate because IDs not ready before
-	for (let groupKey of contentGroupsMaincontent) {
+	for (let i = 0; i < contentGroupsMaincontent.length; i++) {
+		const groupKey = contentGroupsMaincontent[i];
+		const col = globalColors.colorOptions[(5 + i) % globalColors.colorOptions.length];
+		usergridOptions.groupColors[groupKey] = [col, KadColor.stateAsArray({ colorArray: col, type: "HSL" })];
 		usergridCheckGroup(groupKey);
 	}
-	createBlockArray();
+
+	createCells();
 }
 
 export const storage_cl_UserGridLayout = {
@@ -210,19 +217,23 @@ const caUG = new p5((c) => {
 	};
 }, "#idCanv_userGrid");
 
-function createBlockArray() {
+function createCells() {
 	if (contentLayout.navContent[usergridOptions.usedGrid].length === 0) return;
 	usergridOptions.canvasCells = [];
-	const gridCols = contentLayout.navContent[usergridOptions.usedGrid].length; //getCssRoot("gridColLength", true);
-	const { rowLength, gridArray } = createGridLayout("Universe"); //usergridOptions.usedGrid
-	const cellSize = [Math.floor(usergridOptions.canvas.w / rowLength), 50]; // Math.floor(usergridOptions.canvas.h / usergridOptions.canvasCols)
+	const { rowLength, gridArray } = createGridLayout(usergridOptions.usedGrid);
+	const x = Math.floor(usergridOptions.canvas.w / rowLength);
+	const cellSize = [x, usergridOptions.cellHeight];
+	usergridOptions.height = cellSize[1] * (gridArray.length / rowLength) + usergridOptions.cellHeight / 2;
+	canvas_cl_UserGridLayout(); //resize Canvas
+
 	let existingNames = [];
 	for (let n = 0; n < gridArray.length; n++) {
 		const name = gridArray[n];
 		if (name == undefined) continue;
+		const obj = contentGrid[name];
 		if (!existingNames.includes(name)) {
 			const { i, j } = KadArray.indexTo2DxyPosition(n, rowLength);
-			usergridOptions.canvasCells.push(new UGridCell(name, j, i, cellSize[0], cellSize[1]));
+			usergridOptions.canvasCells.push(new UGridCell(obj, j, i, cellSize[0], cellSize[1]));
 			existingNames.push(name);
 		}
 	}
@@ -230,30 +241,32 @@ function createBlockArray() {
 }
 
 class UGridCell {
-	constructor(name, px, py, cellW, cellH) {
-		this.name = contentGrid[name].name;
-		this.size = [contentGrid[name].size[0] * cellW, cellH * contentGrid[name].size[1]];
+	constructor(obj, px, py, cellW, cellH) {
+		this.name = obj.name;
+		this.group = obj.contentGroup;
+		this.size = [obj.size[0] * cellW, cellH * obj.size[1]];
 		this.pos = [px * cellW, py * cellH];
+		this.backgroundColor = usergridOptions.groupColors[this.group][0];
+		this.textColor = usergridOptions.groupColors[this.group][1];
 	}
 	margin = 5;
 
 	show() {
-		let bgcColor = "red"; // globalColors.elements.baseColor; // this.free ? (this.selected ? getCssRoot("bgcSubgrid") : getCssRoot("bgcNavbar")) : getCssRoot("bgcBackground");
-		let textColor = globalColors.elements.text; // this.free ? (this.selected ? getCssRoot("textColorSubgrid") : getCssRoot("textColorNavbar")) : getCssRoot("textColorBackground");
 		caUG.push();
-		caUG.translate(this.pos[0] + this.margin, this.pos[1] + this.margin);
+		caUG.translate(this.pos[0], this.pos[1]);
 		//RECTANGLE
 		// caUG.noFill();
-		caUG.fill(bgcColor);
-		caUG.stroke(textColor);
+		caUG.fill(this.backgroundColor);
+		caUG.stroke(this.textColor);
 		caUG.strokeWeight(2);
-		caUG.rect(0, 0, this.size[0] - 2 * this.margin, this.size[1] - 2 * this.margin);
+		caUG.rect(this.margin, this.margin, this.size[0] - 2 * this.margin, this.size[1] - 2 * this.margin);
 		//TEXT
-		caUG.fill(textColor);
+		caUG.fill(this.textColor);
 		caUG.noStroke();
-		// caUG.textAlign(caUG.CENTER, caUG.CENTER);
-		caUG.textAlign(caUG.CENTER, caUG.CENTER);
+		caUG.textAlign(caUG.CENTER, caUG.BOTTOM);
 		caUG.text(this.name, this.size[0] / 2, this.size[1] / 2);
+		caUG.textAlign(caUG.CENTER, caUG.TOP);
+		caUG.text(`(${this.group})`, this.size[0] / 2, this.size[1] / 2);
 		caUG.stroke(0, 0, 255);
 		caUG.strokeWeight(8);
 		caUG.pop();
@@ -301,7 +314,7 @@ function mouseReleasedUGrid() {
   usergridOptions.canvasCells[usergridOptions.canvasSelCell].selected = false;
   usergridOptions.canvasMousePressed = false;
   usergridOptions.canvasCells[usergridOptions.canvasSelCell].snap();
-  usergridOptions.canvasCells.push(usergridOptions.canvasCells.splice(usergridOptions.canvasSelCell, 1)[0]); //place Cell at the end of the createBlockArray
+  usergridOptions.canvasCells.push(usergridOptions.canvasCells.splice(usergridOptions.canvasSelCell, 1)[0]); //place Cell at the end of the createCells
   caUG.redraw();
 };
 

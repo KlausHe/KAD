@@ -273,10 +273,10 @@ function linahaAnswered(index) {
 		const isCorrect = index == linahaOptions.answerIndex;
 		linahaOptions.correctRounds += isCorrect ? 1 : 0;
 		if (isCorrect) {
-			dbIDStyle(`idBtn_child_linahaAnswers_${index}`).backgroundColor = KadColor.formatAsCSS(globalColors.elements.btnPositive, "HSL");
+			dbIDStyle(`idBtn_child_linahaAnswers_${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
 		} else {
-			dbIDStyle(`idBtn_child_linahaAnswers_${index}`).backgroundColor = KadColor.formatAsCSS(globalColors.elements.btnNegative, "HSL");
-			dbIDStyle(`idBtn_child_linahaAnswers_${linahaOptions.answerIndex}`).backgroundColor = KadColor.formatAsCSS(globalColors.elements.btnPositive, "HSL");
+			dbIDStyle(`idBtn_child_linahaAnswers_${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnNegative, type: "HSL" });
+			dbIDStyle(`idBtn_child_linahaAnswers_${linahaOptions.answerIndex}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
 		}
 	} else {
 		if (linahaOptions.currentRound < linahaOptions.selRounds - 1) {

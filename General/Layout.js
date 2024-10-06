@@ -9,7 +9,7 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_Howa" : "Universe",
+	defaultPage: hostDebug() ? "cl_News" : "Universe",
 	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
 	prevNavContent: null,
 	prevNavFullscreen: null,
@@ -92,7 +92,7 @@ export function resizeGrid() {
 	const x = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols, floored division
 	const calcX = x; //tryWidth < winWidth + gap + margin * 2 ? x : x;
 	if (KadCSS.getRoot({ value: "gridRowLength" }) != calcX) {
-		KadCSS.setRoot("gridRowLength", calcX);
+		KadCSS.setRoot({ variable: "gridRowLength", value: calcX });
 		navClick(contentLayout.prevNavContent);
 	}
 	let navNames = dbCL("cl_navNames", null);
@@ -227,7 +227,7 @@ function layoutContentList(layoutName) {
 	if (layoutName === "AccountSettings") return contentLayout.AccountSettings;
 	if (userLoggedIn()) return [...contentLayout.navContent[layoutName]];
 	return [...contentLayout.navContent[layoutName]].filter((content) => {
-		return hostDebug() ? true : contentGrid[content].logReqUser == undefined;
+		return hostDebug() ? true : contentGrid[content].logReqUser == undefined || contentGrid[content].logReqUser == false;
 	});
 }
 
@@ -281,7 +281,7 @@ export function createSubgrid() {
 		}
 		childDivArea.gridTemplateRows += "auto";
 
-		const arr = KadArray.createArray(contentObj.maingrid.areas[0].length, null, "auto").join(" ");
+		const arr = KadArray.createArray({ x: contentObj.maingrid.areas[0].length, fillNumber: "auto" }).join(" ");
 		childDivArea.gridTemplateColumns = `1fr ${arr} 1fr`;
 
 		childDivArea.gridTemplateAreas = "";

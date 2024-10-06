@@ -12,7 +12,7 @@ const pafadojOptions = {
 		2022: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
 		2021: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
 		2020: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
-		2019: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
+		// 2019: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
 		2018: [0, ["Date", "Dead", "Injured", "Total", "Community"]],
 		2017: [0, ["Date", "Dead", "Injured", "Total", "Location"]],
 	},
@@ -36,7 +36,6 @@ async function pafadojUpdate() {
 	if (layoutCheckCORSandDisableModule(error, "Pafadoj")) return;
 	pafadojOptions.data = [];
 	pafadojOptions.dataTotal = { Dead: 0, Injured: 0, Total: 0 };
-
 	for (let row of dataTable[0]) {
 		let dataObj = {};
 		for (let head of pafadojOptions.headers[pafadojOptions.date][1]) {
@@ -89,7 +88,6 @@ function pafadojTableReturn() {
 
 function pafadojSort(type) {
 	pafadojOptions.sort[type] = !pafadojOptions.sort[type];
-	pafadojOptions.data = KadArray.sortArrayByKey(pafadojOptions.data, type, pafadojOptions.sort[type]);
-	log(pafadojOptions.data);
+	pafadojOptions.data = KadArray.sortArrayByKey({ array: pafadojOptions.data, keys: type, inverse: pafadojOptions.sort[type] });
 	pafadojTableReturn();
 }
