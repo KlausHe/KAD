@@ -1,6 +1,6 @@
 import { contentGrid, contentLayout, createGridLayout } from "../General/Layout.js";
 import { contentGroupsMaincontent } from "../General/MainContent.js";
-import { dbCL, dbID, hostDebug, initEL, KadArray, KadColor, KadDOM, KadInteraction, KadTable, log } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, hostDebug, initEL, KadColor, KadDOM, KadInteraction, KadTable, log } from "../KadUtils/KadUtils.js";
 import { globalColors } from "./Color.js";
 import { globalValues } from "./General.js";
 
@@ -15,12 +15,13 @@ const usergridOptions = {
 	enableAll: true,
 	groups: {},
 	enableGroups: {},
-	usedGrid: hostDebug() ? "Utility" : "User",
+	usedGrid: "Universe",
 	groupColors: {},
 };
 
 initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
 initEL({ id: idBtn_userGridSaveLayout, fn: saveUsergridLayout });
+initEL({ id: idSel_userGridSelect, fn: userGridSelectGroup });
 
 export function clear_cl_UserGridLayout() {
 	KadInteraction.removeContextmenu(idCanv_userGrid);
@@ -32,6 +33,7 @@ export function clear_cl_UserGridLayout() {
 		usergridOptions.enableGroups[groupKey] = false;
 	}
 	usergridCreateTable();
+	idSel_userGridSelect.KadReset({ selList: [["Universe", "Universe"], ...Object.keys(usergridOptions.groups).map((item) => [item, item]), ["User", "User"]] });
 
 	//separate because IDs not ready before
 	for (let i = 0; i < contentGroupsMaincontent.length; i++) {
@@ -187,6 +189,11 @@ function saveUsergridLayout() {
 	dbID("idBtn_child_gridtitle_dbUL_cl_UserGridLayout").click();
 }
 
+function userGridSelectGroup() {
+	usergridOptions.usedGrid = idSel_userGridSelect.KadGet();
+	createCells();
+}
+
 export function canvas_cl_UserGridLayout() {
 	caUG.resizeCanvas(usergridOptions.canvas.w, usergridOptions.canvas.h);
 	caUG.redraw();
@@ -220,21 +227,22 @@ const caUG = new p5((c) => {
 function createCells() {
 	if (contentLayout.navContent[usergridOptions.usedGrid].length === 0) return;
 	usergridOptions.canvasCells = [];
-	const { rowLength, gridArray } = createGridLayout(usergridOptions.usedGrid);
-	const x = Math.floor(usergridOptions.canvas.w / rowLength);
+	const { grid2DArray } = createGridLayout(usergridOptions.usedGrid);
+	const x = Math.floor(usergridOptions.canvas.w / grid2DArray[0].length);
 	const cellSize = [x, usergridOptions.cellHeight];
-	usergridOptions.height = cellSize[1] * (gridArray.length / rowLength) + usergridOptions.cellHeight / 2;
-	canvas_cl_UserGridLayout(); //resize Canvas
+	usergridOptions.height = cellSize[1] * grid2DArray.length + usergridOptions.cellHeight / 2;
+	canvas_cl_UserGridLayout(); //resize sCanvas
 
 	let existingNames = [];
-	for (let n = 0; n < gridArray.length; n++) {
-		const name = gridArray[n];
-		if (name == undefined) continue;
-		const obj = contentGrid[name];
-		if (!existingNames.includes(name)) {
-			const { i, j } = KadArray.indexTo2DxyPosition(n, rowLength);
-			usergridOptions.canvasCells.push(new UGridCell(obj, j, i, cellSize[0], cellSize[1]));
-			existingNames.push(name);
+	for (let row = 0; row < grid2DArray.length; row++) {
+		for (let column = 0; column < grid2DArray[row].length; column++) {
+			const name = grid2DArray[row][column];
+			if (name == 0) continue;
+			const obj = contentGrid[name];
+			if (!existingNames.includes(name)) {
+				usergridOptions.canvasCells.push(new UGridCell(obj, column, row, cellSize[0], cellSize[1]));
+				existingNames.push(name);
+			}
 		}
 	}
 	caUG.redraw();

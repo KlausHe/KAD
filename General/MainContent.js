@@ -459,7 +459,7 @@ export const rawContentGrid = {
 			GeoLocation: "https://github.com/bigdatacloudapi/js-reverse-geocode-client",
 		},
 		info: "Wettervorhersage für die nächsten Tage.",
-		size: [3, 2],
+		size: [3, 1],
 		maingrid: {
 			areas: [
 				["cl_HowaInput", "cl_HowaMapsSelectDistrict", "cl_HowaMapsSelectCriteria"],
@@ -1278,7 +1278,7 @@ export const rawContentGrid = {
 		size: [3, 2],
 		maingrid: {
 			areas: [
-				["cl_UserGridOptions", "cl_UserGridCanvas"],
+				["cl_UserGridOptions", "cl_UserGridSelect"],
 				["cl_UserGridTable", "cl_UserGridCanvas"],
 			],
 			rows: [1],
@@ -1286,6 +1286,7 @@ export const rawContentGrid = {
 		subgrid: [
 			["cl_UserGridOptions", "center"],
 			["cl_UserGridTable", "center"],
+			["cl_UserGridSelect", "center"],
 			["cl_UserGridCanvas", "center"],
 		],
 	},

@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, errorChecked, getFavicon, hostDebug, logChecked } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, errorChecked, getFavicon, hostDebug, log, logChecked, logLevel } from "../KadUtils/KadUtils.js";
 import { updateMasterSelect } from "../Main.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
@@ -9,7 +9,7 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "cl_News" : "Universe",
+	defaultPage: hostDebug() ? "News" : "Universe",
 	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
 	prevNavContent: null,
 	prevNavFullscreen: null,
@@ -121,8 +121,8 @@ export function navClick(layoutName = contentLayout.defaultPage) {
 	}
 	contentLayout.prevNavContent = layoutName || contentLayout.defaultPage;
 	navTitle();
-	const { contentList, rowLength, gridArray } = createGridLayout(contentLayout.prevNavContent);
-	createAreaString({ contentList, rowLength, gridArray });
+	const { contentList, grid2DArray } = createGridLayout(contentLayout.prevNavContent);
+	createAreaString({ grid2DArray });
 
 	for (let objKey in contentGrid) {
 		const state = contentList.includes(objKey);
@@ -138,8 +138,8 @@ export function navClick(layoutName = contentLayout.defaultPage) {
 		}
 	}
 	setTimeout(() => {
-		KadDOM.scrollToTop(id_contentGrid);
-	}, 500);
+		KadDOM.scrollToTop();
+	}, 100);
 }
 
 function navTitle() {
@@ -163,61 +163,71 @@ export function createGridLayout(layoutName = contentLayout.defaultPage) {
 		return;
 	}
 	// fill list with data
-	const rowLength = contentList.length == 1 ? 1 : KadCSS.getRoot({ value: "gridRowLength" }) + 1;
-	let gridArray = [];
-	if (rowLength === 1) {
+	const columns = contentList.length == 1 ? 1 : KadCSS.getRoot({ value: "gridRowLength" }) + 1;
+	if (columns === 1) {
+		let grid2DArray = [];
 		for (const name of contentList) {
-			gridArray.push(name);
+			grid2DArray.push([name]);
 		}
-		return { contentList, rowLength, gridArray };
+		return { contentList, grid2DArray };
 	}
+
+	let rows = 1;
 	for (const name of contentList) {
-		logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name);
+		if (!logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name)) {
+			rows += contentGrid[name].size[1];
+		}
+	}
+
+	let grid2DArray = KadArray.createArray({ x: rows, y: columns, fillNumber: false });
+	for (const name of contentList) {
 		let contWidth = contentGrid[name].size[0];
-		if (contWidth > rowLength) contWidth = rowLength;
-		const contHeight = contentGrid[name].size[1];
+		let contHeight = contentGrid[name].size[1];
+		if (logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name)) {
+			contWidth = 1;
+			contHeight = 1;
+		}
+		if (contWidth > columns) contWidth = columns;
 
-		let notPlaced = true;
-		let indexRow = 0;
+		tryPlacing: for (let row = 0; row < rows; row++) {
+			for (let column = 0; column < columns - contWidth + 1; column++) {
+				if (grid2DArray[row][column] != false) continue;
 
-		while (notPlaced) {
-			for (let r = 0; r < rowLength; r++) {
-				const indexR = indexRow * rowLength + r;
-				notPlaced = false;
-				//if the first spot is not free and if the row can't contain the contWidth --> do nothing!
-				if (gridArray[indexR] !== undefined || Math.floor((indexR + contWidth - 1) / rowLength) != indexRow) {
-					notPlaced = true;
-				} else {
-					// if this place and all to the right are free(second loop) - and inside that loop,
-					for (let x = 0; x < contWidth; x++) {
-						for (let y = 0; y < contHeight; y++) {
-							const index = indexR + x + y * rowLength;
-							if (gridArray[index] !== undefined) notPlaced = true;
+				let placeable = true;
+				tryNextSpot: for (let height = 0; height < contHeight; height++) {
+					for (let width = 0; width < contWidth; width++) {
+						if (grid2DArray[row + height][column + width] != false) {
+							placeable = false;
+							break tryNextSpot;
 						}
 					}
-					if (!notPlaced) {
-						// if  true, push to Array at these places!
-						for (let x = 0; x < contWidth; x++) {
-							for (let y = 0; y < contHeight; y++) {
-								const index = indexR + x + y * rowLength;
-								gridArray[index] = name; //--> not the name, the Index in the contentGrid!!!
-							}
-						}
-						notPlaced = false;
-						break;
-					} //end Insertion
-				} //end ELSE "first spot is not taken"
-
-				if (!notPlaced) break;
-			} // end main FOR (r)
-			indexRow++;
-			//safety
-			if (logChecked(indexRow > 100, "unable to find spot!")) {
-				break;
+				}
+				if (!placeable) continue;
+				for (let height = 0; height < contHeight; height++) {
+					for (let width = 0; width < contWidth; width++) {
+						grid2DArray[row + height][column + width] = name;
+					}
+				}
+				break tryPlacing;
 			}
-		} // end WHILE
-	} // end Grid-Element
-	return { contentList, rowLength, gridArray };
+		}
+	}
+
+	for (let i = grid2DArray.length - 1; i > 0; i--) {
+		if (grid2DArray[i].every((item) => item === false)) grid2DArray.pop();
+		else break;
+	}
+
+	//TODO: expand content if "." is below or to the right
+	// for (let row = 0; row < grid2DArray.length; row++) {
+	// 	for (let col = 0; col < grid2DArray[row].length; col++) {
+	// 		if (grid2DArray[row][col] == false){
+	//       grid2DArray[row-1][col]
+	//     }
+	// 	}
+	// }
+
+	return { contentList, grid2DArray };
 }
 
 function layoutContentList(layoutName) {
@@ -231,27 +241,18 @@ function layoutContentList(layoutName) {
 	});
 }
 
-function createAreaString({ rowLength, gridArray } = {}) {
-	if (gridArray == []) {
+function createAreaString({ grid2DArray } = {}) {
+	if (grid2DArray.length == 0) {
 		dbIDStyle("id_contentGrid").gridTemplateAreas = "";
 		error("No Grid for gridTemplateAreas provided");
 		return;
 	}
 
-	const gridEnd = gridArray.length % rowLength;
-	const addedLength = gridEnd == 0 ? 0 : rowLength - gridEnd;
-	const iteratinoLength = gridArray.length + addedLength;
-
-	// turn grid array to String
 	let gridString = "";
-	for (let i = 0; i < iteratinoLength; i++) {
-		if (i % rowLength === 0) {
-			gridString += '" "';
-		}
-		gridString += gridArray[i] === undefined ? ". " : `${gridArray[i]} `;
+	for (let row of grid2DArray) {
+		const rowCleaned = row.map((item) => (item == false ? " . " : item));
+		gridString += `" ${rowCleaned.join(" ")} "`;
 	}
-	gridString += '"';
-	gridString = gridString.slice(2); // remove fist '" ' from the string
 	dbIDStyle("id_contentGrid").gridTemplateAreas = gridString;
 }
 
