@@ -527,7 +527,7 @@ export const rawContentGrid = {
 		name: "Pafadoj",
 		heritage: ["esperanto", "Schießerei"],
 		source: {
-			Daten: "hhttps://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States",
+			Daten: "https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States",
 		},
 		size: [2, 1],
 		maingrid: {
@@ -1172,6 +1172,29 @@ export const rawContentGrid = {
 			["cl_PlatLesenNumInput", "center"],
 			["cl_PlatLesenRegInput", "center"],
 			["cl_PlatLesenResult", "center"],
+		],
+	},
+	cl_Sima: {
+		contentGroup: "Utility",
+		name: "Sima",
+		heritage: ["isländisch", "Telefon"],
+		source: {
+			Daten: "https://de.wikipedia.org/wiki/Ländervorwahlliste_sortiert_nach_Nummern",
+		},
+		size: [1, 1],
+		maingrid: {
+			areas: [
+				//
+				["cl_SimaCountryInput"],
+				["cl_SimaNumberInput"],
+				["cl_SimaResult"],
+			],
+			rows: [0, 0],
+		},
+		subgrid: [
+			["cl_SimaCountryInput", "center"],
+			["cl_SimaNumberInput", "center"],
+			["cl_SimaResult", "center"],
 		],
 	},
 	cl_Thiontu: {

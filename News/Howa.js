@@ -52,7 +52,7 @@ let howaOptions = {
 	},
 };
 
-initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Search", dbList: Array.from(Data_Nummernschild.values()).sort() });
+initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Search", dbList: Data_Nummernschild.map((item) => item[1]).sort() });
 initEL({ id: idBtn_getGeoLocation, fn: howaGetCoordinates });
 initEL({ id: idBtn_howaGetLocation, fn: howaGetLocation });
 initEL({

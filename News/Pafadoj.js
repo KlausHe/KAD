@@ -1,5 +1,5 @@
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
-import { KadArray, KadFile, KadTable, initEL, log } from "../KadUtils/KadUtils.js";
+import { KadArray, KadFile, KadTable, initEL } from "../KadUtils/KadUtils.js";
 
 const pafadojOptions = {
 	get URL() {

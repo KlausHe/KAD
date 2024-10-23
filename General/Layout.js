@@ -3,13 +3,14 @@ import { updateMasterSelect } from "../Main.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
+import { userGridCreateCells } from "../Settings/Usergridlayout.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "News" : "Universe",
+	defaultPage: hostDebug() ? "Utility" : "Universe",
 	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
 	prevNavContent: null,
 	prevNavFullscreen: null,
@@ -107,6 +108,7 @@ export function resizeGrid() {
 			obj.style.display = diff2 ? "none" : "initial";
 		});
 	}
+	userGridCreateCells();
 }
 
 export function navClick(layoutName = contentLayout.defaultPage) {
@@ -178,7 +180,7 @@ export function createGridLayout(layoutName = contentLayout.defaultPage) {
 			rows += contentGrid[name].size[1];
 		}
 	}
-
+	let gridData = [];
 	let grid2DArray = KadArray.createArray({ x: rows, y: columns, fillNumber: false });
 	for (const name of contentList) {
 		let contWidth = contentGrid[name].size[0];
@@ -203,6 +205,7 @@ export function createGridLayout(layoutName = contentLayout.defaultPage) {
 					}
 				}
 				if (!placeable) continue;
+				gridData.push({ name, row, contHeight, column, contWidth });
 				for (let height = 0; height < contHeight; height++) {
 					for (let width = 0; width < contWidth; width++) {
 						grid2DArray[row + height][column + width] = name;
@@ -218,16 +221,47 @@ export function createGridLayout(layoutName = contentLayout.defaultPage) {
 		else break;
 	}
 
-	//TODO: expand content if "." is below or to the right
-	// for (let row = 0; row < grid2DArray.length; row++) {
-	// 	for (let col = 0; col < grid2DArray[row].length; col++) {
-	// 		if (grid2DArray[row][col] == false){
-	//       grid2DArray[row-1][col]
-	//     }
-	// 	}
-	// }
+	// fill empty spaces
+	for (let item of gridData) {
+		let whileCounter = 0;
+		// check bottom
+		let expandBottom = true;
+		while (expandBottom) {
+			tryBottom: for (let width = 0; width < item.contWidth; width++) {
+				if (grid2DArray[item.row + item.contHeight + whileCounter] === undefined || grid2DArray[item.row + item.contHeight + whileCounter][item.column + width] != false) {
+					expandBottom = false;
+					break tryBottom;
+				}
+			}
+			if (expandBottom) {
+				for (let width = 0; width < item.contWidth; width++) {
+					grid2DArray[item.row + item.contHeight + whileCounter][item.column + width] = item.name;
+				}
+				whileCounter++;
+			}
+		}
+		item.contHeight += whileCounter;
 
-	return { contentList, grid2DArray };
+		// check right
+		whileCounter = 0;
+		let expandRight = true;
+		while (expandRight) {
+			tryRight: for (let height = 0; height < item.contHeight; height++) {
+				if (grid2DArray[item.row + height][item.column + item.contWidth + whileCounter] != false) {
+					expandRight = false;
+					break tryRight;
+				}
+			}
+			if (expandRight) {
+				for (let height = 0; height < item.contHeight; height++) {
+					grid2DArray[item.row + height][item.column + item.contWidth + whileCounter] = item.name;
+				}
+				whileCounter++;
+			}
+		}
+		item.contWidth += whileCounter;
+	}
+	return { contentList, grid2DArray, gridData };
 }
 
 function layoutContentList(layoutName) {

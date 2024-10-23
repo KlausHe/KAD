@@ -58,5 +58,6 @@ export { clear_cl_Kounselor } from "./Utility/Kounselor.js";
 export { clear_cl_Netsaona } from "./Utility/Netsaona.js";
 export { clear_cl_Pelvelea } from "./Utility/Pelvelea.js";
 export { clear_cl_PlatLesen } from "./Utility/PlatLesen.js";
+export { clear_cl_Sima } from "./Utility/Sima.js";
 export { clear_cl_Thiontu } from "./Utility/Thiontu.js";
 export { clear_cl_Tugas } from "./Utility/Tugas.js";

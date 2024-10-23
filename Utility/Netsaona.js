@@ -1,11 +1,10 @@
-import * as Data from "../General/MainData.js";
+import { Data_Botanicals, Data_Country_CodesIso3166, Data_Country_CodesIso639, Data_Country_GermanDistrics, Data_Currencies, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "../General/MainData.js";
 import { dbCL, dbID, KadRandom } from "../KadUtils/KadUtils.js";
 
 export const netsaonaOptions = {
 	data: {
 		get ID() {
-			return "abs";
-			// return [firebase.firestore().collection('name').doc().id]
+			return [Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36)];
 		},
 		Boolean: ["Ja", "Nein", "1", "0", "An", "Aus"],
 		get Integer() {
@@ -13,19 +12,19 @@ export const netsaonaOptions = {
 		},
 		Tier: ["Hund", "Katze", "Hamster", "Maus", "Esel", "Flamingo"],
 		get Pflanze() {
-			return Data.Data_Botanicals.map((o) => {
+			return Data_Botanicals.map((o) => {
 				return o.plant;
 			});
 		},
 		get Beschwerde() {
 			let disSet = new Set();
-			for (let d of Data.Data_Botanicals) {
+			for (let d of Data_Botanicals) {
 				d.discomfort.forEach((i) => disSet.add(i));
 			}
 			return Array.from(disSet).sort();
 		},
 		get Farbe() {
-			return Data.Data_RALColors.map((o) => {
+			return Data_RALColors.map((o) => {
 				return o.Name;
 			});
 		},
@@ -36,27 +35,27 @@ export const netsaonaOptions = {
 			return ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 		},
 		get Stadt() {
-			return Array.from(Data.Data_Nummernschild.values());
+			return Data_Nummernschild.map((item) => item[1]);
 		},
 		get Land() {
-			return Data.Data_Country_CodesIso3166.map((item) => item.name);
+			return Data_Country_CodesIso3166.map((item) => item.name);
 		},
 		get Bundesland() {
-			return Data.Data_Country_GermanDistrics.map((o) => {
+			return Data_Country_GermanDistrics.map((o) => {
 				return o.LandDE;
 			});
 		},
 		get Sprache() {
-			return Array.from(Data.Data_Country_CodesIso639.values());
+			return Array.from(Data_Country_CodesIso639.values());
 		},
 		get Name() {
-			return Data.Data_HumanNames.all;
+			return Data_HumanNames.all;
 		},
 		get Geld() {
-			return Data.Data_Currencies.map((cur) => `${cur.name} (${cur.symbol})`);
+			return Data_Currencies.map((cur) => `${cur.name} (${cur.symbol})`);
 		},
 		get Gender() {
-			return Data.Data_HumanNames.genders;
+			return Data_HumanNames.genders;
 		},
 		get Random() {
 			let rand = new Set(Object.keys(netsaonaOptions.data));

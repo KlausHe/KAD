@@ -2,7 +2,8 @@ import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground } from "./General/BackgroundAnimation.js";
 import { contentCheckActive, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid } from "./General/Layout.js";
 import { contentGroupsMaincontent } from "./General/MainContent.js";
-import { KadDOM, KadDate, dbCL, dbCLStyle, hostDebug, initEL } from "./KadUtils/KadUtils.js";
+
+import { KadDOM, KadDate, dbCL, dbCLStyle, hostDebug, initEL, log } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
@@ -10,6 +11,7 @@ import { globalValues } from "./Settings/General.js";
 window.onload = mainSetup;
 
 function mainSetup() {
+	test();
 	if (hostDebug()) dbCLStyle("cl_Loading").display = "none";
 	contentLayout.createContentData();
 	createContentlayoutList(); // First: create the LayoutLists
@@ -77,4 +79,20 @@ export function updateMasterSelect() {
 
 function globalValueChanged() {
 	navClick(idSel_globalValue.KadGet());
+}
+
+function test() {
+	return;
+	let data = [];
+	for (let point of Data_Country_CodesIso3166) {
+		let phoneIndex = countriesInfo.findIndex((val) => {
+			return val.number == point.countryCode;
+		});
+		if (phoneIndex >= 0) {
+			point["capital"] = countriesInfo[phoneIndex].capital;
+			point["currency"] = countriesInfo[phoneIndex].currency;
+			data.push(point);
+		}
+	}
+	log(data);
 }

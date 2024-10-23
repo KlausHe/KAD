@@ -1,5 +1,5 @@
 import { Data_Leetspeak } from "../General/MainData.js";
-import { dbCL, initEL, KadDOM, KadRandom, KadString } from "../KadUtils/KadUtils.js";
+import { dbCL, initEL, KadDOM, KadRandom, KadString, log } from "../KadUtils/KadUtils.js";
 const thiontuData = {
 	input: "",
 	inputRaw: "",
@@ -143,11 +143,12 @@ const thiontuData = {
 				let arr = thiontuData.input.trim();
 				for (let letter of arr) {
 					const L = letter.toUpperCase();
-					if (!Data_Leetspeak.has(L)) {
+					const index = Data_Leetspeak.findIndex((item) => item[0] == L);
+					if (index < 0) {
 						retText += letter;
-						continue;
+					} else {
+						retText += Data_Leetspeak[index][1][0];
 					}
-					retText += Data_Leetspeak.get(L)[0];
 				}
 				return retText;
 			},
@@ -186,11 +187,12 @@ const thiontuData = {
 				let arr = thiontuData.input.trim();
 				for (let letter of arr) {
 					const L = letter.toUpperCase();
-					if (!Data_Leetspeak.has(L)) {
+					const index = Data_Leetspeak.findIndex((item) => item[0] == L);
+					if (index < 0) {
 						retText += letter;
-						continue;
+					} else {
+						retText += KadRandom.randomObject(Data_Leetspeak[index][1]);
 					}
-					retText += KadRandom.randomObject(Data_Leetspeak.get(L));
 				}
 				return retText;
 			},

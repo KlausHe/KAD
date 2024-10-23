@@ -109,7 +109,7 @@ export const AccData = {
 			data: null,
 			description: "Geburtsort",
 			get suggestions() {
-				return Array.from(Data_Nummernschild.values());
+				return Data_Nummernschild.map((item) => item[1]);
 			},
 		},
 		lTier: {
@@ -244,7 +244,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 export function userLoggedIn() {
-	return auth.currentUser != null;
+	return auth.currentUser !== null;
 }
 
 function firebaseLogin() {
@@ -393,7 +393,6 @@ async function createNewDatabase() {
 function createUserInfos() {
 	const parent = dbCL("cl_UserChange_infos");
 	KadDOM.clearFirstChild(parent);
-	const loggedIn = userLoggedIn();
 	for (const [key, subObj] of Object.entries(AccData.infos)) {
 		const uInfoParent = KadTable.createCell({
 			type: "Div",
@@ -416,7 +415,7 @@ function createUserInfos() {
 		uInfoParent.appendChild(uInfoBtn);
 
 		let ph = subObj.description;
-		if (loggedIn) {
+		if (userLoggedIn()) {
 			if (AccData.infos[key].data) {
 				ph = AccData.infos[key].data;
 			} else {
