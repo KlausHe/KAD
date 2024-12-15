@@ -1,6 +1,6 @@
 import { contentGrid, contentLayout, createGridLayout } from "../General/Layout.js";
-import { contentGroups, contentGroupsMaincontent } from "../General/MainContent.js";
-import { dbCL, dbID, initEL, KadColor, KadDOM, KadInteraction, KadTable, log } from "../KadUtils/KadUtils.js";
+import { contentGroupsMaincontent } from "../General/MainContent.js";
+import { dbCL, dbID, initEL, KadColor, KadDOM, KadInteraction, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "./Color.js";
 import { globalValues } from "./General.js";
 

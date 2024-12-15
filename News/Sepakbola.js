@@ -1,5 +1,5 @@
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
-import { KadArray, KadDate, KadFile, KadTable, dbID, deepClone, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadFile, KadTable, deepClone, initEL, objectLength } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -25,7 +25,6 @@ const sepakbolaOptions = {
 		season: 0,
 		matchday: 0,
 	},
-	images: {},
 	interval: null,
 	liga: [
 		// {
@@ -112,7 +111,6 @@ initEL({ id: idSel_sepakbolaMatchday, fn: sepakbolaMatchdayChange, selStartIndex
 
 export function clear_cl_Sepakbola() {
 	sepakbolaOptions.selected = deepClone(sepakbolaOptions.selectedOrig);
-	sepakbolaOptions.images = {};
 	sepakbolaOptions.selected.ligaIndex = idSel_sepakbolaLiga.KadReset();
 	sepakbolaOptions.selected.season = sepakbolaDropdownSeasons();
 	sepakbolaDropdownMatchdays();
@@ -178,207 +176,114 @@ function sepakbolaMatchesReturn(data = null) {
 		}
 	}
 	let matches = sepakbolaOptions.selectedLiga.matches;
-	dbID("idTabHeader_SepakbolaMatches").innerHTML = `${sepakbolaOptions.selected.matchday + 1}. Spieltag`;
 	const seasonSelected = matches[sepakbolaOptions.selected.matchday];
-	sepakbolaPushImages("match");
+
+	const body = [
+		{
+			data: seasonSelected.map((item) => (item.team1.shortName != null ? item.team1.shortName : item.team1.teamName)),
+			settings: { description: "team1", title: seasonSelected.map((item) => item.team1.teamName), align: "right", noBorder: "right" },
+		},
+		{
+			type: "URLImg",
+			data: seasonSelected.map((item) => sepakbolaImageURL(item.team1.teamIconUrl)),
+			settings: { description: "logo1", title: seasonSelected.map((item) => item.team1.teamName), align: "center", noBorder: "right", imgSize: "olympiaImg" },
+		},
+		{
+			data: seasonSelected.map((item) => {
+				if (!item.matchIsFinished) return "-:-";
+				if (item.goals.length <= 0) return "0:0";
+				return `${item.goals[item.goals.length - 1].scoreTeam1}:${item.goals[item.goals.length - 1].scoreTeam2}`;
+			}),
+			settings: { description: "goals", align: "center", noBorder: "right" },
+		},
+		{
+			type: "URLImg",
+			data: seasonSelected.map((item) => sepakbolaImageURL(item.team2.teamIconUrl)),
+			settings: { description: "logo2", title: seasonSelected.map((item) => item.team2.teamName), align: "center", noBorder: "right", imgSize: "olympiaImg" },
+		},
+		{
+			data: seasonSelected.map((item) => (item.team2.shortName != null ? item.team2.shortName : item.team2.teamName)),
+			settings: { description: "team2", title: seasonSelected.map((item) => item.team2.teamName), align: "left", noBorder: "left" },
+		},
+	];
+
+	let header = { 0: [{ data: `${sepakbolaOptions.selected.matchday + 1}. Spieltag`, colSpan: body.length, settings: { thickBorder: "bottom", align: "center" } }] };
+
 	let prevDay = null;
-	KadTable.clear("idTabBody_SepakbolaMatches");
 	for (let i = 0; i < seasonSelected.length; i++) {
 		const day = new Date(seasonSelected[i].matchDateTimeUTC);
 		if (prevDay != day.getTime()) {
-			const rowTh = KadTable.createRow("idTabBody_SepakbolaMatches");
 			prevDay = new Date(day.getTime()).getTime();
-			KadTable.addHeaderCell(rowTh, {
-				names: ["sepakbolaMatchesHeader", i],
-				type: "Lbl",
-				text: KadDate.getDate(day, { format: "WD - DD.MM. - HH:mm" }),
-				colSpan: 4,
-				cellStyle: {
-					textAlign: "center",
+			header[i + objectLength(header)] = [
+				{
+					data: KadDate.getDate(day, { format: "WD - DD.MM. - HH:mm" }),
+					colSpan: body.length,
+					settings: { align: "center", thickBorder: "bottom", noBorder: "right" },
 				},
-			});
+			];
 		}
-
-		let row = KadTable.createRow("idTabBody_SepakbolaMatches");
-		//--  VereinsLogo1
-		const logo1 = KadTable.addCell(row, {
-			names: ["sepakbolaMatchesLogo", "logoT1", i],
-			type: "Lbl",
-			text: `${seasonSelected[i].team1.shortName || seasonSelected[i].team1.teamName} `,
-			title: seasonSelected[i].team1.teamName,
-			cellStyle: {
-				textAlign: "right",
-			},
-		});
-		if (seasonSelected[i].team1.teamIconUrl) logo1.appendChild(sepakbolaOptions.images[seasonSelected[i].team1.teamId].cloneNode());
-
-		//--  GOAL1 : Goal2
-		KadTable.addCell(row, {
-			names: ["sepakbolaMatchesGoals", i],
-			type: "Lbl",
-			get text() {
-				if (!seasonSelected[i].matchIsFinished) {
-					return "-:-";
-				} else {
-					const goalLength = seasonSelected[i].goals.length;
-					if (goalLength == 0) {
-						return "0:0";
-					} else {
-						return `${seasonSelected[i].goals[goalLength - 1].scoreTeam1}:${seasonSelected[i].goals[goalLength - 1].scoreTeam2}`;
-					}
-				}
-			},
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-
-		//--  VereinsLogo2
-		const logo2 = KadTable.addCell(row, {
-			names: ["sepakbolaMatchesLogo", "logoT2", i],
-			type: "Lbl",
-			text: `${seasonSelected[i].team2.shortName || seasonSelected[i].team2.teamName} `,
-			title: seasonSelected[i].team2.teamName,
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-		if (seasonSelected[i].team2.teamIconUrl) logo2.appendChild(sepakbolaOptions.images[seasonSelected[i].team2.teamId].cloneNode());
 	}
+	KadTable.createHTMLGrid({ id: idTab_SepakbolaMatches, header, body });
 }
 
 function sepakbolaTableReturn(data) {
 	if (data.length == 0) return;
 	sepakbolaOptions.selectedLiga.table = data;
+	const header = [
+		{ data: "SP", colSpan: 4, settings: { align: "right", noBorder: "right" } },
+		{ data: "S", settings: { align: "right", noBorder: "right" } },
+		{ data: "U", settings: { align: "right", noBorder: "right" } },
+		{ data: "N", settings: { align: "right", noBorder: "right" } },
+		{ data: "TD", settings: { align: "right", noBorder: "right" } },
+		{ data: "P", settings: { align: "right", noBorder: "right" } },
+	];
+	const body = [
+		{
+			data: KadArray.arrayFromNumber(data.length).map((n) => n + 1),
+			settings: { description: "place", align: "right", noBorder: "right" },
+		},
+		{
+			type: "URLImg",
 
-	sepakbolaPushImages("table");
-	// body
-	KadTable.clear("idTabBody_SepakbolaTable");
-	for (let i = 0; i < data.length; i++) {
-		if (data[i].teamInfoId == 5251) continue;
-		let row = KadTable.createRow("idTabBody_SepakbolaTable");
+			data: data.map((item) => sepakbolaImageURL(item.teamIconUrl)),
+			settings: { description: "Logo", title: data.map((item) => item.teamName), align: "center", noBorder: "right", imgSize: "olympiaImg" },
+		},
+		{
+			data: data.map((item) => (item.shortName != null ? item.shortName : item.teamName)),
+			settings: { description: "teamName", title: data.map((item) => item.teamName), noBorder: "right" },
+		},
+		{
+			data: data.map((item) => item.matches),
+			settings: { description: "matches", noBorder: "right" },
+		},
+		{
+			data: data.map((item) => item.won),
+			settings: { description: "won", align: "right", noBorder: "right" },
+		},
+		{
+			data: data.map((item) => item.draw),
+			settings: { description: "draw", align: "right", noBorder: "right" },
+		},
+		{
+			data: data.map((item) => item.lost),
+			settings: { description: "lost", align: "right", noBorder: "right" },
+		},
+		{
+			data: data.map((item) => (item.goalDiff > 0 ? `(+${item.goalDiff})` : `(${item.goalDiff})`)),
+			settings: { description: "diff", align: "right", noBorder: "right" },
+		},
+		{
+			data: data.map((item) => item.points),
+			settings: { description: "points" },
+		},
+	];
 
-		//--  Platz
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "place", i],
-			type: "Lbl",
-			text: i + 1,
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-
-		//--  VereinsLogo
-		const logo = KadTable.addCell(row, {
-			names: ["sepakbolaTable", "logo", i],
-			type: "Lbl",
-			text: "",
-		});
-		if (sepakbolaOptions.images[data[i].teamInfoId]) logo.appendChild(sepakbolaOptions.images[data[i].teamInfoId]);
-
-		//--  Team Name
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "name", i],
-			type: "Lbl",
-			text: data[i].shortName != null ? data[i].shortName : data[i].teamName,
-			title: data[i].teamName,
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-
-		//--  Spiele
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "matchcount", i],
-			type: "Lbl",
-			text: `(${data[i].matches})`,
-
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-
-		//--  Siege
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "siege", i],
-			type: "Lbl",
-			text: data[i].won,
-
-			cellStyle: {
-				textAlign: "right",
-			},
-		});
-		//--  Unentschieden
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "draw", i],
-			type: "Lbl",
-			text: data[i].draw,
-
-			cellStyle: {
-				textAlign: "right",
-			},
-		});
-		//--  Niederlage
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "lost", i],
-			type: "Lbl",
-			text: data[i].lost,
-
-			cellStyle: {
-				textAlign: "right",
-			},
-		});
-
-		//--  T-Diff
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "goalDiff", i],
-			type: "Lbl",
-			text: data[i].goalDiff > 0 ? `(+${data[i].goalDiff})` : `(${data[i].goalDiff})`,
-
-			cellStyle: {
-				textAlign: "right",
-			},
-		});
-
-		// points
-		KadTable.addCell(row, {
-			names: ["sepakbolaTable", "points", i],
-			type: "Lbl",
-			text: data[i].points,
-			cellStyle: {
-				textAlign: "right",
-			},
-		});
-	}
+	KadTable.createHTMLGrid({ id: idTab_SepakbolaTable, header, body });
 }
 
-function sepakbolaPushImages(arr) {
-	if (arr == "table") {
-		for (const obj of sepakbolaOptions.selectedLiga.table) {
-			if (!sepakbolaOptions.images.hasOwnProperty(obj.teamInfoId)) {
-				sepakbolaOptions.images[obj.teamInfoId] = sepakbolaCreateImage(obj.teamIconUrl);
-			}
-		}
-	}
-	if (arr == "match") {
-		for (const objArr of sepakbolaOptions.selectedLiga.matches) {
-			for (const obj of objArr) {
-				if (!sepakbolaOptions.images.hasOwnProperty(obj.team1.teamId)) {
-					sepakbolaOptions.images[obj.team1.teamId] = sepakbolaCreateImage(obj.team1.teamIconUrl);
-				}
-				if (!sepakbolaOptions.images.hasOwnProperty(obj.team2.teamId)) {
-					sepakbolaOptions.images[obj.team2.teamId] = sepakbolaCreateImage(obj.team2.teamIconUrl);
-				}
-			}
-		}
-	}
-}
-
-function sepakbolaCreateImage(url) {
+function sepakbolaImageURL(url) {
 	if (url == null) return;
-	const size = globalValues.mediaSizes.imgSize;
-	const img = new Image();
-	//shrink URL-image-size
+	const size = globalValues.mediaSizes.imgSize; //shrink URL-image-size
 	let urlArr = url;
 	if (urlArr.includes("px")) {
 		urlArr = url.split("px");
@@ -386,8 +291,5 @@ function sepakbolaCreateImage(url) {
 		urlArr[0] = urlArr[0].slice(0, index + 1);
 		urlArr = `${urlArr[0]}${size}px${urlArr[1]}`;
 	}
-	img.src = urlArr;
-	img.setAttribute("referrerpolicy", "no-referrer");
-	img.setAttribute("uiSize", "img");
-	return img;
+	return urlArr;
 }

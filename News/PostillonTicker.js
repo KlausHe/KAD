@@ -38,18 +38,7 @@ function postillonTickerNext() {
 
 function postillionCreate() {
 	idLbl_newsTickerNumber.KadSetText(`Ticker ${postillonTickerOptions.num}`);
-	KadTable.clear("idTabBody_postillionTable");
-	const list = postillonTickerOptions.data[postillonTickerOptions.num];
-	for (let i = 0; i < list.length; i++) {
-		const row = KadTable.createRow("idTabBody_postillionTable");
-		KadTable.addCell(row, {
-			names: ["postillon", i],
-			type: "Lbl",
-			text: `${list[i]}`,
-			cellStyle: {
-				textAlign: "center",
-			},
-			copy: true,
-		});
-	}
+	const body = [{ data: postillonTickerOptions.data[postillonTickerOptions.num], settings: { align: "center" } }];
+
+	KadTable.createHTMLGrid({ id: idTab_postillionTable, body });
 }

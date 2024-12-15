@@ -1,4 +1,4 @@
-import { dbID, dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM, KadString, log } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM, KadString } from "../KadUtils/KadUtils.js";
 import * as Canvas from "../MainModulesCanvas.js";
 
 const colorSettingsOptions = {

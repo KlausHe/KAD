@@ -1,5 +1,5 @@
 import { Data_Leetspeak } from "../General/MainData.js";
-import { dbCL, initEL, KadDOM, KadRandom, KadString, log } from "../KadUtils/KadUtils.js";
+import { dbCL, initEL, KadDOM, KadRandom, KadString } from "../KadUtils/KadUtils.js";
 const thiontuData = {
 	input: "",
 	inputRaw: "",

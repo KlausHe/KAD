@@ -115,8 +115,9 @@ function biktadaIPError(data) {
 	biktadaPassValue("IPAdresse");
 }
 
-function biktadaPassValue(id) {
-	dbID(`idLbl_child_biktada_value_${id}`).innerHTML = biktadaOptions.data[id].value;
+function biktadaPassValue(key) {
+	const id = Object.keys(biktadaOptions.data).indexOf(key);
+	dbID(`idLbl_biktadA_value_${id}`).innerHTML = biktadaOptions.data[key].value;
 }
 
 export function clear_cl_BiktadA() {
@@ -132,49 +133,10 @@ function biktadaGetData() {
 }
 
 function createBiktadaTable() {
-	//header
-	KadTable.clear("idTabHeader_BiktadA");
-	const rowTh = KadTable.createRow("idTabHeader_BiktadA");
-	KadTable.addHeaderCell(rowTh, {
-		names: ["biktadaHeader", "Description"],
-		type: "Lbl",
-		text: "Info",
-		cellStyle: {
-			textAlign: "left",
-		},
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["biktadaHeader", "Value"],
-		type: "Lbl",
-		text: "Wert",
-		cellStyle: {
-			textAlign: "left",
-		},
-	});
-
-	// body
-	KadTable.clear("idTabBody_BiktadA");
-	for (const objName in biktadaOptions.data) {
-		const row = KadTable.createRow("idTabBody_BiktadA");
-		KadTable.addCell(row, {
-			names: ["biktada", "description", objName],
-			type: "Lbl",
-			text: biktadaOptions.data[objName].description,
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-		KadTable.addCell(row, {
-			names: ["biktada", "value", objName],
-			type: "Lbl",
-			text: "...",
-			copy: true,
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-	}
-	if (biktadaOptions.ieAlert != null) {
-		alert(biktadaOptions.ieAlert);
-	}
+	const header = [{ data: "Info" }, { data: "Wert" }];
+	// prettier-ignore
+	const body = [
+    { data: Object.values(biktadaOptions.data).map((value) => value.description) }, { data: Object.keys(biktadaOptions.data).map((_) => "..."), settings: { names: ["biktadA", "value"] } }
+  ];
+	KadTable.createHTMLGrid({ id: idTab_biktadATable, header, body });
 }

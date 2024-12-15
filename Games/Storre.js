@@ -1,4 +1,4 @@
-import { errorChecked, hostDebug, initEL, KadDOM, KadFile, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
+import { KadLog, hostDebug, initEL, KadDOM, KadFile, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 
 const storreOptions = {
 	url: `https://restcountries.com/v3.1/all?fields=translations,flags,population,area`,
@@ -60,7 +60,7 @@ function storreStartPopulation() {
 async function storreGetData() {
 	if (storreOptions.data == null) {
 		const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: storreOptions.url });
-		if (errorChecked(error, "Could not receive data for 'Storre'")) return;
+		if (KadLog.errorChecked(error, "Could not receive data for 'Storre'")) return;
 		storreOptions.data = data;
 	}
 	KadDOM.enableBtn(idBtn_storreQuestionA, true);
@@ -115,6 +115,6 @@ function storreShowAnswers(clear = false) {
 }
 
 function storreUpdateStreak(lost = false) {
-	const text = lost ? `WRONG ANSWER!<br>streak: ${storreOptions.streak}` : `streak: ${storreOptions.streak}`;
+	const text = lost ? `Game Over!<br>Punkte: ${storreOptions.streak}` : `Punkte: ${storreOptions.streak}`;
 	idLbl_storreStreak.innerHTML = text;
 }

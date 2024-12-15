@@ -1,5 +1,5 @@
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
-import { KadArray, KadFile, KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadFile, KadTable, initEL } from "../KadUtils/KadUtils.js";
 
 const pafadojOptions = {
 	get URL() {
@@ -38,8 +38,14 @@ async function pafadojUpdate() {
 	pafadojOptions.dataTotal = { Dead: 0, Injured: 0, Total: 0 };
 	for (let row of dataTable[0]) {
 		let dataObj = {};
-		for (let head of pafadojOptions.headers[pafadojOptions.date][1]) {
-			row[head] = Number.isNaN(Number(row[head])) ? row[head] : Number(row[head]);
+		for (let i = 0; i < pafadojOptions.headers[pafadojOptions.date][1].length; i++) {
+			const head = pafadojOptions.headers[pafadojOptions.date][1][i];
+			if (i == 0) {
+				let d = row[head].split(/[\–\,\s]/g);
+				row[head] = KadDate.getDate(`${pafadojOptions.date}-${d[0]}-${d[1]}`, { format: "YYYY/MM/DD" });
+			} else {
+				row[head] = Number.isNaN(Number(row[head])) ? row[head] : Number(row[head]);
+			}
 			dataObj[head] = Number(row[head]) || row[head];
 			if (pafadojOptions.sumHeader.includes(head)) {
 				pafadojOptions.dataTotal[head] += Number(row[head]);
@@ -50,44 +56,28 @@ async function pafadojUpdate() {
 	pafadojTableReturn();
 }
 
-function pafadojTableReturn() {
-	if (pafadojOptions.data.length == 0) return;
-	const data = pafadojOptions.data;
-	KadTable.clear("idTabHeader_PafadojTable");
-	const rowTh = KadTable.createRow("idTabHeader_PafadojTable");
-	for (let head of pafadojOptions.headers[pafadojOptions.date][1]) {
-		const headText = head == "2024 date" || head == "2023 date" ? "Date" : head;
-		KadTable.addHeaderCell(rowTh, {
-			names: ["pafadojHeader", head],
-			type: "Lbl",
-			text: pafadojOptions.sumHeader.includes(headText) ? `${headText}<br> (${pafadojOptions.dataTotal[headText]})` : headText,
-			cellStyle: {
-				textAlign: "left",
-			},
-			onclick: () => {
-				pafadojSort(head);
-			},
-		});
-	}
-
-	KadTable.clear("idTabBody_PafadojTable");
-	for (let i = 0; i < data.length; i++) {
-		let row = KadTable.createRow("idTabBody_PafadojTable");
-		for (let head of pafadojOptions.headers[pafadojOptions.date][1]) {
-			KadTable.addCell(row, {
-				names: ["pafadoj", head, i],
-				type: "Lbl",
-				text: data[i][head],
-				cellStyle: {
-					textAlign: "left",
-				},
-			});
-		}
-	}
-}
-
 function pafadojSort(type) {
 	pafadojOptions.sort[type] = !pafadojOptions.sort[type];
 	pafadojOptions.data = KadArray.sortArrayByKey({ array: pafadojOptions.data, keys: type, inverse: pafadojOptions.sort[type] });
 	pafadojTableReturn();
+}
+
+function pafadojTableReturn() {
+	if (pafadojOptions.data.length == 0) return;
+	const header = [
+		//
+		...pafadojOptions.headers[pafadojOptions.date][1].map((head, index) => {
+			let headText = head;
+			if (index == 0 && (head == "2024 date" || head == "2023 date")) headText = "Date";
+			return {
+				data: pafadojOptions.sumHeader.includes(headText) ? `${headText}<br> (${pafadojOptions.dataTotal[headText]})` : headText,
+				settings: {
+					onclick: pafadojSort,
+					index: head,
+				},
+			};
+		}),
+	];
+	const body = [...pafadojOptions.headers[pafadojOptions.date][1].map((head) => ({ data: pafadojOptions.data.map((item) => item[head]) }))];
+	KadTable.createHTMLGrid({ id: idTab_pafadojTable, header, body });
 }

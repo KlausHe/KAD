@@ -1,11 +1,10 @@
 // General
-// export { canvas_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
+export { canvas_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
 export { canvas_cl_UserGridLayout } from "./Settings/Usergridlayout.js";
 // //Games
 export { canvas_cl_Empat } from "./Games/Empat.js";
 export { canvas_cl_Ibhaluni } from "./Games/Ibhaluni.js";
 export { canvas_cl_Lotto } from "./Games/Lotto.js";
-export { canvas_cl_Numbery } from "./Games/Numbery.js";
 export { canvas_cl_RayCaster } from "./Games/RayCaster.js";
 export { canvas_cl_Sudoku } from "./Games/Sudoku.js";
 export { canvas_cl_Suika } from "./Games/Suika.js";

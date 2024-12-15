@@ -12,40 +12,45 @@ const geometrieOptions = {
 	},
 	roh: 0,
 	acc: 4,
-	units: {
-		circumference: {
+	units: [
+		{
+			key: "circumference",
 			name: "Umfang",
 			unit: "mm",
 			dim: 1,
 		},
-		basearea: {
+		{
+			key: "basearea",
 			name: "Grundfläche",
 			unit: "mm",
 			dim: 2,
 		},
-		fullarea: {
+		{
+			key: "fullarea",
 			name: "Oberfläche",
 			unit: "mm",
 			dim: 2,
 		},
-		volume: {
+		{
+			key: "volume",
 			name: "Volumen",
 			unit: "mm",
 			dim: 3,
 		},
-		mass: {
+		{
+			key: "mass",
 			name: "Masse",
 			unit: "g",
 			dim: 1,
 		},
-	},
+	],
 	result: {
 		circumference: 0,
 		basearea: 0,
 		fullarea: 0,
 		volume: 0,
-		mass: 0,
 	},
+	resultMass: [],
 	get matList() {
 		return materialOptions.matList;
 	},
@@ -569,7 +574,7 @@ export function clear_cl_Geometrie() {
 				createClass: ["clBtn_geometrieAreaSelect"],
 				text: geoObjects.elements[i],
 				ui: {
-					uisize: "size7",
+					uisize: "width7",
 				},
 				onclick: () => {
 					changeGeoObject(i);
@@ -658,20 +663,20 @@ function geoBerechnung() {
 	geoObjects.valA = idVin_Area_0.KadGet({ failSafe: selectedObj.vals[0] }) * selectedObj.radiusFactor[0];
 	geoObjects.valB = idVin_Area_1.KadGet({ failSafe: selectedObj.vals[1] }) * selectedObj.radiusFactor[1];
 	geoObjects.valC = idVin_Area_2.KadGet({ failSafe: selectedObj.vals[2] }) * selectedObj.radiusFactor[2];
-	geometrieOptions.result.circumference = KadValue.number(selectedObj.circumference, { decimals: 3 });
-	geometrieOptions.result.basearea = KadValue.number(selectedObj.basearea, { decimals: 3 });
-	geometrieOptions.result.fullarea = KadValue.number(selectedObj.fullarea, { decimals: 3 });
-	geometrieOptions.result.volume = KadValue.number(selectedObj.volume, { decimals: 3 });
+	geometrieOptions.result[0] = KadValue.number(selectedObj.circumference, { decimals: 3 });
+	geometrieOptions.result[1] = KadValue.number(selectedObj.basearea, { decimals: 3 });
+	geometrieOptions.result[2] = KadValue.number(selectedObj.fullarea, { decimals: 3 });
+	geometrieOptions.result[3] = KadValue.number(selectedObj.volume, { decimals: 3 });
 	geoUpdateMassDependency();
 }
 
 export function geoUpdateMassDependency() {
 	let selectedObj = geoObjects.selected;
-	geometrieOptions.result.mass = [];
+	geometrieOptions.resultMass = [];
 	for (let i = 0; i < geometrieOptions.matList.length; i++) {
 		let mass = Data_Materials.Materials[geometrieOptions.matList[i]].roh * 0.001 * selectedObj.volume;
 		mass = KadValue.number(mass, { decimals: 4 });
-		geometrieOptions.result.mass.push({
+		geometrieOptions.resultMass.push({
 			mass: mass,
 			matName: geometrieOptions.matList[i],
 		});
@@ -680,53 +685,32 @@ export function geoUpdateMassDependency() {
 }
 
 function geoResultTable() {
-	KadTable.clear("idTabBody_geometrieResults");
-	let unitObj = Object.keys(geometrieOptions.units);
-	let unitLength = unitObj.length - 1 + geometrieOptions.result.mass.length;
-	for (let i = 0; i < unitLength; i++) {
-		let unitName;
-		let lblName;
-		let resultNum = null;
-		if (i < unitObj.length - 1) {
-			unitName = unitObj[i];
-			lblName = geometrieOptions.units[unitName].name;
-		} else {
-			unitName = unitObj[unitObj.length - 1];
-			resultNum = i - unitObj.length + 1;
-			lblName = `${geometrieOptions.units[unitName].name} (${geometrieOptions.result.mass[resultNum].matName})`;
-		}
-		const row = KadTable.createRow("idTabBody_geometrieResults");
-		//LBL Title
-		KadTable.addCell(row, {
-			names: ["geoResults", "title", i],
-			type: "Lbl",
-			text: `${lblName}`,
-			cellStyle: {
-				textAlign: "left",
-				whiteSpace: "nowrap",
-			},
-		});
-		//  LBL Value
-		KadTable.addCell(row, {
-			names: ["geoResults", "value", i],
-			type: "Lbl",
-			text: resultNum != null ? geometrieOptions.result[unitName][resultNum].mass : geometrieOptions.result[unitName],
-			cellStyle: {
-				textAlign: "right",
-				whiteSpace: "nowrap",
-				widht: "100%",
-			},
-			copy: true,
-		});
-		// Lbl unit
-		KadTable.addCell(row, {
-			names: ["geoResults", "unit", i],
-			type: "Lbl",
-			get text() {
-				let suffixText = geometrieOptions.units[unitName].unit;
-				suffixText += geometrieOptions.units[unitName].dim > 1 ? `<sup>${geometrieOptions.units[unitName].dim}</sup>` : "";
-				return suffixText;
-			},
-		});
+	let nameData = [];
+	let valueData = [];
+	let unitsData = [];
+
+	for (let i = 0; i < geometrieOptions.units.length - 1; i++) {
+		nameData.push(geometrieOptions.units[i].name);
+		valueData.push(geometrieOptions.result[i]);
+		let unit = geometrieOptions.units[i].unit;
+		unit += geometrieOptions.units[i].dim > 1 ? `<sup>${geometrieOptions.units[i].dim}</sup>` : "";
+		unitsData.push(unit);
 	}
+	const massIndex = geometrieOptions.units.findIndex((obj) => obj.key == "mass");
+	for (let i = 0; i < geometrieOptions.resultMass.length; i++) {
+		nameData.push(`${geometrieOptions.units[massIndex].name} (${geometrieOptions.resultMass[i].matName})`);
+		valueData.push(geometrieOptions.resultMass[i].mass);
+		let unit = geometrieOptions.units[massIndex].unit;
+		unit += geometrieOptions.units[massIndex].dim > 1 ? `<sup>${geometrieOptions.units[massIndex].dim}</sup>` : "";
+		unitsData.push(unit);
+	}
+
+	const body = [
+		//
+		{ data: nameData },
+		{ data: valueData, settings: { align: "right" } },
+		{ data: unitsData },
+	];
+
+	KadTable.createHTMLGrid({ id: idTab_geometrieTable, body });
 }

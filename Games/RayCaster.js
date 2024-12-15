@@ -1,4 +1,4 @@
-import { dbID, deepClone, initEL, KadDOM, KadInteraction, log } from "../KadUtils/KadUtils.js";
+import { dbID, deepClone, initEL, KadDOM, KadInteraction } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
@@ -164,7 +164,6 @@ const caRC = new p5((c) => {
 		let cell = raycasterOptions.cells[idI + idJ * raycasterOptions.rows];
 		if (cell === raycasterOptions.longCell) {
 			caRC.noLoop();
-			log(cell, raycasterOptions.longCell);
 			mazeRayFinished();
 			clear_cl_RayCaster();
 			return;

@@ -1,6 +1,6 @@
 //use AudioContext() and AudioBuffer()
 
-import { dbCL, dbID, dbIDStyle, error, initEL, KadDOM, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, dbIDStyle, KadLog, initEL, KadDOM, KadRandom } from "../KadUtils/KadUtils.js";
 
 const beatmachineOptions = {
 	BPMOrig: 105,
@@ -71,7 +71,7 @@ function beatmachineCreateTracks() {
 			beatmachineToggleTrack(index);
 		};
 		temp.innerHTML = obj.name;
-		temp.setAttribute("uiSize", "size4");
+		temp.setAttribute("uiSize", "width4");
 		baseParent.appendChild(temp);
 
 		for (let i = 0; i < beatmachineOptions.duration; i++) {
@@ -164,7 +164,7 @@ function beatmachineCreateBeat() {
 }
 
 function beatmachineTransport() {
-	error("Beatmachine needs reworking. Stay tuned for the next update");
+	KadLog.error("Beatmachine needs reworking. Stay tuned for the next update");
 	beatmachineOptions.curTime = 0;
 	console.log("transport");
 	if (beatmachineOptions.transportState === false) {
@@ -254,9 +254,5 @@ function beatmachineDrawAll() {
 
 function beatmachineBtnColor(trackObj, pIndex) {
 	const btn = dbID(`idBtn_beatmachine_${trackObj.name}_${pIndex}`);
-	if (trackObj.pattern[pIndex]) {
-		btn.classList.add("cl_BeatmachineBtnSelect");
-	} else {
-		btn.classList.remove("cl_BeatmachineBtnSelect");
-	}
+	btn.classList.toggle("cl_BeatmachineBtnSelect", trackObj.pattern[pIndex]);
 }

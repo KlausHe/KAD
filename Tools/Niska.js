@@ -1342,79 +1342,15 @@ function niskaHelpCalculation(d, P, index) {
 }
 
 function niskaTable() {
-	KadTable.clear("idTabHeader_niskaList");
+	const header = [{ data: "Eigenschaft" }, { data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 2, settings: { align: "center" } }, { data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center" } }];
 
-	const rowTh = KadTable.createRow("idTabHeader_niskaList");
-	KadTable.addHeaderCell(rowTh, {
-		names: ["niska", "Header"],
-		type: "Lbl",
-		text: "",
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["niska", "Header", "Handeingabe"],
-		type: "Lbl",
-		text: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`,
-		colSpan: 2,
-		cellStyle: {
-			textAlign: "center",
-		},
-	});
-	KadTable.addHeaderCell(rowTh, {
-		names: ["niska", "Header", "Normgewinde"],
-		type: "Lbl",
-		text: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`,
-		colSpan: 2,
-		cellStyle: {
-			textAlign: "center",
-		},
-	});
+	const body = [
+		{ data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].name) },
+		{ data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].val[0]), settings: { align: "right", noBorder: "right" } },
+		{ data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
+		{ data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].val[1]), settings: { align: "right", noBorder: "right" } },
+		{ data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
+	];
 
-	KadTable.clear("idTabBody_niskaList");
-	for (let [key, value] of Object.entries(niskaOptions.results)) {
-		const row = KadTable.createRow("idTabBody_niskaList");
-		KadTable.addCell(row, {
-			names: ["niska", "name", key],
-			type: "Lbl",
-			text: value.name,
-			createCellClass: ["clTab_UIBorderThinRight"],
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-		KadTable.addCell(row, {
-			names: ["niska", "val", key],
-			type: "Lbl",
-			text: value.val[0],
-			cellStyle: {
-				textAlign: "right",
-			},
-			copy: true,
-		});
-		KadTable.addCell(row, {
-			names: ["niska", "unit", key],
-			type: "Lbl",
-			text: value.unit,
-			createCellClass: ["clTab_UIBorderThinRight"],
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-		KadTable.addCell(row, {
-			names: ["niska", "val", key],
-			type: "Lbl",
-			text: value.val[1],
-			cellStyle: {
-				textAlign: "right",
-			},
-			copy: true,
-		});
-		KadTable.addCell(row, {
-			names: ["niska", "unit", key],
-			type: "Lbl",
-			text: value.unit,
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-	}
+	KadTable.createHTMLGrid({ id: idTab_niskaTable, header, body });
 }

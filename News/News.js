@@ -1,4 +1,4 @@
-import { KadDOM, KadDate, KadFile, KadString, KadTable, dbID, errorChecked, initEL } from "../KadUtils/KadUtils.js";
+import { KadDOM, KadDate, KadFile, KadLog, KadString, KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
 
 export const newsData = {
 	get articlesURL() {
@@ -62,22 +62,23 @@ function newsCheckRequestCount() {
 async function newsGetData() {
 	if (newsCheckRequestCount()) return;
 	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articlesURL });
-	if (errorChecked(error, "Could not receive data for 'Overview/News'", error)) return;
+	if (KadLog.errorChecked(error, "Could not receive data for 'Overview/News'", error)) return;
 	newsData.articles = data.news;
 	newsData.articles = newsData.articles.filter((n) => n.type == "story");
 	newsData.currIndex = 0;
 	newsCreateTable();
-	showNews();
+	showNews(0);
 }
 
-async function showNews() {
+async function showNews(index) {
+	newsData.currIndex = index;
 	const date = KadDate.getDate(newsData.articles[newsData.currIndex].date, { format: "DD.MM.YY / HH:mm" });
 	dbID(idDiv_News_Title).textContent = `${newsData.articles[newsData.currIndex].title} (${date})`;
 
 	dbID(idImg_News_Image).src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];
 	if (newsCheckRequestCount()) return;
 	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articles[newsData.currIndex].details });
-	if (errorChecked(error, "Could not receive data for 'Article/News'", error)) return;
+	if (KadLog.errorChecked(error, "Could not receive data for 'Article/News'", error)) return;
 	newsData.articles[newsData.currIndex].content = data.content;
 
 	let cleandContent = newsData.articles[newsData.currIndex].content
@@ -86,63 +87,29 @@ async function showNews() {
 		.join(" ");
 	KadDOM.scrollToTop(idDiv_News_Text);
 	idDiv_News_Text.KadSetHTML(cleandContent);
-	newsUpdateTableIcons();
+}
+function newsOpenURL(index) {
+	window.open(newsData.articles[index].shareURL);
 }
 
 function newsCreateTable() {
-	KadTable.clear("idTabBody_newsTitleTable");
-	KadDOM.scrollToTop(idTabBody_newsTitleTable);
-	for (let i = 0; i < newsData.articles.length; i++) {
-		const row = KadTable.createRow("idTabBody_newsTitleTable");
-		row.id = `idRow_NewsTitle_${i}`;
-
-		// arrow
-		KadTable.addCell(row, {
-			names: ["newsContent", i],
-			type: "Img",
-			subGroup: "subgrid",
-			img: "right",
-			cellOnclick: () => {
-				newsData.currIndex = i;
-				newsOpenURL();
+	const body = [
+		{
+			type: "KADImg",
+			data: "globe",
+			settings: {
+				onclick: newsOpenURL,
+				cursor: "alias",
 			},
-
-			onmouseover: () => {
-				dbID(`idImg_child_newsContent_${i}`).src = KadDOM.getImgPath("globe");
+		},
+		{
+			data: newsData.articles.map((item) => item.topline),
+			settings: {
+				title: newsData.articles.map((item) => `${item.title}\n${item.firstSentence}`),
+				description: "newsContent",
+				onclick: showNews,
 			},
-			onmouseleave: () => {
-				dbID(`idImg_child_newsContent_${i}`).src = KadDOM.getImgPath(newsData.currIndex == i ? "search" : "right");
-			},
-		});
-
-		//--  Title Label
-		KadTable.addCell(row, {
-			names: ["newsSource", i],
-			type: "Lbl",
-			text: newsData.articles[i].topline,
-			title: `${newsData.articles[i].title}\n${newsData.articles[i].firstSentence}`,
-			cellStyle: {
-				overflow: "hidden",
-				textOverflow: "ellipsis",
-				whiteSpace: "nowrap",
-				textAlign: "left",
-			},
-			cellOnclick: () => {
-				newsData.currIndex = i;
-				showNews();
-			},
-		});
-	}
-	newsUpdateTableIcons();
-}
-
-function newsUpdateTableIcons() {
-	for (let i = 0; i < newsData.articles.length; i++) {
-		let img = dbID(`idImg_child_newsContent_${i}`);
-		img.src = KadDOM.getImgPath(newsData.currIndex == i ? "search" : "right");
-	}
-}
-
-function newsOpenURL() {
-	window.open(newsData.articles[newsData.currIndex].shareURL);
+		},
+	];
+	KadTable.createHTMLGrid({ id: idTab_newsTable, body });
 }

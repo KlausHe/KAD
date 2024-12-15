@@ -63,6 +63,27 @@ export const rawContentGrid = {
 			["cl_BarvoslepyCanvas", "center", "start"],
 		],
 	},
+	cl_Piny: {
+		contentGroup: "Benkyou",
+		name: "Piny",
+		heritage: ["Luo", "Land"],
+		info: "Informationen zu Ländern der ganzen Welt",
+		size: [2, 2],
+		maingrid: {
+			areas: [
+				//
+				["cl_PinyCountryInput"],
+				["cl_PinyFieldInput"],
+				["cl_PinyTable"],
+			],
+			rows: [1, 1],
+		},
+		subgrid: [
+			["cl_PinyCountryInput", "center"],
+			["cl_PinyFieldInput", "center"],
+			["cl_PinyTable", "center"],
+		],
+	},
 	cl_Speech: {
 		deactivated: true,
 		contentGroup: "Benkyou",
@@ -283,7 +304,7 @@ export const rawContentGrid = {
 		},
 		subgrid: [
 			["cl_NumberyStart", "left"],
-			["cl_NumberyPlayers", "left"],
+			["cl_NumberyPlayers", "center"],
 			["cl_NumberyPairs", "left"],
 			["cl_NumberyCathegory", "left"],
 			["cl_NumberyPlayerNum", "left"],
@@ -548,7 +569,7 @@ export const rawContentGrid = {
 		source: {
 			Daten: "https://www.openligadb.de",
 		},
-		size: [2, 3],
+		size: [3, 2],
 		maingrid: {
 			areas: [
 				["cl_SepakbolaInputLiga", "cl_SepakbolaInputDay"],
@@ -841,10 +862,9 @@ export const rawContentGrid = {
 	cl_Quickmath: {
 		contentGroup: "Tools",
 		name: "Quickmath",
-		size: [1, 2],
+		size: [1, 1],
 		maingrid: {
 			areas: [
-				//
 				["cl_QuickmathInput", "cl_QuickmathInput", "cl_QuickmathInput"],
 				["cl_QuickmathStart", "cl_QuickmathStart", "cl_QuickmathStart"],
 				["cl_QuickmathEnd", "cl_QuickmathEnd", "cl_QuickmathEnd"],
@@ -1022,18 +1042,18 @@ export const rawContentGrid = {
 		maingrid: {
 			areas: [
 				//
-				["cl_KadarSelA", "cl_KadarLblNow", "cl_KadarSelB"],
-				["cl_KadarResultTable_Anow", "cl_KadarResultTable_AB", "cl_KadarResultTable_Bnow"],
+				["cl_KadarLblNow"],
+				["cl_KadarSelA"],
+				["cl_KadarSelB"],
+				["cl_KadarResultTable"],
 			],
-			rows: [1],
+			rows: [1, 1, 1],
 		},
 		subgrid: [
 			["cl_KadarSelA", "center"],
 			["cl_KadarSelB", "center"],
 			["cl_KadarLblNow", "center"],
-			["cl_KadarResultTable_Anow", "center"],
-			["cl_KadarResultTable_AB", "center"],
-			["cl_KadarResultTable_Bnow", "center"],
+			["cl_KadarResultTable", "center"],
 		],
 	},
 	cl_Kaihanga: {
@@ -1364,7 +1384,7 @@ export const rawContentGrid = {
 				["cl_UserChange_change"],
 				["cl_UserChange_cancel"],
 			],
-			rows: [2, 2, 0, 1],
+			rows: [2, 0, 0, 1],
 		},
 		subgrid: [
 			["cl_UserChange_user", "left"],

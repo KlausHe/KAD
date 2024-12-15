@@ -1,4 +1,4 @@
-import { dbID, errorChecked, initEL, KadArray, KadDate, KadDOM, KadFile, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadDate, KadDOM, KadFile, KadInteraction, KadLog, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -98,7 +98,7 @@ async function sudokuRequest() {
 	if (sudokuOptions.data === null) {
 		sudokuOptions.nums = [];
 		const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: "../Data/DataLists/Sudoku1000.json" });
-		if (errorChecked(error, "Could not receive data for 'Sudoku'.", error)) return;
+		if (KadLog.errorChecked(error, "Could not receive data for 'Sudoku'.", error)) return;
 		sudokuOptions.data = data;
 		sudokuOptions.nums = KadArray.createIndexedArray(sudokuOptions.data.length);
 	}

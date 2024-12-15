@@ -1,10 +1,14 @@
-import { KadFile, KadTable, dbID, errorChecked, initEL, objectLength } from "../KadUtils/KadUtils.js";
-import { storage_cl_WikiSearch } from "./WikiSearch.js";
+import { KadFile, KadLog, KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { WikiSearchData } from "./WikiSearch.js";
 
 const analysisOptions = {
 	data: null,
 	searchInput: "",
 	results: {},
+	header: [
+		{ data: "Positiv", colSpan: 2 },
+		{ data: "Negativ", colSpan: 2 },
+	],
 };
 
 initEL({ id: idVin_analysisEntry, fn: analysisInput, resetValue: "Type text to analyze" });
@@ -14,28 +18,30 @@ initEL({ id: idLbl_analysisResult, resetValue: "~Average score~" });
 export function clear_cl_Analysis() {
 	idVin_analysisEntry.KadReset();
 	idLbl_analysisResult.KadReset();
-	KadTable.clear("idTabBody_analysisResult");
+	KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header });
 }
 
 function analysisWiki() {
-	const data = storage_cl_WikiSearch.data;
-	if (data.content != null) {
-		let pagesID = Object.keys(data.content);
-		idVin_analysisEntry.KadReset({ resetValue: data.content[pagesID].extract });
-		analysisInput();
-	}
+	const data = WikiSearchData.data;
+	if (data.content == null) return;
+	let pagesID = Object.keys(data.content);
+	idVin_analysisEntry.KadReset({ resetValue: data.content[pagesID].extract });
+	analysisInput();
 }
 
 async function analysisInput() {
 	analysisOptions.searchInput = idVin_analysisEntry.KadGet();
 	if (analysisOptions.searchInput == "") {
 		idLbl_analysisResult.KadReset();
-		KadTable.clear("idTabBody_analysisResult");
+		KadTable.createHTMLGrid({ id: idTab_analysisTable });
 		return;
 	}
 	if (analysisOptions.data === null) {
-		const { analyseData, error } = await KadFile.loadUrlToJSON({ variable: "analyseData", url: "../Data/DataLists/SentimentListGerman.json" });
-		if (errorChecked(error, "Coult not receive data fpr 'Analysis'", error)) return;
+		const { analyseData, error } = await KadFile.loadUrlToJSON({
+			variable: "analyseData",
+			url: "../Data/DataLists/SentimentListGerman.json",
+		});
+		if (KadLog.errorChecked(error, "Coult not receive data fpr 'Analysis'", error)) return;
 		analysisOptions.data = analyseData;
 	}
 	analysisOptions.results = analysisAnalyze();
@@ -66,6 +72,7 @@ function analysisAnalyze() {
 			results.singleScores += wordScore;
 			if (!results.analysedWords.hasOwnProperty(word)) {
 				results.analysedWords[word] = {
+					word,
 					score: wordScore,
 					occurence: 1,
 				};
@@ -82,8 +89,7 @@ function analysisCreateOutput() {
 	if (analysisOptions.results.totalScore === null) {
 		idLbl_analysisResult.KadSetText("~~~~~~~");
 		dbID("idProg_analysisProgress").setAttribute("value", 100);
-		KadTable.clear("idTabBody_analysisResult");
-		KadTable.clear("idTabBody_analysisResult");
+		KadTable.createHTMLGrid({ id: idTab_analysisTable });
 	} else {
 		const score = convertScore(analysisOptions.results.totalScore);
 		const plural = analysisOptions.results.wordCount == 1 ? "Wort" : "Wörter";
@@ -95,69 +101,28 @@ function analysisCreateOutput() {
 }
 
 function analysisCreateTable() {
-	KadTable.clear("idTabBody_analysisResult");
-	const data = analysisOptions.results.analysedWords; //alias
-	const dataSorted = Object.keys(data).sort((a, b) => {
+	const data = analysisOptions.results.analysedWords;
+	const keysSorted = Object.keys(data).sort((a, b) => {
 		return data[b].score - data[a].score;
 	});
-	for (let i = dataSorted.length - 1; i >= 0; i--) {
-		if (dataSorted.length > 0) {
-			let row = KadTable.createRow("idTabBody_analysisResult");
-			let foundPos = null;
-			for (let n = 0; n < dataSorted.length; n++) {
-				if (data[dataSorted[n]].score >= 0) {
-					foundPos = dataSorted.splice(n, 1);
-					break;
-				}
-			}
-			KadTable.addCell(row, {
-				names: ["analysisPosWord", i],
-				type: "Lbl",
-				text: foundPos != null ? (data[foundPos].occurence > 1 ? `${foundPos} (${data[foundPos].occurence})` : foundPos) : "",
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: foundPos != null ? true : false,
-			});
-			KadTable.addCell(row, {
-				names: ["analysisPosScore", i],
-				type: "Lbl",
-				text: foundPos != null ? convertScore(data[foundPos].score) : "",
-				createCellClass: [objectLength(data) > 1 ? "clTab_UIBorderThinRight" : null],
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: foundPos != null ? true : false,
-			});
 
-			let foundNeg = null;
-			for (let n = 0; n < dataSorted.length; n++) {
-				if (data[dataSorted[n]].score < 0) {
-					foundNeg = dataSorted.splice(n, 1);
-					break;
-				}
-			}
-			KadTable.addCell(row, {
-				names: ["analysisNegWord", i],
-				type: "Lbl",
-				// text: (foundNeg != null) ? foundNeg : "",
-				text: foundNeg != null ? (data[foundNeg].occurence > 1 ? `${foundNeg} (${data[foundNeg].occurence})` : foundNeg) : "",
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: foundNeg != null ? true : false,
-			});
-			KadTable.addCell(row, {
-				names: ["analysisNegScore", i],
-				type: "Lbl",
-				text: foundNeg != null ? convertScore(data[foundNeg].score) : "",
-				cellStyle: {
-					textAlign: "right",
-				},
-				copy: foundNeg != null ? true : false,
-			});
+	let positiveData = [];
+	let negativeData = [];
+	for (let key of keysSorted) {
+		if (data[key].score >= 0) {
+			positiveData.push(data[key]);
+		} else {
+			negativeData.push(data[key]);
 		}
 	}
+
+	const body = [
+		{ data: positiveData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
+		{ data: positiveData.map((item) => convertScore(item.score)) },
+		{ data: negativeData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
+		{ data: negativeData.map((item) => convertScore(item.score)) },
+	];
+	KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header, body });
 }
 
 function convertScore(score) {

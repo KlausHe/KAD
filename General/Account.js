@@ -1,6 +1,6 @@
 import { contentLayout, navClick } from "../General/Layout.js";
 import { Data_AkademischerGrad, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "../General/MainData.js";
-import { KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, initEL, log } from "../KadUtils/KadUtils.js";
+import { KadDOM, KadLog, KadTable, dbCLStyle, dbID, dbIDStyle, initEL } from "../KadUtils/KadUtils.js";
 import { resetAll } from "../Main.js";
 import * as DBData from "../MainModulesDBData.js";
 
@@ -9,7 +9,7 @@ import { browserLocalPersistence, browserSessionPersistence, createUserWithEmail
 //      LOCAL:  	browserLocalPersistence
 //      SESSION:  	browserSessionPersistence
 //      NONE: 	inMemoryPersistence
-import { collection, doc, getDoc, getFirestore, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, doc, getDoc, getFirestore, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDHgM7J-2Q_W1Swp0Ozx6nY1QDoFcwEFwQ",
@@ -249,7 +249,7 @@ export function userLoggedIn() {
 
 function firebaseLogin() {
 	nuncDiscipuli.logging = true;
-	log("log in");
+	KadLog.log("log in");
 	const email = idVin_userLogin_email.KadGet();
 	const pass = idVin_userLogin_pass.KadGet();
 	setPersistence(auth, nuncDiscipuli.cred.keepLogin);
@@ -390,81 +390,29 @@ async function createNewDatabase() {
 }
 
 // ------------CREATE INFO-DIV-------------
+function accountClearInfo(index) {
+	const key = Object.keys(AccData.infos)[index];
+	AccData.infos[key].data = null;
+	let uInfoVin = dbID(`idInput_uInfoData_${index}`);
+	uInfoVin.value = "";
+	uInfoVin.placeholder = "...";
+}
+
 function createUserInfos() {
-	const parent = dbCL("cl_UserChange_infos");
-	KadDOM.clearFirstChild(parent);
-	for (const [key, subObj] of Object.entries(AccData.infos)) {
-		const uInfoParent = KadTable.createCell({
-			type: "Div",
-			names: ["uInfoParent", key],
-			style: {
-				whiteSpace: "nowrap",
-			},
-		});
-		parent.appendChild(uInfoParent);
+	const body = [
+		//
+		{ data: Object.values(AccData.infos).map((item) => item.description), settings: { class: "cl_info", noBorder: "bottom", uiRadius: "left" } },
+		{
+			type: "Input",
+			data: Object.entries(AccData.infos).map(([key, value]) => {
+				if (!userLoggedIn()) return value.description;
+				if (AccData.infos[key].data) return AccData.infos[key].data;
+				return "...";
+			}),
+			settings: { names: ["uInfoData"], dList: Object.values(AccData.infos).map((item) => item.suggestions), noBorder: "bottom", uiRadius: "none" },
+		},
+		{ type: "ButtonImage", data: "trash", settings: { onclick: accountClearInfo, noBorder: "bottom", uiRadius: "right", uiSize: "width1" } },
+	];
 
-		const uInfoBtn = KadTable.createCell({
-			type: "Lbl",
-			names: ["uInfoLbl", key],
-			createClass: ["cl_info"],
-			ui: {
-				uiRadius: "left",
-			},
-			text: subObj.description,
-		});
-		uInfoParent.appendChild(uInfoBtn);
-
-		let ph = subObj.description;
-		if (userLoggedIn()) {
-			if (AccData.infos[key].data) {
-				ph = AccData.infos[key].data;
-			} else {
-				ph = "...";
-			}
-		}
-
-		const uInfoVin = KadTable.createCell({
-			type: "Vin",
-			names: ["uInfoVin", key],
-			subGroup: "text",
-			ui: {
-				uiRadius: "none",
-				uiSize: "wide",
-				list: `dList_uInfo_${key}`,
-				maxLength: subObj.maxlength ? subObj.maxlength : 50,
-			},
-			placeholder: ph,
-		});
-		uInfoParent.appendChild(uInfoVin);
-		const uInfoDel = KadTable.createCell({
-			type: "Btn",
-			names: ["uInfoDel", key],
-			subGroup: "button",
-			img: "trash",
-			ui: {
-				uiRadius: "right",
-				uiSize: "size1",
-			},
-			style: {
-				textAlign: "center",
-			},
-			onclick: () => {
-				AccData.infos[key].data = null;
-				uInfoVin.value = "";
-				uInfoVin.placeholder = "...";
-			},
-		});
-		uInfoParent.appendChild(uInfoDel);
-
-		if (subObj.suggestions != null) {
-			const dList = document.createElement("datalist");
-			dList.id = `dList_uInfo_${key}`;
-			uInfoVin.appendChild(dList);
-			for (let sug of subObj.suggestions) {
-				const opt = new Option(sug);
-				// document.createElement("OPTION");
-				dList.appendChild(opt);
-			}
-		}
-	}
+	KadTable.createHTMLGrid({ id: idTab_userChangeTable, body });
 }

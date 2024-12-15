@@ -38,7 +38,7 @@ export const netsaonaOptions = {
 			return Data_Nummernschild.map((item) => item[1]);
 		},
 		get Land() {
-			return Data_Country_CodesIso3166.map((item) => item.name);
+			return Data_Country_CodesIso3166.map((item) => item.nameDE);
 		},
 		get Bundesland() {
 			return Data_Country_GermanDistrics.map((o) => {

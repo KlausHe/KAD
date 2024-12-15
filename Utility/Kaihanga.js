@@ -1,4 +1,4 @@
-import { dbID, dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable, log } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
@@ -137,53 +137,62 @@ function kaihangaCreateRandomOption() {
 }
 
 function kaihangaUpdate() {
-	if (!kaihangaOptions.spinning) {
-		dbID("idLbl_kaihangaResult").innerHTML = "Gewinner: ...";
-		dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
-		dbIDStyle("idLbl_kaihangaResult").color = "";
-		kaihangaWheelUpdate();
-		KadTable.clear("idTabBody_Kaihanga");
-		for (let i = 0; i < kaihangaOptions.entries.length; i++) {
-			let row = KadTable.createRow("idTabBody_Kaihanga");
-			row.id = `idRow_kaihanga_${i}`;
-			KadTable.addCell(row, {
-				names: ["kaihanga", i],
-				type: "Btn",
-				subGroup: "subgrid",
-				img: "trash",
-				ui: {
-					uiSize: "size1",
-					uiType: "transparent",
-				},
-				cellStyle: {
-					textAlign: "center",
-					cursor: "pointer",
-				},
-				cellOnclick: function () {
-					kaihangaClearRow(i);
-				},
-			});
-			KadTable.addCell(row, {
-				names: ["kaihanga", i],
-				type: "Colbox",
-				color: kaihangaOptions.wheel.segments[i].fillStyle,
-				ui: {
-					uiSize: "size1",
-				},
-				style: {
-					textAlign: "center",
-				},
-			});
-			KadTable.addCell(row, {
-				names: ["kaihanga", i],
-				type: "Lbl",
-				text: kaihangaOptions.entries[i],
-				ui: {
-					uiSize: "size12",
-				},
-				copy: true,
-			});
-		}
+	if (kaihangaOptions.spinning) return;
+	dbID("idLbl_kaihangaResult").innerHTML = "Gewinner: ...";
+	dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
+	dbIDStyle("idLbl_kaihangaResult").color = "";
+	kaihangaWheelUpdate();
+
+	// const body = [
+	//
+	// kaihangaOptions.entries.map(item => ({type: "Colorbox", data: item. }))
+	// kaihangaOptions.entries.map(item => ({data: item }))
+	// ]
+
+	// KadTable.createHTMLGrid({ id: idTab_kaihangaTable,  body });
+
+	// return;
+	KadTable.clear("idTabBody_Kaihanga");
+	for (let i = 0; i < kaihangaOptions.entries.length; i++) {
+		let row = KadTable.createRow("idTabBody_Kaihanga");
+		row.id = `idRow_kaihanga_${i}`;
+		KadTable.addCell(row, {
+			names: ["kaihanga", i],
+			type: "Btn",
+			subGroup: "subgrid",
+			img: "trash",
+			ui: {
+				uiSize: "width1",
+				uiType: "transparent",
+			},
+			cellStyle: {
+				textAlign: "center",
+				cursor: "pointer",
+			},
+			cellOnclick: function () {
+				kaihangaClearRow(i);
+			},
+		});
+		KadTable.addCell(row, {
+			names: ["kaihanga", i],
+			type: "Colbox",
+			color: kaihangaOptions.wheel.segments[i].fillStyle,
+			ui: {
+				uiSize: "width1",
+			},
+			style: {
+				textAlign: "center",
+			},
+		});
+		KadTable.addCell(row, {
+			names: ["kaihanga", i],
+			type: "Lbl",
+			text: kaihangaOptions.entries[i],
+			ui: {
+				uiSize: "width12",
+			},
+			copy: true,
+		});
 	}
 }
 

@@ -64,7 +64,7 @@ export function clear_cl_Numbery() {
 	KadInteraction.removeContextmenu(idDiv_numberyImages);
 	numberyOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
 	idVin_numberyPlayer.KadReset();
-	idSel_numberCategory.KadReset();
+	numberyOptions.cathegoryIndex = idSel_numberCategory.KadReset({ index: true });
 	numberyOptions.pairs = numberyOptions.availiablePairs[idSel_numberyPairs.KadReset()];
 	numberyOptions.delay = KadCSS.getRoot({ value: "transitionTimeHide" }) * 1000;
 	dbID("idLbl_numberyResult").textContent = "...";
@@ -75,10 +75,6 @@ export function clear_cl_Numbery() {
 	numberyDisableInputs(true);
 }
 
-export function canvas_cl_Numbery() {
-	startNumbery();
-}
-
 function numberyDisableInputs() {
 	KadDOM.enableBtn("idSel_numberyPairs", !numberyOptions.isPlaying);
 	KadDOM.enableBtn("idVin_numberyPlayer", !numberyOptions.isPlaying);
@@ -87,10 +83,9 @@ function numberyDisableInputs() {
 }
 
 function numberyLayout() {
-	// if (numberyOptions.pairs == 2) return [2, 2];
 	let result = [];
-	const value = numberyOptions.pairs * 2;
-	for (let i = 2; i <= numberyOptions.pairs; i++) {
+	const value = Number(numberyOptions.pairs) * 2;
+	for (let i = 2; i <= Number(numberyOptions.pairs); i++) {
 		if (value % i === 0) {
 			result.push([i, Math.floor(value / i)]);
 		}
@@ -109,8 +104,7 @@ function numberyPlayerChange() {
 }
 
 function numberyCathegorySelect() {
-	numberyOptions.cathegoryIndex = idSel_numberCategory.options.selectedIndex;
-
+	numberyOptions.cathegoryIndex = idSel_numberCategory.KadGet({ index: true });
 	const index = Math.min(numberyOptions.pairsIndex, numberyOptions.availiablePairs.length - 1);
 	numberyOptions.pairsIndex = idSel_numberyPairs.KadReset({
 		selList: numberyOptions.availiablePairs,
@@ -120,7 +114,7 @@ function numberyCathegorySelect() {
 }
 
 function numberyPairsChange() {
-	numberyOptions.pairsIndex = idSel_numberyPairs.selectedIndex;
+	numberyOptions.pairsIndex = idSel_numberyPairs.KadGet({ index: true });
 	numberyOptions.pairs = idSel_numberyPairs.KadGet();
 	startNumbery();
 }
@@ -236,7 +230,7 @@ function numberyCheckFinished() {
 	if (maxScored[0].score == maxScored[1].score) {
 		result.textContent = `Unentschieden mit ${maxScored[0].score} Punkten`;
 	} else {
-		result.textContent = `${maxScored[0].name} won!`;
+		result.textContent = `Gewinner: ${maxScored[0].name}!`;
 		result.style.setProperty("--bgcNavbar", KadColor.formatAsString({ colorArray: maxScored[0].col, type: "HSL" }));
 		result.style.setProperty("--txtNavbar", KadColor.stateAsString({ colorArray: maxScored[0].col, type: "HSL" }));
 	}
@@ -244,40 +238,13 @@ function numberyCheckFinished() {
 }
 
 function numberyScoreBoard() {
-	KadTable.clear("idTabBody_Numbery");
-	for (let i = 0; i < numberyOptions.players.length; i++) {
-		const row = KadTable.createRow("idTabBody_Numbery");
-		const isPlayer = i == numberyOptions.playerID;
-		// colored Box
-		KadTable.addCell(row, {
-			names: ["numbery", i],
-			type: "Colbox",
-			color: numberyOptions.players[i].col,
-			cellStyle: {
-				backgroundColor: isPlayer ? numberyOptions.players[i].col : "",
-			},
-		});
-		//Name
-		KadTable.addCell(row, {
-			names: ["numberyName", i],
-			type: "Lbl",
-			text: numberyOptions.players[i].name,
-			cellStyle: {
-				textAlign: "left",
-				backgroundColor: isPlayer ? numberyOptions.players[i].col : "",
-			},
-		});
-		//Score
-		KadTable.addCell(row, {
-			names: ["numberyScore", i],
-			type: "Lbl",
-			text: numberyOptions.players[i].score,
-			cellStyle: {
-				textAlign: "left",
-				backgroundColor: isPlayer ? numberyOptions.players[i].col : "",
-			},
-		});
-	}
+	const header = [{ data: "Player" }, { data: "Points" }];
+	const body = [
+		{ data: numberyOptions.players.map((item) => item.name), settings: { noBorder: "right", backgroundColor: numberyOptions.players.map((item) => item.col) } },
+		{ data: numberyOptions.players.map((item) => item.score), settings: { align: "center", names: ["numberyScore"], backgroundColor: numberyOptions.players.map((item) => item.col) } },
+	];
+
+	KadTable.createHTMLGrid({ id: "idTab_numberyTable", header, body });
 }
 
 function numberyMakePlayers(numPlayer) {
@@ -298,7 +265,7 @@ class NumberyPlayer {
 		this.score = 0;
 	}
 	scored() {
-		this.score += 2;
-		dbID(`idLbl_child_numberyScore_${this.id}`).textContent = this.score;
+		this.score++;
+		dbID(`idLbl_numberyScore_${this.id}`).textContent = this.score;
 	}
 }

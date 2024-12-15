@@ -22,35 +22,16 @@ function ranjeCalc() {
 	if (ranjeOptions.results.length == 0) {
 		ranjeOptions.results.push([ranjeOptions.value, 1]);
 	}
-	tableRanjeCalculate();
+	ranjeCreateTable();
 }
 
-function tableRanjeCalculate() {
-	KadTable.clear("idTabHeader_ranjeList");
-	KadTable.clear("idTabBody_ranjeList");
-	for (let i = 0; i < ranjeOptions.results.length; i++) {
-		const row = KadTable.createRow("idTabBody_ranjeList");
-		KadTable.addCell(row, {
-			names: ["ranje", "op", i],
-			type: "Lbl",
-			text: ranjeOptions.value,
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-		KadTable.addCell(row, {
-			names: ["ranje", "eq", i],
-			type: "Lbl",
-			text: "=",
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-		KadTable.addCell(row, {
-			names: ["ranje", "res", i],
-			type: "Lbl",
-			text: `${ranjeOptions.results[i][0]} x ${ranjeOptions.results[i][1]}`,
-			copy: true,
-		});
-	}
+function ranjeCreateTable() {
+	const body = [
+		//
+		{ data: ranjeOptions.value, settings: { align: "right", noBorder: "right" } },
+		{ data: "=", settings: { align: "center", noBorder: "right" } },
+		{ data: ranjeOptions.results.map((item) => `${item[0]} x ${item[1]}`), settings: { align: "left" } },
+	];
+
+	KadTable.createHTMLGrid({ id: idTab_ranjeTable, body });
 }

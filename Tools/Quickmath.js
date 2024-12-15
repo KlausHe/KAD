@@ -3,7 +3,8 @@ const quickmathOptions = {
 	values: { val: 12, i: 42 },
 	objects: {
 		Multiply: {
-			tabID: "idTabBody_quickmathMultiply",
+			tabID: "idTab_quickmathTableMultiply",
+			header: "Multiply",
 			get html() {
 				return `${quickmathOptions.values.val} x ${quickmathOptions.values.i}`; //\u22C5
 			},
@@ -12,7 +13,8 @@ const quickmathOptions = {
 			},
 		},
 		Divide: {
-			tabID: "idTabBody_quickmathDivide",
+			tabID: "idTab_quickmathTableDivide",
+			header: "Divide",
 			get html() {
 				return `${quickmathOptions.values.val}/${quickmathOptions.values.i}`; //"Div by 0"
 			},
@@ -22,7 +24,8 @@ const quickmathOptions = {
 			},
 		},
 		Pow: {
-			tabID: "idTabBody_quickmathPow",
+			tabID: "idTab_quickmathTablePow",
+			header: "Power",
 			get html() {
 				return `${quickmathOptions.values.val}<sup>${quickmathOptions.values.i}</sup>`;
 			},
@@ -51,42 +54,30 @@ function calcQuickmath() {
 }
 
 function tableQuickmathCalculate(op) {
-	const operation = op;
-	const obj = quickmathOptions.objects[operation];
-	KadTable.clear(obj.tabID);
-	quickmathOptions.values.val = idVin_quickkmathVal.KadGet();
 	const vinMin = idVin_quickkmathStart.KadGet();
 	const vinMax = idVin_quickkmathEnd.KadGet();
 	const start = Math.min(vinMin, vinMax);
 	const end = Math.max(vinMin, vinMax) + 1;
+	quickmathOptions.values.val = idVin_quickkmathVal.KadGet();
 
+	const operation = op;
+	const obj = quickmathOptions.objects[operation];
+
+	const header = [{ data: obj.header, colSpan: 3, settings: { align: "center" } }];
+	const dataHtml = [];
+	const dataNum = [];
 	for (let i = start; i < end; i++) {
 		quickmathOptions.values.i = i;
-		const row = KadTable.createRow(obj.tabID);
-		//vals
-		KadTable.addCell(row, {
-			names: ["quickmath", "op", operation, i],
-			type: "Lbl",
-			text: obj.html,
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-
-		KadTable.addCell(row, {
-			names: ["quickmath", "eq", operation, i],
-			type: "Lbl",
-			text: "=",
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-
-		KadTable.addCell(row, {
-			names: ["quickmath", "res", operation, i],
-			type: "Lbl",
-			text: obj.num,
-			copy: true,
-		});
+		dataHtml.push(obj.html);
+		dataNum.push(obj.num);
 	}
+
+	const body = [
+		//
+		{ data: dataHtml, settings: { align: "left", noBorder: "right" } },
+		{ data: "=", settings: { align: "center", noBorder: "right" } },
+		{ data: dataNum, settings: { align: "left" } },
+	];
+
+	KadTable.createHTMLGrid({ id: obj.tabID, header, body });
 }

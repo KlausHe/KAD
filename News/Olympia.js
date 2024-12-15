@@ -1,4 +1,4 @@
-import { KadArray, KadDOM, KadFile, KadTable, KadValue, dbID, errorChecked, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDOM, KadFile, KadLog, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
 	URLFlags: `https://restcountries.com/v3.1/all?fields=cca3,flags,population`,
@@ -33,7 +33,7 @@ async function olympiaUpdate() {
 	const index = idSel_olympiaEvent.KadGet({ index: true });
 	const url = olympiaOptions.events[index][1];
 	const { dataTable, dataCountries, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataCountries"], urlArray: [url, olympiaOptions.URLFlags] });
-	if (errorChecked(error, "Could not receive data for 'Olympia'.", error)) return;
+	if (KadLog.errorChecked(error, "Could not receive data for 'Olympia'.", error)) return;
 	dataTable.results.splice(
 		dataTable.results.findIndex((item) => {
 			return item.country.code == "EOR" || item.country.code == "RPT";
@@ -81,70 +81,36 @@ function olympiaSortByMedals() {
 
 function olympiaTableReturn() {
 	if (olympiaOptions.data.length == 0) return;
-	const data = olympiaOptions.data;
-	KadTable.clear("idTabBody_OlympiaTable");
 
-	for (let name of olympiaOptions.headerNames) {
-		const text = olympiaOptions.specific ? `${name}<br>/Einwohner` : name;
-		dbID(`idTabHeader_Olympia${name}`).innerHTML = text;
-	}
+	//prettier-ignore
+	const header = [
+    { data: "Rang" }, 
+    { data: "Land", colSpan: 2, settings: { align: "center" } }, 
+    ...olympiaOptions.headerNames.map((item) => ({ data: olympiaOptions.specific ? `${item}<br>/Einwohner` : item })), 
+    { data: "Einwohner", settings: { align: "left" } }];
 
-	KadTable.clear("idTabBody_OlympiaTable");
-	for (let i = 0; i < data.length; i++) {
-		let row = KadTable.createRow("idTabBody_OlympiaTable");
-
-		KadTable.addCell(row, {
-			names: ["olympia", "place", i],
-			type: "Lbl",
-			text: i + 1,
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-		// image
-		KadTable.addCell(row, {
-			names: ["olympia", "flag", i],
-			type: "Img",
-			subGroup: "url",
-			img: data[i].flag,
-			ui: {
-				uiSize: "olympiaImg",
-			},
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-
-		//--  Land
-		KadTable.addCell(row, {
-			names: ["olympia", "country", i],
-			type: "Lbl",
-			text: `${data[i].country.name} (${data[i].rank})`,
-			title: data[i].country.name,
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-		// --Medals
-		for (let name of olympiaOptions.headerNames) {
-			KadTable.addCell(row, {
-				names: ["olympia", name, i],
-				type: "Lbl",
-				text: olympiaOptions.specific ? KadValue.number(data[i].specific[name.toLowerCase()], { decimals: 3 }) : data[i].medals[name.toLowerCase()],
-				cellStyle: {
-					textAlign: "center",
-				},
-			});
-		}
-
-		// --Population
-		KadTable.addCell(row, {
-			names: ["olympia", "population", i],
-			type: "Lbl",
-			text: KadValue.number(data[i].population, { indicator: true }),
-			cellStyle: {
-				textAlign: "right",
-			},
-		});
-	}
+	const body = [
+		{
+			data: KadArray.arrayFromNumber(olympiaOptions.data.length).map((n) => n + 1),
+			settings: { description: "place", align: "right" },
+		},
+		{
+			type: "URLImg",
+			data: olympiaOptions.data.map((item) => item.flag),
+			settings: { description: "flag", noBorder: "right", align: "center", imgSize: "olympiaImg" },
+		},
+		{
+			data: olympiaOptions.data.map((item) => `${item.country.name} (${item.rank})`),
+			settings: { description: "country", title: olympiaOptions.data.map((item) => item.country.name) },
+		},
+		...olympiaOptions.headerNames.map((head) => ({
+			data: olympiaOptions.data.map((item) => (olympiaOptions.specific ? KadValue.number(item.specific[head.toLowerCase()], { decimals: 3 }) : item.medals[head.toLowerCase()])),
+			settings: { description: head, align: "center" },
+		})),
+		{
+			data: olympiaOptions.data.map((item) => KadValue.number(item.population, { indicator: true })),
+			settings: { description: "population", align: "right" },
+		},
+	];
+	KadTable.createHTMLGrid({ id: idTab_OlympiaTable, header, body });
 }

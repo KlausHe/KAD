@@ -1,6 +1,6 @@
 // import { createRequestBody, normaliseResponse, isLanguageSupported, translate } from "../Data/translateAPI.js";
 import { Data_Country_CodesIso639 } from "../General/MainData.js";
-import { daEL, dbID, KadArray, KadDOM, log } from "../KadUtils/KadUtils.js";
+import { daEL, dbID, KadArray, KadDOM, KadLog } from "../KadUtils/KadUtils.js";
 
 const speechOptions = {
 	synthObj: window.speechSynthesis,
@@ -160,7 +160,7 @@ async function speechTranslateRequest() {
 	return;
 	// speechOptions.input;
 	// let languages = speechLanguageChange();
-	log(isLanguageSupported("de"));
+	KadLog.log(isLanguageSupported("de"));
 
 	// dbID("idArea_speechToText").value = "Funktion is currently not implemented!";
 	// translate("Je ne mangé pas six jours", { from: "fr", to: "en" })

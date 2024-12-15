@@ -1010,7 +1010,6 @@ class GameOfLife {
 		for (let i = 0; i < this.cols; i++) {
 			for (let j = 0; j < this.rows; j++) {
 				const state = this.gridCurr[i][j];
-				let sum = 0;
 				const neighbors = this.countNeighbors(this.gridCurr, i, j);
 				if (state == 0 && neighbors == 3) {
 					gridNext[i][j] = 1;
@@ -1032,14 +1031,13 @@ class GameOfLife {
 			bgaQuit();
 		}
 	}
-
-	countNeighbors(g, x, y) {
+	countNeighbors(grid, x, y) {
 		let sum = 0;
 		for (let i = -1; i < 2; i++) {
 			for (let j = -1; j < 2; j++) {
 				let c = (x + i + this.cols) % this.cols;
 				let r = (y + j + this.rows) % this.rows;
-				sum += g[c][r];
+				sum += grid[c][r];
 			}
 		}
 		sum -= g[x][y];

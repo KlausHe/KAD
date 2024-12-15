@@ -42,57 +42,40 @@ export const storage_cl_MaterialFilterSettings = {
 
 //Hauptliste mit Werkstoffdaten ersetllen!!!
 function materialFilterBuildTable() {
-	KadTable.clear("idTabBody_MaterialFilterTable");
-	for (const key of Object.keys(Data_Materials.metadata)) {
-		const row = KadTable.createRow("idTabBody_MaterialFilterTable");
-		const cb = KadTable.addCell(row, {
-			names: ["settingsMaterialfilter", key],
-			type: "Vin",
-			idNoChild: true,
-			subGroup: "checkbox",
-			checked: materialFilterOptions.select.includes(key),
-			cellStyle: {
-				textAlign: "center",
+	const header = [{ data: "Verfügbare Materialeigenschaften", colSpan: 3, settings: { align: "center" } }];
+	const body = [
+		{
+			type: "Checkbox",
+			data: Object.keys(Data_Materials.metadata).map((item) => materialFilterOptions.select.includes(item)),
+			settings: {
+				onclick: materialFilterChoices,
+				names: ["materialFilter"],
+				noBorder: "right",
 			},
-			onclick: () => {
-				materialFilterChoices(key);
-			},
-		});
-		KadTable.addCell(row, {
-			names: ["materialFilterName", key],
-			type: "Lbl",
-			text: Data_Materials.metadata[key].Bezeichnung,
-			for: cb.id,
-			cellStyle: {
-				textAlign: "left",
-			},
-		});
-		KadTable.addCell(row, {
-			names: ["materialFilterSign", key],
-			type: "Lbl",
-			text: Data_Materials.metadata[key].abbr,
-			for: cb.id,
-			cellStyle: {
-				textAlign: "center",
-			},
-		});
-	}
+		},
+		{ data: Object.keys(Data_Materials.metadata).map((item) => Data_Materials.metadata[item].Bezeichnung), settings: { for: "idCheckbox_materialFilter", noBorder: "right" } },
+		{ data: Object.keys(Data_Materials.metadata).map((item) => Data_Materials.metadata[item].abbr) },
+	];
+
+	KadTable.createHTMLGrid({ id: idTab_materialFilterTable, header, body });
 }
 
 function materialFilterUpdateCB() {
-	for (const key of Object.keys(Data_Materials.metadata)) {
-		const cb = dbID(`idVin_settingsMaterialfilter_${key}`);
+	for (let index = 0; index < Object.entries(Data_Materials.metadata).length; index++) {
+		const key = Object.keys(Data_Materials.metadata)[index];
+		const cb = dbID(`idCheckbox_materialFilter_${index}`);
 		cb.checked = materialFilterOptions.select.includes(key);
 	}
 }
 
-function materialFilterChoices(key) {
-	const cb = dbID(`idVin_settingsMaterialfilter_${key}`);
+function materialFilterChoices(index) {
+	const key = Object.keys(Data_Materials.metadata)[index];
+	const cb = dbID(`idCheckbox_materialFilter_${index}`);
 	if (cb.checked) {
 		materialFilterOptions.select.push(key);
 	} else {
-		let index = materialFilterOptions.select.indexOf(key);
-		materialFilterOptions.select.splice(index, 1);
+		let i = materialFilterOptions.select.indexOf(key);
+		materialFilterOptions.select.splice(i, 1);
 	}
 	materialSelectedTable();
 }

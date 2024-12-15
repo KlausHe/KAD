@@ -1,5 +1,3 @@
-//Benkyou
-export { storage_cl_WikiSearch } from "./Benkyou/WikiSearch.js";
 //Games
 export { storage_cl_Lotto } from "./Games/Lotto.js";
 //News

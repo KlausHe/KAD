@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
-import { dbCL, dbID, dbIDStyle, errorChecked, initEL, KadColor, KadCSS, KadDOM, KadFile, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, dbIDStyle, KadLog, initEL, KadColor, KadCSS, KadDOM, KadFile, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const linahaOptions = {
@@ -155,7 +155,7 @@ async function linahaGetData() {
 		url += `${code},`;
 	}
 	const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: url });
-	if (errorChecked(error, "Could not receive data for 'Linaha'.", error)) return;
+	if (KadLog.errorChecked(error, "Could not receive data for 'Linaha'.", error)) return;
 	linahaOptions.data = data;
 	linahaCreateButtons();
 }

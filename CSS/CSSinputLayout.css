@@ -50,7 +50,7 @@ h1 {
 i {
 	vertical-align: middle;
 	align-items: center;
-	-webkit-box-align: center;
+	/* -webkit-box-align: center; */
 	margin: 0 var(--padding);
 }
 
@@ -60,7 +60,7 @@ img {
 	border-color: transparent;
 	margin: 0;
 	padding: 0;
-	-webkit-box-align: center;
+	/* -webkit-box-align: center; */
 	align-items: center;
 	vertical-align: middle;
 	-webkit-transition: all var(--transitionTimeName) ease-in-out;
@@ -81,6 +81,10 @@ img[imgBtn="gridtitle"] {
 img[imgSize="blech"] {
 	width: 15rem;
 	height: 6.5rem;
+}
+img[imgSize="olympiaImg"] {
+	width: auto;
+	height: var(--UIHeight1);
 }
 
 img[imgSize="suika"] {
@@ -172,7 +176,7 @@ button {
 	position: relative;
 	width: var(--UIWidth6);
 	text-align: center;
-	-webkit-box-align: center;
+	/* -webkit-box-align: center; */
 	align-items: center;
 	cursor: pointer;
 	transition: all var(--transitionTimeInfo) ease-in-out;
@@ -208,7 +212,7 @@ button:active {
 
 input {
 	width: var(--UIWidth6);
-	-webkit-box-align: center;
+	/* -webkit-box-align: center; */
 	align-items: center;
 	text-align: left;
 }
@@ -365,6 +369,7 @@ input[imgBtn="subgrid"] {
 	border: var(--UIBorderThin);
 	border-radius: var(--UIRadius);
 	text-align: center;
+	padding: 0;
 }
 
 .cl_infoCB {
@@ -387,7 +392,7 @@ input[imgBtn="subgrid"] {
 	min-width: var(--UIWidth12);
 	display: -webkit-box;
 	display: flex;
-	-webkit-box-align: center;
+	/* -webkit-box-align: center; */
 	align-items: center;
 	-webkit-box-pack: center;
 	justify-content: center;
@@ -435,64 +440,64 @@ input[imgBtn="subgrid"] {
 	width: var(--imgSize);
 }
 
-[uiSize~="size1"] {
+[uiSize~="width1"] {
 	width: var(--UIWidth1);
 }
-[uiSize~="size2"] {
+[uiSize~="width2"] {
 	width: var(--UIWidth2);
 }
-[uiSize~="size3"] {
+[uiSize~="width3"] {
 	width: var(--UIWidth3);
 }
-[uiSize~="size4"] {
+[uiSize~="width4"] {
 	width: var(--UIWidth4);
 }
-[uiSize~="size5"] {
+[uiSize~="width5"] {
 	width: var(--UIWidth5);
 }
-[uiSize~="size6"] {
+[uiSize~="width6"] {
 	width: var(--UIWidth6);
 }
-[uiSize~="size7"] {
+[uiSize~="width7"] {
 	width: var(--UIWidth7);
 }
-[uiSize~="size8"] {
+[uiSize~="width8"] {
 	width: var(--UIWidth8);
 }
-[uiSize~="size9"] {
+[uiSize~="width9"] {
 	width: var(--UIWidth9);
 }
-[uiSize~="size10"] {
+[uiSize~="width10"] {
 	width: var(--UIWidth10);
 }
-[uiSize~="size11"] {
+[uiSize~="width11"] {
 	width: var(--UIWidth11);
 }
-[uiSize~="size12"] {
+[uiSize~="width12"] {
 	width: var(--UIWidth12);
 }
-[uiSize~="size13"] {
+[uiSize~="width13"] {
 	width: var(--UIWidth13);
 }
-[uiSize~="size14"] {
+[uiSize~="width14"] {
 	width: var(--UIWidth14);
 }
-[uiSize~="size15"] {
+[uiSize~="width15"] {
 	width: var(--UIWidth15);
 }
-[uiSize~="size16"] {
+[uiSize~="width16"] {
 	width: var(--UIWidth16);
 }
-[uiSize~="size17"] {
+[uiSize~="width17"] {
 	width: var(--UIWidth17);
 }
-[uiSize~="size18"] {
+[uiSize~="width18"] {
 	width: var(--UIWidth18);
 }
-[uiSize~="size19"] {
+[uiSize~="width19"] {
 	width: var(--UIWidth19);
 }
-[uiSize~="size20"] {
+[uiSize~="width20"] {
 	width: var(--UIWidth20);
 }
 
@@ -510,11 +515,11 @@ input[imgBtn="subgrid"] {
 }
 
 [uiSize~="outputTitle"] {
-	width: var(--UIWidth17);
+	max-width: var(--UIWidth17);
 }
 
 [uiSize~="outputText"] {
-	width: var(--UIWidth20);
+	max-width: var(--UIWidth20);
 	max-height: var(--UIWidth20);
 	overflow-y: scroll;
 }
@@ -532,11 +537,6 @@ input[imgBtn="subgrid"] {
 [uiSize~="linahaImg"] {
 	width: calc(var(--UIHeight2) * 1.5);
 	height: calc(var(--UIHeight2) * 0.9);
-}
-
-[uiSize~="olympiaImg"] {
-	width: auto;
-	height: var(--UIHeight1);
 }
 
 [uiRadius~="none"] {
@@ -575,6 +575,21 @@ input[imgBtn="subgrid"] {
 	text-align: right;
 }
 
+[uiAlign~="top"] {
+	justify-items: start;
+	vertical-align: start;
+}
+
+[uiAlign~="middle"] {
+	justify-items: center;
+	vertical-align: middle;
+}
+
+[uiAlign~="bottom"] {
+	justify-items: end;
+	vertical-align: end;
+}
+
 [uiFlex~="horizontal"] {
 	display: -webkit-box;
 	display: flex;
@@ -583,7 +598,7 @@ input[imgBtn="subgrid"] {
 	flex-direction: row;
 	-webkit-box-pack: start;
 	justify-content: left;
-	-webkit-box-align: center;
+	/* -webkit-box-align: center; */
 	align-items: center;
 	flex-wrap: nowrap;
 	gap: var(--gridGap);

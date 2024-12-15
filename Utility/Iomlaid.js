@@ -1,7 +1,7 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
 import { Data_Currencies } from "../General/MainData.js";
-import { dbID, initEL, KadDate, KadFile, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadFile, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 
 const iomlaidOptions = {
 	get URLnow() {
@@ -12,7 +12,6 @@ const iomlaidOptions = {
 	},
 	latest: null,
 	historic: null,
-	dataReceived: false,
 	baseCurrency: null,
 	optionsOrig: {
 		baseCurrency: "EUR",
@@ -44,9 +43,8 @@ initEL({
 initEL({ id: idVin_IomlaidCur, fn: iomlaidValueChange, resetValue: iomlaidOptions.optionsOrig.value });
 
 export function clear_cl_Iomlaid() {
-	iomlaidOptions.dataReceived = false;
-	iomlaidOptions.latest = {};
-	iomlaidOptions.historic = {};
+	iomlaidOptions.latest = null;
+	iomlaidOptions.historic = null;
 	iomlaidOptions.baseCurrency = iomlaidOptions.optionsOrig.baseCurrency;
 	iomlaidOptions.date = idVin_IomlaidDate.KadReset();
 	iomlaidOptions.value = idVin_IomlaidCur.KadReset();
@@ -69,87 +67,49 @@ function iomlaidValueChange() {
 }
 
 async function iomlaidGetData() {
-	iomlaidOptions.dataReceived = false;
-	idTabHeader_iomlaidDatedDate.textContent = "searching...";
-
 	const { error, dataNow, dataHistory } = await KadFile.loadUrlToJSON({
 		variableArray: ["dataNow", "dataHistory"],
 		urlArray: [iomlaidOptions.URLnow, iomlaidOptions.URLhistoric],
 	});
 	if (layoutCheckCORSandDisableModule(error, "Iomlaid")) return;
-
-	iomlaidOptions.dataReceived = true;
 	iomlaidOptions.latest = dataNow[iomlaidOptions.baseCurrency.toLowerCase()];
 	iomlaidOptions.historic = dataHistory[iomlaidOptions.baseCurrency.toLowerCase()];
-	idTabHeader_iomlaidDatedDate.textContent = `Kurs vom ${dataHistory.date}`;
 	iomlaidOptions.date = idVin_IomlaidDate.KadReset({ resetValue: dataHistory.date });
 	iomlaidTable();
 }
 
 function iomlaidTable() {
-	if (!iomlaidOptions.dataReceived) return;
-	dbID("idTabHeader_iomlaidRequestedAmount").textContent = `Betrag: ${KadValue.number(iomlaidOptions.value, { currency: iomlaidOptions.baseCurrency })}`;
-	KadTable.clear("idTabBody_Iomlaid");
-	let i = 0;
-	for (let currency of Data_Currencies) {
-		const key = currency.cc;
-		const symbol = currency.symbol;
-		let row = KadTable.createRow("idTabBody_Iomlaid");
-		// Währung
-		KadTable.addCell(row, {
-			names: ["iomlaidCurrency", i],
-			type: "Lbl",
-			text: `${currency.name} (${key})`,
-			createCellClass: ["clTab_UIBorderThinRight"],
-			cellStyle: {
-				textAlign: "right",
-			},
-			copy: false,
-		});
+	if (iomlaidOptions.latest == null || iomlaidOptions.historic == null) return;
 
-		//latest Kurs
-		KadTable.addCell(row, {
-			names: ["iomlaidLatestChange", i],
-			type: "Lbl",
-			text: iomlaidOptions.latest == null ? "n.d." : KadValue.number(iomlaidOptions.latest[key.toLowerCase()], { decimals: 3 }),
-			cellStyle: {
-				textAlign: "right",
-			},
-			copy: true,
-		});
-		//latest Betrag
-		KadTable.addCell(row, {
-			names: ["iomlaidLatestRate", i],
-			type: "Lbl",
-			text: iomlaidOptions.latest == null ? "n.d." : `${KadValue.number(iomlaidOptions.latest[key.toLowerCase()] * iomlaidOptions.value)} ${symbol}`,
-			createCellClass: ["clTab_UIBorderThinRight"],
-			cellStyle: {
-				textAlign: "right",
-			},
-			copy: true,
-		});
+	const header = [
+		{ data: `Betrag: ${KadValue.number(iomlaidOptions.value, { currency: iomlaidOptions.baseCurrency })}`, settings: { align: "center", justify: "end" } },
+		{ data: "Kurs<br>(heute)", settings: { align: "right" } },
+		{ data: "Betrag<br>(heute)", settings: { align: "right" } },
+		{ data: `Kurs<br>${iomlaidOptions.date}`, settings: { align: "right" } },
+		{ data: `Betrag<br>${iomlaidOptions.date}`, settings: { align: "right" } },
+	];
 
-		//historic Kurs
-		KadTable.addCell(row, {
-			names: ["iomlaidHistoricChange", i],
-			type: "Lbl",
-			text: iomlaidOptions.historic == null ? "n.d." : KadValue.number(iomlaidOptions.historic[key.toLowerCase()], { decimals: 3 }),
-			cellStyle: {
-				textAlign: "right",
-			},
-			copy: true,
-		});
-
-		//historic Betrag
-		KadTable.addCell(row, {
-			names: ["iomlaidHistoricRate", i],
-			type: "Lbl",
-			text: iomlaidOptions.historic == null ? "n.d." : `${KadValue.number(iomlaidOptions.historic[key.toLowerCase()] * iomlaidOptions.value)} ${symbol}`,
-			cellStyle: {
-				textAlign: "right",
-			},
-			copy: true,
-		});
-	}
-	i++;
+	const body = [
+		{
+			data: Data_Currencies.map((item) => `${item.name} (${item.cc})`),
+			settings: { align: "right" },
+		},
+		{
+			data: Data_Currencies.map((item) => (iomlaidOptions.latest == null ? "n.d." : KadValue.number(iomlaidOptions.latest[item.cc.toLowerCase()], { decimals: 3 }))),
+			settings: { align: "right", noBorder: "right" },
+		},
+		{
+			data: Data_Currencies.map((item) => (iomlaidOptions.latest == null ? "n.d." : `${KadValue.number(iomlaidOptions.latest[item.cc.toLowerCase()] * iomlaidOptions.value)} ${item.symbol}`)),
+			settings: { align: "right" },
+		},
+		{
+			data: Data_Currencies.map((item) => (iomlaidOptions.historic == null ? "n.d." : KadValue.number(iomlaidOptions.historic[item.cc.toLowerCase()], { decimals: 3 }))),
+			settings: { align: "right", noBorder: "right" },
+		},
+		{
+			data: Data_Currencies.map((item) => (iomlaidOptions.historic == null ? "n.d." : `${KadValue.number(iomlaidOptions.historic[item.cc.toLowerCase()] * iomlaidOptions.value)} ${item.symbol}`)),
+			settings: { align: "right" },
+		},
+	];
+	KadTable.createHTMLGrid({ id: idTab_iomlaidTable, header, body });
 }

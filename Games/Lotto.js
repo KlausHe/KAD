@@ -1,4 +1,4 @@
-import { dbCLStyle, dbID, initEL, KadColor, KadDate, KadFile, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
+import { dbCLStyle, dbID, initEL, KadColor, KadDate, KadFile, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -7,7 +7,7 @@ const lottoOptions = {
 	get canvas() {
 		return { w: (globalValues.mediaSizes.canvasSize.w * 3) / 4, h: globalValues.mediaSizes.canvasSize.h };
 	},
-	getGameTimer: null,
+	inputTimer: null,
 	cells: [],
 	selGame: "6aus49",
 	randomiziation: 0,
@@ -57,8 +57,6 @@ initEL({ id: idSel_lottoGame, fn: lottoGameSelect, selList: Object.keys(lottoOpt
 initEL({ id: idVin_lottoNumberOfGames, fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
 
 export function clear_cl_Lotto() {
-	KadInteraction.removeContextmenu(idCanv_lotto);
-
 	idVin_lottoNumberOfGames.KadReset();
 	lottoOptions.selGame = idSel_lottoGame.KadReset();
 	lottoOptions.randomiziation = 0;
@@ -196,18 +194,19 @@ function createLotto(clear = false) {
 }
 
 async function lottoGetGames() {
-	if (lottoOptions.getGameTimer != null) {
-		clearTimeout(lottoOptions.getGameTimer);
-		lottoOptions.getGameTimer = null;
+	lottoOptions.numberOfLatestGames = idVin_lottoNumberOfGames.KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
+	if (lottoOptions.inputTimer != null) {
+		clearTimeout(lottoOptions.inputTimer);
+		lottoOptions.inputTimer = null;
 	}
-	lottoOptions.getGameTimer = setTimeout(() => {
-		lottoOptions.numberOfLatestGames = idVin_lottoNumberOfGames.KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
+	lottoOptions.inputTimer = setTimeout(() => {
+		lottoOptions.inputTimer = null;
 		KadFile.loadUrlToJSON({ variable: "data", url: lottoOptions.url, callback: lottoReturn });
-		lottoOptions.getGameTimer = null;
 	}, 800);
 }
 
 function lottoReturn(d) {
+	// KadLog.log(d.data.data);
 	lottoOptions.games[lottoOptions.selGame].loadedSets = {};
 	KadTable.clear("idTabHeader_Lotto");
 	KadTable.clear("idTabBody_Lotto");
@@ -276,18 +275,7 @@ function lottoReturn(d) {
 				textAlign: "right",
 			},
 			onclick: () => {
-				if (lottoOptions.games[lottoOptions.selGame].draw.drawID != entry.drawID) {
-					lottoOptions.games[lottoOptions.selGame].draw.drawID = entry.drawID;
-					lottoOptions.games[lottoOptions.selGame].draw.tips = entry.mainTable;
-					lottoOptions.games[lottoOptions.selGame].draw.star = entry.starTable;
-					caLO.redraw();
-				} else {
-					lottoOptions.games[lottoOptions.selGame].draw.drawID = null;
-					lottoOptions.games[lottoOptions.selGame].draw.tips = [];
-					lottoOptions.games[lottoOptions.selGame].draw.star = [];
-					caLO.redraw();
-				}
-				lottoCheckCorrect();
+				lottoDrawDrawnData(entry);
 			},
 		});
 		//--  numbers
@@ -295,9 +283,11 @@ function lottoReturn(d) {
 			names: ["lottoTable", "numbers", i],
 			type: "Lbl",
 			text: `${entry.mainTable.join(", ")}`,
-			copy: true,
 			cellStyle: {
 				textAlign: "center",
+			},
+			onclick: () => {
+				lottoDrawDrawnData(entry);
 			},
 		});
 		//--  star
@@ -309,18 +299,35 @@ function lottoReturn(d) {
 			cellStyle: {
 				textAlign: "center",
 			},
+			onclick: () => {
+				lottoDrawDrawnData(entry);
+			},
 		});
 		//--  winners
 		KadTable.addCell(row, {
 			names: ["lottoTable", "winners", i],
 			type: "Lbl",
 			text: entry.winner,
-
 			cellStyle: {
 				textAlign: "center",
 			},
 		});
 	}
+}
+
+function lottoDrawDrawnData(entry) {
+	if (lottoOptions.games[lottoOptions.selGame].draw.drawID != entry.drawID) {
+		lottoOptions.games[lottoOptions.selGame].draw.drawID = entry.drawID;
+		lottoOptions.games[lottoOptions.selGame].draw.tips = entry.mainTable;
+		lottoOptions.games[lottoOptions.selGame].draw.star = entry.starTable;
+		caLO.redraw();
+	} else {
+		lottoOptions.games[lottoOptions.selGame].draw.drawID = null;
+		lottoOptions.games[lottoOptions.selGame].draw.tips = [];
+		lottoOptions.games[lottoOptions.selGame].draw.star = [];
+		caLO.redraw();
+	}
+	lottoCheckCorrect();
 }
 // CANVAS----------------------------------------------------------------------------------------------------------------------
 

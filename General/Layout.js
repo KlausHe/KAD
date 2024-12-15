@@ -1,4 +1,4 @@
-import { KadArray, KadCSS, KadDOM, KadTable, dbCL, dbCLStyle, dbID, dbIDStyle, error, errorChecked, getFavicon, hostDebug, log, logChecked, logLevel } from "../KadUtils/KadUtils.js";
+import { dbCL, dbCLStyle, dbID, dbIDStyle, getFavicon, hostDebug, KadArray, KadCSS, KadDOM, KadLog, KadTable } from "../KadUtils/KadUtils.js";
 import { updateMasterSelect } from "../Main.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
@@ -10,7 +10,7 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export let contentGrid = {};
 export const contentLayout = {
-	defaultPage: hostDebug() ? "Utility" : "Universe",
+	defaultPage: hostDebug() ? "Universe" : "Universe",
 	AccountSettings: ["cl_UserLogin", "cl_UserChange"],
 	prevNavContent: null,
 	prevNavFullscreen: null,
@@ -53,7 +53,7 @@ export function contentCheckActive(contentObj) {
 }
 
 export function layoutCheckCORSandDisableModule(error, moduleName) {
-	if (errorChecked(error, `Could not receive data for ${moduleName}!\n\nDeactivating the module!\n\n`, error)) {
+	if (KadLog.errorChecked(error, `Could not receive data for ${moduleName}!\n\nDeactivating the module!\n\n`, error)) {
 		contentGrid[`cl_${moduleName}`].deactivated = true;
 		contentLayout.createContentData();
 		createContentlayoutList();
@@ -90,19 +90,18 @@ window.addEventListener("resize", resizeGrid);
 export function resizeGrid() {
 	const winWidth = window.innerWidth;
 	const minWidth = globalValues.mediaSizes.divGridMinWidth;
-	const x = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols, floored division
-	const calcX = x; //tryWidth < winWidth + gap + margin * 2 ? x : x;
+	const calcX = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols
 	if (KadCSS.getRoot({ value: "gridRowLength" }) != calcX) {
 		KadCSS.setRoot({ variable: "gridRowLength", value: calcX });
 		navClick(contentLayout.prevNavContent);
 	}
 	let navNames = dbCL("cl_navNames", null);
-	const sp = dbID("idDiv_navBar_Universe");
-	const diff1 = sp.offsetLeft <= 0;
-	[...navNames].forEach((obj) => {
+	const sp = dbID("idDiv_navBar_Universe").offsetLeft;
+	const diff1 = sp <= 0;
+	navNames.forEach((obj) => {
 		obj.style.display = diff1 ? "none" : "initial";
 	});
-	const diff2 = sp.offsetLeft <= 0;
+	const diff2 = sp <= 0;
 	if (diff2 && !diff1) {
 		navNames.forEach((obj) => {
 			obj.style.display = diff2 ? "none" : "initial";
@@ -139,6 +138,14 @@ export function navClick(layoutName = contentLayout.defaultPage) {
 			dbID(`idDiv_navBar_${obj}`).classList.remove("navbarActive");
 		}
 	}
+
+	// for (let objKey in contentGrid) {
+	// 	dbCL(objKey).classList.toggle("sectionVisible", contentList.includes(objKey));
+	// }
+
+	// for (const obj of [...Object.keys(contentLayout.navContent)]) {
+	// 	dbID(`idDiv_navBar_${obj}`).classList.toggle("navbarActive", obj == contentLayout.prevNavContent);
+	// }
 	setTimeout(() => {
 		KadDOM.scrollToTop();
 	}, 100);
@@ -158,12 +165,10 @@ function navTitle() {
 	document.title = `KAD-${titleText}`;
 }
 
-export function createGridLayout(layoutName = contentLayout.defaultPage) {
-	let contentList = layoutContentList(layoutName);
-	if (contentList == []) {
-		error("No Grid for gridTemplateAreas provided");
-		return;
-	}
+export function createGridLayout(layoutName = contentLayout.defaultPage, list = null) {
+	let contentList = list != null ? list : layoutContentList(layoutName);
+
+	if (KadLog.errorChecked(contentList == [], "No Grid for gridTemplateAreas provided")) return;
 	// fill list with data
 	const columns = contentList.length == 1 ? 1 : KadCSS.getRoot({ value: "gridRowLength" }) + 1;
 	if (columns === 1) {
@@ -176,7 +181,7 @@ export function createGridLayout(layoutName = contentLayout.defaultPage) {
 
 	let rows = 1;
 	for (const name of contentList) {
-		if (!logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name)) {
+		if (!KadLog.logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name)) {
 			rows += contentGrid[name].size[1];
 		}
 	}
@@ -185,7 +190,7 @@ export function createGridLayout(layoutName = contentLayout.defaultPage) {
 	for (const name of contentList) {
 		let contWidth = contentGrid[name].size[0];
 		let contHeight = contentGrid[name].size[1];
-		if (logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name)) {
+		if (KadLog.logChecked(!contentGrid[name].hasOwnProperty("size"), "no size:[] defined at", name)) {
 			contWidth = 1;
 			contHeight = 1;
 		}
@@ -278,7 +283,7 @@ function layoutContentList(layoutName) {
 function createAreaString({ grid2DArray } = {}) {
 	if (grid2DArray.length == 0) {
 		dbIDStyle("id_contentGrid").gridTemplateAreas = "";
-		error("No Grid for gridTemplateAreas provided");
+		KadLog.error("No Grid for gridTemplateAreas provided");
 		return;
 	}
 
@@ -311,14 +316,13 @@ export function createSubgrid() {
 			if (row == 0) {
 				childDivArea.gridTemplateRows += "auto ";
 			} else {
-				childDivArea.gridTemplateRows += `var(--UIHeight${row}) `;
+				childDivArea.gridTemplateRows += `var(--UIHeight${row})`;
 			}
 		}
 		childDivArea.gridTemplateRows += "auto";
 
 		const arr = KadArray.createArray({ x: contentObj.maingrid.areas[0].length, fillNumber: "auto" }).join(" ");
-		childDivArea.gridTemplateColumns = `1fr ${arr} 1fr`;
-
+		childDivArea.gridTemplateColumns = `${arr}`;
 		childDivArea.gridTemplateAreas = "";
 		for (const main of contentObj.maingrid.areas) {
 			childDivArea.gridTemplateAreas += `". ${main.join(" ")} ." `;
@@ -432,7 +436,7 @@ export function createSubgrid() {
 				subGroup: "gridtitle",
 				img: "upload",
 				ui: {
-					uiSize: "size1",
+					uiSize: "width1",
 					uiType: "transparent",
 				},
 				onclick: () => {
@@ -458,7 +462,7 @@ export function createSubgrid() {
 				subGroup: "gridtitle",
 				img: "download",
 				ui: {
-					uiSize: "size1",
+					uiSize: "width1",
 					uiType: "transparent",
 				},
 				onclick: () => {
@@ -477,7 +481,7 @@ export function createSubgrid() {
 			subGroup: "gridtitle",
 			img: "fullscreen",
 			ui: {
-				uiSize: "size1",
+				uiSize: "width1",
 				uiType: "transparent",
 			},
 			onclick: () => {
@@ -495,7 +499,7 @@ export function createSubgrid() {
 			subGroup: "gridtitle",
 			img: "trash",
 			ui: {
-				uiSize: "size1",
+				uiSize: "width1",
 				uiType: "transparent",
 			},
 			onclick: () => {
