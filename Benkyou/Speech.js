@@ -3,15 +3,15 @@ import { Data_Country_CodesIso639 } from "../General/MainData.js";
 import { daEL, dbID, KadArray, KadDOM, KadLog } from "../KadUtils/KadUtils.js";
 
 const speechOptions = {
-	synthObj: window.speechSynthesis,
-	voices: [],
-	resetCouner: 0,
-	timer: null,
-	input: "",
-	fromIndex: 0,
-	fromCode: "",
-	toIndex: 0,
-	toCode: "",
+  synthObj: window.speechSynthesis,
+  voices: [],
+  resetCouner: 0,
+  timer: null,
+  input: "",
+  fromIndex: 0,
+  fromCode: "",
+  toIndex: 0,
+  toCode: "",
 };
 
 daEL(idSel_speechLanguageFrom, "change", speechHandleLanguageSelect);
@@ -22,126 +22,126 @@ daEL(idBtn_speechSpeakTo, "click", () => speechSpeak("To"));
 daEL(idArea_speechFromText, "input", speechTranslate);
 
 export function clear_cl_Speech() {
-	return;
-	speechOptions.voices = [];
-	speechOptions.synthObj.cancel();
-	KadDOM.resetInput("idArea_speechFromText", "Text übersetzen");
-	KadDOM.resetInput("idArea_speechToText", "Translate text");
-	let voicesUnsorted = speechOptions.synthObj.getVoices();
-	if (voicesUnsorted.length == 0 && speechOptions.resetCouner < 20) {
-		speechOptions.resetCouner++;
-		setTimeout(clear_cl_Speech, 200);
-	} else if (speechOptions.resetCouner >= 20) {
-		speechOptions.resetCouner = 0;
-		return;
-	} else {
-		speechTranslatePopulateLanguage();
-		speechOptions.voices = KadArray.sortArrayByKey({ array: voicesUnsorted, keys: "lang", caseSensitive: true });
-		speechHandleLanguageSelect();
-	}
+  return;
+  speechOptions.voices = [];
+  speechOptions.synthObj.cancel();
+  KadDOM.resetInput("idArea_speechFromText", "Text übersetzen");
+  KadDOM.resetInput("idArea_speechToText", "Translate text");
+  let voicesUnsorted = speechOptions.synthObj.getVoices();
+  if (voicesUnsorted.length == 0 && speechOptions.resetCouner < 20) {
+    speechOptions.resetCouner++;
+    setTimeout(clear_cl_Speech, 200);
+  } else if (speechOptions.resetCouner >= 20) {
+    speechOptions.resetCouner = 0;
+    return;
+  } else {
+    speechTranslatePopulateLanguage();
+    speechOptions.voices = KadArray.sortArrayByKey({ array: voicesUnsorted, keys: "lang", caseSensitive: true });
+    speechHandleLanguageSelect();
+  }
 }
 
 function speechTranslatePopulateLanguage() {
-	let lang = navigator.language.split("-")[0] || "de";
-	Data_Country_CodesIso639.forEach((value, key) => {
-		let option1 = document.createElement("option");
-		option1.textContent = value;
-		option1.setAttribute("data-code", key);
-		option1.setAttribute("data-name", value);
-		let option2 = option1.cloneNode(true);
-		if (key == lang) {
-			option1.selected = true;
-		}
-		if (key == "en") {
-			option2.selected = true;
-		}
-		dbID("idSel_speechLanguageFrom").appendChild(option1);
-		dbID("idSel_speechLanguageTo").appendChild(option2);
-	});
+  let lang = navigator.language.split("-")[0] || "de";
+  Data_Country_CodesIso639.forEach((value, key) => {
+    let option1 = document.createElement("option");
+    option1.textContent = value;
+    option1.setAttribute("data-code", key);
+    option1.setAttribute("data-name", value);
+    let option2 = option1.cloneNode(true);
+    if (key == lang) {
+      option1.selected = true;
+    }
+    if (key == "en") {
+      option2.selected = true;
+    }
+    dbID("idSel_speechLanguageFrom").appendChild(option1);
+    dbID("idSel_speechLanguageTo").appendChild(option2);
+  });
 }
 
 function speechHandleLanguageSelect() {
-	dbID("idSel_speechVoiceFrom").innerHTML = "";
-	dbID("idSel_speechVoiceTo").innerHTML = "";
-	const langFrom = dbID("idSel_speechLanguageFrom");
-	const langTo = dbID("idSel_speechLanguageTo");
-	speechOptions.fromIndex = langFrom.selectedIndex;
-	speechOptions.fromCode = langFrom.options[speechOptions.fromIndex].dataset.code;
-	speechOptions.toIndex = langTo.selectedIndex;
-	speechOptions.toCode = langTo.options[speechOptions.toIndex].dataset.code;
-	for (let i = 0; i < speechOptions.voices.length; i++) {
-		let langSplit;
-		if (speechOptions.voices[i].lang.split("-")[0] == "zh") {
-			langSplit = speechOptions.voices[i].lang.toLowerCase(); // if Chinese, keep all and switch to lower case
-		} else {
-			langSplit = speechOptions.voices[i].lang.split("-")[0];
-		}
-		if (langSplit == speechOptions.fromCode) {
-			createSpeechOption(langSplit, speechOptions.voices[i], "idSel_speechVoiceFrom");
-		}
-		if (langSplit == speechOptions.toCode) {
-			createSpeechOption(langSplit, speechOptions.voices[i], "idSel_speechVoiceTo");
-		}
-	}
-	if (dbID("idSel_speechVoiceFrom").options.length == 0) {
-		createSpeechOption("en", speechOptions.voices[0], "idSel_speechVoiceFrom");
-	}
-	if (dbID("idSel_speechVoiceTo").options.length == 0) {
-		createSpeechOption("en", speechOptions.voices[0], "idSel_speechVoiceTo");
-	}
+  dbID("idSel_speechVoiceFrom").innerHTML = "";
+  dbID("idSel_speechVoiceTo").innerHTML = "";
+  const langFrom = dbID("idSel_speechLanguageFrom");
+  const langTo = dbID("idSel_speechLanguageTo");
+  speechOptions.fromIndex = langFrom.selectedIndex;
+  speechOptions.fromCode = langFrom.options[speechOptions.fromIndex].dataset.code;
+  speechOptions.toIndex = langTo.selectedIndex;
+  speechOptions.toCode = langTo.options[speechOptions.toIndex].dataset.code;
+  for (let i = 0; i < speechOptions.voices.length; i++) {
+    let langSplit;
+    if (speechOptions.voices[i].lang.split("-")[0] == "zh") {
+      langSplit = speechOptions.voices[i].lang.toLowerCase(); // if Chinese, keep all and switch to lower case
+    } else {
+      langSplit = speechOptions.voices[i].lang.split("-")[0];
+    }
+    if (langSplit == speechOptions.fromCode) {
+      createSpeechOption(langSplit, speechOptions.voices[i], "idSel_speechVoiceFrom");
+    }
+    if (langSplit == speechOptions.toCode) {
+      createSpeechOption(langSplit, speechOptions.voices[i], "idSel_speechVoiceTo");
+    }
+  }
+  if (dbID("idSel_speechVoiceFrom").options.length == 0) {
+    createSpeechOption("en", speechOptions.voices[0], "idSel_speechVoiceFrom");
+  }
+  if (dbID("idSel_speechVoiceTo").options.length == 0) {
+    createSpeechOption("en", speechOptions.voices[0], "idSel_speechVoiceTo");
+  }
 }
 function translateSwitch() {
-	const objFrom = dbID("idSel_speechLanguageFrom");
-	const objTo = dbID("idSel_speechLanguageTo");
-	const tempIndex = speechOptions.fromIndex;
-	objFrom.options[speechOptions.toIndex].selected = true;
-	objTo.options[tempIndex].selected = true;
+  const objFrom = dbID("idSel_speechLanguageFrom");
+  const objTo = dbID("idSel_speechLanguageTo");
+  const tempIndex = speechOptions.fromIndex;
+  objFrom.options[speechOptions.toIndex].selected = true;
+  objTo.options[tempIndex].selected = true;
 
-	speechHandleLanguageSelect();
+  speechHandleLanguageSelect();
 }
 function createSpeechOption(landCode, voice, id) {
-	let option = document.createElement("option");
-	option.textContent = `${Data_Country_CodesIso639.get(landCode)} (${voice.name})`;
-	option.setAttribute("data-name", voice.name);
-	const dataLang = voice.lang == "nb-NO" ? "no-NO" : voice.lang; //special treatment with norway!
-	option.setAttribute("data-lang", dataLang);
-	dbID(id).appendChild(option);
+  let option = document.createElement("option");
+  option.textContent = `${Data_Country_CodesIso639.get(landCode)} (${voice.name})`;
+  option.setAttribute("data-name", voice.name);
+  const dataLang = voice.lang == "nb-NO" ? "no-NO" : voice.lang; //special treatment with norway!
+  option.setAttribute("data-lang", dataLang);
+  dbID(id).appendChild(option);
 }
 
 function speechSpeak(type) {
-	const textElement = dbID(`idArea_speech${type}Text`);
-	const langElement = dbID(`idSel_speechLanguage${type}`);
-	const text = textElement.textContent || textElement.value.split("\n(")[0] || textElement.placeholder;
-	const lang = langElement.selectedOptions[0].dataset.code;
-	speechSpeakOutput(text, lang, type);
+  const textElement = dbID(`idArea_speech${type}Text`);
+  const langElement = dbID(`idSel_speechLanguage${type}`);
+  const text = textElement.textContent || textElement.value.split("\n(")[0] || textElement.placeholder;
+  const lang = langElement.selectedOptions[0].dataset.code;
+  speechSpeakOutput(text, lang, type);
 }
 export function speechSpeakOutput(dataText, lang, voice = null) {
-	const voices = speechOptions.voices.filter((voice) => voice.lang.split("-")[0] == lang);
-	speechOptions.synthObj.cancel();
-	let output = new SpeechSynthesisUtterance();
-	output.text = dataText;
-	output.lang = lang;
-	const voiceIndex = voice == null ? 0 : dbID(`idSel_speechVoice${voice}`).selectedIndex;
-	output.voice = voices[voiceIndex];
-	speechOptions.synthObj.speak(output);
+  const voices = speechOptions.voices.filter((voice) => voice.lang.split("-")[0] == lang);
+  speechOptions.synthObj.cancel();
+  let output = new SpeechSynthesisUtterance();
+  output.text = dataText;
+  output.lang = lang;
+  const voiceIndex = voice == null ? 0 : dbID(`idSel_speechVoice${voice}`).selectedIndex;
+  output.voice = voices[voiceIndex];
+  speechOptions.synthObj.speak(output);
 }
 
 function speechTranslate() {
-	speechOptions.input = dbID("idArea_speechFromText").value.trim();
-	if (speechOptions.input == "") {
-		clearTimeout(speechOptions.timer);
-		dbID("idArea_speechToText").value = "...";
-		return;
-	}
+  speechOptions.input = dbID("idArea_speechFromText").value.trim();
+  if (speechOptions.input == "") {
+    clearTimeout(speechOptions.timer);
+    dbID("idArea_speechToText").value = "...";
+    return;
+  }
 
-	if (speechOptions.timer != null) {
-		clearTimeout(speechOptions.timer);
-		speechOptions.timer = null;
-	}
-	speechOptions.timer = setTimeout(() => {
-		speechOptions.timer = null;
-		speechTranslateRequest();
-	}, 500);
+  if (speechOptions.timer != null) {
+    clearTimeout(speechOptions.timer);
+    speechOptions.timer = null;
+  }
+  speechOptions.timer = setTimeout(() => {
+    speechOptions.timer = null;
+    speechTranslateRequest();
+  }, 500);
 }
 
 // function speechLanguageChange() {
@@ -157,47 +157,47 @@ function speechTranslate() {
 // }
 
 async function speechTranslateRequest() {
-	return;
-	// speechOptions.input;
-	// let languages = speechLanguageChange();
-	KadLog.log(isLanguageSupported("de"));
+  return;
+  // speechOptions.input;
+  // let languages = speechLanguageChange();
+  KadLog.log(isLanguageSupported("de"));
 
-	// dbID("idArea_speechToText").value = "Funktion is currently not implemented!";
-	// translate("Je ne mangé pas six jours", { from: "fr", to: "en" })
-	// 	.then((res) => {
-	// 		// I do not eat six days
-	// 		console.log("text:", res.text);
-	// 		dbID("idArea_speechToText").value = res.text;
-	// 	})
-	// 	.catch((err) => {
-	// 		error("Error receiving data for translation:", err);
-	// 	});
+  // dbID("idArea_speechToText").value = "Funktion is currently not implemented!";
+  // translate("Je ne mangé pas six jours", { from: "fr", to: "en" })
+  // 	.then((res) => {
+  // 		// I do not eat six days
+  // 		console.log("text:", res.text);
+  // 		dbID("idArea_speechToText").value = res.text;
+  // 	})
+  // 	.catch((err) => {
+  // 		error("Error receiving data for translation:", err);
+  // 	});
 
-	translate(speechOptions.input, { to: "en" })
-		.then((res) => {
-			console.log(res.text);
-		})
-		.catch((err) => {
-			console.error(err);
-		})
-		.finally(() => console.log(false));
+  translate(speechOptions.input, { to: "en" })
+    .then((res) => {
+      console.log(res.text);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => console.log(false));
 
-	return;
-	const f = speechOptions.fromCode == "ja" ? "jpn" : speechOptions.fromCode;
-	const t = speechOptions.toCode == "ja" ? "jpn" : speechOptions.toCode;
-	const url = createRequestBody(speechOptions.input, {
-		from: f,
-		to: t,
-		raw: true,
-	});
+  return;
+  const f = speechOptions.fromCode == "ja" ? "jpn" : speechOptions.fromCode;
+  const t = speechOptions.toCode == "ja" ? "jpn" : speechOptions.toCode;
+  const url = createRequestBody(speechOptions.input, {
+    from: f,
+    to: t,
+    raw: true,
+  });
 
-	console.log(url);
-	let response = await fetch(url);
-	let data = await response.json();
-	if (data.error) {
-		alert("Sorry, hat nicht geklappt.\nVersuchs nochmal!");
-	}
+  console.log(url);
+  let response = await fetch(url);
+  let data = await response.json();
+  if (data.error) {
+    alert("Sorry, hat nicht geklappt.\nVersuchs nochmal!");
+  }
 
-	const pronunciation = returnData.pronunciation == undefined || returnData.pronunciation == "" ? "" : `\n(${data.pronunciation})`;
-	dbID("idArea_speechToText").value = `${data.text}${pronunciation}`;
+  const pronunciation = returnData.pronunciation == undefined || returnData.pronunciation == "" ? "" : `\n(${data.pronunciation})`;
+  dbID("idArea_speechToText").value = `${data.text}${pronunciation}`;
 }

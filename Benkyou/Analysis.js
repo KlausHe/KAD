@@ -2,13 +2,13 @@ import { KadFile, KadLog, KadTable, dbID, initEL } from "../KadUtils/KadUtils.js
 import { WikiSearchData } from "./WikiSearch.js";
 
 const analysisOptions = {
-	data: null,
-	searchInput: "",
-	results: {},
-	header: [
-		{ data: "Positiv", colSpan: 2 },
-		{ data: "Negativ", colSpan: 2 },
-	],
+  data: null,
+  searchInput: "",
+  results: {},
+  header: [
+    { data: "Positiv", colSpan: 2 },
+    { data: "Negativ", colSpan: 2 },
+  ],
 };
 
 initEL({ id: idVin_analysisEntry, fn: analysisInput, resetValue: "Type text to analyze" });
@@ -16,115 +16,115 @@ initEL({ id: idBtn_analyseWiki, fn: analysisWiki });
 initEL({ id: idLbl_analysisResult, resetValue: "~Average score~" });
 
 export function clear_cl_Analysis() {
-	idVin_analysisEntry.KadReset();
-	idLbl_analysisResult.KadReset();
-	KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header });
+  idVin_analysisEntry.KadReset();
+  idLbl_analysisResult.KadReset();
+  KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header });
 }
 
 function analysisWiki() {
-	const data = WikiSearchData.data;
-	if (data.content == null) return;
-	let pagesID = Object.keys(data.content);
-	idVin_analysisEntry.KadReset({ resetValue: data.content[pagesID].extract });
-	analysisInput();
+  const data = WikiSearchData.data;
+  if (data.content == null) return;
+  let pagesID = Object.keys(data.content);
+  idVin_analysisEntry.KadReset({ resetValue: data.content[pagesID].extract });
+  analysisInput();
 }
 
 async function analysisInput() {
-	analysisOptions.searchInput = idVin_analysisEntry.KadGet();
-	if (analysisOptions.searchInput == "") {
-		idLbl_analysisResult.KadReset();
-		KadTable.createHTMLGrid({ id: idTab_analysisTable });
-		return;
-	}
-	if (analysisOptions.data === null) {
-		const { analyseData, error } = await KadFile.loadUrlToJSON({
-			variable: "analyseData",
-			url: "../Data/DataLists/SentimentListGerman.json",
-		});
-		if (KadLog.errorChecked(error, "Coult not receive data fpr 'Analysis'", error)) return;
-		analysisOptions.data = analyseData;
-	}
-	analysisOptions.results = analysisAnalyze();
-	if (analysisOptions.results != null) {
-		analysisCreateOutput();
-		analysisCreateTable();
-	}
+  analysisOptions.searchInput = idVin_analysisEntry.KadGet();
+  if (analysisOptions.searchInput == "") {
+    idLbl_analysisResult.KadReset();
+    KadTable.createHTMLGrid({ id: idTab_analysisTable });
+    return;
+  }
+  if (analysisOptions.data === null) {
+    const { analyseData, error } = await KadFile.loadUrlToJSON({
+      variable: "analyseData",
+      url: "../Data/DataLists/SentimentListGerman.json",
+    });
+    if (KadLog.errorChecked(error, "Coult not receive data fpr 'Analysis'", error)) return;
+    analysisOptions.data = analyseData;
+  }
+  analysisOptions.results = analysisAnalyze();
+  if (analysisOptions.results != null) {
+    analysisCreateOutput();
+    analysisCreateTable();
+  }
 }
 
 function analysisAnalyze() {
-	let results = {
-		totalScore: 0,
-		singleScores: 0,
-		wordCount: 0,
-		analysedWords: {},
-	};
-	const regexSplit = new RegExp(/[0-9_\:\.\-\s\\\/\,\?\!]+/);
-	const regexClean = new RegExp(/[$-/:-?{-~!"^_`\ [\]] /);
-	let words = analysisOptions.searchInput.split(regexSplit);
-	words = words.filter((word) => {
-		return !((!regexClean.test(word) && word === "") || word === undefined || word === "-" || word === "…");
-	});
-	for (let j = words.length - 1; j >= 0; j--) {
-		let word = words[j];
-		if (analysisOptions.data[word]) {
-			const wordScore = analysisOptions.data[word];
-			results.wordCount++;
-			results.singleScores += wordScore;
-			if (!results.analysedWords.hasOwnProperty(word)) {
-				results.analysedWords[word] = {
-					word,
-					score: wordScore,
-					occurence: 1,
-				};
-			} else {
-				results.analysedWords[word].occurence += 1;
-			}
-		}
-	}
-	results.totalScore = results.singleScores == 0 ? null : results.singleScores / results.wordCount;
-	return results;
+  let results = {
+    totalScore: 0,
+    singleScores: 0,
+    wordCount: 0,
+    analysedWords: {},
+  };
+  const regexSplit = new RegExp(/[0-9_\:\.\-\s\\\/\,\?\!]+/);
+  const regexClean = new RegExp(/[$-/:-?{-~!"^_`\ [\]] /);
+  let words = analysisOptions.searchInput.split(regexSplit);
+  words = words.filter((word) => {
+    return !((!regexClean.test(word) && word === "") || word === undefined || word === "-" || word === "…");
+  });
+  for (let j = words.length - 1; j >= 0; j--) {
+    let word = words[j];
+    if (analysisOptions.data[word]) {
+      const wordScore = analysisOptions.data[word];
+      results.wordCount++;
+      results.singleScores += wordScore;
+      if (!results.analysedWords.hasOwnProperty(word)) {
+        results.analysedWords[word] = {
+          word,
+          score: wordScore,
+          occurence: 1,
+        };
+      } else {
+        results.analysedWords[word].occurence += 1;
+      }
+    }
+  }
+  results.totalScore = results.singleScores == 0 ? null : results.singleScores / results.wordCount;
+  return results;
 }
 
 function analysisCreateOutput() {
-	if (analysisOptions.results.totalScore === null) {
-		idLbl_analysisResult.KadSetText("~~~~~~~");
-		dbID("idProg_analysisProgress").setAttribute("value", 100);
-		KadTable.createHTMLGrid({ id: idTab_analysisTable });
-	} else {
-		const score = convertScore(analysisOptions.results.totalScore);
-		const plural = analysisOptions.results.wordCount == 1 ? "Wort" : "Wörter";
-		const count = `(${analysisOptions.results.wordCount} ${plural})`;
-		idLbl_analysisResult.KadSetText(`Ø${score} ${count}`);
-		dbID("idProg_analysisProgress").setAttribute("value", score + 100);
-		analysisCreateTable();
-	}
+  if (analysisOptions.results.totalScore === null) {
+    idLbl_analysisResult.KadSetText("~~~~~~~");
+    dbID("idProg_analysisProgress").setAttribute("value", 100);
+    KadTable.createHTMLGrid({ id: idTab_analysisTable });
+  } else {
+    const score = convertScore(analysisOptions.results.totalScore);
+    const plural = analysisOptions.results.wordCount == 1 ? "Wort" : "Wörter";
+    const count = `(${analysisOptions.results.wordCount} ${plural})`;
+    idLbl_analysisResult.KadSetText(`Ø${score} ${count}`);
+    dbID("idProg_analysisProgress").setAttribute("value", score + 100);
+    analysisCreateTable();
+  }
 }
 
 function analysisCreateTable() {
-	const data = analysisOptions.results.analysedWords;
-	const keysSorted = Object.keys(data).sort((a, b) => {
-		return data[b].score - data[a].score;
-	});
+  const data = analysisOptions.results.analysedWords;
+  const keysSorted = Object.keys(data).sort((a, b) => {
+    return data[b].score - data[a].score;
+  });
 
-	let positiveData = [];
-	let negativeData = [];
-	for (let key of keysSorted) {
-		if (data[key].score >= 0) {
-			positiveData.push(data[key]);
-		} else {
-			negativeData.push(data[key]);
-		}
-	}
+  let positiveData = [];
+  let negativeData = [];
+  for (let key of keysSorted) {
+    if (data[key].score >= 0) {
+      positiveData.push(data[key]);
+    } else {
+      negativeData.push(data[key]);
+    }
+  }
 
-	const body = [
-		{ data: positiveData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
-		{ data: positiveData.map((item) => convertScore(item.score)) },
-		{ data: negativeData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
-		{ data: negativeData.map((item) => convertScore(item.score)) },
-	];
-	KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header, body });
+  const body = [
+    { data: positiveData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
+    { data: positiveData.map((item) => convertScore(item.score)) },
+    { data: negativeData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
+    { data: negativeData.map((item) => convertScore(item.score)) },
+  ];
+  KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header, body });
 }
 
 function convertScore(score) {
-	return Math.floor(score * 1000) / 10;
+  return Math.floor(score * 1000) / 10;
 }

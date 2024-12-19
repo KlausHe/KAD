@@ -1,117 +1,117 @@
 :root {
-	/* Navbar */
-	--bgcNavbar: 0 100% 100%;
-	--txtNavbar: 0 100% 100%;
-	--invNavbar: 1;
-	/* Title */
-	--bgcGridtitle: 240 52% 54%;
-	--txtGridtitle: 0 100% 100%;
-	--invGridtitle: 1;
-	/* General Background */
-	--bgcBackground: 100 5% 89%;
-	--txtBackground: 0 100% 0%;
-	--invBackground: 0;
-	/* Tile / Subgrid */
-	--bgcSubgrid: 0 100% 100%;
-	--opacitySubgrid: 0.3;
-	/* Button Colors */
-	--bgcButton: 0 0% 100%;
-	--txtButton: 0 0% 0%;
-	--bgcButtonPositive: 120 100% 50%;
-	--txtButtonPositive: 0 0% 0%;
-	--bgcButtonNegative: 0 100% 44%;
-	--txtButtonNegative: 0 0% 100%;
-	/* fixed colors */
-	--bgcNumberyHover: hsl(var(--bgcBackground));
-	/* NAVBAR/TITLE */
-	--navbarHeight: 2.5rem;
-	--gridtitleHeight: 2.083rem;
-	/* GRID SIZES */
-	--gridRowLength: 3;
-	--gridGap: 0.25rem;
-	--gridMarginSideFactor: 0.5;
-	--gridMarginSide: calc(var(--UIHeight1) * var(--gridMarginSideFactor));
-	--divGridMinWidthFactor: 18;
-	--divGridMinWidth: calc(var(--UIHeight1) * var(--divGridMinWidthFactor));
-	--divGridMinHeight: calc(var(--UIHeight1) * 10);
-	--navOrientation: column;
-	/* UI SIZES */
-	--UIRadius: 0.3rem;
-	--LayoutRadius: 0rem;
-	--padding: 0.417rem;
-	--paddingVertical: 0.167rem;
-	--UIPadding: 0.167rem;
+  /* Navbar */
+  --bgcNavbar: 0 100% 100%;
+  --txtNavbar: 0 100% 100%;
+  --invNavbar: 1;
+  /* Title */
+  --bgcGridtitle: 240 52% 54%;
+  --txtGridtitle: 0 100% 100%;
+  --invGridtitle: 1;
+  /* General Background */
+  --bgcBackground: 100 5% 89%;
+  --txtBackground: 0 100% 0%;
+  --invBackground: 0;
+  /* Tile / Subgrid */
+  --bgcSubgrid: 0 100% 100%;
+  --opacitySubgrid: 0.3;
+  /* Button Colors */
+  --bgcButton: 0 0% 100%;
+  --txtButton: 0 0% 0%;
+  --bgcButtonPositive: 120 100% 50%;
+  --txtButtonPositive: 0 0% 0%;
+  --bgcButtonNegative: 0 100% 44%;
+  --txtButtonNegative: 0 0% 100%;
+  /* fixed colors */
+  --bgcNumberyHover: hsl(var(--bgcBackground));
+  /* NAVBAR/TITLE */
+  --navbarHeight: 2.5rem;
+  --gridtitleHeight: 2.083rem;
+  /* GRID SIZES */
+  --gridRowLength: 3;
+  --gridGap: 0.25rem;
+  --gridMarginSideFactor: 0.5;
+  --gridMarginSide: calc(var(--UIHeight1) * var(--gridMarginSideFactor));
+  --divGridMinWidthFactor: 18;
+  --divGridMinWidth: calc(var(--UIHeight1) * var(--divGridMinWidthFactor));
+  --divGridMinHeight: calc(var(--UIHeight1) * 10);
+  --navOrientation: column;
+  /* UI SIZES */
+  --UIRadius: 0.3rem;
+  --LayoutRadius: 0rem;
+  --padding: 0.417rem;
+  --paddingVertical: 0.167rem;
+  --UIPadding: 0.167rem;
 
-	--UIHeight1: 1.5rem;
-	--UIHeight2: calc(var(--UIHeight1) * 2);
-	--UIHeight3: calc(var(--UIHeight1) * 3);
-	--UIHeight4: calc(var(--UIHeight1) * 4);
-	--UIHeight5: calc(var(--UIHeight1) * 5);
-	--UIHeight6: calc(var(--UIHeight1) * 6);
+  --UIHeight1: 1.5rem;
+  --UIHeight2: calc(var(--UIHeight1) * 2);
+  --UIHeight3: calc(var(--UIHeight1) * 3);
+  --UIHeight4: calc(var(--UIHeight1) * 4);
+  --UIHeight5: calc(var(--UIHeight1) * 5);
+  --UIHeight6: calc(var(--UIHeight1) * 6);
 
-	--UIWidth1: calc(var(--UIHeight1) * 1);
-	--UIWidth2: calc(var(--UIHeight1) * 2);
-	--UIWidth3: calc(var(--UIHeight1) * 3);
-	--UIWidth4: calc(var(--UIHeight1) * 4);
-	--UIWidth5: calc(var(--UIHeight1) * 5);
-	--UIWidth6: calc(var(--UIHeight1) * 6);
-	--UIWidth7: calc(var(--UIHeight1) * 7);
-	--UIWidth8: calc(var(--UIHeight1) * 8);
-	--UIWidth9: calc(var(--UIHeight1) * 9);
-	--UIWidth10: calc(var(--UIHeight1) * 10);
-	--UIWidth11: calc(var(--UIHeight1) * 11);
-	--UIWidth12: calc(var(--UIHeight1) * 12);
-	--UIWidth13: calc(var(--UIHeight1) * 13);
-	--UIWidth14: calc(var(--UIHeight1) * 14);
-	--UIWidth15: calc(var(--UIHeight1) * 15);
-	--UIWidth16: calc(var(--UIHeight1) * 16);
-	--UIWidth17: calc(var(--UIHeight1) * 17);
-	--UIWidth18: calc(var(--UIHeight1) * 18);
-	--UIWidth19: calc(var(--UIHeight1) * 19);
-	--UIWidth20: calc(var(--UIHeight1) * 20);
-	--UIWidth30: calc(var(--UIHeight1) * 30);
+  --UIWidth1: calc(var(--UIHeight1) * 1);
+  --UIWidth2: calc(var(--UIHeight1) * 2);
+  --UIWidth3: calc(var(--UIHeight1) * 3);
+  --UIWidth4: calc(var(--UIHeight1) * 4);
+  --UIWidth5: calc(var(--UIHeight1) * 5);
+  --UIWidth6: calc(var(--UIHeight1) * 6);
+  --UIWidth7: calc(var(--UIHeight1) * 7);
+  --UIWidth8: calc(var(--UIHeight1) * 8);
+  --UIWidth9: calc(var(--UIHeight1) * 9);
+  --UIWidth10: calc(var(--UIHeight1) * 10);
+  --UIWidth11: calc(var(--UIHeight1) * 11);
+  --UIWidth12: calc(var(--UIHeight1) * 12);
+  --UIWidth13: calc(var(--UIHeight1) * 13);
+  --UIWidth14: calc(var(--UIHeight1) * 14);
+  --UIWidth15: calc(var(--UIHeight1) * 15);
+  --UIWidth16: calc(var(--UIHeight1) * 16);
+  --UIWidth17: calc(var(--UIHeight1) * 17);
+  --UIWidth18: calc(var(--UIHeight1) * 18);
+  --UIWidth19: calc(var(--UIHeight1) * 19);
+  --UIWidth20: calc(var(--UIHeight1) * 20);
+  --UIWidth30: calc(var(--UIHeight1) * 30);
 
-	--rangeHeight: 0.833rem;
-	--rangeThumbWidth: 0.5rem;
-	--rangeThumbHeight: 1.25rem;
-	--gridWidthGameCanvas: 30rem;
-	--gridHeightGameCanvas: 30rem;
-	/**/
-	--UIBorderThin: 0.042rem solid hsl(var(--bgcNavbar));
-	--UIBorderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
-	--UIBorderRight: 0.5rem solid hsl(var(--bgcNavbar));
-	--UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
-	/* IMAGES */
-	--imgSize: 1.25rem;
-	--colBoxWidth: calc(var(--UIHeight1) * 0.75);
-	--colBoxHeight: calc(var(--UIHeight1) * 0.5);
-	--imgGifPrevWidth: 7rem;
-	--imgGifMainWidth: 24rem;
-	/* SONSTIGES */
-	--transitionTimeInfo: 0.3s;
-	--transitionTimeHide: 1s;
-	--transitionTimeName: 1.3s;
-	--fontSize: 12px;
-	--fontWeight: 300;
-	--fontSizeMedium: 1.2rem;
-	--fontSizeLarge: 1.4rem;
+  --rangeHeight: 0.833rem;
+  --rangeThumbWidth: 0.5rem;
+  --rangeThumbHeight: 1.25rem;
+  --gridWidthGameCanvas: 30rem;
+  --gridHeightGameCanvas: 30rem;
+  /**/
+  --UIBorderThin: 0.042rem solid hsl(var(--bgcNavbar));
+  --UIBorderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
+  --UIBorderRight: 0.5rem solid hsl(var(--bgcNavbar));
+  --UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
+  /* IMAGES */
+  --imgSize: 1.25rem;
+  --colBoxWidth: calc(var(--UIHeight1) * 0.75);
+  --colBoxHeight: calc(var(--UIHeight1) * 0.5);
+  --imgGifPrevWidth: 7rem;
+  --imgGifMainWidth: 24rem;
+  /* SONSTIGES */
+  --transitionTimeInfo: 0.3s;
+  --transitionTimeHide: 1s;
+  --transitionTimeName: 1.3s;
+  --fontSize: 12px;
+  --fontWeight: 300;
+  --fontSizeMedium: 1.2rem;
+  --fontSizeLarge: 1.4rem;
 }
 
 * {
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	font-family: "Roboto", Times, "Work San", sans-serif;
-	font-size: var(--fontSize);
-	font-weight: var(--fontWeight);
-	font-style: normal;
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "Roboto", Times, "Work San", sans-serif;
+  font-size: var(--fontSize);
+  font-weight: var(--fontWeight);
+  font-style: normal;
 }
 
 *::after,
 *::before {
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* @font-face {
@@ -123,559 +123,559 @@
 
 /* roboto-300 - latin */
 @font-face {
-	font-family: "Roboto";
-	font-style: normal;
-	font-weight: 300;
-	src: url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
 }
 
 /* roboto-regular - latin */
 @font-face {
-	font-family: "Roboto";
-	font-style: normal;
-	font-weight: 400;
-	src: url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
 }
 
 body {
-	background-color: hsl(var(--bgcBackground));
-	color: hsl(var(--txtBackground));
-	-webkit-transition: all var(--transitionTimeName) ease-in-out;
-	transition: all var(--transitionTimeName) ease-in-out;
+  background-color: hsl(var(--bgcBackground));
+  color: hsl(var(--txtBackground));
+  -webkit-transition: all var(--transitionTimeName) ease-in-out;
+  transition: all var(--transitionTimeName) ease-in-out;
 }
 
 /* body>div  */
 .cl_Loading {
-	position: fixed;
-	display: grid;
-	visibility: visible;
-	top: 0;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-	width: 100%;
-	height: 100vh;
-	background-color: black;
-	color: white;
-	font-size: 10vmin;
-	z-index: 901;
-	transition: none;
+  position: fixed;
+  display: grid;
+  visibility: visible;
+  top: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  color: white;
+  font-size: 10vmin;
+  z-index: 901;
+  transition: none;
 }
 
 .cl_LoadingFinished {
-	color: transparent;
-	background-color: hsl(var(--bgcSubgrid) / 0);
-	visibility: hidden;
-	pointer-events: none;
-	transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out, pointer-events 0s linear var(--transitionTimeHide), visibility 0s linear var(--transitionTimeHide);
+  color: transparent;
+  background-color: hsl(var(--bgcSubgrid) / 0);
+  visibility: hidden;
+  pointer-events: none;
+  transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out, pointer-events 0s linear var(--transitionTimeHide), visibility 0s linear var(--transitionTimeHide);
 }
 
 .cl_BackgroundAnimation {
-	position: fixed;
-	z-index: -1;
+  position: fixed;
+  z-index: -1;
 }
 
 main {
-	min-height: calc(100vh - (2 * var(--navbarHeight)) - 2 * var(--gridGap));
-	display: grid;
-	grid-template-rows: repeat(var(--gridRowLength), auto);
-	grid-gap: var(--padding);
-	margin: calc(var(--gridGap) + var(--navbarHeight)) var(--gridMarginSide) var(--gridGap) var(--gridMarginSide);
-	z-index: 1;
+  min-height: calc(100vh - (2 * var(--navbarHeight)) - 2 * var(--gridGap));
+  display: grid;
+  grid-template-rows: repeat(var(--gridRowLength), auto);
+  grid-gap: var(--padding);
+  margin: calc(var(--gridGap) + var(--navbarHeight)) var(--gridMarginSide) var(--gridGap) var(--gridMarginSide);
+  z-index: 1;
 }
 
 canvas {
-	border: none;
+  border: none;
 }
 
 sub {
-	line-height: 0;
-	vertical-align: sub;
-	font-size: 70%;
+  line-height: 0;
+  vertical-align: sub;
+  font-size: 70%;
 }
 
 sup {
-	line-height: 0;
-	vertical-align: super;
-	font-size: 70%;
+  line-height: 0;
+  vertical-align: super;
+  font-size: 70%;
 }
 
 strong {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 /* Table */
 table {
-	table-layout: fixed;
-	border-collapse: separate;
-	border-spacing: 0 0;
-	color: hsl(var(--txtBackground));
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0 0;
+  color: hsl(var(--txtBackground));
 }
 
 /* HEADER */
 thead {
-	position: -webkit-sticky;
-	position: sticky;
-	min-height: var(--UIHeight1);
-	top: 0;
-	z-index: 2;
+  position: -webkit-sticky;
+  position: sticky;
+  min-height: var(--UIHeight1);
+  top: 0;
+  z-index: 2;
 }
 
 thead th {
-	padding: var(--paddingVertical) var(--padding);
+  padding: var(--paddingVertical) var(--padding);
 }
 
 tbody th,
 thead tr:last-child th {
-	border-bottom: var(--UIBorderBottom);
+  border-bottom: var(--UIBorderBottom);
 }
 
 /* BODY */
 tbody {
-	z-index: 1;
+  z-index: 1;
 }
 
 tbody td {
-	padding: var(--paddingVertical) var(--padding);
-	border-bottom: var(--UIBorderThin);
-	position: relative;
-	transition: all var(--transitionTimeInfo) linear;
+  padding: var(--paddingVertical) var(--padding);
+  border-bottom: var(--UIBorderThin);
+  position: relative;
+  transition: all var(--transitionTimeInfo) linear;
 }
 
 /* single Cell highlight!!!*/
 tbody td:hover {
-	background-color: hsl(var(--bgcNavbar) / 0.7);
-	color: hsl(var(--txtNavbar));
+  background-color: hsl(var(--bgcNavbar) / 0.7);
+  color: hsl(var(--txtNavbar));
 }
 
 /* Row Highlighting*/
 tbody tr:hover {
-	background-color: hsl(var(--bgcNavbar) / 0.15);
+  background-color: hsl(var(--bgcNavbar) / 0.15);
 }
 
 tbody tr:last-child td {
-	border-bottom: 0;
+  border-bottom: 0;
 }
 
 .scrollTable {
-	/* background-color: hsl(var(--bgcBackground)); */
-	background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
+  /* background-color: hsl(var(--bgcBackground)); */
+  background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
 }
 
 .cl_tableText {
-	width: 70%;
-	padding: var(--padding) calc(var(--padding) * 2);
+  width: 70%;
+  padding: var(--padding) calc(var(--padding) * 2);
 }
 
 .cl_tableImage {
-	width: 30%;
-	/* padding: var(--padding) calc(var(--padding)*2); */
+  width: 30%;
+  /* padding: var(--padding) calc(var(--padding)*2); */
 }
 
 .clTab_UIBorderThinRight {
-	border-right: var(--UIBorderThin);
+  border-right: var(--UIBorderThin);
 }
 
 .clTab_borderThickRight {
-	border-right: var(--UIBorderBottom);
+  border-right: var(--UIBorderBottom);
 }
 
 .clTab_shortTH {
-	width: 5rem;
+  width: 5rem;
 }
 
 .clDiv_overviewTablesWide {
-	overflow-x: hidden;
-	overflow-y: auto;
-	scrollbar-width: none;
-	max-height: var(--UIWidth10);
-	max-width: var(--UIWidth10);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  max-height: var(--UIWidth10);
+  max-width: var(--UIWidth10);
 }
 
 .clDiv_overviewTablesWide::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 .clDiv_overviewTablesInput {
-	overflow-x: hidden;
-	overflow-y: auto;
-	scrollbar-width: none;
-	max-height: 16.667rem;
-	max-width: var(--UIWidth12);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  max-height: 16.667rem;
+  max-width: var(--UIWidth12);
 }
 
 .clDiv_overviewTablesInput::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 .clDiv_overviewTablesAuto {
-	overflow-y: auto;
-	scrollbar-width: none;
-	max-height: 21rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+  max-height: 21rem;
 }
 
 .clDiv_overviewTablesAuto::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 .clDiv_overviewTablesMaterial {
-	overflow-y: auto;
-	scrollbar-width: none;
-	max-width: 95vw;
-	max-height: 95vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  max-width: 95vw;
+  max-height: 95vh;
 }
 
 .clDiv_overviewTablesMaterial::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 .clTab_vertical {
-	-webkit-writing-mode: vertical-rl;
-	writing-mode: vertical-rl;
-	word-wrap: break-word;
-	rotate: 180deg;
-	height: var(--UIWidth5);
-	min-width: var(--UIHeight1);
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  word-wrap: break-word;
+  rotate: 180deg;
+  height: var(--UIWidth5);
+  min-width: var(--UIHeight1);
 }
 
 /* Grid Table */
 .cl_gridTable {
-	display: grid;
-	position: relative;
-	grid-auto-flow: column;
-	color: hsl(var(--txtBackground));
-	margin: var(--padding);
-	/* white-space: nowrap; */
+  display: grid;
+  position: relative;
+  grid-auto-flow: column;
+  color: hsl(var(--txtBackground));
+  margin: var(--padding);
+  /* white-space: nowrap; */
 }
 
 .cl_gridTableWrapper {
-	display: inline-block;
-	border-right: var(--UIBorderThin);
-	border-bottom: var(--UIBorderThin);
-	align-content: center;
+  display: inline-block;
+  border-right: var(--UIBorderThin);
+  border-bottom: var(--UIBorderThin);
+  align-content: center;
 }
 
 .cl_gridTableWrapper:hover {
-	background-color: hsl(var(--bgcNavbar) / 0.2);
-	color: hsl(var(--txtNavbar));
-	transition: all var(--transitionTimeInfo) ease-in-out;
+  background-color: hsl(var(--bgcNavbar) / 0.2);
+  color: hsl(var(--txtNavbar));
+  transition: all var(--transitionTimeInfo) ease-in-out;
 }
 
 .cl_gridTableItem {
-	display: inline-block;
-	padding: var(--paddingVertical) var(--padding);
+  display: inline-block;
+  padding: var(--paddingVertical) var(--padding);
 }
 
 .cl_gridTableWrapperHeader {
-	/* display: table; */
-	z-index: 2;
-	background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
-	border-right: var(--UIBorderThin);
-	border-bottom: var(--UIBorderBottom);
-	padding: var(--paddingVertical) var(--padding);
+  /* display: table; */
+  z-index: 2;
+  background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
+  border-right: var(--UIBorderThin);
+  border-bottom: var(--UIBorderBottom);
+  padding: var(--paddingVertical) var(--padding);
 }
 
 .cl_gridTableWrapperHeader > * {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .cl_alignCenter {
-	align-items: center;
+  align-items: center;
 }
 
 .cl_thinBorderTop {
-	border-top: var(--UIBorderThin);
+  border-top: var(--UIBorderThin);
 }
 
 .cl_thinBorderRight {
-	border-right: var(--UIBorderThin);
+  border-right: var(--UIBorderThin);
 }
 
 .cl_thinBorderBottom {
-	border-bottom: var(--UIBorderThin);
+  border-bottom: var(--UIBorderThin);
 }
 
 .cl_thinBorderLeft {
-	border-left: var(--UIBorderThin);
+  border-left: var(--UIBorderThin);
 }
 
 .cl_thickBorderTop {
-	border-top: var(--UIBorderBottom);
+  border-top: var(--UIBorderBottom);
 }
 
 .cl_thickBorderRight {
-	border-right: var(--UIBorderBottom);
+  border-right: var(--UIBorderBottom);
 }
 
 .cl_thickBorderBottom {
-	border-bottom: var(--UIBorderBottom);
+  border-bottom: var(--UIBorderBottom);
 }
 
 .cl_thickBorderLeft {
-	border-left: var(--UIBorderBottom);
+  border-left: var(--UIBorderBottom);
 }
 
 .cl_noBorderTop {
-	border-top: none;
+  border-top: none;
 }
 
 .cl_noBorderRight {
-	border-right: none;
+  border-right: none;
 }
 
 .cl_noBorderBottom {
-	border-bottom: none;
+  border-bottom: none;
 }
 
 .cl_noBorderLeft {
-	border-left: none;
+  border-left: none;
 }
 
 /* Gird Design */
 section {
-	display: none;
-	background-color: hsl(var(--bgcSubgrid) / var(--opacitySubgrid));
-	border-radius: var(--LayoutRadius);
-	min-height: var(--divGridMinHeight);
-	-webkit-transition: all var(--transitionTimeInfo) ease;
-	transition: all var(--transitionTimeInfo) ease;
-	overflow: hidden;
-	z-index: 4;
+  display: none;
+  background-color: hsl(var(--bgcSubgrid) / var(--opacitySubgrid));
+  border-radius: var(--LayoutRadius);
+  min-height: var(--divGridMinHeight);
+  -webkit-transition: all var(--transitionTimeInfo) ease;
+  transition: all var(--transitionTimeInfo) ease;
+  overflow: hidden;
+  z-index: 4;
 }
 
 section:hover > .cl_gridTitle {
-	background-color: hsl(var(--bgcNavbar) / 1);
-	color: hsl(var(--txtNavbar));
+  background-color: hsl(var(--bgcNavbar) / 1);
+  color: hsl(var(--txtNavbar));
 }
 
 .sectionVisible {
-	display: initial;
+  display: initial;
 }
 
 .cl_contentGrid {
-	min-height: 100vh;
-	display: grid;
-	grid-gap: var(--padding);
-	margin: calc(var(--gridGap) + var(--navbarHeight)) var(--gridMarginSide) var(--gridMarginSide);
-	z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  grid-gap: var(--padding);
+  margin: calc(var(--gridGap) + var(--navbarHeight)) var(--gridMarginSide) var(--gridMarginSide);
+  z-index: 1;
 }
 
 .cl_gridTitle {
-	display: -webkit-box;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	flex-direction: row;
-	-webkit-box-pack: start;
-	justify-content: left;
-	/* -webkit-box-align: center; */
-	align-items: center;
-	flex-wrap: nowrap;
-	gap: calc(2 * var(--padding));
-	height: var(--gridtitleHeight);
-	background-color: hsl(var(--bgcGridtitle) / 0.9);
-	color: hsl(var(--txtGridtitle));
-	-webkit-transition: all var(--transitionTimeInfo) ease;
-	transition: all var(--transitionTimeInfo) ease;
-	margin: 0 0 var(--padding) 0;
-	padding: 0 var(--padding);
-	z-index: 5;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  justify-content: left;
+  /* -webkit-box-align: center; */
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: calc(2 * var(--padding));
+  height: var(--gridtitleHeight);
+  background-color: hsl(var(--bgcGridtitle) / 0.9);
+  color: hsl(var(--txtGridtitle));
+  -webkit-transition: all var(--transitionTimeInfo) ease;
+  transition: all var(--transitionTimeInfo) ease;
+  margin: 0 0 var(--padding) 0;
+  padding: 0 var(--padding);
+  z-index: 5;
 }
 
 .cl_gridTitle div,
 h1 {
-	font-size: var(--fontSizeMedium);
+  font-size: var(--fontSizeMedium);
 }
 
 .cl_subGrid {
-	display: grid;
-	grid-gap: var(--gridGap);
+  display: grid;
+  grid-gap: var(--gridGap);
 }
 
 /* the subgrid-tile itself! */
 .cl_contentSubGrid {
-	background-color: hsl(var(--bgcSubgrid) / var(--opacitySubgrid));
-	border-radius: var(--LayoutRadius);
-	min-height: var(--divGridMinHeight);
-	-webkit-transition: all var(--transitionTimeInfo) ease;
-	transition: all var(--transitionTimeInfo) ease;
-	overflow: hidden;
-	z-index: 4;
+  background-color: hsl(var(--bgcSubgrid) / var(--opacitySubgrid));
+  border-radius: var(--LayoutRadius);
+  min-height: var(--divGridMinHeight);
+  -webkit-transition: all var(--transitionTimeInfo) ease;
+  transition: all var(--transitionTimeInfo) ease;
+  overflow: hidden;
+  z-index: 4;
 }
 
 .cl_contentSubGrid:hover > .cl_gridTitle {
-	background-color: hsl(var(--bgcNavbar) / 1);
-	color: hsl(var(--txtNavbar));
+  background-color: hsl(var(--bgcNavbar) / 1);
+  color: hsl(var(--txtNavbar));
 }
 
 /* Dropdon/Dropup  */
 .cl_DropdownParent {
-	display: inline-block;
-	position: relative;
-	padding: 0;
+  display: inline-block;
+  position: relative;
+  padding: 0;
 }
 
 /* Dropdown Infos */
 .cl_DropdownParent:hover .cl_DropdownInfo {
-	display: block;
-	opacity: 1;
-	pointer-events: auto;
-	-webkit-transition-delay: var(--transitionTimeInfo);
-	transition-delay: var(--transitionTimeInfo);
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+  -webkit-transition-delay: var(--transitionTimeInfo);
+  transition-delay: var(--transitionTimeInfo);
 }
 
 .cl_DropdownParent:hover .clDropdownName {
-	display: block;
-	opacity: 1;
-	pointer-events: auto;
-	transition: opacity var(--transitionTimeInfo) ease-in-out;
-	transition-delay: var(--transitionTimeName);
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity var(--transitionTimeInfo) ease-in-out;
+  transition-delay: var(--transitionTimeName);
 }
 
 .clDropdown {
-	position: absolute;
-	top: calc(var(--imgSize) * 1.5);
-	background-color: hsl(var(--bgcNavbar));
-	color: hsl(var(--txtNavbar));
-	border-radius: var(--LayoutRadius);
-	border: var(--UIBorderThinInverse);
-	padding: var(--padding);
-	text-align: center;
-	width: calc(var(--divGridMinWidth) * 0.5);
-	z-index: 20;
-	opacity: 0;
-	transition: opacity var(--transitionTimeInfo) ease-in-out;
-	transition-delay: 0s;
-	pointer-events: none;
+  position: absolute;
+  top: calc(var(--imgSize) * 1.5);
+  background-color: hsl(var(--bgcNavbar));
+  color: hsl(var(--txtNavbar));
+  border-radius: var(--LayoutRadius);
+  border: var(--UIBorderThinInverse);
+  padding: var(--padding);
+  text-align: center;
+  width: calc(var(--divGridMinWidth) * 0.5);
+  z-index: 20;
+  opacity: 0;
+  transition: opacity var(--transitionTimeInfo) ease-in-out;
+  transition-delay: 0s;
+  pointer-events: none;
 }
 
 .clDropup {
-	position: absolute;
-	bottom: var(--imgSize);
-	background-color: hsl(var(--bgcNavbar));
-	color: hsl(var(--txtNavbar));
-	border-radius: var(--LayoutRadius);
-	border: var(--UIBorderThinInverse);
-	padding: var(--padding);
-	text-align: center;
-	width: calc(var(--divGridMinWidth) * 0.5);
-	z-index: 20;
-	opacity: 0;
-	-webkit-transition: opacity var(--transitionTimeInfo) ease-in-out;
-	transition: opacity var(--transitionTimeInfo) ease-in-out;
-	-webkit-transition-delay: 0s;
-	transition-delay: 0s;
-	pointer-events: none;
+  position: absolute;
+  bottom: var(--imgSize);
+  background-color: hsl(var(--bgcNavbar));
+  color: hsl(var(--txtNavbar));
+  border-radius: var(--LayoutRadius);
+  border: var(--UIBorderThinInverse);
+  padding: var(--padding);
+  text-align: center;
+  width: calc(var(--divGridMinWidth) * 0.5);
+  z-index: 20;
+  opacity: 0;
+  -webkit-transition: opacity var(--transitionTimeInfo) ease-in-out;
+  transition: opacity var(--transitionTimeInfo) ease-in-out;
+  -webkit-transition-delay: 0s;
+  transition-delay: 0s;
+  pointer-events: none;
 }
 
 .cl_selColorSettings {
-	display: -webkit-box;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	flex-direction: column;
-	-webkit-box-pack: end;
-	/* -webkit-box-align: end; */
-	align-items: end;
-	flex-wrap: nowrap;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-box-pack: end;
+  /* -webkit-box-align: end; */
+  align-items: end;
+  flex-wrap: nowrap;
 }
 
 /* Navbar Styles */
 .cl_navNames {
-	font-size: var(--fontSizeLarge);
+  font-size: var(--fontSizeLarge);
 }
 
 .coloredBox {
-	height: var(--colBoxHeight);
-	width: var(--colBoxWidth);
-	margin: 0;
-	border: 0.083rem solid hsl(var(--txtBackground));
+  height: var(--colBoxHeight);
+  width: var(--colBoxWidth);
+  margin: 0;
+  border: 0.083rem solid hsl(var(--txtBackground));
 }
 
 .coloredDot {
-	height: var(--colBoxWidth);
-	width: var(--colBoxWidth);
-	border-radius: 50%;
-	margin: 0;
-	border: 0.083rem solid hsl(var(--txtBackground));
+  height: var(--colBoxWidth);
+  width: var(--colBoxWidth);
+  border-radius: 50%;
+  margin: 0;
+  border: 0.083rem solid hsl(var(--txtBackground));
 }
 
 dialog {
-	background-color: hsl(var(--bgcBackground));
-	top: var(--navbarHeight);
-	margin: 1rem 1rem auto 1rem;
-	padding: var(--padding);
-	border: var(--UIBorderThin);
-	border-radius: var(--UIRadius);
+  background-color: hsl(var(--bgcBackground));
+  top: var(--navbarHeight);
+  margin: 1rem 1rem auto 1rem;
+  padding: var(--padding);
+  border: var(--UIBorderThin);
+  border-radius: var(--UIRadius);
 }
 
 nav,
 footer {
-	position: fixed;
-	top: 0;
-	left: 0;
-	/* right: 0; */
-	height: var(--navbarHeight);
-	width: 100%;
-	margin: auto;
-	background-color: hsl(var(--bgcNavbar) / 1);
-	display: grid;
-	grid-auto-flow: var(--navOrientation);
-	grid-gap: var(--gridGap);
-	/* -webkit-box-align: center; */
-	align-items: center;
-	-webkit-box-pack: center;
-	justify-content: center;
-	overflow: hidden;
-	-webkit-transition: all var(--transitionTimeInfo) ease;
-	transition: all var(--transitionTimeInfo) ease;
-	z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* right: 0; */
+  height: var(--navbarHeight);
+  width: 100%;
+  margin: auto;
+  background-color: hsl(var(--bgcNavbar) / 1);
+  display: grid;
+  grid-auto-flow: var(--navOrientation);
+  grid-gap: var(--gridGap);
+  /* -webkit-box-align: center; */
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  overflow: hidden;
+  -webkit-transition: all var(--transitionTimeInfo) ease;
+  transition: all var(--transitionTimeInfo) ease;
+  z-index: 100;
 }
 
 footer {
-	position: relative;
-	bottom: 0;
-	padding: 0 calc(var(--padding) * 4);
-	background-color: hsl(var(--bgcNavbar) / 1);
-	overflow: inherit;
-	display: -webkit-box;
-	display: flex;
+  position: relative;
+  bottom: 0;
+  padding: 0 calc(var(--padding) * 4);
+  background-color: hsl(var(--bgcNavbar) / 1);
+  overflow: inherit;
+  display: -webkit-box;
+  display: flex;
 }
 
 .cl_navElements,
 .cl_navUser,
 .cl_footerElements {
-	color: hsl(var(--txtNavbar));
-	padding: var(--gridGap);
-	border-radius: var(--LayoutRadius);
-	-webkit-transition: all var(--transitionTimeInfo) ease;
-	transition: all var(--transitionTimeInfo) ease;
-	cursor: pointer;
+  color: hsl(var(--txtNavbar));
+  padding: var(--gridGap);
+  border-radius: var(--LayoutRadius);
+  -webkit-transition: all var(--transitionTimeInfo) ease;
+  transition: all var(--transitionTimeInfo) ease;
+  cursor: pointer;
 }
 
 .cl_navElements > * {
-	display: inline-block;
-	margin: 0 var(--gridGap);
+  display: inline-block;
+  margin: 0 var(--gridGap);
 }
 
 .cl_navElements:hover,
 .cl_navUser:hover,
 .navbarActive .cl_footerElements:hover {
-	background-color: hsl(var(--bgcSubgrid) / 0.15);
+  background-color: hsl(var(--bgcSubgrid) / 0.15);
 }
 
 .navbarActive {
-	background-color: hsl(var(--bgcSubgrid) / 0.3);
+  background-color: hsl(var(--bgcSubgrid) / 0.3);
 }
 
 .clFooterCredits {
-	padding: var(--gridGap);
+  padding: var(--gridGap);
 }
 
 .cl_centeredPH::-webkit-input-placeholder {
-	text-align: center;
+  text-align: center;
 }
 
 .cl_centeredPH::-moz-placeholder {
-	text-align: center;
+  text-align: center;
 }

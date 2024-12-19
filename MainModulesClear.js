@@ -14,7 +14,7 @@ export { clear_cl_Sima } from "./Benkyou/Sima.js";
 export { clear_cl_Speech } from "./Benkyou/Speech.js";
 export { clear_cl_Synonym } from "./Benkyou/Synonym.js";
 export { clear_cl_WikiSearch } from "./Benkyou/WikiSearch.js";
-// //Games
+//Games
 export { clear_cl_Beatmachine } from "./Games/Beatmachine.js";
 export { clear_cl_Empat } from "./Games/Empat.js";
 export { clear_cl_Ibhaluni } from "./Games/Ibhaluni.js";
@@ -46,7 +46,7 @@ export { clear_cl_Pormula } from "./Tools/Pormula.js";
 export { clear_cl_Pythagoras } from "./Tools/Pythagoras.js";
 export { clear_cl_Quickmath } from "./Tools/Quickmath.js";
 export { clear_cl_Ranje } from "./Tools/Ranje.js";
-// //Utility
+//Utility
 export { clear_cl_BiktadA } from "./Utility/BiktadA.js";
 export { clear_cl_Boredom } from "./Utility/Boredom.js";
 export { clear_cl_Botanicals } from "./Utility/Botanicals.js";
