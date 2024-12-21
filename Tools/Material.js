@@ -80,7 +80,7 @@ export function materialSelectedTable() {
   const settingsCenter = { noBorder: "right", align: "center" };
   const settingsRight = { noBorder: "right", align: "right" };
 
-  const header = [{ data: "Eigenschaften", colSpan: 3, settings: settingsCenter }, ...materialOptions.matList.map((item, index) => ({ type: "KADImg", data: "trash", settings: { ...settingsCenter, onclick: materialRemoveMaterial, index } })), { type: "KADImg", data: "oAdd", settings: { ...settingsCenter, onclick: materialAddMaterial } }];
+  const header = [{ data: "Eigenschaften", colSpan: 3, settings: settingsCenter }, ...materialOptions.matList.map((item, index) => ({ type: "KADImg", data: "trash", settings: { ...settingsCenter, onclick: [materialRemoveMaterial, index] } })), { type: "KADImg", data: "oAdd", settings: { ...settingsCenter, onclick: materialAddMaterial } }];
 
   const bodyData = [];
   for (let m = 0; m < materialOptions.matList.length; m++) {

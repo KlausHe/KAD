@@ -3,14 +3,14 @@ import { updateMasterSelect } from "../Main.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
-import { userGridCreateCells } from "../Settings/Usergridlayout.js";
+import { userGridCreateCells } from "../Settings/UserGridLayout.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 export let contentGrid = {};
 export const contentLayout = {
-  defaultPage: hostDebug() ? "Universe" : "Universe",
+  defaultPage: hostDebug() ? "cl_UserGridLayout" : "Universe",
   AccountSettings: ["cl_UserLogin", "cl_UserChange"],
   prevNavContent: null,
   prevNavFullscreen: null,
@@ -305,10 +305,22 @@ export function createSubgrid() {
     parentGrid.style.gridArea = gridKey;
 
     const childDivArea = parentGrid.children[0].style;
+
     childDivArea.gridTemplateRows = "";
-    for (let row of contentObj.maingrid.areas) {
-      childDivArea.gridTemplateRows += " auto ";
+    let rows = [];
+    if (contentObj.maingrid.rows.length == 0) {
+      rows = ["auto"];
+    } else {
+      rows = contentObj.maingrid.rows;
     }
+    for (let row of rows) {
+      if (row == 0) {
+        childDivArea.gridTemplateRows += "auto ";
+      } else {
+        childDivArea.gridTemplateRows += `var(--UIHeight${row})`;
+      }
+    }
+    childDivArea.gridTemplateRows += "auto";
 
     const arr = KadArray.createArray({ x: contentObj.maingrid.areas[0].length, fillNumber: "auto" }).join(" ");
     childDivArea.gridTemplateColumns = `${arr}`;

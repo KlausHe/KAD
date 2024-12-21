@@ -18,6 +18,7 @@ export const rawContentGrid = {
         ["cl_AnalysisInput", "cl_AnalysisProgress"],
         ["cl_AnalysisWiki", "cl_AnalysisTabResult"],
       ],
+      rows: [0, 0],
     },
     subgrid: [
       ["cl_AnalysisInput", "right"],
@@ -45,6 +46,7 @@ export const rawContentGrid = {
         ["cl_BarvoslepyOverview", "cl_BarvoslepyOverview"],
         ["cl_BarvoslepyCanvas", "cl_BarvoslepyCanvas"],
       ],
+      rows: [1, 1, 1, 1, 1, 1],
     },
     subgrid: [
       ["cl_BarvoslepyUpload", "right"],
@@ -74,6 +76,7 @@ export const rawContentGrid = {
         ["cl_PinyFieldInput"],
         ["cl_PinyTable"],
       ],
+      rows: [1, 1],
     },
     subgrid: [
       ["cl_PinyCountryInput", "center"],
@@ -89,6 +92,7 @@ export const rawContentGrid = {
     size: [2, 1],
     maingrid: {
       areas: [["cl_SpeechLangSelect"], ["cl_SpeechVoiceSelect"], ["cl_SpeechOutputArea"]],
+      rows: [1, 1],
     },
     subgrid: [
       ["cl_SpeechLangSelect", "center"],
@@ -107,6 +111,7 @@ export const rawContentGrid = {
     size: [1, 2],
     maingrid: {
       areas: [["cl_SynonymInput"], ["cl_SynonymSearchword"], ["cl_SynonymTable"]],
+      rows: [1, 1],
     },
     subgrid: [
       ["cl_SynonymInput", "center"],
@@ -128,6 +133,7 @@ export const rawContentGrid = {
         ["cl_WikiLanguage", "cl_WikiResultImage", "cl_WikiResultTitle"],
         ["cl_WikiTable", "cl_WikiResultText", "cl_WikiResultText"],
       ],
+      rows: [1, 0],
     },
     subgrid: [
       ["cl_WikiInput", "left"],
@@ -153,6 +159,7 @@ export const rawContentGrid = {
         ["cl_BeatmachineOptionsC", "cl_BeatmachineOptionsD"],
         ["cl_BeatmachineTracks", "cl_BeatmachineTracks"],
       ],
+      rows: [1, 1],
     },
     subgrid: [
       ["cl_BeatmachineOptionsA", "left"],
@@ -174,6 +181,7 @@ export const rawContentGrid = {
         ["cl_EmpatInputs"],
         ["cl_EmpatCanvas"],
       ],
+      rows: [1],
     },
     subgrid: [
       ["cl_EmpatInputs", "center"],
@@ -195,6 +203,7 @@ export const rawContentGrid = {
         ["cl_IbhaluniInputs"],
         ["cl_IbhaluniCanvas"],
       ],
+      rows: [1],
     },
     subgrid: [
       ["cl_IbhaluniInputs", "center"],
@@ -221,6 +230,7 @@ export const rawContentGrid = {
         ["cl_LinahaQuestion", "cl_LinahaQuestion"],
         ["cl_LinahaAnswers", "cl_LinahaAnswers"],
       ],
+      rows: [1, 1, 1, 1, 1, 2],
     },
     subgrid: [
       ["cl_LinahaOptionsA", "center"],
@@ -253,6 +263,7 @@ export const rawContentGrid = {
         ["cl_LottoCanvas", "cl_LottoGetGames"],
         ["cl_LottoCanvas", "cl_LottoTabGames"],
       ],
+      rows: [1, 1, 1, 1],
     },
     subgrid: [
       ["cl_LottoOptionsA", "center"],
@@ -289,6 +300,7 @@ export const rawContentGrid = {
         ["cl_NumberyImages", "cl_NumberyResult"],
         ["cl_NumberyImages", "."],
       ],
+      rows: [1, 1, 1, 1, 0, 2],
     },
     subgrid: [
       ["cl_NumberyStart", "left"],
@@ -322,6 +334,7 @@ export const rawContentGrid = {
         ["cl_RayCasterCanvas", "cl_RayCasterSpider"],
         ["cl_RayCasterCanvas", "."],
       ],
+      rows: [1, 1, 1, 1, 1, 1, 1, 1],
     },
     subgrid: [
       ["cl_RayCasterInputs", "left"],
@@ -352,6 +365,7 @@ export const rawContentGrid = {
         ["cl_StorreAnswerA", "cl_StorreAnswerB"],
         ["cl_StorreStreak", "cl_StorreStreak"],
       ],
+      rows: [1, 3, 1],
     },
     subgrid: [
       ["cl_StorreStartArea", "right"],
@@ -385,6 +399,7 @@ export const rawContentGrid = {
         ["cl_SudokuCanvas", "cl_SudokuInput"],
         ["cl_SudokuCanvas", "cl_SudokuOverview"],
       ],
+      rows: [1, 1, 2, 1, 2, 1, 2, 0],
     },
     subgrid: [
       ["cl_SudokuGetBoard", "center"],
@@ -419,6 +434,7 @@ export const rawContentGrid = {
         ["cl_SuikaCanvas", "cl_SuikaGameOver"],
         ["cl_SuikaCanvas", "."],
       ],
+      rows: [1, 1, 1, 2, 1, 0],
     },
     subgrid: [
       ["cl_SuikaInputs", "left"],
@@ -445,6 +461,7 @@ export const rawContentGrid = {
         ["cl_SweeperCanvas", "cl_SweeperGrid"],
         ["cl_SweeperCanvas", "cl_SweeperSweeps"],
       ],
+      rows: [1, 1],
     },
     subgrid: [
       ["cl_SweeperCanvas", "center"],
@@ -470,7 +487,7 @@ export const rawContentGrid = {
         ["cl_HowaNow", "cl_HowaMapsImg", "cl_HowaMapsImg"],
         ["cl_HowaGraph", "cl_HowaMapsImg", "cl_HowaMapsImg"],
       ],
-      //
+      rows: [1, 2],
     },
     subgrid: [
       ["cl_HowaInput", "center", "end"],
@@ -478,7 +495,7 @@ export const rawContentGrid = {
       ["cl_HowaGraph", "center"],
       ["cl_HowaMapsSelectDistrict", "right"],
       ["cl_HowaMapsSelectCriteria", "left"],
-      ["cl_HowaMapsImg", "center"],
+      ["cl_HowaMapsImg", "bottom"],
     ],
   },
   cl_News: {
@@ -497,6 +514,7 @@ export const rawContentGrid = {
         ["cl_NewsTable", "cl_NewsResultImage", "cl_NewsResultTitle"],
         ["cl_NewsTable", "cl_NewsResultText", "cl_NewsResultText"],
       ],
+      rows: [1, 1, 1],
     },
     subgrid: [
       ["cl_NewsRegion", "left"],
@@ -517,6 +535,7 @@ export const rawContentGrid = {
     size: [2, 1],
     maingrid: {
       areas: [["cl_PostillionNumber"], ["cl_PostillionTable"]],
+      rows: [1],
     },
     subgrid: [
       ["cl_PostillionTable", "center"],
@@ -534,6 +553,7 @@ export const rawContentGrid = {
     size: [2, 1],
     maingrid: {
       areas: [["cl_PafadojInfo"], ["cl_PafadojUpdate"], ["cl_PafadojTable"]],
+      rows: [0, 1],
     },
     subgrid: [
       ["cl_PafadojInfo", "center"],
@@ -556,6 +576,7 @@ export const rawContentGrid = {
         ["cl_SepakbolaInputSeason", "."],
         ["cl_SepakbolaTable", "cl_SepakbolaMatches"],
       ],
+      rows: [1, 1],
     },
     subgrid: [
       ["cl_SepakbolaInputLiga", "center"],
@@ -576,6 +597,7 @@ export const rawContentGrid = {
     size: [2, 1],
     maingrid: {
       areas: [["cl_OlympiaUpdate"], ["cl_OlympiaTable"]],
+      rows: [1],
     },
     subgrid: [
       ["cl_OlympiaUpdate", "center"],
@@ -593,6 +615,7 @@ export const rawContentGrid = {
     size: [1, 1],
     maingrid: {
       areas: [["cl_BlechgeoVinDicke"], ["cl_BlechgeoVinRadius"], ["cl_BlechgeoVinForm"], ["cl_BlechgeoVinBreite"], ["cl_BlechgeoImg"], ["cl_BlechgeoLblResult"]],
+      rows: [1, 1, 1, 1, 0],
     },
     subgrid: [
       ["cl_BlechgeoVinDicke", "center"],
@@ -620,6 +643,7 @@ export const rawContentGrid = {
         ["cl_ExpansionCBOptions", "cl_ExpansionCBOptions", "cl_ExpansionCBOptions"],
         ["cl_ExpansionList", "cl_ExpansionList", "cl_ExpansionList"],
       ],
+      rows: [1, 1, 1, 1, 2],
     },
     subgrid: [
       ["cl_ExpansionMaterialsA", "right"],
@@ -641,8 +665,7 @@ export const rawContentGrid = {
         ["cl_GeometrieAreaSelect", "cl_GeometrieTable"],
         ["cl_GeometrieOptions", "cl_GeometrieCanvas"],
       ],
-
-      //
+      rows: [0],
     },
     subgrid: [
       ["cl_GeometrieAreaSelect", "left"],
@@ -659,6 +682,7 @@ export const rawContentGrid = {
     size: [1, 2],
     maingrid: {
       areas: [["cl_LuasVinAngularVin"], ["cl_LuasVinLinearVin"], ["cl_LuasOptAngularVin"], ["cl_LuasOptLinearVin"], ["cl_LuasCanvas"], ["cl_LuasResult"]],
+      rows: [1, 1, 1, 1, 0],
     },
     subgrid: [
       ["cl_LuasVinAngularVin", "left"],
@@ -685,8 +709,7 @@ export const rawContentGrid = {
         // ["cl_MaterialSearchOptions", "cl_MaterialSearchOptions"], // in DIALOG
         // ["cl_MaterialSearchList cl_MaterialSearchList"], // in DIALOG
       ],
-
-      //
+      rows: [1],
     },
     subgrid: [
       ["cl_MaterialPropertyCb", "left"],
@@ -702,6 +725,7 @@ export const rawContentGrid = {
     size: [1, 1],
     maingrid: {
       areas: [["cl_MiddleInput0"], ["cl_MiddleInput1"], ["cl_MiddleCanvas"], ["cl_MiddleMid"], ["cl_MiddleDiff"]],
+      rows: [1, 1, 0, 2],
     },
     subgrid: [
       ["cl_MiddleInput0", "center"],
@@ -729,6 +753,7 @@ export const rawContentGrid = {
         ["cl_NiskaStrengthClassA", "cl_NiskaStrengthClassB"],
         ["cl_NiskaList", "cl_NiskaList"],
       ],
+      rows: [1, 1, 1],
     },
     subgrid: [
       ["cl_NiskaHeaderInput", "center"],
@@ -749,6 +774,7 @@ export const rawContentGrid = {
     size: [2, 1],
     maingrid: {
       areas: [["cl_PatternInputA"], ["cl_PatternInputB"], ["cl_PatternInputC"], ["cl_PatternInputD"], ["cl_PatternInputE"], ["cl_PatternCanvas"]],
+      rows: [1, 1, 1, 1, 1],
     },
     subgrid: [
       ["cl_PatternInputA", "center"],
@@ -781,6 +807,7 @@ export const rawContentGrid = {
         [".", ".", "cl_PormulaPointEntryC", "cl_PormulaPointResultC"],
         ["cl_PormulaCanvas", "cl_PormulaCanvas", "cl_PormulaCanvas", "cl_PormulaCanvas"],
       ],
+      rows: [1, 1, 1, 1, 2, 0, 0],
     },
     subgrid: [
       ["cl_PormulaBestFit", "center"],
@@ -808,16 +835,8 @@ export const rawContentGrid = {
     name: "Pythagoras",
     size: [1, 1],
     maingrid: {
-      areas: [
-        //
-        ["cl_PythagorasInput0"],
-        ["cl_PythagorasInput1"],
-        ["cl_PythagorasInput2"],
-        ["cl_PythagorasInput3"],
-        ["cl_PythagorasInput4"],
-        ["cl_PythagorasInfo"],
-        ["cl_PythagorasCanvas"],
-      ],
+      areas: [["cl_PythagorasInput0"], ["cl_PythagorasInput1"], ["cl_PythagorasInput2"], ["cl_PythagorasInput3"], ["cl_PythagorasInput4"], ["cl_PythagorasInfo"], ["cl_PythagorasCanvas"]],
+      rows: [1, 1, 1, 1, 1, 0],
     },
     subgrid: [
       ["cl_PythagorasInput0", "center"],
@@ -832,7 +851,7 @@ export const rawContentGrid = {
   cl_Quickmath: {
     contentGroup: "Tools",
     name: "Quickmath",
-    size: [2, 1],
+    size: [1, 1],
     maingrid: {
       areas: [
         ["cl_QuickmathInput", "cl_QuickmathInput", "cl_QuickmathInput"],
@@ -840,6 +859,7 @@ export const rawContentGrid = {
         ["cl_QuickmathEnd", "cl_QuickmathEnd", "cl_QuickmathEnd"],
         ["cl_QuickmathListMultiply", "cl_QuickmathListDivide", "cl_QuickmathListPow"],
       ],
+      rows: [1, 1, 1],
     },
     subgrid: [
       ["cl_QuickmathInput", "center"],
@@ -857,6 +877,7 @@ export const rawContentGrid = {
     size: [1, 1],
     maingrid: {
       areas: [["cl_RanjeInput"], ["cl_RanjeList"]],
+      rows: [1],
     },
     subgrid: [
       ["cl_RanjeInput", "center"],
@@ -875,6 +896,7 @@ export const rawContentGrid = {
     size: [1, 1],
     maingrid: {
       areas: [["cl_BiktadATable"]],
+      rows: [0],
     },
     subgrid: [["cl_BiktadATable", "center"]],
   },
@@ -888,6 +910,7 @@ export const rawContentGrid = {
     size: [1, 1],
     maingrid: {
       areas: [["cl_BoredomStart"], ["cl_BoredomAnswer"]],
+      rows: [1],
     },
     subgrid: [
       ["cl_BoredomStart", "center"],
@@ -907,6 +930,7 @@ export const rawContentGrid = {
         ["cl_BotanicalsVinDiscomfort", "cl_BotanicalsVinPlant"],
         ["cl_BotanicalsTabResultDiscomfort", "cl_BotanicalsTabResultPlant"],
       ],
+      rows: [1],
     },
     subgrid: [
       ["cl_BotanicalsVinPlant", "center"],
@@ -925,6 +949,7 @@ export const rawContentGrid = {
     size: [2, 1],
     maingrid: {
       areas: [["cl_EggMassValue"], ["cl_EggTempValue"], ["cl_EggYolkValue"], ["cl_EggStart"], ["cl_EggTime"], ["cl_EggTimeProgress"]],
+      rows: [1, 1, 1, 1, 0],
     },
     subgrid: [
       ["cl_EggMassValue", "center"],
@@ -943,6 +968,7 @@ export const rawContentGrid = {
     size: [2, 1],
     maingrid: {
       areas: [["cl_FoodyType"], ["cl_FoodyPreheat"], ["cl_FoodyStart"], ["cl_FoodyTime"], ["cl_FoodyTimeProgress"]],
+      rows: [1, 1, 1, 0],
     },
     subgrid: [
       ["cl_FoodyType", "left"],
@@ -964,6 +990,7 @@ export const rawContentGrid = {
     size: [1, 1],
     maingrid: {
       areas: [["cl_HverertuInput"], ["cl_HverertuTable"]],
+      rows: [1],
     },
     subgrid: [
       ["cl_HverertuInput", "center"],
@@ -985,6 +1012,7 @@ export const rawContentGrid = {
         ["cl_IomlaidSelCur", "cl_IomlaidVinCur", "cl_IomlaidVinDate"],
         ["cl_IomlaidTab", "cl_IomlaidTab", "cl_IomlaidTab"],
       ],
+      rows: [1],
     },
     subgrid: [
       ["cl_IomlaidSelCur", "center"],
@@ -1008,6 +1036,7 @@ export const rawContentGrid = {
         ["cl_KadarSelB"],
         ["cl_KadarResultTable"],
       ],
+      rows: [1, 1, 1],
     },
     subgrid: [
       ["cl_KadarSelA", "center"],
@@ -1032,6 +1061,7 @@ export const rawContentGrid = {
         ["cl_KaihangaSegments", "cl_KaihangaCanvas"],
         ["cl_KaihangaSegments", "cl_KaihangaResult"],
       ],
+      rows: [0, 0],
     },
     subgrid: [
       ["cl_KaihangaInput", "left"],
@@ -1058,6 +1088,7 @@ export const rawContentGrid = {
         ["cl_KounselorOptionsF"],
         ["cl_KounselorOptionsG"],
       ],
+      rows: [2, 2, 1, 1, 1, 1, 1, 1],
     },
     subgrid: [
       ["cl_KounselorOptionsA", "left"],
@@ -1089,6 +1120,7 @@ export const rawContentGrid = {
         ["cl_NetsaonaOptionsG"],
         ["cl_NetsaonaOutput"],
       ],
+      rows: [1, 1, 1, 1, 1, 1, 1],
     },
     subgrid: [
       ["cl_NetsaonaOptionsA", "center"],
@@ -1117,6 +1149,7 @@ export const rawContentGrid = {
         ["cl_PelveleaProgress"],
         ["cl_PelveleaBreaktime"],
       ],
+      rows: [1, 1, 1, 2, 1],
     },
     subgrid: [
       ["cl_PelveleaStarttime", "center"],
@@ -1142,6 +1175,7 @@ export const rawContentGrid = {
         ["cl_PlatLesenNumInput"],
         ["cl_PlatLesenResult"],
       ],
+      rows: [0, 0],
     },
     subgrid: [
       ["cl_PlatLesenNumInput", "center"],
@@ -1164,6 +1198,7 @@ export const rawContentGrid = {
         ["cl_SimaNumberInput"],
         ["cl_SimaResult"],
       ],
+      rows: [0, 0],
     },
     subgrid: [
       ["cl_SimaCountryInput", "center"],
@@ -1186,6 +1221,7 @@ export const rawContentGrid = {
         ["cl_ThiontuOptions_D", "cl_ThiontuOptions_D"],
         ["cl_ThiontuOptions_E", "cl_ThiontuOptions_E"],
       ],
+      rows: [0, 1, 1, 1, 1],
     },
     subgrid: [
       ["cl_ThiontuInputArea", "right"],
@@ -1210,6 +1246,7 @@ export const rawContentGrid = {
         ["cl_TugasEnter"],
         ["cl_TugasList"],
       ],
+      rows: [0, 1],
     },
     subgrid: [
       ["cl_TugasInput", "center"],
@@ -1228,6 +1265,7 @@ export const rawContentGrid = {
         ["cl_SettingsFontsize"],
         ["cl_SettingsDecimals"],
       ],
+      rows: [1],
     },
     subgrid: [
       ["cl_SettingsFontsize", "left"],
@@ -1251,6 +1289,7 @@ export const rawContentGrid = {
         ["cl_ColorSettings_dark_1"],
         ["cl_ColorSettings_dark_2"],
       ],
+      rows: [1, 1, 1, 1, 1, 2, 1, 1],
     },
     subgrid: [
       ["cl_ColorSettingsDefault", "center"],
@@ -1274,6 +1313,7 @@ export const rawContentGrid = {
         ["cl_UserGridOptions", "cl_UserGridSelect"],
         ["cl_UserGridTable", "cl_UserGridCanvas"],
       ],
+      rows: [1],
     },
     subgrid: [
       ["cl_UserGridOptions", "center"],
@@ -1291,6 +1331,7 @@ export const rawContentGrid = {
         //
         ["cl_MaterialFilterTable"],
       ],
+      rows: [],
     },
     subgrid: [["cl_MaterialFilterTable", "center"]],
   },
@@ -1308,6 +1349,7 @@ export const rawContentGrid = {
         ["cl_UserLogin_check"],
         ["cl_UserLogin_cancel"],
       ],
+      rows: [1, 1, 0, 1, 1],
     },
     subgrid: [
       ["cl_UserLogin_mail", "left"],
@@ -1331,6 +1373,7 @@ export const rawContentGrid = {
         ["cl_UserChange_change"],
         ["cl_UserChange_cancel"],
       ],
+      rows: [2, 0, 0, 1],
     },
     subgrid: [
       ["cl_UserChange_user", "left"],

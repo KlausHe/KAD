@@ -1,4 +1,4 @@
-import { KadDOM, KadDate, KadFile, KadLog, KadString, KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { KadDOM, KadDate, KadFile, KadLog, KadString, KadTable, dbID, dbIDStyle, initEL } from "../KadUtils/KadUtils.js";
 
 export const newsData = {
   get articlesURL() {
@@ -75,7 +75,12 @@ async function showNews(index) {
   const date = KadDate.getDate(newsData.articles[newsData.currIndex].date, { format: "DD.MM.YY / HH:mm" });
   dbID(idDiv_News_Title).textContent = `${newsData.articles[newsData.currIndex].title} (${date})`;
 
-  dbID(idImg_News_Image).src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];
+  if (newsData.articles[newsData.currIndex].teaserImage) {
+    dbID(idImg_News_Image).src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];
+    dbIDStyle(idImg_News_Image).display = "initial";
+  } else {
+    dbIDStyle(idImg_News_Image).display = "none";
+  }
   if (newsCheckRequestCount()) return;
   const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articles[newsData.currIndex].details });
   if (KadLog.errorChecked(error, "Could not receive data for 'Article/News'", error)) return;

@@ -7,7 +7,7 @@ const pafadojOptions = {
     return `https://www.wikitable2json.com/api/List_of_mass_shootings_in_the_United_States_in_${pafadojOptions.date}?lang=en&cleanRef=true&table=${table}&keyRows=1`;
   },
   headers: {
-    2024: [1, ["2024 date", "Dead", "Injured", "Total", "State or territory", "Location"]],
+    2024: [1, ["2024 date", "Dead", "Injured", "Total", "State orterritory", "Location"]],
     2023: [0, ["2023 date", "Dead", "Injured", "Total", "State or territory", "Location"]],
     2022: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
     2021: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
@@ -32,6 +32,8 @@ export function clear_cl_Pafadoj() {
 
 async function pafadojUpdate() {
   pafadojOptions.date = idSel_pafadojSelect.KadGet();
+  KadTable.createHTMLGrid({ id: idTab_pafadojTable, header: pafadojGetHeader() });
+
   const { dataTable, error } = await KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL });
   if (layoutCheckCORSandDisableModule(error, "Pafadoj")) return;
   pafadojOptions.data = [];
@@ -62,22 +64,39 @@ function pafadojSort(type) {
   pafadojTableReturn();
 }
 
-function pafadojTableReturn() {
-  if (pafadojOptions.data.length == 0) return;
-  const header = [
-    //
+function pafadojGetHeader(data = null) {
+  if (data == null) {
+    return [
+      ...pafadojOptions.headers[pafadojOptions.date][1].map((head, index) => {
+        let headText = head;
+        if (index == 0 && (head == "2024 date" || head == "2023 date")) headText = "Date";
+        return {
+          data: pafadojOptions.sumHeader.includes(headText) ? `${headText}` : headText,
+          settings: {
+            onclick: [pafadojSort, head],
+          },
+        };
+      }),
+    ];
+  }
+  return [
     ...pafadojOptions.headers[pafadojOptions.date][1].map((head, index) => {
       let headText = head;
       if (index == 0 && (head == "2024 date" || head == "2023 date")) headText = "Date";
       return {
-        data: pafadojOptions.sumHeader.includes(headText) ? `${headText}<br> (${pafadojOptions.dataTotal[headText]})` : headText,
+        data: pafadojOptions.sumHeader.includes(headText) ? `${headText}<br> (${data[headText]})` : headText,
         settings: {
-          onclick: pafadojSort,
-          index: head,
+          onclick: [pafadojSort, head],
         },
       };
     }),
   ];
+}
+
+function pafadojTableReturn() {
+  if (pafadojOptions.data.length == 0) return;
+  const header = pafadojGetHeader(pafadojOptions.dataTotal);
+
   const body = [...pafadojOptions.headers[pafadojOptions.date][1].map((head) => ({ data: pafadojOptions.data.map((item) => item[head]) }))];
   KadTable.createHTMLGrid({ id: idTab_pafadojTable, header, body });
 }
