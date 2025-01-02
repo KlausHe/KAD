@@ -3,7 +3,7 @@ import { updateMasterSelect } from "../Main.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
-import { userGridCreateCells } from "../Settings/UserGridLayout.js";
+import { userGridCreateCells } from "../Settings/UsergridLayout.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
