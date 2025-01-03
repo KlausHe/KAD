@@ -37,7 +37,6 @@ function sweeperStartOver() {
 
 function sweeperGridChange(obj) {
   sweeperOptions.gridSize = obj.target.KadGet();
-  console.log(sweeperOptions.gridSize);
   sweeperStartOver();
 }
 

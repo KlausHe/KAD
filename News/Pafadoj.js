@@ -7,6 +7,7 @@ const pafadojOptions = {
     return `https://www.wikitable2json.com/api/List_of_mass_shootings_in_the_United_States_in_${pafadojOptions.date}?lang=en&cleanRef=true&table=${table}&keyRows=1`;
   },
   headers: {
+    2025: [1, ["2025 date", "Dead", "Injured", "Total", "State orterritory", "Location"]],
     2024: [1, ["2024 date", "Dead", "Injured", "Total", "State orterritory", "Location"]],
     2023: [0, ["2023 date", "Dead", "Injured", "Total", "State or territory", "Location"]],
     2022: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
@@ -23,7 +24,7 @@ const pafadojOptions = {
   sort: {},
 };
 
-initEL({ id: idSel_pafadojSelect, fn: pafadojUpdate, selStartValue: 2024, selList: Object.keys(pafadojOptions.headers).map((year) => [year, year]) });
+initEL({ id: idSel_pafadojSelect, fn: pafadojUpdate, selStartValue: 2025, selList: Object.keys(pafadojOptions.headers).map((year) => [year, year]) });
 
 export function clear_cl_Pafadoj() {
   pafadojOptions.date = idSel_pafadojSelect.KadGet();
@@ -33,7 +34,6 @@ export function clear_cl_Pafadoj() {
 async function pafadojUpdate() {
   pafadojOptions.date = idSel_pafadojSelect.KadGet();
   KadTable.createHTMLGrid({ id: idTab_pafadojTable, header: pafadojGetHeader() });
-
   const { dataTable, error } = await KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL });
   if (layoutCheckCORSandDisableModule(error, "Pafadoj")) return;
   pafadojOptions.data = [];

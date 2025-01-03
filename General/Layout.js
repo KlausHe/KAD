@@ -10,7 +10,7 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export let contentGrid = {};
 export const contentLayout = {
-  defaultPage: hostDebug() ? "cl_UserGridLayout" : "Universe",
+  defaultPage: hostDebug() ? "cl_Pafadoj" : "Universe",
   AccountSettings: ["cl_UserLogin", "cl_UserChange"],
   prevNavContent: null,
   prevNavFullscreen: null,
@@ -53,7 +53,8 @@ export function contentCheckActive(contentObj) {
 }
 
 export function layoutCheckCORSandDisableModule(error, moduleName) {
-  if (KadLog.errorChecked(error, `Could not receive data for ${moduleName}!\n\nDeactivating the module!\n\n`, error)) {
+  if (error) {
+    console.log(`Could not receive data for ${moduleName}!\n\nDeactivating the module!\n\n`, error);
     contentGrid[`cl_${moduleName}`].deactivated = true;
     contentLayout.createContentData();
     createContentlayoutList();
