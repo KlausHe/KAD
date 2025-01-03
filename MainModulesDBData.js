@@ -11,4 +11,4 @@ export { storage_cl_UserAcc } from "./General/Account.js";
 export { storage_cl_ColorSettings } from "./Settings/Color.js";
 export { storage_cl_GeneralSettings } from "./Settings/General.js";
 export { storage_cl_MaterialFilterSettings } from "./Settings/MaterialFilterSettings.js";
-export { storage_cl_UserGridLayout } from "./Settings/UserGridLayout.js";
+export { storage_cl_UserGridLayout } from "./Settings/UserGridLayouts.js";

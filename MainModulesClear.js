@@ -5,7 +5,7 @@ export { clear_cl_BackgroundAnimation } from "./General/BackgroundAnimation.js";
 export { clear_cl_ColorSettings } from "./Settings/Color.js";
 export { clear_cl_GeneralSettings } from "./Settings/General.js";
 export { clear_cl_MaterialFilterSettings } from "./Settings/MaterialFilterSettings.js";
-export { clear_cl_UserGridLayout } from "./Settings/UserGridLayout.js";
+export { clear_cl_UserGridLayout } from "./Settings/UserGridLayouts.js";
 //Benkyou
 export { clear_cl_Analysis } from "./Benkyou/Analysis.js";
 export { clear_cl_Barvoslepy } from "./Benkyou/Barvoslepy.js";
