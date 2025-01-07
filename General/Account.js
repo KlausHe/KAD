@@ -53,12 +53,13 @@ export const nuncDiscipuli = {
   },
   getData(obj) {
     const objName = `storage_cl_${obj}`;
-    return DBData[objName].data;
+    return DBData[objName].getData();
   },
   saveData(obj, data) {
     const objName = `storage_cl_${obj}`;
     if (!DBData[objName]) return;
-    DBData[objName].data = data;
+    DBData[objName].saveData(data);
+    DBData[objName].activateData();
   },
 };
 
@@ -171,18 +172,21 @@ export const storage_cl_UserAcc = {
       AccData.infos[key].data = null;
     }
   },
-  get data() {
+  getData() {
     let data = {};
     for (const [key, value] of Object.entries(AccData.infos)) {
       data[key] = value.data;
     }
     return data;
   },
-  set data(data) {
+  saveData(data) {
     AccData.data = true;
     for (const [key, value] of Object.entries(data)) {
       AccData.infos[key].data = value;
     }
+  },
+  activateData() {
+    return;
   },
 };
 

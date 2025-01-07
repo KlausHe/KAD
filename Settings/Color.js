@@ -141,15 +141,14 @@ export const storage_cl_ColorSettings = {
   clear() {
     this.data = null;
   },
-  get data() {
-    //#A9C7C6
+  getData() {
     return {
       lightmode: deepClone(colorSettingsOptions.light),
       darkmode: deepClone(colorSettingsOptions.dark),
       selectedDefaultModeIndex: idSel_colorSettingsDefault.KadGet({ index: true }),
     };
   },
-  set data(data) {
+  saveData(data) {
     if (data == null) {
       colorSettingsOptions.light = deepClone(colorSettingsOptions.modesOrig.light);
       colorSettingsOptions.dark = deepClone(colorSettingsOptions.modesOrig.dark);
@@ -159,6 +158,8 @@ export const storage_cl_ColorSettings = {
     colorSettingsOptions.light = deepClone(data.lightmode);
     colorSettingsOptions.dark = deepClone(data.darkmode);
     idSel_colorSettingsDefault.KadReset({ selStartIndex: data.selectedDefaultModeIndex });
+  },
+  activateData() {
     colorDefaultMode();
     populateColorSelector();
   },

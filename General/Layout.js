@@ -10,7 +10,7 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export let contentGrid = {};
 export const contentLayout = {
-  defaultPage: hostDebug() ? "cl_Pafadoj" : "Universe",
+  defaultPage: hostDebug() ? "cl_UserGridLayout" : "Universe",
   AccountSettings: ["cl_UserLogin", "cl_UserChange"],
   prevNavContent: null,
   prevNavFullscreen: null,
@@ -116,7 +116,7 @@ export function navClick(layoutName = contentLayout.defaultPage) {
     if (layoutName === "Universe") {
       contentLayout.navContent[layoutName] = [...contentLayout.origUniverse];
     } else if (layoutName === "User") {
-      contentLayout.navContent[layoutName] = [...DBData.storage_cl_UserGridLayout.data];
+      contentLayout.navContent[layoutName] = [...DBData.storage_cl_UserGridLayout.getData()];
     } else {
       contentLayout.navContent[layoutName] = contentLayout.navContent[layoutName].sort();
     }
@@ -168,16 +168,18 @@ function navTitle() {
 
 export function createGridLayout(layoutName = contentLayout.defaultPage, list = null) {
   let contentList = list != null ? list : layoutContentList(layoutName);
-
   if (KadLog.errorChecked(contentList == [], "No Grid for gridTemplateAreas provided")) return;
   // fill list with data
   const columns = contentList.length == 1 ? 1 : KadCSS.getRoot({ value: "gridRowLength" }) + 1;
+  let gridData = [];
+
   if (columns === 1) {
     let grid2DArray = [];
     for (const name of contentList) {
       grid2DArray.push([name]);
+      gridData.push({ name, row: 0, contHeight: contentGrid[name].size[1], column: 0, contWidth: 1 });
     }
-    return { contentList, grid2DArray };
+    return { contentList, grid2DArray, gridData };
   }
 
   let rows = 1;
@@ -186,7 +188,6 @@ export function createGridLayout(layoutName = contentLayout.defaultPage, list = 
       rows += contentGrid[name].size[1];
     }
   }
-  let gridData = [];
   let grid2DArray = KadArray.createArray({ x: rows, y: columns, fillNumber: false });
   for (const name of contentList) {
     let contWidth = contentGrid[name].size[0];

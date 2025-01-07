@@ -17,10 +17,10 @@ export const storage_cl_Tugas = {
   clear() {
     this.data = [];
   },
-  get data() {
+  getData() {
     return tugasOptions.data;
   },
-  set data(data) {
+  saveData(data) {
     tugasOptions.data = [];
     if (typeof data == "object") {
       for (let [key, value] of Object.entries(data)) {
@@ -29,6 +29,8 @@ export const storage_cl_Tugas = {
     } else {
       tugasOptions.data = data;
     }
+  },
+  activateData() {
     tugasCreateTable();
   },
 };
@@ -64,7 +66,7 @@ function tugasCreateTable() {
     { type: "KADImg", data: "trash", settings: { onclick: tugasClearRow } },
     { type: "KADImg", data: "edit", settings: { onclick: tugasEditRow } },
     { type: "Checkbox", data: tugasOptions.data.map((item) => item.state), settings: { names: ["tugas", "state"], onclick: checkboxClicked } },
-    { data: tugasOptions.data.map((item) => item.text), settings: { names: ["tugas", "entry"], for: "idCheckbox_tugas_state" } },
+    { data: tugasOptions.data.map((item) => item.text), settings: { names: ["tugas", "entry"], for: "tugas_state" } },
   ];
 
   KadTable.createHTMLGrid({ id: idTab_tugasTable, body });

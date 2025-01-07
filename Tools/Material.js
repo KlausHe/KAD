@@ -9,7 +9,7 @@ export const materialOptions = {
   matList: [],
   filterList: [],
   get headerList() {
-    return dbID("idCb_materialListFilter").checked ? [...storage_cl_MaterialFilterSettings.data] : Object.keys(Data_Materials.metadata);
+    return dbID("idCb_materialListFilter").checked ? [...storage_cl_MaterialFilterSettings.getData()] : Object.keys(Data_Materials.metadata);
   },
   optGroup: null,
   selMatGroup: "all",
@@ -46,11 +46,13 @@ export const storage_cl_Material = {
   clear() {
     this.data = [...materialOptions.matListOrig];
   },
-  get data() {
+  getData() {
     return [...materialOptions.matList];
   },
-  set data(data) {
+  saveData(data) {
     materialOptions.matList = data;
+  },
+  activateData() {
     materialSelectedTable();
   },
 };

@@ -366,8 +366,7 @@ tbody tr:last-child td {
   padding: var(--paddingVertical) var(--padding);
 }
 
-.cl_gridTableWrapperHeader {
-  /* display: table; */
+.KadUtilsGridTableWrapperHeader {
   z-index: 2;
   background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
   border-right: var(--UIBorderThin);
@@ -375,59 +374,55 @@ tbody tr:last-child td {
   padding: var(--paddingVertical) var(--padding);
 }
 
-.cl_gridTableWrapperHeader > * {
+.KadUtilsGridTableWrapperHeader > * {
   font-weight: bold;
 }
 
-.cl_alignCenter {
-  align-items: center;
-}
-
-.cl_thinBorderTop {
+.KadUtilsThinBorderTop {
   border-top: var(--UIBorderThin);
 }
 
-.cl_thinBorderRight {
+.KadUtilsThinBorderRight {
   border-right: var(--UIBorderThin);
 }
 
-.cl_thinBorderBottom {
+.KadUtilsThinBorderBottom {
   border-bottom: var(--UIBorderThin);
 }
 
-.cl_thinBorderLeft {
+.KadUtilsThinBorderLeft {
   border-left: var(--UIBorderThin);
 }
 
-.cl_thickBorderTop {
+.KadUtilsThickBorderTop {
   border-top: var(--UIBorderBottom);
 }
 
-.cl_thickBorderRight {
+.KadUtilsThickBorderRight {
   border-right: var(--UIBorderBottom);
 }
 
-.cl_thickBorderBottom {
+.KadUtilsThickBorderBottom {
   border-bottom: var(--UIBorderBottom);
 }
 
-.cl_thickBorderLeft {
+.KadUtilsThickBorderLeft {
   border-left: var(--UIBorderBottom);
 }
 
-.cl_noBorderTop {
+.KadUtilsNoBorderTop {
   border-top: none;
 }
 
-.cl_noBorderRight {
+.KadUtilsNoBorderRight {
   border-right: none;
 }
 
-.cl_noBorderBottom {
+.KadUtilsNoBorderBottom {
   border-bottom: none;
 }
 
-.cl_noBorderLeft {
+.KadUtilsNoBorderLeft {
   border-left: none;
 }
 
@@ -585,14 +580,14 @@ h1 {
   font-size: var(--fontSizeLarge);
 }
 
-.coloredBox {
+.cl_KadUtilsColoredBox {
   height: var(--colBoxHeight);
   width: var(--colBoxWidth);
   margin: 0;
   border: 0.083rem solid hsl(var(--txtBackground));
 }
 
-.coloredDot {
+.cl_KadUtilsColoredDot {
   height: var(--colBoxWidth);
   width: var(--colBoxWidth);
   border-radius: 50%;

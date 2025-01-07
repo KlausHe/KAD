@@ -50,23 +50,20 @@ export const storage_cl_GeneralSettings = {
     this.data = {
       decimals: 4,
       fontSize: 12,
-      clear: true,
     };
   },
-  get data() {
+  getData() {
     return globalValues.settings;
   },
-  set data(data) {
-    const clear = data.hasOwnProperty("clear");
+  saveData(data) {
     for (const key of Object.keys(globalValues.settings)) {
       if (key == "clear") continue;
       globalValues.settings[key] = data[key];
     }
-    //call functions without arg to toggle secific functionality
-    if (!clear) {
-      settingsFontsize();
-      settingsDecimals();
-    }
+  },
+  activateData() {
+    settingsFontsize();
+    settingsDecimals();
   },
 };
 

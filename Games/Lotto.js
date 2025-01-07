@@ -77,7 +77,6 @@ export const storage_cl_Lotto = {
   contentName: "cl_Lotto",
   clear() {
     this.data = {
-      startup: true,
       Eurojackpot: {
         tips: [],
         star: [],
@@ -90,7 +89,7 @@ export const storage_cl_Lotto = {
       },
     };
   },
-  get data() {
+  getData() {
     let retData = {};
     for (const [key, values] of Object.entries(lottoOptions.games)) {
       retData[key] = {};
@@ -100,7 +99,7 @@ export const storage_cl_Lotto = {
     }
     return retData;
   },
-  set data(data) {
+  saveData(data) {
     dbCLStyle("cl_LottoSavedGame").display = "initial";
     for (const [key, values] of Object.entries(lottoOptions.games)) {
       if (data[key] != null && data[key] != "") {
@@ -109,9 +108,9 @@ export const storage_cl_Lotto = {
         lottoOptions.games[key].savedSet["date"] = data[key].date != null ? data[key].date : null;
       }
     }
-    if (!data.startup) {
-      lottoUpdateSavegames();
-    }
+  },
+  activateData() {
+    lottoUpdateSavegames();
     lottoOptions.randomiziation = 0;
     clearTimeout(lottoOptions.randomTimeout);
     createLotto(false);

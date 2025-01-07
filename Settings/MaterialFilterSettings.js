@@ -20,10 +20,10 @@ export const storage_cl_MaterialFilterSettings = {
       materialFilterOptions.select.push(dataPoint);
     }
   },
-  get data() {
+  getData() {
     return [...materialFilterOptions.select];
   },
-  set data(data) {
+  saveData(data) {
     let filteredWrong = [];
     materialFilterOptions.select = [];
     for (const dataPoint of data) {
@@ -34,6 +34,8 @@ export const storage_cl_MaterialFilterSettings = {
       }
     }
     if (filteredWrong.length > 0) console.log("The following Filters are no longer supported:", filteredWrong);
+  },
+  activateData() {
     materialFilterBuildTable();
     materialFilterUpdateCB();
     materialSelectedTable();
@@ -53,7 +55,7 @@ function materialFilterBuildTable() {
         noBorder: "right",
       },
     },
-    { data: Object.keys(Data_Materials.metadata).map((item) => Data_Materials.metadata[item].Bezeichnung), settings: { for: "idCheckbox_materialFilter", noBorder: "right" } },
+    { data: Object.keys(Data_Materials.metadata).map((item) => Data_Materials.metadata[item].Bezeichnung), settings: { for: "materialFilter", noBorder: "right" } },
     { data: Object.keys(Data_Materials.metadata).map((item) => Data_Materials.metadata[item].abbr) },
   ];
 

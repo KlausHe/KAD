@@ -81,11 +81,14 @@ export const storage_cl_Howa = {
   clear() {
     this.data = "Berlin";
   },
-  get data() {
+  getData() {
     return howaOptions.city;
   },
-  set data(data) {
-    idVin_howaEntry.KadReset(); //{ resetValue: data }
+  saveData(data) {
+    idVin_howaEntry.KadReset({ resetValue: data });
+  },
+  activateData() {
+    return;
   },
 };
 

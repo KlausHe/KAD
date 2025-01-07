@@ -1,6 +1,6 @@
 import { contentGrid, contentLayout, createGridLayout } from "../General/Layout.js";
 import { contentGroupsMaincontent, contentGroupsNav } from "../General/MainContent.js";
-import { dbCL, dbID, initEL, KadColor, KadDOM, KadInteraction, KadTable } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadColor, KadInteraction, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "./Color.js";
 import { globalValues } from "./General.js";
 
@@ -14,26 +14,26 @@ const userGridOptions = {
   columns: 3,
   enableAll: true,
   groups: {},
-  enableGroups: {},
+  enableGroupList: [],
   enabledList: [],
-  usedGrid: "Universe",
+  columnCount: 3,
+  usedGrid: "User",
   groupColors: {},
 };
 
-initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
+// initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
 initEL({ id: idBtn_userGridSaveLayout, fn: saveUsergridLayout });
-initEL({ id: idSel_userGridSelect, fn: userGridSelectGroup });
+initEL({ id: idSel_userGridSelect, fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
 
 export function clear_cl_UserGridLayout() {
   KadInteraction.removeContextmenu(idCanv_userGrid);
   userGridOptions.groups = {};
-  userGridOptions.enableGroups = {};
+  userGridOptions.enableGroupList = [...contentGroupsMaincontent];
+  userGridOptions.enabledList = [...contentLayout.navContent.Universe];
 
   for (let groupKey of contentGroupsMaincontent) {
-    userGridOptions.groups[groupKey] = contentLayout.navContent[groupKey].map((entry, index) => ({ [entry]: index % 3 == 0 ? true : false }));
-    userGridOptions.enableGroups[groupKey] = false;
+    userGridOptions.groups[groupKey] = contentLayout.navContent[groupKey];
   }
-  userGridCreateTable();
   idSel_userGridSelect.KadReset({ selList: contentGroupsNav.map((item) => [item, item]) });
 
   //separate because IDs not ready before
@@ -41,9 +41,8 @@ export function clear_cl_UserGridLayout() {
     const groupKey = contentGroupsMaincontent[i];
     const col = globalColors.colorOptions[(5 + i) % globalColors.colorOptions.length];
     userGridOptions.groupColors[groupKey] = [col, KadColor.stateAsArray({ colorArray: col, type: "HSL" })];
-    userGridCheckGroup(groupKey);
   }
-  userGridCreateCells();
+  userGridRedraw();
 }
 
 export const storage_cl_UserGridLayout = {
@@ -52,128 +51,105 @@ export const storage_cl_UserGridLayout = {
   clear() {
     this.data = [];
   },
-  get data() {
+  getData() {
     return userGridOptions.enabledList;
   },
-  set data(data) {
+  saveData(data) {
     userGridOptions.enabledList = [...data];
     contentLayout.navContent.User = [...data];
   },
+  activateData() {
+    for (let group of Object.keys(userGridOptions.groups)) {
+      userGridCheckGroup(null, group);
+    }
+    userGridRedraw();
+  },
 };
 
-function userGridToggleAll() {
-  userGridOptions.enableAll = !userGridOptions.enableAll;
-  for (const groupKey in userGridOptions.groups) {
-    userGridOptions.groups[groupKey].forEach((obj) => {
-      dbID(`idVin_disableUsergridSingle_CB_${Object.keys(obj)}`).checked = userGridOptions.enableAll;
-    });
-    userGridCheckGroup(groupKey);
-    userGridUpdateGroup(groupKey);
+function userGridUpdateSingle(data) {
+  const indexData = userGridOptions.enabledList.indexOf(data);
+  if (indexData == -1) {
+    userGridOptions.enabledList.push(data);
+  } else {
+    userGridOptions.enabledList.splice(indexData, 1);
+  }
+  userGridCheckGroup(data);
+  userGridRedraw();
+}
+
+function userGridCheckGroup(data, savedGroup = null) {
+  const group = savedGroup == null ? contentGrid[data].contentGroup : savedGroup;
+  let isEmpty = true;
+  for (let item of contentLayout.navContent[group]) {
+    if (userGridOptions.enabledList.includes(item)) {
+      isEmpty = false;
+      break;
+    }
+  }
+  const index = userGridOptions.enableGroupList.indexOf(group);
+  if (!isEmpty && index == -1) {
+    userGridOptions.enableGroupList.push(group);
+  } else if (isEmpty && index > -1) {
+    userGridOptions.enableGroupList.splice(index, 1);
   }
 }
 
-function userGridCheckGroup(groupKey) {
-  let somethingChecked = 0;
-  const cbEnabled = dbCL(`clCb_disableUsergridSingle_${groupKey}`, null);
-  for (let i = 0; i < cbEnabled.length; i++) {
-    if (cbEnabled[i].checked) somethingChecked++;
+function userGridUpdateGroup(group) {
+  userGridOptions.enabledList = userGridOptions.enabledList.filter((item) => !userGridOptions.groups[group].includes(item));
+  const index = userGridOptions.enableGroupList.indexOf(group);
+  if (index == -1) {
+    userGridOptions.enableGroupList.push(group);
+    userGridOptions.enabledList.push(...userGridOptions.groups[group]);
+  } else {
+    userGridOptions.enableGroupList.splice(index, 1);
   }
-  const state = somethingChecked === cbEnabled.length ? false : true;
-  dbID(`idBtn_child_disableUsergridGroup_${groupKey}`).firstChild.src = KadDOM.getImgPath(state ? "cCheck" : "cX");
-  userGridOptions.enableGroups[groupKey] = state;
-  caUG.redraw();
+  userGridRedraw();
 }
 
-function userGridToggleGroup(groupKey) {
-  userGridOptions.enableGroups[groupKey] = !userGridOptions.enableGroups[groupKey];
-  userGridUpdateGroup(groupKey);
-  userGridCheckGroup(groupKey);
-}
+// function userGridToggleAll() { }
 
-function userGridUpdateGroup(groupKey) {
-  const singleList = dbCL(`clCb_disableUsergridSingle_${groupKey}`, null);
-  for (let i = 0; i < singleList.length; i++) {
-    singleList[i].checked = !userGridOptions.enableGroups[groupKey];
-  }
+function userGridRedraw() {
+  userGridCreateTable();
+  userGridCreateCells();
 }
 
 function userGridCreateTable() {
-  const header = null;
-  const body = null;
+  let header = {};
+  let headerRowOffset = 0;
 
-  KadTable.createHTMLGrid({ id: idTab_disableUserGridTable, header, body });
+  const dataArrayColumns = new Array(userGridOptions.columnCount * 2).fill(null).map(() => []);
+  for (const [group, arr] of Object.entries(userGridOptions.groups)) {
+    header[headerRowOffset] = [
+      { type: "Checkbox", data: userGridOptions.enableGroupList.includes(group), colSpan: userGridOptions.columnCount - 1, settings: { noBorder: "right", align: "right", names: ["userGridGroup", group], onclick: [userGridUpdateGroup, group] } },
+      { data: group, colSpan: userGridOptions.columnCount + 1, settings: { for: `userGridGroup_${group}` } },
+    ];
 
-  KadTable.clear("idTabBody_DisableUserGrid");
-  for (const groupKey in userGridOptions.groups) {
-    const rowTh = KadTable.createRow("idTabBody_DisableUserGrid");
-    rowTh.id = `idTabBody_DisableUserGrid_Group${groupKey}`;
+    const arrCount = Math.ceil(arr.length / userGridOptions.columnCount);
+    headerRowOffset += arrCount + 1;
 
-    KadTable.addHeaderCell(rowTh, {
-      names: ["disableUsergridGroup", groupKey],
-      type: "Btn",
-      subGroup: "subgrid",
-      img: "cCheck",
-      ui: {
-        uiSize: "size1",
-        uiType: "transparent",
-      },
-      style: {
-        margin: "UIPadding",
-      },
-      cellStyle: {
-        textAlign: "center",
-      },
-      cellOnclick: () => {
-        userGridToggleGroup(groupKey);
-      },
-    });
-    KadTable.addHeaderCell(rowTh, {
-      names: ["disableUsergridGroup", groupKey],
-      type: "Lbl",
-      text: groupKey,
-      colSpan: userGridOptions.columns * 2 - 1,
-      cellStyle: {
-        textAlign: "left",
-      },
-      cellOnclick: () => {
-        userGridToggleGroup(groupKey);
-      },
-    });
-    for (let j = 0; j < userGridOptions.groups[groupKey].length; j += userGridOptions.columns) {
-      const row = KadTable.createRow("idTabBody_DisableUserGrid");
-      for (let p = 0; p < userGridOptions.columns; p++) {
-        if (userGridOptions.groups[groupKey][j + p] != undefined) {
-          const clName = Object.keys(userGridOptions.groups[groupKey][j + p]);
-          const name = contentGrid[clName].name;
-          const info = contentGrid[clName].info ? contentGrid[clName].info.replaceAll("<br>", " ") : "";
-          const cellA = KadTable.addCell(row, {
-            names: ["disableUsergridSingle", "CB", clName],
-            type: "Vin",
-            subGroup: "checkbox",
-            idNoChild: true,
-            title: info,
-            cellStyle: {
-              textAlign: "center",
-            },
-            createClass: [`clCb_disableUsergridSingle_${groupKey}`],
-            checked: userGridOptions.groups[groupKey][j + p],
-            onclick: () => {
-              userGridCheckGroup(groupKey);
-            },
-          });
-          KadTable.addCell(row, {
-            names: ["disableUsergridSingle", groupKey, j + p],
-            type: "Lbl",
-            text: name,
-            title: info,
-            ui: {
-              for: cellA.childNodes[0].id,
-            },
-          });
-        }
+    for (let i = 0; i < arrCount * userGridOptions.columnCount; i++) {
+      if (arr[i] != undefined) {
+        dataArrayColumns[(i % userGridOptions.columnCount) * 2].push(userGridOptions.enabledList.includes(arr[i]));
+        dataArrayColumns[(i % userGridOptions.columnCount) * 2 + 1].push(arr[i]);
+      } else {
+        dataArrayColumns[(i % userGridOptions.columnCount) * 2].push(null);
+        dataArrayColumns[(i % userGridOptions.columnCount) * 2 + 1].push(null);
       }
     }
   }
+
+  const body = [];
+  for (let i = 0; i < userGridOptions.columnCount; i++) {
+    body.push({ type: "Checkbox", data: dataArrayColumns[i * 2], settings: { noBorder: "right", onclick: [userGridUpdateSingle, dataArrayColumns[i * 2 + 1]], names: ["userGrid", dataArrayColumns[i * 2 + 1]] } });
+    body.push({
+      data: dataArrayColumns[i * 2 + 1].map((item) => {
+        if (item) return contentGrid[item].name;
+      }),
+      settings: { for: ["userGrid", dataArrayColumns[i * 2 + 1]] },
+    });
+  }
+
+  KadTable.createHTMLGrid({ id: idTab_disableUserGridTable, header, body });
 }
 
 function saveUsergridLayout() {
@@ -204,7 +180,7 @@ const caUG = new p5((c) => {
   };
 
   c.draw = function () {
-    c.background("lightblue");
+    c.clear();
     for (let cell of userGridOptions.canvasCells) {
       cell.show();
     }
@@ -212,13 +188,13 @@ const caUG = new p5((c) => {
 }, "#idCanv_userGrid");
 
 export function userGridCreateCells() {
-  let list = null;
+  let list = [];
   if (userGridOptions.usedGrid == "User") {
-    list = ["cl_Analysis", "cl_Barvoslepy", "cl_Piny", "cl_Blechgeometrie", "cl_Expansion", "cl_Expansion"];
+    list = userGridOptions.enabledList;
   }
+  if (list.length == 0) return;
   const { grid2DArray, gridData } = createGridLayout(userGridOptions.usedGrid, list);
 
-  if (gridData.length == 0) return;
   userGridOptions.canvasCells = [];
   const x = Math.floor(userGridOptions.canvas.w / grid2DArray[0].length);
   const cellSize = [x, userGridOptions.cellHeight];
@@ -229,7 +205,6 @@ export function userGridCreateCells() {
     const gridObj = contentGrid[item.name];
     userGridOptions.canvasCells.push(new UGridCell(item, gridObj, cellSize));
   }
-
   caUG.redraw();
 }
 
@@ -319,5 +294,21 @@ function mouseMovedUGrid() {
     // Wow, what a function!
   };
 };
+
+*/
+
+//-------------
+/*
+
+function userGridToggleAll() {
+  userGridOptions.enableAll = !userGridOptions.enableAll;
+  for (const groupKey in userGridOptions.groups) {
+    userGridOptions.groups[groupKey].forEach((obj) => {
+      dbID(`idVin_disableUsergridSingle_CB_${Object.keys(obj)}`).checked = userGridOptions.enableAll;
+    });
+    userGridCheckGroup(groupKey);
+    userGridUpdateGroup(groupKey);
+  }
+}
 
 */
