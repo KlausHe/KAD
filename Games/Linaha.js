@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../General/MainData.js";
-import { dbCL, dbID, dbIDStyle, initEL, KadColor, KadCSS, KadDOM, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadCSS, KadDOM, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const linahaOptions = {
@@ -164,16 +164,38 @@ function linahaCreateButtons() {
   //select random countries
   const currArr = linahaOptions.data.slice(0, linahaOptions.btnCount);
   linahaOptions.answerIndex = KadRandom.randomObject(currArr.length);
-  linahaShowData("idLbl_linahaQuestion", linahaOptions.selQ, linahaOptions.answerIndex);
+  dbID("idLbl_linahaQuestion").innerHTML = linahaShowData(linahaOptions.selQ, linahaOptions.answerIndex);
   if (linahaOptions.selQ == 1) {
     dbID("idLbl_linahaQuestion").setAttribute("uiType", "transparent");
   } else {
     dbID("idLbl_linahaQuestion").removeAttribute("uiType");
   }
-  let parent = dbCL("cl_LinahaAnswers");
-  KadDOM.clearFirstChild(parent);
   const cols = linahaOptions.setLayout.cols[linahaOptions.setLength];
   const rows = linahaOptions.setLayout.rows[linahaOptions.setLength];
+
+  const settings = {
+    uiSize: linahaOptions.selA == 1 ? "linahaBtn" : "height2",
+    uiType: linahaOptions.selA == 1 ? "transparent" : "",
+    noBorder: ["right", "bottom"],
+    names: ["linahaAnswers"],
+  };
+
+  let data = [];
+  let valueIndex = [];
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const index = y * cols + x;
+      valueIndex.push(index);
+      data.push(linahaShowData(linahaOptions.selA, index));
+    }
+  }
+  const type = linahaDataType(linahaOptions.selA);
+  const body = [{ type, data, multiColumn: cols, settings: { ...settings, onclick: [linahaAnswered, valueIndex] } }];
+
+  KadLog.log(body, valueIndex);
+  KadTable.createHTMLGrid({ id: idTab_linahaTable, body });
+  return;
+
   for (let y = 0; y < rows; y++) {
     const rowDiv = KadTable.addCell(
       null,
@@ -215,7 +237,25 @@ function linahaCreateButtons() {
   }
 }
 
-function linahaShowData(domID, optionsID, dataIndex) {
+function linahaDataType(type) {
+  let retType = "";
+  switch (type) {
+    case 1:
+      retType = "ButtonUrlImage";
+      break;
+    case 0:
+    case 2:
+    case 3:
+    case 4:
+      retType = "Button";
+      break;
+    default:
+      retType = "...";
+      break;
+  }
+  return retType;
+}
+function linahaShowData(optionsID, dataIndex) {
   if (dataIndex === null) return;
   const obj = linahaOptions.data[dataIndex];
   if (obj === null) return;
@@ -225,21 +265,8 @@ function linahaShowData(domID, optionsID, dataIndex) {
       retText = obj.translations.deu.common;
       break;
     case 1: //flag IMG
-      KadDOM.clearFirstChild(domID);
-      KadTable.addCell(
-        null,
-        {
-          names: ["linahaImg", dataIndex],
-          type: "Img",
-          subGroup: "url",
-          img: obj.flags.svg,
-          ui: {
-            uiSize: "linahaImg",
-          },
-        },
-        dbID(domID)
-      );
-      return;
+      retText = obj.flags.svg;
+      break;
     case 2: // capital text
       retText = obj.capital || "n.d.";
       break;
@@ -260,10 +287,11 @@ function linahaShowData(domID, optionsID, dataIndex) {
     default:
       retText = "...";
   }
-  dbID(domID).innerHTML = retText;
+  return retText;
 }
 
 function linahaAnswered(index) {
+  KadLog.log(index); //idButtonUrlImage_linahaAnswers_1
   if (!linahaOptions.isPlaying) return;
   linahaOptions.answered = !linahaOptions.answered;
   KadDOM.enableBtn("idBtn_linahaMap", linahaOptions.answered);
@@ -272,11 +300,13 @@ function linahaAnswered(index) {
     KadDOM.enableBtn("idBtn_linahaMap", true);
     const isCorrect = index == linahaOptions.answerIndex;
     linahaOptions.correctRounds += isCorrect ? 1 : 0;
+    const type = linahaDataType(linahaOptions.selA);
+    const idStyleText = `id${type}_linahaAnswers_`;
     if (isCorrect) {
-      dbIDStyle(`idBtn_child_linahaAnswers_${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
+      dbIDStyle(`${idStyleText}${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
     } else {
-      dbIDStyle(`idBtn_child_linahaAnswers_${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnNegative, type: "HSL" });
-      dbIDStyle(`idBtn_child_linahaAnswers_${linahaOptions.answerIndex}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
+      dbIDStyle(`${idStyleText}${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnNegative, type: "HSL" });
+      dbIDStyle(`${idStyleText}${linahaOptions.answerIndex}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
     }
   } else {
     if (linahaOptions.currentRound < linahaOptions.selRounds - 1) {
@@ -299,15 +329,16 @@ function linahaOpenMap() {
 }
 
 function linahaClearEntries() {
-  const cols = linahaOptions.setLayout.cols[linahaOptions.setLength];
-  const rows = linahaOptions.setLayout.rows[linahaOptions.setLength];
-  linahaShowData("idLbl_linahaQuestion", null, null);
-  if (dbCL("cl_LinahaAnswers").childElementCount > 1) {
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const index = y * cols + x;
-        linahaShowData(`idBtn_child_linahaAnswers_${index}`, null, null);
-      }
-    }
-  }
+  dbID(idLbl_linahaQuestion).innerHTML = (null, null);
+  KadTable.createHTMLGrid({ id: idTab_linahaTable });
+  // const cols = linahaOptions.setLayout.cols[linahaOptions.setLength];
+  // const rows = linahaOptions.setLayout.rows[linahaOptions.setLength];
+  // if (dbCL("cl_LinahaAnswers").childElementCount > 1) {
+  //   for (let y = 0; y < rows; y++) {
+  //     for (let x = 0; x < cols; x++) {
+  //       const index = y * cols + x;
+  //       linahaShowData(`idBtn_child_linahaAnswers_${index}`, null, null);
+  //     }
+  //   }
+  // }
 }

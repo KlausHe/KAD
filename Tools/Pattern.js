@@ -52,7 +52,7 @@ const caPA = new p5((c) => {
     caPA.translate(patternOptions.margin, patternOptions.margin);
     const w = patternOptions.canvas.w - 2 * patternOptions.margin;
     const h = patternOptions.canvas.h - 2 * patternOptions.margin;
-    const offsetLineTop = 0.1;
+    const offsetLineTop = 0.15;
     const offsetContur = offsetLineTop + 0.15;
     const offsetPoint = offsetContur + 0.2;
     const offsetLineInc = offsetPoint + 0.2;
@@ -160,11 +160,11 @@ function patternArrowLine(start, end, weight = 1) {
   caPA.triangle(...end, ex - arrowSizeX, ey - arrowSizeY, ex - arrowSizeX, ey + arrowSizeY);
 }
 
-function patternText(text, pos) {
+function patternText(text, posVector) {
   caPA.textSize(globalValues.mediaSizes.fontSize);
   caPA.textAlign(caPA.CENTER, caPA.TOP);
   caPA.noStroke();
   caPA.fill(globalColors.elements.line);
   caPA.strokeWeight(1);
-  caPA.text(text, ...pos);
+  caPA.text(text, ...posVector);
 }

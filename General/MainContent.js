@@ -234,8 +234,8 @@ export const rawContentGrid = {
     },
     subgrid: [
       ["cl_LinahaOptionsA", "center"],
-      ["cl_LinahaOptionsB", "left"],
-      ["cl_LinahaOptionsC", "left"],
+      ["cl_LinahaOptionsB", "right"],
+      ["cl_LinahaOptionsC", "right"],
       ["cl_LinahaOptionsStart", "left", "center"],
       ["cl_LinahaQuestion", "center"],
       ["cl_LinahaRounds", "right"],
@@ -587,7 +587,7 @@ export const rawContentGrid = {
     ],
   },
   cl_Olympia: {
-    deactivated: false,
+    deactivated: true,
     contentGroup: "News",
     name: "Olympia",
     heritage: ["griechisch", "Olympia"],
@@ -668,7 +668,7 @@ export const rawContentGrid = {
       rows: [0],
     },
     subgrid: [
-      ["cl_GeometrieAreaSelect", "left"],
+      ["cl_GeometrieAreaSelect", "center"],
       ["cl_GeometrieOptions", "center"],
       ["cl_GeometrieCanvas", "center", "start"],
       ["cl_GeometrieTable", "center"],

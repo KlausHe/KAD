@@ -561,28 +561,10 @@ initEL({ id: idCb_geoRadius, fn: geoChangeDiameter });
 export function clear_cl_Geometrie() {
   KadInteraction.removeContextmenu(idCanv_geometire);
   geoObjects.elementIndex = geoObjects.elementIndexOrig;
-  let parent = dbID("idDiv_GeometrieAreaSelect");
-  KadDOM.clearFirstChild(parent);
 
-  for (let i = 0; i < geoObjects.elements.length; i++) {
-    KadTable.addCell(
-      null,
-      {
-        names: ["geometrieAreaSelect", i],
-        type: "Btn",
-        subGroup: " text",
-        createClass: ["clBtn_geometrieAreaSelect"],
-        text: geoObjects.elements[i],
-        ui: {
-          uisize: "width7",
-        },
-        onclick: () => {
-          changeGeoObject(i);
-        },
-      },
-      parent
-    );
-  }
+  const body = [{ type: "Button", data: geoObjects.elements, settings: { onclick: changeGeoObject, uiSize: "width7", class: "clBtn_geometrieAreaSelect" } }];
+  KadTable.createHTMLGrid({ id: idTab_geometrieSelectTable, body });
+
   changeGeoObject(geoObjects.elementIndex);
   dbID("idCb_geoRadius").checked = false;
 
@@ -705,12 +687,7 @@ function geoResultTable() {
     unitsData.push(unit);
   }
 
-  const body = [
-    //
-    { data: nameData },
-    { data: valueData, settings: { align: "right" } },
-    { data: unitsData },
-  ];
+  const body = [{ data: nameData }, { data: valueData, settings: { align: "right" } }, { data: unitsData }];
 
   KadTable.createHTMLGrid({ id: idTab_geometrieTable, body });
 }

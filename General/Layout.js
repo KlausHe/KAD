@@ -6,11 +6,12 @@ import { globalValues } from "../Settings/General.js";
 import { userGridCreateCells } from "../Settings/UserGridLayout.js";
 import { loadDiscipuli, nuncDiscipuli, saveDiscipuli, userLoggedIn } from "./Account.js";
 import { bgaOptions } from "./BackgroundAnimation.js";
+import { debugDefaultPage } from "./HostDebug.js";
 import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "./MainContent.js";
 
 export let contentGrid = {};
 export const contentLayout = {
-  defaultPage: hostDebug() ? "cl_UserGridLayout" : "Universe",
+  defaultPage: hostDebug() ? debugDefaultPage : "Universe",
   AccountSettings: ["cl_UserLogin", "cl_UserChange"],
   prevNavContent: null,
   prevNavFullscreen: null,

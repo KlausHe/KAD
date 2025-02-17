@@ -58,7 +58,9 @@ function botanicalsDiscomfortTable() {
   const discomfort = botanicalsOptions.discomfort;
   let plantsArray = Data_Botanicals.filter((item) => item.discomfort.includes(discomfort)).map((item) => item.plant);
 
-  const header = [{ data: "Gewürze / Kräuter", colSpan: 2, settings: { align: "center" } }];
-  const body = [{ data: plantsArray, multiColumn: 2 }];
+  const cols = 2;
+
+  const header = [{ data: "Gewürze / Kräuter", colSpan: cols, settings: { align: "center" } }];
+  const body = [{ data: plantsArray, multiColumn: cols }];
   KadTable.createHTMLGrid({ id: idTab_botanicalsTableDiscomfort, header, body });
 }
