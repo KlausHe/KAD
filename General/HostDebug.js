@@ -1,1 +1,1 @@
-export const debugDefaultPage = "cl_Pattern";
+export const debugDefaultPage = "cl_Pormula";

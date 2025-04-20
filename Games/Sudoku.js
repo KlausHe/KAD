@@ -97,7 +97,7 @@ function sudokuClear() {
 async function sudokuRequest() {
   if (sudokuOptions.data === null) {
     sudokuOptions.nums = [];
-    const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: "../Data/DataLists/Sudoku1000.json" });
+    const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: "./Data/DataLists/Sudoku.json" });
     if (KadLog.errorChecked(error, "Could not receive data for 'Sudoku'.", error)) return;
     sudokuOptions.data = data;
     sudokuOptions.nums = KadArray.createIndexedArray(sudokuOptions.data.length);
