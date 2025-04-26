@@ -4,13 +4,13 @@ import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
   get URLTable() {
-    return `https://www.openligadb.de/api/getbltable/${sepakbolaOptions.selectedLiga.urlName}/${sepakbolaOptions.selected.season}`;
+    return `https://api.openligadb.de/getbltable/${sepakbolaOptions.selectedLiga.urlName}/${sepakbolaOptions.selected.season}`;
   },
   get URLMatches() {
-    return `https://www.openligadb.de/api/getmatchdata/${sepakbolaOptions.selectedLiga.urlName}/${sepakbolaOptions.selected.season}`;
+    return `https://api.openligadb.de/getmatchdata/${sepakbolaOptions.selectedLiga.urlName}/${sepakbolaOptions.selected.season}`;
   },
   get URLLastday() {
-    return `https://www.openligadb.de/api/getcurrentgroup/${sepakbolaOptions.selectedLiga.urlName}`;
+    return `https://api.openligadb.de/getcurrentgroup/${sepakbolaOptions.selectedLiga.urlName}`;
   },
   get selectedLiga() {
     return this.liga[this.selected.ligaIndex];
