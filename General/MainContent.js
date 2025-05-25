@@ -6,9 +6,7 @@ export const rawContentGrid = {
   cl_Analysis: {
     contentGroup: "Benkyou",
     name: "Analysis",
-    source: {
-      Daten: "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt",
-    },
+    source: [["Daten", "https://github.com/syzer/sentiment-analyser/blob/master/SentiWS.txt"]],
     info: "Lass einen Text oder einzelne Wörter auf ihre Stimmung hin prüfen! Der schlechteste wert ist -100, der beste ist 100",
     size: [2, 1],
     maingrid: {
@@ -32,9 +30,7 @@ export const rawContentGrid = {
     contentGroup: "Benkyou",
     name: "Barvoslepy",
     heritage: ["tschechisch", "Farbenblind"],
-    source: {
-      Code: "https://github.com/MaPePeR/jsColorblindSimulator",
-    },
+    source: [["Code", "https://github.com/MaPePeR/jsColorblindSimulator"]],
     size: [2, 2],
     maingrid: {
       areas: [
@@ -104,9 +100,7 @@ export const rawContentGrid = {
     contentGroup: "Benkyou",
     name: "Synonym",
     heritage: ["deutsch", "Ersatzwort"],
-    source: {
-      Daten: "https://www.openthesaurus.de",
-    },
+    source: [["Daten", "https://www.openthesaurus.de"]],
     info: "Finde Synonyme für einen Begriff.",
     size: [1, 2],
     maingrid: {
@@ -122,9 +116,7 @@ export const rawContentGrid = {
   cl_WikiSearch: {
     contentGroup: "Benkyou",
     name: "Wiki-Search",
-    source: {
-      Code: "https://thecodingtrain.com/CodingChallenges/075-wikipedia-api.html",
-    },
+    source: [["Code", "https://thecodingtrain.com/CodingChallenges/075-wikipedia-api.html"]],
     size: [2, 1],
     maingrid: {
       areas: [
@@ -192,9 +184,7 @@ export const rawContentGrid = {
     contentGroup: "Games",
     name: "Ibhaluni",
     heritage: ["zulu", "Ballon"],
-    source: {
-      Hintergrundbild: "https://opengameart.org/content/flappy-bird-background",
-    },
+    source: [["Hintergrundbild", "https://opengameart.org/content/flappy-bird-background"]],
     info: "Plopp die Ballons!",
     size: [2, 2],
     maingrid: {
@@ -214,9 +204,7 @@ export const rawContentGrid = {
     contentGroup: "Games",
     name: "Linaha",
     heritage: ["sesotho", "Länder"],
-    source: {
-      Daten: "https://restcountries.com/",
-    },
+    source: [["Daten", "https://restcountries.com/"]],
     info: "Erweitere dein Wissen in Geographie!",
     size: [2, 2],
     maingrid: {
@@ -248,10 +236,10 @@ export const rawContentGrid = {
     logReqUser: false,
     contentGroup: "Games",
     name: "Lotto",
-    source: {
-      Zahlen: "https://github.com/JohannesFriedrich/LottoNumberArchive",
-      Daten: "https://www.npmjs.com/package/norsk-tipping",
-    },
+    source: [
+      ["Zahlen", "https://github.com/JohannesFriedrich/LottoNumberArchive"],
+      ["Daten", "https://www.npmjs.com/package/norsk-tipping"],
+    ],
     info: "Lotto / Eurojackpot",
     size: [3, 2],
     maingrid: {
@@ -279,14 +267,14 @@ export const rawContentGrid = {
     contentGroup: "Games",
     name: "Numbery",
     heritage: ["indonesisch", "nummeriert"],
-    source: {
-      Amazon: "https://www.iconfinder.com/iconsets/life-of-amazon-outline",
-      Camping: "https://www.iconfinder.com/iconsets/camp-2",
-      Furniture: "https://www.iconfinder.com/iconsets/furniture-269",
-      Sport: "https://www.iconfinder.com/iconsets/sports-android-l-lollipop-icon-pack",
-      SeaAnimals: "https://www.iconfinder.com/iconsets/under-the-sea-7",
-      Zoo: "https://www.iconfinder.com/iconsets/zoo-line-welcome-to-zootopia",
-    },
+    source: [
+      ["Amazon", "https://www.iconfinder.com/iconsets/life-of-amazon-outline"],
+      ["Camping", "https://www.iconfinder.com/iconsets/camp-2"],
+      ["Furniture", "https://www.iconfinder.com/iconsets/furniture-269"],
+      ["Sport", "https://www.iconfinder.com/iconsets/sports-android-l-lollipop-icon-pack"],
+      ["SeaAnimals", "https://www.iconfinder.com/iconsets/under-the-sea-7"],
+      ["Zoo", "https://www.iconfinder.com/iconsets/zoo-line-welcome-to-zootopia"],
+    ],
     info: "Klassisches Memory!",
     size: [3, 2],
     maingrid: {
@@ -315,10 +303,10 @@ export const rawContentGrid = {
   cl_RayCaster: {
     contentGroup: "Games",
     name: "RayCaster",
-    source: {
-      Code1: "https://ncase.me/sight-and-light/",
-      Code2: "https://thecodingtrain.com/CodingChallenges/010.4-maze-dfs-p5.html",
-    },
+    source: [
+      ["Code", "https://ncase.me/sight-and-light/"],
+      ["Code", "https://thecodingtrain.com/CodingChallenges/010.4-maze-dfs-p5.html"],
+    ],
     info: 'Du bist der "blaue" und willst den grünen Punkt erreichen. Bewegen kannst du dich mit den Pfeiltasten. Drücke "x" um deine aktuelle Position zu markieren. Aber beachte: du hast nur 5 Markierungen!',
     size: [2, 2],
     maingrid: {
@@ -352,9 +340,7 @@ export const rawContentGrid = {
     contentGroup: "Games",
     name: "Storre",
     heritage: ["dänisch", "größer"],
-    source: {
-      Daten: "https://restcountries.com/",
-    },
+    source: [["Daten", "https://restcountries.com/"]],
     info: "Wer ist größer?",
     size: [1, 1],
     maingrid: {
@@ -380,10 +366,10 @@ export const rawContentGrid = {
   cl_Sudoku: {
     contentGroup: "Games",
     name: "Sudoku",
-    source: {
-      Code: "https://github.com/boggan/js-sudoku-generator#readme",
-      Puzzels: "https://www.kaggle.com/bryanpark/sudoku",
-    },
+    source: [
+      ["Code", "https://github.com/boggan/js-sudoku-generator#readme"],
+      ["Puzzels", "https://www.kaggle.com/bryanpark/sudoku"],
+    ],
     info: "Klassisches Sudoku-Puzzle.<br>Durch Eingabe einer Zahl mittels Tastatur kannst du die Zahl eintragen. Durch drücken der Leertaste kannst du die Eingabeart direkt wechseln. Mit SHIFT kannst du mehere Zellen gleichzeitig auswählen.",
     size: [2, 2],
     maingrid: {
@@ -418,9 +404,7 @@ export const rawContentGrid = {
     contentGroup: "Games",
     name: "Suika",
     heritage: ["japanisch", "Wassermelone"],
-    source: {
-      Code: "https://github.com/TomboFry/suika-game/blob/main/index.html",
-    },
+    source: [["Code", "https://github.com/TomboFry/suika-game/blob/main/index.html"]],
     info: "Reach the Suika!",
     size: [2, 2],
     maingrid: {
@@ -450,9 +434,7 @@ export const rawContentGrid = {
     contentGroup: "Games",
     name: "Sweeper",
     heritage: ["englisch", "Kehrmaschine"],
-    source: {
-      Code: "https://thecodingtrain.com/CodingChallenges/071-minesweeper.html",
-    },
+    source: [["Code", "https://thecodingtrain.com/CodingChallenges/071-minesweeper.html"]],
     info: "Klassisches Mine-Sweeper!",
     size: [2, 2],
     maingrid: {
@@ -475,10 +457,10 @@ export const rawContentGrid = {
     contentGroup: "News",
     name: "Howa",
     heritage: ["turkmenisch", "Wetter"],
-    source: {
-      Daten: "https://open-meteo.com",
-      GeoLocation: "https://github.com/bigdatacloudapi/js-reverse-geocode-client",
-    },
+    source: [
+      ["Daten", "https://open-meteo.com"],
+      ["GeoLocation", "https://github.com/bigdatacloudapi/js-reverse-geocode-client"],
+    ],
     info: "Wettervorhersage für die nächsten Tage.",
     size: [3, 1],
     maingrid: {
@@ -502,10 +484,10 @@ export const rawContentGrid = {
     contentGroup: "News",
     name: "News",
     heritage: ["englisch", "Nachrichten"],
-    source: {
-      Daten: "https://Tagesschau.de",
-      API: "https://github.com/bundesAPI/tagesschau-api",
-    },
+    source: [
+      ["Daten", "https://Tagesschau.de"],
+      ["API", "https://github.com/bundesAPI/tagesschau-api"],
+    ],
     size: [2, 1],
     maingrid: {
       areas: [
@@ -528,9 +510,7 @@ export const rawContentGrid = {
   cl_PostillonTicker: {
     contentGroup: "News",
     name: "PostillonTicker",
-    source: {
-      Daten: "https://www.der-Postillon.com",
-    },
+    source: [["Daten", "https://www.der-Postillon.com"]],
     info: "Alle Postillon News-Ticker zum durchklicken",
     size: [2, 1],
     maingrid: {
@@ -547,9 +527,7 @@ export const rawContentGrid = {
     contentGroup: "News",
     name: "Pafadoj",
     heritage: ["esperanto", "Schießerei"],
-    source: {
-      Daten: "https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States",
-    },
+    source: [["Daten", "https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States"]],
     size: [2, 1],
     maingrid: {
       areas: [["cl_PafadojInfo"], ["cl_PafadojUpdate"], ["cl_PafadojTable"]],
@@ -566,9 +544,7 @@ export const rawContentGrid = {
     contentGroup: "News",
     name: "Sepakbola",
     heritage: ["javanisch", "Fußball"],
-    source: {
-      Daten: "https://www.openligadb.de",
-    },
+    source: [["Daten", "https://www.openligadb.de"]],
     size: [3, 2],
     maingrid: {
       areas: [
@@ -591,9 +567,11 @@ export const rawContentGrid = {
     contentGroup: "News",
     name: "Olympia",
     heritage: ["griechisch", "Olympia"],
-    source: {
-      Daten: "https://github.com/kevle1/paris-2024-olympic-api",
-    },
+    info: "Bevölkerungsdaten sind auf 2020 - 2024 bezogen und sind nicht geeignet für ältere Spiele!",
+    source: [
+      ["Daten", "https://de.wikipedia.org"],
+      ["Daten", "https://restcountries.com/"],
+    ],
     size: [2, 1],
     maingrid: {
       areas: [["cl_OlympiaUpdate"], ["cl_OlympiaTable"]],
@@ -609,9 +587,7 @@ export const rawContentGrid = {
     logReqUser: true,
     contentGroup: "Tools",
     name: "Blechgeometrie",
-    source: {
-      Daten: "https://rime.de/de/wiki/lochabstand-berechnen/",
-    },
+    source: [["Daten", "https://rime.de/de/wiki/lochabstand-berechnen/"]],
     size: [1, 1],
     maingrid: {
       areas: [["cl_BlechgeoVinDicke"], ["cl_BlechgeoVinRadius"], ["cl_BlechgeoVinForm"], ["cl_BlechgeoVinBreite"], ["cl_BlechgeoImg"], ["cl_BlechgeoLblResult"]],
@@ -630,9 +606,7 @@ export const rawContentGrid = {
     contentGroup: "Tools",
     name: "Expansion",
     heritage: ["englisch", "Ausdehnung"],
-    source: {
-      Daten: "https://www.schweizer-fn.de/stoff/waermedehnung/waermedehnung.php#stahltabelle",
-    },
+    source: [["Daten", "https://www.schweizer-fn.de/stoff/waermedehnung/waermedehnung.php#stahltabelle"]],
     size: [2, 2],
     maingrid: {
       areas: [
@@ -697,9 +671,7 @@ export const rawContentGrid = {
     logReqUser: true,
     contentGroup: "Tools",
     name: "Material",
-    source: {
-      Daten: "https://www.schweizer-fn.de/festigkeit/festigkeitswerte/stahl/stahl_start.php",
-    },
+    source: [["Daten", "https://www.schweizer-fn.de/festigkeit/festigkeitswerte/stahl/stahl_start.php"]],
     size: [2, 2],
     maingrid: {
       areas: [
@@ -736,11 +708,11 @@ export const rawContentGrid = {
     ],
   },
   cl_Niska: {
-    source: {
-      Regelgewinde: "https://de.wikipedia.org/wiki/Metrisches_ISO-Gewinde",
-      Feingewinde: "http://gewindenormen.com",
-      Berechnung: "https://www.schweizer-fn.de/maschinenelemente/schraube/schraubenverbindung.php",
-    },
+    source: [
+      ["Regelgewinde", "https://de.wikipedia.org/wiki/Metrisches_ISO-Gewinde"],
+      ["Feingewinde", "http://gewindenormen.com"],
+      ["Berechnung", "https://www.schweizer-fn.de/maschinenelemente/schraube/schraubenverbindung.php"],
+    ],
     contentGroup: "Tools",
     name: "Niska",
     heritage: ["mazedonisch", "Gewinde"],
@@ -788,9 +760,7 @@ export const rawContentGrid = {
   cl_Pormula: {
     contentGroup: "Tools",
     name: "Pormula",
-    source: {
-      Library: "https://github.com/Tom-Alexander/regression-js",
-    },
+    source: [["Library", "https://github.com/Tom-Alexander/regression-js"]],
     heritage: ["filipino", "Formel"],
     info: "Gleichung aus Datenpunkten ermitteln.",
     size: [2, 1],
@@ -889,9 +859,7 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "BiktadA",
     heritage: ["schwedisch", "gebeichtet"],
-    source: {
-      Code: "https://stackoverflow.com/a/5918791",
-    },
+    source: [["Code", "https://stackoverflow.com/a/5918791"]],
     info: "Diese Daten sind ohne deine Zustimmung im Browser verfügbar!",
     size: [1, 1],
     maingrid: {
@@ -904,9 +872,7 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "Boredom",
     heritage: ["englisch", "Langeweile"],
-    source: {
-      Daten: "https://www.boredapi.com/",
-    },
+    source: [["Daten", "https://www.boredapi.com/"]],
     size: [1, 1],
     maingrid: {
       areas: [["cl_BoredomStart"], ["cl_BoredomAnswer"]],
@@ -921,9 +887,7 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "Botanicals",
     heritage: ["englisch", "botanisch"],
-    source: {
-      Daten: "https://www.tabelle.info/kraeuter.html",
-    },
+    source: [["Daten", "https://www.tabelle.info/kraeuter.html"]],
     size: [2, 1],
     maingrid: {
       areas: [
@@ -942,9 +906,7 @@ export const rawContentGrid = {
   cl_Egg: {
     contentGroup: "Utility",
     name: "Eierkochen",
-    source: {
-      Daten: "newton.ex.ac.uk/teaching/CDHW/egg/",
-    },
+    source: [["Daten", "newton.ex.ac.uk/teaching/CDHW/egg/"]],
     info: "1. Ausreichnd Wasser zum kochen bringen.<br>2. Ei in leicht kochendes Wasser legen, sodass es vollständig bedeckt ist.<br>3. Timer starten.<br>4. Fertiges Ei aus kochendem Wasser entnehmen. Achtung, das Wasser ist heiß, das Ei auch!<br>5. Nach belieben unter kaltem Wasser abschrecken",
     size: [2, 1],
     maingrid: {
@@ -982,11 +944,11 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "Hver Ertu",
     heritage: ["isländisch", "Wer bist du"],
-    source: {
-      Alter: "https://agify.io",
-      Herkunft: "https://nationalize.io",
-      Gender: "https://genderize.io",
-    },
+    source: [
+      ["Alter", "https://agify.io"],
+      ["Herkunft", "https://nationalize.io"],
+      ["Gender", "https://genderize.io"],
+    ],
     size: [1, 1],
     maingrid: {
       areas: [["cl_HverertuInput"], ["cl_HverertuTable"]],
@@ -1002,9 +964,7 @@ export const rawContentGrid = {
     name: "Iomlaid",
     deactivated: false,
     heritage: ["schottisch-gälisch", "Austausch"],
-    source: {
-      Daten: "https://github.com/fawazahmed0/exchange-api",
-    },
+    source: [["Daten", "https://github.com/fawazahmed0/exchange-api"]],
     size: [3, 1],
     maingrid: {
       areas: [
@@ -1049,9 +1009,7 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "Kaihanga",
     heritage: ["maori", "Hersteller"],
-    source: {
-      Code: "http://dougtesting.net/home",
-    },
+    source: [["Code", "http://dougtesting.net/home"]],
     info: "Glücksrad!<br>Gib Gewinne ein und drücke auf das Rad.",
     size: [2, 1],
     maingrid: {
@@ -1164,9 +1122,7 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "PlatLesen",
     heritage: ["malaysisch", "Nummernschild"],
-    source: {
-      Daten: "https://www.wbrnet.info/db/9964.html",
-    },
+    source: [["Daten", "https://www.wbrnet.info/db/9964.html"]],
     size: [1, 1],
     maingrid: {
       areas: [
@@ -1187,9 +1143,7 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "Sima",
     heritage: ["isländisch", "Telefon"],
-    source: {
-      Daten: "https://de.wikipedia.org/wiki/Ländervorwahlliste_sortiert_nach_Nummern",
-    },
+    source: [["Daten", "https://de.wikipedia.org/wiki/Ländervorwahlliste_sortiert_nach_Nummern"]],
     size: [1, 1],
     maingrid: {
       areas: [

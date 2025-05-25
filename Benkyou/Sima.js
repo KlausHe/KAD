@@ -1,4 +1,4 @@
-import { Data_Country_CodesIso3166 } from "../General/MainData.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadData.js";
 import { dbID, initEL } from "../KadUtils/KadUtils.js";
 
 initEL({ id: idVin_simaCountry, action: "focus", dbList: Data_Country_CodesIso3166.map((item) => item.nameDE).sort() });

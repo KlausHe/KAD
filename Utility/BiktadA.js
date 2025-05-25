@@ -1,4 +1,4 @@
-import { Data_Country_CodesIso639 } from "../General/MainData.js";
+import { Data_Country_CodesIso639 } from "../KadData/KadData.js";
 import { dbID, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 
 const biktadaOptions = {

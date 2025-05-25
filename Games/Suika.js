@@ -17,8 +17,8 @@ const suikaOptions = {
   bgcCanvas: "skyblue",
   sounds: null,
   enableSounds: false,
-  soundsPath: "./Games/SuikaAssets/sounds",
-  imagesPath: "./Games/SuikaAssets/images",
+  soundsPath: "./Games/AssetsSuika/sounds",
+  imagesPath: "./Games/AssetsSuika/images",
   friction: {
     friction: 0.006,
     frictionStatic: 0.01,

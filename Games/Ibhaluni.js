@@ -54,7 +54,7 @@ function ibhaluniReset() {
   ibhaluniOptions.score = 0;
   ibhaluniOptions.misses = 0;
   if (ibhaluniOptions.sound === null) {
-    ibhaluniOptions.sound = new Audio("./Games/IbhaluniAssets/IbhaluniHH.mp3");
+    ibhaluniOptions.sound = new Audio("./Games/AssetsIbhaluni/IbhaluniHH.mp3");
   }
   for (let i = 0; i < ibhaluniOptions.nums; i++) {
     ibhaluniOptions.balloons.push(new IbhaluniObj());
@@ -69,8 +69,8 @@ const caIB = new p5((c) => {
     c.canv.mousePressed(mousePushedIbhaluni);
     c.colorMode(c.HSL);
     c.noLoop();
-    ibhaluniOptions.backgroundDay = caIB.loadImage("Games/IbhaluniAssets/ib_BGday.png");
-    ibhaluniOptions.backgroundNight = caIB.loadImage("Games/IbhaluniAssets/ib_BGnight.png");
+    ibhaluniOptions.backgroundDay = caIB.loadImage("Games/AssetsIbhaluni/ib_BGday.png");
+    ibhaluniOptions.backgroundNight = caIB.loadImage("Games/AssetsIbhaluni/ib_BGnight.png");
     c.redraw();
     c.cursor(c.CROSS);
   };

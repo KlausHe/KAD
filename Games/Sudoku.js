@@ -1,4 +1,5 @@
-import { dbID, initEL, KadArray, KadDate, KadDOM, KadFile, KadInteraction, KadLog, KadRandom } from "../KadUtils/KadUtils.js";
+import { Data_Sudoku } from "../KadData/Data_Sudoku.js";
+import { dbID, initEL, KadArray, KadDate, KadDOM, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -7,8 +8,8 @@ const sudokuOptions = {
     return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
   },
   cells: [],
-  data: null,
-  nums: [],
+  data: Data_Sudoku,
+  nums: KadArray.createIndexedArray(Data_Sudoku.length),
   usedNums: [],
   get availiableNums() {
     return this.nums.filter((obj) => {
@@ -94,14 +95,7 @@ function sudokuClear() {
   caSU.redraw();
 }
 
-async function sudokuRequest() {
-  if (sudokuOptions.data === null) {
-    sudokuOptions.nums = [];
-    const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: "./Data/DataLists/Sudoku.json" });
-    if (KadLog.errorChecked(error, "Could not receive data for 'Sudoku'.", error)) return;
-    sudokuOptions.data = data;
-    sudokuOptions.nums = KadArray.createIndexedArray(sudokuOptions.data.length);
-  }
+function sudokuRequest() {
   sudokuOptions.curIndex = KadRandom.randomObject(sudokuOptions.availiableNums);
   sudokuOptions.usedNums.push(sudokuOptions.curIndex);
   for (let index = 0; index < 9 * 9; index++) {

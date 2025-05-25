@@ -1,4 +1,4 @@
-import { Data_Materials } from "../General/MainData.js";
+import { Data_Materials } from "../KadData/KadDataMaterial.js";
 import { dbID, dbIDStyle, initEL, KadTable } from "../KadUtils/KadUtils.js";
 import { materialFilterOptions, storage_cl_MaterialFilterSettings } from "../Settings/MaterialFilterSettings.js";
 import { expansionUpdateMassDependecy } from "./Expansion.js";

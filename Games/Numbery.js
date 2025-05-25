@@ -36,7 +36,7 @@ const numberyOptions = {
     return this.cathegories[this.cathegoryIndex][0];
   },
   img(id) {
-    return `Data/Images/Numbery/${this.cathegory}/numbery_${this.cathegory}_${id}.svg`;
+    return `./Games/AssetsNumbery/${this.cathegory}/numbery_${this.cathegory}_${id}.svg`;
   },
 };
 

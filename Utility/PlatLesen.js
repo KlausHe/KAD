@@ -1,4 +1,4 @@
-import { Data_Nummernschild } from "../General/MainData.js";
+import { Data_Nummernschild } from "../KadData/KadData.js";
 import { dbID, initEL } from "../KadUtils/KadUtils.js";
 
 initEL({ id: idVin_platLesenReg, action: "focus", dbList: Data_Nummernschild.map((item) => item[1]) });

@@ -1,23 +1,81 @@
+import { Data_Olympia } from "../KadData/Data_Olympiadaten.js";
 import { KadArray, KadDOM, KadFile, KadLog, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
-  URLFlags: `https://restcountries.com/v3.1/all?fields=cca3,flags,population`,
+  URLFlags: `https://restcountries.com/v3.1/all?fields=cioc,flags,population`,
+  baseData: new Map(Data_Olympia),
+  countryData: null,
   data: null,
   specific: false,
-  headerNames: ["Gold", "Silver", "Bronze", "Total"],
+  medalNames: ["Gold", "Silber", "Bronze", "Gesamt"],
   sortTotal: false,
   sortMedals: false,
-  events: [
-    ["Olympia", `https://api.olympics.kevle.xyz/medals`],
-    ["Paralympics", `https://api.olympics.kevle.xyz/paralympics/medals`, true],
+  origEventArray: [
+    ["Sommerspiele", 1896],
+    ["Sommerspiele", 1900],
+    ["Sommerspiele", 1904],
+    ["Sommerspiele", 1908],
+    ["Sommerspiele", 1912],
+    ["Sommerspiele", 1920],
+    ["Winterspiele", 1924],
+    ["Sommerspiele", 1924],
+    ["Winterspiele", 1928],
+    ["Sommerspiele", 1928],
+    ["Winterspiele", 1932],
+    ["Sommerspiele", 1932],
+    ["Winterspiele", 1936],
+    ["Sommerspiele", 1936],
+    ["Winterspiele", 1948],
+    ["Sommerspiele", 1948],
+    ["Winterspiele", 1952],
+    ["Sommerspiele", 1952],
+    ["Winterspiele", 1956],
+    ["Sommerspiele", 1956],
+    ["Winterspiele", 1960],
+    ["Sommerspiele", 1960],
+    ["Winterspiele", 1964],
+    ["Sommerspiele", 1964],
+    ["Winterspiele", 1968],
+    ["Sommerspiele", 1968],
+    ["Winterspiele", 1972],
+    ["Sommerspiele", 1972],
+    ["Winterspiele", 1976],
+    ["Sommerspiele", 1976],
+    ["Winterspiele", 1980],
+    ["Sommerspiele", 1980],
+    ["Winterspiele", 1984],
+    ["Sommerspiele", 1984],
+    ["Winterspiele", 1988],
+    ["Sommerspiele", 1988],
+    ["Winterspiele", 1992],
+    ["Sommerspiele", 1992],
+    ["Winterspiele", 1994],
+    ["Sommerspiele", 1996],
+    ["Winterspiele", 1998],
+    ["Sommerspiele", 2000],
+    ["Winterspiele", 2002],
+    ["Sommerspiele", 2004],
+    ["Winterspiele", 2006],
+    ["Sommerspiele", 2008],
+    ["Winterspiele", 2010],
+    ["Sommerspiele", 2012],
+    ["Winterspiele", 2014],
+    ["Sommerspiele", 2016],
+    ["Winterspiele", 2018],
+    ["Sommerspiele", 2020],
+    ["Winterspiele", 2022],
+    ["Sommerspiele", 2024],
   ],
+  get events() {
+    return olympiaOptions.origEventArray;
+  },
 };
 
 initEL({
   id: idSel_olympiaEvent,
   fn: olympiaUpdate,
-  selStartIndex: 0,
-  selList: olympiaOptions.events.map((v) => [v[0], v[0], v[2] || null]),
+  selStartIndex: 51,
+  selList: olympiaOptions.events.map((v) => [`${v[0]} ${v[1]}`, v[1]]),
 });
 initEL({ id: idBtn_olympiaSpecific, fn: olympiaSpecific });
 initEL({ id: idBtn_olympiaSortMedals, fn: olympiaSortByMedals });
@@ -29,31 +87,42 @@ export function clear_cl_Olympia() {
 }
 
 async function olympiaUpdate() {
-  olympiaOptions.data = null;
-  const index = idSel_olympiaEvent.KadGet({ index: true });
-  const url = olympiaOptions.events[index][1];
-  const { dataTable, dataCountries, error } = await KadFile.loadUrlToJSON({ variableArray: ["dataTable", "dataCountries"], urlArray: [url, olympiaOptions.URLFlags] });
-  if (KadLog.errorChecked(error, "Could not receive data for 'Olympia'.", error)) return;
-  dataTable.results.splice(
-    dataTable.results.findIndex((item) => {
-      return item.country.code == "EOR" || item.country.code == "RPT";
-    }),
-    1
-  );
-  let countrieObj = {};
-  for (let obj of dataCountries) {
-    countrieObj[obj.cca3] = { flag: obj.flags.svg, population: obj.population };
-  }
-  for (let rang of dataTable.results) {
-    if (rang.country.iso_alpha_3 === undefined) continue;
-    rang.flag = countrieObj[rang.country.iso_alpha_3].flag;
-    rang.population = countrieObj[rang.country.iso_alpha_3].population;
-    rang.specific = {};
-    for (let name of olympiaOptions.headerNames) {
-      rang.specific[name.toLowerCase()] = (rang.medals[name.toLowerCase()] / rang.population) * 1000000;
+  // olympiaOptions.baseData = new Map(Data_Olympia);
+  if (olympiaOptions.countryData === null) {
+    const { dataCountries, error } = await KadFile.loadUrlToJSON({ variable: "dataCountries", url: olympiaOptions.URLFlags });
+    if (KadLog.errorChecked(error, "Could not receive data for 'Olympia'", error)) return;
+    olympiaOptions.countryData = {};
+    for (let obj of dataCountries) {
+      olympiaOptions.countryData[obj.cioc] = { cioc: obj.cioc, flag: obj.flags.svg, population: obj.population };
     }
   }
-  olympiaOptions.data = dataTable.results;
+
+  const eventname = idSel_olympiaEvent.KadGet({ textContent: true });
+  const eventData = olympiaOptions.baseData.get(eventname);
+
+  olympiaOptions.data = [];
+  for (let row of eventData) {
+    let dataObj = {};
+    dataObj.Platz = row[0];
+    dataObj.name = row[1].trim();
+    const cioc = row[2];
+    dataObj.cioc = cioc;
+    dataObj.flag = olympiaOptions.countryData[cioc] ? olympiaOptions.countryData[cioc].flag : null;
+    dataObj.population = olympiaOptions.countryData[cioc] ? olympiaOptions.countryData[cioc].population : null;
+    dataObj.medals = {};
+    dataObj.specific = {};
+    for (let i = 0; i < olympiaOptions.medalNames.length; i++) {
+      const headName = olympiaOptions.medalNames[i];
+      dataObj.medals[headName] = row[3 + i];
+      if (dataObj.population == 0 || isNaN(row[3 + i])) {
+        dataObj.specific[headName] = 0;
+      } else {
+        dataObj.specific[headName] = (row[3 + i] / dataObj.population) * 1000000;
+      }
+    }
+    olympiaOptions.data.push(dataObj);
+  }
+
   olympiaTableReturn();
 }
 
@@ -66,14 +135,14 @@ function olympiaSpecific() {
 function olympiaSortByTotal() {
   olympiaOptions.sortTotal = !olympiaOptions.sortTotal;
   const dataset = olympiaOptions.specific ? "specific" : "medals";
-  olympiaOptions.data = KadArray.sortArrayByKey({ array: olympiaOptions.data, keys: [dataset, "total"], inverse: olympiaOptions.sortTotal });
+  olympiaOptions.data = KadArray.sortArrayByKey({ array: olympiaOptions.data, keys: [dataset, "Gesamt"], inverse: olympiaOptions.sortTotal });
   olympiaTableReturn();
 }
 
 function olympiaSortByMedals() {
   olympiaOptions.sortMedals = !olympiaOptions.sortMedals;
   const dataset = olympiaOptions.specific ? "specific" : "medals";
-  for (let type of ["bronze", "silver", "gold"]) {
+  for (let type of ["Bronze", "Silber", "Gold"]) {
     olympiaOptions.data = KadArray.sortArrayByKey({ array: olympiaOptions.data, keys: [dataset, type], inverse: olympiaOptions.sortMedals });
   }
   olympiaTableReturn();
@@ -81,12 +150,13 @@ function olympiaSortByMedals() {
 
 function olympiaTableReturn() {
   if (olympiaOptions.data.length == 0) return;
+  // KadLog.log(olympiaOptions.data);
 
   //prettier-ignore
   const header = [
     { data: "Rang" }, 
     { data: "Land", colSpan: 2, settings: { align: "center" } }, 
-    ...olympiaOptions.headerNames.map((item) => ({ data: olympiaOptions.specific ? `${item}<br>/Einwohner` : item })), 
+    ...olympiaOptions.medalNames.map((item) => ({ data: olympiaOptions.specific ? `${item}<br>/Einwohner` : item })), 
     { data: "Einwohner", settings: { align: "left" } }];
 
   const body = [
@@ -100,11 +170,11 @@ function olympiaTableReturn() {
       settings: { description: "flag", noBorder: "right", align: "center", imgSize: "olympiaImg" },
     },
     {
-      data: olympiaOptions.data.map((item) => `${item.country.name} (${item.rank})`),
-      settings: { description: "country", title: olympiaOptions.data.map((item) => item.country.name) },
+      data: olympiaOptions.data.map((item) => `${item.name} (${item.Platz})`),
+      settings: { description: "country", title: olympiaOptions.data.map((item) => item.name) },
     },
-    ...olympiaOptions.headerNames.map((head) => ({
-      data: olympiaOptions.data.map((item) => (olympiaOptions.specific ? KadValue.number(item.specific[head.toLowerCase()], { decimals: 3 }) : item.medals[head.toLowerCase()])),
+    ...olympiaOptions.medalNames.map((head) => ({
+      data: olympiaOptions.data.map((item) => (olympiaOptions.specific ? KadValue.number(item.specific[head], { decimals: 3 }) : item.medals[head])),
       settings: { description: head, align: "center" },
     })),
     {

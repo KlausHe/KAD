@@ -1,4 +1,5 @@
-import { Data_Botanicals, Data_Country_CodesIso3166, Data_Country_CodesIso639, Data_Country_GermanDistrics, Data_Currencies, Data_HumanNames, Data_Nummernschild, Data_RALColors } from "../General/MainData.js";
+import { Data_Botanicals, Data_Country_CodesIso3166, Data_Country_CodesIso639, Data_Country_GermanDistrics, Data_Currencies, Data_HumanNames, Data_Nummernschild } from "../KadData/KadData.js";
+import { Data_RALColors } from "../KadData/KadDataColor.js";
 import { dbCL, dbID, KadRandom } from "../KadUtils/KadUtils.js";
 
 export const netsaonaOptions = {

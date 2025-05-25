@@ -57,8 +57,8 @@ const barvoslepyOptions = {
   severity: 0.5,
   previewImagesSelected: null,
   previewImages: [
-    ["Venedig", "./Benkyou/BarvoslepyAssets/Venice.JPG"],
-    ["Ishihara", "./Benkyou/BarvoslepyAssets/Ishihara.png"],
+    ["Venedig", "./Benkyou/AssetsBarvoslepy/Venice.JPG"],
+    ["Ishihara", "./Benkyou/AssetsBarvoslepy/Ishihara.png"],
   ],
   showState: null,
   showStates: {

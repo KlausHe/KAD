@@ -118,15 +118,15 @@ img[imgSize="thumbnail"]:focus {
 }
 
 .img_trash {
-  content: url("../Data/Images/SVG/trash.svg");
+  content: url("../Data/Images/trash.svg");
 }
 
 .img_oAdd {
-  content: url("../Data/Images/SVG/oAdd.svg");
+  content: url("../Data/Images/oAdd.svg");
 }
 
 .img_oSub {
-  content: url("../Data/Images/SVG/oSub.svg");
+  content: url("../Data/Images/oSub.svg");
 }
 
 textarea {
@@ -397,6 +397,10 @@ input[imgBtn="subgrid"] {
   -webkit-box-pack: center;
   justify-content: center;
   text-align: center;
+}
+.cl_outputTextContent {
+  color: hsl(var(--txtNavbar));
+  font-size: var(--fontSizeLarge);
 }
 
 .cl_outputEquation {

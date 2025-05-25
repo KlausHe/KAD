@@ -1,4 +1,4 @@
-import { Data_Botanicals } from "../General/MainData.js";
+import { Data_Botanicals } from "../KadData/KadData.js";
 import { initEL, KadTable } from "../KadUtils/KadUtils.js";
 
 const botanicalsOptions = {
@@ -57,9 +57,7 @@ function botanicalsPlantTable() {
 function botanicalsDiscomfortTable() {
   const discomfort = botanicalsOptions.discomfort;
   let plantsArray = Data_Botanicals.filter((item) => item.discomfort.includes(discomfort)).map((item) => item.plant);
-
   const cols = 2;
-
   const header = [{ data: "Gewürze / Kräuter", colSpan: cols, settings: { align: "center" } }];
   const body = [{ data: plantsArray, multiColumn: cols }];
   KadTable.createHTMLGrid({ id: idTab_botanicalsTableDiscomfort, header, body });

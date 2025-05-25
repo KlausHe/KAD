@@ -388,7 +388,9 @@ export function createSubgrid() {
 
     // source --> OPEN NEW WINDOW
     if (contentObj.hasOwnProperty("source")) {
-      for (const [key, value] of Object.entries(contentObj.source)) {
+      for (let source of contentObj.source) {
+        const key = source[0];
+        const value = source[1];
         const dropSourceParent = KadTable.createCell({ type: "Div", names: ["titleSource", gridKey, key], createClass: ["cl_DropdownParent"] });
         parent.appendChild(dropSourceParent);
         const dropSourceImg = KadTable.createCell({

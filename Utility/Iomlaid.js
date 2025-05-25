@@ -1,6 +1,6 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
-import { Data_Currencies } from "../General/MainData.js";
+import { Data_Currencies } from "../KadData/KadData.js";
 import { initEL, KadDate, KadFile, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 
 const iomlaidOptions = {

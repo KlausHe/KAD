@@ -1,7 +1,7 @@
 // Imags weather_code from openweathermap
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 const reverseGeocoder = new BDCReverseGeocode();
-import { Data_Country_GermanDistrics, Data_Nummernschild } from "../General/MainData.js";
+import { Data_Country_GermanDistrics, Data_Nummernschild } from "../KadData/KadData.js";
 import { dbID, dbIDStyle, initEL, KadDate, KadFile, KadInteraction, KadLog, KadValue, objectLength } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
@@ -178,7 +178,7 @@ async function howaReqestData() {
   howaOptions.data.current = responseCurrent;
   howaOptions.data.forecast = responseForecast;
   dbID("idP_howaCurrentText").textContent = `${howaOptions.city}: ${howaOptions.data.current.current.temperature_2m}°C`;
-  dbID("idImg_howaCurrentImage").src = `./Data/Howa/OWM/${howaWeatherIcons.data[howaOptions.data.current.current.weather_code]}.png`;
+  dbID("idImg_howaCurrentImage").src = `./News/AssetsHowa/OWM/${howaWeatherIcons.data[howaOptions.data.current.current.weather_code]}.png`;
 
   howaUpdateGraphData();
 }
@@ -211,7 +211,7 @@ const caHO = new p5((c) => {
   c.preload = function () {
     for (let value of Object.values(howaWeatherIcons.data)) {
       if (howaWeatherIcons.images.hasOwnProperty(value)) continue;
-      howaWeatherIcons.images[value] = c.loadImage(`./Data/Howa/OWM/${value}.png`);
+      howaWeatherIcons.images[value] = c.loadImage(`./News/AssetsHowa/OWM/${value}.png`);
     }
   };
   c.setup = function () {
@@ -237,7 +237,8 @@ function howaDrawData() {
   const rowHeight = howaOptions.canvas.h / len;
   const offsetTop = rowHeight * 0.25;
   const barHeight = rowHeight - 2 * offsetTop;
-  const dayWidth = howaOptions.canvas.w * 0.08;
+  const dayWidth = howaOptions.canvas.w * 0.22;
+  // const dayWidth = howaOptions.canvas.w * 0.08;
   const tempWidth = howaOptions.canvas.w * 0.1;
   const imgWidth = howaOptions.canvas.w * 0.1;
 
@@ -251,14 +252,15 @@ function howaDrawData() {
     // caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
     caHO.fill(globalColors.elements.line);
     caHO.textSize(globalValues.mediaSizes.fontSize);
-    caHO.text(KadDate.getDate(graph.labels[i], { format: "WD" }), dayWidth / 2, y + rowHeight / 2);
+    caHO.text(KadDate.getDate(graph.labels[i], { format: "WD DD.MM" }), dayWidth / 2, y + rowHeight / 2);
     caHO.image(howaWeatherIcons.imageFromCode(graph.weatherCode[i]), dayWidth + tempWidth / 2, y + rowHeight / 4, rowHeight / 2, rowHeight / 2);
     caHO.text(`${point[0]}°`, dayWidth + tempWidth + tempWidth / 2, y + rowHeight / 2);
     caHO.text(`${point[1]}°`, howaOptions.canvas.w - tempWidth / 2, y + rowHeight / 2);
 
     const x = howaMap(point[0]);
     const barWidth = howaMap(point[1]);
-    caHO.fill("orange");
+    const hue = cappedColorRange(point[1]);
+    caHO.fill(hue, 100, 50);
     caHO.rect(x, y, barWidth - x, barHeight, 10);
   }
 
@@ -267,6 +269,9 @@ function howaDrawData() {
   }
 }
 
+function cappedColorRange(temp) {
+  return KadValue.mapping(temp, 0, 35, 240, 360, true);
+}
 const howaWeatherIcons = {
   imageFromCode(code) {
     const name = howaWeatherIcons.data[code];

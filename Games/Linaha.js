@@ -1,4 +1,4 @@
-import { Data_Country_CodesIso3166 } from "../General/MainData.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadData.js";
 import { dbID, dbIDStyle, initEL, KadColor, KadCSS, KadDOM, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 

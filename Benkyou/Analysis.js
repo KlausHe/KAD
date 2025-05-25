@@ -1,8 +1,9 @@
-import { KadFile, KadLog, KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { Data_SentimentListGerman } from "../KadData/Data_SentimentListGerman.js";
+import { KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
 import { WikiSearchData } from "./WikiSearch.js";
 
 const analysisOptions = {
-  data: null,
+  data: new Map(Data_SentimentListGerman),
   searchInput: "",
   results: {},
   header: [
@@ -29,20 +30,12 @@ function analysisWiki() {
   analysisInput();
 }
 
-async function analysisInput() {
+function analysisInput() {
   analysisOptions.searchInput = idVin_analysisEntry.KadGet();
   if (analysisOptions.searchInput == "") {
     idLbl_analysisResult.KadReset();
-    KadTable.createHTMLGrid({ id: idTab_analysisTable });
+    KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header });
     return;
-  }
-  if (analysisOptions.data === null) {
-    const { analyseData, error } = await KadFile.loadUrlToJSON({
-      variable: "analyseData",
-      url: "../Data/DataLists/SentimentListGerman.json",
-    });
-    if (KadLog.errorChecked(error, "Coult not receive data fpr 'Analysis'", error)) return;
-    analysisOptions.data = analyseData;
   }
   analysisOptions.results = analysisAnalyze();
   if (analysisOptions.results != null) {
@@ -66,8 +59,8 @@ function analysisAnalyze() {
   });
   for (let j = words.length - 1; j >= 0; j--) {
     let word = words[j];
-    if (analysisOptions.data[word]) {
-      const wordScore = analysisOptions.data[word];
+    const wordScore = analysisOptions.data.get(word);
+    if (wordScore) {
       results.wordCount++;
       results.singleScores += wordScore;
       if (!results.analysedWords.hasOwnProperty(word)) {
@@ -89,7 +82,7 @@ function analysisCreateOutput() {
   if (analysisOptions.results.totalScore === null) {
     idLbl_analysisResult.KadSetText("~~~~~~~");
     dbID("idProg_analysisProgress").setAttribute("value", 100);
-    KadTable.createHTMLGrid({ id: idTab_analysisTable });
+    KadTable.createHTMLGrid({ id: idTab_analysisTable, header: analysisOptions.header });
   } else {
     const score = convertScore(analysisOptions.results.totalScore);
     const plural = analysisOptions.results.wordCount == 1 ? "Wort" : "Wörter";
@@ -115,7 +108,6 @@ function analysisCreateTable() {
       negativeData.push(data[key]);
     }
   }
-
   const body = [
     { data: positiveData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
     { data: positiveData.map((item) => convertScore(item.score)) },

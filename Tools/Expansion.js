@@ -1,4 +1,4 @@
-import { Data_Materials } from "../General/MainData.js";
+import { Data_Materials } from "../KadData/KadDataMaterial.js";
 import { dbID, initEL, KadArray, KadDOM, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { materialOptions } from "./Material.js";
 

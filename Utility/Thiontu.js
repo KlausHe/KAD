@@ -1,4 +1,4 @@
-import { Data_Leetspeak } from "../General/MainData.js";
+import { Data_Leetspeak } from "../KadData/KadData.js";
 import { dbCL, initEL, KadDOM, KadRandom, KadString } from "../KadUtils/KadUtils.js";
 const thiontuData = {
   input: "",

@@ -1,3 +1,6 @@
 [submodule "KadUtils"]
 	path = KadUtils
 	url = https://github.com/KlausHe/KadUtils.git
+[submodule "KadData"]
+	path = KadData
+	url = https://github.com/KlausHe/KadData.git

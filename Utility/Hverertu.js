@@ -1,4 +1,4 @@
-import { Data_Country_CodesIso3166 } from "../General/MainData.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadData.js";
 import { dbID, initEL, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 
 const hverertuOptions = {
