@@ -62,7 +62,7 @@ function newsCheckRequestCount() {
 async function newsGetData() {
   if (newsCheckRequestCount()) return;
   const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articlesURL });
-  if (KadLog.errorChecked(error, "Could not receive data for 'Overview/News'", error)) return;
+  if (KadLog.errorChecked(error, "Could not receive data for 'Overview/ ->News'", error)) return;
   newsData.articles = data.news;
   newsData.articles = newsData.articles.filter((n) => n.type == "story");
   newsData.currIndex = 0;
