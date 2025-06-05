@@ -1,8 +1,8 @@
-import { hostDebug, initEL, KadDOM, KadFile, KadLog, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadDataCountries.js";
+import { initEL, KadDOM, KadValue } from "../KadUtils/KadUtils.js";
 
 const storreOptions = {
-  url: `https://restcountries.com/v3.1/all?fields=translations,flags,population,area`,
-  data: [],
+  data: Data_Country_CodesIso3166,
   dataType: "area",
   streak: 0,
   gameState: 1,
@@ -27,10 +27,9 @@ initEL({ id: idBtn_storreQuestionA, fn: storreQuestion, dataset: ["set", "A"] })
 initEL({ id: idBtn_storreQuestionB, fn: storreQuestion, dataset: ["set", "B"] });
 
 export function clear_cl_Storre() {
-  storreOptions.data = null;
-  storreReset();
   KadDOM.enableBtn(idBtn_storreQuestionA, false);
   KadDOM.enableBtn(idBtn_storreQuestionB, false);
+  storreReset();
 }
 
 function storreReset() {
@@ -58,22 +57,17 @@ function storreStartPopulation() {
 }
 
 async function storreGetData() {
-  if (storreOptions.data == null) {
-    const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: storreOptions.url });
-    if (KadLog.errorChecked(error, "Could not receive data for 'Storre'")) return;
-    storreOptions.data = data;
-  }
   KadDOM.enableBtn(idBtn_storreQuestionA, true);
   KadDOM.enableBtn(idBtn_storreQuestionB, true);
-  if (!hostDebug()) storreOptions.data = KadRandom.shuffleData(storreOptions.data);
+  // if (!hostDebug()) storreOptions.data = KadRandom.shuffleData(storreOptions.data);
   storreDisplayQuestions();
 }
 
 function storreDisplayQuestions() {
   const offsetA = storreOptions.streak % 2 == 0 ? 0 : 1;
-  const valA = storreOptions.data[storreOptions.streak + offsetA].translations.deu.common;
+  const valA = storreOptions.data[storreOptions.streak + offsetA].nameDECommon;
   const offsetB = storreOptions.streak % 2 == 0 ? 1 : 0;
-  const valB = storreOptions.data[storreOptions.streak + offsetB].translations.deu.common;
+  const valB = storreOptions.data[storreOptions.streak + offsetB].nameDECommon;
   idBtn_storreQuestionA.KadReset({ resetValue: valA });
   idBtn_storreQuestionB.KadReset({ resetValue: valB });
 }

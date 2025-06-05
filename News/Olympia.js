@@ -1,8 +1,11 @@
+// https://github.com/samayo/country-json?tab=readme-ov-file
+// //https://d-d-r.de/ddr-bevoelkerung.html
+
 import { Data_Olympia } from "../KadData/Data_Olympiadaten.js";
-import { KadArray, KadDOM, KadFile, KadLog, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadDataCountries.js";
+import { KadArray, KadDOM, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
-  URLFlags: `https://restcountries.com/v3.1/all?fields=cioc,flags,population`,
   baseData: new Map(Data_Olympia),
   countryData: null,
   data: null,
@@ -11,60 +14,60 @@ const olympiaOptions = {
   sortTotal: false,
   sortMedals: false,
   origEventArray: [
-    ["Sommerspiele", 1896],
-    ["Sommerspiele", 1900],
-    ["Sommerspiele", 1904],
-    ["Sommerspiele", 1908],
-    ["Sommerspiele", 1912],
-    ["Sommerspiele", 1920],
-    ["Winterspiele", 1924],
-    ["Sommerspiele", 1924],
-    ["Winterspiele", 1928],
-    ["Sommerspiele", 1928],
-    ["Winterspiele", 1932],
-    ["Sommerspiele", 1932],
-    ["Winterspiele", 1936],
-    ["Sommerspiele", 1936],
-    ["Winterspiele", 1948],
-    ["Sommerspiele", 1948],
-    ["Winterspiele", 1952],
-    ["Sommerspiele", 1952],
-    ["Winterspiele", 1956],
-    ["Sommerspiele", 1956],
-    ["Winterspiele", 1960],
-    ["Sommerspiele", 1960],
-    ["Winterspiele", 1964],
-    ["Sommerspiele", 1964],
-    ["Winterspiele", 1968],
-    ["Sommerspiele", 1968],
-    ["Winterspiele", 1972],
-    ["Sommerspiele", 1972],
-    ["Winterspiele", 1976],
-    ["Sommerspiele", 1976],
-    ["Winterspiele", 1980],
-    ["Sommerspiele", 1980],
-    ["Winterspiele", 1984],
-    ["Sommerspiele", 1984],
-    ["Winterspiele", 1988],
+    ["Sommerspiele", 2024],
+    ["Winterspiele", 2022],
+    ["Sommerspiele", 2020],
+    ["Winterspiele", 2018],
+    ["Sommerspiele", 2016],
+    ["Winterspiele", 2014],
+    ["Sommerspiele", 2012],
+    ["Winterspiele", 2010],
+    ["Sommerspiele", 2008],
+    ["Winterspiele", 2006],
+    ["Sommerspiele", 2004],
+    ["Winterspiele", 2002],
+    ["Sommerspiele", 2000],
+    ["Winterspiele", 1998],
+    ["Sommerspiele", 1996],
+    ["Winterspiele", 1994],
+    ["Sommerspiele", 1992],
     ["Sommerspiele", 1988],
     ["Winterspiele", 1992],
-    ["Sommerspiele", 1992],
-    ["Winterspiele", 1994],
-    ["Sommerspiele", 1996],
-    ["Winterspiele", 1998],
-    ["Sommerspiele", 2000],
-    ["Winterspiele", 2002],
-    ["Sommerspiele", 2004],
-    ["Winterspiele", 2006],
-    ["Sommerspiele", 2008],
-    ["Winterspiele", 2010],
-    ["Sommerspiele", 2012],
-    ["Winterspiele", 2014],
-    ["Sommerspiele", 2016],
-    ["Winterspiele", 2018],
-    ["Sommerspiele", 2020],
-    ["Winterspiele", 2022],
-    ["Sommerspiele", 2024],
+    ["Winterspiele", 1988],
+    ["Sommerspiele", 1984],
+    ["Winterspiele", 1984],
+    ["Sommerspiele", 1980],
+    ["Winterspiele", 1980],
+    ["Sommerspiele", 1976],
+    ["Winterspiele", 1976],
+    ["Sommerspiele", 1972],
+    ["Winterspiele", 1972],
+    ["Sommerspiele", 1968],
+    ["Winterspiele", 1968],
+    ["Sommerspiele", 1964],
+    ["Winterspiele", 1964],
+    ["Sommerspiele", 1960],
+    ["Winterspiele", 1960],
+    ["Sommerspiele", 1956],
+    ["Winterspiele", 1956],
+    ["Sommerspiele", 1952],
+    ["Winterspiele", 1952],
+    ["Sommerspiele", 1948],
+    ["Winterspiele", 1948],
+    ["Sommerspiele", 1936],
+    ["Winterspiele", 1936],
+    ["Sommerspiele", 1932],
+    ["Winterspiele", 1932],
+    ["Sommerspiele", 1928],
+    ["Winterspiele", 1928],
+    ["Sommerspiele", 1924],
+    ["Sommerspiele", 1912],
+    ["Winterspiele", 1924],
+    ["Sommerspiele", 1920],
+    ["Sommerspiele", 1908],
+    ["Sommerspiele", 1904],
+    ["Sommerspiele", 1900],
+    ["Sommerspiele", 1896],
   ],
   get events() {
     return olympiaOptions.origEventArray;
@@ -82,21 +85,15 @@ initEL({ id: idBtn_olympiaSortMedals, fn: olympiaSortByMedals });
 initEL({ id: idBtn_olympiaSortTotal, fn: olympiaSortByTotal });
 
 export function clear_cl_Olympia() {
+  olympiaOptions.countryData = {};
+  for (let obj of Data_Country_CodesIso3166) {
+    olympiaOptions.countryData[obj.cioc] = { cioc: obj.cioc, flag: obj.flagSvgURL, population: obj.population };
+  }
   idSel_olympiaEvent.KadReset();
   olympiaUpdate();
 }
 
-async function olympiaUpdate() {
-  // olympiaOptions.baseData = new Map(Data_Olympia);
-  if (olympiaOptions.countryData === null) {
-    const { dataCountries, error } = await KadFile.loadUrlToJSON({ variable: "dataCountries", url: olympiaOptions.URLFlags });
-    if (KadLog.errorChecked(error, "Could not receive data for 'Olympia'", error)) return;
-    olympiaOptions.countryData = {};
-    for (let obj of dataCountries) {
-      olympiaOptions.countryData[obj.cioc] = { cioc: obj.cioc, flag: obj.flags.svg, population: obj.population };
-    }
-  }
-
+function olympiaUpdate() {
   const eventname = idSel_olympiaEvent.KadGet({ textContent: true });
   const eventData = olympiaOptions.baseData.get(eventname);
 

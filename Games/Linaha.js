@@ -1,5 +1,5 @@
-import { Data_Country_CodesIso3166 } from "../KadData/KadData.js";
-import { dbID, dbIDStyle, initEL, KadColor, KadCSS, KadDOM, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadDataCountries.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadDOM, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const linahaOptions = {
@@ -57,7 +57,7 @@ export function clear_cl_Linaha() {
 }
 
 function linahaCreateAvaible() {
-  linahaOptions.avaibleCodeIndex = Data_Country_CodesIso3166.map((item) => item.alpha2);
+  linahaOptions.avaibleCodeIndex = Data_Country_CodesIso3166.map((item) => item.cca2);
   linahaOptions.avaibleCodeIndex = KadRandom.shuffleData(linahaOptions.avaibleCodeIndex);
 }
 
@@ -194,47 +194,6 @@ function linahaCreateButtons() {
 
   KadLog.log(body, valueIndex);
   KadTable.createHTMLGrid({ id: idTab_linahaTable, body });
-  return;
-
-  for (let y = 0; y < rows; y++) {
-    const rowDiv = KadTable.addCell(
-      null,
-      {
-        names: ["linahaAnswers", y],
-        type: "Div",
-        createClass: ["cl_SquareButtonFlex"],
-        ui: {
-          uiFlex: "horizontal",
-        },
-      },
-      parent
-    );
-    for (let x = 0; x < cols; x++) {
-      const index = y * cols + x;
-      KadTable.addCell(
-        null,
-        {
-          names: ["linahaAnswers", index],
-          type: "Btn",
-          subGroup: "text",
-          ui: {
-            uiSize: linahaOptions.selA == 1 ? "linahaBtn" : "height2",
-            uiType: linahaOptions.selA == 1 ? "transparent" : "",
-          },
-          style: {
-            margin: KadCSS.getRoot({ value: "gridGap", noUnit: false }),
-            border: KadCSS.getRoot({ value: "UIBorderThin", noUnit: false }),
-          },
-          text: "...",
-          onclick: () => {
-            linahaAnswered(index);
-          },
-        },
-        rowDiv
-      );
-      linahaShowData(`idBtn_child_linahaAnswers_${index}`, linahaOptions.selA, index);
-    }
-  }
 }
 
 function linahaDataType(type) {

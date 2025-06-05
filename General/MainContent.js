@@ -569,7 +569,7 @@ export const rawContentGrid = {
     heritage: ["griechisch", "Olympia"],
     info: "Bevölkerungsdaten sind auf 2020 - 2024 bezogen und sind nicht geeignet für ältere Spiele!",
     source: [
-      ["Daten", "https://de.wikipedia.org"],
+      ["Daten", "https://de.wikipedia.org/wiki/Medaillenspiegel_der_Olympischen_Sommerspiele_1896"],
       ["Daten", "https://restcountries.com/"],
     ],
     size: [2, 1],

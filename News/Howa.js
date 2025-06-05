@@ -1,8 +1,9 @@
 // Imags weather_code from openweathermap
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 const reverseGeocoder = new BDCReverseGeocode();
-import { Data_Country_GermanDistrics, Data_Nummernschild } from "../KadData/KadData.js";
-import { dbID, dbIDStyle, initEL, KadDate, KadFile, KadInteraction, KadLog, KadValue, objectLength } from "../KadUtils/KadUtils.js";
+import { Data_Nummernschild } from "../KadData/KadData.js";
+import { Data_Country_GermanDistrics } from "../KadData/KadDataCountries.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadDate, KadFile, KadInteraction, KadLog, KadValue, objectLength } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -156,9 +157,13 @@ async function howaGeocodingCity() {
 function howaCleanLocation() {
   reverseGeocoder.getClientLocation({ latitude: howaOptions.latitude, longitude: howaOptions.longitude }, (result) => {
     howaOptions.city = result.city;
-    weatherMaps.district = result.principalSubdivisionCode.split("-")[1].toLowerCase();
+    if (result.principalSubdivisionCode) {
+      weatherMaps.district = result.principalSubdivisionCode.split("-")[1].toLowerCase();
+      if (!Data_Country_GermanDistrics.map((d) => d.abbr).includes(weatherMaps.district)) weatherMaps.district = "de";
+    } else {
+      weatherMaps.district = "de";
+    }
     howaReqestData();
-    if (!Data_Country_GermanDistrics.map((d) => d.abbr).includes(weatherMaps.district)) weatherMaps.district = "de";
     for (let node of dbID("idSel_howaMapsDistrict").options) {
       if (node.value == weatherMaps.district) {
         node.selected = true;
@@ -179,7 +184,6 @@ async function howaReqestData() {
   howaOptions.data.forecast = responseForecast;
   dbID("idP_howaCurrentText").textContent = `${howaOptions.city}: ${howaOptions.data.current.current.temperature_2m}°C`;
   dbID("idImg_howaCurrentImage").src = `./News/AssetsHowa/OWM/${howaWeatherIcons.data[howaOptions.data.current.current.weather_code]}.png`;
-
   howaUpdateGraphData();
 }
 
@@ -197,13 +201,13 @@ function howaUpdateGraphData() {
     max: range(point.temperature_2m_max, 1),
   };
   caHO.redraw();
-  function range(arr, dir) {
-    const round = 1;
-    if (dir == 0) {
-      return Math.floor((Math.min(...arr) - 1) / round) * round;
-    } else {
-      return Math.ceil((Math.max(...arr) + 1) / round) * round;
-    }
+}
+function range(arr, dir) {
+  const round = 1;
+  if (dir == 0) {
+    return Math.floor((Math.min(...arr) - 1) / round) * round;
+  } else {
+    return Math.ceil((Math.max(...arr) + 1) / round) * round;
   }
 }
 
@@ -238,10 +242,20 @@ function howaDrawData() {
   const offsetTop = rowHeight * 0.25;
   const barHeight = rowHeight - 2 * offsetTop;
   const dayWidth = howaOptions.canvas.w * 0.22;
-  // const dayWidth = howaOptions.canvas.w * 0.08;
   const tempWidth = howaOptions.canvas.w * 0.1;
   const imgWidth = howaOptions.canvas.w * 0.1;
 
+  const canvasContext = caHO.drawingContext;
+  let gradient = canvasContext.createLinearGradient(dayWidth + tempWidth + imgWidth, 0, howaOptions.canvas.w - tempWidth, 0);
+  const temperatureMin = Math.min(...graph.data.map((item) => item[0]));
+  const temperatureMax = Math.max(...graph.data.map((item) => item[1]));
+  const hueMin = Math.round(cappedColorRange(temperatureMin));
+  const hueMid = Math.round(cappedColorRange((temperatureMin + temperatureMax) / 2));
+  const hueMax = Math.round(cappedColorRange(temperatureMax));
+
+  gradient.addColorStop(0, KadColor.formatAsCSS({ colorArray: [hueMin, 100, 60], type: "HSL" }));
+  gradient.addColorStop(0.5, KadColor.formatAsCSS({ colorArray: [hueMid, 100, 60], type: "HSL" }));
+  gradient.addColorStop(1, KadColor.formatAsCSS({ colorArray: [hueMax, 100, 60], type: "HSL" }));
   for (let i = 0; i < len; i++) {
     const point = graph.data[i];
     const y = offsetTop + rowHeight * i;
@@ -259,18 +273,16 @@ function howaDrawData() {
 
     const x = howaMap(point[0]);
     const barWidth = howaMap(point[1]);
-    const hue = cappedColorRange(point[1]);
-    caHO.fill(hue, 100, 50);
+    canvasContext.fillStyle = gradient;
     caHO.rect(x, y, barWidth - x, barHeight, 10);
   }
-
   function howaMap(p) {
     return KadValue.mapping(p, graph.min, graph.max, dayWidth + tempWidth + imgWidth, howaOptions.canvas.w - tempWidth);
   }
 }
 
 function cappedColorRange(temp) {
-  return KadValue.mapping(temp, 0, 35, 240, 360, true);
+  return KadValue.mapping(temp, 5, 30, 250, 0, true);
 }
 const howaWeatherIcons = {
   imageFromCode(code) {

@@ -160,7 +160,6 @@ select {
   border-top-right-radius: var(--UIRadius);
   border-bottom: var(--UIBorderBottom);
   max-width: var(--UIWidth16);
-  size: 6;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   padding-right: var(--padding);
@@ -176,7 +175,6 @@ button {
   position: relative;
   width: var(--UIWidth6);
   text-align: center;
-  /* -webkit-box-align: center; */
   align-items: center;
   cursor: pointer;
   transition: all var(--transitionTimeInfo) ease-in-out;

@@ -1,4 +1,4 @@
-import { Data_Country_CodesIso3166 } from "../KadData/KadData.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadDataCountries.js";
 import { dbID, initEL, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 
 const hverertuOptions = {
@@ -71,7 +71,7 @@ function hverertuHerkunft({ data }) {
   } else {
     hverertuOptions.data.Herkunft.value = data.country.map((obj) => {
       for (let item of Data_Country_CodesIso3166) {
-        if (item.alpha2 == obj.country_id) return item.nameDE;
+        if (item.cca2 == obj.country_id) return item.nameDE;
       }
     });
   }
