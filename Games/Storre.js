@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../KadData/KadDataCountries.js";
-import { initEL, KadDOM, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadDOM, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 
 const storreOptions = {
   data: Data_Country_CodesIso3166,
@@ -59,7 +59,7 @@ function storreStartPopulation() {
 async function storreGetData() {
   KadDOM.enableBtn(idBtn_storreQuestionA, true);
   KadDOM.enableBtn(idBtn_storreQuestionB, true);
-  // if (!hostDebug()) storreOptions.data = KadRandom.shuffleData(storreOptions.data);
+  storreOptions.data = KadRandom.shuffleData(storreOptions.data);
   storreDisplayQuestions();
 }
 

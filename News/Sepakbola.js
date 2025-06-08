@@ -244,7 +244,6 @@ function sepakbolaTableReturn(data) {
     },
     {
       type: "URLImg",
-
       data: data.map((item) => sepakbolaImageURL(item.teamIconUrl)),
       settings: { description: "Logo", title: data.map((item) => item.teamName), align: "center", noBorder: "right", imgSize: "olympiaImg" },
     },
