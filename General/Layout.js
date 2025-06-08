@@ -1,4 +1,4 @@
-import { dbCL, dbCLStyle, dbID, dbIDStyle, getFavicon, hostDebug, KadArray, KadCSS, KadDOM, KadLog, KadTable } from "../KadUtils/KadUtils.js";
+import { dbCL, dbCLStyle, dbID, dbIDStyle, getFavicon, hostDebug, KadArray, KadDOM, KadLog, KadTable } from "../KadUtils/KadUtils.js";
 import { updateMasterSelect } from "../Main.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
@@ -19,6 +19,7 @@ export const contentLayout = {
   origUniverse: [],
   navContent: {},
   namelistContent: {},
+  gridRows: 3,
   get GlobalSettings() {
     if (!userLoggedIn() && !hostDebug()) return ["cl_GeneralSettings", "cl_ColorSettings"];
     return Object.keys(contentGrid).filter((key) => {
@@ -93,8 +94,8 @@ export function resizeGrid() {
   const winWidth = window.innerWidth;
   const minWidth = globalValues.mediaSizes.divGridMinWidth;
   const calcX = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols
-  if (KadCSS.getRoot({ value: "gridRowLength" }) != calcX) {
-    KadCSS.setRoot({ variable: "gridRowLength", value: calcX });
+  if (contentLayout.gridRows != calcX) {
+    contentLayout.gridRows = calcX;
     navClick(contentLayout.prevNavContent);
   }
   let navNames = dbCL("cl_navNames", null);
@@ -171,7 +172,7 @@ export function createGridLayout(layoutName = contentLayout.defaultPage, list = 
   let contentList = list != null ? list : layoutContentList(layoutName);
   if (KadLog.errorChecked(contentList == [], "No Grid for gridTemplateAreas provided")) return;
   // fill list with data
-  const columns = contentList.length == 1 ? 1 : KadCSS.getRoot({ value: "gridRowLength" }) + 1;
+  const columns = contentList.length == 1 ? 1 : contentLayout.gridRows + 1;
   let gridData = [];
 
   if (columns === 1) {

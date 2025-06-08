@@ -27,7 +27,6 @@
   --navbarHeight: 2.5rem;
   --gridtitleHeight: 2.083rem;
   /* GRID SIZES */
-  --gridRowLength: 3;
   --gridGap: 0.25rem;
   --gridMarginSideFactor: 0.5;
   --gridMarginSide: calc(var(--UIHeight1) * var(--gridMarginSideFactor));
@@ -178,7 +177,6 @@ body {
 main {
   min-height: calc(100vh - (2 * var(--navbarHeight)) - 2 * var(--gridGap));
   display: grid;
-  grid-template-rows: repeat(var(--gridRowLength), auto);
   grid-gap: var(--padding);
   margin: calc(var(--gridGap) + var(--navbarHeight)) var(--gridMarginSide) var(--gridGap) var(--gridMarginSide);
   z-index: 1;

@@ -183,7 +183,7 @@ async function howaReqestData() {
   howaOptions.data.current = responseCurrent;
   howaOptions.data.forecast = responseForecast;
   dbID("idP_howaCurrentText").textContent = `${howaOptions.city}: ${howaOptions.data.current.current.temperature_2m}°C`;
-  dbID("idImg_howaCurrentImage").src = `./News/AssetsHowa/OWM/${howaWeatherIcons.data[howaOptions.data.current.current.weather_code]}.png`;
+  dbID("idImg_howaCurrentImage").src = `./News/AssetsHowa/${howaWeatherIcons.data[howaOptions.data.current.current.weather_code]}.png`;
   howaUpdateGraphData();
 }
 
@@ -215,7 +215,7 @@ const caHO = new p5((c) => {
   c.preload = function () {
     for (let value of Object.values(howaWeatherIcons.data)) {
       if (howaWeatherIcons.images.hasOwnProperty(value)) continue;
-      howaWeatherIcons.images[value] = c.loadImage(`./News/AssetsHowa/OWM/${value}.png`);
+      howaWeatherIcons.images[value] = c.loadImage(`./News/AssetsHowa/${value}.png`);
     }
   };
   c.setup = function () {
@@ -293,7 +293,7 @@ const howaWeatherIcons = {
   data: {
     0: "clear",
     1: "clear",
-    2: "cloud",
+    2: "clear",
     3: "cloud",
     45: "clear",
     48: "fog",
