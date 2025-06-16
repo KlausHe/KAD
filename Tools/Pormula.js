@@ -1,16 +1,20 @@
-import { dbCL, dbID, dbIDStyle, initEL, KadDOM, KadTable, KadValue, objectLength } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, dbIDStyle, initEL, KadDOM, KadValue } from "../KadUtils/KadUtils.js";
 
 const pormulaOptions = {
   valuesOrig: [3, 5, 8],
+  formulaResult: "",
   messages: [],
   reg: null,
   data: {
     userPoints: [],
     uniquePoints: [],
     uniqueX: [],
+    resultPoints: [],
+    curvePoints: [],
+    xRange: [0, 1],
     size: 3,
     minSize: 2,
-    maxSize: 11,
+    maxSize: 8,
   },
   selType: null,
   regOptionsOrig: {
@@ -132,8 +136,13 @@ const pormulaOptions = {
   },
 };
 
-initEL({ id: idBtn_pormulaBestFit, fn: pormulaBestFit });
-initEL({ id: idBtn_pormulaPolyFit, fn: pormulaPolyFit });
+initEL({ id: idBtn_pormulaTypeSelectLinear, fn: () => pormulaGetType("idBtn_pormulaTypeSelectLinear", "Linear"), resetValue: "Linear" });
+initEL({ id: idBtn_pormulaTypeSelectExponential, fn: () => pormulaGetType("idBtn_pormulaTypeSelectExponential", "Exponential"), resetValue: "Exponential" });
+initEL({ id: idBtn_pormulaTypeSelectLogarithmus, fn: () => pormulaGetType("idBtn_pormulaTypeSelectLogarithmus", "Logarithmus"), resetValue: "Logarithmus" });
+initEL({ id: idBtn_pormulaTypeSelectPotenz, fn: () => pormulaGetType("idBtn_pormulaTypeSelectPotenz", "Potenz"), resetValue: "Potenz" });
+initEL({ id: idBtn_pormulaBestFit, fn: pormulaBestFit, resetValue: "Fit Best" });
+initEL({ id: idBtn_pormulaTypeSelectPolynom, fn: () => pormulaGetType("idBtn_pormulaTypeSelectPolynom", "Polynom"), resetValue: "Polynom" });
+initEL({ id: idBtn_pormulaPolyFit, fn: pormulaPolyFit, resetValue: "Fit Polynom" });
 initEL({ id: idVin_pormulaPrecision, fn: pormulaCalculate, resetValue: pormulaOptions.regOptionsOrig.precision });
 initEL({ id: idVin_pormulaOrder, fn: pormulaCalculate, resetValue: pormulaOptions.regOptionsOrig.order });
 initEL({ id: idBtn_pormulaSubInput, fn: pormulaSubInput });
@@ -157,36 +166,9 @@ initEL({ id: idVin_Pormula_x6, fn: pormulaCalculate, resetValue: 7 });
 initEL({ id: idVin_Pormula_y6, fn: pormulaCalculate, resetValue: 7 });
 initEL({ id: idVin_Pormula_x7, fn: pormulaCalculate, resetValue: 8 });
 initEL({ id: idVin_Pormula_y7, fn: pormulaCalculate, resetValue: 8 });
-initEL({ id: idVin_Pormula_x8, fn: pormulaCalculate, resetValue: 9 });
-initEL({ id: idVin_Pormula_y8, fn: pormulaCalculate, resetValue: 9 });
-initEL({ id: idVin_Pormula_x9, fn: pormulaCalculate, resetValue: 10 });
-initEL({ id: idVin_Pormula_y9, fn: pormulaCalculate, resetValue: 10 });
-initEL({ id: idVin_Pormula_x10, fn: pormulaCalculate, resetValue: 11 });
-initEL({ id: idVin_Pormula_y10, fn: pormulaCalculate, resetValue: 11 });
-initEL({ id: idVin_Pormula_x11, fn: pormulaCalculate, resetValue: 12 });
-initEL({ id: idVin_Pormula_y11, fn: pormulaCalculate, resetValue: 12 });
 
 export function clear_cl_Pormula() {
-  const selectParent = dbID("idDiv_PormulaTypeSelect");
-  KadDOM.clearFirstChild(selectParent);
-  for (let i = 0; i < objectLength(pormulaOptions.types); i++) {
-    KadTable.addCell(
-      null,
-      {
-        names: ["pormulaTypeSelect", i],
-        type: "Btn",
-        subGroup: " text",
-        createClass: ["clBtn_pormulaTypeSelect"],
-        text: Object.keys(pormulaOptions.types)[i],
-        onclick: () => {
-          pormulaGetType(`idBtn_child_pormulaTypeSelect_${i}`, Object.keys(pormulaOptions.types)[i]);
-        },
-      },
-      selectParent
-    );
-  }
   pormulaGetType();
-
   pormulaOptions.regOptions.order = idVin_pormulaOrder.KadReset();
   pormulaOptions.regOptions.precision = idVin_pormulaPrecision.KadReset();
   idVin_pormulaPointEntryA.KadReset();
@@ -196,11 +178,13 @@ export function clear_cl_Pormula() {
   pormulaOptions.data.size = pormulaOptions.valuesOrig.length;
   const inputParent = dbCL("clDiv_pormulaInput", null);
   for (let i = 0; i < inputParent.length; i++) {
-    const x = i < pormulaOptions.data.size ? i + 1 : "";
+    const x = i < pormulaOptions.data.size ? i * 2 + 1 : "";
     const y = i < pormulaOptions.data.size ? pormulaOptions.valuesOrig[i] : "";
     dbID(`idVin_Pormula_x${i}`).KadReset({ resetValue: x });
     dbID(`idVin_Pormula_y${i}`).KadReset({ resetValue: y });
   }
+
+  pormulaChart.canvas = new Chart(idCanv_promula, pormulaChart.config);
   pormulaDirInput(0); // initiate hiding/showing of input rows
   pormulaCalculate();
 }
@@ -225,7 +209,7 @@ function pormulaDirInput(dir) {
   pormulaCalculate();
 }
 
-function pormulaGetType(id = null, type) {
+function pormulaGetType(id, type) {
   let cl = dbCL("clBtn_pormulaTypeSelect", null);
   for (let i = 0; i < cl.length; i++) {
     KadDOM.btnColor(cl[i]);
@@ -241,19 +225,18 @@ function pormulaGetType(id = null, type) {
 }
 
 function pormulaReadInputs() {
-  //no logic, only gathering informations
   pormulaOptions.regOptions.order = idVin_pormulaOrder.KadGet();
   pormulaOptions.regOptions.precision = idVin_pormulaPrecision.KadGet();
   pormulaOptions.data.userPoints = [];
   pormulaOptions.data.uniquePoints = [];
   pormulaOptions.data.uniqueX = [];
   for (let i = 0; i < pormulaOptions.data.size; i++) {
-    const x = dbID(`idVin_Pormula_x${i}`).KadGet({ failSafe: i, noPlaceholder: true });
+    const x = dbID(`idVin_Pormula_x${i}`).KadGet({ failSafe: i * 2 + 1, noPlaceholder: true });
     const y = dbID(`idVin_Pormula_y${i}`).KadGet({ failSafe: pormulaOptions.valuesOrig[i], noPlaceholder: true });
     if (x != null && y != null) {
       pormulaOptions.data.userPoints.push([x, y]);
       if (!pormulaOptions.data.uniqueX.includes(x)) {
-        pormulaOptions.data.uniquePoints.push([x, y]);
+        pormulaOptions.data.uniquePoints.push({ x, y });
         pormulaOptions.data.uniqueX.push(x);
       }
     }
@@ -269,16 +252,17 @@ function pormulaCalculate() {
     pormulaError();
     return;
   }
-  pormulaRegressioin();
+  pormulaRegression();
 }
 
-function pormulaRegressioin() {
+function pormulaRegression() {
   const regType = pormulaOptions.types[pormulaOptions.selType];
   regType.calc();
   pormulaPoint();
-  const string = regType.result(pormulaOptions.reg.equation);
-  dbID("idP_pormulaResult").innerHTML = string;
+  pormulaOptions.formulaResult = regType.result(pormulaOptions.reg.equation);
+  dbID("idP_pormulaResult").innerHTML = pormulaOptions.formulaResult;
   dbID("idLbl_pormulaAccuracy").textContent = `${(pormulaOptions.reg.r2 * 100).toFixed(2)}%`;
+  pormulaUpdateChart();
 }
 
 function pormulaError() {
@@ -288,30 +272,24 @@ function pormulaError() {
 
 function pormulaBestFit() {
   let types = Object.keys(pormulaOptions.types);
-  types.pop();
+  const index = types.indexOf("Polynom");
+  types.splice(index, 1);
   let bestType = null;
   let bestR = 0;
-  let bestI = null;
   types.forEach((t, i) => {
-    const regType = pormulaOptions.types[t];
-    regType.calc();
+    pormulaOptions.types[t].calc();
     const cur = pormulaOptions.reg.r2;
     if (bestR < cur) {
       bestR = cur;
       bestType = t;
-      bestI = i;
     }
   });
-
   if (bestType != null) {
-    pormulaGetType(`idBtn_child_pormulaTypeSelect_${bestI}`, bestType);
+    pormulaGetType(`idBtn_pormulaTypeSelect${bestType}`, bestType);
   }
 }
 
 function pormulaPolyFit() {
-  const polyI = objectLength(pormulaOptions.types) - 1;
-  const polyName = Object.keys(pormulaOptions.types)[polyI];
-
   let prevR = null;
   for (let i = 0; i < pormulaOptions.data.uniquePoints.length; i++) {
     const reg = regression.polynomial(pormulaOptions.data.userPoints, {
@@ -329,22 +307,22 @@ function pormulaPolyFit() {
     }
     prevR = newR;
   }
-
   pormulaOptions.regOptions.order = idVin_pormulaOrder.KadReset();
-
-  pormulaGetType(`idBtn_child_pormulaTypeSelect_${polyI}`, polyName);
+  pormulaGetType(`idBtn_pormulaTypeSelectPolynom`, "Polynom");
 }
 
 function pormulaPoint() {
-  let p1 = idVin_pormulaPointEntryA.KadGet();
-  let p2 = idVin_pormulaPointEntryB.KadGet();
-  let p3 = idVin_pormulaPointEntryC.KadGet();
+  let p0 = idVin_pormulaPointEntryA.KadGet();
+  let p1 = idVin_pormulaPointEntryB.KadGet();
+  let p2 = idVin_pormulaPointEntryC.KadGet();
+  let r0 = pormulaOptions.reg.predict(p0);
   let r1 = pormulaOptions.reg.predict(p1);
   let r2 = pormulaOptions.reg.predict(p2);
-  let r3 = pormulaOptions.reg.predict(p3);
-  dbID("idLbl_pormulaPointResultA").textContent = KadValue.number(r1[1], { notation: "scientific", decimals: 2 });
-  dbID("idLbl_pormulaPointResultB").textContent = KadValue.number(r2[1], { notation: "scientific", decimals: 2 });
-  dbID("idLbl_pormulaPointResultC").textContent = KadValue.number(r3[1], { notation: "scientific", decimals: 2 });
+  pormulaOptions.data.resultPoints = [r0, r1, r2];
+
+  dbID("idLbl_pormulaPointResultA").textContent = pormulaOptions.data.resultPoints[0][1];
+  dbID("idLbl_pormulaPointResultB").textContent = pormulaOptions.data.resultPoints[1][1];
+  dbID("idLbl_pormulaPointResultC").textContent = pormulaOptions.data.resultPoints[2][1];
 }
 
 function pormulaInfo() {
@@ -358,5 +336,81 @@ function pormulaInfo() {
     });
     dbID("idLbl_pormulaInfo").innerHTML = text;
     dbIDStyle("idDiv_pormulaInfo").display = "initial";
+  }
+}
+
+//--------------------------------------------------------------------- CHART ------------------------------------------------
+
+const data = {
+  datasets: [
+    {
+      label: "Startpunkte",
+      data: pormulaOptions.data.uniquePoints,
+      backgroundColor: "rgb(5, 117, 3)",
+      borderColor: "rgb(5, 117, 3)",
+    },
+    {
+      label: "Ergebnisspunkte",
+      data: pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] })),
+      backgroundColor: "rgb(255, 11, 11)",
+      borderColor: "rgb(255, 11, 11)",
+    },
+    {
+      label: "Kurve",
+      data: pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] })),
+      showLine: true,
+      tension: 0.2,
+      pointStyle: false,
+      borderColor: "rgb(89, 0, 255)",
+      backgroundColor: "rgb(89, 0, 255)",
+    },
+  ],
+  // Kurve
+};
+
+const pormulaChart = {
+  config: {
+    type: "scatter",
+    data: data,
+    options: {
+      scales: {
+        x: {
+          type: "linear",
+          position: "bottom",
+          min: pormulaOptions.data.xRange[0],
+          max: pormulaOptions.data.xRange.length - 1,
+        },
+      },
+    },
+  },
+  canvas: null,
+};
+
+function pormulaUpdateChart() {
+  if (pormulaChart.canvas == null) return;
+  pormulaUpdateCurve();
+
+  data.datasets[0].data = pormulaOptions.data.uniquePoints;
+  data.datasets[1].data = pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] }));
+  data.datasets[2].data = pormulaOptions.data.curvePoints;
+
+  pormulaChart.canvas.update();
+}
+
+function pormulaUpdateCurve() {
+  pormulaOptions.data.xRange = [...pormulaOptions.data.uniquePoints.map((item) => item.x), ...pormulaOptions.data.resultPoints.map((points) => points[0])];
+
+  let min = Math.floor(Math.min(...pormulaOptions.data.xRange));
+  let max = Math.ceil(Math.max(...pormulaOptions.data.xRange));
+  const resolution = 20;
+  const step = (max - min) / resolution;
+  min = Math.floor(min - step);
+  max = Math.floor(max + step);
+
+  pormulaChart.canvas.options.scales.x.min = min;
+  pormulaChart.canvas.options.scales.x.max = max;
+  pormulaOptions.data.curvePoints = [];
+  for (let x = min; x <= max + step; x += step) {
+    pormulaOptions.data.curvePoints.push({ x, y: pormulaOptions.reg.predict(x)[1] });
   }
 }

@@ -1,1 +1,1 @@
-export const debugDefaultPage = "cl_Howa";
+export const debugDefaultPage = "cl_Thiontu";

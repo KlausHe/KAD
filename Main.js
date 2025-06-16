@@ -79,6 +79,7 @@ export function updateMasterSelect() {
 function globalValueChanged() {
   navClick(idSel_globalValue.KadGet());
 }
+
 /*
 function test() {
   let obj = [];

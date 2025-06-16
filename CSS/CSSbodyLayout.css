@@ -68,6 +68,7 @@
   --UIWidth18: calc(var(--UIHeight1) * 18);
   --UIWidth19: calc(var(--UIHeight1) * 19);
   --UIWidth20: calc(var(--UIHeight1) * 20);
+  --UIWidth25: calc(var(--UIHeight1) * 25);
   --UIWidth30: calc(var(--UIHeight1) * 30);
 
   --rangeHeight: 0.833rem;

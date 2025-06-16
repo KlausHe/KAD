@@ -28,7 +28,7 @@ initEL({ id: idSel_pafadojSelect, fn: pafadojUpdate, selStartValue: 2025, selLis
 
 export function clear_cl_Pafadoj() {
   pafadojOptions.date = idSel_pafadojSelect.KadGet();
-  pafadojUpdate();
+  // pafadojUpdate();
 }
 
 async function pafadojUpdate() {

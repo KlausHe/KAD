@@ -502,6 +502,12 @@ input[imgBtn="subgrid"] {
 [uiSize~="width20"] {
   width: var(--UIWidth20);
 }
+[uiSize~="width25"] {
+  width: var(--UIWidth25);
+}
+[uiSize~="width30"] {
+  width: var(--UIWidth30);
+}
 
 [uiSize~="height2"] {
   height: var(--UIHeight2);

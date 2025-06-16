@@ -9,7 +9,6 @@ const kadarOptions = {
     valueA: null,
     valueB: null,
   },
-
   valueDiffA: 0,
   valueDiffB: 0,
   valueDiffAB: 0,

@@ -32,6 +32,8 @@
   <script src="https://cdn.jsdelivr.net/gh/bigdatacloudapi/js-reverse-geocode-client@latest/bigdatacloud_reverse_geocode.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js" integrity="sha512-0k6FXllQktdobw8Nc8KQN2WtZrOuxpMn7jC2RKCF6LR7EdOhhrg3H5cBPxhs3CFzQVlO6ni1B9SDLUPhBs0Alg==" crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
   <script type="module" src="Main.js"></script>
 </head>
 
@@ -930,13 +932,26 @@
     </section>
     <section class="cl_Pormula">
       <div class="cl_subGrid_Pormula cl_subGrid">
-        <div class="cl_PormulaBestFit">
-          <button id="idBtn_pormulaBestFit">Fit Best</button>
+        <div class="cl_PormulaTypeSelectLinear">
+          <button id="idBtn_pormulaTypeSelectLinear" class="clBtn_pormulaTypeSelect"></button>
         </div>
-        <div class="cl_PormulaTypeSelect" uiFlex="vertical" id="idDiv_PormulaTypeSelect">
+        <div class="cl_PormulaTypeSelectExponential">
+          <button id="idBtn_pormulaTypeSelectExponential" class="clBtn_pormulaTypeSelect"></button>
+        </div>
+        <div class="cl_PormulaTypeSelectLogarithmus">
+          <button id="idBtn_pormulaTypeSelectLogarithmus" class="clBtn_pormulaTypeSelect"></button>
+        </div>
+        <div class="cl_PormulaTypeSelectPotenz">
+          <button id="idBtn_pormulaTypeSelectPotenz" class="clBtn_pormulaTypeSelect"></button>
+        </div>
+        <div class="cl_PormulaTypeSelectPolynom">
+          <button id="idBtn_pormulaTypeSelectPolynom" class="clBtn_pormulaTypeSelect"></button>
+        </div>
+        <div class="cl_PormulaBestFit">
+          <button id="idBtn_pormulaBestFit"></button>
         </div>
         <div class="cl_PormulaPolyFit">
-          <button id="idBtn_pormulaPolyFit">Fit Polynom</button>
+          <button id="idBtn_pormulaPolyFit"></button>
         </div>
         <div class="cl_PormulaPrecision" uiWrap="nowrap">
           <label class="cl_info" id="idLbl_pormulaPrecision" uiRadius="left">Genauigkeit
@@ -959,55 +974,37 @@
             <img class="img_oAdd" alt="oAdd.svg"></img>
           </button>
         </div>
-        <div class="cl_PormulaInputs" id="idDiv_pormulaInputs" uiWrap="nowrap">
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>1</sub></label><input type="number" id="idVin_Pormula_x0" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>1</sub></label><input type="number" id="idVin_Pormula_y0" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>2</sub></label><input type="number" id="idVin_Pormula_x1" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>2</sub></label><input type="number" id="idVin_Pormula_y1" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>3</sub></label><input type="number" id="idVin_Pormula_x2" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>3</sub></label><input type="number" id="idVin_Pormula_y2" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>4</sub></label><input type="number" id="idVin_Pormula_x3" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>4</sub></label><input type="number" id="idVin_Pormula_y3" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>5</sub></label><input type="number" id="idVin_Pormula_x4" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>5</sub></label><input type="number" id="idVin_Pormula_y4" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>6</sub></label><input type="number" id="idVin_Pormula_x5" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>6</sub></label><input type="number" id="idVin_Pormula_y5" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>7</sub></label><input type="number" id="idVin_Pormula_x6" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>7</sub></label><input type="number" id="idVin_Pormula_y6" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>8</sub></label><input type="number" id="idVin_Pormula_x7" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>8</sub></label><input type="number" id="idVin_Pormula_y7" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>9</sub></label><input type="number" id="idVin_Pormula_x8" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>9</sub></label><input type="number" id="idVin_Pormula_y8" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>10</sub></label><input type="number" id="idVin_Pormula_x9" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>10</sub></label><input type="number" id="idVin_Pormula_y9" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>11</sub></label><input type="number" id="idVin_Pormula_x10" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>11</sub></label><input type="number" id="idVin_Pormula_y10" uiRadius="right"></input>
-          </div>
-          <div uiWrap="nowrap" class="clDiv_pormulaInput">
-            <label class="cl_infoCB" uiRadius="left">x<sub>12</sub></label><input type="number" id="idVin_Pormula_x11" uiRadius="right"></input>
-            <label class="cl_infoCB" uiRadius="left">y<sub>12</sub></label><input type="number" id="idVin_Pormula_y11" uiRadius="right"></input>
-          </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs1 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>1</sub></label><input type="number" id="idVin_Pormula_x0" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>1</sub></label><input type="number"
+            id="idVin_Pormula_y0" uiRadius="right"></input>
+        </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs2 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>2</sub></label><input type="number" id="idVin_Pormula_x1" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>2</sub></label><input type="number"
+            id="idVin_Pormula_y1" uiRadius="right"></input>
+        </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs3 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>3</sub></label><input type="number" id="idVin_Pormula_x2" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>3</sub></label><input type="number"
+            id="idVin_Pormula_y2" uiRadius="right"></input>
+        </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs4 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>4</sub></label><input type="number" id="idVin_Pormula_x3" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>4</sub></label><input type="number"
+            id="idVin_Pormula_y3" uiRadius="right"></input>
+        </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs5 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>5</sub></label><input type="number" id="idVin_Pormula_x4" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>5</sub></label><input type="number"
+            id="idVin_Pormula_y4" uiRadius="right"></input>
+        </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs6 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>6</sub></label><input type="number" id="idVin_Pormula_x5" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>6</sub></label><input type="number"
+            id="idVin_Pormula_y5" uiRadius="right"></input>
+        </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs7 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>7</sub></label><input type="number" id="idVin_Pormula_x6" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>7</sub></label><input type="number"
+            id="idVin_Pormula_y6" uiRadius="right"></input>
+        </div>
+        <div uiWrap="nowrap" class="cl_PormulaInputs8 clDiv_pormulaInput">
+          <label class="cl_infoCB" uiRadius="left">x<sub>8</sub></label><input type="number" id="idVin_Pormula_x7" uiRadius="none"></input><label class="cl_infoCB" uiRadius="none">y<sub>8</sub></label><input type="number"
+            id="idVin_Pormula_y7" uiRadius="right"></input>
         </div>
         <div class="cl_PormulaPointEntryA" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">x<sub>1</sub>
@@ -1028,7 +1025,7 @@
           </button>
         </div>
         <div class="cl_PormulaPointResults" uiWrap="nowrap">
-          <label class="cl_info" id="idLbl_pormulaPointResults" uiSize="width12">Ergebnisse für x:</label>
+          <label class="cl_info" id="idLbl_pormulaPointResults" uiSize="width12">Ergebnisse für x<sub>n</sub>:</label>
         </div>
         <div class="cl_PormulaPointResultA" uiWrap="nowrap">
           <label class="cl_infoCB" uiRadius="left">y<sub>1</sub>:</label><label class="cl_info" id="idLbl_pormulaPointResultA" uiSize="width4" uiRadius="right"></label>
@@ -1050,9 +1047,8 @@
         <div class="cl_PormulaAccuracy" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Bestimmtheitsmaß</label><label class="cl_info" id="idLbl_pormulaAccuracy" uiRadius="right"></label>
         </div>
-        <div class="cl_PormulaCanvas">
-          <div id="idCanv_promula">
-          </div>
+        <div class="cl_PormulaCanvas" uiSize="width25">
+          <canvas id="idCanv_promula" style="width: max-content;"></canvas>
         </div>
       </div>
     </section>
@@ -1171,7 +1167,7 @@
     <section class="cl_Boredom">
       <div class="cl_subGrid_Boredom cl_subGrid">
         <div class="cl_BoredomStart">
-          <button id="idBtn_boredomStart" uiRadius="left">Was tun?</button><select id="idSel_boredomLanguage" uiSize="width6" uiRadius="right"></select>
+          <button id="idBtn_boredomStart" uiRadius="left">Was tun?</button>
         </div>
         <div class="cl_BoredomAnswer" uiWrap="nowrap">
           <textarea id="idArea_boredomAnswer"></textarea>
@@ -1441,10 +1437,10 @@
     <section class="cl_Thiontu">
       <div class="cl_subGrid_Thiontu cl_subGrid">
         <div class="cl_ThiontuInputArea">
-          <textarea id="idArea_thiontuInputEntry"></textarea>
+          <textarea id="idArea_thiontuInputEntry" uiSize="width16"></textarea>
         </div>
         <div class="cl_ThiontuOutputArea">
-          <textarea id="idArea_thiontuOutputArea" readonly></textarea>
+          <textarea id="idArea_thiontuOutputArea" uiSize="width16" readonly></textarea>
         </div>
         <div class="cl_ThiontuOptions_A" name="naBtn_ThiontuOptions" uiWrap="nowrap">
           <button class="clBtn_ThiontuOptions"></button>

@@ -327,7 +327,8 @@ export function createSubgrid() {
     childDivArea.gridTemplateRows += "auto";
 
     const arr = KadArray.createArray({ x: contentObj.maingrid.areas[0].length, fillNumber: "auto" }).join(" ");
-    childDivArea.gridTemplateColumns = `${arr}`;
+    // childDivArea.gridTemplateColumns = `${arr}`;
+    childDivArea.gridTemplateColumns = `1fr ${arr} 1fr`;
     childDivArea.gridTemplateAreas = "";
     for (const main of contentObj.maingrid.areas) {
       childDivArea.gridTemplateAreas += `". ${main.join(" ")} ." `;
