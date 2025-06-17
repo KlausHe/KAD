@@ -136,6 +136,48 @@ const pormulaOptions = {
   },
 };
 
+const pormulaChart = {
+  config: {
+    type: "scatter",
+    data: {
+      datasets: [
+        {
+          label: "Startpunkte",
+          data: pormulaOptions.data.uniquePoints,
+          backgroundColor: "rgb(5, 117, 3)",
+          borderColor: "rgb(5, 117, 3)",
+        },
+        {
+          label: "Ergebnisspunkte",
+          data: pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] })),
+          backgroundColor: "rgb(255, 11, 11)",
+          borderColor: "rgb(255, 11, 11)",
+        },
+        {
+          label: "Kurve",
+          data: pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] })),
+          showLine: true,
+          tension: 0.2,
+          pointStyle: false,
+          borderColor: "rgb(89, 0, 255)",
+          backgroundColor: "rgb(89, 0, 255)",
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: {
+          type: "linear",
+          position: "bottom",
+          min: pormulaOptions.data.xRange[0],
+          max: pormulaOptions.data.xRange.length - 1,
+        },
+      },
+    },
+  },
+  canvas: null,
+};
+
 initEL({ id: idBtn_pormulaTypeSelectLinear, fn: () => pormulaGetType("idBtn_pormulaTypeSelectLinear", "Linear"), resetValue: "Linear" });
 initEL({ id: idBtn_pormulaTypeSelectExponential, fn: () => pormulaGetType("idBtn_pormulaTypeSelectExponential", "Exponential"), resetValue: "Exponential" });
 initEL({ id: idBtn_pormulaTypeSelectLogarithmus, fn: () => pormulaGetType("idBtn_pormulaTypeSelectLogarithmus", "Logarithmus"), resetValue: "Logarithmus" });
@@ -184,6 +226,9 @@ export function clear_cl_Pormula() {
     dbID(`idVin_Pormula_y${i}`).KadReset({ resetValue: y });
   }
 
+  if (pormulaChart.canvas != null) {
+    pormulaChart.canvas.destroy();
+  }
   pormulaChart.canvas = new Chart(idCanv_promula, pormulaChart.config);
   pormulaDirInput(0); // initiate hiding/showing of input rows
   pormulaCalculate();
@@ -339,73 +384,16 @@ function pormulaInfo() {
   }
 }
 
-//--------------------------------------------------------------------- CHART ------------------------------------------------
-
-const data = {
-  datasets: [
-    {
-      label: "Startpunkte",
-      data: pormulaOptions.data.uniquePoints,
-      backgroundColor: "rgb(5, 117, 3)",
-      borderColor: "rgb(5, 117, 3)",
-    },
-    {
-      label: "Ergebnisspunkte",
-      data: pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] })),
-      backgroundColor: "rgb(255, 11, 11)",
-      borderColor: "rgb(255, 11, 11)",
-    },
-    {
-      label: "Kurve",
-      data: pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] })),
-      showLine: true,
-      tension: 0.2,
-      pointStyle: false,
-      borderColor: "rgb(89, 0, 255)",
-      backgroundColor: "rgb(89, 0, 255)",
-    },
-  ],
-  // Kurve
-};
-
-const pormulaChart = {
-  config: {
-    type: "scatter",
-    data: data,
-    options: {
-      scales: {
-        x: {
-          type: "linear",
-          position: "bottom",
-          min: pormulaOptions.data.xRange[0],
-          max: pormulaOptions.data.xRange.length - 1,
-        },
-      },
-    },
-  },
-  canvas: null,
-};
-
 function pormulaUpdateChart() {
   if (pormulaChart.canvas == null) return;
-  pormulaUpdateCurve();
-
-  data.datasets[0].data = pormulaOptions.data.uniquePoints;
-  data.datasets[1].data = pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] }));
-  data.datasets[2].data = pormulaOptions.data.curvePoints;
-
-  pormulaChart.canvas.update();
-}
-
-function pormulaUpdateCurve() {
   pormulaOptions.data.xRange = [...pormulaOptions.data.uniquePoints.map((item) => item.x), ...pormulaOptions.data.resultPoints.map((points) => points[0])];
 
   let min = Math.floor(Math.min(...pormulaOptions.data.xRange));
   let max = Math.ceil(Math.max(...pormulaOptions.data.xRange));
   const resolution = 20;
   const step = (max - min) / resolution;
-  min = Math.floor(min - step);
-  max = Math.floor(max + step);
+  min = Math.floor(min - 2 * step);
+  max = Math.ceil(max + 2 * step);
 
   pormulaChart.canvas.options.scales.x.min = min;
   pormulaChart.canvas.options.scales.x.max = max;
@@ -413,4 +401,10 @@ function pormulaUpdateCurve() {
   for (let x = min; x <= max + step; x += step) {
     pormulaOptions.data.curvePoints.push({ x, y: pormulaOptions.reg.predict(x)[1] });
   }
+
+  pormulaChart.config.data.datasets[0].data = pormulaOptions.data.uniquePoints;
+  pormulaChart.config.data.datasets[1].data = pormulaOptions.data.resultPoints.map((points) => ({ x: points[0], y: points[1] }));
+  pormulaChart.config.data.datasets[2].data = pormulaOptions.data.curvePoints;
+
+  pormulaChart.canvas.update();
 }

@@ -857,12 +857,17 @@ export const rawContentGrid = {
     heritage: ["Haiti-Kreolisch", "anordnen"],
     size: [1, 1],
     maingrid: {
-      areas: [["cl_RanjeInput"], ["cl_RanjeList"]],
-      rows: [1],
+      areas: [
+        //
+        ["cl_RanjeInput", "cl_RanjeCanvas"],
+        ["cl_RanjeList", "cl_RanjeCanvas"],
+      ],
+      rows: [1, 0],
     },
     subgrid: [
       ["cl_RanjeInput", "center"],
       ["cl_RanjeList", "center"],
+      ["cl_RanjeCanvas", "left"],
     ],
   },
   //Utility

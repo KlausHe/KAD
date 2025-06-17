@@ -38,7 +38,7 @@ initEL({ id: idBtn_transporteMute, fn: muteAll });
 initEL({ id: idVin_beatmachine_BPM, fn: beatmachineBPMChange, resetValue: beatmachineOptions.BPMOrig });
 
 export function clear_cl_Beatmachine() {
-  //TODO console.log("TODO");
+  //TODO Fix this thing!?!
   initEL({ id: idBtn_beatmachineLoad, beatmachineGetSounds });
   beatmachineOptions.soundsLoaded = false;
   beatmachineOptions.curTime = 0;

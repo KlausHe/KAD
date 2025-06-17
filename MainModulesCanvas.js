@@ -17,6 +17,7 @@ export { canvas_cl_Luas } from "./Tools/Luas.js";
 export { canvas_cl_Middle } from "./Tools/Middle.js";
 export { canvas_cl_Pattern } from "./Tools/Pattern.js";
 export { canvas_cl_Pythagoras } from "./Tools/Pythagoras.js";
+export { canvas_cl_Ranje } from "./Tools/Ranje.js";
 //Utility
 export { canvas_cl_Kaihanga } from "./Utility/Kaihanga.js";
 export { canvas_cl_Kounselor } from "./Utility/Kounselor.js";
