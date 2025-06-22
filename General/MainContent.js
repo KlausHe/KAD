@@ -200,6 +200,32 @@ export const rawContentGrid = {
       ["cl_IbhaluniCanvas", "center"],
     ],
   },
+
+  cl_Kontour: {
+    contentGroup: "Games",
+    name: "Kontour",
+    heritage: ["kreolisch", "größer"],
+    source: [["Daten", "https://www.kaggle.com/datasets/ktochylin/world-countries?resource=download"]],
+    size: [1, 1],
+    maingrid: {
+      areas: [
+        //
+        ["cl_KontourStart"],
+        ["cl_KontourBorders"],
+        ["cl_KontourStreak"],
+        ["cl_KontourInput"],
+        ["cl_KontourCanvas"],
+      ],
+      rows: [1, 1, 0, 1],
+    },
+    subgrid: [
+      ["cl_KontourStart", "center"],
+      ["cl_KontourBorders", "center"],
+      ["cl_KontourStreak", "center"],
+      ["cl_KontourInput", "center"],
+      ["cl_KontourCanvas", "center"],
+    ],
+  },
   cl_Linaha: {
     contentGroup: "Games",
     name: "Linaha",

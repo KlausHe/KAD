@@ -213,6 +213,7 @@ class KaihangaWheel {
 
   startAnimation() {
     this.angle = this.winnerAngle / 360;
+    t = 0;
     this.winnerAngle = caKA.random(0, 360);
     this.winner = caKA.floor((this.winnerAngle * this.segments.length) / 360);
     caKA.loop();
@@ -287,8 +288,6 @@ class KaihangaWheel {
   }
 }
 
-// cos between 0 an 1 based on t[0,1]
-// f = (1 - Math.cos(t * Math.PI)) / 2;
 function kaihangaUdate() {
   if (this.pi > Math.PI) {
     caKA.noLoop();

@@ -1,4 +1,4 @@
-import { Data_SentimentListGerman } from "../KadData/Data_SentimentListGerman.js";
+import { Data_SentimentListGerman } from "../KadData/KadData_SentimentListGerman.js";
 import { KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
 import { WikiSearchData } from "./WikiSearch.js";
 

@@ -1,4 +1,4 @@
-import { Data_Country_CodesIso3166 } from "../KadData/KadDataCountries.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
 import { dbID, initEL } from "../KadUtils/KadUtils.js";
 
 initEL({

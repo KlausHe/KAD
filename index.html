@@ -25,7 +25,6 @@
 
   <link href="CSS/CSSbodyLayout.css" rel="stylesheet" type="text/css">
   <link href="CSS/CSSinputLayout.css" rel="stylesheet" type="text/css">
-  <!-- <link href="Data/Howa/css/weather-icons.min.css" rel="stylesheet" type="text/css"> -->
 
   <script src="Data/p5.min.js"></script>
   <script src="Data/matter.min.js"></script>
@@ -260,6 +259,26 @@
         </div>
         <div class="cl_IbhaluniCanvas">
           <div style="display:block;" id="idCanv_ibhaluni" tabindex="0"></div>
+        </div>
+      </div>
+    </section>
+    <section class="cl_Kontour">
+      <div class="cl_subGrid_Kontour cl_subGrid">
+        <div class="cl_KontourStart" uiWrap="nowrap">
+          <button id="idBtn_kontourStart" uiSize="width12"></button>
+        </div>
+        <div class="cl_KontourStreak">
+          <label class="cl_outputLbl" id="idLbl_kontourStreak">...</label>
+        </div>
+        <div class="cl_KontourInput">
+          <input type="text" id="idVin_kontourInput" uiSize="width12"></input>
+        </div>
+        <div class="cl_KontourCanvas">
+          <div style="display:block;" id="idCanv_kontour" tabindex="0"></div>
+        </div>
+        <div class="cl_KontourBorders" uiWrap="nowrap">
+          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_kontourBorders"></input>
+          </label><label class="cl_info" for="idCb_kontourBorders" uiSize="width11" uiRadius="right">Grenzen anzeigen</label>
         </div>
       </div>
     </section>

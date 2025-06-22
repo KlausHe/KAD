@@ -1,6 +1,6 @@
 import { Data_Botanicals, Data_HumanNames, Data_Nummernschild } from "../KadData/KadData.js";
-import { Data_RALColors } from "../KadData/KadDataColor.js";
-import { Data_Country_CodesIso3166, Data_Country_CodesIso639, Data_Country_GermanDistrics, Data_Currencies } from "../KadData/KadDataCountries.js";
+import { Data_RALColors } from "../KadData/KadData_Color.js";
+import { Data_Country_CodesIso3166, Data_Country_CodesIso639, Data_Country_GermanDistrics, Data_Currencies } from "../KadData/KadData_Countries.js";
 import { dbCL, dbID, KadRandom } from "../KadUtils/KadUtils.js";
 
 export const netsaonaOptions = {

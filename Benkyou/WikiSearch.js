@@ -1,4 +1,4 @@
-import { Data_Country_CodesIso639 } from "../KadData/KadDataCountries.js";
+import { Data_Country_CodesIso639 } from "../KadData/KadData_Countries.js";
 import { dbID, dbIDStyle, initEL, KadFile, KadTable } from "../KadUtils/KadUtils.js";
 
 const wikiOptions = {

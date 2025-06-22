@@ -1,4 +1,4 @@
-import { Data_Newsticker } from "../KadData/Data_Newsticker.js";
+import { Data_Newsticker } from "../KadData/KadData_Newsticker.js";
 import { initEL, KadArray, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 
 initEL({ id: idBtn_newsTickerNext, fn: postillonTickerNext });

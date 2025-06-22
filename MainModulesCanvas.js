@@ -4,6 +4,7 @@ export { canvas_cl_UserGridLayout } from "./Settings/UserGridLayout.js";
 //Games
 export { canvas_cl_Empat } from "./Games/Empat.js";
 export { canvas_cl_Ibhaluni } from "./Games/Ibhaluni.js";
+export { canvas_cl_Kontour } from "./Games/Kontour.js";
 export { canvas_cl_Lotto } from "./Games/Lotto.js";
 export { canvas_cl_RayCaster } from "./Games/RayCaster.js";
 export { canvas_cl_Sudoku } from "./Games/Sudoku.js";

@@ -517,6 +517,9 @@ input[imgBtn="subgrid"] {
 [uiSize~="height3"] {
   height: var(--UIHeight3);
 }
+[uiSize~="height20"] {
+  height: var(--UIWidth20);
+}
 
 [uiSize~="outputTable"] {
   max-width: var(--UIWidth20);

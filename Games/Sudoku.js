@@ -1,4 +1,4 @@
-import { Data_Sudoku } from "../KadData/Data_Sudoku.js";
+import { Data_Sudoku } from "../KadData/KadData_Sudoku.js";
 import { dbID, initEL, KadArray, KadDate, KadDOM, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";

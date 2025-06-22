@@ -1,7 +1,7 @@
 import { contentLayout, navClick } from "../General/Layout.js";
 import { Data_HumanNames, Data_Nummernschild } from "../KadData/KadData.js";
-import { Data_AkademischerGrad } from "../KadData/KadDataAkademischerGrad.js";
-import { Data_RALColors } from "../KadData/KadDataColor.js";
+import { Data_AkademischerGrad } from "../KadData/KadData_AkademischerGrad.js";
+import { Data_RALColors } from "../KadData/KadData_Color.js";
 import { KadDOM, KadLog, KadTable, dbCLStyle, dbID, dbIDStyle, initEL } from "../KadUtils/KadUtils.js";
 import { resetAll } from "../Main.js";
 import * as DBData from "../MainModulesDBData.js";

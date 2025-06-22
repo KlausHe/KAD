@@ -199,7 +199,7 @@ export function userGridCreateCells() {
   const x = Math.floor(userGridOptions.canvas.w / grid2DArray[0].length);
   const cellSize = [x, userGridOptions.cellHeight];
   userGridOptions.height = cellSize[1] * grid2DArray.length + userGridOptions.cellHeight / 2;
-  canvas_cl_UserGridLayout(); //resize sCanvas
+  canvas_cl_UserGridLayout(); //resize Canvas
 
   for (let item of gridData) {
     const gridObj = contentGrid[item.name];

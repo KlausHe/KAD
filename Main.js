@@ -124,3 +124,20 @@ function test() {
   KadFile.downloadFile(obj, "json");
 }
 */
+
+// let t = 0;
+// let step = 0.01;
+// function test() {
+//   // f = (1 - Math.cos(t * Math.PI)) / 2;
+//   while (t <= 1) {
+//     cosLerp(t);
+//     t += step;
+//   }
+// }
+
+// function cosLerp(t) {
+//   const f = (1 - Math.cos(t * Math.PI)) / 2;
+//   console.log(f);
+// }
+
+// ---------------

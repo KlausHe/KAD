@@ -18,6 +18,7 @@ export { clear_cl_WikiSearch } from "./Benkyou/WikiSearch.js";
 export { clear_cl_Beatmachine } from "./Games/Beatmachine.js";
 export { clear_cl_Empat } from "./Games/Empat.js";
 export { clear_cl_Ibhaluni } from "./Games/Ibhaluni.js";
+export { clear_cl_Kontour } from "./Games/Kontour.js";
 export { clear_cl_Linaha } from "./Games/Linaha.js";
 export { clear_cl_Lotto } from "./Games/Lotto.js";
 export { clear_cl_Numbery } from "./Games/Numbery.js";

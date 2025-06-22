@@ -1,6 +1,6 @@
 //  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
 
-import { Data_Materials } from "../KadData/KadDataMaterial.js";
+import { Data_Materials } from "../KadData/KadData_Material.js";
 import { dbCL, dbID, initEL, KadDOM, KadInteraction, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";

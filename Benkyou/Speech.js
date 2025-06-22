@@ -1,25 +1,25 @@
-// import { createRequestBody, normaliseResponse, isLanguageSupported, translate } from "../Data/translateAPI.js";
-import { Data_Country_CodesIso639 } from "../KadData/KadDataCountries.js";
-import { daEL, dbID, KadArray, KadDOM, KadLog } from "../KadUtils/KadUtils.js";
+// import { createRequestBody, isLanguageSupported, translate } from "../Data/translateAPI.js";
+// import { Data_Country_CodesIso639 } from "../KadData/KadDataCountries.js";
+// import { daEL, dbID, KadArray, KadDOM, KadLog } from "../KadUtils/KadUtils.js";
 
-const speechOptions = {
-  synthObj: window.speechSynthesis,
-  voices: [],
-  resetCouner: 0,
-  timer: null,
-  input: "",
-  fromIndex: 0,
-  fromCode: "",
-  toIndex: 0,
-  toCode: "",
-};
+// const speechOptions = {
+//   synthObj: window.speechSynthesis,
+//   voices: [],
+//   resetCouner: 0,
+//   timer: null,
+//   input: "",
+//   fromIndex: 0,
+//   fromCode: "",
+//   toIndex: 0,
+//   toCode: "",
+// };
 
-daEL(idSel_speechLanguageFrom, "change", speechHandleLanguageSelect);
-daEL(idSel_speechLanguageTo, "change", speechHandleLanguageSelect);
-daEL(idBtn_speechSwitch, "click", translateSwitch);
-daEL(idBtn_speechSpeakFrom, "click", () => speechSpeak("From"));
-daEL(idBtn_speechSpeakTo, "click", () => speechSpeak("To"));
-daEL(idArea_speechFromText, "input", speechTranslate);
+// daEL(idSel_speechLanguageFrom, "change", speechHandleLanguageSelect);
+// daEL(idSel_speechLanguageTo, "change", speechHandleLanguageSelect);
+// daEL(idBtn_speechSwitch, "click", translateSwitch);
+// daEL(idBtn_speechSpeakFrom, "click", () => speechSpeak("From"));
+// daEL(idBtn_speechSpeakTo, "click", () => speechSpeak("To"));
+// daEL(idArea_speechFromText, "input", speechTranslate);
 
 export function clear_cl_Speech() {
   return;
@@ -36,7 +36,7 @@ export function clear_cl_Speech() {
     return;
   } else {
     speechTranslatePopulateLanguage();
-    speechOptions.voices = KadArray.sortArrayByKey({ array: voicesUnsorted, keys: "lang", caseSensitive: true });
+    speechOptions.voices = KadArray.sortArrayByKey({ array: voicesUnsorted, key: "lang", caseSensitive: true });
     speechHandleLanguageSelect();
   }
 }
@@ -157,10 +157,10 @@ function speechTranslate() {
 // }
 
 async function speechTranslateRequest() {
-  return;
   // speechOptions.input;
   // let languages = speechLanguageChange();
   KadLog.log(isLanguageSupported("de"));
+  return;
 
   // dbID("idArea_speechToText").value = "Funktion is currently not implemented!";
   // translate("Je ne mangé pas six jours", { from: "fr", to: "en" })

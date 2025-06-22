@@ -1,8 +1,8 @@
 // https://github.com/samayo/country-json?tab=readme-ov-file
 // //https://d-d-r.de/ddr-bevoelkerung.html
 
-import { Data_Olympia } from "../KadData/Data_Olympiadaten.js";
-import { Data_Country_CodesIso3166 } from "../KadData/KadDataCountries.js";
+import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
+import { Data_Olympia } from "../KadData/KadData_Olympiadaten.js";
 import { KadArray, KadDOM, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
