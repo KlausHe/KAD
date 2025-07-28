@@ -165,16 +165,6 @@ function expansionCalc() {
 //Hauptliste mit Werkstoffdaten ersetllen!!!
 function build_ExpansionTable() {
   if (expansionOptions.exTemp.length === 0) expansionOptions.exTemp = [...expansionOptions.tempsOrig];
-  // if (expansionOptions.exTemp.length === 0) {
-  // 	contentGrid.cl_Expansion.width = 1;
-  // 	layoutNavClick();
-  // } else if (expansionOptions.exTemp.length > 7 && contentGrid.cl_Expansion.width == 1) {
-  // 	contentGrid.cl_Expansion.width = 2;
-  // 	layoutNavClick();
-  // } else if (expansionOptions.exTemp.length <= 7 && contentGrid.cl_Expansion.width == 2) {
-  // 	contentGrid.cl_Expansion.width = 1;
-  // 	layoutNavClick();
-  // }
 
   KadTable.clear("idTabHeader_ExpansionList");
   const headerRow = KadTable.createRow("idTabHeader_ExpansionList");

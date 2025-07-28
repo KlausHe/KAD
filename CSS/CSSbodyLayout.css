@@ -268,7 +268,6 @@ tbody tr:last-child td {
 
 .cl_tableImage {
   width: 30%;
-  /* padding: var(--padding) calc(var(--padding)*2); */
 }
 
 .clTab_UIBorderThinRight {
@@ -338,7 +337,7 @@ tbody tr:last-child td {
 }
 
 /* Grid Table */
-.cl_gridTable {
+.KadUtilsGridTable {
   display: grid;
   position: relative;
   grid-auto-flow: column;
@@ -347,20 +346,18 @@ tbody tr:last-child td {
   /* white-space: nowrap; */
 }
 
-.cl_gridTableWrapper {
+.KadUtilsTableWrapper {
   display: inline-block;
-  border-right: var(--UIBorderThin);
-  border-bottom: var(--UIBorderThin);
   align-content: center;
 }
 
-.cl_gridTableWrapper:hover {
+.KadUtilsTableWrapper:hover {
   background-color: hsl(var(--bgcNavbar) / 0.2);
   color: hsl(var(--txtNavbar));
   transition: all var(--transitionTimeInfo) ease-in-out;
 }
 
-.cl_gridTableItem {
+.KadUtilsTableItem {
   display: inline-block;
   padding: var(--paddingVertical) var(--padding);
 }
@@ -368,8 +365,6 @@ tbody tr:last-child td {
 .KadUtilsGridTableWrapperHeader {
   z-index: 2;
   background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
-  border-right: var(--UIBorderThin);
-  border-bottom: var(--UIBorderBottom);
   padding: var(--paddingVertical) var(--padding);
 }
 
@@ -377,51 +372,51 @@ tbody tr:last-child td {
   font-weight: bold;
 }
 
-.KadUtilsThinBorderTop {
+.KadUtilsBorderTopThin {
   border-top: var(--UIBorderThin);
 }
 
-.KadUtilsThinBorderRight {
+.KadUtilsBorderRightThin {
   border-right: var(--UIBorderThin);
 }
 
-.KadUtilsThinBorderBottom {
+.KadUtilsBorderBottomThin {
   border-bottom: var(--UIBorderThin);
 }
 
-.KadUtilsThinBorderLeft {
+.KadUtilsBorderLeftThin {
   border-left: var(--UIBorderThin);
 }
 
-.KadUtilsThickBorderTop {
+.KadUtilsBorderTopThick {
   border-top: var(--UIBorderBottom);
 }
 
-.KadUtilsThickBorderRight {
+.KadUtilsBorderRightThick {
   border-right: var(--UIBorderBottom);
 }
 
-.KadUtilsThickBorderBottom {
+.KadUtilsBorderBottomThick {
   border-bottom: var(--UIBorderBottom);
 }
 
-.KadUtilsThickBorderLeft {
+.KadUtilsBorderLeftThick {
   border-left: var(--UIBorderBottom);
 }
 
-.KadUtilsNoBorderTop {
+.KadUtilsBorderTopNone {
   border-top: none;
 }
 
-.KadUtilsNoBorderRight {
+.KadUtilsBorderRightNone {
   border-right: none;
 }
 
-.KadUtilsNoBorderBottom {
+.KadUtilsBorderBottomNone {
   border-bottom: none;
 }
 
-.KadUtilsNoBorderLeft {
+.KadUtilsBorderLeftNone {
   border-left: none;
 }
 

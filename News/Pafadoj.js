@@ -68,8 +68,7 @@ function pafadojGetHeader(data = null) {
   if (data == null) {
     return [
       ...pafadojOptions.headers[pafadojOptions.date][1].map((head, index) => {
-        let headText = head;
-        if (index == 0 && (head == "2024 date" || head == "2023 date")) headText = "Date";
+        let headText = index == 0 ? "Year" : head;
         return {
           data: pafadojOptions.sumHeader.includes(headText) ? `${headText}` : headText,
           settings: {
@@ -78,19 +77,19 @@ function pafadojGetHeader(data = null) {
         };
       }),
     ];
+  } else {
+    return [
+      ...pafadojOptions.headers[pafadojOptions.date][1].map((head, index) => {
+        let headText = index == 0 ? "Year" : head;
+        return {
+          data: pafadojOptions.sumHeader.includes(headText) ? `${headText}<br> (${data[headText]})` : headText,
+          settings: {
+            onclick: [pafadojSort, head],
+          },
+        };
+      }),
+    ];
   }
-  return [
-    ...pafadojOptions.headers[pafadojOptions.date][1].map((head, index) => {
-      let headText = head;
-      if (index == 0 && (head == "2024 date" || head == "2023 date")) headText = "Date";
-      return {
-        data: pafadojOptions.sumHeader.includes(headText) ? `${headText}<br> (${data[headText]})` : headText,
-        settings: {
-          onclick: [pafadojSort, head],
-        },
-      };
-    }),
-  ];
 }
 
 function pafadojTableReturn() {

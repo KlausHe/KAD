@@ -205,22 +205,31 @@ export const rawContentGrid = {
     contentGroup: "Games",
     name: "Kontour",
     heritage: ["kreolisch", "größer"],
-    source: [["Daten", "https://www.kaggle.com/datasets/ktochylin/world-countries?resource=download"]],
+    source: [
+      ["Daten", "https://www.kaggle.com/datasets/ktochylin/world-countries?resource=download"],
+      ["Daten", "https://hub.arcgis.com/datasets/esri::world-countries-generalized/about"],
+      ["Robinson Code", "https://gist.github.com/gr8bit/172584afeb738fd864d572b7cfbcc14d"],
+      ["Gall-Peterson Code", "https://developers.google.com/maps/documentation/javascript/examples/map-projection-simple#maps_map_projection_simple-javascript"],
+    ],
     size: [1, 1],
     maingrid: {
       areas: [
         //
         ["cl_KontourStart"],
         ["cl_KontourBorders"],
+        ["cl_KontourProjection"],
+        ["cl_KontourQuestionSet"],
         ["cl_KontourStreak"],
         ["cl_KontourInput"],
         ["cl_KontourCanvas"],
       ],
-      rows: [1, 1, 0, 1],
+      rows: [1, 1, 1, 1, 0, 1],
     },
     subgrid: [
       ["cl_KontourStart", "center"],
       ["cl_KontourBorders", "center"],
+      ["cl_KontourProjection", "center"],
+      ["cl_KontourQuestionSet", "center"],
       ["cl_KontourStreak", "center"],
       ["cl_KontourInput", "center"],
       ["cl_KontourCanvas", "center"],
@@ -598,7 +607,7 @@ export const rawContentGrid = {
       ["Daten", "https://de.wikipedia.org/wiki/Medaillenspiegel_der_Olympischen_Sommerspiele_1896"],
       ["Daten", "https://restcountries.com/"],
     ],
-    size: [2, 1],
+    size: [3, 1],
     maingrid: {
       areas: [["cl_OlympiaUpdate"], ["cl_OlympiaTable"]],
       rows: [1],
