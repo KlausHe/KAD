@@ -143,7 +143,7 @@ initEL({ id: idCb_kontourBorders, fn: kontourBorders, resetValue: true });
 initEL({
   id: idSel_kontourProjection,
   fn: kontourProjection,
-  selStartIndex: 2,
+  selStartIndex: 1,
   selList: kontourOptions.projections.map((item, index) => [item.name, index]),
 });
 initEL({
@@ -164,8 +164,8 @@ export function clear_cl_Kontour() {
   kontourOptions.gameRunning = false;
   idVin_kontourInput.KadReset();
   kontourOptions.bordersActive = idCb_kontourBorders.KadReset();
-  kontourOptions.projectionIndex = idSel_kontourProjection.KadReset();
-  idSel_kontourQuestionSet.KadReset();
+  kontourOptions.projectionIndex = idSel_kontourProjection.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.projections) });
+  idSel_kontourQuestionSet.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.questionSets) });
   kontourRestart();
   KadInteraction.removeContextmenu(idCanv_kontour);
 }

@@ -211,7 +211,7 @@ export const rawContentGrid = {
       ["Robinson Code", "https://gist.github.com/gr8bit/172584afeb738fd864d572b7cfbcc14d"],
       ["Gall-Peterson Code", "https://developers.google.com/maps/documentation/javascript/examples/map-projection-simple#maps_map_projection_simple-javascript"],
     ],
-    size: [1, 1],
+    size: [3, 2],
     maingrid: {
       areas: [
         //
