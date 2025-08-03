@@ -1394,7 +1394,6 @@ export const contentFooter = [
   ["Icons", "https://www.iconfinder.com/search/icons?family=feather"],
   ["Canvas-Library", "https://p5js.org/"],
   ["Charts", "http://chartJS.org"],
-  ["Date-Picker", "https://github.com/Pikaday/Pikaday"],
   ["Inspirations", "https://thecodingtrain.com/"],
   ["Color calculations", "https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023"],
   ["Color calculations", "https://www.html-code-generator.com/javascript/color-converter-script"],

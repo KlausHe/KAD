@@ -1,5 +1,5 @@
 import { contentLayout, navClick } from "../General/Layout.js";
-import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, KadValue, dbID, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 export const bgaOptions = {
@@ -14,8 +14,8 @@ export const bgaOptions = {
 };
 
 export function clear_cl_BackgroundAnimation() {
-  bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Cursordot(), new Trail(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new GameOfLife(), new PongAI()];
-  idSel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name) });
+  bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Cursordot(), new Trail(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new Truchet(), new GameOfLife(), new PongAI()];
+  bgaOptions.curr = idSel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name) });
 }
 
 export function canvas_cl_BackgroundAnimation() {
@@ -46,7 +46,7 @@ function bgaClearGrid() {
 }
 
 initEL({ id: idDiv_bgaToggle, fn: bgaToggle });
-initEL({ id: idSel_bgaSelect, fn: bgaSelectAnimation, selList: [1] });
+initEL({ id: idSel_bgaSelect, fn: bgaSelectAnimation, selList: [1], selStartIndex: 13 });
 initEL({ id: idDiv_bgaClearGrid, fn: bgaClearGrid });
 
 function bgaStart() {
@@ -304,7 +304,10 @@ class Trail {
   }
   draw() {
     caBA.clear();
-    if (caBA.mouseX - this.trail[0].x != 0 || caBA.mouseY - this.trail[0].y != 0) {
+    const offset = 3;
+    const mouseUpdateX = !KadValue.numberInBound(caBA.mouseX, this.trail[0].x, offset);
+    const mouseUpdateY = !KadValue.numberInBound(caBA.mouseY, this.trail[0].y, offset);
+    if (mouseUpdateX || mouseUpdateY) {
       this.trail.unshift({
         x: caBA.mouseX,
         y: caBA.mouseY,
@@ -414,7 +417,6 @@ class LanktonsAnt {
 
   draw() {
     caBA.clear();
-    // for (let n = 0; n < 20; n++) {
     const state = this.grid[this.x][this.y];
     if (state == 0) {
       this.turn(1);
@@ -432,7 +434,6 @@ class LanktonsAnt {
       }
     }
     this.moveForward();
-    // };
   }
 
   turn(d) {
@@ -958,6 +959,58 @@ class TenPrint {
       } else {
         caBA.line(spot.x, spot.y + this.w, spot.x + this.w, spot.y);
       }
+      if (this.avaible.length <= 0) {
+        bgaQuit();
+      }
+    }
+  }
+}
+
+class Truchet {
+  constructor() {
+    this.Framerate = 10;
+    this.w = bgaOptions.pointDiameter * 8;
+    this.grid = [];
+    this.avaible = [];
+    this.counter = 0;
+    this.cols = 1;
+    this.rows = 1;
+    this.col;
+  }
+  reset() {
+    this.grid = [];
+    this.counter = 0;
+    this.cols = Math.floor(caBA.width / this.w);
+    this.rows = Math.floor(caBA.height / this.w);
+    this.avaible = Array.from(Array(this.cols * this.rows).keys());
+    for (let i = 0; i < this.cols; i++) {
+      for (let j = 0; j < this.rows; j++) {
+        const index = j + i * this.rows;
+        this.grid[index] = {
+          dir: KadRandom.randomIndex(2),
+          x: i * this.w + this.w / 2,
+          y: j * this.w + this.w / 2,
+        };
+      }
+    }
+    this.col = caBA.color(globalColors.elements.baseColor);
+    caBA.stroke(this.col);
+    caBA.strokeWeight(4);
+    caBA.noFill();
+    caBA.rectMode(caBA.CENTER, caBA.CENTER);
+    caBA.clear();
+  }
+  draw() {
+    for (let i = 0; i < 5; i++) {
+      const avaibleIndex = KadRandom.randomIndex(this.avaible);
+      const index = this.avaible.splice(avaibleIndex, 1);
+      const spot = this.grid[index];
+      caBA.push();
+      caBA.translate(spot.x, spot.y);
+      caBA.rotate((Math.PI / 2) * spot.dir);
+      caBA.arc(-this.w / 2, -this.w / 2, this.w, this.w, 0, Math.PI / 2);
+      caBA.arc(this.w / 2, this.w / 2, this.w, this.w, Math.PI, (Math.PI * 3) / 2);
+      caBA.pop();
       if (this.avaible.length <= 0) {
         bgaQuit();
       }
