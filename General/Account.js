@@ -2,7 +2,7 @@ import { contentLayout, navClick } from "../General/Layout.js";
 import { Data_HumanNames, Data_Nummernschild } from "../KadData/KadData.js";
 import { Data_AkademischerGrad } from "../KadData/KadData_AkademischerGrad.js";
 import { Data_RALColors } from "../KadData/KadData_Color.js";
-import { KadDOM, KadLog, KadTable, dbCLStyle, dbID, dbIDStyle, initEL } from "../KadUtils/KadUtils.js";
+import { KadLog, KadTable, dbCLStyle, dbID, dbIDStyle, initEL } from "../KadUtils/KadUtils.js";
 import { resetAll } from "../Main.js";
 import * as DBData from "../MainModulesDBData.js";
 
@@ -157,7 +157,7 @@ export function clear_cl_UserLogin() {
   idCb_userLogin_check.KadReset();
   accountPersistanceChange();
   dbID("idVin_userLogin_email").removeAttribute("disabled");
-  KadDOM.enableBtn("idBtn_userLogin_login", true);
+  idBtn_userLogin_login.KadEnable(true);
   dbID("idLbl_userLogin_alert").textContent = "";
 }
 
@@ -261,7 +261,7 @@ function firebaseLogin() {
   setPersistence(auth, nuncDiscipuli.cred.keepLogin);
   signInWithEmailAndPassword(auth, email, pass)
     .then(() => {
-      KadDOM.enableBtn("idBtn_userLogin_login", false);
+      idBtn_userLogin_login.KadEnable(false);
     })
     .catch((error) => {
       userAccError(error);
@@ -285,7 +285,7 @@ function firebaseRegister() {
 function userRegister() {
   createNewDatabase();
   navClick("cl_UserChange");
-  KadDOM.enableBtn("idBtn_userLogin_login", false);
+  idBtn_userLogin_login.KadEnable(false);
 }
 
 function firebaseLogout() {
@@ -328,12 +328,12 @@ function userAccSetUserBtn() {
   dbIDStyle("idDiv_navBar_User").display = "initial";
   if (nuncDiscipuli.short == null) AccData.infos.shortName.data = nuncDiscipuli.createShort();
   dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
-  KadDOM.enableBtn("idBtn_userLogin_login", true);
+  idBtn_userLogin_login.KadEnable(true);
 }
 
 function userAccError(err) {
-  KadDOM.enableBtn(idBtn_userLogin_login, true);
-  KadDOM.enableBtn(idBtn_userLogin_register, true);
+  idBtn_userLogin_login.KadEnable(true);
+  idBtn_userLogin_register.KadEnable(true);
   dbID(idLbl_userLogin_alert).textContent = "E-Mail oder Passwort falsch!";
   error(err);
 }

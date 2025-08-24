@@ -192,6 +192,19 @@ button:active {
   transition-duration: 0s;
   transition-delay: 0s;
 }
+.btnPositive {
+  background-color: hsl(var(--bgcButtonPositive));
+  color: hsl(var(--txtButtonPositive));
+}
+.btnNegative {
+  background-color: hsl(var(--bgcButtonNegative));
+  color: hsl(var(--txtButtonNegative));
+}
+
+.btnBasecolor {
+  background-color: hsl(var(--bgcNavbar));
+  color: hsl(var(--txtNavbar));
+}
 
 [data-btnstatus="btnPositive"] {
   background-color: hsl(var(--bgcButtonPositive));

@@ -1,5 +1,5 @@
 import { Data_Materials } from "../KadData/KadData_Material.js";
-import { dbID, initEL, KadArray, KadDOM, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { materialOptions } from "./Material.js";
 
 const expansionOptions = {
@@ -84,7 +84,7 @@ function expansionEntryMaterial() {
   expansionOptions.materials.matA = idSel_expansionMaterialA.KadGet();
   expansionOptions.materials.matB = idSel_expansionMaterialB.KadGet();
   expansionOptions.materials.compare = expansionOptions.materials.matB == 0 || expansionOptions.materials.matA === expansionOptions.materials.matB ? false : true;
-  KadDOM.enableBtn(idCb_expansionDifference, !expansionOptions.materials.compare);
+  idCb_expansionDifference.KadEnable(!expansionOptions.materials.compare);
 
   const cbEntry = dbID("idLbl_expansionDifference").textContent;
   dbID("idLbl_expansionDifference").innerHTML = expansionOptions.materials.compare ? `<del>${cbEntry}</del>` : cbEntry;

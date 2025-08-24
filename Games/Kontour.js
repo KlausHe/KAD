@@ -4,7 +4,7 @@
 
 import { Data_GetCountriesByProperty, Data_GetReducedCountryList } from "../KadData/KadData_Countries.js";
 import { Data_CountryOutlines } from "../KadData/KadData_CountryBoundaries.js";
-import { initEL, KadArray, KadDOM, KadInteraction, KadLog, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadArray, KadInteraction, KadLog, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -191,9 +191,9 @@ function kontourRestart() {
 function kontourEnableInputs() {
   const state = !kontourOptions.gameRunning;
   idBtn_kontourStart.textContent = state ? "Start" : "Stop";
-  KadDOM.enableBtn("idCb_kontourBorders", state);
-  KadDOM.enableBtn("idSel_kontourProjection", state);
-  KadDOM.enableBtn("idSel_kontourQuestionSet", state);
+  idCb_kontourBorders.KadEnable(state);
+  idSel_kontourProjection.KadEnable(state);
+  idSel_kontourQuestionSet.KadEnable(state);
 }
 
 function kontourStart() {

@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
-import { dbID, dbIDStyle, initEL, KadColor, KadDOM, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, dbIDStyle, initEL, KadColor, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const linahaOptions = {
@@ -45,7 +45,7 @@ export function clear_cl_Linaha() {
   idSel_linahaChoices.KadReset();
   linahaOptions.selRounds = idVin_linahaRounds.KadReset();
   dbID("idLbl_linahaQuestion").innerHTML = `Spiele <br>${linahaOptions.selRounds} Runden<br>Linaha!`;
-  KadDOM.enableBtn("idBtn_linahaMap", false);
+  idBtn_linahaMap.KadEnable(false);
   linahaCreateAvaible();
   linahaOptions.data = [];
   linahaOptions.currentRound = -1;
@@ -107,7 +107,7 @@ function linahaFinished() {
   dbID("idLbl_linahaQuestion").removeAttribute("uiType");
   dbID("idBtn_linahaStart").textContent = "New Game";
   dbID("idLbl_linahaQuestion").innerHTML = `Punkte:<br>${linahaOptions.score}`;
-  KadDOM.enableBtn("idBtn_linahaMap", true);
+  idBtn_linahaMap.KadEnable(true);
   linahaDisableEntries(false);
   linahaOptions.currentRound = -1;
 }
@@ -115,7 +115,7 @@ function linahaFinished() {
 function linahaDisableEntries(lock) {
   const inputArr = ["idSel_linahaSelectQ", "idBtn_linahaSelectSwitch", "idSel_linahaSelectA", "idSel_linahaChoices", "idVin_linahaRounds"];
   for (const id of inputArr) {
-    KadDOM.enableBtn(id, !lock);
+    dbID(id).KadEnable(!lock);
   }
 }
 
@@ -253,10 +253,10 @@ function linahaAnswered(index) {
   KadLog.log(index); //idButtonUrlImage_linahaAnswers_1
   if (!linahaOptions.isPlaying) return;
   linahaOptions.answered = !linahaOptions.answered;
-  KadDOM.enableBtn("idBtn_linahaMap", linahaOptions.answered);
+  idBtn_linahaMap.KadEnable(linahaOptions.answered);
   if (linahaOptions.answered) {
     // answer is chosen
-    KadDOM.enableBtn("idBtn_linahaMap", true);
+    idBtn_linahaMap.KadEnable(true);
     const isCorrect = index == linahaOptions.answerIndex;
     linahaOptions.correctRounds += isCorrect ? 1 : 0;
     const type = linahaDataType(linahaOptions.selA);

@@ -1,4 +1,4 @@
-import { initEL, KadDOM } from "../KadUtils/KadUtils.js";
+import { initEL } from "../KadUtils/KadUtils.js";
 
 const blechOptions = {
   dicke: 3,
@@ -59,7 +59,7 @@ export function clear_cl_Blechgeometrie() {
 
 function blechgeoFormChange() {
   blechOptions.selectedGeo = idSel_blechgeoForm.KadGet();
-  KadDOM.enableBtn(idVin_blechgeoBreite, !blechOptions.geo[blechOptions.selectedGeo].breite);
+  idVin_blechgeoBreite.KadEnable(!blechOptions.geo[blechOptions.selectedGeo].breite);
   calcBlechGeo();
 }
 

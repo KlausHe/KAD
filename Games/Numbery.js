@@ -76,9 +76,9 @@ export function clear_cl_Numbery() {
 }
 
 function numberyDisableInputs() {
-  KadDOM.enableBtn("idSel_numberyPairs", !numberyOptions.isPlaying);
-  KadDOM.enableBtn("idVin_numberyPlayer", !numberyOptions.isPlaying);
-  KadDOM.enableBtn("idSel_numberCategory", !numberyOptions.isPlaying);
+  idSel_numberyPairs.KadEnable(!numberyOptions.isPlaying);
+  idVin_numberyPlayer.KadEnable(!numberyOptions.isPlaying);
+  idSel_numberCategory.KadEnable(!numberyOptions.isPlaying);
   dbID("idBtn_startNumbery").textContent = numberyOptions.isPlaying ? "Stop" : "Start";
 }
 

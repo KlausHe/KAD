@@ -1,4 +1,4 @@
-import { dbID, initEL, KadDOM, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 // barvoslepy
@@ -114,7 +114,7 @@ export function clear_cl_Barvoslepy() {
   idSel_barvoslepySelectWeakness.KadReset();
   barvoslepyOptions.differenceEpsilon = idVin_barvoslepyEpsilon.KadReset();
   let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
-  KadDOM.enableBtn(idVin_barvoslepySeverity, typeIndex % 2 == 0);
+  idVin_barvoslepySeverity.KadEnable(typeIndex % 2 == 0);
   barvoslepyImagePreview();
   barvoslepyOptions.conversionTable = [];
   for (let i = 0; i < 256; i++) {
@@ -137,7 +137,7 @@ function barvoslepySeverity() {
 
 function barvoslepySelectWeakness() {
   let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
-  KadDOM.enableBtn(idVin_barvoslepySeverity, typeIndex % 2 == 0);
+  idVin_barvoslepySeverity.KadEnable(typeIndex % 2 == 0);
   barvoslepyFilter();
 }
 
@@ -153,10 +153,10 @@ function barvoslepyShow(t) {
   for (let type of Object.keys(barvoslepyOptions.showStates)) {
     if (type == thisType) {
       barvoslepyOptions.showStates[type] = thisState;
-      KadDOM.btnColor(`idBtn_barvoslepy${type}`, thisState ? "colored" : null);
+      dbID(`idBtn_barvoslepy${type}`).KadButtonColor(thisState ? "colored" : null);
     } else {
       barvoslepyOptions.showStates[type] = false;
-      KadDOM.btnColor(`idBtn_barvoslepy${type}`, null);
+      dbID(`idBtn_barvoslepy${type}`).KadButtonColor(null);
     }
   }
   barvoslepyFilter();

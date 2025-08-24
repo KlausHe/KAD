@@ -1,7 +1,7 @@
 //  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
 
 import { Data_Materials } from "../KadData/KadData_Material.js";
-import { dbCL, dbID, initEL, KadDOM, KadInteraction, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, initEL, KadInteraction, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 import { materialOptions } from "./Material.js";
@@ -615,25 +615,25 @@ function changeGeoObject(index) {
   geoObjects.elementIndex = index;
   let cl = dbCL("clBtn_geometrieAreaSelect", null);
   for (let i = 0; i < cl.length; i++) {
-    KadDOM.btnColor(cl[i]);
+    // dbID(cl[i]).KadButtonColor();
   }
-  KadDOM.btnColor(cl[geoObjects.elementIndex], "positive");
+  // cl[geoObjects.elementIndex].KadButtonColor("positive");
   geoObjects.selected.show();
 
   let num = document.getElementsByName("naDiv_Area").length;
   for (let i = 0; i < num; i++) {
     if (geoObjects.selected.vals[i]) {
-      KadDOM.enableBtn(`idVin_Area_${i}`, true);
+      dbID(`idVin_Area_${i}`).KadEnable(true);
       dbID(`idLbl_Vin_Area_${i}`).textContent = geoObjects.selected.lbl[i]; //LABEL
       dbID(`idVin_Area_${i}`).placeholder = geoObjects.selected.vals[i];
     } else {
-      KadDOM.enableBtn(`idVin_Area_${i}`, false);
-      KadDOM.enableBtn(`idVin_Area_${i}`, false);
+      dbID(`idVin_Area_${i}`).KadEnable(false);
+      dbID(`idVin_Area_${i}`).KadEnable(false);
       dbID(`idLbl_Vin_Area_${i}`).textContent = ""; //LABEL
       dbID(`idVin_Area_${i}`).placeholder = "";
     }
   }
-  KadDOM.enableBtn(idCb_geoRadius, geoObjects.selected.cbRadiusEnable);
+  idCb_geoRadius.KadEnable(geoObjects.selected.cbRadiusEnable);
   const cbEntry = dbID("idLbl_goeRadius").textContent;
   dbID("idLbl_goeRadius").innerHTML = geoObjects.selected.cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
   geoBerechnung();

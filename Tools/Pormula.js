@@ -1,4 +1,4 @@
-import { dbCL, dbID, dbIDStyle, initEL, KadDOM, KadValue } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, dbIDStyle, initEL, KadValue } from "../KadUtils/KadUtils.js";
 
 const pormulaOptions = {
   valuesOrig: [3, 5, 8],
@@ -257,13 +257,13 @@ function pormulaDirInput(dir) {
 function pormulaGetType(id, type) {
   let cl = dbCL("clBtn_pormulaTypeSelect", null);
   for (let i = 0; i < cl.length; i++) {
-    KadDOM.btnColor(cl[i]);
+    cl[i].KadButtonColor();
   }
   if (id != null) {
-    KadDOM.btnColor(id, "positive");
+    dbID(id).KadButtonColor("positive");
     pormulaOptions.selType = type;
   } else {
-    KadDOM.btnColor(cl[0], "positive");
+    cl[0].KadButtonColor("positive");
     pormulaOptions.selType = Object.keys(pormulaOptions.types)[0];
   }
   pormulaCalculate();

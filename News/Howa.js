@@ -1,5 +1,7 @@
 // Imags weather_code from openweathermap
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
+
+// https://docs.maptiler.com/sdk-js/examples/weather-layer-switcher/
 const reverseGeocoder = new BDCReverseGeocode();
 import { Data_Nummernschild } from "../KadData/KadData.js";
 import { Data_Country_GermanDistrics } from "../KadData/KadData_Countries.js";

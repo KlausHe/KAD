@@ -1,5 +1,5 @@
 import { Data_Sudoku } from "../KadData/KadData_Sudoku.js";
-import { dbID, initEL, KadArray, KadDate, KadDOM, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadDate, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -111,8 +111,8 @@ function sudokuRequest() {
 
 function sudokuInputOptionChange() {
   sudokuOptions.mode = !sudokuOptions.mode;
-  KadDOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-  KadDOM.btnColor("idBtn_sudokuPencil", sudokuOptions.mode != 1 ? "positive" : null);
+  idBtn_sudokuWrite.KadButtonColor(sudokuOptions.mode == 1 ? "positive" : null);
+  idBtn_sudokuPencil.KadButtonColor(sudokuOptions.mode != 1 ? "positive" : null);
   KadInteraction.focus(idCanv_sudoku, caSU);
 }
 
@@ -265,8 +265,8 @@ function sudokuGroupHighlight(obj) {
 }
 
 function sudokuSetBtnColor(diff) {
-  KadDOM.btnColor("idBtn_sudokuWrite", sudokuOptions.mode == 1 ? "positive" : null);
-  KadDOM.btnColor("idBtn_sudokuPuzzle", diff == "puzzle" ? "positive" : null);
+  idBtn_sudokuWrite.KadButtonColor(sudokuOptions.mode == 1 ? "positive" : null);
+  idBtn_sudokuPencil.KadButtonColor(diff == "puzzle" ? "positive" : null);
 }
 
 function sudokuSetDoneNumbers() {
@@ -285,7 +285,7 @@ function sudokuSetDoneNumbers() {
     let col = null;
     if (numCount[i] == 9) col = "positive";
     if (numCount[i] > 9) col = "negative";
-    KadDOM.btnColor(btnObj, col);
+    btnObj.KadButtonColor(col);
     btnObj.innerHTML = i + "<sup>" + numCount[i] + "</sup>";
   }
 }
@@ -533,7 +533,6 @@ class SudokuCell {
     }
     this.eraseSudokuPencil(tempSudRow);
     let tempSudQuad = [];
-    let x, y;
     let i = caSU.floor(this.pos.i / 3);
     let j = caSU.floor(this.pos.j / 3);
     for (let n = 0; n < 3; n++) {

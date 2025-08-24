@@ -1,5 +1,5 @@
 import { Data_Leetspeak } from "../KadData/KadData.js";
-import { dbCL, initEL, KadDOM, KadRandom, KadString } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, initEL, KadRandom, KadString } from "../KadUtils/KadUtils.js";
 const thiontuData = {
   input: "",
   inputRaw: "",
@@ -71,7 +71,9 @@ const thiontuData = {
         return true;
       },
       get func() {
-        return window.btoa(unescape(encodeURIComponent(thiontuData.input)));
+        cons;
+        return window.btoa(thiontuData.input);
+        // return window.btoa(unescape(encodeURIComponent(thiontuData.input)));
       },
     },
 
@@ -99,16 +101,15 @@ const thiontuData = {
         return arr.join("");
       },
     },
-    base64ToString: {
-      btnName: "Base64 to String",
-      get enable() {
-        return true;
-      },
-      get func() {
-        return window.atob(thiontuData.input);
-        // return decodeURIComponent(escape(window.atob(thiontuData.input)));
-      },
-    },
+    // base64ToString: {
+    //   btnName: "Base64 to String",
+    //   get enable() {
+    //     return true;
+    //   },
+    //   get func() {
+    //     return window.atob(thiontuData.input);
+    //   },
+    // },
     binaryToDecimal: {
       btnName: "Binary to Decimal",
       get enable() {
@@ -133,26 +134,6 @@ const thiontuData = {
         return arr.join(" ");
       },
     },
-    textToLeetSimple: {
-      btnName: "Leetspeak (1337)",
-      get enable() {
-        return true;
-      },
-      get func() {
-        let retText = "";
-        let arr = thiontuData.input.trim();
-        for (let letter of arr) {
-          const L = letter.toUpperCase();
-          const index = Data_Leetspeak.findIndex((item) => item[0] == L);
-          if (index < 0) {
-            retText += letter;
-          } else {
-            retText += Data_Leetspeak[index][1][0];
-          }
-        }
-        return retText;
-      },
-    },
     decimalToBinary: {
       btnName: "Decimal to Binary",
       get enable() {
@@ -175,6 +156,26 @@ const thiontuData = {
         let arr = thiontuData.input.split(regexSplit);
         arr = arr.map((txt) => Number(txt).toString(16));
         return arr.join(" ");
+      },
+    },
+    textToLeetSimple: {
+      btnName: "Leetspeak (1337)",
+      get enable() {
+        return true;
+      },
+      get func() {
+        let retText = "";
+        let arr = thiontuData.input.trim();
+        for (let letter of arr) {
+          const L = letter.toUpperCase();
+          const index = Data_Leetspeak.findIndex((item) => item[0] == L);
+          if (index < 0) {
+            retText += letter;
+          } else {
+            retText += Data_Leetspeak[index][1][0];
+          }
+        }
+        return retText;
       },
     },
     textToLeetAdvanced: {
@@ -208,18 +209,16 @@ export function clear_cl_Thiontu() {
   idArea_thiontuOutputArea.KadReset();
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
   for (let i = 0; i < clBtn.length; i++) {
-    KadDOM.enableBtn(clBtn[i], true);
-    clBtn[i].id = `idBtn_thiontuToText_${Object.keys(thiontuData.opts)[i]}`;
-    clBtn[i].textContent = Object.values(thiontuData.opts)[i].btnName;
-    clBtn[i].value = Object.keys(thiontuData.opts)[i];
-    clBtn[i].addEventListener("click", thiontuOptionChange, false);
-    if (i === 0) {
-      KadDOM.btnColor(clBtn[0], "positive");
-      thiontuData.selected = Object.keys(thiontuData.opts)[i];
-    } else {
-      KadDOM.btnColor(clBtn[i]);
-    }
+    const btn = dbID(clBtn[i]);
+    btn.id = `idBtn_thiontuToText_${Object.keys(thiontuData.opts)[i]}`;
+    initEL({ id: clBtn[i], fn: thiontuOptionChange, resetValue: Object.values(thiontuData.opts)[i].btnName });
+    btn.KadEnable(true);
+    btn.KadButtonColor();
+    btn.value = Object.keys(thiontuData.opts)[i];
   }
+
+  clBtn[0].KadButtonColor("positive");
+  thiontuData.selected = Object.keys(thiontuData.opts)[0];
 }
 
 function thiontuOptionChange(btn) {
@@ -227,10 +226,10 @@ function thiontuOptionChange(btn) {
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
   for (let i = 0; i < clBtn.length; i++) {
     if (!clBtn[i].disabled) {
-      KadDOM.btnColor(clBtn[i]);
+      clBtn[i].KadButtonColor();
     }
   }
-  KadDOM.btnColor(obj, "positive");
+  obj.KadButtonColor("positive");
   thiontuData.selected = obj.value;
   thiontuUpdate();
 }
@@ -242,18 +241,14 @@ function thiontuUpdate() {
   //check text and disable buttons if input is not valid for them
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
   for (let i = 0; i < clBtn.length; i++) {
-    KadDOM.enableBtn(clBtn[i], thiontuData.opts[clBtn[i].value].enable);
-    if (thiontuData.opts[clBtn[i].value].enable) {
-      KadDOM.enableBtn(clBtn[i], true);
-    } else {
-      KadDOM.enableBtn(clBtn[i], false);
-      clBtn[i].style.backgroundColor = "";
-    }
+    clBtn[i].KadEnable(thiontuData.opts[clBtn[i].value].enable);
+    dbID(clBtn[i]).KadEnable(thiontuData.opts[clBtn[i].value].enable);
+    // clBtn[i].style.backgroundColor = "";
   }
 
   //if selected is disabled, jump to ALL CAPS
   if (!thiontuData.opts[thiontuData.selected].enable) {
-    KadDOM.btnColor(clBtn[0], "positive");
+    clBtn[0].KadButtonColor("positive");
     thiontuData.selected = clBtn[0].value;
   }
   idArea_thiontuOutputArea.value = thiontuData.input == "" || thiontuData.input == 0 ? "" : thiontuData.opts[thiontuData.selected].func;

@@ -1,4 +1,4 @@
-import { dbID, deepClone, initEL, KadDOM, KadInteraction } from "../KadUtils/KadUtils.js";
+import { dbID, deepClone, initEL, KadInteraction } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
@@ -128,13 +128,13 @@ function rayDebugChange() {
 
 function rayPolyChange() {
   raycasterOptions.modes.poly = dbID(idCb_rayPoly).checked;
-  KadDOM.enableBtn(idCb_raySpider, !raycasterOptions.modes.poly);
+  idCb_raySpider.KadEnable(!raycasterOptions.modes.poly);
   KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 
 function raySpiderChange() {
   raycasterOptions.modes.spider = dbID(idCb_raySpider).checked;
-  KadDOM.enableBtn(idCb_rayPoly, !raycasterOptions.modes.spider);
+  idCb_rayPoly.KadEnable(!raycasterOptions.modes.spider);
   KadInteraction.focus(idCanv_rayCaster, caRC);
 }
 

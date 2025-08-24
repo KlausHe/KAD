@@ -29,7 +29,7 @@ const hverertuOptions = {
     },
   },
 };
-initEL({ id: idVin_hverertuEntry, fn: hverertuGetInput, resetValue: "Enter a Name" });
+initEL({ id: idVin_hverertuEntry, fn: hverertuGetInput, resetValue: "Vorname eingeben" });
 initEL({ id: idBtn_hverertuEntry, fn: hverertuGetInput });
 
 export function clear_cl_Hverertu() {

@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
-import { initEL, KadDOM, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 
 const storreOptions = {
   data: Data_Country_CodesIso3166,
@@ -27,8 +27,8 @@ initEL({ id: idBtn_storreQuestionA, fn: storreQuestion, dataset: ["set", "A"] })
 initEL({ id: idBtn_storreQuestionB, fn: storreQuestion, dataset: ["set", "B"] });
 
 export function clear_cl_Storre() {
-  KadDOM.enableBtn(idBtn_storreQuestionA, false);
-  KadDOM.enableBtn(idBtn_storreQuestionB, false);
+  idBtn_storreQuestionA.KadEnable(false);
+  idBtn_storreQuestionB.KadEnable(false);
   storreReset();
 }
 
@@ -41,24 +41,24 @@ function storreReset() {
 }
 
 function storreStartArea() {
-  KadDOM.btnColor(idBtn_storreStartArea, "positive");
-  KadDOM.btnColor(idBtn_storreStartPopulation, null);
+  idBtn_storreStartArea.KadButtonColor("positive");
+  idBtn_storreStartPopulation.KadButtonColor(null);
   storreOptions.dataType = "area";
   storreReset();
   storreGetData();
 }
 
 function storreStartPopulation() {
-  KadDOM.btnColor(idBtn_storreStartArea, null);
-  KadDOM.btnColor(idBtn_storreStartPopulation, "positive");
+  idBtn_storreStartArea.KadButtonColor(null);
+  idBtn_storreStartPopulation.KadButtonColor("positive");
   storreOptions.dataType = "population";
   storreReset();
   storreGetData();
 }
 
 async function storreGetData() {
-  KadDOM.enableBtn(idBtn_storreQuestionA, true);
-  KadDOM.enableBtn(idBtn_storreQuestionB, true);
+  idBtn_storreQuestionA.KadEnable(true);
+  idBtn_storreQuestionB.KadEnable(true);
   storreOptions.data = KadRandom.shuffleData(storreOptions.data);
   storreDisplayQuestions();
 }
@@ -83,14 +83,14 @@ function storreQuestion(obj) {
     const set = obj.target.dataset.set;
     if ((set == "A" && storreOptions.dataA < storreOptions.dataB) || (set == "B" && storreOptions.dataA > storreOptions.dataB)) {
       storreOptions.gameState == storreOptions.gameStates.LOST;
-      KadDOM.btnColor(`idBtn_storreQuestion${set}`, "negative");
+      dbID(`idBtn_storreQuestion${set}`).KadButtonColor("negative");
       storreUpdateStreak(true);
       storreShowAnswers();
-      KadDOM.btnColor(idBtn_storreStartArea, null);
-      KadDOM.btnColor(idBtn_storreStartPopulation, null);
+      idBtn_storreStartArea.KadButtonColor(null);
+      idBtn_storreStartPopulation.KadButtonColor(null);
       return;
     }
-    KadDOM.btnColor(`idBtn_storreQuestion${set}`, "positive");
+    dbID(`idBtn_storreQuestion${set}`).KadButtonColor("positive");
     storreShowAnswers();
     storreOptions.gameState = storreOptions.gameStates.ANSWERED;
     storreOptions.streak++;
@@ -103,8 +103,8 @@ function storreShowAnswers(clear = false) {
   idLbl_storreAnswerA.innerHTML = clear ? "" : KadValue.number(storreOptions.dataA, { indicator: true }) + unit;
   idLbl_storreAnswerB.innerHTML = clear ? "" : KadValue.number(storreOptions.dataB, { indicator: true }) + unit;
   if (clear) {
-    KadDOM.btnColor(idBtn_storreQuestionA, null);
-    KadDOM.btnColor(idBtn_storreQuestionB, null);
+    // idBtn_storreQuestionA.KadButtonColor();
+    // idBtn_storreQuestionB.KadButtonColor();
   }
 }
 

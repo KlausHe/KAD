@@ -3,7 +3,7 @@
 
 import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
 import { Data_Olympia } from "../KadData/KadData_Olympiadaten.js";
-import { KadArray, KadDOM, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
   baseData: new Map(Data_Olympia),
@@ -125,7 +125,7 @@ function olympiaUpdate() {
 
 function olympiaSpecific() {
   olympiaOptions.specific = !olympiaOptions.specific;
-  KadDOM.btnColor(idBtn_olympiaSpecific, olympiaOptions.specific ? "positive" : null);
+  idBtn_olympiaSpecific.KadButtonColor(olympiaOptions.specific ? "positive" : null);
   olympiaTableReturn();
 }
 

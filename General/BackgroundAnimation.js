@@ -109,7 +109,6 @@ const caBA = new p5((c) => {
   };
 }, "#idCanv_backgroundAnimation");
 
-// ---------------
 class Clock {
   constructor() {
     this.Framerate = 4;
@@ -295,8 +294,8 @@ class Trail {
     caBA.noFill();
     caBA.stroke(this.col);
     caBA.strokeWeight(this.w * 2);
-    this.shape = ""; //KadRandom.randomObject(["", caBA.TRIANGLE_FAN])
-    this.close = caBA.OPEN; //KadRandom.randomObject(["", caBA.CLOSE])
+    this.shape = "";
+    this.close = caBA.OPEN;
     this.trail[0] = {
       x: caBA.mouseX,
       y: caBA.mouseY,
@@ -488,15 +487,15 @@ class Cardioid {
     caBA.translate(caBA.width / 2, caBA.height / 2);
     caBA.circle(0, 0, this.r * 2);
     for (let i = 0; i < this.total; i++) {
-      const a = this.getVector(i, this.total);
-      const b = this.getVector(i * this.factor, this.total);
+      const a = this.getVector(i);
+      const b = this.getVector(i * this.factor);
       caBA.line(a.x, a.y, b.x, b.y);
     }
     if (this.factor >= 10 || this.factor < 1) {
       this.fDir *= -1;
     }
   }
-  getVector(index, total) {
+  getVector(index) {
     const angle = caBA.map(index % this.total, 0, this.total, 0, caBA.TWO_PI);
     const v = p5.Vector.fromAngle(angle + caBA.PI);
     v.mult(this.r);
@@ -551,47 +550,46 @@ class AStar {
     caBA.translate(this.resolution / 2, this.resolution / 2);
     this.current = null;
     // Am I still searching?
-    if (this.openSet.length > 0) {
-      let winner = 0;
-      this.openSet.forEach((s, index) => {
-        if (s.f < this.openSet[winner].f) winner = index;
-      });
-      this.current = this.openSet[winner];
-      if (this.current === this.endPoint) {
-        bgaQuit();
-        return;
-      }
-      // Best option moves from openSet to closedSet
-      this.removeFromArray(this.openSet, this.current);
-      this.closedSet.push(this.current);
-
-      // Check all the neighbors
-      let neighbors = this.current.neighbors;
-      for (let i = 0; i < neighbors.length; i++) {
-        const neighbor = neighbors[i];
-        if (!this.closedSet.includes(neighbor) && !neighbor.wall) {
-          let tempG = this.current.g + this.heuristic(neighbor, this.current);
-          let newPath = false;
-          if (this.openSet.includes(neighbor)) {
-            if (tempG < neighbor.g) {
-              neighbor.g = tempG;
-              newPath = true;
-            }
-          } else {
-            neighbor.g = tempG;
-            newPath = true;
-            this.openSet.push(neighbor);
-          }
-          if (newPath) {
-            neighbor.h = this.heuristic(neighbor, this.endPoint);
-            neighbor.f = neighbor.g + neighbor.h;
-            neighbor.previous = this.current;
-          }
-        }
-      }
-    } else {
+    if (this.openSet.length <= 0) {
       bgaQuit();
       return;
+    }
+    let winner = 0;
+    this.openSet.forEach((s, index) => {
+      if (s.f < this.openSet[winner].f) winner = index;
+    });
+    this.current = this.openSet[winner];
+    if (this.current === this.endPoint) {
+      bgaQuit();
+      return;
+    }
+    // Best option moves from openSet to closedSet
+    this.removeFromArray(this.openSet, this.current);
+    this.closedSet.push(this.current);
+
+    // Check all the neighbors
+    let neighbors = this.current.neighbors;
+    for (let i = 0; i < neighbors.length; i++) {
+      const neighbor = neighbors[i];
+      if (!this.closedSet.includes(neighbor) && !neighbor.wall) {
+        let tempG = this.current.g + this.heuristic(neighbor, this.current);
+        let newPath = false;
+        if (this.openSet.includes(neighbor)) {
+          if (tempG < neighbor.g) {
+            neighbor.g = tempG;
+            newPath = true;
+          }
+        } else {
+          neighbor.g = tempG;
+          newPath = true;
+          this.openSet.push(neighbor);
+        }
+        if (newPath) {
+          neighbor.h = this.heuristic(neighbor, this.endPoint);
+          neighbor.f = neighbor.g + neighbor.h;
+          neighbor.previous = this.current;
+        }
+      }
     }
     caBA.clear();
     for (let i = 0; i < this.cols; i++) {
@@ -866,14 +864,16 @@ class PoissonDisc {
         }
       }
     }
+    if (this.ordered.length >= 10000) {
+      bgaQuit();
+      return;
+    }
+
     for (let i = 0; i < this.ordered.length; i++) {
       if (this.ordered[i]) {
         caBA.fill(i % 360, 50, 50, bgaOptions.alpha);
         caBA.circle(this.ordered[i].x, this.ordered[i].y, bgaOptions.pointDiameter);
       }
-    }
-    if (this.ordered.length >= 10000) {
-      bgaQuit();
     }
   }
 }

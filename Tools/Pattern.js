@@ -1,4 +1,4 @@
-import { dbID, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 const patternOptions = {
@@ -8,34 +8,40 @@ const patternOptions = {
   get canvas() {
     return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h / 4 };
   },
-  names: ["Gesamtlänge", "Seitenversatz", "Asymetrie", "Punkte", "Vorschlag"],
-  valOrig: [330, 20, 0, 3, 3],
+  names: ["Gesamtlänge", "Seitenversatz", "Asymetrie", "Löcher", "Vorschlag"],
+  // valOrig: [300, 0, 0, 3, 3],
   size: 0,
   side: 0,
   asym: 0,
   holes: 0,
   propHoles: 0,
-  holeDist: 90,
+  holeDistanceMultiplier: 2,
   absArr: [],
+  style: {
+    bodyStroke: 3,
+    circleDiameter: 10,
+  },
 };
 
-initEL({ id: idVin_Pattern0, fn: patternSize, resetValue: patternOptions.valOrig[0] });
-initEL({ id: idVin_Pattern1, fn: patternSide, resetValue: patternOptions.valOrig[1] });
-initEL({ id: idVin_Pattern2, fn: patternAsym, resetValue: patternOptions.valOrig[2] });
-initEL({ id: idVin_Pattern3, fn: patternHoles, resetValue: patternOptions.valOrig[3] });
-initEL({ id: idBtn_Pattern4, fn: patternProp });
+initEL({ id: idVin_patternLength, fn: patternSize, resetValue: 300 });
+initEL({ id: idVin_patternSides, fn: patternSide, resetValue: 20 });
+initEL({ id: idVin_patternAsymetry, fn: patternAsym, resetValue: 0 });
+initEL({ id: idVin_patternHoleCount, fn: patternHoles, resetValue: 3 });
+initEL({ id: idBtn_patternProposedHoleCount, fn: patternProp });
+
+initEL({ id: idLbl_patternLength, resetValue: patternOptions.names[0] });
+initEL({ id: idLbl_patternSides, resetValue: patternOptions.names[1] });
+initEL({ id: idLbl_patternAsymetry, resetValue: patternOptions.names[2] });
+initEL({ id: idLbl_patternHoleCount, resetValue: patternOptions.names[3] });
+initEL({ id: idLbl_patternProposedHoleCount, resetValue: patternOptions.names[4] });
 
 export function clear_cl_Pattern() {
   KadInteraction.removeContextmenu(idCanv_pattern);
-  patternOptions.size = idVin_Pattern0.KadReset();
-  patternOptions.side = idVin_Pattern1.KadReset();
-  patternOptions.asym = idVin_Pattern2.KadReset();
-  patternOptions.holes = idVin_Pattern3.KadReset();
+  patternOptions.size = idVin_patternLength.KadReset();
+  patternOptions.side = idVin_patternSides.KadReset();
+  patternOptions.asym = idVin_patternAsymetry.KadReset();
+  patternOptions.holes = idVin_patternHoleCount.KadReset();
 
-  dbID("idLbl_Pattern0").textContent = patternOptions.names[0]; //gesamltänge
-  dbID("idLbl_Pattern1").textContent = patternOptions.names[1]; //Seitenversatz
-  dbID("idLbl_Pattern2").textContent = patternOptions.names[2]; //Asymmetrie
-  dbID("idLbl_Pattern3").textContent = patternOptions.names[3]; //Punkte
   calcPattern();
 }
 
@@ -61,9 +67,9 @@ const caPA = new p5((c) => {
     const offsetTextAbs = offsetLineAbs + 0.05;
 
     //Maincontur
-    patternLine([0, h * offsetContur], [w, h * offsetContur], 3);
-    patternLine([0, h * offsetContur], [0, h], 3);
-    patternLine([w, h * offsetContur], [w, h], 3);
+    patternLine([0, h * offsetContur], [w, h * offsetContur], patternOptions.style.bodyStroke);
+    patternLine([0, h * offsetContur], [0, h], patternOptions.style.bodyStroke);
+    patternLine([w, h * offsetContur], [w, h], patternOptions.style.bodyStroke);
 
     //text Length top
     patternText(KadValue.number(patternOptions.size, { decimals: 3 }), [w / 2, 0]);
@@ -77,7 +83,7 @@ const caPA = new p5((c) => {
       prevX = (patternOptions.absArr[i - 1] / patternOptions.size) * w;
 
       if (i < patternOptions.absArr.length - 1) {
-        patternPoint([currX, h * offsetPoint], 3, 10);
+        patternPoint([currX, h * offsetPoint], patternOptions.style.bodyStroke, patternOptions.style.circleDiameter);
         patternLine([currX, h * offsetPoint], [currX, h * offsetLineAbs]);
         patternText(KadValue.number(patternOptions.absArr[i], { decimals: 3 }), [currX, h * offsetTextAbs]);
       }
@@ -93,53 +99,73 @@ export function canvas_cl_Pattern() {
 }
 
 function patternSize() {
-  patternOptions.size = idVin_Pattern0.KadGet({ failSafe: patternOptions.valOrig[0] });
+  patternOptions.size = idVin_patternLength.KadGet();
   calcPattern();
 }
 function patternSide() {
-  patternOptions.side = idVin_Pattern1.KadGet({ failSafe: patternOptions.valOrig[1] });
+  patternOptions.side = idVin_patternSides.KadGet();
   calcPattern();
 }
 function patternAsym() {
-  patternOptions.asym = idVin_Pattern2.KadGet({ failSafe: patternOptions.valOrig[2] });
+  patternOptions.asym = idVin_patternAsymetry.KadGet();
   calcPattern();
 }
 function patternHoles() {
-  patternOptions.holes = idVin_Pattern3.KadGet({ failSafe: patternOptions.valOrig[3] });
+  patternOptions.holes = idVin_patternHoleCount.KadGet();
   calcPattern();
 }
 function patternProp() {
   patternOptions.holes = patternOptions.propHoles;
-  dbID("idVin_Pattern3").value = patternOptions.propHoles;
+  idVin_patternHoleCount.KadSetValue(patternOptions.propHoles);
   calcPattern();
 }
 
 function calcPattern() {
-  //correct side if size < 2 * side
-  patternOptions.side = patternOptions.size <= 2 * patternOptions.side ? 0 : patternOptions.side;
-  dbID("idLbl_Pattern1").textContent = patternOptions.side;
-
-  const correctedSize = patternOptions.size - 2 * patternOptions.side;
-  patternOptions.propHoles = 1 + Math.ceil((correctedSize - patternOptions.asym) / patternOptions.holeDist);
-  dbID("idBtn_Pattern4").textContent = `${patternOptions.propHoles} Punkte`;
-
-  patternOptions.absArr = [0];
-  // const tempSize = patternOptions.holes % 2 == 0 ? correctedSize - patternOptions.asym : correctedSize;
-  const holeDistance = correctedSize / (patternOptions.holes - 1);
-
-  for (let i = 0; i < patternOptions.holes; i++) {
-    const asymAdd = i > patternOptions.holes * 0.5 ? 0 : patternOptions.asym;
-    patternOptions.absArr[i + 1] = patternOptions.side + i * holeDistance + asymAdd;
+  if (patternOptions.size == 0) return;
+  let side = patternOptions.side;
+  const sizeToSmallForSides = patternOptions.size <= 2 * patternOptions.side;
+  idVin_patternSides.KadEnable(!sizeToSmallForSides);
+  if (sizeToSmallForSides) {
+    side = 0;
   }
+
+  const correctedSize = patternOptions.size - 2 * side;
+  //calculate spaces between holes
+  // --> without Asym when "patternOptions.holes" is uneven
+  // --> with Asym when "patternOptions.holes" is even
+  let asymetryinfluence = 0;
+  if (patternOptions.holes % 2 == 0) {
+    asymetryinfluence = patternOptions.asym;
+  }
+  let holeDistance = (correctedSize - asymetryinfluence) / (patternOptions.holes - 1);
+
+  // calculate the positions
+  patternOptions.absArr = [];
+  for (let i = 0; i < patternOptions.holes; i++) {
+    let asymAdd = 0;
+    if (i >= patternOptions.holes * 0.5) {
+      asymAdd = asymetryinfluence;
+    }
+    patternOptions.absArr[i] = side + i * holeDistance + asymAdd;
+  }
+  patternOptions.absArr.unshift(0);
   patternOptions.absArr.push(patternOptions.size);
+
+  // calculate porposedHoleCount
+  const orderOfPower = Math.floor(patternOptions.size).toString().length; // faster than calculate with log(n)? https://math.stackexchange.com/questions/1604448/how-to-find-out-if-a-number-is-a-hundred-or-thousand
+  const holeDisatanceProposed = 10 ** (orderOfPower - 1) * patternOptions.holeDistanceMultiplier;
+  patternOptions.propHoles = 1 + Math.ceil((correctedSize - asymetryinfluence) / holeDisatanceProposed);
+
+  // redraw / show porposed holeCount
   caPA.redraw();
+  idBtn_patternProposedHoleCount.textContent = `${patternOptions.propHoles} Punkte`;
 }
 
-function patternPoint(pos, weight = 3, d = 10) {
+function patternPoint(pos, weight, diameter) {
   caPA.stroke(globalColors.elements.line);
   caPA.strokeWeight(weight);
   caPA.noFill();
-  caPA.circle(...pos, d);
+  caPA.circle(...pos, diameter);
 }
 
 function patternLine(start, end, weight = 1) {
