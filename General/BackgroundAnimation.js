@@ -1,6 +1,10 @@
 import { contentLayout, navClick } from "../General/Layout.js";
-import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, KadValue, dbID, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
+
+initEL({ id: idDiv_bgaToggle, fn: bgaToggle });
+initEL({ id: idSel_bgaSelect, fn: bgaSelectAnimation, selList: [1], selStartIndex: 0 });
+initEL({ id: idDiv_bgaClearGrid, fn: bgaClearGrid });
 
 export const bgaOptions = {
   curr: 0,
@@ -14,8 +18,8 @@ export const bgaOptions = {
 };
 
 export function clear_cl_BackgroundAnimation() {
-  bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Cursordot(), new Trail(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new Truchet(), new GameOfLife(), new PongAI()];
-  bgaOptions.curr = idSel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name) });
+  bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new Truchet(), new GameOfLife(), new PongAI()]; //new Cursordot(), new Trail(),
+  bgaOptions.curr = idSel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name), selStartIndex: KadRandom.randomIndex(bgaOptions.animations) });
 }
 
 export function canvas_cl_BackgroundAnimation() {
@@ -44,10 +48,6 @@ function bgaClearGrid() {
     navClick();
   }
 }
-
-initEL({ id: idDiv_bgaToggle, fn: bgaToggle });
-initEL({ id: idSel_bgaSelect, fn: bgaSelectAnimation, selList: [1], selStartIndex: 13 });
-initEL({ id: idDiv_bgaClearGrid, fn: bgaClearGrid });
 
 function bgaStart() {
   bgaOptions.animations[bgaOptions.curr].reset();
@@ -259,7 +259,7 @@ class Time {
     caBA.text(time, -this.offset, 0);
   }
 }
-
+/*
 class Cursordot {
   constructor() {
     this.Framerate = 30;
@@ -323,6 +323,7 @@ class Trail {
     caBA.endShape(this.close);
   }
 }
+*/
 
 class Hilbert {
   constructor() {
@@ -1037,7 +1038,7 @@ class GameOfLife {
     this.gridCurr = KadArray.createArray({ x: this.cols, y: this.rows });
     for (let i = 0; i < this.cols; i++) {
       for (let j = 0; j < this.rows; j++) {
-        this.gridCurr[i][j] = Math.random() > 0.7;
+        this.gridCurr[i][j] = Math.random() > 0.75;
       }
     }
     this.gridPrev = null;
@@ -1093,7 +1094,7 @@ class GameOfLife {
         sum += grid[c][r];
       }
     }
-    sum -= g[x][y];
+    sum -= grid[x][y];
     return sum;
   }
   copy2DArray(from) {

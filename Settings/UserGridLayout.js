@@ -22,6 +22,7 @@ const userGridOptions = {
 };
 
 // initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
+initEL({ id: idBtn_userGridPrioritize, fn: userGridLayoutProiritize });
 initEL({ id: idBtn_userGridSaveLayout, fn: saveUsergridLayout });
 initEL({ id: idSel_userGridSelect, fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
 
@@ -106,10 +107,66 @@ function userGridUpdateGroup(group) {
   userGridRedraw();
 }
 
-// function userGridToggleAll() { }
-
 function userGridRedraw() {
   userGridCreateTable();
+  userGridCreateCells();
+}
+
+function saveUsergridLayout() {
+  dbID("idBtn_child_gridtitle_dbUL_cl_UserGridLayout").click();
+}
+
+function userGridLayoutProiritize() {
+  let header = null;
+  let body = [
+    {
+      data: userGridOptions.enabledList.map((item) => contentGrid[item].name),
+      settings: {
+        title: userGridOptions.enabledList.map((item) => {
+          const info = contentGrid[item].info;
+          const heritage = contentGrid[item].heritage;
+          let title = contentGrid[item].contentGroup;
+          if (heritage != undefined) title += ` (${heritage[1]})`;
+          if (info != undefined) title += `: ${info}`;
+          return title;
+        }),
+        description: "userGridLayout",
+        noBorder: ["right"],
+      },
+    },
+    {
+      type: "KADImg",
+      data: "up",
+      settings: {
+        onclick: userGridLayoutPrioritizeUp,
+        noBorder: ["right"],
+      },
+    },
+    {
+      type: "KADImg",
+      data: "down",
+      settings: {
+        onclick: userGridLayoutPrioritizeDown,
+      },
+    },
+  ];
+  KadTable.createHTMLGrid({ id: idTab_disableUserGridTable, header, body });
+}
+
+function userGridLayoutPrioritizeUp(index) {
+  if (index == 0) return;
+  userGridLayoutPrioritize(index, -1);
+}
+
+function userGridLayoutPrioritizeDown(index) {
+  if (index == userGridOptions.enabledList.length - 1) return;
+  userGridLayoutPrioritize(index, 1);
+}
+
+function userGridLayoutPrioritize(index, dir) {
+  const arrElement = userGridOptions.enabledList.splice(index, 1)[0];
+  userGridOptions.enabledList.splice(index + dir, 0, arrElement);
+  userGridLayoutProiritize();
   userGridCreateCells();
 }
 
@@ -152,10 +209,6 @@ function userGridCreateTable() {
   KadTable.createHTMLGrid({ id: idTab_disableUserGridTable, header, body });
 }
 
-function saveUsergridLayout() {
-  dbID("idBtn_child_gridtitle_dbUL_cl_UserGridLayout").click();
-}
-
 function userGridSelectGroup() {
   userGridOptions.usedGrid = idSel_userGridSelect.KadGet();
   userGridCreateCells();
@@ -173,10 +226,6 @@ const caUG = new p5((c) => {
     c.canv_UGird.parent("#idCanv_userGrid");
     c.colorMode(c.HSL);
     c.noLoop();
-    // c.canv_UGird.mouseMoved(mouseMovedUGrid);
-    // c.canv_UGird.mousePressed(mousePressedUGrid);
-    // c.canv_UGird.mouseReleased(mouseReleasedUGrid);
-    // c.canv_UGird.doubleClicked(mouseDoubleUGrid); // attach
   };
 
   c.draw = function () {
@@ -191,7 +240,10 @@ export function userGridCreateCells() {
   let list = [];
   if (userGridOptions.usedGrid == "User") {
     list = userGridOptions.enabledList;
+  } else {
+    list = contentLayout.navContent[userGridOptions.usedGrid];
   }
+
   if (list.length == 0) return;
   const { grid2DArray, gridData } = createGridLayout(userGridOptions.usedGrid, list);
 
@@ -199,7 +251,7 @@ export function userGridCreateCells() {
   const x = Math.floor(userGridOptions.canvas.w / grid2DArray[0].length);
   const cellSize = [x, userGridOptions.cellHeight];
   userGridOptions.height = cellSize[1] * grid2DArray.length + userGridOptions.cellHeight / 2;
-  canvas_cl_UserGridLayout(); //resize Canvas
+  canvas_cl_UserGridLayout();
 
   for (let item of gridData) {
     const gridObj = contentGrid[item.name];
@@ -222,24 +274,22 @@ class UGridCell {
   show() {
     caUG.push();
     caUG.translate(this.pos[0], this.pos[1]);
-    //RECTANGLE
-    // caUG.noFill();
     caUG.fill(this.backgroundColor);
     caUG.stroke(this.textColor);
     caUG.strokeWeight(2);
     caUG.rect(this.margin, this.margin, this.size[0] - 2 * this.margin, this.size[1] - 2 * this.margin);
-    //TEXT
     caUG.fill(this.textColor);
     caUG.noStroke();
     caUG.textAlign(caUG.CENTER, caUG.BOTTOM);
     caUG.text(this.name, this.size[0] / 2, this.size[1] / 2);
     caUG.textAlign(caUG.CENTER, caUG.TOP);
     caUG.text(`(${this.group})`, this.size[0] / 2, this.size[1] / 2);
-    // caUG.stroke(0, 0, 255);
-    // caUG.strokeWeight(8);
     caUG.pop();
   }
+}
+/*
 
+// from UGridCell:
   // snap() {
   //   this.posGrid.x = caUG.constrain(Math.floor((this.posCanvas.x / this.tileDim.x) + 0.5), 0, userGridOptions.canvasRows - (this.tileWH.x + 1));
   //   this.posGrid.y = caUG.constrain(Math.floor((this.posCanvas.y / this.tileDim.y) + 0.5), 0, userGridOptions.canvasCols - (this.tileWH.y - 1));
@@ -250,8 +300,8 @@ class UGridCell {
   // contains(mouse) {
   //   return (mouse.x > this.posCanvas.x && mouse.x < this.posCanvas.x + this.tileSize.x && mouse.y > this.posCanvas.y && mouse.y < this.posCanvas.y + this.tileSize.y);
   // };
-}
-/*
+
+
 function mouseDoubleUGrid() {
   let vMouse = caUG.createVector(caUG.mouseX, caUG.mouseY);
   for (let i = 0; i < userGridOptions.canvasCells.length; i++) {
@@ -294,21 +344,5 @@ function mouseMovedUGrid() {
     // Wow, what a function!
   };
 };
-
-*/
-
-//-------------
-/*
-
-function userGridToggleAll() {
-  userGridOptions.enableAll = !userGridOptions.enableAll;
-  for (const groupKey in userGridOptions.groups) {
-    userGridOptions.groups[groupKey].forEach((obj) => {
-      dbID(`idVin_disableUsergridSingle_CB_${Object.keys(obj)}`).checked = userGridOptions.enableAll;
-    });
-    userGridCheckGroup(groupKey);
-    userGridUpdateGroup(groupKey);
-  }
-}
 
 */
