@@ -1,18 +1,18 @@
 // import { createRequestBody, isLanguageSupported, translate } from "../Data/translateAPI.js";
-// import { Data_Country_CodesIso639 } from "../KadData/KadDataCountries.js";
-// import { daEL, dbID, KadArray, KadDOM, KadLog } from "../KadUtils/KadUtils.js";
+import { Data_Country_CodesIso639 } from "../KadData/KadData_Countries.js";
+import { dbID, KadArray, KadDOM, KadLog } from "../KadUtils/KadUtils.js";
 
-// const speechOptions = {
-//   synthObj: window.speechSynthesis,
-//   voices: [],
-//   resetCouner: 0,
-//   timer: null,
-//   input: "",
-//   fromIndex: 0,
-//   fromCode: "",
-//   toIndex: 0,
-//   toCode: "",
-// };
+const speechOptions = {
+  synthObj: window.speechSynthesis,
+  voices: [],
+  resetCouner: 0,
+  timer: null,
+  input: "",
+  fromIndex: 0,
+  fromCode: "",
+  toIndex: 0,
+  toCode: "",
+};
 
 // daEL(idSel_speechLanguageFrom, "change", speechHandleLanguageSelect);
 // daEL(idSel_speechLanguageTo, "change", speechHandleLanguageSelect);
@@ -22,7 +22,6 @@
 // daEL(idArea_speechFromText, "input", speechTranslate);
 
 export function clear_cl_Speech() {
-  return;
   speechOptions.voices = [];
   speechOptions.synthObj.cancel();
   KadDOM.resetInput("idArea_speechFromText", "Text übersetzen");

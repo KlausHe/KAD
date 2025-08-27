@@ -1,4 +1,3 @@
-import { speechSpeakOutput } from "../Benkyou/Speech.js";
 import { dbID, initEL, KadDate } from "../KadUtils/KadUtils.js";
 
 const eggOptions = {
@@ -6,6 +5,10 @@ const eggOptions = {
   timeTotal: 0,
   timeRemaining: 0,
   timerState: false,
+  startCallbacks: [
+    ["Start", eggStart],
+    ["Stop", eggStop],
+  ],
   mass: {
     val: 0,
     valOrig: 60,
@@ -62,43 +65,40 @@ const eggOptions = {
 initEL({ id: idVin_EggMass, fn: eggMassChange, resetValue: eggOptions.mass.valOrig, domOpts: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
 initEL({ id: idVin_EggTemp, fn: eggTempChange, resetValue: eggOptions.temp.valOrig, domOpts: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
 initEL({ id: idVin_EggYolk, fn: eggYolkChange, resetValue: eggOptions.yolk.valOrig, domOpts: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
-initEL({ id: idBtn_EggStart, fn: eggStartChange });
+initEL({ id: idBtn_EggStart, fn: eggStartChange, btnCallbacks: eggOptions.startCallbacks });
+initEL({ id: idLbl_EggTime, resetValue: "Eieruhr" });
 
 export function clear_cl_Egg() {
   eggOptions.mass.val = idVin_EggMass.KadReset();
   eggOptions.temp.val = idVin_EggTemp.KadReset();
   eggOptions.yolk.val = idVin_EggYolk.KadReset();
+  eggOptions.timerState = idBtn_EggStart.KadReset();
+  idLbl_EggTime.KadReset();
 
   dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
   dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
   dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
-  eggOptions.timerState = true;
   eggStartChange();
 }
 
 function eggMassChange(obj) {
   eggOptions.mass.val = obj.target.KadGet();
   dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
-  eggRefrechInput();
+  eggCalculate();
 }
 
 function eggTempChange(obj) {
   eggOptions.temp.val = obj.target.KadGet();
   dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
-  eggRefrechInput();
+  eggCalculate();
 }
 
 function eggYolkChange(obj) {
   eggOptions.yolk.val = obj.target.KadGet();
   dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
-  eggRefrechInput();
-}
-
-function eggRefrechInput() {
-  eggOptions.timerState = false;
-  clearInterval(eggOptions.timerEggCount);
   eggCalculate();
 }
+
 function eggCalculate() {
   let tempFactor = 0.76 * ((eggOptions.temp.val - 100) / (eggOptions.yolk.val - 100));
   tempFactor = Math.log(tempFactor);
@@ -110,35 +110,36 @@ function eggCalculate() {
 
 function eggShowTime() {
   let obj = KadDate.secondsToObj(eggOptions.timeRemaining);
-  dbID("idLbl_EggTime").textContent = `${obj.h}:${obj.m}:${obj.s}`;
+  idLbl_EggTime.KadSetText(`${obj.h}:${obj.m}:${obj.s}`);
 }
 
 function eggStartChange() {
   eggOptions.timerState = !eggOptions.timerState;
-  if (eggOptions.timerState) {
-    idBtn_EggStart.textContent = "Stop";
-    eggCalculate();
-    dbID("idProg_eggProgress").setAttribute("max", eggOptions.timeTotal);
-    eggCountdown();
-    eggOptions.timerEggCount = setInterval(eggCountdown, 1000);
-  } else {
-    idBtn_EggStart.textContent = "Start";
-    clearInterval(eggOptions.timerEggCount);
-    let textStart = "Eieruhr";
-    dbID("idLbl_EggTime").textContent = textStart;
-  }
+  idVin_EggMass.KadEnable(!eggOptions.timerState);
+  idVin_EggTemp.KadEnable(!eggOptions.timerState);
+  idVin_EggYolk.KadEnable(!eggOptions.timerState);
+
+  idBtn_EggStart.KadNext();
+}
+function eggStart() {
+  eggCalculate();
+  dbID("idProg_eggProgress").setAttribute("max", eggOptions.timeTotal);
+  eggCountdown();
+  eggOptions.timerEggCount = setInterval(eggCountdown, 1000);
+}
+
+function eggStop() {
+  clearInterval(eggOptions.timerEggCount);
+  idLbl_EggTime.KadReset();
 }
 
 function eggCountdown() {
   eggOptions.timeRemaining--;
   dbID("idProg_eggProgress").setAttribute("value", eggOptions.timeRemaining);
-  if (eggOptions.timeRemaining <= 0) {
-    dbID("idLbl_EggTime").textContent = "Fertig!";
-    clearInterval(eggOptions.timerEggCount);
-    if (dbID("idCb_eggVoiceOutput").checked) {
-      speechSpeakOutput("Deine Eier sind fertig!", "de");
-    }
-  } else {
+  if (eggOptions.timeRemaining > 0) {
     eggShowTime();
+  } else {
+    idLbl_EggTime.KadSetText("Fertig!");
+    clearInterval(eggOptions.timerEggCount);
   }
 }

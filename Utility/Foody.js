@@ -1,9 +1,8 @@
-import { speechSpeakOutput } from "../Benkyou/Speech.js";
 import { dbID, initEL, KadDate, KadRandom } from "../KadUtils/KadUtils.js";
 const foodyOptions = {
-  timerRunning: false,
   timerCount: 0,
   timeTotal: 0,
+  timerState: false,
   timeRemaining: 0,
   foodIndex: 0,
   get chosenFood() {
@@ -11,6 +10,10 @@ const foodyOptions = {
   },
   preheat: 0,
   preheatOrig: 6,
+  startCallbacks: [
+    ["Start", foodyStart],
+    ["Stop", foodyStop],
+  ],
   data: [
     {
       name: "Baguette",
@@ -142,60 +145,61 @@ const foodyOptions = {
   ],
 };
 
-initEL({ id: idBtn_foodyStart, fn: foodyStartTimer });
-initEL({ id: idCb_foodyVoiceOutput, resetValue: false });
+initEL({ id: idBtn_foodyStart, fn: foodyStartChange, btnCallbacks: foodyOptions.startCallbacks });
 initEL({ id: idVin_foodyPreheat, fn: foodyPreheatChange, resetValue: foodyOptions.preheatOrig });
 initEL({ id: idSel_foodyType, fn: foodyChangeFood, selStartIndex: 0, selList: foodyOptions.data.map((f, i) => [`${f.name} (${f.time}min)`, i]) });
+initEL({ id: idLbl_foodyTime, resetValue: "Foody" });
 
 export function clear_cl_Foody() {
-  resetCounter();
-  idCb_foodyVoiceOutput.KadReset();
+  foodyOptions.timerState = idBtn_foodyStart.KadReset();
   foodyOptions.preheat = idVin_foodyPreheat.KadReset();
+  idLbl_foodyTime.KadReset();
   idSel_foodyType.KadReset({ selStartIndex: KadRandom.randomIndex(foodyOptions.data) });
-  foodyDisplayTime();
+  clearInterval(foodyOptions.timerCount);
+  foodyCalculate();
+  foodyStartChange();
 }
 
 function foodyPreheatChange() {
   foodyOptions.preheat = idVin_foodyPreheat.KadGet();
+  foodyCalculate();
 }
 
 function foodyChangeFood() {
   foodyOptions.foodIndex = idSel_foodyType.KadGet();
+  foodyCalculate();
 }
 
-function foodyStartTimer() {
-  foodyOptions.timerRunning = !foodyOptions.timerRunning;
-  idBtn_foodyStart.textContent = foodyOptions.timerRunning ? "Stop" : "Start";
-}
-
-function foodyDisplayTime() {}
-
-function foodyStartChange() {
-  if (foodyOptions.timerRunning) {
-    let noTopfPreheat;
-    if (foodyOptions.chosenFood.temp != "Topf") {
-      noTopfPreheat = foodyOptions.preheat;
-    } else {
-      noTopfPreheat = 0;
-      dbID("idLbl_foodyPreheat").textContent = "---";
-    }
-    foodyOptions.timeTotal = (foodyOptions.chosenFood.time + noTopfPreheat) * 60;
-    foodyOptions.timeRemaining = foodyOptions.timeTotal;
-    const bar = dbID("idProg_foodyProgress");
-    bar.setAttribute("max", foodyOptions.timeTotal);
-    foodyCountdown();
-    foodyOptions.timerCount = setInterval(foodyCountdown, 1000);
+function foodyCalculate() {
+  let noTopfPreheat;
+  if (foodyOptions.chosenFood.temp != "Topf") {
+    noTopfPreheat = foodyOptions.preheat;
   } else {
-    dbID("idBtn_foodyStart").textContent = "Start";
-    clearInterval(foodyOptions.timerCount);
-    let textStart = "Foody";
-    dbID("idLbl_foodyTime").innerHTML = textStart;
+    noTopfPreheat = 0;
+    dbID("idLbl_foodyPreheat").textContent = "---";
   }
+  foodyOptions.timeTotal = (foodyOptions.chosenFood.time + noTopfPreheat) * 60;
+  foodyOptions.timeRemaining = foodyOptions.timeTotal;
+  foodyShowTime();
 }
 
-function resetCounter() {
+function foodyStart() {
+  const bar = dbID("idProg_foodyProgress");
+  bar.setAttribute("max", foodyOptions.timeTotal);
+  foodyOptions.timerCount = setInterval(foodyCountdown, 1000);
+  foodyCountdown();
+}
+
+function foodyStop() {
   clearInterval(foodyOptions.timerCount);
-  foodyOptions.timerRunning = false;
+  let textStart = "Foody";
+  idLbl_foodyTime.KadSetText(textStart);
+}
+function foodyStartChange() {
+  foodyOptions.timerState = !foodyOptions.timerState;
+  idVin_foodyPreheat.KadEnable(!foodyOptions.timerState);
+  idSel_foodyType.KadEnable(!foodyOptions.timerState);
+  idBtn_foodyStart.KadNext();
 }
 
 function foodyCountdown() {
@@ -203,18 +207,16 @@ function foodyCountdown() {
   const bar = dbID("idProg_foodyProgress");
   bar.setAttribute("value", foodyOptions.timeRemaining);
   if (foodyOptions.timeRemaining <= 0) {
-    if (dbID("idCb_foodyVoiceOutput").checked) {
-      let index = idSel_foodyType.KadGet();
-      let s = foodyOptions.data[index].numerus ? "sind" : "ist";
-      const sentence = `${foodyOptions.data[index].name} ${s} feritg!`;
-      speechSpeakOutput(sentence, "de");
-    }
-    dbID("idLbl_foodyTime").textContent = "Fertig!";
+    idLbl_foodyTime.KadSetText("Fertig!");
     clearInterval(foodyOptions.timerCount);
     setTimeout(foodyStartChange, 10000);
   } else {
-    let zubereitung = foodyOptions.chosenFood.temp === "Topf" ? " (im Topf)" : " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
-    let obj = KadDate.secondsToObj(foodyOptions.timeRemaining);
-    dbID("idLbl_foodyTime").textContent = `${obj.h}:${obj.m}:${obj.s} ${zubereitung}`;
+    foodyShowTime();
   }
+}
+
+function foodyShowTime() {
+  let zubereitung = foodyOptions.chosenFood.temp === "Topf" ? " (im Topf)" : " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
+  let obj = KadDate.secondsToObj(foodyOptions.timeRemaining);
+  idLbl_foodyTime.KadSetText(`${obj.h}:${obj.m}:${obj.s} ${zubereitung}`);
 }

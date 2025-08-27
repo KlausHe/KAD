@@ -19,19 +19,25 @@ const userGridOptions = {
   columnCount: 3,
   usedGrid: "User",
   groupColors: {},
+  tableType: false,
+  tableTypes: [
+    ["Auswahl", userGridCreateTable],
+    ["Priorität", userGridLayoutProiritize],
+  ],
 };
 
 // initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
-initEL({ id: idBtn_userGridPrioritize, fn: userGridLayoutProiritize });
+initEL({ id: idBtn_userGridPrioritize, fn: userGridToggleBtn, btnCallbacks: userGridOptions.tableTypes });
 initEL({ id: idBtn_userGridSaveLayout, fn: saveUsergridLayout });
 initEL({ id: idSel_userGridSelect, fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
 
 export function clear_cl_UserGridLayout() {
+  idBtn_userGridPrioritize.KadReset();
   KadInteraction.removeContextmenu(idCanv_userGrid);
   userGridOptions.groups = {};
   userGridOptions.enableGroupList = [...contentGroupsMaincontent];
   userGridOptions.enabledList = [...contentLayout.navContent.Universe];
-
+  userGridOptions.tableType = false;
   for (let groupKey of contentGroupsMaincontent) {
     userGridOptions.groups[groupKey] = contentLayout.navContent[groupKey];
   }
@@ -114,6 +120,19 @@ function userGridRedraw() {
 
 function saveUsergridLayout() {
   dbID("idBtn_child_gridtitle_dbUL_cl_UserGridLayout").click();
+}
+
+function userGridToggleBtn() {
+  idBtn_userGridPrioritize.KadNext();
+
+  // if (!userGridOptions.tableType) {
+  //   userGridCreateTable();
+  //   idBtn_userGridPrioritize.KadSetText("Auswahl");
+  // } else {
+  //   userGridLayoutProiritize();
+  //   idBtn_userGridPrioritize.KadSetText("Priorität");
+  // }
+  userGridOptions.tableType = !userGridOptions.tableType;
 }
 
 function userGridLayoutProiritize() {
