@@ -557,16 +557,22 @@ initEL({ id: idVin_Area_0, fn: geoBerechnung });
 initEL({ id: idVin_Area_1, fn: geoBerechnung });
 initEL({ id: idVin_Area_2, fn: geoBerechnung });
 initEL({ id: idCb_geoRadius, fn: geoChangeDiameter });
+initEL({ id: idLbl_goeRadius, resetValue: "Radius verwenden" });
 
 export function clear_cl_Geometrie() {
   KadInteraction.removeContextmenu(idCanv_geometire);
   geoObjects.elementIndex = geoObjects.elementIndexOrig;
 
-  const body = [{ type: "Button", data: geoObjects.elements, settings: { onclick: changeGeoObject, uiSize: "width7", class: "clBtn_geometrieAreaSelect" } }];
+  const body = [{ type: "Button", data: geoObjects.elements, settings: { names: ["geometrieAreaSelect"], onclick: changeGeoObject, uiSize: "width7", class: "clBtn_geometrieAreaSelect", noBorder: ["bottom"] } }];
   KadTable.createHTMLGrid({ id: idTab_geometrieSelectTable, body });
 
+  let cl = dbCL("clBtn_geometrieAreaSelect", null);
+  for (let i = 0; i < cl.length; i++) {
+    initEL({ id: cl[i] });
+  }
+
   changeGeoObject(geoObjects.elementIndex);
-  dbID("idCb_geoRadius").checked = false;
+  idCb_geoRadius.checked = false;
 
   let num = document.getElementsByName("naDiv_Area").length;
   for (let i = 0; i < num; i++) {
@@ -575,7 +581,7 @@ export function clear_cl_Geometrie() {
 }
 
 function geoChangeDiameter() {
-  geoObjects.radState = dbID("idCb_geoRadius").checked;
+  geoObjects.radState = idCb_geoRadius.checked;
   let num = document.getElementsByName("naDiv_Area").length;
   for (let i = 0; i < num; i++) {
     if (geoObjects.selected.vals[i]) {
@@ -615,9 +621,9 @@ function changeGeoObject(index) {
   geoObjects.elementIndex = index;
   let cl = dbCL("clBtn_geometrieAreaSelect", null);
   for (let i = 0; i < cl.length; i++) {
-    // dbID(cl[i]).KadButtonColor();
+    cl[i].KadButtonColor();
   }
-  // cl[geoObjects.elementIndex].KadButtonColor("positive");
+  cl[geoObjects.elementIndex].KadButtonColor("positive");
   geoObjects.selected.show();
 
   let num = document.getElementsByName("naDiv_Area").length;
@@ -634,8 +640,7 @@ function changeGeoObject(index) {
     }
   }
   idCb_geoRadius.KadEnable(geoObjects.selected.cbRadiusEnable);
-  const cbEntry = dbID("idLbl_goeRadius").textContent;
-  dbID("idLbl_goeRadius").innerHTML = geoObjects.selected.cbRadiusEnable ? cbEntry : `<del>${cbEntry}</del>`;
+  idLbl_goeRadius.KadEnable(geoObjects.selected.cbRadiusEnable);
   geoBerechnung();
 }
 

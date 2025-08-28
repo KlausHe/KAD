@@ -124,14 +124,6 @@ function saveUsergridLayout() {
 
 function userGridToggleBtn() {
   idBtn_userGridPrioritize.KadNext();
-
-  // if (!userGridOptions.tableType) {
-  //   userGridCreateTable();
-  //   idBtn_userGridPrioritize.KadSetText("Auswahl");
-  // } else {
-  //   userGridLayoutProiritize();
-  //   idBtn_userGridPrioritize.KadSetText("Priorität");
-  // }
   userGridOptions.tableType = !userGridOptions.tableType;
 }
 

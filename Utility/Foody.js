@@ -157,7 +157,7 @@ export function clear_cl_Foody() {
   idSel_foodyType.KadReset({ selStartIndex: KadRandom.randomIndex(foodyOptions.data) });
   clearInterval(foodyOptions.timerCount);
   foodyCalculate();
-  foodyStartChange();
+  // foodyStartChange();
 }
 
 function foodyPreheatChange() {

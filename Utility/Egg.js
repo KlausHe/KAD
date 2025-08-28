@@ -78,7 +78,7 @@ export function clear_cl_Egg() {
   dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
   dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
   dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
-  eggStartChange();
+  // eggStartChange();
 }
 
 function eggMassChange(obj) {
@@ -118,7 +118,6 @@ function eggStartChange() {
   idVin_EggMass.KadEnable(!eggOptions.timerState);
   idVin_EggTemp.KadEnable(!eggOptions.timerState);
   idVin_EggYolk.KadEnable(!eggOptions.timerState);
-
   idBtn_EggStart.KadNext();
 }
 function eggStart() {
