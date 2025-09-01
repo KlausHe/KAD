@@ -1,5 +1,5 @@
 import { Data_Materials } from "../KadData/KadData_Material.js";
-import { initEL, KadArray, KadLog, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { materialOptions } from "./Material.js";
 
 const expansionOptions = {
@@ -27,35 +27,32 @@ const expansionOptions = {
   compareOptions: ["Vergleich", "Berechne A", "Berechne B"],
 };
 
-initEL({ id: idSel_expansionMaterialA, action: "focus", fn: expansionUpdateOptions }, { once: true });
-initEL({ id: idSel_expansionMaterialB, action: "focus", fn: expansionUpdateOptions }, { once: true });
-initEL({ id: idSel_expansionMaterialA, fn: expansionEntryMaterial, selStartIndex: expansionOptions.materials.matAOrig });
-initEL({ id: idSel_expansionMaterialB, fn: expansionEntryMaterial, selStartIndex: expansionOptions.materials.matBOrig });
-
-initEL({ id: idBtn_expansionMaterialSwitch, fn: expansionSwitch });
-initEL({ id: idBtn_expansionLength, fn: expansionEntryLength });
-initEL({ id: idBtn_expansionBaseTemperature, fn: expansionEntryBaseTemperature });
-initEL({ id: idBtn_expansionTemperature, fn: expansionEntryTemperature });
-initEL({ id: idCb_expansionDifference, fn: expansionDifference });
-initEL({ id: idCb_expansionCoefficient, fn: expansionCoefficient, resetValue: false });
-initEL({ id: idSel_expansionCompare, fn: expansionToggelCompare, selList: expansionOptions.compareOptions, selStartIndex: 0 });
-
-initEL({ id: idVin_expansionLength, resetValue: expansionOptions.lengthOrig[0] });
-initEL({ id: idVin_expansionTemperature, resetValue: expansionOptions.tempsOrig[0] });
-initEL({ id: idVin_expansionBaseTemperature, resetValue: expansionOptions.baseTemp });
-
-initEL({ id: idLbl_expansionDifference });
-initEL({ id: idLbl_expansionCoefficient });
+initEL({ id: dbID("idSel_expansionMaterialA"), action: "focus", fn: expansionUpdateOptions }, { once: true });
+initEL({ id: dbID("idSel_expansionMaterialB"), action: "focus", fn: expansionUpdateOptions }, { once: true });
+initEL({ id: dbID("idSel_expansionMaterialA"), fn: expansionEntryMaterial, selStartIndex: expansionOptions.materials.matAOrig });
+initEL({ id: dbID("idSel_expansionMaterialB"), fn: expansionEntryMaterial, selStartIndex: expansionOptions.materials.matBOrig });
+initEL({ id: dbID("idBtn_expansionMaterialSwitch"), fn: expansionSwitch });
+initEL({ id: dbID("idBtn_expansionLength"), fn: expansionEntryLength });
+initEL({ id: dbID("idBtn_expansionBaseTemperature"), fn: expansionEntryBaseTemperature });
+initEL({ id: dbID("idBtn_expansionTemperature"), fn: expansionEntryTemperature });
+initEL({ id: dbID("idCb_expansionDifference"), fn: expansionDifference });
+initEL({ id: dbID("idCb_expansionCoefficient"), fn: expansionCoefficient, resetValue: false });
+initEL({ id: dbID("idSel_expansionCompare"), fn: expansionToggelCompare, selList: expansionOptions.compareOptions, selStartIndex: 0 });
+initEL({ id: dbID("idVin_expansionLength"), resetValue: expansionOptions.lengthOrig[0] });
+initEL({ id: dbID("idVin_expansionTemperature"), resetValue: expansionOptions.tempsOrig[0] });
+initEL({ id: dbID("idVin_expansionBaseTemperature"), resetValue: expansionOptions.baseTemp });
+initEL({ id: dbID("idLbl_expansionDifference") });
+initEL({ id: dbID("idLbl_expansionCoefficient") });
 
 export function clear_cl_Expansion() {
-  idVin_expansionLength.KadReset();
-  idVin_expansionTemperature.KadReset();
-  idVin_expansionBaseTemperature.KadReset();
-  idCb_expansionCoefficient.KadReset();
-  idLbl_expansionDifference.KadReset();
-  idLbl_expansionCoefficient.KadReset();
-  idLbl_expansionDifference.KadSetHTML("Zeige &#x0394;l [mm]");
-  idLbl_expansionCoefficient.KadSetHTML("Zeige &#x03B1;<sub>T</sub> [K<sup>-1</sup>]");
+  dbID("idVin_expansionLength").KadReset();
+  dbID("idVin_expansionTemperature").KadReset();
+  dbID("idVin_expansionBaseTemperature").KadReset();
+  dbID("idCb_expansionCoefficient").KadReset();
+  dbID("idLbl_expansionDifference").KadReset();
+  dbID("idLbl_expansionCoefficient").KadReset();
+  dbID("idLbl_expansionDifference").KadSetHTML("Zeige &#x0394;l [mm]");
+  dbID("idLbl_expansionCoefficient").KadSetHTML("Zeige &#x03B1;<sub>T</sub> [K<sup>-1</sup>]");
   expansionOptions.exLength = [...expansionOptions.lengthOrig];
   expansionOptions.exTemp = [...expansionOptions.tempsOrig];
 }
@@ -65,29 +62,29 @@ export function expansionUpdateMassDependecy() {
 }
 
 export function expansionUpdateOptions() {
-  idSel_expansionMaterialA.KadReset({ selGroup: expansionOptions.expansionPopulateSelection });
-  idSel_expansionMaterialB.KadReset({ selGroup: expansionOptions.expansionPopulateSelection });
+  dbID("idSel_expansionMaterialA").KadReset({ selGroup: expansionOptions.expansionPopulateSelection });
+  dbID("idSel_expansionMaterialB").KadReset({ selGroup: expansionOptions.expansionPopulateSelection });
   expansionEntryMaterial();
 }
 
 function expansionSwitch() {
-  const tempSelA = idSel_expansionMaterialA.selectedIndex;
-  const tempSelB = idSel_expansionMaterialB.selectedIndex;
-  idSel_expansionMaterialA.options[tempSelB].selected = true;
-  idSel_expansionMaterialB.options[tempSelA].selected = true;
+  const tempSelA = dbID("idSel_expansionMaterialA").selectedIndex;
+  const tempSelB = dbID("idSel_expansionMaterialB").selectedIndex;
+  dbID("idSel_expansionMaterialA").options[tempSelB].selected = true;
+  dbID("idSel_expansionMaterialB").options[tempSelA].selected = true;
   expansionEntryMaterial();
 }
 
 function expansionEntryMaterial() {
-  expansionOptions.materials.matA = idSel_expansionMaterialA.KadGet();
-  expansionOptions.materials.matB = idSel_expansionMaterialB.KadGet();
-  idSel_expansionCompare[1].textContent = `Berechne ${expansionOptions.materials.matA}`;
-  idSel_expansionCompare[2].textContent = `Berechne ${expansionOptions.materials.matB}`;
+  expansionOptions.materials.matA = dbID("idSel_expansionMaterialA").KadGet();
+  expansionOptions.materials.matB = dbID("idSel_expansionMaterialB").KadGet();
+  dbID("idSel_expansionCompare")[1].textContent = `Berechne ${expansionOptions.materials.matA}`;
+  dbID("idSel_expansionCompare")[2].textContent = `Berechne ${expansionOptions.materials.matB}`;
   expansionCalc();
 }
 
 function expansionEntryLength() {
-  const val = idVin_expansionLength.KadGet();
+  const val = dbID("idVin_expansionLength").KadGet();
   if (!expansionOptions.exLength.includes(val)) {
     expansionOptions.exLength.push(val);
     expansionOptions.exLength.sort((a, b) => {
@@ -98,12 +95,12 @@ function expansionEntryLength() {
 }
 
 function expansionEntryBaseTemperature() {
-  expansionOptions.baseTemp = idVin_expansionBaseTemperature.KadGet();
+  expansionOptions.baseTemp = dbID("idVin_expansionBaseTemperature").KadGet();
   expansionCalc();
 }
 
 function expansionEntryTemperature() {
-  const val = idVin_expansionTemperature.KadGet();
+  const val = dbID("idVin_expansionTemperature").KadGet();
   if (!expansionOptions.exTemp.includes(val)) {
     expansionOptions.exTemp.push(val);
     expansionOptions.exTemp.sort((a, b) => {
@@ -122,14 +119,13 @@ function expansionCoefficient() {
 }
 
 function expansionToggelCompare() {
-  expansionOptions.compareIndex = idSel_expansionCompare.KadGet({ index: true });
-  KadLog.log(expansionOptions.compareIndex);
+  expansionOptions.compareIndex = dbID("idSel_expansionCompare").KadGet({ index: true });
   expansionCalc();
 }
 
 function expansionEnableDelatLength(state) {
-  idCb_expansionDifference.KadEnable(state);
-  idLbl_expansionDifference.KadEnable(state);
+  dbID("idCb_expansionDifference").KadEnable(state);
+  dbID("idLbl_expansionDifference").KadEnable(state);
 }
 
 function expansionCalc() {
@@ -148,13 +144,13 @@ function expansionCalc() {
       const alphaB = Number(Data_Materials.Materials[expansionOptions.materials.matB].expansion[selTempB]);
       let dLB = alphaB * dT * expansionOptions.exLength[l] * 0.000001;
 
-      if (idCb_expansionDifference.checked) {
+      if (dbID("idCb_expansionDifference").checked) {
         dLA += expansionOptions.exLength[l];
         dLB += expansionOptions.exLength[l];
       }
 
       let value = 0;
-      const showCoefficient = idCb_expansionCoefficient.checked;
+      const showCoefficient = dbID("idCb_expansionCoefficient").checked;
       switch (expansionOptions.compareIndex) {
         case 0:
           expansionEnableDelatLength(false);

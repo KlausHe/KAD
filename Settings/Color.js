@@ -95,7 +95,7 @@ export const globalColors = {
   },
 };
 
-initEL({ id: idSel_colorSettingsDefault, fn: colorDefaultMode, selList: colorSettingsOptions.defaultMode.map((l) => [KadString.firstLetterCap(l), l]) });
+initEL({ id: dbID("idSel_colorSettingsDefault"), fn: colorDefaultMode, selList: colorSettingsOptions.defaultMode.map((l) => [KadString.firstLetterCap(l), l]) });
 for (let area of colorSettingsOptions.colorAreas) {
   for (let mode of colorSettingsOptions.modeNames) {
     initEL({
@@ -145,7 +145,7 @@ export const storage_cl_ColorSettings = {
     return {
       lightmode: deepClone(colorSettingsOptions.light),
       darkmode: deepClone(colorSettingsOptions.dark),
-      selectedDefaultModeIndex: idSel_colorSettingsDefault.KadGet({ index: true }),
+      selectedDefaultModeIndex: dbID("idSel_colorSettingsDefault").KadGet({ index: true }),
     };
   },
   saveData(data) {
@@ -157,7 +157,7 @@ export const storage_cl_ColorSettings = {
     }
     colorSettingsOptions.light = deepClone(data.lightmode);
     colorSettingsOptions.dark = deepClone(data.darkmode);
-    idSel_colorSettingsDefault.KadReset({ selStartIndex: data.selectedDefaultModeIndex });
+    dbID("idSel_colorSettingsDefault").KadReset({ selStartIndex: data.selectedDefaultModeIndex });
   },
   activateData() {
     colorDefaultMode();
@@ -166,7 +166,7 @@ export const storage_cl_ColorSettings = {
 };
 
 export function colorThemeChanged() {
-  idImg_userNav_colormode.src = KadDOM.getImgPath(globalColors.darkmodeOn ? "sun" : "moon");
+  dbID("idImg_userNav_colormode").src = KadDOM.getImgPath(globalColors.darkmodeOn ? "sun" : "moon");
   for (let theme of colorSettingsOptions.modeNames) {
     for (let [name, col] of Object.entries(colorSettingsOptions[theme])) {
       const selID = `idLbl_colorSetting_${theme}_${name}`;
@@ -184,7 +184,7 @@ export function colorThemeChanged() {
   }, KadCSS.getRoot({ value: "transitionTimeName" }) * 500);
 }
 function colorDefaultMode() {
-  colorSettingsOptions.selectedDefaultModeIndex = idSel_colorSettingsDefault.KadGet({ index: true });
+  colorSettingsOptions.selectedDefaultModeIndex = dbID("idSel_colorSettingsDefault").KadGet({ index: true });
   if (colorSettingsOptions.selectedDefaultModeIndex == 0) {
     globalColors.darkmodeOn = window.matchMedia("(prefers-color-scheme:dark)").matches;
   } else {

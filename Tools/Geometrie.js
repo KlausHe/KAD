@@ -1,7 +1,7 @@
 //  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
 
 import { Data_Materials } from "../KadData/KadData_Material.js";
-import { dbCL, dbID, initEL, KadInteraction, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadInteraction, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 import { materialOptions } from "./Material.js";
@@ -553,26 +553,27 @@ let geoObjects = {
   },
 };
 
-initEL({ id: idVin_Area_0, fn: geoBerechnung });
-initEL({ id: idVin_Area_1, fn: geoBerechnung });
-initEL({ id: idVin_Area_2, fn: geoBerechnung });
-initEL({ id: idCb_geoRadius, fn: geoChangeDiameter });
-initEL({ id: idLbl_goeRadius, resetValue: "Radius verwenden" });
+initEL({ id: dbID("idVin_Area_0"), fn: geoBerechnung });
+initEL({ id: dbID("idVin_Area_1"), fn: geoBerechnung });
+initEL({ id: dbID("idVin_Area_2"), fn: geoBerechnung });
+initEL({ id: dbID("idCb_geoRadius"), fn: geoChangeDiameter });
+initEL({ id: dbID("idLbl_goeRadius"), resetValue: "Radius verwenden" });
+
+for (let i = 0; i < geoObjects.elements.length; i++) {
+  initEL({
+    id: dbID(`idBtn_GeometrieElement_${i}`),
+    fn: () => changeGeoObject(i),
+    resetValue: geoObjects.elements[i],
+    dataset: ["radio", "geometrieAreaSelect"],
+    uiOpts: { uiSize: "width7" },
+  });
+}
 
 export function clear_cl_Geometrie() {
   KadInteraction.removeContextmenu(idCanv_geometire);
   geoObjects.elementIndex = geoObjects.elementIndexOrig;
-
-  const body = [{ type: "Button", data: geoObjects.elements, settings: { names: ["geometrieAreaSelect"], onclick: changeGeoObject, uiSize: "width7", class: "clBtn_geometrieAreaSelect", noBorder: ["bottom"] } }];
-  KadTable.createHTMLGrid({ id: idTab_geometrieSelectTable, body });
-
-  let cl = dbCL("clBtn_geometrieAreaSelect", null);
-  for (let i = 0; i < cl.length; i++) {
-    initEL({ id: cl[i] });
-  }
-
   changeGeoObject(geoObjects.elementIndex);
-  idCb_geoRadius.checked = false;
+  dbID("idCb_geoRadius").checked = false;
 
   let num = document.getElementsByName("naDiv_Area").length;
   for (let i = 0; i < num; i++) {
@@ -581,7 +582,7 @@ export function clear_cl_Geometrie() {
 }
 
 function geoChangeDiameter() {
-  geoObjects.radState = idCb_geoRadius.checked;
+  geoObjects.radState = dbID("idCb_geoRadius").checked;
   let num = document.getElementsByName("naDiv_Area").length;
   for (let i = 0; i < num; i++) {
     if (geoObjects.selected.vals[i]) {
@@ -619,11 +620,8 @@ function patternText(text, v1, v2, posLR, posTB) {
 
 function changeGeoObject(index) {
   geoObjects.elementIndex = index;
-  let cl = dbCL("clBtn_geometrieAreaSelect", null);
-  for (let i = 0; i < cl.length; i++) {
-    cl[i].KadButtonColor();
-  }
-  cl[geoObjects.elementIndex].KadButtonColor("positive");
+  dbID(`idBtn_GeometrieElement_${geoObjects.elementIndex}`).KadRadioColor();
+
   geoObjects.selected.show();
 
   let num = document.getElementsByName("naDiv_Area").length;
@@ -639,17 +637,17 @@ function changeGeoObject(index) {
       dbID(`idVin_Area_${i}`).placeholder = "";
     }
   }
-  idCb_geoRadius.KadEnable(geoObjects.selected.cbRadiusEnable);
-  idLbl_goeRadius.KadEnable(geoObjects.selected.cbRadiusEnable);
+  dbID("idCb_geoRadius").KadEnable(geoObjects.selected.cbRadiusEnable);
+  dbID("idLbl_goeRadius").KadEnable(geoObjects.selected.cbRadiusEnable);
   geoBerechnung();
 }
 
 //---------------------------
 function geoBerechnung() {
   let selectedObj = geoObjects.selected;
-  geoObjects.valA = idVin_Area_0.KadGet({ failSafe: selectedObj.vals[0] }) * selectedObj.radiusFactor[0];
-  geoObjects.valB = idVin_Area_1.KadGet({ failSafe: selectedObj.vals[1] }) * selectedObj.radiusFactor[1];
-  geoObjects.valC = idVin_Area_2.KadGet({ failSafe: selectedObj.vals[2] }) * selectedObj.radiusFactor[2];
+  geoObjects.valA = dbID("idVin_Area_0").KadGet({ failSafe: selectedObj.vals[0] }) * selectedObj.radiusFactor[0];
+  geoObjects.valB = dbID("idVin_Area_1").KadGet({ failSafe: selectedObj.vals[1] }) * selectedObj.radiusFactor[1];
+  geoObjects.valC = dbID("idVin_Area_2").KadGet({ failSafe: selectedObj.vals[2] }) * selectedObj.radiusFactor[2];
   geometrieOptions.result[0] = KadValue.number(selectedObj.circumference, { decimals: 3 });
   geometrieOptions.result[1] = KadValue.number(selectedObj.basearea, { decimals: 3 });
   geometrieOptions.result[2] = KadValue.number(selectedObj.fullarea, { decimals: 3 });
@@ -694,5 +692,5 @@ function geoResultTable() {
 
   const body = [{ data: nameData }, { data: valueData, settings: { align: "right" } }, { data: unitsData }];
 
-  KadTable.createHTMLGrid({ id: idTab_geometrieTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_geometrieTable"), body });
 }

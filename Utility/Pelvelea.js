@@ -53,18 +53,18 @@ const pelveleaOptions = {
   maxWorktime: false,
 };
 
-initEL({ id: idVin_pelveleaStarttime, fn: pelveleaStarttime, resetValue: pelveleaOptions.starttime.valOrig });
-initEL({ id: idVin_pelveleaBreaks, fn: pelveleaBreaks, resetValue: pelveleaOptions.breaks.valOrig });
-initEL({ id: idVin_pelveleaWorktime, fn: pelveleaWorktime, resetValue: pelveleaOptions.worktime.valOrig });
+initEL({ id: dbID("idVin_pelveleaStarttime"), fn: pelveleaStarttime, resetValue: pelveleaOptions.starttime.valOrig });
+initEL({ id: dbID("idVin_pelveleaBreaks"), fn: pelveleaBreaks, resetValue: pelveleaOptions.breaks.valOrig });
+initEL({ id: dbID("idVin_pelveleaWorktime"), fn: pelveleaWorktime, resetValue: pelveleaOptions.worktime.valOrig });
 
 export function clear_cl_Pelvelea() {
   clearTimeout(pelveleaOptions.timer);
   pelveleaOptions.maxWorktime = false;
   pelveleaOptions.timer = null;
 
-  pelveleaOptions.starttime.val = idVin_pelveleaStarttime.KadReset();
-  pelveleaOptions.breaks.val = idVin_pelveleaBreaks.KadReset();
-  pelveleaOptions.worktime.val = idVin_pelveleaWorktime.KadReset();
+  pelveleaOptions.starttime.val = dbID("idVin_pelveleaStarttime").KadReset();
+  pelveleaOptions.breaks.val = dbID("idVin_pelveleaBreaks").KadReset();
+  pelveleaOptions.worktime.val = dbID("idVin_pelveleaWorktime").KadReset();
   pelveleaCalculate();
 }
 

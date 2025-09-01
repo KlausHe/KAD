@@ -1,4 +1,4 @@
-import { KadInteraction, KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { KadInteraction, KadValue, dbID, initEL } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -17,15 +17,19 @@ const ibhaluniOptions = {
   enableSound: false,
   score: 0,
   misses: 0,
+  startCallbacks: [
+    ["Start", ibhaluniStart],
+    ["Stop", ibhaluniStop],
+  ],
 };
 
-initEL({ id: idBtn_ibhaluniStart, fn: ibhaluniStart, resetValue: "Start" });
-initEL({ id: idCb_ibhaluniSoundOutput, fn: ibhaluniToggleSound, resetValue: false });
+initEL({ id: dbID("idBtn_ibhaluniStart"), btnCallbacks: ibhaluniOptions.startCallbacks });
+initEL({ id: dbID("idCb_ibhaluniSoundOutput"), fn: ibhaluniToggleSound });
 
 export function clear_cl_Ibhaluni() {
-  KadInteraction.removeContextmenu(idCanv_ibhaluni);
-  idBtn_ibhaluniStart.KadReset();
-  idCb_ibhaluniSoundOutput.KadReset();
+  KadInteraction.removeContextmenu(dbID("idCanv_ibhaluni"));
+  dbID("idBtn_ibhaluniStart").KadReset();
+  dbID("idCb_ibhaluniSoundOutput").KadReset();
   ibhaluniOptions.balloons = [];
   caIB.noLoop();
   caIB.background(globalColors.elements.background);
@@ -37,16 +41,12 @@ export function canvas_cl_Ibhaluni() {
 }
 
 function ibhaluniStart() {
-  if (ibhaluniOptions.started) {
-    ibhaluniOptions.started = false;
-    idBtn_ibhaluniStart.KadReset({ resetValue: "Start" });
-    caIB.noLoop();
-  } else {
-    ibhaluniOptions.started = true;
-    ibhaluniReset();
-    idBtn_ibhaluniStart.KadReset({ resetValue: "Stop" });
-    caIB.loop();
-  }
+  ibhaluniReset();
+  caIB.loop();
+}
+
+function ibhaluniStop() {
+  caIB.noLoop();
 }
 
 function ibhaluniReset() {
@@ -99,7 +99,7 @@ function mousePushedIbhaluni() {
   }
 }
 function ibhaluniToggleSound() {
-  ibhaluniOptions.enableSound = idCb_ibhaluniSoundOutput.KadGet();
+  ibhaluniOptions.enableSound = dbID("idCb_ibhaluniSoundOutput").KadGet();
 }
 
 class IbhaluniObj {

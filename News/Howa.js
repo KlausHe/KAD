@@ -55,20 +55,20 @@ let howaOptions = {
   },
 };
 
-initEL({ id: idVin_howaEntry, action: "change", fn: howaGetLocation, resetValue: "Search", dbList: Data_Nummernschild.map((item) => item[1]).sort() });
-initEL({ id: idBtn_getGeoLocation, fn: howaGetCoordinates });
-initEL({ id: idBtn_howaGetLocation, fn: howaGetLocation });
+initEL({ id: dbID("idVin_howaEntry"), action: "change", fn: howaGetLocation, resetValue: "Search", dbList: Data_Nummernschild.map((item) => item[1]).sort() });
+initEL({ id: dbID("idBtn_getGeoLocation"), fn: howaGetCoordinates });
+initEL({ id: dbID("idBtn_howaGetLocation"), fn: howaGetLocation });
 initEL({
-  id: idSel_howaMapsDistrict,
+  id: dbID("idSel_howaMapsDistrict"),
   fn: howaChangeMap,
   selStartIndex: 0,
   selList: [["Deutschland", "de"], ...Data_Country_GermanDistrics.map((d) => [d.LandDE, d.abbr])],
 });
-initEL({ id: idSel_howaMapsCriteria, fn: howaChangeMap, selList: weatherMaps.criteriaList.map((d) => [d[1], d[0]]) });
+initEL({ id: dbID("idSel_howaMapsCriteria"), fn: howaChangeMap, selList: weatherMaps.criteriaList.map((d) => [d[1], d[0]]) });
 
 export function clear_cl_Howa() {
-  KadInteraction.removeContextmenu(idCanv_howa);
-  idVin_howaEntry.KadReset();
+  KadInteraction.removeContextmenu(dbID("idCanv_howa"));
+  dbID("idVin_howaEntry").KadReset();
   howaOptions.latitude = howaOptions.latOrig;
   howaOptions.longitude = howaOptions.lonOrig;
   howaOptions.city = null;
@@ -88,7 +88,7 @@ export const storage_cl_Howa = {
     return howaOptions.city;
   },
   saveData(data) {
-    idVin_howaEntry.KadReset({ resetValue: data });
+    dbID("idVin_howaEntry").KadReset({ resetValue: data });
   },
   activateData() {
     return;
@@ -102,8 +102,8 @@ export function canvas_cl_Howa() {
 
 // DWD stuff
 function howaChangeMap() {
-  weatherMaps.district = idSel_howaMapsDistrict.KadGet();
-  weatherMaps.criteria = idSel_howaMapsCriteria.KadGet();
+  weatherMaps.district = dbID("idSel_howaMapsDistrict").KadGet();
+  weatherMaps.criteria = dbID("idSel_howaMapsCriteria").KadGet();
   dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
 }
 
@@ -111,7 +111,7 @@ function howaChangeMap() {
 function howaGetCoordinates() {
   if ("geolocation" in navigator) {
     howaOptions.city = null;
-    idVin_howaEntry.KadReset({ resetValue: "Device-location used!" });
+    dbID("idVin_howaEntry").KadReset({ resetValue: "Device-location used!" });
     dbIDStyle("idBtn_getGeoLocation").display = "initial";
     navigator.geolocation.getCurrentPosition(howaNavigatorPosition, howaNavigatorError);
   } else {
@@ -134,7 +134,7 @@ function howaNavigatorError() {
 }
 
 async function howaGetLocation() {
-  let input = idVin_howaEntry.KadGet();
+  let input = dbID("idVin_howaEntry").KadGet();
   if (input == "") return;
   howaOptions.city = input;
   const err = await howaGeocodingCity();

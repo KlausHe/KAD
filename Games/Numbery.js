@@ -30,7 +30,7 @@ const numberyOptions = {
     return array.filter((a) => a <= this.imgCount);
   },
   get imgCount() {
-    return this.cathegories[this.cathegoryIndex][1];
+    return Number(this.cathegories[this.cathegoryIndex][1]);
   },
   get cathegory() {
     return this.cathegories[this.cathegoryIndex][0];
@@ -38,48 +38,46 @@ const numberyOptions = {
   img(id) {
     return `./Games/AssetsNumbery/${this.cathegory}/numbery_${this.cathegory}_${id}.svg`;
   },
+  btnCallback: [
+    ["Start", numberyStart],
+    ["Stop", numberyStop],
+  ],
 };
 
 initEL({
-  id: idVin_numberyPlayer,
+  id: dbID("idVin_numberyPlayer"),
   fn: numberyPlayerChange,
   resetValue: 2,
   domOpts: { min: 2, max: numberyOptions.maxPlayerCount },
 });
 initEL({
-  id: idSel_numberCategory,
+  id: dbID("idSel_numberCategory"),
   fn: numberyCathegorySelect,
   selList: numberyOptions.cathegories.map((c) => c[0]),
   selStartIndex: KadRandom.randomObject(numberyOptions.cathegories.length),
 });
 initEL({
-  id: idSel_numberyPairs,
+  id: dbID("idSel_numberyPairs"),
   fn: numberyPairsChange,
   selList: numberyOptions.availiablePairs,
   selStartIndex: KadRandom.randomObject(numberyOptions.availiablePairs.length),
 });
-initEL({ id: idBtn_startNumbery, fn: numberyToggleStart });
+initEL({ id: dbID("idBtn_startNumbery"), fn: numberyToggleStart, btnCallbacks: numberyOptions.btnCallback });
+initEL({ id: dbID("idDiv_numberyImages") });
+initEL({ id: dbID("idLbl_numberyResult") });
 
 export function clear_cl_Numbery() {
-  KadInteraction.removeContextmenu(idDiv_numberyImages);
+  KadInteraction.removeContextmenu(dbID("idDiv_numberyImages"));
+  numberyOptions.isPlaying = dbID("idBtn_startNumbery").KadReset();
   numberyOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
-  idVin_numberyPlayer.KadReset();
-  numberyOptions.cathegoryIndex = idSel_numberCategory.KadReset({ index: true });
-  numberyOptions.pairs = numberyOptions.availiablePairs[idSel_numberyPairs.KadReset()];
+  dbID("idVin_numberyPlayer").KadReset();
+  numberyOptions.cathegoryIndex = dbID("idSel_numberCategory").KadReset({ index: true });
+  numberyOptions.pairs = numberyOptions.availiablePairs[dbID("idSel_numberyPairs").KadReset()];
   numberyOptions.delay = KadCSS.getRoot({ value: "transitionTimeHide" }) * 1000;
-  dbID("idLbl_numberyResult").textContent = "...";
+  dbID("idLbl_numberyResult").KadSetText("---");
   numberyMakePlayers(2);
-  numberyOptions.isPlaying = false;
   let inputImg = dbCL("cl_NumberyImages");
   KadDOM.clearFirstChild(inputImg);
-  numberyDisableInputs(true);
-}
-
-function numberyDisableInputs() {
-  idSel_numberyPairs.KadEnable(!numberyOptions.isPlaying);
-  idVin_numberyPlayer.KadEnable(!numberyOptions.isPlaying);
-  idSel_numberCategory.KadEnable(!numberyOptions.isPlaying);
-  dbID("idBtn_startNumbery").textContent = numberyOptions.isPlaying ? "Stop" : "Start";
 }
 
 function numberyLayout() {
@@ -98,15 +96,15 @@ function numberyLayout() {
 }
 
 function numberyPlayerChange() {
-  let numPlayer = idVin_numberyPlayer.KadGet({ failSafe: numberyOptions.maxPlayerCount });
+  let numPlayer = dbID("idVin_numberyPlayer").KadGet({ failSafe: numberyOptions.maxPlayerCount });
   numberyMakePlayers(numPlayer);
   numberyScoreBoard();
 }
 
 function numberyCathegorySelect() {
-  numberyOptions.cathegoryIndex = idSel_numberCategory.KadGet({ index: true });
+  numberyOptions.cathegoryIndex = dbID("idSel_numberCategory").KadGet({ index: true });
   const index = Math.min(numberyOptions.pairsIndex, numberyOptions.availiablePairs.length - 1);
-  numberyOptions.pairsIndex = idSel_numberyPairs.KadReset({
+  numberyOptions.pairsIndex = dbID("idSel_numberyPairs").KadReset({
     selList: numberyOptions.availiablePairs,
     selStartIndex: index,
   });
@@ -114,22 +112,27 @@ function numberyCathegorySelect() {
 }
 
 function numberyPairsChange() {
-  numberyOptions.pairsIndex = idSel_numberyPairs.KadGet({ index: true });
-  numberyOptions.pairs = idSel_numberyPairs.KadGet();
+  numberyOptions.pairsIndex = dbID("idSel_numberyPairs").KadGet({ index: true });
+  numberyOptions.pairs = dbID("idSel_numberyPairs").KadGet();
   startNumbery();
 }
 
 function numberyToggleStart() {
-  if (numberyOptions.isPlaying) {
-    numberyOptions.isPlaying = false;
-    dbID("idLbl_numberyResult").textContent = "...";
-  } else {
-    numberyOptions.isPlaying = true;
-    numberyRestart();
-    startNumbery();
-  }
-  numberyDisableInputs();
+  numberyOptions.isPlaying = !numberyOptions.isPlaying;
+  dbID("idSel_numberyPairs").KadEnable(!numberyOptions.isPlaying);
+  dbID("idVin_numberyPlayer").KadEnable(!numberyOptions.isPlaying);
+  dbID("idSel_numberCategory").KadEnable(!numberyOptions.isPlaying);
 }
+
+function numberyStart() {
+  numberyRestart();
+  startNumbery();
+}
+
+function numberyStop() {
+  dbID("idLbl_numberyResult").KadSetText(".-.");
+}
+
 function numberyRestart() {
   numberyOptions.cells = [];
   numberyOptions.cellCurrSel = [];
@@ -226,7 +229,7 @@ function numberyCheckFinished() {
   }
   numberyToggleStart();
   const result = dbID("idLbl_numberyResult");
-  let maxScored = KadArray.sortArrayByKey({ array: numberyOptions.players, keys: "score", inverse: true });
+  let maxScored = KadArray.sortArrayByKey({ array: numberyOptions.players, key: "score", inverse: true });
   if (maxScored[0].score == maxScored[1].score) {
     result.textContent = `Unentschieden mit ${maxScored[0].score} Punkten`;
   } else {
@@ -244,7 +247,7 @@ function numberyScoreBoard() {
     { data: numberyOptions.players.map((item) => item.score), settings: { align: "center", names: ["numberyScore"], backgroundColor: numberyOptions.players.map((item) => item.col) } },
   ];
 
-  KadTable.createHTMLGrid({ id: "idTab_numberyTable", header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_numberyTable"), header, body });
 }
 
 function numberyMakePlayers(numPlayer) {

@@ -1,7 +1,7 @@
 import { Data_Botanicals, Data_HumanNames, Data_Nummernschild } from "../KadData/KadData.js";
 import { Data_RALColors } from "../KadData/KadData_Color.js";
 import { Data_Country_CodesIso3166, Data_Country_CodesIso639, Data_Country_GermanDistrics, Data_Currencies } from "../KadData/KadData_Countries.js";
-import { dbCL, dbID, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadRandom, objectLength } from "../KadUtils/KadUtils.js";
 
 export const netsaonaOptions = {
   data: {
@@ -88,24 +88,15 @@ export const netsaonaOptions = {
   },
 };
 
+initEL({ id: dbID("idLbl_netsaonaOutput"), resetValue: "..." });
+
 export function clear_cl_Netsaona() {
-  dbID("idLbl_netsaonaOutput").textContent = "...";
-  const clBtn = dbCL("cl_NetsaonaOption", null);
-  for (let i = 0; i < clBtn.length; i++) {
-    const name = Object.keys(netsaonaOptions.data)[i];
-    clBtn[i].textContent = name;
-    clBtn[i].value = name;
-    clBtn[i].addEventListener(
-      "click",
-      () => {
-        netsaonaGenerate(clBtn[i]);
-      },
-      false
-    );
+  dbID("idLbl_netsaonaOutput").KadReset();
+  for (let i = 0; i < objectLength(netsaonaOptions.data); i++) {
+    initEL({ id: dbID(`idBtn_NetsaonaOption_${i}`), fn: netsaonaGenerate, resetValue: Object.keys(netsaonaOptions.data)[i] });
   }
-  netsaonaGenerate(clBtn[clBtn.length - 1]);
 }
 
 function netsaonaGenerate(obj) {
-  dbID("idLbl_netsaonaOutput").textContent = KadRandom.randomObject(netsaonaOptions.data[obj.value]);
+  dbID("idLbl_netsaonaOutput").KadSetText(KadRandom.randomObject(netsaonaOptions.data[obj.target.textContent]));
 }

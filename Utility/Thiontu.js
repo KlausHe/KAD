@@ -71,9 +71,7 @@ const thiontuData = {
         return true;
       },
       get func() {
-        cons;
         return window.btoa(thiontuData.input);
-        // return window.btoa(unescape(encodeURIComponent(thiontuData.input)));
       },
     },
 
@@ -201,19 +199,19 @@ const thiontuData = {
   },
 };
 
-initEL({ id: idArea_thiontuInputEntry, fn: thiontuUpdate, resetValue: "Type text to convert" });
-initEL({ id: idArea_thiontuOutputArea, resetValue: "~~~~~~~~~~~" });
+initEL({ id: dbID("idArea_thiontuInputEntry"), fn: thiontuUpdate, resetValue: "Type text to convert" });
+initEL({ id: dbID("idArea_thiontuOutputArea"), resetValue: "~~~~~~~~~~~" });
 
 export function clear_cl_Thiontu() {
-  idArea_thiontuInputEntry.KadReset();
-  idArea_thiontuOutputArea.KadReset();
+  dbID("idArea_thiontuInputEntry").KadReset();
+  dbID("idArea_thiontuOutputArea").KadReset();
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
   for (let i = 0; i < clBtn.length; i++) {
     const btn = dbID(clBtn[i]);
     btn.id = `idBtn_thiontuToText_${Object.keys(thiontuData.opts)[i]}`;
-    initEL({ id: clBtn[i], fn: thiontuOptionChange, resetValue: Object.values(thiontuData.opts)[i].btnName });
-    btn.KadEnable(true);
-    btn.KadButtonColor();
+    initEL({ id: clBtn[i], fn: thiontuOptionChange, resetValue: Object.values(thiontuData.opts)[i].btnName, dataset: ["radio", "thiontuOption"] });
+    // btn.KadEnable(true);
+    // btn.KadButtonColor();
     btn.value = Object.keys(thiontuData.opts)[i];
   }
 
@@ -221,35 +219,26 @@ export function clear_cl_Thiontu() {
   thiontuData.selected = Object.keys(thiontuData.opts)[0];
 }
 
-function thiontuOptionChange(btn) {
-  const obj = btn.target;
-  const clBtn = dbCL("clBtn_ThiontuOptions", null);
-  for (let i = 0; i < clBtn.length; i++) {
-    if (!clBtn[i].disabled) {
-      clBtn[i].KadButtonColor();
-    }
-  }
-  obj.KadButtonColor("positive");
-  thiontuData.selected = obj.value;
+function thiontuOptionChange(obj) {
+  obj.target.KadRadioColor();
+  thiontuData.selected = obj.target.KadGet();
   thiontuUpdate();
 }
 
 function thiontuUpdate() {
-  thiontuData.inputRaw = idArea_thiontuInputEntry.KadGet();
-  thiontuData.input = idArea_thiontuInputEntry.KadGet();
+  thiontuData.inputRaw = dbID("idArea_thiontuInputEntry").KadGet();
+  thiontuData.input = dbID("idArea_thiontuInputEntry").KadGet();
 
   //check text and disable buttons if input is not valid for them
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
   for (let i = 0; i < clBtn.length; i++) {
     clBtn[i].KadEnable(thiontuData.opts[clBtn[i].value].enable);
     dbID(clBtn[i]).KadEnable(thiontuData.opts[clBtn[i].value].enable);
-    // clBtn[i].style.backgroundColor = "";
   }
-
   //if selected is disabled, jump to ALL CAPS
   if (!thiontuData.opts[thiontuData.selected].enable) {
-    clBtn[0].KadButtonColor("positive");
+    clBtn[0].KadRadioColor();
     thiontuData.selected = clBtn[0].value;
   }
-  idArea_thiontuOutputArea.value = thiontuData.input == "" || thiontuData.input == 0 ? "" : thiontuData.opts[thiontuData.selected].func;
+  dbID("idArea_thiontuOutputArea").value = thiontuData.input == "" || thiontuData.input == 0 ? "" : thiontuData.opts[thiontuData.selected].func;
 }

@@ -8,16 +8,16 @@ const synonymOptions = {
   data: {},
 };
 
-initEL({ id: idVin_synonymEntry, fn: newSynonym, resetValue: "Search for synonyms" });
-initEL({ id: idBtn_synonymEntry, fn: newSynonym });
+initEL({ id: dbID("idVin_synonymEntry"), fn: newSynonym, resetValue: "Search for synonyms" });
+initEL({ id: dbID("idLbl_synonymSearchWord") });
 
 export function clear_cl_Synonym() {
-  idVin_synonymEntry.KadReset();
-  idTab_synonymTableSynonym.textContent = "";
+  dbID("idVin_synonymEntry").KadReset();
+  dbID("idTab_synonymTableSynonym").textContent = "";
 }
 
 function newSynonym() {
-  synonymOptions.input = idVin_synonymEntry.KadGet();
+  synonymOptions.input = dbID("idVin_synonymEntry").KadGet();
   if (!synonymOptions.input) return;
 
   if (synonymOptions.inputTimer != null) {
@@ -31,34 +31,23 @@ async function synonymGetData() {
   synonymOptions.inputTimer = null;
   const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: synonymOptions.URL });
   if (KadLog.errorChecked(error, "Could not receive data for 'Synonym'.", error)) {
-    dbID("idLbl_synonymSearchWord").textContent = "---";
+    dbID("idLbl_synonymSearchWord").KadSetText("---");
   } else {
     synonymOptions.data = data;
-    dbID("idLbl_synonymSearchWord").textContent = synonymOptions.input;
+    dbID("idLbl_synonymSearchWord").KadSetText(synonymOptions.input);
     synonymCreateTable();
   }
-}
-
-function newSynonymTerm(index) {
-  KadLog.log(index);
-  // synonymOptions.input = data.synsets[0].terms[index].term;
-  // synonymGetData();
-}
-function newSimilarTerm(index) {
-  KadLog.log(index);
-  // synonymOptions.input = data.similarterms[index].term;
-  // synonymGetData();
 }
 
 function synonymCreateTable() {
   const data = synonymOptions.data;
   let header = [{ data: "Synonyme", colSpan: 3, settings: { align: "center" } }];
   let body = [{ data: data.synsets[0].terms.map((item) => [item.term]), multiColumn: 3 }];
-  KadTable.createHTMLGrid({ id: idTab_synonymTableSynonym, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_synonymTableSynonym"), header, body });
 
   if (data.hasOwnProperty("similarterms")) {
     header = [{ data: "Ähnliche Befriffe", colSpan: 3, settings: { align: "center" } }];
     body = [{ data: data.similarterms.map((item) => [item.term]), multiColumn: 3 }];
-    KadTable.createHTMLGrid({ id: idTab_synonymTableSimilar, header, body });
+    KadTable.createHTMLGrid({ id: dbID("idTab_synonymTableSimilar"), header, body });
   }
 }

@@ -1,4 +1,4 @@
-import { initEL, KadArray, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -14,15 +14,15 @@ const sweeperOptions = {
   cells: [],
 };
 
-initEL({ id: idBtn_startSweeper, fn: sweeperStart });
-initEL({ id: idVin_sweeperGrid, fn: sweeperGridChange, resetValue: sweeperOptions.gridSizeOrig });
-initEL({ id: idVin_sweeperSweeps, fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
+initEL({ id: dbID("idBtn_startSweeper"), fn: sweeperStart });
+initEL({ id: dbID("idVin_sweeperGrid"), fn: sweeperGridChange, resetValue: sweeperOptions.gridSizeOrig });
+initEL({ id: dbID("idVin_sweeperSweeps"), fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
 
 export function clear_cl_Sweeper() {
-  KadInteraction.removeContextmenu(idCanv_sweeper);
+  KadInteraction.removeContextmenu(dbID("idCanv_sweeper"));
   sweeperOptions.cells = [];
-  sweeperOptions.gridSize = idVin_sweeperGrid.KadReset();
-  sweeperOptions.sweepCells = idVin_sweeperSweeps.KadReset();
+  sweeperOptions.gridSize = dbID("idVin_sweeperGrid").KadReset();
+  sweeperOptions.sweepCells = dbID("idVin_sweeperSweeps").KadReset();
   sweeperStartOver();
 }
 export function canvas_cl_Sweeper() {
@@ -119,7 +119,7 @@ function sweeperMousePushed(event) {
 const caSW = new p5((c) => {
   c.setup = function () {
     c.canv = c.createCanvas(sweeperOptions.canvas.w, sweeperOptions.canvas.h);
-    c.canv.id("canvasSweeper");
+    c.canv.id(dbID("canvasSweeper"));
     c.canv.parent("#idCanv_sweeper");
     c.canv.mousePressed(sweeperMousePushed);
     c.colorMode(c.HSL);

@@ -21,10 +21,10 @@ const luasOptions = {
   lastFramecount: 0,
 };
 
-initEL({ id: idVin_luasVelAngular, fn: luasInputChange, resetValue: 10 });
-initEL({ id: idVin_luasDiameter, fn: luasInputChange, resetValue: 10 });
+initEL({ id: dbID("idVin_luasVelAngular"), fn: luasInputChange, resetValue: 10 });
+initEL({ id: dbID("idVin_luasDiameter"), fn: luasInputChange, resetValue: 10 });
 initEL({
-  id: idSel_luasAngularUnit,
+  id: dbID("idSel_luasAngularUnit"),
   fn: luasInputChange,
   selList: [
     ["U/s", 1],
@@ -33,20 +33,20 @@ initEL({
   selStartIndex: 1,
 });
 initEL({
-  id: idSel_luasLinearUnit,
+  id: dbID("idSel_luasLinearUnit"),
   fn: luasInputChange,
   selList: ["mm", "cm", "dm", "m", "km"],
 });
-initEL({ id: idBtn_luasChangeDirection, fn: luasChangeDirection });
-initEL({ id: idBtn_luasChecker, fn: luasStart });
+initEL({ id: dbID("idBtn_luasChangeDirection"), fn: luasChangeDirection });
+initEL({ id: dbID("idBtn_luasChecker"), fn: luasStart });
 //Canvas Stuff
 export function clear_cl_Luas() {
-  KadInteraction.removeContextmenu(idCanv_luas);
-  idVin_luasVelAngular.KadReset();
-  idVin_luasDiameter.KadReset();
+  KadInteraction.removeContextmenu(dbID("idCanv_luas"));
+  dbID("idVin_luasVelAngular").KadReset();
+  dbID("idVin_luasDiameter").KadReset();
 
-  idSel_luasAngularUnit.KadReset();
-  idSel_luasLinearUnit.KadReset();
+  dbID("idSel_luasAngularUnit").KadReset();
+  dbID("idSel_luasLinearUnit").KadReset();
 
   luasInputChange();
   luasOptions.radius = luasOptions.canvas.w * 0.5 * 0.9;
@@ -112,11 +112,11 @@ function luasStart() {
 }
 
 function luasInputChange() {
-  luasOptions.speedVin = idVin_luasVelAngular.KadGet();
-  luasOptions.diameterVin = idVin_luasDiameter.KadGet();
-  luasOptions.angularVin = Number(idSel_luasAngularUnit.value);
-  luasOptions.angularText = idSel_luasAngularUnit[idSel_luasAngularUnit.selectedIndex].text;
-  luasOptions.linearText = idSel_luasLinearUnit[idSel_luasLinearUnit.selectedIndex].text;
+  luasOptions.speedVin = dbID("idVin_luasVelAngular").KadGet();
+  luasOptions.diameterVin = dbID("idVin_luasDiameter").KadGet();
+  luasOptions.angularVin = dbID("idSel_luasAngularUnit").KadGet();
+  luasOptions.angularText = dbID("idSel_luasAngularUnit")[dbID("idSel_luasAngularUnit").selectedIndex].text;
+  luasOptions.linearText = dbID("idSel_luasLinearUnit")[dbID("idSel_luasLinearUnit").selectedIndex].text;
   luasOptions.speedAngular = (luasOptions.speedVin * 360) / luasOptions.angularVin;
   luasOptions.speedLinear = luasOptions.speedVin * Math.PI * luasOptions.diameterVin;
   dbID("idLbl_luasResult").innerHTML = `Linear: ${KadValue.number(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.angularText.replace("U", luasOptions.linearText)}`;

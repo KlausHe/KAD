@@ -151,13 +151,13 @@ export const AccData = {
 // ------------CLEAR-------------
 export function clear_cl_UserLogin() {
   nuncDiscipuli.logging = false;
-  nuncDiscipuli.cred.email = idVin_userLogin_email.KadReset();
-  nuncDiscipuli.cred.uid = idVin_userLogin_pass.KadReset();
+  nuncDiscipuli.cred.email = dbID("idVin_userLogin_email").KadReset();
+  nuncDiscipuli.cred.uid = dbID("idVin_userLogin_pass").KadReset();
 
-  idCb_userLogin_check.KadReset();
+  dbID("idCb_userLogin_check").KadReset();
   accountPersistanceChange();
   dbID("idVin_userLogin_email").removeAttribute("disabled");
-  idBtn_userLogin_login.KadEnable(true);
+  dbID("idBtn_userLogin_login").KadEnable(true);
   dbID("idLbl_userLogin_alert").textContent = "";
 }
 
@@ -201,11 +201,11 @@ export function createNewNuncDiscipuli() {
   }
 }
 
-initEL({ id: idVin_userLogin_email, resetValue: "E-Mail" });
-initEL({ id: idVin_userLogin_pass, resetValue: "Passwort" });
+initEL({ id: dbID("idVin_userLogin_email"), resetValue: "E-Mail" });
+initEL({ id: dbID("idVin_userLogin_pass"), resetValue: "Passwort" });
 
-initEL({ id: idDiv_navBar_AccountLogin, fn: openNavLogin });
-initEL({ id: idDiv_navBar_AccountChange, fn: openNavChange });
+initEL({ id: dbID("idDiv_navBar_AccountLogin"), fn: openNavLogin });
+initEL({ id: dbID("idDiv_navBar_AccountChange"), fn: openNavChange });
 
 function openNavLogin() {
   clear_cl_UserLogin();
@@ -219,13 +219,13 @@ function openNavChange() {
 }
 
 //-----------------------ACTIONS------------------------------------
-initEL({ id: idCb_userLogin_check, fn: accountPersistanceChange, resetValue: true });
-initEL({ id: idBtn_userLogin_login, fn: firebaseLogin });
-initEL({ id: idBtn_userLogin_register, fn: firebaseRegister });
-initEL({ id: idBtn_userChange_logout, fn: firebaseLogout });
-initEL({ id: idBtn_userChange_change, fn: userChange });
-initEL({ id: idBtn_userLogin_cancel, fn: loginCancel });
-initEL({ id: idBtn_userChange_cancel, fn: changeCancel });
+initEL({ id: dbID("idCb_userLogin_check"), fn: accountPersistanceChange, resetValue: true });
+initEL({ id: dbID("idBtn_userLogin_login"), fn: firebaseLogin });
+initEL({ id: dbID("idBtn_userLogin_register"), fn: firebaseRegister });
+initEL({ id: dbID("idBtn_userChange_logout"), fn: firebaseLogout });
+initEL({ id: dbID("idBtn_userChange_change"), fn: userChange });
+initEL({ id: dbID("idBtn_userLogin_cancel"), fn: loginCancel });
+initEL({ id: dbID("idBtn_userChange_cancel"), fn: changeCancel });
 
 function accountPersistanceChange() {
   nuncDiscipuli.cred.keepLogin = dbID("idCb_userLogin_check").checked ? browserLocalPersistence : browserSessionPersistence;
@@ -235,9 +235,9 @@ onAuthStateChanged(auth, (user) => {
   const state = user != null;
   nuncDiscipuli.cred.email = state ? user.email : null;
   nuncDiscipuli.cred.uid = state ? user.uid : null;
-  dbIDStyle(idDiv_navBar_AccountLogin).display = state ? "none" : "block";
-  dbIDStyle(idDiv_navBar_AccountChange).display = state ? "block" : "none";
-  dbID(idLbl_userChange_user).textContent = state ? nuncDiscipuli.cred.email : "User";
+  dbIDStyle("idDiv_navBar_AccountLogin").display = state ? "none" : "block";
+  dbIDStyle("idDiv_navBar_AccountChange").display = state ? "block" : "none";
+  dbID("idLbl_userChange_user").textContent = state ? nuncDiscipuli.cred.email : "User";
   if (state && !nuncDiscipuli.registering) {
     nuncDiscipuli.logging = true;
     loadDiscipuli(null);
@@ -256,12 +256,12 @@ export function userLoggedIn() {
 function firebaseLogin() {
   nuncDiscipuli.logging = true;
   KadLog.log("log in");
-  const email = idVin_userLogin_email.KadGet();
-  const pass = idVin_userLogin_pass.KadGet();
+  const email = dbID("idVin_userLogin_email").KadGet();
+  const pass = dbID("idVin_userLogin_pass").KadGet();
   setPersistence(auth, nuncDiscipuli.cred.keepLogin);
   signInWithEmailAndPassword(auth, email, pass)
     .then(() => {
-      idBtn_userLogin_login.KadEnable(false);
+      dbID("idBtn_userLogin_login").KadEnable(false);
     })
     .catch((error) => {
       userAccError(error);
@@ -270,8 +270,8 @@ function firebaseLogin() {
 
 function firebaseRegister() {
   nuncDiscipuli.registering = true;
-  const email = idVin_userLogin_email.KadGet();
-  const pass = idVin_userLogin_pass.KadGet();
+  const email = dbID("idVin_userLogin_email").KadGet();
+  const pass = dbID("idVin_userLogin_pass").KadGet();
   createUserWithEmailAndPassword(auth, email, pass)
     .then((user) => {
       nuncDiscipuli.registering = false;
@@ -285,7 +285,7 @@ function firebaseRegister() {
 function userRegister() {
   createNewDatabase();
   navClick("cl_UserChange");
-  idBtn_userLogin_login.KadEnable(false);
+  dbID("idBtn_userLogin_login").KadEnable(false);
 }
 
 function firebaseLogout() {
@@ -301,7 +301,7 @@ function firebaseLogout() {
 
 function userChange() {
   for (let key of Object.keys(AccData.infos)) {
-    const id = `idVin_child_uInfoVin_${key}`;
+    const id = dbID(`idVin_child_uInfoVin_${key}`);
     const vinUser = id.KadGet();
     if (vinUser != "") {
       AccData.infos[key].data = vinUser;
@@ -328,14 +328,14 @@ function userAccSetUserBtn() {
   dbIDStyle("idDiv_navBar_User").display = "initial";
   if (nuncDiscipuli.short == null) AccData.infos.shortName.data = nuncDiscipuli.createShort();
   dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
-  idBtn_userLogin_login.KadEnable(true);
+  dbID("idBtn_userLogin_login").KadEnable(true);
 }
 
 function userAccError(err) {
-  idBtn_userLogin_login.KadEnable(true);
-  idBtn_userLogin_register.KadEnable(true);
-  dbID(idLbl_userLogin_alert).textContent = "E-Mail oder Passwort falsch!";
-  error(err);
+  dbID("idBtn_userLogin_login").KadEnable(true);
+  dbID("idBtn_userLogin_register").KadEnable(true);
+  dbID("idLbl_userLogin_alert").textContent = "E-Mail oder Passwort falsch!";
+  KadLog.error(err);
 }
 
 //--------------Load Single DATA-------------
@@ -380,7 +380,7 @@ async function loadFromDatabase(categories) {
     if (Object.keys(savedData).includes(category)) {
       nuncDiscipuli.saveData(category, savedData[category]);
     } else {
-      error("Currently not supported data from saved userdata:", category);
+      KadLog.error("Currently not supported data from saved userdata:", category);
     }
   }
 }
@@ -420,5 +420,5 @@ function createUserInfos() {
     { type: "ButtonImage", data: "trash", settings: { onclick: accountClearInfo, noBorder: "bottom", uiRadius: "right", uiSize: "width1" } },
   ];
 
-  KadTable.createHTMLGrid({ id: idTab_userChangeTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_userChangeTable"), body });
 }

@@ -21,44 +21,42 @@ const storreOptions = {
   },
 };
 
-initEL({ id: idBtn_storreStartArea, fn: storreStartArea });
-initEL({ id: idBtn_storreStartPopulation, fn: storreStartPopulation });
-initEL({ id: idBtn_storreQuestionA, fn: storreQuestion, dataset: ["set", "A"] });
-initEL({ id: idBtn_storreQuestionB, fn: storreQuestion, dataset: ["set", "B"] });
+initEL({ id: dbID("idBtn_storreStartArea"), fn: storreStartArea, dataset: ["radio", "storreType"] });
+initEL({ id: dbID("idBtn_storreStartPopulation"), fn: storreStartPopulation, dataset: ["radio", "storreType"] });
+initEL({ id: dbID("idBtn_storreQuestionA"), fn: storreQuestion, dataset: ["set", "A"] });
+initEL({ id: dbID("idBtn_storreQuestionB"), fn: storreQuestion, dataset: ["set", "B"] });
+initEL({ id: dbID("idLbl_storreAnswerA") });
+initEL({ id: dbID("idLbl_storreAnswerB") });
 
 export function clear_cl_Storre() {
-  idBtn_storreQuestionA.KadEnable(false);
-  idBtn_storreQuestionB.KadEnable(false);
+  dbID("idBtn_storreQuestionA").KadEnable(false);
+  dbID("idBtn_storreQuestionB").KadEnable(false);
   storreReset();
 }
 
 function storreReset() {
   storreOptions.streak = 0;
   storreUpdateStreak();
-  idBtn_storreQuestionA.KadReset({ resetValue: "..." });
-  idBtn_storreQuestionB.KadReset({ resetValue: "..." });
+  dbID("idBtn_storreQuestionA").KadReset({ resetValue: "..." });
+  dbID("idBtn_storreQuestionB").KadReset({ resetValue: "..." });
   storreShowAnswers(true);
 }
 
 function storreStartArea() {
-  idBtn_storreStartArea.KadButtonColor("positive");
-  idBtn_storreStartPopulation.KadButtonColor(null);
   storreOptions.dataType = "area";
   storreReset();
   storreGetData();
 }
 
 function storreStartPopulation() {
-  idBtn_storreStartArea.KadButtonColor(null);
-  idBtn_storreStartPopulation.KadButtonColor("positive");
   storreOptions.dataType = "population";
   storreReset();
   storreGetData();
 }
 
 async function storreGetData() {
-  idBtn_storreQuestionA.KadEnable(true);
-  idBtn_storreQuestionB.KadEnable(true);
+  dbID("idBtn_storreQuestionA").KadEnable(true);
+  dbID("idBtn_storreQuestionB").KadEnable(true);
   storreOptions.data = KadRandom.shuffleData(storreOptions.data);
   storreDisplayQuestions();
 }
@@ -68,8 +66,8 @@ function storreDisplayQuestions() {
   const valA = storreOptions.data[storreOptions.streak + offsetA].nameDECommon;
   const offsetB = storreOptions.streak % 2 == 0 ? 1 : 0;
   const valB = storreOptions.data[storreOptions.streak + offsetB].nameDECommon;
-  idBtn_storreQuestionA.KadReset({ resetValue: valA });
-  idBtn_storreQuestionB.KadReset({ resetValue: valB });
+  dbID("idBtn_storreQuestionA").KadReset({ resetValue: valA });
+  dbID("idBtn_storreQuestionB").KadReset({ resetValue: valB });
 }
 
 function storreQuestion(obj) {
@@ -86,8 +84,8 @@ function storreQuestion(obj) {
       dbID(`idBtn_storreQuestion${set}`).KadButtonColor("negative");
       storreUpdateStreak(true);
       storreShowAnswers();
-      idBtn_storreStartArea.KadButtonColor(null);
-      idBtn_storreStartPopulation.KadButtonColor(null);
+      dbID("idBtn_storreStartArea").KadButtonColor(null);
+      dbID("idBtn_storreStartPopulation").KadButtonColor(null);
       return;
     }
     dbID(`idBtn_storreQuestion${set}`).KadButtonColor("positive");
@@ -100,15 +98,15 @@ function storreQuestion(obj) {
 
 function storreShowAnswers(clear = false) {
   const unit = storreOptions.dataType == "area" ? "km<sup>2</sup>" : " E";
-  idLbl_storreAnswerA.innerHTML = clear ? "" : KadValue.number(storreOptions.dataA, { indicator: true }) + unit;
-  idLbl_storreAnswerB.innerHTML = clear ? "" : KadValue.number(storreOptions.dataB, { indicator: true }) + unit;
+  dbID("idLbl_storreAnswerA").KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataA, { indicator: true }) + unit);
+  dbID("idLbl_storreAnswerB").KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataB, { indicator: true }) + unit);
   if (clear) {
-    // idBtn_storreQuestionA.KadButtonColor();
-    // idBtn_storreQuestionB.KadButtonColor();
+    dbID("idBtn_storreQuestionA").KadButtonColor();
+    dbID("idBtn_storreQuestionB").KadButtonColor();
   }
 }
 
 function storreUpdateStreak(lost = false) {
   const text = lost ? `Game Over!<br>Punkte: ${storreOptions.streak}` : `Punkte: ${storreOptions.streak}`;
-  idLbl_storreStreak.innerHTML = text;
+  dbID("idLbl_storreStreak").innerHTML = text;
 }

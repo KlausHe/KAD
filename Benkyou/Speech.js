@@ -22,6 +22,7 @@ const speechOptions = {
 // daEL(idArea_speechFromText, "input", speechTranslate);
 
 export function clear_cl_Speech() {
+  return;
   speechOptions.voices = [];
   speechOptions.synthObj.cancel();
   KadDOM.resetInput("idArea_speechFromText", "Text übersetzen");

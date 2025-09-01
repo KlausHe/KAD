@@ -206,21 +206,6 @@ button:active {
   color: hsl(var(--txtNavbar));
 }
 
-[data-btnstatus="btnPositive"] {
-  background-color: hsl(var(--bgcButtonPositive));
-  color: hsl(var(--txtButtonPositive));
-}
-
-[data-btnstatus="btnNegative"] {
-  background-color: hsl(var(--bgcButtonNegative));
-  color: hsl(var(--txtButtonNegative));
-}
-
-[data-btnstatus="btnBasecolor"] {
-  background-color: hsl(var(--bgcNavbar));
-  color: hsl(var(--txtNavbar));
-}
-
 input {
   width: var(--UIWidth6);
   /* -webkit-box-align: center; */

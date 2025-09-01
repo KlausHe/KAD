@@ -14,10 +14,12 @@ export const globalValues = {
       return KadCSS.getRoot({ value: "UIRadius", RemToPx: true });
     },
     get divGridMinWidth() {
-      return Math.floor(this.size * KadCSS.getRoot({ value: "divGridMinWidthFactor" }));
+      const factor = KadCSS.getRoot({ value: "divGridMinWidthFactor" });
+      return Math.floor(this.size * factor);
     },
     get gridMarginSide() {
-      return Math.floor(this.size * KadCSS.getRoot({ value: "gridMarginSide" }));
+      const factor = KadCSS.getRoot({ value: "gridMarginSide" });
+      return Math.floor(this.size * factor);
     },
     get imgSize() {
       return KadCSS.getRoot({ value: "imgSize", RemToPx: true });
@@ -35,12 +37,12 @@ export const globalValues = {
   decimalsArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 };
 
-initEL({ id: idSel_settingsFontsize, fn: settingsFontsize, selList: globalValues.fontSizeArray });
-initEL({ id: idSel_settingsDecimals, fn: settingsDecimals, selStartIndex: 4, selList: globalValues.decimalsArray });
+initEL({ id: dbID("idSel_settingsFontsize"), fn: settingsFontsize, selList: globalValues.fontSizeArray });
+initEL({ id: dbID("idSel_settingsDecimals"), fn: settingsDecimals, selStartIndex: 4, selList: globalValues.decimalsArray });
 
 export function clear_cl_GeneralSettings() {
-  idSel_settingsFontsize.KadReset();
-  idSel_settingsDecimals.KadReset();
+  dbID("idSel_settingsFontsize").KadReset();
+  dbID("idSel_settingsDecimals").KadReset();
 }
 
 export const storage_cl_GeneralSettings = {
@@ -71,9 +73,9 @@ function settingsFontsize(obj = null) {
   if (obj != null) {
     globalValues.settings.fontSize = obj.target.value;
   } else {
-    idSel_settingsFontsize.KadReset({ selStartValue: globalValues.settings.fontSize });
+    dbID("idSel_settingsFontsize").KadReset({ selStartValue: globalValues.settings.fontSize });
   }
-  KadCSS.setRoot({ varabel: "fontSize", value: globalValues.settings.fontSize, dim: "px" });
+  KadCSS.setRoot({ variable: "fontSize", value: globalValues.settings.fontSize, dim: "px" });
   colorUpdateCanvascolors();
   resizeGrid();
 }

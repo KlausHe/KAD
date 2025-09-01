@@ -1,4 +1,4 @@
-import { initEL } from "../KadUtils/KadUtils.js";
+import { dbID, initEL } from "../KadUtils/KadUtils.js";
 
 const blechOptions = {
   dicke: 3,
@@ -41,33 +41,33 @@ const blechOptions = {
   },
 };
 
-initEL({ id: idVin_blechgeoDicke, fn: calcBlechGeo, resetValue: blechOptions.dicke });
-initEL({ id: idVin_blechgeoRadius, fn: calcBlechGeo, resetValue: blechOptions.radius });
-initEL({ id: idVin_blechgeoBreite, fn: calcBlechGeo, resetValue: blechOptions.breite });
-initEL({ id: idLbl_blechgeoResult, resetValue: `Mindestabstand: ...` });
-initEL({ id: idSel_blechgeoForm, fn: blechgeoFormChange, selStartValue: blechOptions.selectedGeo, selList: Object.keys(blechOptions.geo).map((geo) => [geo, geo]) });
+initEL({ id: dbID("idVin_blechgeoDicke"), fn: calcBlechGeo, resetValue: blechOptions.dicke });
+initEL({ id: dbID("idVin_blechgeoRadius"), fn: calcBlechGeo, resetValue: blechOptions.radius });
+initEL({ id: dbID("idVin_blechgeoBreite"), fn: calcBlechGeo, resetValue: blechOptions.breite });
+initEL({ id: dbID("idLbl_blechgeoResult"), resetValue: `Mindestabstand: ...` });
+initEL({ id: dbID("idSel_blechgeoForm"), fn: blechgeoFormChange, selStartValue: blechOptions.selectedGeo, selList: Object.keys(blechOptions.geo).map((geo) => [geo, geo]) });
 
 export function clear_cl_Blechgeometrie() {
-  idVin_blechgeoDicke.KadReset();
-  idVin_blechgeoRadius.KadReset();
-  idVin_blechgeoBreite.KadReset();
-  idSel_blechgeoForm.KadReset();
-  idLbl_blechgeoResult.KadReset();
+  dbID("idVin_blechgeoDicke").KadReset();
+  dbID("idVin_blechgeoRadius").KadReset();
+  dbID("idVin_blechgeoBreite").KadReset();
+  dbID("idSel_blechgeoForm").KadReset();
+  dbID("idLbl_blechgeoResult").KadReset();
   blechgeoFormChange();
   calcBlechGeo();
 }
 
 function blechgeoFormChange() {
-  blechOptions.selectedGeo = idSel_blechgeoForm.KadGet();
-  idVin_blechgeoBreite.KadEnable(!blechOptions.geo[blechOptions.selectedGeo].breite);
+  blechOptions.selectedGeo = dbID("idSel_blechgeoForm").KadGet();
+  dbID("idVin_blechgeoBreite").KadEnable(!blechOptions.geo[blechOptions.selectedGeo].breite);
   calcBlechGeo();
 }
 
 function calcBlechGeo() {
-  blechOptions.s = idVin_blechgeoDicke.KadGet({ failSafe: blechOptions.dicke });
-  blechOptions.r = idVin_blechgeoRadius.KadGet({ failSafe: blechOptions.radius });
-  blechOptions.b = idVin_blechgeoBreite.KadGet({ failSafe: blechOptions.breite });
-  let selBlechForm = blechOptions.geo[idSel_blechgeoForm.KadGet()];
-  idImg_Blechgeometrie.src = blechOptions.geo[blechOptions.selectedGeo].imgPath;
-  idLbl_blechgeoResult.KadSetText(`Mindestabstand: ${selBlechForm.func}`);
+  blechOptions.s = dbID("idVin_blechgeoDicke").KadGet({ failSafe: blechOptions.dicke });
+  blechOptions.r = dbID("idVin_blechgeoRadius").KadGet({ failSafe: blechOptions.radius });
+  blechOptions.b = dbID("idVin_blechgeoBreite").KadGet({ failSafe: blechOptions.breite });
+  let selBlechForm = blechOptions.geo[dbID("idSel_blechgeoForm").KadGet()];
+  dbID("idImg_Blechgeometrie").src = blechOptions.geo[blechOptions.selectedGeo].imgPath;
+  dbID("idLbl_blechgeoResult").KadSetText(`Mindestabstand: ${selBlechForm.func}`);
 }

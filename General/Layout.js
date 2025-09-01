@@ -56,7 +56,7 @@ export function contentCheckActive(contentObj) {
 
 export function layoutCheckCORSandDisableModule(error, moduleName) {
   if (error) {
-    console.log(`Could not receive data for ${moduleName}!\n\nDeactivating the module!\n\n`, error);
+    KadLog.error(`Could not receive data for ${moduleName}!\n\nDeactivating the module!\n\n`, error);
     contentGrid[`cl_${moduleName}`].deactivated = true;
     contentLayout.createContentData();
     createContentlayoutList();
@@ -95,6 +95,7 @@ export function resizeGrid() {
   const minWidth = globalValues.mediaSizes.divGridMinWidth;
   const calcX = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols
   if (contentLayout.gridRows != calcX) {
+    KadLog.log(winWidth, minWidth, winWidth / minWidth);
     contentLayout.gridRows = calcX;
     navClick(contentLayout.prevNavContent);
   }
@@ -142,13 +143,6 @@ export function navClick(layoutName = contentLayout.defaultPage) {
     }
   }
 
-  // for (let objKey in contentGrid) {
-  // 	dbCL(objKey).classList.toggle("sectionVisible", contentList.includes(objKey));
-  // }
-
-  // for (const obj of [...Object.keys(contentLayout.navContent)]) {
-  // 	dbID(`idDiv_navBar_${obj}`).classList.toggle("navbarActive", obj == contentLayout.prevNavContent);
-  // }
   setTimeout(() => {
     KadDOM.scrollToTop();
   }, 100);

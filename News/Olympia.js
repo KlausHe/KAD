@@ -3,7 +3,7 @@
 
 import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
 import { Data_Olympia } from "../KadData/KadData_Olympiadaten.js";
-import { KadArray, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadTable, KadValue, dbID, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
   baseData: new Map(Data_Olympia),
@@ -75,26 +75,26 @@ const olympiaOptions = {
 };
 
 initEL({
-  id: idSel_olympiaEvent,
+  id: dbID("idSel_olympiaEvent"),
   fn: olympiaUpdate,
   selStartIndex: 51,
   selList: olympiaOptions.events.map((v) => [`${v[0]} ${v[1]}`, v[1]]),
 });
-initEL({ id: idBtn_olympiaSpecific, fn: olympiaSpecific });
-initEL({ id: idBtn_olympiaSortMedals, fn: olympiaSortByMedals });
-initEL({ id: idBtn_olympiaSortTotal, fn: olympiaSortByTotal });
+initEL({ id: dbID("idBtn_olympiaSpecific"), fn: olympiaSpecific });
+initEL({ id: dbID("idBtn_olympiaSortMedals"), fn: olympiaSortByMedals });
+initEL({ id: dbID("idBtn_olympiaSortTotal"), fn: olympiaSortByTotal });
 
 export function clear_cl_Olympia() {
   olympiaOptions.countryData = {};
   for (let obj of Data_Country_CodesIso3166) {
     olympiaOptions.countryData[obj.cioc] = { cioc: obj.cioc, flag: obj.flagSvgURL, population: obj.population };
   }
-  idSel_olympiaEvent.KadReset();
+  dbID("idSel_olympiaEvent").KadReset();
   olympiaUpdate();
 }
 
 function olympiaUpdate() {
-  const eventname = idSel_olympiaEvent.KadGet({ textContent: true });
+  const eventname = dbID("idSel_olympiaEvent").KadGet({ textContent: true });
   const eventData = olympiaOptions.baseData.get(eventname);
 
   olympiaOptions.data = [];
@@ -125,7 +125,7 @@ function olympiaUpdate() {
 
 function olympiaSpecific() {
   olympiaOptions.specific = !olympiaOptions.specific;
-  idBtn_olympiaSpecific.KadButtonColor(olympiaOptions.specific ? "positive" : null);
+  dbID("idBtn_olympiaSpecific").KadButtonColor(olympiaOptions.specific ? "positive" : null);
   olympiaTableReturn();
 }
 
@@ -147,7 +147,6 @@ function olympiaSortByMedals() {
 
 function olympiaTableReturn() {
   if (olympiaOptions.data.length == 0) return;
-  // KadLog.log(olympiaOptions.data);
 
   //prettier-ignore
   const header = [
@@ -179,5 +178,5 @@ function olympiaTableReturn() {
       settings: { description: "population", align: "right" },
     },
   ];
-  KadTable.createHTMLGrid({ id: idTab_OlympiaTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_OlympiaTable"), header, body });
 }

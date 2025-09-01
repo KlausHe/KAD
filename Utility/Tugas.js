@@ -3,12 +3,12 @@ import { dbID, initEL, KadTable } from "../KadUtils/KadUtils.js";
 
 let tugasOptions = { data: [] };
 
-initEL({ id: idArea_tugasEntry, action: "change", fn: tugasNewEntry, resetValue: "Paste to Tugas" });
-initEL({ id: idBtn_tugasEntry, fn: tugasNewEntry });
+initEL({ id: dbID("idArea_tugasEntry"), action: "change", fn: tugasNewEntry, resetValue: "Paste to Tugas" });
+initEL({ id: dbID("idBtn_tugasEntry"), fn: tugasNewEntry });
 
 export function clear_cl_Tugas() {
   tugasOptions.data = [];
-  idArea_tugasEntry.KadReset();
+  dbID("idArea_tugasEntry").KadReset();
   tugasCreateTable();
 }
 export const storage_cl_Tugas = {
@@ -41,15 +41,15 @@ function tugasClearRow(index) {
 }
 
 function tugasEditRow(index) {
-  dbID("idArea_tugasEntry").value = tugasOptions.data[index].text;
+  dbID("idArea_tugasEntry").KadSetValue(tugasOptions.data[index].text);
   tugasOptions.data.splice(index, 1);
 }
 
 function tugasNewEntry() {
-  const value = idArea_tugasEntry.KadGet({ noPlaceholder: true });
+  const value = dbID("idArea_tugasEntry").KadGet({ noPlaceholder: true });
   if (value == "") return;
   tugasOptions.data.push({ text: value, state: false });
-  idArea_tugasEntry.value = "";
+  dbID("idArea_tugasEntry").KadReset();
   tugasCreateTable();
   saveDiscipuli("Tugas");
 }
@@ -69,5 +69,5 @@ function tugasCreateTable() {
     { data: tugasOptions.data.map((item) => item.text), settings: { names: ["tugas", "entry"], for: "tugas_state" } },
   ];
 
-  KadTable.createHTMLGrid({ id: idTab_tugasTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_tugasTable"), body });
 }

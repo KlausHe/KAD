@@ -30,22 +30,22 @@ export const WikiSearchData = {
   },
 };
 
-initEL({ id: idVin_wikiInput, fn: wikiSearchInput, resetValue: "Search on Wiki" });
-initEL({ id: idBtn_wikiInput, fn: wikiSearchInput });
-initEL({ id: idSel_wikiLanguage, fn: wikiSearchLanguage, selStartValue: "German", selList: Array.from(Data_Country_CodesIso639).map((item) => [item[1], item[0]]) });
+initEL({ id: dbID("idVin_wikiInput"), fn: wikiSearchInput, resetValue: "Search on Wiki" });
+initEL({ id: dbID("idBtn_wikiInput"), fn: wikiSearchInput });
+initEL({ id: dbID("idSel_wikiLanguage"), fn: wikiSearchLanguage, selStartValue: "German", selList: Array.from(Data_Country_CodesIso639).map((item) => [item[1], item[0]]) });
 
 export function clear_cl_WikiSearch() {
-  idVin_wikiInput.KadReset();
-  idSel_wikiLanguage.KadReset();
+  dbID("idVin_wikiInput").KadReset();
+  dbID("idSel_wikiLanguage").KadReset();
   dbID("idDiv_wiki_Title").textContent = "";
   dbID("idDiv_wiki_Text").textContent = "";
   dbID("idImg_Wiki_Image").src = "";
   dbIDStyle("idImg_Wiki_Image").display = "none";
-  wikiOptions.search = { tab: null, content: null, language: idSel_wikiLanguage.KadGet(), img: null };
+  wikiOptions.search = { tab: null, content: null, language: dbID("idSel_wikiLanguage").KadGet(), img: null };
 }
 
 function wikiSearchInput() {
-  wikiOptions.search.tab = idVin_wikiInput.KadGet().replace(/\s+/g, "_");
+  wikiOptions.search.tab = dbID("idVin_wikiInput").KadGet().replace(/\s+/g, "_");
   if (wikiOptions.inputTimer != null) {
     clearTimeout(wikiOptions.inputTimer);
     wikiOptions.inputTimer = null;
@@ -65,7 +65,7 @@ function wikiSearchGetData() {
 }
 
 function wikiSearchLanguage() {
-  wikiOptions.search.language = idSel_wikiLanguage.KadGet();
+  wikiOptions.search.language = dbID("idSel_wikiLanguage").KadGet();
   if (!wikiOptions.search.tab) return;
   wikiSearchInput();
 }
@@ -90,7 +90,7 @@ function wikiCreateTable(data) {
       settings: { onclick: showWiki },
     },
   ];
-  KadTable.createHTMLGrid({ id: idTab_wikiTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_wikiTable"), body });
 }
 
 function wikiShowSelectedText(data) {

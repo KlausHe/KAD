@@ -15,26 +15,26 @@ export const materialOptions = {
   selMatGroup: "all",
 };
 
-initEL({ id: idCb_materialListFilter, fn: materialPropertyfilter, resetValue: true });
-initEL({ id: idVin_materialFilter, fn: materialSearchInput, resetValue: "Material suchen" });
+initEL({ id: dbID("idCb_materialListFilter"), fn: materialPropertyfilter, resetValue: true });
+initEL({ id: dbID("idVin_materialFilter"), fn: materialSearchInput, resetValue: "Material suchen" });
 initEL({
-  id: idSel_materialFilter,
+  id: dbID("idSel_materialFilter"),
   fn: materialSearchSelectChange,
 });
-initEL({ id: idBtn_materialSelectClose, fn: materialCloseMaterialSelect });
+initEL({ id: dbID("idBtn_materialSelectClose"), fn: materialCloseMaterialSelect });
 
 export function clear_cl_Material() {
   materialOptions.matList = materialOptions.matListOrig;
   materialOptions.filterList = Object.keys(Data_Materials.Materials);
   materialFilterOptions.select = [...materialFilterOptions.listOrig];
-  idSel_materialFilter.KadReset({
+  dbID("idSel_materialFilter").KadReset({
     selGroup: {
       "Alle Werkstoffe": [["Alle Werkstoffe", "all"], ...Array.from(new Set(Object.values(Data_Materials.Materials).map((mat) => mat.matGroup))).map((mat) => [mat, mat])],
     },
     selStartIndex: 0,
   });
-  idVin_materialFilter.KadReset();
-  idCb_materialListFilter.KadReset();
+  dbID("idVin_materialFilter").KadReset();
+  dbID("idCb_materialListFilter").KadReset();
 
   materialSelectedTable();
   materialToggleSearch();
@@ -67,7 +67,7 @@ function materialRemoveMaterial(index) {
   materialSelectedTable();
 }
 
-function materialAddMaterial(index) {
+function materialAddMaterial() {
   materialToggleSearch(true);
   materialOpenMaterialSelect();
 }
@@ -105,7 +105,7 @@ export function materialSelectedTable() {
     ...bodyData.map((item) => ({ data: item.map((mat) => mat), settings: settingsRight })),
     { skip: true, settings: { noBorder: "bottom" } },
   ];
-  KadTable.createHTMLGrid({ id: idTab_materialTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_materialTable"), header, body });
   geoUpdateMassDependencies();
 }
 
@@ -115,13 +115,13 @@ function geoUpdateMassDependencies() {
 }
 
 function materialSearchSelectChange() {
-  materialOptions.selMatGroup = idSel_materialFilter.KadGet();
+  materialOptions.selMatGroup = dbID("idSel_materialFilter").KadGet();
   materialSearchInput();
 }
 
 function materialSearchInput() {
   materialOptions.filterList = [];
-  let val = idVin_materialFilter.KadGet().toLowerCase();
+  let val = dbID("idVin_materialFilter").KadGet().toLowerCase();
   let search = val.split(/[*^\s]/g);
   for (const [key, value] of Object.entries(Data_Materials.Materials)) {
     if (materialOptions.selMatGroup == "all" || value.matGroup == materialOptions.selMatGroup) {
@@ -229,9 +229,9 @@ function materialToggleSearch(state = false) {
 }
 
 function materialOpenMaterialSelect() {
-  idDia_materialSelect.showModal();
+  dbID("idDia_materialSelect").showModal();
 }
 function materialCloseMaterialSelect() {
   materialToggleSearch();
-  idDia_materialSelect.close();
+  dbID("idDia_materialSelect").close();
 }

@@ -1,14 +1,14 @@
 import { Data_Country_CodesIso3166, Data_Country_Descriptions } from "../KadData/KadData_Countries.js";
-import { initEL, KadArray, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 
 initEL({
-  id: idSel_pinyCountry,
+  id: dbID("idSel_pinyCountry"),
   fn: pinyCreateCountryData,
   selList: Data_Country_CodesIso3166.map((obj, index) => [obj.nameDECommon, index]).sort(),
   selStartIndex: KadRandom.randomIndex(Data_Country_CodesIso3166.length),
 });
 initEL({
-  id: idSel_pinyField,
+  id: dbID("idSel_pinyField"),
   fn: pinyCreateFieldData,
   selStartIndex: 0,
 });
@@ -21,14 +21,14 @@ const pinyOptions = {
 
 export function clear_cl_Piny() {
   pinyOptions.countryData = Data_Country_CodesIso3166;
-  idSel_pinyCountry.KadReset();
-  idSel_pinyField.KadReset({ selList: Object.keys(pinyFieldOptions).map((item) => [Data_Country_Descriptions[item], item]) });
+  dbID("idSel_pinyCountry").KadReset();
+  dbID("idSel_pinyField").KadReset({ selList: Object.keys(pinyFieldOptions).map((item) => [Data_Country_Descriptions[item], item]) });
   pinyCreateCountryData();
 }
 
 const uiSize = "width10";
 function pinyCreateCountryData() {
-  const countryIndex = idSel_pinyCountry.KadGet();
+  const countryIndex = dbID("idSel_pinyCountry").KadGet();
   const country = Data_Country_CodesIso3166[countryIndex];
   const header = [
     { data: "Eigenschaft", settings: { uiSize } },
@@ -38,29 +38,17 @@ function pinyCreateCountryData() {
     { data: Object.keys(pinyFieldOptions).map((obj) => Data_Country_Descriptions[obj]), settings: { uiSize } },
     { data: Object.keys(pinyFieldOptions).map((obj) => pinyFieldOptions[obj](country)), settings: { uiSize } },
   ];
-  KadTable.createHTMLGrid({ id: idTab_pinyTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_pinyTable"), header, body });
 }
 
-// async function pinyGetDataForField() {
-//   pinyOptions.fieldIndex = idSel_pinyField.KadGet();
-//   const url = pinyOptions.getFieldURL();
-//   const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url });
-//   if (KadLog.errorChecked(error, "Could not receive data for 'Piny'.", error)) return;
-//   pinyOptions.fieldData = data;
-//   pinyCreateFieldData();
-// }
-//
 function pinyCreateFieldData() {
-  pinyOptions.fieldName = idSel_pinyField.KadGet({ content: true });
-  KadLog.log(pinyOptions.fieldName);
+  pinyOptions.fieldName = dbID("idSel_pinyField").KadGet({ content: true });
 
   const sortedCountries = KadArray.sortArrayByKey({
     array: Data_Country_CodesIso3166,
     key: "cca2",
     caseSensitive: true,
   });
-
-  KadLog.log(sortedCountries);
 
   const header = [
     { data: "Land", settings: { uiSize } },
@@ -70,14 +58,8 @@ function pinyCreateFieldData() {
     { data: sortedCountries.map((item) => item.nameDE), settings: { uiSize } },
     { data: sortedCountries.map((item) => pinyFieldOptions[pinyOptions.fieldName](item)), settings: { uiSize } },
   ];
-  KadTable.createHTMLGrid({ id: idTab_pinyTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_pinyTable"), header, body });
 }
-
-// pinyOptions.fieldData = KadArray.sortArrayByKey({ array: pinyOptions.fieldData, keys: ["translations", "deu", "official"], caseSensitive: true });
-// const body = [
-//   { data: pinyOptions.fieldData.map((item) => item.translations.deu.official), settings: { uiSize } },
-//   { data: pinyOptions.fieldData.map((item) => pinyFieldOptions[pinyOptions.fieldIndex].data(item)), settings: { uiSize } },
-// ];
 
 const pinyFieldOptions = {
   nameDE(obj) {

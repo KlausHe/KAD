@@ -29,17 +29,17 @@ const hverertuOptions = {
     },
   },
 };
-initEL({ id: idVin_hverertuEntry, fn: hverertuGetInput, resetValue: "Vorname eingeben" });
-initEL({ id: idBtn_hverertuEntry, fn: hverertuGetInput });
+initEL({ id: dbID("idVin_hverertuEntry"), fn: hverertuGetInput, resetValue: "Vorname eingeben" });
+initEL({ id: dbID("idBtn_hverertuEntry"), fn: hverertuGetInput });
 
 export function clear_cl_Hverertu() {
-  idVin_hverertuEntry.KadReset();
+  dbID("idVin_hverertuEntry").KadReset();
   hverertuOptions.input = "";
   createHverertuTable();
 }
 
 function hverertuGetInput() {
-  hverertuOptions.input = idVin_hverertuEntry.KadGet();
+  hverertuOptions.input = dbID("idVin_hverertuEntry").KadGet();
   if (hverertuOptions.input == "") return;
 
   if (hverertuOptions.inputTimer != null) {
@@ -91,5 +91,5 @@ function hverertuGender({ data }) {
 
 function createHverertuTable() {
   const body = [{ data: Object.keys(hverertuOptions.data) }, { data: Object.keys(hverertuOptions.data).map((_) => "..."), settings: { names: ["hverertu", "value"] } }];
-  KadTable.createHTMLGrid({ id: idTab_hverertuTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_hverertuTable"), body });
 }

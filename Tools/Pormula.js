@@ -178,44 +178,44 @@ const pormulaChart = {
   canvas: null,
 };
 
-initEL({ id: idBtn_pormulaTypeSelectLinear, fn: () => pormulaGetType("idBtn_pormulaTypeSelectLinear", "Linear"), resetValue: "Linear" });
-initEL({ id: idBtn_pormulaTypeSelectExponential, fn: () => pormulaGetType("idBtn_pormulaTypeSelectExponential", "Exponential"), resetValue: "Exponential" });
-initEL({ id: idBtn_pormulaTypeSelectLogarithmus, fn: () => pormulaGetType("idBtn_pormulaTypeSelectLogarithmus", "Logarithmus"), resetValue: "Logarithmus" });
-initEL({ id: idBtn_pormulaTypeSelectPotenz, fn: () => pormulaGetType("idBtn_pormulaTypeSelectPotenz", "Potenz"), resetValue: "Potenz" });
-initEL({ id: idBtn_pormulaBestFit, fn: pormulaBestFit, resetValue: "Fit Best" });
-initEL({ id: idBtn_pormulaTypeSelectPolynom, fn: () => pormulaGetType("idBtn_pormulaTypeSelectPolynom", "Polynom"), resetValue: "Polynom" });
-initEL({ id: idBtn_pormulaPolyFit, fn: pormulaPolyFit, resetValue: "Fit Polynom" });
-initEL({ id: idVin_pormulaPrecision, fn: pormulaCalculate, resetValue: pormulaOptions.regOptionsOrig.precision });
-initEL({ id: idVin_pormulaOrder, fn: pormulaCalculate, resetValue: pormulaOptions.regOptionsOrig.order });
-initEL({ id: idBtn_pormulaSubInput, fn: pormulaSubInput });
-initEL({ id: idBtn_pormulaAddInput, fn: pormulaAddInput });
-initEL({ id: idVin_pormulaPointEntryA, fn: pormulaCalculate, resetValue: pormulaOptions.valuesOrig[0] });
-initEL({ id: idVin_pormulaPointEntryB, fn: pormulaCalculate, resetValue: pormulaOptions.valuesOrig[1] });
-initEL({ id: idVin_pormulaPointEntryC, fn: pormulaCalculate, resetValue: pormulaOptions.valuesOrig[2] });
-initEL({ id: idVin_Pormula_x0, fn: pormulaCalculate, resetValue: 1 });
-initEL({ id: idVin_Pormula_y0, fn: pormulaCalculate, resetValue: 1 });
-initEL({ id: idVin_Pormula_x1, fn: pormulaCalculate, resetValue: 2 });
-initEL({ id: idVin_Pormula_y1, fn: pormulaCalculate, resetValue: 2 });
-initEL({ id: idVin_Pormula_x2, fn: pormulaCalculate, resetValue: 3 });
-initEL({ id: idVin_Pormula_y2, fn: pormulaCalculate, resetValue: 3 });
-initEL({ id: idVin_Pormula_x3, fn: pormulaCalculate, resetValue: 4 });
-initEL({ id: idVin_Pormula_y3, fn: pormulaCalculate, resetValue: 4 });
-initEL({ id: idVin_Pormula_x4, fn: pormulaCalculate, resetValue: 5 });
-initEL({ id: idVin_Pormula_y4, fn: pormulaCalculate, resetValue: 5 });
-initEL({ id: idVin_Pormula_x5, fn: pormulaCalculate, resetValue: 6 });
-initEL({ id: idVin_Pormula_y5, fn: pormulaCalculate, resetValue: 6 });
-initEL({ id: idVin_Pormula_x6, fn: pormulaCalculate, resetValue: 7 });
-initEL({ id: idVin_Pormula_y6, fn: pormulaCalculate, resetValue: 7 });
-initEL({ id: idVin_Pormula_x7, fn: pormulaCalculate, resetValue: 8 });
-initEL({ id: idVin_Pormula_y7, fn: pormulaCalculate, resetValue: 8 });
+initEL({ id: dbID("idBtn_pormulaTypeSelectLinear"), fn: () => pormulaGetType("idBtn_pormulaTypeSelectLinear", "Linear"), resetValue: "Linear", dataset: ["radio", "pormulaType"] });
+initEL({ id: dbID("idBtn_pormulaTypeSelectExponential"), fn: () => pormulaGetType("idBtn_pormulaTypeSelectExponential", "Exponential"), resetValue: "Exponential", dataset: ["radio", "pormulaType"] });
+initEL({ id: dbID("idBtn_pormulaTypeSelectLogarithmus"), fn: () => pormulaGetType("idBtn_pormulaTypeSelectLogarithmus", "Logarithmus"), resetValue: "Logarithmus", dataset: ["radio", "pormulaType"] });
+initEL({ id: dbID("idBtn_pormulaTypeSelectPotenz"), fn: () => pormulaGetType("idBtn_pormulaTypeSelectPotenz", "Potenz"), resetValue: "Potenz", dataset: ["radio", "pormulaType"] });
+initEL({ id: dbID("idBtn_pormulaTypeSelectPolynom"), fn: () => pormulaGetType("idBtn_pormulaTypeSelectPolynom", "Polynom"), resetValue: "Polynom", dataset: ["radio", "pormulaType"] });
+initEL({ id: dbID("idBtn_pormulaBestFit"), fn: pormulaBestFit, resetValue: "Fit Best" });
+initEL({ id: dbID("idBtn_pormulaPolyFit"), fn: pormulaPolyFit, resetValue: "Fit Polynom" });
+initEL({ id: dbID("idVin_pormulaPrecision"), fn: pormulaCalculate, resetValue: pormulaOptions.regOptionsOrig.precision });
+initEL({ id: dbID("idVin_pormulaOrder"), fn: pormulaCalculate, resetValue: pormulaOptions.regOptionsOrig.order });
+initEL({ id: dbID("idBtn_pormulaSubInput"), fn: pormulaSubInput });
+initEL({ id: dbID("idBtn_pormulaAddInput"), fn: pormulaAddInput });
+initEL({ id: dbID("idVin_pormulaPointEntryA"), fn: pormulaCalculate, resetValue: pormulaOptions.valuesOrig[0] });
+initEL({ id: dbID("idVin_pormulaPointEntryB"), fn: pormulaCalculate, resetValue: pormulaOptions.valuesOrig[1] });
+initEL({ id: dbID("idVin_pormulaPointEntryC"), fn: pormulaCalculate, resetValue: pormulaOptions.valuesOrig[2] });
+initEL({ id: dbID("idVin_Pormula_x0"), fn: pormulaCalculate, resetValue: 1 });
+initEL({ id: dbID("idVin_Pormula_y0"), fn: pormulaCalculate, resetValue: 1 });
+initEL({ id: dbID("idVin_Pormula_x1"), fn: pormulaCalculate, resetValue: 2 });
+initEL({ id: dbID("idVin_Pormula_y1"), fn: pormulaCalculate, resetValue: 2 });
+initEL({ id: dbID("idVin_Pormula_x2"), fn: pormulaCalculate, resetValue: 3 });
+initEL({ id: dbID("idVin_Pormula_y2"), fn: pormulaCalculate, resetValue: 3 });
+initEL({ id: dbID("idVin_Pormula_x3"), fn: pormulaCalculate, resetValue: 4 });
+initEL({ id: dbID("idVin_Pormula_y3"), fn: pormulaCalculate, resetValue: 4 });
+initEL({ id: dbID("idVin_Pormula_x4"), fn: pormulaCalculate, resetValue: 5 });
+initEL({ id: dbID("idVin_Pormula_y4"), fn: pormulaCalculate, resetValue: 5 });
+initEL({ id: dbID("idVin_Pormula_x5"), fn: pormulaCalculate, resetValue: 6 });
+initEL({ id: dbID("idVin_Pormula_y5"), fn: pormulaCalculate, resetValue: 6 });
+initEL({ id: dbID("idVin_Pormula_x6"), fn: pormulaCalculate, resetValue: 7 });
+initEL({ id: dbID("idVin_Pormula_y6"), fn: pormulaCalculate, resetValue: 7 });
+initEL({ id: dbID("idVin_Pormula_x7"), fn: pormulaCalculate, resetValue: 8 });
+initEL({ id: dbID("idVin_Pormula_y7"), fn: pormulaCalculate, resetValue: 8 });
 
 export function clear_cl_Pormula() {
-  pormulaGetType();
-  pormulaOptions.regOptions.order = idVin_pormulaOrder.KadReset();
-  pormulaOptions.regOptions.precision = idVin_pormulaPrecision.KadReset();
-  idVin_pormulaPointEntryA.KadReset();
-  idVin_pormulaPointEntryB.KadReset();
-  idVin_pormulaPointEntryC.KadReset();
+  pormulaOptions.selType = Object.keys(pormulaOptions.types)[0];
+  pormulaOptions.regOptions.order = dbID("idVin_pormulaOrder").KadReset();
+  pormulaOptions.regOptions.precision = dbID("idVin_pormulaPrecision").KadReset();
+  dbID("idVin_pormulaPointEntryA").KadReset();
+  dbID("idVin_pormulaPointEntryB").KadReset();
+  dbID("idVin_pormulaPointEntryC").KadReset();
 
   pormulaOptions.data.size = pormulaOptions.valuesOrig.length;
   const inputParent = dbCL("clDiv_pormulaInput", null);
@@ -231,7 +231,8 @@ export function clear_cl_Pormula() {
   }
   pormulaChart.canvas = new Chart(idCanv_promula, pormulaChart.config);
   pormulaDirInput(0); // initiate hiding/showing of input rows
-  pormulaCalculate();
+  pormulaBestFit();
+  // pormulaCalculate();
 }
 
 function pormulaSubInput() {
@@ -255,23 +256,14 @@ function pormulaDirInput(dir) {
 }
 
 function pormulaGetType(id, type) {
-  let cl = dbCL("clBtn_pormulaTypeSelect", null);
-  for (let i = 0; i < cl.length; i++) {
-    cl[i].KadButtonColor();
-  }
-  if (id != null) {
-    dbID(id).KadButtonColor("positive");
-    pormulaOptions.selType = type;
-  } else {
-    cl[0].KadButtonColor("positive");
-    pormulaOptions.selType = Object.keys(pormulaOptions.types)[0];
-  }
+  dbID(id).KadRadioColor();
+  pormulaOptions.selType = type;
   pormulaCalculate();
 }
 
 function pormulaReadInputs() {
-  pormulaOptions.regOptions.order = idVin_pormulaOrder.KadGet();
-  pormulaOptions.regOptions.precision = idVin_pormulaPrecision.KadGet();
+  pormulaOptions.regOptions.order = dbID("idVin_pormulaOrder").KadGet();
+  pormulaOptions.regOptions.precision = dbID("idVin_pormulaPrecision").KadGet();
   pormulaOptions.data.userPoints = [];
   pormulaOptions.data.uniquePoints = [];
   pormulaOptions.data.uniqueX = [];
@@ -352,14 +344,14 @@ function pormulaPolyFit() {
     }
     prevR = newR;
   }
-  pormulaOptions.regOptions.order = idVin_pormulaOrder.KadReset();
-  pormulaGetType(`idBtn_pormulaTypeSelectPolynom`, "Polynom");
+  pormulaOptions.regOptions.order = dbID("idVin_pormulaOrder").KadReset();
+  pormulaGetType(`dbID("idBtn_pormulaTypeSelectPolynom")`, "Polynom");
 }
 
 function pormulaPoint() {
-  let p0 = idVin_pormulaPointEntryA.KadGet();
-  let p1 = idVin_pormulaPointEntryB.KadGet();
-  let p2 = idVin_pormulaPointEntryC.KadGet();
+  let p0 = dbID("idVin_pormulaPointEntryA").KadGet();
+  let p1 = dbID("idVin_pormulaPointEntryB").KadGet();
+  let p2 = dbID("idVin_pormulaPointEntryC").KadGet();
   let r0 = pormulaOptions.reg.predict(p0);
   let r1 = pormulaOptions.reg.predict(p1);
   let r2 = pormulaOptions.reg.predict(p2);

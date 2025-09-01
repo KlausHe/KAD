@@ -1,7 +1,7 @@
 // https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
 import { Data_Currencies } from "../KadData/KadData_Countries.js";
-import { initEL, KadDate, KadFile, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadDate, KadFile, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 
 const iomlaidOptions = {
   get URLnow() {
@@ -29,40 +29,40 @@ const iomlaidOptions = {
 };
 
 initEL({
-  id: idSel_IomlaidCur,
+  id: dbID("idSel_IomlaidCur"),
   fn: iomlaidCurrencyChange,
   selStartValue: iomlaidOptions.optionsOrig.baseCurrency,
   selList: Data_Currencies.map((currency) => [`${currency.cc} (${currency.name})`, currency.cc]),
 });
 initEL({
-  id: idVin_IomlaidDate,
+  id: dbID("idVin_IomlaidDate"),
   fn: iomlaidDateChange,
   resetValue: iomlaidOptions.minDate,
   domOpts: { min: iomlaidOptions.dateDatabase },
 });
-initEL({ id: idVin_IomlaidCur, fn: iomlaidValueChange, resetValue: iomlaidOptions.optionsOrig.value });
+initEL({ id: dbID("idVin_IomlaidCur"), fn: iomlaidValueChange, resetValue: iomlaidOptions.optionsOrig.value });
 
 export function clear_cl_Iomlaid() {
   iomlaidOptions.latest = null;
   iomlaidOptions.historic = null;
   iomlaidOptions.baseCurrency = iomlaidOptions.optionsOrig.baseCurrency;
-  iomlaidOptions.date = idVin_IomlaidDate.KadReset();
-  iomlaidOptions.value = idVin_IomlaidCur.KadReset();
-  idSel_IomlaidCur.KadReset();
+  iomlaidOptions.date = dbID("idVin_IomlaidDate").KadReset();
+  iomlaidOptions.value = dbID("idVin_IomlaidCur").KadReset();
+  dbID("idSel_IomlaidCur").KadReset();
   iomlaidGetData();
 }
 
 function iomlaidCurrencyChange() {
-  iomlaidOptions.baseCurrency = idSel_IomlaidCur.KadGet();
+  iomlaidOptions.baseCurrency = dbID("idSel_IomlaidCur").KadGet();
   iomlaidGetData();
 }
 function iomlaidDateChange() {
-  iomlaidOptions.date = KadDate.dateFromInput(idVin_IomlaidDate, iomlaidOptions.dateFormat);
+  iomlaidOptions.date = KadDate.dateFromInput(dbID("idVin_IomlaidDate"), iomlaidOptions.dateFormat);
   iomlaidGetData();
 }
 
 function iomlaidValueChange() {
-  iomlaidOptions.value = idVin_IomlaidCur.KadGet();
+  iomlaidOptions.value = dbID("idVin_IomlaidCur").KadGet();
   iomlaidTable();
 }
 
@@ -74,7 +74,7 @@ async function iomlaidGetData() {
   if (layoutCheckCORSandDisableModule(error, "Iomlaid")) return;
   iomlaidOptions.latest = dataNow[iomlaidOptions.baseCurrency.toLowerCase()];
   iomlaidOptions.historic = dataHistory[iomlaidOptions.baseCurrency.toLowerCase()];
-  iomlaidOptions.date = idVin_IomlaidDate.KadReset({ resetValue: dataHistory.date });
+  iomlaidOptions.date = dbID("idVin_IomlaidDate").KadReset({ resetValue: dataHistory.date });
   iomlaidTable();
 }
 
@@ -111,5 +111,5 @@ function iomlaidTable() {
       settings: { align: "right" },
     },
   ];
-  KadTable.createHTMLGrid({ id: idTab_iomlaidTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_iomlaidTable"), header, body });
 }

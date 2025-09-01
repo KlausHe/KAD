@@ -1,8 +1,8 @@
 import { Data_Newsticker } from "../KadData/KadData_Newsticker.js";
-import { initEL, KadArray, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 
-initEL({ id: idBtn_newsTickerNext, fn: postillonTickerNext });
-initEL({ id: idLbl_newsTickerNumber, resetValue: "Ticker" });
+initEL({ id: dbID("idBtn_newsTickerNext"), fn: postillonTickerNext });
+initEL({ id: dbID("idLbl_newsTickerNumber"), resetValue: "Ticker" });
 
 let postillonTickerOptions = {
   num: null,
@@ -28,8 +28,8 @@ function postillonTickerNext() {
 }
 
 function postillionCreate() {
-  idLbl_newsTickerNumber.KadSetText(`Ticker ${postillonTickerOptions.num}`);
+  dbID("idLbl_newsTickerNumber").KadSetText(`Ticker ${postillonTickerOptions.num}`);
   const body = [{ data: postillonTickerOptions.data[postillonTickerOptions.num], settings: { align: "center" } }];
 
-  KadTable.createHTMLGrid({ id: idTab_postillionTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_postillionTable"), body });
 }

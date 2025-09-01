@@ -182,9 +182,7 @@
     <section class="cl_Synonym">
       <div class="cl_subGrid_Synonym cl_subGrid">
         <div class="cl_SynonymInput">
-          <input type="text" id="idVin_synonymEntry" uiSize="width9" uiRadius="left"></input><button id="idBtn_synonymEntry" uiSize="width1" uiRadius="right">
-            <img src="Data/Images/down.svg"></img>
-          </button>
+          <input type="text" id="idVin_synonymEntry" uiSize="width10"></input>
         </div>
         <div class="cl_SynonymSearchword" uiWrap="nowrap">
           <label class="cl_info" uiSize="width3" uiRadius="left">Suche:</label><label class="cl_info" id="idLbl_synonymSearchWord" uiSize="width7" uiRadius="right">...</label>
@@ -490,11 +488,11 @@
         </div>
         <div class="cl_SudokuAutoCheck">
           <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_sudokuAutoCheck" checked></input>
-          </label><label class="cl_info" uiSize="width5" uiRadius="right">Auto-Check</label><br>
+          </label><label class="cl_info" for="idCb_sudokuAutoCheck" uiSize="width5" uiRadius="right">Auto-Check</label><br>
         </div>
         <div class="cl_SudokuAutoErase">
           <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_sudokuErasePencils" checked></input>
-          </label><label class="cl_info" uiSize="width5" uiRadius="right">Auto-Erase</label>
+          </label><label class="cl_info" for="idCb_sudokuErasePencils" uiSize="width5" uiRadius="right">Auto-Erase</label>
         </div>
         <div class="cl_SudokuOverview">
           <div class="cl_SquareButtonFlex" uiFlex="horizontal">
@@ -768,6 +766,30 @@
     </section>
     <section class="cl_Geometrie">
       <div class="cl_subGrid_Geometrie cl_subGrid">
+        <div class="cl_GeometrieElement_0">
+          <button id="idBtn_GeometrieElement_0"></button>
+        </div>
+        <div class="cl_GeometrieElement_1">
+          <button id="idBtn_GeometrieElement_1"></button>
+        </div>
+        <div class="cl_GeometrieElement_2">
+          <button id="idBtn_GeometrieElement_2"></button>
+        </div>
+        <div class="cl_GeometrieElement_3">
+          <button id="idBtn_GeometrieElement_3"></button>
+        </div>
+        <div class="cl_GeometrieElement_4">
+          <button id="idBtn_GeometrieElement_4"></button>
+        </div>
+        <div class="cl_GeometrieElement_5">
+          <button id="idBtn_GeometrieElement_5"></button>
+        </div>
+        <div class="cl_GeometrieElement_6">
+          <button id="idBtn_GeometrieElement_6"></button>
+        </div>
+        <div class="cl_GeometrieElement_7">
+          <button id="idBtn_GeometrieElement_7"></button>
+        </div>
         <div class="cl_GeometrieAreaSelect">
           <div id="idTab_geometrieSelectTable"></div>
         </div>
@@ -960,19 +982,19 @@
     <section class="cl_Pormula">
       <div class="cl_subGrid_Pormula cl_subGrid">
         <div class="cl_PormulaTypeSelectLinear">
-          <button id="idBtn_pormulaTypeSelectLinear" class="clBtn_pormulaTypeSelect"></button>
+          <button id="idBtn_pormulaTypeSelectLinear"></button>
         </div>
         <div class="cl_PormulaTypeSelectExponential">
-          <button id="idBtn_pormulaTypeSelectExponential" class="clBtn_pormulaTypeSelect"></button>
+          <button id="idBtn_pormulaTypeSelectExponential"></button>
         </div>
         <div class="cl_PormulaTypeSelectLogarithmus">
-          <button id="idBtn_pormulaTypeSelectLogarithmus" class="clBtn_pormulaTypeSelect"></button>
+          <button id="idBtn_pormulaTypeSelectLogarithmus"></button>
         </div>
         <div class="cl_PormulaTypeSelectPotenz">
-          <button id="idBtn_pormulaTypeSelectPotenz" class="clBtn_pormulaTypeSelect"></button>
+          <button id="idBtn_pormulaTypeSelectPotenz"></button>
         </div>
         <div class="cl_PormulaTypeSelectPolynom">
-          <button id="idBtn_pormulaTypeSelectPolynom" class="clBtn_pormulaTypeSelect"></button>
+          <button id="idBtn_pormulaTypeSelectPolynom"></button>
         </div>
         <div class="cl_PormulaBestFit">
           <button id="idBtn_pormulaBestFit"></button>
@@ -1380,38 +1402,39 @@
     <section class="cl_Netsaona">
       <div class="cl_subGrid_Netsaona cl_subGrid">
         <div class="cl_NetsaonaOptionsA" uiWrap="nowrap">
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
+          <button id="idBtn_NetsaonaOption_0"></button>
+          <button id="idBtn_NetsaonaOption_1"></button>
+          <button id="idBtn_NetsaonaOption_2"></button>
         </div>
         <div class="cl_NetsaonaOptionsB" uiWrap="nowrap">
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
+          <button id="idBtn_NetsaonaOption_3"></button>
+          <button id="idBtn_NetsaonaOption_4"></button>
+          <button id="idBtn_NetsaonaOption_5"></button>
         </div>
         <div class="cl_NetsaonaOptionsC" uiWrap="nowrap">
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
+          <button id="idBtn_NetsaonaOption_6"></button>
+          <button id="idBtn_NetsaonaOption_7"></button>
+          <button id="idBtn_NetsaonaOption_8"></button>
         </div>
         <div class="cl_NetsaonaOptionsD" uiWrap="nowrap">
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
+          <button id="idBtn_NetsaonaOption_9"></button>
+          <button id="idBtn_NetsaonaOption_10"></button>
+          <button id="idBtn_NetsaonaOption_11"></button>
         </div>
         <div class="cl_NetsaonaOptionsE" uiWrap="nowrap">
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
+          <button id="idBtn_NetsaonaOption_12"></button>
+          <button id="idBtn_NetsaonaOption_13"></button>
+          <button id="idBtn_NetsaonaOption_14"></button>
         </div>
         <div class="cl_NetsaonaOptionsF" uiWrap="nowrap">
-          <button class="cl_NetsaonaOption"></button>
-          <!-- <button class="cl_NetsaonaOption"></button> -->
-          <!-- <button class="cl_NetsaonaOption"></button> -->
+          <button id="idBtn_NetsaonaOption_15"></button>
+          <button id="idBtn_NetsaonaOption_16"></button>
+          <button id="idBtn_NetsaonaOption_17"></button>
         </div>
         <div class="cl_NetsaonaOptionsG" uiWrap="nowrap">
-          <button class="cl_NetsaonaOption"></button>
-          <button class="cl_NetsaonaOption"></button>
+          <!-- <button id="idBtn_NetsaonaOption_18"></button> -->
+          <!-- <button id="idBtn_NetsaonaOption_19"></button> -->
+          <!-- <button id="idBtn_NetsaonaOption_20"></button> -->
         </div>
         <div class="cl_NetsaonaOutput">
           <label class="cl_outputLbl" id="idLbl_netsaonaOutput">...</label>
@@ -1563,15 +1586,9 @@
       <div class="cl_subGrid_UserGridLayout cl_subGrid">
         <div class="cl_UserGridTable">
           <div id="idTab_disableUserGridTable"></div>
-          <!-- <table id="idTab_DisableUserGrid">
-            <thead id="idTabHeader_DisableUserGrid">
-            </thead>
-            <tbody id="idTabBody_DisableUserGrid">
-            </tbody>
-          </table> -->
         </div>
         <div class="cl_UserGridOptions">
-          <!-- <button id="idBtn_userGridToggleAll">Toggle all</button> -->
+          <button id="idBtn_userGridEnable"></button>
           <button id="idBtn_userGridPrioritize"></button>
           <button id="idBtn_userGridSaveLayout">Save</button>
         </div>

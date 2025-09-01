@@ -51,18 +51,19 @@ const lottoOptions = {
   },
 };
 
-initEL({ id: idBtn_lottoReset, fn: lottoReset });
-initEL({ id: idBtn_lottoRandom, fn: lottoRandom });
-initEL({ id: idSel_lottoGame, fn: lottoGameSelect, selList: Object.keys(lottoOptions.games), selStartValue: "6aus49" });
-initEL({ id: idVin_lottoNumberOfGames, fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
+initEL({ id: dbID("idBtn_lottoReset"), fn: lottoReset });
+initEL({ id: dbID("idBtn_lottoRandom"), fn: lottoRandom });
+initEL({ id: dbID("idSel_lottoGame"), fn: lottoGameSelect, selList: Object.keys(lottoOptions.games), selStartValue: "6aus49" });
+initEL({ id: dbID("idVin_lottoNumberOfGames"), fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
+initEL({ id: dbID("idLbl_lottoOverview"), resetValue: `...` });
 
 export function clear_cl_Lotto() {
-  idVin_lottoNumberOfGames.KadReset();
-  lottoOptions.selGame = idSel_lottoGame.KadReset();
+  dbID("idVin_lottoNumberOfGames").KadReset();
+  lottoOptions.selGame = dbID("idSel_lottoGame").KadReset();
   lottoOptions.randomiziation = 0;
   clearTimeout(lottoOptions.randomTimeout);
   createLotto(true);
-  dbID("idLbl_lottoOverview").textContent = `...`;
+  dbID("idLbl_lottoOverview").KadReset();
   lottoUpdateSavegames();
   lottoGetGames();
 }
@@ -157,7 +158,7 @@ function lottoReset() {
 }
 
 function lottoGameSelect() {
-  lottoOptions.selGame = idSel_lottoGame.KadGet();
+  lottoOptions.selGame = dbID("idSel_lottoGame").KadGet();
   lottoGetGames();
 }
 
@@ -193,7 +194,7 @@ function createLotto(clear = false) {
 }
 
 async function lottoGetGames() {
-  lottoOptions.numberOfLatestGames = idVin_lottoNumberOfGames.KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
+  lottoOptions.numberOfLatestGames = dbID("idVin_lottoNumberOfGames").KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
   if (lottoOptions.inputTimer != null) {
     clearTimeout(lottoOptions.inputTimer);
     lottoOptions.inputTimer = null;

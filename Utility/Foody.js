@@ -145,39 +145,34 @@ const foodyOptions = {
   ],
 };
 
-initEL({ id: idBtn_foodyStart, fn: foodyStartChange, btnCallbacks: foodyOptions.startCallbacks });
-initEL({ id: idVin_foodyPreheat, fn: foodyPreheatChange, resetValue: foodyOptions.preheatOrig });
-initEL({ id: idSel_foodyType, fn: foodyChangeFood, selStartIndex: 0, selList: foodyOptions.data.map((f, i) => [`${f.name} (${f.time}min)`, i]) });
-initEL({ id: idLbl_foodyTime, resetValue: "Foody" });
+initEL({ id: dbID("idBtn_foodyStart"), fn: foodyStartChange, btnCallbacks: foodyOptions.startCallbacks });
+initEL({ id: dbID("idVin_foodyPreheat"), fn: foodyPreheatChange, resetValue: foodyOptions.preheatOrig });
+initEL({ id: dbID("idSel_foodyType"), fn: foodyChangeFood, selStartIndex: 0, selList: foodyOptions.data.map((f, i) => [`${f.name} (${f.time}min)`, i]) });
+initEL({ id: dbID("idLbl_foodyTime"), resetValue: "Foody" });
 
 export function clear_cl_Foody() {
-  foodyOptions.timerState = idBtn_foodyStart.KadReset();
-  foodyOptions.preheat = idVin_foodyPreheat.KadReset();
-  idLbl_foodyTime.KadReset();
-  idSel_foodyType.KadReset({ selStartIndex: KadRandom.randomIndex(foodyOptions.data) });
+  foodyOptions.timerState = dbID("idBtn_foodyStart").KadReset();
+  foodyOptions.preheat = dbID("idVin_foodyPreheat").KadReset();
+  dbID("idLbl_foodyTime").KadReset();
+  dbID("idSel_foodyType").KadReset({ selStartIndex: KadRandom.randomIndex(foodyOptions.data) });
   clearInterval(foodyOptions.timerCount);
   foodyCalculate();
-  // foodyStartChange();
 }
 
 function foodyPreheatChange() {
-  foodyOptions.preheat = idVin_foodyPreheat.KadGet();
+  foodyOptions.preheat = dbID("idVin_foodyPreheat").KadGet();
   foodyCalculate();
 }
 
 function foodyChangeFood() {
-  foodyOptions.foodIndex = idSel_foodyType.KadGet();
+  foodyOptions.foodIndex = dbID("idSel_foodyType").KadGet();
   foodyCalculate();
 }
 
 function foodyCalculate() {
-  let noTopfPreheat;
-  if (foodyOptions.chosenFood.temp != "Topf") {
-    noTopfPreheat = foodyOptions.preheat;
-  } else {
-    noTopfPreheat = 0;
-    dbID("idLbl_foodyPreheat").textContent = "---";
-  }
+  const preheatState = foodyOptions.chosenFood.temp != "Topf";
+  let noTopfPreheat = preheatState ? foodyOptions.preheat : 0;
+  dbID("idVin_foodyPreheat").KadEnable(preheatState);
   foodyOptions.timeTotal = (foodyOptions.chosenFood.time + noTopfPreheat) * 60;
   foodyOptions.timeRemaining = foodyOptions.timeTotal;
   foodyShowTime();
@@ -193,13 +188,12 @@ function foodyStart() {
 function foodyStop() {
   clearInterval(foodyOptions.timerCount);
   let textStart = "Foody";
-  idLbl_foodyTime.KadSetText(textStart);
+  dbID("idLbl_foodyTime").KadSetText(textStart);
 }
 function foodyStartChange() {
   foodyOptions.timerState = !foodyOptions.timerState;
-  idVin_foodyPreheat.KadEnable(!foodyOptions.timerState);
-  idSel_foodyType.KadEnable(!foodyOptions.timerState);
-  idBtn_foodyStart.KadNext();
+  dbID("idVin_foodyPreheat").KadEnable(!foodyOptions.timerState);
+  dbID("idSel_foodyType").KadEnable(!foodyOptions.timerState);
 }
 
 function foodyCountdown() {
@@ -207,7 +201,7 @@ function foodyCountdown() {
   const bar = dbID("idProg_foodyProgress");
   bar.setAttribute("value", foodyOptions.timeRemaining);
   if (foodyOptions.timeRemaining <= 0) {
-    idLbl_foodyTime.KadSetText("Fertig!");
+    dbID("idLbl_foodyTime").KadSetText("Fertig!");
     clearInterval(foodyOptions.timerCount);
     setTimeout(foodyStartChange, 10000);
   } else {
@@ -218,5 +212,5 @@ function foodyCountdown() {
 function foodyShowTime() {
   let zubereitung = foodyOptions.chosenFood.temp === "Topf" ? " (im Topf)" : " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
   let obj = KadDate.secondsToObj(foodyOptions.timeRemaining);
-  idLbl_foodyTime.KadSetText(`${obj.h}:${obj.m}:${obj.s} ${zubereitung}`);
+  dbID("idLbl_foodyTime").KadSetText(`${obj.h}:${obj.m}:${obj.s} ${zubereitung}`);
 }

@@ -19,14 +19,14 @@ const pythoOptions = {
   errorShown: false,
 };
 
-initEL({ id: idVin_Pytho_0, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[0] });
-initEL({ id: idVin_Pytho_1, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[1] });
-initEL({ id: idVin_Pytho_2, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[2] });
-initEL({ id: idVin_Pytho_3, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[3] });
-initEL({ id: idVin_Pytho_4, fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
+initEL({ id: dbID("idVin_Pytho_0"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[0] });
+initEL({ id: dbID("idVin_Pytho_1"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[1] });
+initEL({ id: dbID("idVin_Pytho_2"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[2] });
+initEL({ id: dbID("idVin_Pytho_3"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[3] });
+initEL({ id: dbID("idVin_Pytho_4"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
 
 export function clear_cl_Pythagoras() {
-  KadInteraction.removeContextmenu(idCanv_pytho);
+  KadInteraction.removeContextmenu(dbID("idCanv_pytho"));
   pythoOptions.inputState = [...pythoOptions.inputStateOrig];
   for (let i = 0; i < 5; i++) {
     pythoOptions.vals[i] = dbID(`idVin_Pytho_${i}`).KadReset();
@@ -173,9 +173,7 @@ function pythoCalc() {
       dbID(`idVin_Pytho_${i}`).KadReset({ resetValue: val });
     }
   }
-  if (pythoOptions.p5Loaded) {
-    drawPytho();
-  }
+  drawPytho();
 }
 
 function drawPytho() {
@@ -193,99 +191,76 @@ function drawPytho() {
   drawWidth = drawWidth - 2 * pythoOptions.margin;
   drawHeight = drawHeight - 2 * pythoOptions.margin;
 
-  const pythPoints = [
-    {
-      x: -drawWidth,
-      y: 0,
-      Up: "A",
-      Lo: " a",
-    },
-    {
-      x: 0,
-      y: -drawHeight,
-      Up: "B",
-      Lo: "b",
-    },
-    {
-      x: 0,
-      y: 0,
-      Up: "C",
-      Lo: "c",
-    },
-  ];
-
   const hyp = pythoTriHypo(drawWidth, drawHeight);
   const beta = Math.asin(drawWidth / hyp);
   const alpha = pythoMinusNinety(beta);
+  let curColor = null;
+
+  const pythoPoints = [
+    { pos: [-drawWidth, 0], cornerText: "A", cornerAlign: [caPY.RIGHT, caPY.TOP], lineText: " a", lineAlign: [caPY.LEFT, caPY.CENTER] },
+    { pos: [0, -drawHeight], cornerText: "B", cornerAlign: [caPY.LEFT, caPY.BOTTOM], lineText: " b", lineAlign: [caPY.CENTER, caPY.TOP] },
+    { pos: [0, 0], cornerText: "C", cornerAlign: [caPY.LEFT, caPY.TOP], lineText: " c", lineAlign: [caPY.RIGHT, caPY.BOTTOM] },
+    { pos: [-drawWidth, 0], angleText: ` ${pythoOptions.greekAlpha}`, angleAign: [caPY.LEFT, caPY.TOP], arcAngle: [caPY.TWO_PI - alpha, caPY.TWO_PI] },
+    { pos: [0, -drawHeight], angleText: ` ${pythoOptions.greekBeta}`, angleAign: [caPY.LEFT, caPY.TOP], arcAngle: [caPY.HALF_PI, caPY.HALF_PI + beta] },
+  ];
+
   caPY.clear();
-  caPY.strokeWeight(2);
 
   caPY.push();
   caPY.translate(pythoOptions.canvas.w - pythoOptions.margin, pythoOptions.canvas.h - pythoOptions.margin);
   // Basics
-  caPY.noStroke();
-  caPY.fill(globalColors.elements.line);
-  caPY.textSize(globalValues.mediaSizes.fontSize);
-  caPY.textAlign(caPY.RIGHT, caPY.TOP); //A
-  caPY.text(pythPoints[0].Up, pythPoints[0].x, pythPoints[0].y);
-  caPY.textAlign(caPY.LEFT, caPY.BOTTOM); //B
-  caPY.text(pythPoints[1].Up, pythPoints[1].x, pythPoints[1].y);
-  caPY.textAlign(caPY.LEFT, caPY.TOP);
-  caPY.text(pythPoints[2].Up, pythPoints[2].x, pythPoints[2].y);
-  caPY.stroke(globalColors.elements.line);
-  caPY.noFill();
-  caPY.arc(pythPoints[2].x, pythPoints[2].y, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, caPY.PI, caPY.PI + caPY.HALF_PI); // C bottom right
+  pythoText(pythoPoints[0].cornerText, pythoPoints[0].pos, pythoPoints[0].cornerAlign);
+  pythoText(pythoPoints[1].cornerText, pythoPoints[1].pos, pythoPoints[1].cornerAlign);
+  pythoText(pythoPoints[2].cornerText, pythoPoints[2].pos, pythoPoints[2].cornerAlign);
+  pythoArc(pythoPoints[2].pos, [caPY.PI, caPY.PI + caPY.HALF_PI]);
 
   //Colored Stuff
   // line "a"
-  let curColor = pythoOptions.inputState.includes(0) ? globalColors.elements.baseColor : globalColors.elements.line;
-  caPY.stroke(curColor);
-  caPY.line(pythPoints[1].x, pythPoints[1].y, pythPoints[2].x, pythPoints[2].y); //BC
-  caPY.noStroke();
-  caPY.fill(curColor);
-  caPY.textAlign(caPY.LEFT, caPY.CENTER); //a
-  caPY.text(pythPoints[0].Lo, pythPoints[1].x, (pythPoints[1].y + pythPoints[2].y) / 2);
+  curColor = pythoOptions.inputState.includes(0) ? globalColors.elements.baseColor : globalColors.elements.line;
+  pythoLine(pythoPoints[1].pos, pythoPoints[2].pos, curColor);
+  pythoText(pythoPoints[0].lineText, [pythoPoints[1].pos[0], (pythoPoints[1].pos[1] + pythoPoints[2].pos[1]) / 2], pythoPoints[0].lineAlign, curColor);
 
-  // line "b"
+  // // line "b"
   curColor = pythoOptions.inputState.includes(1) ? globalColors.elements.baseColor : globalColors.elements.line;
-  caPY.stroke(curColor);
-  caPY.line(pythPoints[0].x, pythPoints[0].y, pythPoints[2].x, pythPoints[2].y); //AC
-  caPY.noStroke();
-  caPY.fill(curColor);
-  caPY.textAlign(caPY.CENTER, caPY.TOP); //b
-  caPY.text(pythPoints[1].Lo, (pythPoints[2].x + pythPoints[0].x) / 2, pythPoints[2].y + 5);
+  pythoLine(pythoPoints[0].pos, pythoPoints[2].pos, curColor);
+  pythoText(pythoPoints[1].lineText, [(pythoPoints[2].pos[0] + pythoPoints[0].pos[0]) / 2, pythoPoints[2].pos[1] + 5], pythoPoints[1].lineAlign, curColor);
 
-  // line "c"
+  // // line "c"
   curColor = pythoOptions.inputState.includes(2) ? globalColors.elements.baseColor : globalColors.elements.line;
-  caPY.stroke(curColor);
-  caPY.line(pythPoints[0].x, pythPoints[0].y, pythPoints[1].x, pythPoints[1].y); //AB
-  caPY.noStroke();
-  caPY.fill(curColor);
-  caPY.textAlign(caPY.RIGHT, caPY.BOTTOM);
-  caPY.text(pythPoints[2].Lo, (pythPoints[0].x + pythPoints[1].x) / 2, (pythPoints[0].y + pythPoints[1].y) / 2);
+  pythoLine(pythoPoints[0].pos, pythoPoints[1].pos, curColor);
+  pythoText(pythoPoints[2].lineText, [(pythoPoints[0].pos[0] + pythoPoints[1].pos[0]) / 2, (pythoPoints[0].pos[1] + pythoPoints[1].pos[1]) / 2], pythoPoints[2].lineAlign, curColor);
 
-  caPY.textFont(pythoOptions.greekFont);
-  caPY.textSize(globalValues.mediaSizes.fontSize * 0.8);
-  //Alpha
+  // //Alpha
   curColor = pythoOptions.inputState.includes(3) ? globalColors.elements.baseColor : globalColors.elements.line;
-  caPY.stroke(curColor);
-  caPY.noFill();
-  caPY.arc(pythPoints[0].x, pythPoints[0].y, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, caPY.TWO_PI - alpha, caPY.TWO_PI); // A bottom left
-  caPY.noStroke();
-  caPY.fill(curColor);
-  caPY.textAlign(caPY.LEFT, caPY.TOP); //A
-  caPY.text(`${pythoOptions.greekAlpha}`, pythPoints[0].x + 8, pythPoints[0].y);
+  pythoArc(pythoPoints[3].pos, pythoPoints[3].arcAngle);
+  pythoText(pythoPoints[3].angleText, pythoPoints[3].pos, pythoPoints[3].angleAign, curColor, 0.8, pythoOptions.greekFont);
 
-  //Beta
+  // //Beta
   curColor = pythoOptions.inputState.includes(4) ? globalColors.elements.baseColor : globalColors.elements.line;
-  caPY.stroke(curColor);
-  caPY.noFill();
-  caPY.arc(pythPoints[1].x, pythPoints[1].y, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, caPY.HALF_PI, caPY.HALF_PI + beta); //B top right
-  caPY.noStroke();
-  caPY.fill(curColor);
-  caPY.textAlign(caPY.LEFT, caPY.TOP); //B
-  caPY.text(`${pythoOptions.greekBeta}`, pythPoints[1].x + 4, pythPoints[1].y);
+  pythoArc(pythoPoints[4].pos, pythoPoints[4].arcAngle);
+  pythoText(pythoPoints[4].angleText, pythoPoints[4].pos, pythoPoints[4].angleAign, curColor, 0.8, pythoOptions.greekFont);
 
-  caPY.textSize(globalValues.mediaSizes.fontSize);
   caPY.pop();
+}
+
+function pythoText(text, posVector, alignText, color = globalColors.elements.line, textSizeFactor = 1, textFont = null) {
+  caPY.textSize(globalValues.mediaSizes.fontSize * textSizeFactor);
+  caPY.textAlign(...alignText);
+  if (textFont != null) caPY.textFont(textFont);
+  caPY.noStroke();
+  caPY.fill(color);
+  caPY.strokeWeight(2);
+  caPY.text(text, ...posVector);
+}
+function pythoLine(start, end, color = globalColors.elements.line) {
+  caPY.stroke(color);
+  caPY.fill(color);
+  caPY.strokeWeight(2);
+  caPY.line(...start, ...end);
+}
+function pythoArc(start, arcAngle, color = globalColors.elements.line) {
+  caPY.noFill();
+  caPY.stroke(color);
+  caPY.strokeWeight(2);
+  caPY.arc(...start, pythoOptions.raduisRightAngle, pythoOptions.raduisRightAngle, ...arcAngle); //B top right
 }

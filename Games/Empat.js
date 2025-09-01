@@ -2,7 +2,7 @@ import { dbID, initEL, KadArray, KadInteraction, KadValue } from "../KadUtils/Ka
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
-//Vier gewinnt  empat kemenangan
+
 const empatOptions = {
   get canvas() {
     return { w: globalValues.mediaSizes.canvasSize.w, h: globalValues.mediaSizes.canvasSize.h };
@@ -24,13 +24,28 @@ const empatOptions = {
   ],
   lastMove: 3,
   players: [],
+  startCallbacks: [
+    ["Start", empatStart],
+    ["Reset", empatStop],
+  ],
 };
 
-initEL({ id: idBtn_empatStart, fn: empatStart, resetValue: "Start" });
-initEL({ id: idCanv_empat, fn: empatKeyPushed });
+initEL({ id: dbID("idBtn_empatStart"), fn: empatStartChange, btnCallbacks: empatOptions.startCallbacks });
+initEL({ id: dbID("idCanv_empat"), fn: empatKeyPushed });
 
 export function clear_cl_Empat() {
-  KadInteraction.removeContextmenu(idCanv_empat);
+  KadInteraction.removeContextmenu(dbID("idCanv_empat"));
+  KadInteraction.unfocus(dbID("idCanv_empat"), caEM);
+  empatOptions.playing = dbID("idBtn_empatStart").KadReset();
+  empatReset();
+}
+
+export function canvas_cl_Empat() {
+  caEM.resizeCanvas(empatOptions.canvas.w, empatOptions.canvas.h);
+  caEM.redraw();
+}
+
+function empatReset() {
   empatOptions.cells = [];
   empatOptions.winCells = [];
   empatOptions.curPlayer = 0;
@@ -47,26 +62,21 @@ export function clear_cl_Empat() {
       empatOptions.cells[i][j] = new EmpatCell(i, j, empatOptions.size);
     }
   }
-  KadInteraction.unfocus(idCanv_empat, caEM);
 }
-export function canvas_cl_Empat() {
-  caEM.resizeCanvas(empatOptions.canvas.w, empatOptions.canvas.h);
-  caEM.redraw();
+
+function empatStartChange() {
+  empatOptions.playing = !empatOptions.playing;
+  empatReset();
 }
 
 function empatStart() {
-  clear_cl_Empat();
-  empatOptions.playing = !empatOptions.playing;
-  if (empatOptions.playing) {
-    dbID("idBtn_empatStart").textContent = "Reset";
-    empatOptions.won = false;
-    caEM.loop();
-    KadInteraction.focus(idCanv_empat);
-  } else {
-    dbID("idBtn_empatStart").textContent = "Start";
-    empatOptions.won = false;
-    KadInteraction.unfocus(idCanv_empat, caEM);
-  }
+  empatOptions.won = false;
+  caEM.loop();
+  KadInteraction.focus(dbID("idCanv_empat"));
+}
+function empatStop() {
+  empatOptions.won = false;
+  KadInteraction.unfocus(dbID("idCanv_empat"), caEM);
 }
 
 const caEM = new p5((c) => {
@@ -163,7 +173,7 @@ function empatFinished() {
     caEM.stroke(empatOptions.players[empatOptions.curPlayer].color);
     caEM.line(empatOptions.winCells[0].x, empatOptions.winCells[0].y, empatOptions.winCells[1].x, empatOptions.winCells[1].y);
   }, 50);
-  KadInteraction.unfocus(idCanv_empat);
+  KadInteraction.unfocus(dbID("idCanv_empat"));
   timeoutCanvasFinished(caEM, {
     textTop: `Player \"${empatOptions.players[empatOptions.curPlayer].name}\" won`,
     textBottom: `in round ${Math.floor(empatOptions.turns / 2) + 1}!`,
@@ -187,7 +197,6 @@ function mousePressedEmpat() {
 }
 
 function empatKeyPushed(event) {
-  event.preventDefault();
   let keyInput = event.keyCode;
   if (!empatOptions.players[empatOptions.curPlayer].bot) {
     if (keyInput == 13 || keyInput == 32 || keyInput == 40) {

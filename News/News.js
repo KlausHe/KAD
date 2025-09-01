@@ -13,38 +13,38 @@ export const newsData = {
   ressortList: ["inland", "ausland", "wirtschaft", "sport", "video", "investigativ", "wissen"],
 };
 
-initEL({ id: idDiv_News_Title, resetValue: "Nachrichtentitel" });
-initEL({ id: idDiv_News_Text, resetValue: "Nachrichtentext", animatedText: { animate: false, singleLetter: false } });
+initEL({ id: dbID("idDiv_News_Title"), resetValue: "Nachrichtentitel" });
+initEL({ id: dbID("idDiv_News_Text"), resetValue: "Nachrichtentext", animatedText: { animate: false, singleLetter: false } });
 initEL({
-  id: idSel_newsRegion,
+  id: dbID("idSel_newsRegion"),
   fn: newsInputChanged,
   selGroup: { Region: newsData.regionList.map((v, index) => [v, index + 1]) },
 });
 initEL({
-  id: idSel_newsRessort,
+  id: dbID("idSel_newsRessort"),
   fn: newsInputChanged,
   selGroup: { Ressort: newsData.ressortList.map((v) => [KadString.firstLetterCap(v), v]) },
 });
 
 export function clear_cl_News() {
-  idDiv_News_Title.KadReset();
-  idDiv_News_Text.KadReset();
-  idSel_newsRegion.KadReset();
-  idSel_newsRessort.KadReset();
+  dbID("idDiv_News_Title").KadReset();
+  dbID("idDiv_News_Text").KadReset();
+  dbID("idSel_newsRegion").KadReset();
+  dbID("idSel_newsRessort").KadReset();
   newsData.requestCount = [];
   newsData.currIndex = 0;
   newsInputChanged();
 }
 
 function newsInputChanged() {
-  newsData.region = idSel_newsRegion.KadGet();
-  newsData.ressort = idSel_newsRessort.KadGet();
+  newsData.region = dbID("idSel_newsRegion").KadGet();
+  newsData.ressort = dbID("idSel_newsRessort").KadGet();
   newsGetData();
 }
 
 function newsError(...msg) {
-  idDiv_News_Title.KadSetText(msg.join(" "));
-  idDiv_News_Text.KadSetText("");
+  dbID("idDiv_News_Title").KadSetText(msg.join(" "));
+  dbID("idDiv_News_Text").KadSetText("");
 }
 
 function newsCheckRequestCount() {
@@ -73,13 +73,13 @@ async function newsGetData() {
 async function showNews(index) {
   newsData.currIndex = index;
   const date = KadDate.getDate(newsData.articles[newsData.currIndex].date, { format: "DD.MM.YY / HH:mm" });
-  dbID(idDiv_News_Title).textContent = `${newsData.articles[newsData.currIndex].title} (${date})`;
+  dbID("idDiv_News_Title").textContent = `${newsData.articles[newsData.currIndex].title} (${date})`;
 
   if (newsData.articles[newsData.currIndex].teaserImage) {
-    dbID(idImg_News_Image).src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];
-    dbIDStyle(idImg_News_Image).display = "initial";
+    dbID("idImg_News_Image").src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];
+    dbIDStyle("idImg_News_Image").display = "initial";
   } else {
-    dbIDStyle(idImg_News_Image).display = "none";
+    dbIDStyle("idImg_News_Image").display = "none";
   }
   if (newsCheckRequestCount()) return;
   const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: newsData.articles[newsData.currIndex].details });
@@ -90,8 +90,8 @@ async function showNews(index) {
     .filter((obj) => obj.type == "text")
     .map((obj) => `${obj.value}<br><br>`)
     .join(" ");
-  KadDOM.scrollToTop(idDiv_News_Text);
-  idDiv_News_Text.KadSetHTML(cleandContent);
+  KadDOM.scrollToTop(dbID("idDiv_News_Text"));
+  dbID("idDiv_News_Text").KadSetHTML(cleandContent);
 }
 function newsOpenURL(index) {
   window.open(newsData.articles[index].shareURL);
@@ -116,5 +116,5 @@ function newsCreateTable() {
       },
     },
   ];
-  KadTable.createHTMLGrid({ id: idTab_newsTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_newsTable"), body });
 }

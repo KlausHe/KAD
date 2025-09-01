@@ -69,21 +69,21 @@ const barvoslepyOptions = {
   },
 };
 
-initEL({ id: idFile_barvoslepyUpload, action: "change", fn: barvoslepyLoadFile });
+initEL({ id: dbID("idFile_barvoslepyUpload"), action: "change", fn: barvoslepyLoadFile });
 initEL({
-  id: idSel_barvoslepySelectImage,
+  id: dbID("idSel_barvoslepySelectImage"),
   fn: barvoslepyImagePreview,
   selStartValue: "Venedig", // KadRandom.randomObject(barvoslepyOptions.previewImages.map((v) => v[0])),
   selList: barvoslepyOptions.previewImages.map((v) => [v[0], v[1]]),
 });
 initEL({
-  id: idSel_barvoslepySelectWeakness,
+  id: dbID("idSel_barvoslepySelectWeakness"),
   fn: barvoslepySelectWeakness,
   selStartValue: KadRandom.randomObject(barvoslepyOptions.Abstufungen.map((v) => v[0])),
   selList: barvoslepyOptions.Abstufungen.map((v) => [v[0], v[1]]),
 });
 initEL({
-  id: idVin_barvoslepySeverity,
+  id: dbID("idVin_barvoslepySeverity"),
   fn: barvoslepySeverity,
   resetValue: 50,
   domOpts: {
@@ -93,7 +93,7 @@ initEL({
   },
 });
 initEL({
-  id: idVin_barvoslepyEpsilon,
+  id: dbID("idVin_barvoslepyEpsilon"),
   fn: barvoslepyEpsilon,
   resetValue: 5,
   domOpts: {
@@ -102,19 +102,20 @@ initEL({
     step: 1,
   },
 });
-initEL({ id: idBtn_barvoslepyOriginal, fn: () => barvoslepyShow("Original"), resetValue: "Original" });
-initEL({ id: idBtn_barvoslepyPositive, fn: () => barvoslepyShow("Positive"), resetValue: "Max is black" });
-initEL({ id: idBtn_barvoslepyNegative, fn: () => barvoslepyShow("Negative"), resetValue: "Max is white" });
-initEL({ id: idBtn_barvoslepyWhite, fn: () => barvoslepyShow("White"), resetValue: "Diff is white" });
-initEL({ id: idBtn_barvoslepyBlack, fn: () => barvoslepyShow("Black"), resetValue: "Diff is black" });
-initEL({ id: idCanv_barvoslepyCanvas, action: "click", fn: () => barvoslepyShow("Original") });
+initEL({ id: dbID("idBtn_barvoslepyOriginal"), fn: () => barvoslepyShow("Original"), resetValue: "Original" });
+initEL({ id: dbID("idBtn_barvoslepyPositive"), fn: () => barvoslepyShow("Positive"), resetValue: "Max is black" });
+initEL({ id: dbID("idBtn_barvoslepyNegative"), fn: () => barvoslepyShow("Negative"), resetValue: "Max is white" });
+initEL({ id: dbID("idBtn_barvoslepyWhite"), fn: () => barvoslepyShow("White"), resetValue: "Diff is white" });
+initEL({ id: dbID("idBtn_barvoslepyBlack"), fn: () => barvoslepyShow("Black"), resetValue: "Diff is black" });
+initEL({ id: dbID("idCanv_barvoslepyCanvas"), action: "click", fn: () => barvoslepyShow("Original") });
+initEL({ id: dbID("idLbl_barvoslepyApply") });
 
 export function clear_cl_Barvoslepy() {
-  idSel_barvoslepySelectImage.KadReset();
-  idSel_barvoslepySelectWeakness.KadReset();
-  barvoslepyOptions.differenceEpsilon = idVin_barvoslepyEpsilon.KadReset();
-  let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
-  idVin_barvoslepySeverity.KadEnable(typeIndex % 2 == 0);
+  dbID("idSel_barvoslepySelectImage").KadReset();
+  dbID("idSel_barvoslepySelectWeakness").KadReset();
+  barvoslepyOptions.differenceEpsilon = dbID("idVin_barvoslepyEpsilon").KadReset();
+  let typeIndex = dbID("idSel_barvoslepySelectWeakness").KadGet({ index: true });
+  dbID("idVin_barvoslepySeverity").KadEnable(typeIndex % 2 == 0);
   barvoslepyImagePreview();
   barvoslepyOptions.conversionTable = [];
   for (let i = 0; i < 256; i++) {
@@ -124,25 +125,25 @@ export function clear_cl_Barvoslepy() {
 }
 
 function barvoslepyImagePreview() {
-  barvoslepyOptions.previewImagesSelected = idSel_barvoslepySelectImage.KadGet();
+  barvoslepyOptions.previewImagesSelected = dbID("idSel_barvoslepySelectImage").KadGet();
   barvoslepyOptions.image = new Image();
   barvoslepyOptions.image.src = barvoslepyOptions.previewImagesSelected;
   barvoslepyOptions.image.onload = barvoslepyImageLoaded;
 }
 
 function barvoslepySeverity() {
-  barvoslepyOptions.severity = idVin_barvoslepySeverity.KadGet() / 100;
+  barvoslepyOptions.severity = dbID("idVin_barvoslepySeverity").KadGet() / 100;
   barvoslepyFilter();
 }
 
 function barvoslepySelectWeakness() {
-  let typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
-  idVin_barvoslepySeverity.KadEnable(typeIndex % 2 == 0);
+  let typeIndex = dbID("idSel_barvoslepySelectWeakness").KadGet({ index: true });
+  dbID("idVin_barvoslepySeverity").KadEnable(typeIndex % 2 == 0);
   barvoslepyFilter();
 }
 
 function barvoslepyEpsilon() {
-  barvoslepyOptions.differenceEpsilon = idVin_barvoslepyEpsilon.KadGet();
+  barvoslepyOptions.differenceEpsilon = dbID("idVin_barvoslepyEpsilon").KadGet();
   barvoslepyFilter();
 }
 
@@ -179,16 +180,16 @@ function barvoslepyLoadFile(file) {
 }
 
 function barvoslepyFilter() {
-  const type = idSel_barvoslepySelectWeakness.KadGet();
-  const typeText = idSel_barvoslepySelectWeakness.KadGet({ textContent: true });
-  const typeIndex = idSel_barvoslepySelectWeakness.KadGet({ index: true });
+  const type = dbID("idSel_barvoslepySelectWeakness").KadGet();
+  const typeText = dbID("idSel_barvoslepySelectWeakness").KadGet({ textContent: true });
+  const typeIndex = dbID("idSel_barvoslepySelectWeakness").KadGet({ index: true });
   let severity = typeIndex % 2 == 0 ? ` ${Math.floor(barvoslepyOptions.severity * 100)}%` : "";
-  idLbl_barvoslepyApply.textContent = `${typeText}${severity}`;
+  dbID("idLbl_barvoslepyApply").KadSetText(`${typeText}${severity}`);
 
   const w = barvoslepyOptions.image.width;
   const h = barvoslepyOptions.image.height;
   const ratio = w / h;
-  const canvasFiltered = dbID(idCanv_barvoslepyCanvas);
+  const canvasFiltered = dbID(dbID("idCanv_barvoslepyCanvas"));
   const canvasWidth = Math.min(barvoslepyOptions.image.width, barvoslepyOptions.canvas.w);
   const canvasHeight = Math.round(canvasWidth / ratio);
   canvasFiltered.width = canvasWidth;

@@ -1,4 +1,4 @@
-import { initEL, KadArray, KadColor, KadTable } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadArray, KadColor, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 const ranjeOptions = {
   value: 36,
@@ -43,14 +43,14 @@ const ranjeChart = {
   canvas: null,
 };
 
-initEL({ id: idVin_ranjeVal, fn: ranjeCalc, resetValue: 36 });
+initEL({ id: dbID("idVin_ranjeVal"), fn: ranjeCalc, resetValue: 36 });
 
 export function clear_cl_Ranje() {
-  idVin_ranjeVal.KadReset();
+  dbID("idVin_ranjeVal").KadReset();
   if (ranjeChart.canvas != null) {
     ranjeChart.canvas.destroy();
   }
-  ranjeChart.canvas = new Chart(idCanv_ranje, ranjeChart.config);
+  ranjeChart.canvas = new Chart(dbID("idCanv_ranje"), ranjeChart.config);
   ranjeChart.config.data.datasets[0].backgroundColor = KadColor.colAsCSS({ colorArray: globalColors.elements.baseColor, from: "HSL", to: "RGB" });
   ranjeChart.config.data.datasets[0].borderColor = KadColor.colAsCSS({ colorArray: globalColors.elements.baseColor, from: "HSL", to: "RGB" });
   ranjeCalc();
@@ -58,7 +58,7 @@ export function clear_cl_Ranje() {
 
 function ranjeCalc() {
   ranjeOptions.results = [];
-  ranjeOptions.value = idVin_ranjeVal.KadGet();
+  ranjeOptions.value = dbID("idVin_ranjeVal").KadGet();
   for (let i = 2; i < ranjeOptions.value; i++) {
     if (ranjeOptions.value % i === 0) {
       ranjeOptions.results.push([i, Math.floor(ranjeOptions.value / i)]);
@@ -79,7 +79,7 @@ function ranjeCreateTable() {
     { data: "=", settings: { align: "center", noBorder: "right", onclick: ranjeSelect } },
     { data: ranjeOptions.results.map((item) => `${item[0]} x ${item[1]}`), settings: { align: "left", onclick: ranjeSelect } },
   ];
-  KadTable.createHTMLGrid({ id: idTab_ranjeTable, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_ranjeTable"), body });
 }
 
 function ranjeSelect(index) {

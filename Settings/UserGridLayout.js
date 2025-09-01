@@ -19,29 +19,25 @@ const userGridOptions = {
   columnCount: 3,
   usedGrid: "User",
   groupColors: {},
-  tableType: false,
-  tableTypes: [
-    ["Auswahl", userGridCreateTable],
-    ["Priorität", userGridLayoutProiritize],
-  ],
 };
 
-// initEL({ id: idBtn_userGridToggleAll, fn: userGridToggleAll });
-initEL({ id: idBtn_userGridPrioritize, fn: userGridToggleBtn, btnCallbacks: userGridOptions.tableTypes });
-initEL({ id: idBtn_userGridSaveLayout, fn: saveUsergridLayout });
-initEL({ id: idSel_userGridSelect, fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
+initEL({ id: dbID("idBtn_userGridEnable"), fn: userGridCreateTable, resetValue: "Auswahl", dataset: ["radio", "userGridBtn"] });
+initEL({ id: dbID("idBtn_userGridPrioritize"), fn: userGridLayoutProiritize, resetValue: "Priorität", dataset: ["radio", "userGridBtn"] });
+initEL({ id: dbID("idBtn_userGridSaveLayout"), fn: saveUsergridLayout });
+initEL({ id: dbID("idSel_userGridSelect"), fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
 
 export function clear_cl_UserGridLayout() {
-  idBtn_userGridPrioritize.KadReset();
-  KadInteraction.removeContextmenu(idCanv_userGrid);
+  dbID("idBtn_userGridEnable").KadReset();
+  dbID("idBtn_userGridPrioritize").KadReset();
+
+  KadInteraction.removeContextmenu(dbID("idCanv_userGrid"));
   userGridOptions.groups = {};
   userGridOptions.enableGroupList = [...contentGroupsMaincontent];
   userGridOptions.enabledList = [...contentLayout.navContent.Universe];
-  userGridOptions.tableType = false;
   for (let groupKey of contentGroupsMaincontent) {
     userGridOptions.groups[groupKey] = contentLayout.navContent[groupKey];
   }
-  idSel_userGridSelect.KadReset({ selList: contentGroupsNav.map((item) => [item, item]) });
+  dbID("idSel_userGridSelect").KadReset({ selList: contentGroupsNav.map((item) => [item, item]) });
 
   //separate because IDs not ready before
   for (let i = 0; i < contentGroupsMaincontent.length; i++) {
@@ -122,11 +118,6 @@ function saveUsergridLayout() {
   dbID("idBtn_child_gridtitle_dbUL_cl_UserGridLayout").click();
 }
 
-function userGridToggleBtn() {
-  idBtn_userGridPrioritize.KadNext();
-  userGridOptions.tableType = !userGridOptions.tableType;
-}
-
 function userGridLayoutProiritize() {
   let header = null;
   let body = [
@@ -161,7 +152,7 @@ function userGridLayoutProiritize() {
       },
     },
   ];
-  KadTable.createHTMLGrid({ id: idTab_disableUserGridTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_disableUserGridTable"), header, body });
 }
 
 function userGridLayoutPrioritizeUp(index) {
@@ -191,10 +182,8 @@ function userGridCreateTable() {
       { type: "Checkbox", data: userGridOptions.enableGroupList.includes(group), colSpan: userGridOptions.columnCount - 1, settings: { noBorder: "right", align: "right", names: ["userGridGroup", group], onclick: [userGridUpdateGroup, group] } },
       { data: group, colSpan: userGridOptions.columnCount + 1, settings: { for: `userGridGroup_${group}` } },
     ];
-
     const arrCount = Math.ceil(arr.length / userGridOptions.columnCount);
     headerRowOffset += arrCount + 1;
-
     for (let i = 0; i < arrCount * userGridOptions.columnCount; i++) {
       if (arr[i] != undefined) {
         dataArrayColumns[(i % userGridOptions.columnCount) * 2].push(userGridOptions.enabledList.includes(arr[i]));
@@ -217,11 +206,11 @@ function userGridCreateTable() {
     });
   }
 
-  KadTable.createHTMLGrid({ id: idTab_disableUserGridTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_disableUserGridTable"), header, body });
 }
 
 function userGridSelectGroup() {
-  userGridOptions.usedGrid = idSel_userGridSelect.KadGet();
+  userGridOptions.usedGrid = dbID("idSel_userGridSelect").KadGet();
   userGridCreateCells();
 }
 

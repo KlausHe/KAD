@@ -14,11 +14,12 @@ const kaihangaOptions = {
   colStart: 0,
 };
 
-initEL({ id: idVin_kaihangaEntry, action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
-initEL({ id: idBtn_kaihangaEntry, fn: kaihangaEntrySubmit });
+initEL({ id: dbID("idVin_kaihangaEntry"), action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
+initEL({ id: dbID("idBtn_kaihangaEntry"), fn: kaihangaEntrySubmit });
+initEL({ id: dbID("idLbl_kaihangaResult"), resetValue: "Gewinner: ..." });
 
 export function clear_cl_Kaihanga() {
-  KadInteraction.removeContextmenu(idCanv_kaihanga);
+  KadInteraction.removeContextmenu(dbID("idCanv_kaihanga"));
   kaihangaOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
   kaihangaOptions.entries = [];
   kaihangaOptions.spinning = false;
@@ -28,9 +29,9 @@ export function clear_cl_Kaihanga() {
   caKA.clear();
   kaihangaCreateRandomSet();
   kaihangaUpdate();
-  idVin_kaihangaEntry.KadReset();
-  dbID("idLbl_kaihangaResult").textContent = "Gewinner: ...";
-  dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
+  dbID("idVin_kaihangaEntry").KadReset();
+  dbID("idLbl_kaihangaResult").KadReset();
+  // dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
   dbIDStyle("idCanv_kaihanga").cursor = "pointer";
 }
 
@@ -50,7 +51,7 @@ function kaihangaClearRow(index) {
 }
 
 function kaihangaEntrySubmit() {
-  const value = idVin_kaihangaEntry.KadGet();
+  const value = dbID("idVin_kaihangaEntry").KadGet();
   if (value == "") return;
   kaihangaAddOption(value);
 }
@@ -58,7 +59,7 @@ function kaihangaEntrySubmit() {
 function kaihangaAddOption(value) {
   if (kaihangaOptions.spinning) return;
   kaihangaOptions.entries.push(value);
-  idVin_kaihangaEntry.value = "";
+  dbID("idVin_kaihangaEntry").value = "";
   kaihangaUpdate();
 }
 
@@ -125,7 +126,7 @@ function kaihangaUpdate() {
   // kaihangaOptions.entries.map(item => ({data: item }))
   // ]
 
-  // KadTable.createHTMLGrid({ id: idTab_kaihangaTable,  body });
+  // KadTable.createHTMLGrid({ id: dbID("idTab_kaihangaTable"),  body });
 
   // return;
   KadTable.clear("idTabBody_Kaihanga");
@@ -213,7 +214,7 @@ class KaihangaWheel {
 
   startAnimation() {
     this.angle = this.winnerAngle / 360;
-    t = 0;
+    // let t = 0;
     this.winnerAngle = caKA.random(0, 360);
     this.winner = caKA.floor((this.winnerAngle * this.segments.length) / 360);
     caKA.loop();

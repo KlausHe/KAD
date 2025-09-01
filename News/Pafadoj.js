@@ -1,5 +1,5 @@
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
-import { KadArray, KadDate, KadFile, KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadFile, KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
 
 const pafadojOptions = {
   get URL() {
@@ -24,16 +24,16 @@ const pafadojOptions = {
   sort: {},
 };
 
-initEL({ id: idSel_pafadojSelect, fn: pafadojUpdate, selStartValue: 2025, selList: Object.keys(pafadojOptions.headers).map((year) => [year, year]) });
+initEL({ id: dbID("idSel_pafadojSelect"), fn: pafadojUpdate, selStartValue: 2025, selList: Object.keys(pafadojOptions.headers).map((year) => [year, year]) });
 
 export function clear_cl_Pafadoj() {
-  pafadojOptions.date = idSel_pafadojSelect.KadGet();
+  pafadojOptions.date = dbID("idSel_pafadojSelect").KadGet();
   // pafadojUpdate();
 }
 
 async function pafadojUpdate() {
-  pafadojOptions.date = idSel_pafadojSelect.KadGet();
-  KadTable.createHTMLGrid({ id: idTab_pafadojTable, header: pafadojGetHeader() });
+  pafadojOptions.date = dbID("idSel_pafadojSelect").KadGet();
+  KadTable.createHTMLGrid({ id: dbID("idTab_pafadojTable"), header: pafadojGetHeader() });
   const { dataTable, error } = await KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL });
   if (layoutCheckCORSandDisableModule(error, "Pafadoj")) return;
   pafadojOptions.data = [];
@@ -97,5 +97,5 @@ function pafadojTableReturn() {
   const header = pafadojGetHeader(pafadojOptions.dataTotal);
 
   const body = [...pafadojOptions.headers[pafadojOptions.date][1].map((head) => ({ data: pafadojOptions.data.map((item) => item[head]) }))];
-  KadTable.createHTMLGrid({ id: idTab_pafadojTable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_pafadojTable"), header, body });
 }

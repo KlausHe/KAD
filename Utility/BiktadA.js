@@ -138,5 +138,5 @@ function createBiktadaTable() {
   const body = [
     { data: Object.values(biktadaOptions.data).map((value) => value.description) }, { data: Object.keys(biktadaOptions.data).map((_) => "..."), settings: { names: ["biktadA", "value"] } }
   ];
-  KadTable.createHTMLGrid({ id: idTab_biktadATable, header, body });
+  KadTable.createHTMLGrid({ id: dbID("idTab_biktadATable"), header, body });
 }

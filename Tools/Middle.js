@@ -24,13 +24,13 @@ const caMI = new p5((c) => {
   };
 }, "#idCanv_middle");
 
-initEL({ id: idVin_middleA, fn: calcMiddle, resetValue: 5 });
-initEL({ id: idVin_middleB, fn: calcMiddle, resetValue: 2 });
+initEL({ id: dbID("idVin_middleA"), fn: calcMiddle, resetValue: 5 });
+initEL({ id: dbID("idVin_middleB"), fn: calcMiddle, resetValue: 2 });
 
 export function clear_cl_Middle() {
-  KadInteraction.removeContextmenu(idCanv_middle);
-  idVin_middleA.KadReset();
-  idVin_middleB.KadReset();
+  KadInteraction.removeContextmenu(dbID("idCanv_middle"));
+  dbID("idVin_middleA").KadReset();
+  dbID("idVin_middleB").KadReset();
   middleOptions.barA = {
     hStart: 0,
     h: middleOptions.canvas.h * 0.5,
@@ -62,8 +62,8 @@ export function canvas_cl_Middle() {
 }
 
 function calcMiddle() {
-  const a = idVin_middleA.KadGet();
-  const b = idVin_middleB.KadGet();
+  const a = dbID("idVin_middleA").KadGet();
+  const b = dbID("idVin_middleB").KadGet();
   middleOptions.barA.val = a;
   middleOptions.barB.val = b;
   middleOptions.barA.text = `a: ${middleOptions.barA.val}`;

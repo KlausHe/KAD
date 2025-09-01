@@ -29,17 +29,19 @@ const suikaOptions = {
   gravity: 0.7,
 };
 
-initEL({ id: idBtn_suikaStart, fn: suikaStart, resetValue: "Start" });
-initEL({ id: idBtn_suikaPause, fn: suikaPause, resetValue: "Pause" });
-initEL({ id: idBtn_suikaRestart, fn: suikaRestart, resetValue: "Reset" });
-initEL({ id: idCb_suikaSoundOutput, fn: suikaToggleSound, resetValue: false });
+initEL({ id: dbID("idBtn_suikaStart"), fn: suikaStart, resetValue: "Start" });
+initEL({ id: dbID("idBtn_suikaPause"), fn: suikaPause, resetValue: "Pause" });
+initEL({ id: dbID("idBtn_suikaRestart"), fn: suikaRestart, resetValue: "Reset" });
+initEL({ id: dbID("idCb_suikaSoundOutput"), fn: suikaToggleSound, resetValue: false });
+initEL({ id: dbID("idLbl_suikaGameOver"), resetValue: "" });
 
 export function clear_cl_Suika() {
-  KadInteraction.removeContextmenu(idCanv_suika);
-  idBtn_suikaStart.KadReset();
-  idBtn_suikaPause.KadReset();
-  idBtn_suikaRestart.KadReset();
-  idCb_suikaSoundOutput.KadReset();
+  KadInteraction.removeContextmenu(dbID("idCanv_suika"));
+  dbID("idBtn_suikaStart").KadReset();
+  dbID("idBtn_suikaPause").KadReset();
+  dbID("idBtn_suikaRestart").KadReset();
+  dbID("idCb_suikaSoundOutput").KadReset();
+  dbID("idLbl_suikaGameOver").KadReset();
   Game.wallPad = Game.resizeUnits(0.06875); //0.06875
   Game.loseHeight = Game.resizeUnits(0.2);
   Game.bottomHeight = Game.resizeUnits(0.05);
@@ -50,7 +52,7 @@ export function clear_cl_Suika() {
 }
 
 export function canvas_cl_Suika() {
-  dbID(idImg_suikaNextFruit).src = `${suikaOptions.imagesPath}/circle0.png`;
+  dbID("idImg_suikaNextFruit").src = `${suikaOptions.imagesPath}/circle0.png`;
   Game.render.canvas.style.width = `${suikaOptions.canvas.w}px`;
   Game.render.canvas.style.height = `${suikaOptions.canvas.h}px`;
 }
@@ -91,7 +93,7 @@ function suikaRestart() {
 }
 
 function suikaToggleSound() {
-  suikaOptions.enableSounds = idCb_suikaSoundOutput.KadGet();
+  suikaOptions.enableSounds = dbID("idCb_suikaSoundOutput").KadGet();
 }
 
 const { Engine, Render, World, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
@@ -139,7 +141,7 @@ const Game = {
       Game.highscore = score;
       Game.showHighscore(`*${score}*`);
     }
-    dbID(idLbl_suikaScore).textContent = score;
+    dbID("idLbl_suikaScore").textContent = score;
   },
   get fruitSizes() {
     return [
@@ -160,16 +162,16 @@ const Game = {
   nextFruitSize: 0,
   setNextFruitSize: () => {
     Game.nextFruitSize = KadRandom.randomObject([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4]);
-    dbID(idImg_suikaNextFruit).src = `${suikaOptions.imagesPath}/circle${Game.nextFruitSize}.png`;
+    dbID("idImg_suikaNextFruit").src = `${suikaOptions.imagesPath}/circle${Game.nextFruitSize}.png`;
   },
   resizeUnits: (size) => {
     return suikaOptions.canvas.w * size;
   },
   showHighscore: function (score) {
-    dbID(idLbl_suikaHighscore).textContent = score;
+    dbID("idLbl_suikaHighscore").textContent = score;
   },
   gameOver: (state) => {
-    idLbl_suikaGameOver.textContent = state ? "GameOver" : "";
+    dbID("idLbl_suikaGameOver").KadSetText(state ? "GameOver" : "");
   },
   suikaInitEngine: function () {
     this.engine = Engine.create();

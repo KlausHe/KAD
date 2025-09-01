@@ -1,5 +1,6 @@
 import { Data_Sudoku } from "../KadData/KadData_Sudoku.js";
 import { dbID, initEL, KadArray, KadDate, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
+import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -31,35 +32,35 @@ const sudokuOptions = {
   pencilErase: false,
 };
 
-initEL({ id: idBtn_sudokuPuzzle, fn: sudokuRequest });
-initEL({ id: idBtn_sudokuClear, fn: sudokuClear });
-initEL({ id: idBtn_sudokuTimer, fn: sudokuStopTimer });
-initEL({ id: idBtn_sudokuWrite, fn: sudokuInputOptionChange });
-initEL({ id: idBtn_sudokuPencil, fn: sudokuInputOptionChange });
-initEL({ id: idBtn_sudokuValidate, fn: sudokuValidate });
-initEL({ id: idBtn_sudokuHint, fn: sudokuHint });
-initEL({ id: idCb_sudokuAutoCheck, fn: sudokuOptionChange, resetValue: sudokuOptions.errorChecked });
-initEL({ id: idCb_sudokuErasePencils, fn: sudokuOptionChange, resetValue: sudokuOptions.pencilErase });
-initEL({ id: idBtn_sudokuNumOverview_1, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_2, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_3, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_4, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_5, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_6, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_7, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_8, fn: sudokuGroupHighlight });
-initEL({ id: idBtn_sudokuNumOverview_9, fn: sudokuGroupHighlight });
-initEL({ id: idCanv_sudoku, action: "keydown", fn: sudokuKeyPressed });
+initEL({ id: dbID("idBtn_sudokuPuzzle"), fn: sudokuRequest });
+initEL({ id: dbID("idBtn_sudokuClear"), fn: sudokuClear });
+initEL({ id: dbID("idBtn_sudokuTimer"), fn: sudokuStopTimer });
+initEL({ id: dbID("idBtn_sudokuWrite"), fn: sudokuInputOptionChange, dataset: ["radio", "sudokuPencil"] });
+initEL({ id: dbID("idBtn_sudokuPencil"), fn: sudokuInputOptionChange, dataset: ["radio", "sudokuPencil"] });
+initEL({ id: dbID("idBtn_sudokuValidate"), fn: sudokuValidate });
+initEL({ id: dbID("idBtn_sudokuHint"), fn: sudokuHint });
+initEL({ id: dbID("idCb_sudokuAutoCheck"), fn: sudokuOptionChange, resetValue: sudokuOptions.errorChecked });
+initEL({ id: dbID("idCb_sudokuErasePencils"), fn: sudokuOptionChange, resetValue: sudokuOptions.pencilErase });
+initEL({ id: dbID("idBtn_sudokuNumOverview_1"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_2"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_3"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_4"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_5"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_6"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_7"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_8"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idBtn_sudokuNumOverview_9"), fn: sudokuGroupHighlight });
+initEL({ id: dbID("idCanv_sudoku"), action: "keydown", fn: sudokuKeyPressed });
 
 export function clear_cl_Sudoku() {
-  KadInteraction.removeContextmenu(idCanv_sudoku);
+  KadInteraction.removeContextmenu(dbID("idCanv_sudoku"));
   sudokuOptions.curHighlight = null;
   sudokuOptions.usedNums = [];
   sudokuOptions.cells = [];
   sudokuOptions.cellWidth = Math.floor(sudokuOptions.canvas.w / 9);
   sudokuOptions.selCells = [{ i: 0, j: 0 }];
-  idCb_sudokuAutoCheck.KadReset();
-  idCb_sudokuErasePencils.KadReset();
+  dbID("idCb_sudokuAutoCheck").KadReset();
+  dbID("idCb_sudokuErasePencils").KadReset();
   //print empty cells
   for (let i = 0; i < 9; i++) {
     sudokuOptions.cells[i] = [];
@@ -67,14 +68,13 @@ export function clear_cl_Sudoku() {
       sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, "", "");
     }
   }
-  sudokuSetBtnColor("");
   sudokuSetDoneNumbers();
   sudokuStartTimer(false);
   sudokuOptions.mode = 0;
   caSU.clear();
   sudokuInputOptionChange();
   sudokuOptionChange();
-  KadInteraction.unfocus(idCanv_sudoku, caSU);
+  KadInteraction.unfocus(dbID("idCanv_sudoku"), caSU);
 }
 
 export function canvas_cl_Sudoku() {
@@ -106,14 +106,13 @@ function sudokuRequest() {
   }
   sudokuStartTimer(true);
   sudokuSetDoneNumbers();
-  KadInteraction.focus(idCanv_sudoku, caSU);
+  KadInteraction.focus(dbID("idCanv_sudoku"), caSU);
 }
 
 function sudokuInputOptionChange() {
   sudokuOptions.mode = !sudokuOptions.mode;
-  idBtn_sudokuWrite.KadButtonColor(sudokuOptions.mode == 1 ? "positive" : null);
-  idBtn_sudokuPencil.KadButtonColor(sudokuOptions.mode != 1 ? "positive" : null);
-  KadInteraction.focus(idCanv_sudoku, caSU);
+  sudokuSetBtnColor();
+  KadInteraction.focus(dbID("idCanv_sudoku"), caSU);
 }
 
 function sudokuOptionChange() {
@@ -127,7 +126,7 @@ function sudokuOptionChange() {
   } else {
     sudokuErrors();
   }
-  KadInteraction.focus(idCanv_sudoku, caSU);
+  KadInteraction.focus(dbID("idCanv_sudoku"), caSU);
 }
 
 function sudokuValidate() {
@@ -145,7 +144,7 @@ function sudokuValidate() {
     dbID("idCb_sudokuAutoCheck").checked = true;
     sudokuOptions.errorChecked = true;
   }
-  KadInteraction.focus(idCanv_sudoku, caSU);
+  KadInteraction.focus(dbID("idCanv_sudoku"), caSU);
 }
 
 function sudokuHint() {
@@ -188,13 +187,12 @@ function sudokuHint() {
     cell.solution = true;
     cell.colNum.drawn = cell.colNum.hinted;
   }
-  KadInteraction.focus(idCanv_sudoku, caSU);
+  KadInteraction.focus(dbID("idCanv_sudoku"), caSU);
 }
 
 function sudokuKeyPressed(event) {
   event.preventDefault(); //prevent keyinput from comming thout to the window!
-  let keyInput = event.keyCode || window.event;
-  // let cell = {};
+  let keyInput = event.keyCode; //|| window.event
   if (keyInput == 32) {
     sudokuInputOptionChange();
   } else if (keyInput == 8) {
@@ -259,14 +257,17 @@ function sudokuShiftPressed() {
 }
 
 function sudokuGroupHighlight(obj) {
-  sudokuOptions.curHighlight = obj.target.value;
+  sudokuOptions.curHighlight = obj.value;
   caSU.redraw();
-  KadInteraction.focus(idCanv_sudoku, caSU);
+  KadInteraction.focus(dbID("idCanv_sudoku"), caSU);
 }
 
-function sudokuSetBtnColor(diff) {
-  idBtn_sudokuWrite.KadButtonColor(sudokuOptions.mode == 1 ? "positive" : null);
-  idBtn_sudokuPencil.KadButtonColor(diff == "puzzle" ? "positive" : null);
+function sudokuSetBtnColor() {
+  if (sudokuOptions.mode == 1) {
+    dbID("idBtn_sudokuWrite").KadRadioColor();
+  } else {
+    dbID("idBtn_sudokuPencil").KadRadioColor();
+  }
 }
 
 function sudokuSetDoneNumbers() {
