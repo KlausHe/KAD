@@ -29,19 +29,20 @@ const suikaOptions = {
   gravity: 0.7,
 };
 
-initEL({ id: dbID("idBtn_suikaStart"), fn: suikaStart, resetValue: "Start" });
-initEL({ id: dbID("idBtn_suikaPause"), fn: suikaPause, resetValue: "Pause" });
-initEL({ id: dbID("idBtn_suikaRestart"), fn: suikaRestart, resetValue: "Reset" });
-initEL({ id: dbID("idCb_suikaSoundOutput"), fn: suikaToggleSound, resetValue: false });
-initEL({ id: dbID("idLbl_suikaGameOver"), resetValue: "" });
+const Btn_suikaStart = initEL({ id: "idBtn_suikaStart", fn: suikaStart, resetValue: "Start" });
+const Btn_suikaPause = initEL({ id: "idBtn_suikaPause", fn: suikaPause, resetValue: "Pause" });
+const Btn_suikaRestart = initEL({ id: "idBtn_suikaRestart", fn: suikaRestart, resetValue: "Reset" });
+const Cb_suikaSoundOutput = initEL({ id: "idCb_suikaSoundOutput", fn: suikaToggleSound, resetValue: false });
+const Lbl_suikaGameOver = initEL({ id: "idLbl_suikaGameOver", resetValue: "" });
+const Lbl_suikaHighscore = initEL({ id: "idLbl_suikaHighscore" });
 
 export function clear_cl_Suika() {
-  KadInteraction.removeContextmenu(dbID("idCanv_suika"));
-  dbID("idBtn_suikaStart").KadReset();
-  dbID("idBtn_suikaPause").KadReset();
-  dbID("idBtn_suikaRestart").KadReset();
-  dbID("idCb_suikaSoundOutput").KadReset();
-  dbID("idLbl_suikaGameOver").KadReset();
+  KadInteraction.removeContextmenu("idCanv_suika");
+  Btn_suikaStart.KadReset();
+  Btn_suikaPause.KadReset();
+  Btn_suikaRestart.KadReset();
+  Cb_suikaSoundOutput.KadReset();
+  Lbl_suikaGameOver.KadReset();
   Game.wallPad = Game.resizeUnits(0.06875); //0.06875
   Game.loseHeight = Game.resizeUnits(0.2);
   Game.bottomHeight = Game.resizeUnits(0.05);
@@ -93,7 +94,7 @@ function suikaRestart() {
 }
 
 function suikaToggleSound() {
-  suikaOptions.enableSounds = dbID("idCb_suikaSoundOutput").KadGet();
+  suikaOptions.enableSounds = Cb_suikaSoundOutput.KadGet();
 }
 
 const { Engine, Render, World, Runner, MouseConstraint, Mouse, Composite, Bodies, Events } = Matter;
@@ -141,7 +142,7 @@ const Game = {
       Game.highscore = score;
       Game.showHighscore(`*${score}*`);
     }
-    dbID("idLbl_suikaScore").textContent = score;
+    Lbl_suikaScore.textContent = score;
   },
   get fruitSizes() {
     return [
@@ -168,10 +169,10 @@ const Game = {
     return suikaOptions.canvas.w * size;
   },
   showHighscore: function (score) {
-    dbID("idLbl_suikaHighscore").textContent = score;
+    Lbl_suikaHighscore.textContent = score;
   },
   gameOver: (state) => {
-    dbID("idLbl_suikaGameOver").KadSetText(state ? "GameOver" : "");
+    Lbl_suikaGameOver.KadSetText(state ? "GameOver" : "");
   },
   suikaInitEngine: function () {
     this.engine = Engine.create();

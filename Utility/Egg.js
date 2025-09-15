@@ -1,4 +1,4 @@
-import { dbID, initEL, KadDate } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate } from "../KadUtils/KadUtils.js";
 
 const eggOptions = {
   timerEggCount: null,
@@ -62,39 +62,43 @@ const eggOptions = {
   },
 };
 
-initEL({ id: dbID("idVin_EggMass"), fn: eggMassChange, resetValue: eggOptions.mass.valOrig, domOpts: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
-initEL({ id: dbID("idVin_EggTemp"), fn: eggTempChange, resetValue: eggOptions.temp.valOrig, domOpts: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
-initEL({ id: dbID("idVin_EggYolk"), fn: eggYolkChange, resetValue: eggOptions.yolk.valOrig, domOpts: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
-initEL({ id: dbID("idBtn_EggStart"), fn: eggStartChange, btnCallbacks: eggOptions.startCallbacks });
-initEL({ id: dbID("idLbl_EggTime"), resetValue: "Eieruhr" });
+const Vin_EggMass = initEL({ id: "idVin_EggMass", fn: eggMassChange, resetValue: eggOptions.mass.valOrig, domOpts: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
+const Vin_EggTemp = initEL({ id: "idVin_EggTemp", fn: eggTempChange, resetValue: eggOptions.temp.valOrig, domOpts: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
+const Vin_EggYolk = initEL({ id: "idVin_EggYolk", fn: eggYolkChange, resetValue: eggOptions.yolk.valOrig, domOpts: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
+const Btn_EggStart = initEL({ id: "idBtn_EggStart", fn: eggStartChange, btnCallbacks: eggOptions.startCallbacks });
+const Lbl_EggTime = initEL({ id: "idLbl_EggTime", resetValue: "Eieruhr" });
+const Lbl_EggMass = initEL({ id: "idLbl_EggMass" });
+const Lbl_EggTemp = initEL({ id: "idLbl_EggTemp" });
+const Lbl_EggYolk = initEL({ id: "idLbl_EggYolk" });
+const Prog_eggProgress = initEL({ id: "idProg_eggProgress", domOpts: { max: 100 } });
 
 export function clear_cl_Egg() {
-  eggOptions.mass.val = dbID("idVin_EggMass").KadReset();
-  eggOptions.temp.val = dbID("idVin_EggTemp").KadReset();
-  eggOptions.yolk.val = dbID("idVin_EggYolk").KadReset();
-  eggOptions.timerState = dbID("idBtn_EggStart").KadReset();
-  dbID("idLbl_EggTime").KadReset();
+  eggOptions.mass.val = Vin_EggMass.KadReset();
+  eggOptions.temp.val = Vin_EggTemp.KadReset();
+  eggOptions.yolk.val = Vin_EggYolk.KadReset();
+  eggOptions.timerState = Btn_EggStart.KadReset();
+  Lbl_EggTime.KadReset();
 
-  dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
-  dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
-  dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
+  Lbl_EggMass.KadSetText(eggOptions.mass.label);
+  Lbl_EggTemp.KadSetText(eggOptions.temp.label);
+  Lbl_EggYolk.KadSetText(eggOptions.yolk.label);
 }
 
 function eggMassChange(obj) {
   eggOptions.mass.val = obj.target.KadGet();
-  dbID("idLbl_EggMass").textContent = eggOptions.mass.label;
+  Lbl_EggMass.KadSetText(eggOptions.mass.label);
   eggCalculate();
 }
 
 function eggTempChange(obj) {
   eggOptions.temp.val = obj.target.KadGet();
-  dbID("idLbl_EggTemp").textContent = eggOptions.temp.label;
+  Lbl_EggTemp.KadSetText(eggOptions.temp.label);
   eggCalculate();
 }
 
 function eggYolkChange(obj) {
   eggOptions.yolk.val = obj.target.KadGet();
-  dbID("idLbl_EggYolk").textContent = eggOptions.yolk.label;
+  Lbl_EggYolk.KadSetText(eggOptions.yolk.label);
   eggCalculate();
 }
 
@@ -109,35 +113,35 @@ function eggCalculate() {
 
 function eggShowTime() {
   let obj = KadDate.secondsToObj(eggOptions.timeRemaining);
-  dbID("idLbl_EggTime").KadSetText(`${obj.h}:${obj.m}:${obj.s}`);
+  Lbl_EggTime.KadSetText(`${obj.h}:${obj.m}:${obj.s}`);
 }
 
 function eggStartChange() {
   eggOptions.timerState = !eggOptions.timerState;
-  dbID("idVin_EggMass").KadEnable(!eggOptions.timerState);
-  dbID("idVin_EggTemp").KadEnable(!eggOptions.timerState);
-  dbID("idVin_EggYolk").KadEnable(!eggOptions.timerState);
+  Vin_EggMass.KadEnable(!eggOptions.timerState);
+  Vin_EggTemp.KadEnable(!eggOptions.timerState);
+  Vin_EggYolk.KadEnable(!eggOptions.timerState);
 }
 
 function eggStart() {
   eggCalculate();
-  dbID("idProg_eggProgress").setAttribute("max", eggOptions.timeTotal);
+  Prog_eggProgress.KadSetMax(eggOptions.timeTotal);
   eggCountdown();
   eggOptions.timerEggCount = setInterval(eggCountdown, 1000);
 }
 
 function eggStop() {
   clearInterval(eggOptions.timerEggCount);
-  dbID("idLbl_EggTime").KadReset();
+  Lbl_EggTime.KadReset();
 }
 
 function eggCountdown() {
   eggOptions.timeRemaining--;
-  dbID("idProg_eggProgress").setAttribute("value", eggOptions.timeRemaining);
+  Prog_eggProgress.KadSetValue(eggOptions.timeRemaining);
   if (eggOptions.timeRemaining > 0) {
     eggShowTime();
   } else {
-    dbID("idLbl_EggTime").KadSetText("Fertig!");
+    Lbl_EggTime.KadSetText("Fertig!");
     clearInterval(eggOptions.timerEggCount);
   }
 }

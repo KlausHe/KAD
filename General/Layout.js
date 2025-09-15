@@ -95,7 +95,7 @@ export function resizeGrid() {
   const minWidth = globalValues.mediaSizes.divGridMinWidth;
   const calcX = Math.max(1, Math.floor(winWidth / minWidth)); // minimum 2 Cols
   if (contentLayout.gridRows != calcX) {
-    KadLog.log(winWidth, minWidth, winWidth / minWidth);
+    // KadLog.log(winWidth, minWidth, winWidth / minWidth);
     contentLayout.gridRows = calcX;
     navClick(contentLayout.prevNavContent);
   }
@@ -293,15 +293,12 @@ function createAreaString({ grid2DArray } = {}) {
   dbIDStyle("id_contentGrid").gridTemplateAreas = gridString;
 }
 
-export function createSubgrid() {
-  const databaseList = Object.values(DBData).map((obj) => obj.contentName);
+export function layoutCreateSubgrid() {
   for (const gridKey in contentGrid) {
     const parentGrid = dbCL(gridKey);
     const contentObj = contentGrid[gridKey];
-    const displayName = contentObj.name;
 
     parentGrid.style.gridArea = gridKey;
-
     const childDivArea = parentGrid.children[0].style;
 
     childDivArea.gridTemplateRows = "";
@@ -321,7 +318,6 @@ export function createSubgrid() {
     childDivArea.gridTemplateRows += "auto";
 
     const arr = KadArray.createArray({ x: contentObj.maingrid.areas[0].length, fillNumber: "auto" }).join(" ");
-    // childDivArea.gridTemplateColumns = `${arr}`;
     childDivArea.gridTemplateColumns = `1fr ${arr} 1fr`;
     childDivArea.gridTemplateAreas = "";
     for (const main of contentObj.maingrid.areas) {
@@ -333,6 +329,89 @@ export function createSubgrid() {
       if (sub[1]) dbCLStyle(sub[0]).justifySelf = sub[1];
       if (sub[2]) dbCLStyle(sub[0]).alignSelf = sub[2];
     }
+  }
+}
+
+export function layoutCreateNavbar() {
+  let parent = dbID("idNav_navElements");
+  let navElements = dbCL("cl_navElements", null);
+  while (navElements.length > 0) {
+    navElements[0].parentNode.removeChild(navElements[0]);
+  }
+  let contentLength = 0;
+  for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
+    contentLength++;
+    const obj = contentGroupsNav[i];
+    const navParentDiv = KadTable.createCell({
+      type: "Div",
+      names: ["navBar", obj],
+      createClass: ["cl_navElements"],
+      idNoChild: true,
+      style: {
+        whiteSpace: "nowrap",
+      },
+      onclick: () => navClick(obj),
+    });
+    const navParentImg = KadTable.createCell({ type: "Img", names: ["navBarIcon", "parent", obj], subGroup: "navbar", img: `nav${obj}` });
+    navParentDiv.appendChild(navParentImg);
+    const navParentLbl = KadTable.createCell({ type: "Lbl", names: ["navBarLbl", obj], createClass: ["cl_navNames"], idNoChild: true, text: obj });
+    navParentDiv.appendChild(navParentLbl);
+    parent.insertBefore(navParentDiv, parent.children[0]);
+  }
+  dbID("idDiv_navBar_Universe").classList.add("navbarActive");
+  dbIDStyle("idDiv_navBar_User").display = "none";
+  dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short || "User";
+}
+
+export function layoutCreateFooter() {
+  let parent = dbID("idDiv_footerCredits");
+  while (parent.length > 0) {
+    parent.removeChild(parent.firstChild);
+  }
+  contentFooter.forEach((arr, index) => {
+    const name = arr[0];
+    const url = arr[1];
+    const dropSourceParent = KadTable.createCell({ type: "Div", names: ["footerSource", index], createClass: ["cl_DropdownParent", "clFooterCredits"] });
+    parent.appendChild(dropSourceParent);
+
+    const dropSourceImg = KadTable.createCell({
+      type: "Img",
+      names: ["footerSource", index],
+      subGroup: "url",
+      img: getFavicon(url, globalValues.mediaSizes.imgSize),
+      onclick: () => {
+        window.open(url);
+      },
+    });
+    dropSourceParent.appendChild(dropSourceImg);
+    const dropSourceText = KadTable.createCell({
+      type: "Lbl",
+      names: ["footerSource", index],
+      text: `${name} von:<br>${url}<br>(Opens in a new Tab)`,
+      createClass: ["clDropup", "cl_DropdownInfo"],
+      onclick: () => {
+        window.open(url);
+      },
+    });
+    dropSourceParent.appendChild(dropSourceText);
+  });
+}
+
+export function toggelFullscreen(gridKey) {
+  if (contentLayout.prevNavContent == gridKey) {
+    navClick(contentLayout.prevNavFullscreen);
+  } else {
+    contentLayout.prevNavFullscreen = contentLayout.prevNavContent;
+    navClick(gridKey);
+  }
+}
+
+export function layoutCreateGridTitles() {
+  const databaseList = Object.values(DBData).map((obj) => obj.contentName);
+  for (const gridKey in contentGrid) {
+    const parentGrid = dbCL(gridKey);
+    const contentObj = contentGrid[gridKey];
+    const displayName = contentObj.name;
 
     // CERATE Title-bar
     const parent = document.createElement("DIV");
@@ -510,78 +589,4 @@ export function createSubgrid() {
     });
     titleTrashParent.appendChild(titleTrashBtn);
   }
-}
-
-export function toggelFullscreen(gridKey) {
-  if (contentLayout.prevNavContent == gridKey) {
-    navClick(contentLayout.prevNavFullscreen);
-  } else {
-    contentLayout.prevNavFullscreen = contentLayout.prevNavContent;
-    navClick(gridKey);
-  }
-}
-
-export function createNavbar() {
-  let parent = dbID("idNav_navElements");
-  let navElements = dbCL("cl_navElements", null);
-  while (navElements.length > 0) {
-    navElements[0].parentNode.removeChild(navElements[0]);
-  }
-  let contentLength = 0;
-  for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
-    contentLength++;
-    const obj = contentGroupsNav[i];
-    const navParentDiv = KadTable.createCell({
-      type: "Div",
-      names: ["navBar", obj],
-      createClass: ["cl_navElements"],
-      idNoChild: true,
-      style: {
-        whiteSpace: "nowrap",
-      },
-      onclick: () => navClick(obj),
-    });
-    const navParentImg = KadTable.createCell({ type: "Img", names: ["navBarIcon", "parent", obj], subGroup: "navbar", img: `nav${obj}` });
-    navParentDiv.appendChild(navParentImg);
-    const navParentLbl = KadTable.createCell({ type: "Lbl", names: ["navBarLbl", obj], createClass: ["cl_navNames"], idNoChild: true, text: obj });
-    navParentDiv.appendChild(navParentLbl);
-    parent.insertBefore(navParentDiv, parent.children[0]);
-  }
-  dbID("idDiv_navBar_Universe").classList.add("navbarActive");
-  dbIDStyle("idDiv_navBar_User").display = "none";
-  dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short || "User";
-}
-
-export function createFooter() {
-  let parent = dbID("idDiv_footerCredits");
-  while (parent.length > 0) {
-    parent.removeChild(parent.firstChild);
-  }
-  contentFooter.forEach((arr, index) => {
-    const name = arr[0];
-    const url = arr[1];
-    const dropSourceParent = KadTable.createCell({ type: "Div", names: ["footerSource", index], createClass: ["cl_DropdownParent", "clFooterCredits"] });
-    parent.appendChild(dropSourceParent);
-
-    const dropSourceImg = KadTable.createCell({
-      type: "Img",
-      names: ["footerSource", index],
-      subGroup: "url",
-      img: getFavicon(url, globalValues.mediaSizes.imgSize),
-      onclick: () => {
-        window.open(url);
-      },
-    });
-    dropSourceParent.appendChild(dropSourceImg);
-    const dropSourceText = KadTable.createCell({
-      type: "Lbl",
-      names: ["footerSource", index],
-      text: `${name} von:<br>${url}<br>(Opens in a new Tab)`,
-      createClass: ["clDropup", "cl_DropdownInfo"],
-      onclick: () => {
-        window.open(url);
-      },
-    });
-    dropSourceParent.appendChild(dropSourceText);
-  });
 }

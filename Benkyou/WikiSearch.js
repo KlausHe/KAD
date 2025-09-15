@@ -14,7 +14,6 @@ const wikiOptions = {
   get openUrl() {
     return `https://${this.search.language}.wikipedia.org/wiki/`;
   },
-  inputTimer: null,
   resultTerms: null,
   search: {
     tab: null,
@@ -30,79 +29,68 @@ export const WikiSearchData = {
   },
 };
 
-initEL({ id: dbID("idVin_wikiInput"), fn: wikiSearchInput, resetValue: "Search on Wiki" });
-initEL({ id: dbID("idBtn_wikiInput"), fn: wikiSearchInput });
-initEL({ id: dbID("idSel_wikiLanguage"), fn: wikiSearchLanguage, selStartValue: "German", selList: Array.from(Data_Country_CodesIso639).map((item) => [item[1], item[0]]) });
+const Vin_wikiInput = initEL({ id: "idVin_wikiInput", fn: wikiSearchInput, resetValue: "Search on Wiki" });
+const Btn_wikiInput = initEL({ id: "idBtn_wikiInput", fn: wikiSearchInput });
+const Div_wiki_Title = initEL({ id: "idDiv_wiki_Title" });
+const Div_wiki_Text = initEL({ id: "idDiv_wiki_Text" });
+const Sel_wikiLanguage = initEL({ id: "idSel_wikiLanguage", fn: wikiSearchLanguage, selStartValue: "German", selList: Array.from(Data_Country_CodesIso639).map((item) => [item[1], item[0]]) });
 
 export function clear_cl_WikiSearch() {
-  dbID("idVin_wikiInput").KadReset();
-  dbID("idSel_wikiLanguage").KadReset();
-  dbID("idDiv_wiki_Title").textContent = "";
-  dbID("idDiv_wiki_Text").textContent = "";
+  Vin_wikiInput.KadReset();
+  Sel_wikiLanguage.KadReset();
+  Div_wiki_Title.KadSetText("");
+  Div_wiki_Text.KadSetText("");
   dbID("idImg_Wiki_Image").src = "";
   dbIDStyle("idImg_Wiki_Image").display = "none";
-  wikiOptions.search = { tab: null, content: null, language: dbID("idSel_wikiLanguage").KadGet(), img: null };
+  wikiOptions.search = { tab: null, content: null, language: Sel_wikiLanguage.KadGet(), img: null };
 }
-
-function wikiSearchInput() {
-  wikiOptions.search.tab = dbID("idVin_wikiInput").KadGet().replace(/\s+/g, "_");
-  if (wikiOptions.inputTimer != null) {
-    clearTimeout(wikiOptions.inputTimer);
-    wikiOptions.inputTimer = null;
-  }
-  wikiOptions.inputTimer = setTimeout(wikiSearchGetData, 400);
-}
-
-function wikiSearchGetData() {
-  if (wikiOptions.search.tab != null && wikiOptions.search.tab != "") {
-    KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.searchUrl}${wikiOptions.search.tab}`, callback: wikiCreateTable });
-    dbID("idDiv_wiki_Title").textContent = "Artikel wählen";
-    dbID("idDiv_wiki_Title").onclick = null;
-    dbID("idDiv_wiki_Text").textContent = "";
-    dbID("idImg_Wiki_Image").src = "";
-    dbIDStyle("idImg_Wiki_Image").display = "none";
-  }
-}
-
 function wikiSearchLanguage() {
-  wikiOptions.search.language = dbID("idSel_wikiLanguage").KadGet();
+  wikiOptions.search.language = Sel_wikiLanguage.KadGet();
   if (!wikiOptions.search.tab) return;
   wikiSearchInput();
 }
 
+function wikiSearchInput() {
+  wikiOptions.search.tab = Vin_wikiInput.KadGet().replace(/\s+/g, "_");
+  if (wikiOptions.search.tab == null && wikiOptions.search.tab == "") return;
+  Div_wiki_Title.KadSetText("Artikel wählen");
+  Div_wiki_Title.onclick = null;
+  Div_wiki_Text.KadSetText("");
+  dbID("idImg_Wiki_Image").src = "";
+  dbIDStyle("idImg_Wiki_Image").display = "none";
+  KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.searchUrl}${wikiOptions.search.tab}`, callback: wikiCreateTable, errorCallback: wikiSearchErrorData });
+}
+
 function showWiki(index) {
-  KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.contentUrl}${wikiOptions.resultTerms[index]}`, callback: wikiShowSelectedText });
-  KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.imageUrl}${wikiOptions.resultTerms[index]}`, callback: wikiShowSelectedImage });
-  dbID("idDiv_wiki_Title").textContent = "searching...";
-  dbID("idDiv_wiki_Title").onclick = null;
+  KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.contentUrl}${wikiOptions.resultTerms[index]}`, callback: wikiShowSelectedText, errorCallback: wikiSearchErrorData });
+  KadFile.loadUrlToJSON({ variable: "data", url: `${wikiOptions.imageUrl}${wikiOptions.resultTerms[index]}`, callback: wikiShowSelectedImage, errorCallback: wikiSearchErrorData });
+  Div_wiki_Title.KadSetText("searching...");
+  Div_wiki_Title.onclick = null;
+}
+
+function wikiSearchErrorData({ error }) {
+  console.error("Error  loading data for Wiki", error);
 }
 
 function wikiCreateTable(data) {
   wikiOptions.resultTerms = data.data[1];
   const body = [
-    {
-      type: "KADImg",
-      data: "right",
-      settings: { onclick: showWiki },
-    },
-    {
-      data: wikiOptions.resultTerms,
-      settings: { onclick: showWiki },
-    },
+    { type: "KADImg", data: "right", settings: { onclick: showWiki } },
+    { data: wikiOptions.resultTerms, settings: { onclick: showWiki } },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_wikiTable"), body });
+  KadTable.createHTMLGrid({ id: "idTab_wikiTable", body });
 }
 
 function wikiShowSelectedText(data) {
   wikiOptions.search.content = data.data.query.pages;
   let pagesID = Object.keys(wikiOptions.search.content);
   const title = wikiOptions.search.content[pagesID].title;
-  dbID("idDiv_wiki_Title").textContent = title;
-  dbID("idDiv_wiki_Title").onclick = () => {
+  Div_wiki_Title.KadSetText(title);
+  Div_wiki_Title.onclick = () => {
     const urlTitle = title.replace(/\s+/g, "_");
     window.open(`${wikiOptions.openUrl}${urlTitle}`);
   };
-  dbID("idDiv_wiki_Text").textContent = wikiOptions.search.content[pagesID].extract;
+  Div_wiki_Text.KadSetText(wikiOptions.search.content[pagesID].extract);
 }
 
 function wikiShowSelectedImage(data) {

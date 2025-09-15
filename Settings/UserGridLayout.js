@@ -1,6 +1,6 @@
 import { contentGrid, contentLayout, createGridLayout } from "../General/Layout.js";
 import { contentGroupsMaincontent, contentGroupsNav } from "../General/MainContent.js";
-import { dbID, initEL, KadColor, KadInteraction, KadTable } from "../KadUtils/KadUtils.js";
+import { initEL, KadColor, KadInteraction, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "./Color.js";
 import { globalValues } from "./General.js";
 
@@ -21,23 +21,23 @@ const userGridOptions = {
   groupColors: {},
 };
 
-initEL({ id: dbID("idBtn_userGridEnable"), fn: userGridCreateTable, resetValue: "Auswahl", dataset: ["radio", "userGridBtn"] });
-initEL({ id: dbID("idBtn_userGridPrioritize"), fn: userGridLayoutProiritize, resetValue: "Priorität", dataset: ["radio", "userGridBtn"] });
-initEL({ id: dbID("idBtn_userGridSaveLayout"), fn: saveUsergridLayout });
-initEL({ id: dbID("idSel_userGridSelect"), fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
+const Btn_userGridEnable = initEL({ id: "idBtn_userGridEnable", fn: userGridCreateTable, resetValue: "Auswahl", dataset: ["radio", "userGridBtn"] });
+const Btn_userGridPrioritize = initEL({ id: "idBtn_userGridPrioritize", fn: userGridLayoutProiritize, resetValue: "Priorität", dataset: ["radio", "userGridBtn"] });
+const Btn_userGridSaveLayout = initEL({ id: "idBtn_userGridSaveLayout", fn: saveUsergridLayout });
+const Sel_userGridSelect = initEL({ id: "idSel_userGridSelect", fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
 
 export function clear_cl_UserGridLayout() {
-  dbID("idBtn_userGridEnable").KadReset();
-  dbID("idBtn_userGridPrioritize").KadReset();
+  Btn_userGridEnable.KadReset();
+  Btn_userGridPrioritize.KadReset();
 
-  KadInteraction.removeContextmenu(dbID("idCanv_userGrid"));
+  KadInteraction.removeContextmenu("idCanv_userGrid");
   userGridOptions.groups = {};
   userGridOptions.enableGroupList = [...contentGroupsMaincontent];
   userGridOptions.enabledList = [...contentLayout.navContent.Universe];
   for (let groupKey of contentGroupsMaincontent) {
     userGridOptions.groups[groupKey] = contentLayout.navContent[groupKey];
   }
-  dbID("idSel_userGridSelect").KadReset({ selList: contentGroupsNav.map((item) => [item, item]) });
+  Sel_userGridSelect.KadReset({ selList: contentGroupsNav.map((item) => [item, item]) });
 
   //separate because IDs not ready before
   for (let i = 0; i < contentGroupsMaincontent.length; i++) {
@@ -115,7 +115,7 @@ function userGridRedraw() {
 }
 
 function saveUsergridLayout() {
-  dbID("idBtn_child_gridtitle_dbUL_cl_UserGridLayout").click();
+  Btn_child_gridtitle_dbUL_cl_UserGridLayout.click();
 }
 
 function userGridLayoutProiritize() {
@@ -152,7 +152,7 @@ function userGridLayoutProiritize() {
       },
     },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_disableUserGridTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_disableUserGridTable", header, body });
 }
 
 function userGridLayoutPrioritizeUp(index) {
@@ -206,11 +206,11 @@ function userGridCreateTable() {
     });
   }
 
-  KadTable.createHTMLGrid({ id: dbID("idTab_disableUserGridTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_disableUserGridTable", header, body });
 }
 
 function userGridSelectGroup() {
-  userGridOptions.usedGrid = dbID("idSel_userGridSelect").KadGet();
+  userGridOptions.usedGrid = Sel_userGridSelect.KadGet();
   userGridCreateCells();
 }
 

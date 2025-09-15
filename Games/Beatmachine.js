@@ -30,18 +30,18 @@ const beatmachineOptions = {
   ],
 };
 
-initEL({ id: dbID("idBtn_beatmachineLoad"), fn: beatmachineGetSounds });
-initEL({ id: dbID("idBtn_transportPlayPause"), fn: beatmachineTransport });
-initEL({ id: dbID("idBtn_transportClear"), fn: clear_cl_Beatmachine });
-initEL({ id: dbID("idBtn_transportCreateBeat"), fn: beatmachineCreateBeat });
-initEL({ id: dbID("idBtn_transporteExpand"), fn: beatmachineExpand });
-initEL({ id: dbID("idBtn_transporteMute"), fn: muteAll });
-initEL({ id: dbID("idVin_beatmachine_BPM"), fn: beatmachineBPMChange, resetValue: beatmachineOptions.BPMOrig });
+const Btn_beatmachineLoad = initEL({ id: "idBtn_beatmachineLoad", fn: beatmachineGetSounds });
+const Btn_transportPlayPause = initEL({ id: "idBtn_transportPlayPause", fn: beatmachineTransport });
+const Btn_transportClear = initEL({ id: "idBtn_transportClear", fn: clear_cl_Beatmachine });
+const Btn_transportCreateBeat = initEL({ id: "idBtn_transportCreateBeat", fn: beatmachineCreateBeat });
+const Btn_transporteExpand = initEL({ id: "idBtn_transporteExpand", fn: beatmachineExpand });
+const Btn_transporteMute = initEL({ id: "idBtn_transporteMute", fn: muteAll });
+const Vin_beatmachine_BPM = initEL({ id: "idVin_beatmachine_BPM", fn: beatmachineBPMChange, resetValue: beatmachineOptions.BPMOrig });
 
 export function clear_cl_Beatmachine() {
   return;
   //TODO Fix this thing!?!
-  initEL({ id: dbID("idBtn_beatmachineLoad"), beatmachineGetSounds });
+  const Btn_beatmachineLoad = initEL({ id: "idBtn_beatmachineLoad", beatmachineGetSounds });
   beatmachineOptions.soundsLoaded = false;
   beatmachineOptions.curTime = 0;
   beatmachineOptions.stepInterval = 0;

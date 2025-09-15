@@ -19,14 +19,15 @@ const pythoOptions = {
   errorShown: false,
 };
 
-initEL({ id: dbID("idVin_Pytho_0"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[0] });
-initEL({ id: dbID("idVin_Pytho_1"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[1] });
-initEL({ id: dbID("idVin_Pytho_2"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[2] });
-initEL({ id: dbID("idVin_Pytho_3"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[3] });
-initEL({ id: dbID("idVin_Pytho_4"), fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
+const Vin_Pytho_0 = initEL({ id: "idVin_Pytho_0", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[0] });
+const Vin_Pytho_1 = initEL({ id: "idVin_Pytho_1", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[1] });
+const Vin_Pytho_2 = initEL({ id: "idVin_Pytho_2", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[2] });
+const Vin_Pytho_3 = initEL({ id: "idVin_Pytho_3", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[3] });
+const Vin_Pytho_4 = initEL({ id: "idVin_Pytho_4", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
+const Lbl_pythagorasInfo = initEL({ id: "idLbl_pythagorasInfo" });
 
 export function clear_cl_Pythagoras() {
-  KadInteraction.removeContextmenu(dbID("idCanv_pytho"));
+  KadInteraction.removeContextmenu("idCanv_pytho");
   pythoOptions.inputState = [...pythoOptions.inputStateOrig];
   for (let i = 0; i < 5; i++) {
     pythoOptions.vals[i] = dbID(`idVin_Pytho_${i}`).KadReset();
@@ -68,7 +69,7 @@ function pythoShowError(text = null) {
   if (pythoOptions.errorShown) {
     dbIDStyle("idDiv_pythagorasInfo").display = "none";
   } else {
-    dbID("idLbl_pythagorasInfo").textContent = text;
+    Lbl_pythagorasInfo.KadSetTet(text);
     dbIDStyle("idDiv_pythagorasInfo").display = "initial";
   }
 }

@@ -1,4 +1,4 @@
-import { dbID, initEL, KadDate, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 
 const kadarOptions = {
   table: {
@@ -18,26 +18,26 @@ const kadarOptions = {
   },
 };
 
-initEL({ id: dbID("idVin_kadarDateA"), fn: kadarDateSelectedA, resetValue: kadarOptions.dateOrig(-7), dateOpts: { format: kadarOptions.format, dateObject: true } });
-initEL({ id: dbID("idVin_kadarDateB"), fn: kadarDateSelectedB, resetValue: kadarOptions.dateOrig(7), dateOpts: { format: kadarOptions.format, dateObject: true } });
-initEL({ id: dbID("idBtn_kadarTrashA"), fn: clearKadarTableAnow });
-initEL({ id: dbID("idBtn_kadarRefresh"), fn: kadarTable });
-initEL({ id: dbID("idBtn_kadarTrashB"), fn: clearKadarTableBnow });
-initEL({ id: dbID("idLbl_kadarDateNow") });
+const Vin_kadarDateA = initEL({ id: "idVin_kadarDateA", fn: kadarDateSelectedA, resetValue: kadarOptions.dateOrig(-7), dateOpts: { format: kadarOptions.format, dateObject: true } });
+const Vin_kadarDateB = initEL({ id: "idVin_kadarDateB", fn: kadarDateSelectedB, resetValue: kadarOptions.dateOrig(7), dateOpts: { format: kadarOptions.format, dateObject: true } });
+const Btn_kadarTrashA = initEL({ id: "idBtn_kadarTrashA", fn: clearKadarTableAnow });
+const Btn_kadarRefresh = initEL({ id: "idBtn_kadarRefresh", fn: kadarTable });
+const Btn_kadarTrashB = initEL({ id: "idBtn_kadarTrashB", fn: clearKadarTableBnow });
+const Lbl_kadarDateNow = initEL({ id: "idLbl_kadarDateNow" });
 
 export function clear_cl_Kadar() {
-  kadarOptions.table.valueA = dbID("idVin_kadarDateA").KadReset();
-  kadarOptions.table.valueB = dbID("idVin_kadarDateB").KadReset();
-  dbID("idLbl_kadarDateNow").KadSetText(KadDate.getDate(null, { format: "DD.MM.YYYY, HH:mm" }));
+  kadarOptions.table.valueA = Vin_kadarDateA.KadReset();
+  kadarOptions.table.valueB = Vin_kadarDateB.KadReset();
+  Lbl_kadarDateNow.KadSetText(KadDate.getDate(null, { format: "DD.MM.YYYY, HH:mm" }));
   kadarTable();
 }
 
 function kadarDateSelectedA() {
-  kadarOptions.table.valueA = dbID("idVin_kadarDateA").KadGet();
+  kadarOptions.table.valueA = Vin_kadarDateA.KadGet();
   kadarTable();
 }
 function kadarDateSelectedB() {
-  kadarOptions.table.valueB = dbID("idVin_kadarDateB").KadGet();
+  kadarOptions.table.valueB = Vin_kadarDateB.KadGet();
   kadarTable();
 }
 
@@ -61,5 +61,5 @@ function kadarTable() {
     { data: tab.divisor.map((div, index) => KadValue.number(Math.abs(tab.valueB - new Date().getTime()) / div, { decimals: tab.decimals[index] })), settings },
     { data: tab.units },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_KadarTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_KadarTable", header, body });
 }

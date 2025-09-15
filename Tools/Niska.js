@@ -1,4 +1,4 @@
-import { KadTable, KadValue, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 //https://schraube-mutter.de/bohrtabelle-fuer-zylinderschrauben/
 const niskaOptions = {
   size: {
@@ -1240,10 +1240,10 @@ const niskaOptions = {
   },
 };
 
-initEL({ id: dbID("idVin_niskaSize"), fn: niskaCalc, resetValue: niskaOptions.size.valOrig, domOpts: { min: 0 } });
-initEL({ id: dbID("idVin_niskaPitch"), fn: niskaCalc, resetValue: niskaOptions.pitch.valOrig, domOpts: { min: 0 } });
-initEL({
-  id: dbID("idSel_niskaSelect"),
+const Vin_niskaSize = initEL({ id: "idVin_niskaSize", fn: niskaCalc, resetValue: niskaOptions.size.valOrig, domOpts: { min: 0 } });
+const Vin_niskaPitch = initEL({ id: "idVin_niskaPitch", fn: niskaCalc, resetValue: niskaOptions.pitch.valOrig, domOpts: { min: 0 } });
+const Sel_niskaSelect = initEL({
+  id: "idSel_niskaSelect",
   fn: niskaCalc,
   selGroup: {
     Regelgewinde: niskaOptions.regel.map((val, index) => [`M${val[0]}x${val[1]}`, index]),
@@ -1251,9 +1251,9 @@ initEL({
   },
   selStartIndex: niskaOptions.select.indexOrig,
 });
-initEL({ id: dbID("idSel_niskaStrengthClassA"), fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index0 });
-initEL({ id: dbID("idSel_niskaStrengthClassB"), fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index1 });
-initEL({ id: dbID("idLbl_niskaRegelInfo") });
+const Sel_niskaStrengthClassA = initEL({ id: "idSel_niskaStrengthClassA", fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index0 });
+const Sel_niskaStrengthClassB = initEL({ id: "idSel_niskaStrengthClassB", fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index1 });
+const Lbl_niskaRegelInfo = initEL({ id: "idLbl_niskaRegelInfo" });
 
 export function clear_cl_Niska() {
   niskaOptions.size.val = niskaOptions.size.valOrig;
@@ -1262,27 +1262,27 @@ export function clear_cl_Niska() {
   niskaOptions.select.type = niskaOptions.select.typeOrig;
   niskaOptions.strengthClass.index0 = niskaOptions.strengthClass.indexOrig;
   niskaOptions.strengthClass.index1 = niskaOptions.strengthClass.indexOrig;
-  dbID("idVin_niskaSize").KadReset();
-  dbID("idVin_niskaPitch").KadReset();
-  dbID("idSel_niskaSelect").KadReset();
-  dbID("idSel_niskaStrengthClassA").KadReset();
-  dbID("idSel_niskaStrengthClassB").KadReset();
+  Vin_niskaSize.KadReset();
+  Vin_niskaPitch.KadReset();
+  Sel_niskaSelect.KadReset();
+  Sel_niskaStrengthClassA.KadReset();
+  Sel_niskaStrengthClassB.KadReset();
 
   niskaCalc();
 }
 
 function niskaCalc() {
-  niskaOptions.size.val = dbID("idVin_niskaSize").KadGet();
-  niskaOptions.pitch.val = dbID("idVin_niskaPitch").KadGet();
-  niskaOptions.strengthClass.index0 = dbID("idSel_niskaStrengthClassA").selectedIndex;
+  niskaOptions.size.val = Vin_niskaSize.KadGet();
+  niskaOptions.pitch.val = Vin_niskaPitch.KadGet();
+  niskaOptions.strengthClass.index0 = Sel_niskaStrengthClassA.selectedIndex;
   niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
-  niskaOptions.select.index = dbID("idSel_niskaSelect").selectedIndex;
-  let type = dbID("idSel_niskaSelect").options[niskaOptions.select.index].parentElement.label;
+  niskaOptions.select.index = Sel_niskaSelect.selectedIndex;
+  let type = Sel_niskaSelect.options[niskaOptions.select.index].parentElement.label;
   niskaOptions.select.type = niskaOptions.select.types[type];
 
   niskaOptions.select.index -= niskaOptions.select.offset;
-  niskaOptions.strengthClass.index1 = dbID("idSel_niskaStrengthClassB").selectedIndex;
-  dbID("idLbl_niskaRegelInfo").KadSetText(niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde");
+  niskaOptions.strengthClass.index1 = Sel_niskaStrengthClassB.selectedIndex;
+  Lbl_niskaRegelInfo.KadSetText(niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde");
   niskaHelpCalculation(niskaOptions.select.size, niskaOptions.select.pitch, 1);
   niskaTable();
 }
@@ -1353,5 +1353,5 @@ function niskaTable() {
     { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
   ];
 
-  KadTable.createHTMLGrid({ id: dbID("idTab_niskaTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_niskaTable", header, body });
 }

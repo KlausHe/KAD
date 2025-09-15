@@ -1,5 +1,5 @@
 import { Data_Botanicals } from "../KadData/KadData.js";
-import { dbID, initEL, KadTable } from "../KadUtils/KadUtils.js";
+import { initEL, KadTable } from "../KadUtils/KadUtils.js";
 
 const botanicalsOptions = {
   plant: null,
@@ -7,22 +7,22 @@ const botanicalsOptions = {
   plantOrig: "Anis",
   discomfortOrig: "Blutniederdruck",
 };
-initEL({
-  id: dbID("idSel_botanicalsPlant"),
+const Sel_botanicalsPlant = initEL({
+  id: "idSel_botanicalsPlant",
   fn: botanicalsPlantChange,
   selStartValue: botanicalsOptions.plantOrig,
   selGroup: { "Pflanze wählen": Data_Botanicals.map((obj) => [obj.plant, obj.plant]) },
 });
-initEL({
-  id: dbID("idSel_botanicalsDiscomfort"),
+const Sel_botanicalsDiscomfort = initEL({
+  id: "idSel_botanicalsDiscomfort",
   fn: botanicalsDiscomfortChange,
   selStartValue: botanicalsOptions.discomfortOrig,
   selGroup: { "Beschwerde wählen": botanicalsPopulateDiscomfort() },
 });
 
 export function clear_cl_Botanicals() {
-  botanicalsOptions.plant = dbID("idSel_botanicalsPlant").KadReset({ selStartValue: botanicalsOptions.plantOrig });
-  botanicalsOptions.discomfort = dbID("idSel_botanicalsDiscomfort").KadReset({ selStartValue: botanicalsOptions.discomfortOrig });
+  botanicalsOptions.plant = Sel_botanicalsPlant.KadReset({ selStartValue: botanicalsOptions.plantOrig });
+  botanicalsOptions.discomfort = Sel_botanicalsDiscomfort.KadReset({ selStartValue: botanicalsOptions.discomfortOrig });
   botanicalsPlantTable();
   botanicalsDiscomfortTable();
 }
@@ -35,12 +35,12 @@ function botanicalsPopulateDiscomfort() {
 }
 
 function botanicalsPlantChange() {
-  botanicalsOptions.plant = dbID("idSel_botanicalsPlant").KadGet();
+  botanicalsOptions.plant = Sel_botanicalsPlant.KadGet();
   botanicalsPlantTable();
 }
 
 function botanicalsDiscomfortChange() {
-  botanicalsOptions.discomfort = dbID("idSel_botanicalsDiscomfort").KadGet();
+  botanicalsOptions.discomfort = Sel_botanicalsDiscomfort.KadGet();
   botanicalsDiscomfortTable();
 }
 
@@ -51,7 +51,7 @@ function botanicalsPlantTable() {
     { data: "Wirkung", settings: { align: "center" } },
   ];
   const body = [{ data: plant.discomfort }, { data: plant.effect }];
-  KadTable.createHTMLGrid({ id: dbID("idTab_botanicalsTablePlant"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_botanicalsTablePlant", header, body });
 }
 
 function botanicalsDiscomfortTable() {
@@ -60,5 +60,5 @@ function botanicalsDiscomfortTable() {
   const cols = 2;
   const header = [{ data: "Gewürze / Kräuter", colSpan: cols, settings: { align: "center" } }];
   const body = [{ data: plantsArray, multiColumn: cols }];
-  KadTable.createHTMLGrid({ id: dbID("idTab_botanicalsTableDiscomfort"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_botanicalsTableDiscomfort", header, body });
 }

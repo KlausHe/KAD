@@ -95,11 +95,12 @@ export const globalColors = {
   },
 };
 
-initEL({ id: dbID("idSel_colorSettingsDefault"), fn: colorDefaultMode, selList: colorSettingsOptions.defaultMode.map((l) => [KadString.firstLetterCap(l), l]) });
+const Sel_colorSettingsDefault = initEL({ id: "idSel_colorSettingsDefault", fn: colorDefaultMode, selList: colorSettingsOptions.defaultMode.map((l) => [KadString.firstLetterCap(l), l]) });
+let Vin_colorSettings = [];
 for (let area of colorSettingsOptions.colorAreas) {
   for (let mode of colorSettingsOptions.modeNames) {
     initEL({
-      id: dbID(`idVin_colorSetting_${mode}_${area}`),
+      id: `idVin_colorSetting_${mode}_${area}`,
       action: "input",
       fn: colorChange,
       dataset: [
@@ -109,7 +110,7 @@ for (let area of colorSettingsOptions.colorAreas) {
       resetValue: KadColor.colAsString({ colorArray: colorSettingsOptions.modesOrig[mode][area], from: "HSL", to: "HEX" }),
     });
     initEL({
-      id: dbID(`idLbl_colorSetting_${mode}_${area}`),
+      id: `idLbl_colorSetting_${mode}_${area}`,
       action: "input",
       fn: colorChange,
       dataset: [
@@ -145,7 +146,7 @@ export const storage_cl_ColorSettings = {
     return {
       lightmode: deepClone(colorSettingsOptions.light),
       darkmode: deepClone(colorSettingsOptions.dark),
-      selectedDefaultModeIndex: dbID("idSel_colorSettingsDefault").KadGet({ index: true }),
+      selectedDefaultModeIndex: Sel_colorSettingsDefault.KadGet({ index: true }),
     };
   },
   saveData(data) {
@@ -157,7 +158,7 @@ export const storage_cl_ColorSettings = {
     }
     colorSettingsOptions.light = deepClone(data.lightmode);
     colorSettingsOptions.dark = deepClone(data.darkmode);
-    dbID("idSel_colorSettingsDefault").KadReset({ selStartIndex: data.selectedDefaultModeIndex });
+    Sel_colorSettingsDefault.KadReset({ selStartIndex: data.selectedDefaultModeIndex });
   },
   activateData() {
     colorDefaultMode();
@@ -184,7 +185,7 @@ export function colorThemeChanged() {
   }, KadCSS.getRoot({ value: "transitionTimeName" }) * 500);
 }
 function colorDefaultMode() {
-  colorSettingsOptions.selectedDefaultModeIndex = dbID("idSel_colorSettingsDefault").KadGet({ index: true });
+  colorSettingsOptions.selectedDefaultModeIndex = Sel_colorSettingsDefault.KadGet({ index: true });
   if (colorSettingsOptions.selectedDefaultModeIndex == 0) {
     globalColors.darkmodeOn = window.matchMedia("(prefers-color-scheme:dark)").matches;
   } else {

@@ -553,27 +553,30 @@ let geoObjects = {
   },
 };
 
-initEL({ id: dbID("idVin_Area_0"), fn: geoBerechnung });
-initEL({ id: dbID("idVin_Area_1"), fn: geoBerechnung });
-initEL({ id: dbID("idVin_Area_2"), fn: geoBerechnung });
-initEL({ id: dbID("idCb_geoRadius"), fn: geoChangeDiameter });
-initEL({ id: dbID("idLbl_goeRadius"), resetValue: "Radius verwenden" });
+const Vin_Area_0 = initEL({ id: "idVin_Area_0", fn: geoBerechnung });
+const Vin_Area_1 = initEL({ id: "idVin_Area_1", fn: geoBerechnung });
+const Vin_Area_2 = initEL({ id: "idVin_Area_2", fn: geoBerechnung });
+const Cb_geoRadius = initEL({ id: "idCb_geoRadius", fn: geoChangeDiameter });
+const Lbl_goeRadius = initEL({ id: "idLbl_goeRadius", resetValue: "Radius verwenden" });
 
+let Btn_GeometrieElements = [];
 for (let i = 0; i < geoObjects.elements.length; i++) {
-  initEL({
-    id: dbID(`idBtn_GeometrieElement_${i}`),
-    fn: () => changeGeoObject(i),
-    resetValue: geoObjects.elements[i],
-    dataset: ["radio", "geometrieAreaSelect"],
-    uiOpts: { uiSize: "width7" },
-  });
+  Btn_GeometrieElements.push[
+    initEL({
+      id: `idBtn_GeometrieElement_${i}`,
+      fn: () => changeGeoObject(i),
+      resetValue: geoObjects.elements[i],
+      dataset: ["radio", "geometrieAreaSelect"],
+      uiOpts: { uiSize: "width7" },
+    })
+  ];
 }
 
 export function clear_cl_Geometrie() {
-  KadInteraction.removeContextmenu(idCanv_geometire);
+  KadInteraction.removeContextmenu("idCanv_geometire");
   geoObjects.elementIndex = geoObjects.elementIndexOrig;
   changeGeoObject(geoObjects.elementIndex);
-  dbID("idCb_geoRadius").checked = false;
+  Cb_geoRadius.checked = false;
 
   let num = document.getElementsByName("naDiv_Area").length;
   for (let i = 0; i < num; i++) {
@@ -582,7 +585,7 @@ export function clear_cl_Geometrie() {
 }
 
 function geoChangeDiameter() {
-  geoObjects.radState = dbID("idCb_geoRadius").checked;
+  geoObjects.radState = Cb_geoRadius.checked;
   let num = document.getElementsByName("naDiv_Area").length;
   for (let i = 0; i < num; i++) {
     if (geoObjects.selected.vals[i]) {
@@ -637,17 +640,17 @@ function changeGeoObject(index) {
       dbID(`idVin_Area_${i}`).placeholder = "";
     }
   }
-  dbID("idCb_geoRadius").KadEnable(geoObjects.selected.cbRadiusEnable);
-  dbID("idLbl_goeRadius").KadEnable(geoObjects.selected.cbRadiusEnable);
+  Cb_geoRadius.KadEnable(geoObjects.selected.cbRadiusEnable);
+  Lbl_goeRadius.KadEnable(geoObjects.selected.cbRadiusEnable);
   geoBerechnung();
 }
 
 //---------------------------
 function geoBerechnung() {
   let selectedObj = geoObjects.selected;
-  geoObjects.valA = dbID("idVin_Area_0").KadGet({ failSafe: selectedObj.vals[0] }) * selectedObj.radiusFactor[0];
-  geoObjects.valB = dbID("idVin_Area_1").KadGet({ failSafe: selectedObj.vals[1] }) * selectedObj.radiusFactor[1];
-  geoObjects.valC = dbID("idVin_Area_2").KadGet({ failSafe: selectedObj.vals[2] }) * selectedObj.radiusFactor[2];
+  geoObjects.valA = Vin_Area_0.KadGet({ failSafe: selectedObj.vals[0] }) * selectedObj.radiusFactor[0];
+  geoObjects.valB = Vin_Area_1.KadGet({ failSafe: selectedObj.vals[1] }) * selectedObj.radiusFactor[1];
+  geoObjects.valC = Vin_Area_2.KadGet({ failSafe: selectedObj.vals[2] }) * selectedObj.radiusFactor[2];
   geometrieOptions.result[0] = KadValue.number(selectedObj.circumference, { decimals: 3 });
   geometrieOptions.result[1] = KadValue.number(selectedObj.basearea, { decimals: 3 });
   geometrieOptions.result[2] = KadValue.number(selectedObj.fullarea, { decimals: 3 });
@@ -692,5 +695,5 @@ function geoResultTable() {
 
   const body = [{ data: nameData }, { data: valueData, settings: { align: "right" } }, { data: unitsData }];
 
-  KadTable.createHTMLGrid({ id: dbID("idTab_geometrieTable"), body });
+  KadTable.createHTMLGrid({ id: "idTab_geometrieTable", body });
 }

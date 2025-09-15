@@ -1,4 +1,4 @@
-import { dbID, dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
+import { dbIDStyle, initEL, KadColor, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 import { netsaonaOptions } from "./Netsaona.js";
@@ -14,12 +14,12 @@ const kaihangaOptions = {
   colStart: 0,
 };
 
-initEL({ id: dbID("idVin_kaihangaEntry"), action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
-initEL({ id: dbID("idBtn_kaihangaEntry"), fn: kaihangaEntrySubmit });
-initEL({ id: dbID("idLbl_kaihangaResult"), resetValue: "Gewinner: ..." });
+const Vin_kaihangaEntry = initEL({ id: "idVin_kaihangaEntry", action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
+const Btn_kaihangaEntry = initEL({ id: "idBtn_kaihangaEntry", fn: kaihangaEntrySubmit });
+const Lbl_kaihangaResult = initEL({ id: "idLbl_kaihangaResult", resetValue: "Gewinner: ..." });
 
 export function clear_cl_Kaihanga() {
-  KadInteraction.removeContextmenu(dbID("idCanv_kaihanga"));
+  KadInteraction.removeContextmenu("idCanv_kaihanga");
   kaihangaOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
   kaihangaOptions.entries = [];
   kaihangaOptions.spinning = false;
@@ -29,8 +29,8 @@ export function clear_cl_Kaihanga() {
   caKA.clear();
   kaihangaCreateRandomSet();
   kaihangaUpdate();
-  dbID("idVin_kaihangaEntry").KadReset();
-  dbID("idLbl_kaihangaResult").KadReset();
+  Vin_kaihangaEntry.KadReset();
+  Lbl_kaihangaResult.KadReset();
   // dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
   dbIDStyle("idCanv_kaihanga").cursor = "pointer";
 }
@@ -42,7 +42,7 @@ export function canvas_cl_Kaihanga() {
 
 function kaihangaResult(winner) {
   kaihangaOptions.spinning = false;
-  dbID("idLbl_kaihangaResult").textContent = "Gewinner: " + winner.text;
+  Lbl_kaihangaResult.KadSetText(`Gewinner: ${winner.text}`);
 }
 
 function kaihangaClearRow(index) {
@@ -51,7 +51,7 @@ function kaihangaClearRow(index) {
 }
 
 function kaihangaEntrySubmit() {
-  const value = dbID("idVin_kaihangaEntry").KadGet();
+  const value = Vin_kaihangaEntry.KadGet();
   if (value == "") return;
   kaihangaAddOption(value);
 }
@@ -59,7 +59,7 @@ function kaihangaEntrySubmit() {
 function kaihangaAddOption(value) {
   if (kaihangaOptions.spinning) return;
   kaihangaOptions.entries.push(value);
-  dbID("idVin_kaihangaEntry").value = "";
+  Vin_kaihangaEntry.value = "";
   kaihangaUpdate();
 }
 
@@ -115,7 +115,7 @@ function kaihangaStart() {
 
 function kaihangaUpdate() {
   if (kaihangaOptions.spinning) return;
-  dbID("idLbl_kaihangaResult").innerHTML = "Gewinner: ...";
+  Lbl_kaihangaResult.KadSetText("Gewinner: ...");
   dbIDStyle("idLbl_kaihangaResult").backgroundColor = "";
   dbIDStyle("idLbl_kaihangaResult").color = "";
   kaihangaWheelUpdate();
@@ -126,7 +126,7 @@ function kaihangaUpdate() {
   // kaihangaOptions.entries.map(item => ({data: item }))
   // ]
 
-  // KadTable.createHTMLGrid({ id: dbID("idTab_kaihangaTable"),  body });
+  // KadTable.createHTMLGrid({ id: "idTab_kaihangaTable",  body });
 
   // return;
   KadTable.clear("idTabBody_Kaihanga");

@@ -4,7 +4,7 @@
 
 import { Data_GetCountriesByProperty, Data_GetReducedCountryList } from "../KadData/KadData_Countries.js";
 import { Data_CountryOutlines } from "../KadData/KadData_CountryBoundaries.js";
-import { dbID, initEL, KadArray, KadInteraction, KadLog, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadArray, KadInteraction, KadLog, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -123,37 +123,37 @@ const kontourOptions = {
   },
 };
 
-initEL({ id: dbID("idBtn_kontourStart"), fn: kontourStart, resetValue: "Start" });
-initEL({ id: dbID("idCb_kontourBorders"), fn: kontourBorders, resetValue: true });
-initEL({
-  id: dbID("idSel_kontourProjection"),
+const Btn_kontourStart = initEL({ id: "idBtn_kontourStart", fn: kontourStart, resetValue: "Start" });
+const Cb_kontourBorders = initEL({ id: "idCb_kontourBorders", fn: kontourBorders, resetValue: true });
+const Sel_kontourProjection = initEL({
+  id: "idSel_kontourProjection",
   fn: kontourProjection,
   selStartIndex: 1,
   selList: kontourOptions.projections.map((item, index) => [item.name, index]),
 });
-initEL({
-  id: dbID("idSel_kontourQuestionSet"),
+const Sel_kontourQuestionSet = initEL({
+  id: "idSel_kontourQuestionSet",
   fn: kontourQuestionSet,
   selStartIndex: 1,
   selList: Object.keys(kontourOptions.questionSets).map((item) => [item]),
 });
-initEL({
-  id: dbID("idVin_kontourInput"),
+const Vin_kontourInput = initEL({
+  id: "idVin_kontourInput",
   action: "change",
   fn: kontourInput,
   resetValue: "Guess the Country",
   dbList: kontourOptions.nameList.map((item) => item.nameDECommon).sort(),
 });
-initEL({ id: dbID("idLbl_kontourStreak") });
+const Lbl_kontourStreak = initEL({ id: "idLbl_kontourStreak" });
 
 export function clear_cl_Kontour() {
   kontourOptions.gameRunning = false;
-  dbID("idVin_kontourInput").KadReset();
-  kontourOptions.bordersActive = dbID("idCb_kontourBorders").KadReset();
-  kontourOptions.projectionIndex = dbID("idSel_kontourProjection").KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.projections) });
-  dbID("idSel_kontourQuestionSet").KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.questionSets) });
+  Vin_kontourInput.KadReset();
+  kontourOptions.bordersActive = Cb_kontourBorders.KadReset();
+  kontourOptions.projectionIndex = Sel_kontourProjection.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.projections) });
+  Sel_kontourQuestionSet.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.questionSets) });
   kontourRestart();
-  KadInteraction.removeContextmenu(idCanv_kontour);
+  KadInteraction.removeContextmenu("idCanv_kontour");
 }
 
 function limitLatitude(lat) {
@@ -179,10 +179,10 @@ function kontourRestart() {
   kontourEnableInputs();
   kontourOptions.streak = 0;
   kontourOptions.points = 0;
-  dbID("idVin_kontourInput").KadReset();
-  kontourOptions.bordersActive = dbID("idCb_kontourBorders").KadGet();
-  kontourOptions.projectionIndex = dbID("idSel_kontourProjection").KadGet();
-  const questionSetsName = dbID("idSel_kontourQuestionSet").KadGet({ textContent: true });
+  Vin_kontourInput.KadReset();
+  kontourOptions.bordersActive = Cb_kontourBorders.KadGet();
+  kontourOptions.projectionIndex = Sel_kontourProjection.KadGet();
+  const questionSetsName = Sel_kontourQuestionSet.KadGet({ textContent: true });
   kontourOptions.currentQuestionset = kontourOptions.questionSets[questionSetsName];
   kontourOptions.availableCCA3List = KadRandom.shuffleData(kontourOptions.currentQuestionset.map((item) => item.cca3));
   kontourOptions.current = null;
@@ -191,10 +191,10 @@ function kontourRestart() {
 
 function kontourEnableInputs() {
   const state = !kontourOptions.gameRunning;
-  dbID("idBtn_kontourStart").textContent = state ? "Start" : "Stop";
-  dbID("idCb_kontourBorders").KadEnable(state);
-  dbID("idSel_kontourProjection").KadEnable(state);
-  dbID("idSel_kontourQuestionSet").KadEnable(state);
+  Btn_kontourStart.textContent = state ? "Start" : "Stop";
+  Cb_kontourBorders.KadEnable(state);
+  Sel_kontourProjection.KadEnable(state);
+  Sel_kontourQuestionSet.KadEnable(state);
 }
 
 function kontourStart() {
@@ -207,7 +207,7 @@ function kontourStart() {
 }
 
 function kontourBorders() {
-  kontourOptions.bordersActive = dbID("idCb_kontourBorders").KadGet();
+  kontourOptions.bordersActive = Cb_kontourBorders.KadGet();
   caKO.redraw();
   if (kontourOptions.current != null) {
     kontourDrawCloseup();
@@ -215,13 +215,13 @@ function kontourBorders() {
 }
 
 function kontourProjection() {
-  kontourOptions.projectionIndex = dbID("idSel_kontourProjection").KadGet();
+  kontourOptions.projectionIndex = Sel_kontourProjection.KadGet();
   canvas_cl_Kontour();
   caKO.redraw();
 }
 
 function kontourQuestionSet() {
-  const objName = dbID("idSel_kontourQuestionSet").KadGet({ textContent: true });
+  const objName = Sel_kontourQuestionSet.KadGet({ textContent: true });
   kontourOptions.currentQuestionset = kontourOptions.questionSets[objName];
 }
 
@@ -236,8 +236,8 @@ function kontourGetNewCountry() {
 
 function kontourInput() {
   if (kontourOptions.current == null) return;
-  const input = dbID("idVin_kontourInput").KadGet();
-  dbID("idVin_kontourInput").KadReset({ resetValue: input });
+  const input = Vin_kontourInput.KadGet();
+  Vin_kontourInput.KadReset({ resetValue: input });
 
   const obj = kontourOptions.nameList.find((item) => item.nameDECommon.toLowerCase() == input.toLowerCase());
   if (obj == undefined) return;
@@ -262,11 +262,11 @@ function kontourInput() {
 
 function kontourUpdateOutput() {
   const lives = ["III", "II", "I"];
-  dbID("idLbl_kontourStreak").KadSetHTML(`Punkte: ${kontourOptions.points}<br>Versuche: ${lives[kontourOptions.guessCount]}`);
+  Lbl_kontourStreak.KadSetHTML(`Punkte: ${kontourOptions.points}<br>Versuche: ${lives[kontourOptions.guessCount]}`);
 }
 
 function kontourGameOver() {
-  dbID("idLbl_kontourStreak").KadSetHTML(`Game Over!<br>Punkte: ${kontourOptions.points}`);
+  Lbl_kontourStreak.KadSetHTML(`Game Over!<br>Punkte: ${kontourOptions.points}`);
   kontourOptions.guessCount = 0;
   const obj = kontourOptions.nameList.find((item) => item.cca3 == kontourOptions.current);
   caKO.textAlign(caKO.CENTER, caKO.CENTER);
@@ -279,7 +279,7 @@ function kontourGameOver() {
 }
 
 function kontourGameWon() {
-  dbID("idLbl_kontourStreak").KadSetHTML(`Finished!<br>Punkte: ${kontourOptions.points}`);
+  Lbl_kontourStreak.KadSetHTML(`Finished!<br>Punkte: ${kontourOptions.points}`);
   caKO.textAlign(caKO.CENTER, caKO.CENTER);
   caKO.stroke(0);
   caKO.strokeWeight(1);

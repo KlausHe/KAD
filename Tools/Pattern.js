@@ -1,4 +1,4 @@
-import { dbID, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 const patternOptions = {
@@ -23,25 +23,25 @@ const patternOptions = {
   },
 };
 
-initEL({ id: dbID("idVin_patternLength"), fn: patternSize, resetValue: 300 });
-initEL({ id: dbID("idVin_patternSides"), fn: patternSide, resetValue: 20 });
-initEL({ id: dbID("idVin_patternAsymetry"), fn: patternAsym, resetValue: 0 });
-initEL({ id: dbID("idVin_patternHoleCount"), fn: patternHoles, resetValue: 3, domOpts: { min: 2 } });
+const Vin_patternLength = initEL({ id: "idVin_patternLength", fn: patternSize, resetValue: 300 });
+const Vin_patternSides = initEL({ id: "idVin_patternSides", fn: patternSide, resetValue: 20 });
+const Vin_patternAsymetry = initEL({ id: "idVin_patternAsymetry", fn: patternAsym, resetValue: 0 });
+const Vin_patternHoleCount = initEL({ id: "idVin_patternHoleCount", fn: patternHoles, resetValue: 3, domOpts: { min: 2 } });
 
-initEL({ id: dbID("idBtn_patternProposedHoleCount"), fn: patternProp });
+const Btn_patternProposedHoleCount = initEL({ id: "idBtn_patternProposedHoleCount", fn: patternProp });
 
-initEL({ id: dbID("idLbl_patternLength"), resetValue: patternOptions.names[0] });
-initEL({ id: dbID("idLbl_patternSides"), resetValue: patternOptions.names[1] });
-initEL({ id: dbID("idLbl_patternAsymetry"), resetValue: patternOptions.names[2] });
-initEL({ id: dbID("idLbl_patternHoleCount"), resetValue: patternOptions.names[3] });
-initEL({ id: dbID("idLbl_patternProposedHoleCount"), resetValue: patternOptions.names[4] });
+const Lbl_patternLength = initEL({ id: "idLbl_patternLength", resetValue: patternOptions.names[0] });
+const Lbl_patternSides = initEL({ id: "idLbl_patternSides", resetValue: patternOptions.names[1] });
+const Lbl_patternAsymetry = initEL({ id: "idLbl_patternAsymetry", resetValue: patternOptions.names[2] });
+const Lbl_patternHoleCount = initEL({ id: "idLbl_patternHoleCount", resetValue: patternOptions.names[3] });
+const Lbl_patternProposedHoleCount = initEL({ id: "idLbl_patternProposedHoleCount", resetValue: patternOptions.names[4] });
 
 export function clear_cl_Pattern() {
-  KadInteraction.removeContextmenu(dbID("idCanv_pattern"));
-  patternOptions.size = dbID("idVin_patternLength").KadReset();
-  patternOptions.side = dbID("idVin_patternSides").KadReset();
-  patternOptions.asym = dbID("idVin_patternAsymetry").KadReset();
-  patternOptions.holes = dbID("idVin_patternHoleCount").KadReset();
+  KadInteraction.removeContextmenu("idCanv_pattern");
+  patternOptions.size = Vin_patternLength.KadReset();
+  patternOptions.side = Vin_patternSides.KadReset();
+  patternOptions.asym = Vin_patternAsymetry.KadReset();
+  patternOptions.holes = Vin_patternHoleCount.KadReset();
 
   calcPattern();
 }
@@ -100,24 +100,24 @@ export function canvas_cl_Pattern() {
 }
 
 function patternSize() {
-  patternOptions.size = dbID("idVin_patternLength").KadGet();
+  patternOptions.size = Vin_patternLength.KadGet();
   calcPattern();
 }
 function patternSide() {
-  patternOptions.side = dbID("idVin_patternSides").KadGet();
+  patternOptions.side = Vin_patternSides.KadGet();
   calcPattern();
 }
 function patternAsym() {
-  patternOptions.asym = dbID("idVin_patternAsymetry").KadGet();
+  patternOptions.asym = Vin_patternAsymetry.KadGet();
   calcPattern();
 }
 function patternHoles() {
-  patternOptions.holes = dbID("idVin_patternHoleCount").KadGet();
+  patternOptions.holes = Vin_patternHoleCount.KadGet();
   calcPattern();
 }
 function patternProp() {
   patternOptions.holes = patternOptions.propHoles;
-  dbID("idVin_patternHoleCount").KadSetValue(patternOptions.propHoles);
+  Vin_patternHoleCount.KadSetValue(patternOptions.propHoles);
   calcPattern();
 }
 
@@ -125,7 +125,7 @@ function calcPattern() {
   if (patternOptions.size == 0) return;
   let side = patternOptions.side;
   const sizeToSmallForSides = patternOptions.size <= 2 * patternOptions.side;
-  dbID("idVin_patternSides").KadEnable(!sizeToSmallForSides);
+  Vin_patternSides.KadEnable(!sizeToSmallForSides);
   if (sizeToSmallForSides) {
     side = 0;
   }
@@ -159,7 +159,7 @@ function calcPattern() {
 
   // redraw / show porposed holeCount
   caPA.redraw();
-  dbID("idBtn_patternProposedHoleCount").KadSetText(`${patternOptions.propHoles} Punkte`);
+  Btn_patternProposedHoleCount.KadSetText(`${patternOptions.propHoles} Punkte`);
 }
 
 function patternPoint(pos, weight, diameter) {

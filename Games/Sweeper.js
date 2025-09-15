@@ -14,15 +14,15 @@ const sweeperOptions = {
   cells: [],
 };
 
-initEL({ id: dbID("idBtn_startSweeper"), fn: sweeperStart });
-initEL({ id: dbID("idVin_sweeperGrid"), fn: sweeperGridChange, resetValue: sweeperOptions.gridSizeOrig });
-initEL({ id: dbID("idVin_sweeperSweeps"), fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
+const Btn_startSweeper = initEL({ id: "idBtn_startSweeper", fn: sweeperStart });
+const Vin_sweeperGrid = initEL({ id: "idVin_sweeperGrid", fn: sweeperGridChange, resetValue: sweeperOptions.gridSizeOrig });
+const Vin_sweeperSweeps = initEL({ id: "idVin_sweeperSweeps", fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
 
 export function clear_cl_Sweeper() {
-  KadInteraction.removeContextmenu(dbID("idCanv_sweeper"));
+  KadInteraction.removeContextmenu("idCanv_sweeper");
   sweeperOptions.cells = [];
-  sweeperOptions.gridSize = dbID("idVin_sweeperGrid").KadReset();
-  sweeperOptions.sweepCells = dbID("idVin_sweeperSweeps").KadReset();
+  sweeperOptions.gridSize = Vin_sweeperGrid.KadReset();
+  sweeperOptions.sweepCells = Vin_sweeperSweeps.KadReset();
   sweeperStartOver();
 }
 export function canvas_cl_Sweeper() {

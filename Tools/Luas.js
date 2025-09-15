@@ -21,10 +21,10 @@ const luasOptions = {
   lastFramecount: 0,
 };
 
-initEL({ id: dbID("idVin_luasVelAngular"), fn: luasInputChange, resetValue: 10 });
-initEL({ id: dbID("idVin_luasDiameter"), fn: luasInputChange, resetValue: 10 });
-initEL({
-  id: dbID("idSel_luasAngularUnit"),
+const Vin_luasVelAngular = initEL({ id: "idVin_luasVelAngular", fn: luasInputChange, resetValue: 10 });
+const Vin_luasDiameter = initEL({ id: "idVin_luasDiameter", fn: luasInputChange, resetValue: 10 });
+const Sel_luasAngularUnit = initEL({
+  id: "idSel_luasAngularUnit",
   fn: luasInputChange,
   selList: [
     ["U/s", 1],
@@ -32,21 +32,22 @@ initEL({
   ],
   selStartIndex: 1,
 });
-initEL({
-  id: dbID("idSel_luasLinearUnit"),
+const Sel_luasLinearUnit = initEL({
+  id: "idSel_luasLinearUnit",
   fn: luasInputChange,
   selList: ["mm", "cm", "dm", "m", "km"],
 });
-initEL({ id: dbID("idBtn_luasChangeDirection"), fn: luasChangeDirection });
-initEL({ id: dbID("idBtn_luasChecker"), fn: luasStart });
+const Btn_luasChangeDirection = initEL({ id: "idBtn_luasChangeDirection", fn: luasChangeDirection });
+const Btn_luasChecker = initEL({ id: "idBtn_luasChecker", fn: luasStart });
+const Lbl_luasResult = initEL({ id: "idLbl_luasResult" });
 //Canvas Stuff
 export function clear_cl_Luas() {
-  KadInteraction.removeContextmenu(dbID("idCanv_luas"));
-  dbID("idVin_luasVelAngular").KadReset();
-  dbID("idVin_luasDiameter").KadReset();
+  KadInteraction.removeContextmenu("idCanv_luas");
+  Vin_luasVelAngular.KadReset();
+  Vin_luasDiameter.KadReset();
 
-  dbID("idSel_luasAngularUnit").KadReset();
-  dbID("idSel_luasLinearUnit").KadReset();
+  Sel_luasAngularUnit.KadReset();
+  Sel_luasLinearUnit.KadReset();
 
   luasInputChange();
   luasOptions.radius = luasOptions.canvas.w * 0.5 * 0.9;
@@ -112,14 +113,14 @@ function luasStart() {
 }
 
 function luasInputChange() {
-  luasOptions.speedVin = dbID("idVin_luasVelAngular").KadGet();
-  luasOptions.diameterVin = dbID("idVin_luasDiameter").KadGet();
-  luasOptions.angularVin = dbID("idSel_luasAngularUnit").KadGet();
-  luasOptions.angularText = dbID("idSel_luasAngularUnit")[dbID("idSel_luasAngularUnit").selectedIndex].text;
-  luasOptions.linearText = dbID("idSel_luasLinearUnit")[dbID("idSel_luasLinearUnit").selectedIndex].text;
+  luasOptions.speedVin = Vin_luasVelAngular.KadGet();
+  luasOptions.diameterVin = Vin_luasDiameter.KadGet();
+  luasOptions.angularVin = Sel_luasAngularUnit.KadGet();
+  luasOptions.angularText = Sel_luasAngularUnit[Sel_luasAngularUnit.selectedIndex].text;
+  luasOptions.linearText = Sel_luasLinearUnit[Sel_luasLinearUnit.selectedIndex].text;
   luasOptions.speedAngular = (luasOptions.speedVin * 360) / luasOptions.angularVin;
   luasOptions.speedLinear = luasOptions.speedVin * Math.PI * luasOptions.diameterVin;
-  dbID("idLbl_luasResult").innerHTML = `Linear: ${KadValue.number(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.angularText.replace("U", luasOptions.linearText)}`;
+  Lbl_luasResult.KadSetHTML(`Linear: ${KadValue.number(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.angularText.replace("U", luasOptions.linearText)}`);
 }
 
 function luasChangeDirection() {

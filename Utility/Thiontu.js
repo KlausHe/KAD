@@ -199,19 +199,17 @@ const thiontuData = {
   },
 };
 
-initEL({ id: dbID("idArea_thiontuInputEntry"), fn: thiontuUpdate, resetValue: "Type text to convert" });
-initEL({ id: dbID("idArea_thiontuOutputArea"), resetValue: "~~~~~~~~~~~" });
+const Area_thiontuInputEntry = initEL({ id: "idArea_thiontuInputEntry", fn: thiontuUpdate, resetValue: "Type text to convert" });
+const Area_thiontuOutputArea = initEL({ id: "idArea_thiontuOutputArea", resetValue: "~~~~~~~~~~~" });
 
 export function clear_cl_Thiontu() {
-  dbID("idArea_thiontuInputEntry").KadReset();
-  dbID("idArea_thiontuOutputArea").KadReset();
+  Area_thiontuInputEntry.KadReset();
+  Area_thiontuOutputArea.KadReset();
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
   for (let i = 0; i < clBtn.length; i++) {
     const btn = dbID(clBtn[i]);
     btn.id = `idBtn_thiontuToText_${Object.keys(thiontuData.opts)[i]}`;
-    initEL({ id: clBtn[i], fn: thiontuOptionChange, resetValue: Object.values(thiontuData.opts)[i].btnName, dataset: ["radio", "thiontuOption"] });
-    // btn.KadEnable(true);
-    // btn.KadButtonColor();
+    initEL({ id: btn.id, fn: thiontuOptionChange, resetValue: Object.values(thiontuData.opts)[i].btnName, dataset: ["radio", "thiontuOption"] });
     btn.value = Object.keys(thiontuData.opts)[i];
   }
 
@@ -226,8 +224,8 @@ function thiontuOptionChange(obj) {
 }
 
 function thiontuUpdate() {
-  thiontuData.inputRaw = dbID("idArea_thiontuInputEntry").KadGet();
-  thiontuData.input = dbID("idArea_thiontuInputEntry").KadGet();
+  thiontuData.inputRaw = Area_thiontuInputEntry.KadGet();
+  thiontuData.input = Area_thiontuInputEntry.KadGet();
 
   //check text and disable buttons if input is not valid for them
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
@@ -240,5 +238,5 @@ function thiontuUpdate() {
     clBtn[0].KadRadioColor();
     thiontuData.selected = clBtn[0].value;
   }
-  dbID("idArea_thiontuOutputArea").value = thiontuData.input == "" || thiontuData.input == 0 ? "" : thiontuData.opts[thiontuData.selected].func;
+  Area_thiontuOutputArea.value = thiontuData.input == "" || thiontuData.input == 0 ? "" : thiontuData.opts[thiontuData.selected].func;
 }

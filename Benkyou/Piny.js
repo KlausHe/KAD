@@ -1,14 +1,14 @@
 import { Data_Country_CodesIso3166, Data_Country_Descriptions } from "../KadData/KadData_Countries.js";
-import { dbID, initEL, KadArray, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadArray, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 
-initEL({
-  id: dbID("idSel_pinyCountry"),
+const Sel_pinyCountry = initEL({
+  id: "idSel_pinyCountry",
   fn: pinyCreateCountryData,
   selList: Data_Country_CodesIso3166.map((obj, index) => [obj.nameDECommon, index]).sort(),
   selStartIndex: KadRandom.randomIndex(Data_Country_CodesIso3166.length),
 });
-initEL({
-  id: dbID("idSel_pinyField"),
+const Sel_pinyField = initEL({
+  id: "idSel_pinyField",
   fn: pinyCreateFieldData,
   selStartIndex: 0,
 });
@@ -21,14 +21,15 @@ const pinyOptions = {
 
 export function clear_cl_Piny() {
   pinyOptions.countryData = Data_Country_CodesIso3166;
-  dbID("idSel_pinyCountry").KadReset();
-  dbID("idSel_pinyField").KadReset({ selList: Object.keys(pinyFieldOptions).map((item) => [Data_Country_Descriptions[item], item]) });
+  Sel_pinyCountry.KadReset();
+  Sel_pinyField.KadReset({ selList: Object.keys(pinyFieldOptions).map((item) => [Data_Country_Descriptions[item], item]) });
+  KadTable.createHTMLGrid({ id: "idTab_pinyTable" });
   pinyCreateCountryData();
 }
 
 const uiSize = "width10";
 function pinyCreateCountryData() {
-  const countryIndex = dbID("idSel_pinyCountry").KadGet();
+  const countryIndex = Sel_pinyCountry.KadGet();
   const country = Data_Country_CodesIso3166[countryIndex];
   const header = [
     { data: "Eigenschaft", settings: { uiSize } },
@@ -38,11 +39,11 @@ function pinyCreateCountryData() {
     { data: Object.keys(pinyFieldOptions).map((obj) => Data_Country_Descriptions[obj]), settings: { uiSize } },
     { data: Object.keys(pinyFieldOptions).map((obj) => pinyFieldOptions[obj](country)), settings: { uiSize } },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_pinyTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_pinyTable", header, body });
 }
 
 function pinyCreateFieldData() {
-  pinyOptions.fieldName = dbID("idSel_pinyField").KadGet({ content: true });
+  pinyOptions.fieldName = Sel_pinyField.KadGet({ content: true });
 
   const sortedCountries = KadArray.sortArrayByKey({
     array: Data_Country_CodesIso3166,
@@ -58,7 +59,7 @@ function pinyCreateFieldData() {
     { data: sortedCountries.map((item) => item.nameDE), settings: { uiSize } },
     { data: sortedCountries.map((item) => pinyFieldOptions[pinyOptions.fieldName](item)), settings: { uiSize } },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_pinyTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_pinyTable", header, body });
 }
 
 const pinyFieldOptions = {

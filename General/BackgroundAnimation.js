@@ -2,9 +2,9 @@ import { contentLayout, navClick } from "../General/Layout.js";
 import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
-initEL({ id: dbID("idDiv_bgaToggle"), fn: bgaToggle });
-initEL({ id: dbID("idSel_bgaSelect"), fn: bgaSelectAnimation, selList: [1], selStartIndex: 0 });
-initEL({ id: dbID("idDiv_bgaClearGrid"), fn: bgaClearGrid });
+const Div_bgaToggle = initEL({ id: "idDiv_bgaToggle", fn: bgaToggle });
+const Sel_bgaSelect = initEL({ id: "idSel_bgaSelect", fn: bgaSelectAnimation, selList: [1], selStartIndex: 0 });
+const Div_bgaClearGrid = initEL({ id: "idDiv_bgaClearGrid", fn: bgaClearGrid });
 
 export const bgaOptions = {
   curr: 0,
@@ -19,7 +19,7 @@ export const bgaOptions = {
 
 export function clear_cl_BackgroundAnimation() {
   bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new Truchet(), new GameOfLife(), new PongAI()]; //new Cursordot(), new Trail(),
-  bgaOptions.curr = dbID("idSel_bgaSelect").KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name), selStartIndex: KadRandom.randomIndex(bgaOptions.animations) });
+  bgaOptions.curr = Sel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name), selStartIndex: KadRandom.randomIndex(bgaOptions.animations) });
 }
 
 export function canvas_cl_BackgroundAnimation() {
@@ -74,7 +74,7 @@ function bgaToggle() {
 }
 
 function bgaSelectAnimation() {
-  bgaOptions.curr = dbID("idSel_bgaSelect").selectedIndex;
+  bgaOptions.curr = Sel_bgaSelect.selectedIndex;
   bgaClearBackground();
   bgaStopp();
 }

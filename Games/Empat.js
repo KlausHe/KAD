@@ -1,4 +1,4 @@
-import { dbID, initEL, KadArray, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadArray, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
@@ -30,13 +30,13 @@ const empatOptions = {
   ],
 };
 
-initEL({ id: dbID("idBtn_empatStart"), fn: empatStartChange, btnCallbacks: empatOptions.startCallbacks });
-initEL({ id: dbID("idCanv_empat"), fn: empatKeyPushed });
+const Btn_empatStart = initEL({ id: "idBtn_empatStart", fn: empatStartChange, btnCallbacks: empatOptions.startCallbacks });
+const Canv_empat = initEL({ id: "idCanv_empat", fn: empatKeyPushed });
 
 export function clear_cl_Empat() {
-  KadInteraction.removeContextmenu(dbID("idCanv_empat"));
-  KadInteraction.unfocus(dbID("idCanv_empat"), caEM);
-  empatOptions.playing = dbID("idBtn_empatStart").KadReset();
+  KadInteraction.removeContextmenu("idCanv_empat");
+  KadInteraction.unfocus("idCanv_empat", caEM);
+  empatOptions.playing = Btn_empatStart.KadReset();
   empatReset();
 }
 
@@ -72,11 +72,11 @@ function empatStartChange() {
 function empatStart() {
   empatOptions.won = false;
   caEM.loop();
-  KadInteraction.focus(dbID("idCanv_empat"));
+  KadInteraction.focus(Canv_empat);
 }
 function empatStop() {
   empatOptions.won = false;
-  KadInteraction.unfocus(dbID("idCanv_empat"), caEM);
+  KadInteraction.unfocus(Canv_empat, caEM);
 }
 
 const caEM = new p5((c) => {
@@ -173,7 +173,7 @@ function empatFinished() {
     caEM.stroke(empatOptions.players[empatOptions.curPlayer].color);
     caEM.line(empatOptions.winCells[0].x, empatOptions.winCells[0].y, empatOptions.winCells[1].x, empatOptions.winCells[1].y);
   }, 50);
-  KadInteraction.unfocus(dbID("idCanv_empat"));
+  KadInteraction.unfocus(Canv_empat);
   timeoutCanvasFinished(caEM, {
     textTop: `Player \"${empatOptions.players[empatOptions.curPlayer].name}\" won`,
     textBottom: `in round ${Math.floor(empatOptions.turns / 2) + 1}!`,

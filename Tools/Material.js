@@ -9,32 +9,32 @@ export const materialOptions = {
   matList: [],
   filterList: [],
   get headerList() {
-    return dbID("idCb_materialListFilter").checked ? [...storage_cl_MaterialFilterSettings.getData()] : Object.keys(Data_Materials.metadata);
+    return Cb_materialListFilter.checked ? [...storage_cl_MaterialFilterSettings.getData()] : Object.keys(Data_Materials.metadata);
   },
   optGroup: null,
   selMatGroup: "all",
 };
 
-initEL({ id: dbID("idCb_materialListFilter"), fn: materialPropertyfilter, resetValue: true });
-initEL({ id: dbID("idVin_materialFilter"), fn: materialSearchInput, resetValue: "Material suchen" });
-initEL({
-  id: dbID("idSel_materialFilter"),
+const Cb_materialListFilter = initEL({ id: "idCb_materialListFilter", fn: materialPropertyfilter, resetValue: true });
+const Vin_materialFilter = initEL({ id: "idVin_materialFilter", fn: materialSearchInput, resetValue: "Material suchen" });
+const Sel_materialFilter = initEL({
+  id: "idSel_materialFilter",
   fn: materialSearchSelectChange,
 });
-initEL({ id: dbID("idBtn_materialSelectClose"), fn: materialCloseMaterialSelect });
+const Btn_materialSelectClose = initEL({ id: "idBtn_materialSelectClose", fn: materialCloseMaterialSelect });
 
 export function clear_cl_Material() {
   materialOptions.matList = materialOptions.matListOrig;
   materialOptions.filterList = Object.keys(Data_Materials.Materials);
   materialFilterOptions.select = [...materialFilterOptions.listOrig];
-  dbID("idSel_materialFilter").KadReset({
+  Sel_materialFilter.KadReset({
     selGroup: {
       "Alle Werkstoffe": [["Alle Werkstoffe", "all"], ...Array.from(new Set(Object.values(Data_Materials.Materials).map((mat) => mat.matGroup))).map((mat) => [mat, mat])],
     },
     selStartIndex: 0,
   });
-  dbID("idVin_materialFilter").KadReset();
-  dbID("idCb_materialListFilter").KadReset();
+  Vin_materialFilter.KadReset();
+  Cb_materialListFilter.KadReset();
 
   materialSelectedTable();
   materialToggleSearch();
@@ -105,7 +105,7 @@ export function materialSelectedTable() {
     ...bodyData.map((item) => ({ data: item.map((mat) => mat), settings: settingsRight })),
     { skip: true, settings: { noBorder: "bottom" } },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_materialTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_materialTable", header, body });
   geoUpdateMassDependencies();
 }
 
@@ -115,13 +115,13 @@ function geoUpdateMassDependencies() {
 }
 
 function materialSearchSelectChange() {
-  materialOptions.selMatGroup = dbID("idSel_materialFilter").KadGet();
+  materialOptions.selMatGroup = Sel_materialFilter.KadGet();
   materialSearchInput();
 }
 
 function materialSearchInput() {
   materialOptions.filterList = [];
-  let val = dbID("idVin_materialFilter").KadGet().toLowerCase();
+  let val = Vin_materialFilter.KadGet().toLowerCase();
   let search = val.split(/[*^\s]/g);
   for (const [key, value] of Object.entries(Data_Materials.Materials)) {
     if (materialOptions.selMatGroup == "all" || value.matGroup == materialOptions.selMatGroup) {

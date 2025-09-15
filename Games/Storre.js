@@ -21,24 +21,25 @@ const storreOptions = {
   },
 };
 
-initEL({ id: dbID("idBtn_storreStartArea"), fn: storreStartArea, dataset: ["radio", "storreType"] });
-initEL({ id: dbID("idBtn_storreStartPopulation"), fn: storreStartPopulation, dataset: ["radio", "storreType"] });
-initEL({ id: dbID("idBtn_storreQuestionA"), fn: storreQuestion, dataset: ["set", "A"] });
-initEL({ id: dbID("idBtn_storreQuestionB"), fn: storreQuestion, dataset: ["set", "B"] });
-initEL({ id: dbID("idLbl_storreAnswerA") });
-initEL({ id: dbID("idLbl_storreAnswerB") });
+const Btn_storreStartArea = initEL({ id: "idBtn_storreStartArea", fn: storreStartArea, dataset: ["radio", "storreType"] });
+const Btn_storreStartPopulation = initEL({ id: "idBtn_storreStartPopulation", fn: storreStartPopulation, dataset: ["radio", "storreType"] });
+const Btn_storreQuestionA = initEL({ id: "idBtn_storreQuestionA", fn: storreQuestion, dataset: ["set", "A"] });
+const Btn_storreQuestionB = initEL({ id: "idBtn_storreQuestionB", fn: storreQuestion, dataset: ["set", "B"] });
+const Lbl_storreAnswerA = initEL({ id: "idLbl_storreAnswerA" });
+const Lbl_storreAnswerB = initEL({ id: "idLbl_storreAnswerB" });
+const Lbl_storreStreak = initEL({ id: "idLbl_storreStreak" });
 
 export function clear_cl_Storre() {
-  dbID("idBtn_storreQuestionA").KadEnable(false);
-  dbID("idBtn_storreQuestionB").KadEnable(false);
+  Btn_storreQuestionA.KadEnable(false);
+  Btn_storreQuestionB.KadEnable(false);
   storreReset();
 }
 
 function storreReset() {
   storreOptions.streak = 0;
   storreUpdateStreak();
-  dbID("idBtn_storreQuestionA").KadReset({ resetValue: "..." });
-  dbID("idBtn_storreQuestionB").KadReset({ resetValue: "..." });
+  Btn_storreQuestionA.KadReset({ resetValue: "..." });
+  Btn_storreQuestionB.KadReset({ resetValue: "..." });
   storreShowAnswers(true);
 }
 
@@ -55,8 +56,8 @@ function storreStartPopulation() {
 }
 
 async function storreGetData() {
-  dbID("idBtn_storreQuestionA").KadEnable(true);
-  dbID("idBtn_storreQuestionB").KadEnable(true);
+  Btn_storreQuestionA.KadEnable(true);
+  Btn_storreQuestionB.KadEnable(true);
   storreOptions.data = KadRandom.shuffleData(storreOptions.data);
   storreDisplayQuestions();
 }
@@ -66,8 +67,8 @@ function storreDisplayQuestions() {
   const valA = storreOptions.data[storreOptions.streak + offsetA].nameDECommon;
   const offsetB = storreOptions.streak % 2 == 0 ? 1 : 0;
   const valB = storreOptions.data[storreOptions.streak + offsetB].nameDECommon;
-  dbID("idBtn_storreQuestionA").KadReset({ resetValue: valA });
-  dbID("idBtn_storreQuestionB").KadReset({ resetValue: valB });
+  Btn_storreQuestionA.KadReset({ resetValue: valA });
+  Btn_storreQuestionB.KadReset({ resetValue: valB });
 }
 
 function storreQuestion(obj) {
@@ -84,8 +85,8 @@ function storreQuestion(obj) {
       dbID(`idBtn_storreQuestion${set}`).KadButtonColor("negative");
       storreUpdateStreak(true);
       storreShowAnswers();
-      dbID("idBtn_storreStartArea").KadButtonColor(null);
-      dbID("idBtn_storreStartPopulation").KadButtonColor(null);
+      Btn_storreStartArea.KadButtonColor(null);
+      Btn_storreStartPopulation.KadButtonColor(null);
       return;
     }
     dbID(`idBtn_storreQuestion${set}`).KadButtonColor("positive");
@@ -98,15 +99,15 @@ function storreQuestion(obj) {
 
 function storreShowAnswers(clear = false) {
   const unit = storreOptions.dataType == "area" ? "km<sup>2</sup>" : " E";
-  dbID("idLbl_storreAnswerA").KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataA, { indicator: true }) + unit);
-  dbID("idLbl_storreAnswerB").KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataB, { indicator: true }) + unit);
+  Lbl_storreAnswerA.KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataA, { indicator: true }) + unit);
+  Lbl_storreAnswerB.KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataB, { indicator: true }) + unit);
   if (clear) {
-    dbID("idBtn_storreQuestionA").KadButtonColor();
-    dbID("idBtn_storreQuestionB").KadButtonColor();
+    Btn_storreQuestionA.KadButtonColor();
+    Btn_storreQuestionB.KadButtonColor();
   }
 }
 
 function storreUpdateStreak(lost = false) {
   const text = lost ? `Game Over!<br>Punkte: ${storreOptions.streak}` : `Punkte: ${storreOptions.streak}`;
-  dbID("idLbl_storreStreak").innerHTML = text;
+  Lbl_storreStreak.innerHTML = text;
 }

@@ -3,7 +3,7 @@
 
 import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
 import { Data_Olympia } from "../KadData/KadData_Olympiadaten.js";
-import { KadArray, KadTable, KadValue, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 
 const olympiaOptions = {
   baseData: new Map(Data_Olympia),
@@ -74,27 +74,27 @@ const olympiaOptions = {
   },
 };
 
-initEL({
-  id: dbID("idSel_olympiaEvent"),
+const Sel_olympiaEvent = initEL({
+  id: "idSel_olympiaEvent",
   fn: olympiaUpdate,
   selStartIndex: 51,
   selList: olympiaOptions.events.map((v) => [`${v[0]} ${v[1]}`, v[1]]),
 });
-initEL({ id: dbID("idBtn_olympiaSpecific"), fn: olympiaSpecific });
-initEL({ id: dbID("idBtn_olympiaSortMedals"), fn: olympiaSortByMedals });
-initEL({ id: dbID("idBtn_olympiaSortTotal"), fn: olympiaSortByTotal });
+const Btn_olympiaSpecific = initEL({ id: "idBtn_olympiaSpecific", fn: olympiaSpecific });
+const Btn_olympiaSortMedals = initEL({ id: "idBtn_olympiaSortMedals", fn: olympiaSortByMedals });
+const Btn_olympiaSortTotal = initEL({ id: "idBtn_olympiaSortTotal", fn: olympiaSortByTotal });
 
 export function clear_cl_Olympia() {
   olympiaOptions.countryData = {};
   for (let obj of Data_Country_CodesIso3166) {
     olympiaOptions.countryData[obj.cioc] = { cioc: obj.cioc, flag: obj.flagSvgURL, population: obj.population };
   }
-  dbID("idSel_olympiaEvent").KadReset();
+  Sel_olympiaEvent.KadReset();
   olympiaUpdate();
 }
 
 function olympiaUpdate() {
-  const eventname = dbID("idSel_olympiaEvent").KadGet({ textContent: true });
+  const eventname = Sel_olympiaEvent.KadGet({ textContent: true });
   const eventData = olympiaOptions.baseData.get(eventname);
 
   olympiaOptions.data = [];
@@ -125,7 +125,7 @@ function olympiaUpdate() {
 
 function olympiaSpecific() {
   olympiaOptions.specific = !olympiaOptions.specific;
-  dbID("idBtn_olympiaSpecific").KadButtonColor(olympiaOptions.specific ? "positive" : null);
+  Btn_olympiaSpecific.KadButtonColor(olympiaOptions.specific ? "positive" : null);
   olympiaTableReturn();
 }
 
@@ -178,5 +178,5 @@ function olympiaTableReturn() {
       settings: { description: "population", align: "right" },
     },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_OlympiaTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_OlympiaTable", header, body });
 }

@@ -1,8 +1,8 @@
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground } from "./General/BackgroundAnimation.js";
-import { contentCheckActive, contentLayout, createContentlayoutList, createFooter, createNavbar, createSubgrid, navClick, resizeGrid } from "./General/Layout.js";
+import { contentCheckActive, contentLayout, createContentlayoutList, layoutCreateFooter, layoutCreateGridTitles, layoutCreateNavbar, layoutCreateSubgrid, navClick, resizeGrid } from "./General/Layout.js";
 import { contentGroupsMaincontent } from "./General/MainContent.js";
-import { KadDOM, KadDate, dbCL, dbCLStyle, dbID, hostDebug, initEL } from "./KadUtils/KadUtils.js";
+import { KadDOM, KadDate, dbCL, dbCLStyle, hostDebug, initEL } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
@@ -19,27 +19,29 @@ function mainSetup() {
   KadDOM.htmlSetButtonType();
   createNewNuncDiscipuli();
 
-  createNavbar();
-  createFooter();
-  createSubgrid();
+  layoutCreateNavbar();
+  layoutCreateFooter();
+  layoutCreateSubgrid();
+  layoutCreateGridTitles();
+
   contentLayout.prevNavContent = contentLayout.defaultPage;
   clearAllTiles();
   resizeGrid();
   navClick();
   updateMasterSelect();
-  dbID("idLbl_navBar_KW").KadSetText(`KW ${KadDate.getWeekNumber()}`);
+  Lbl_navBar_KW.KadSetText(`KW ${KadDate.getWeekNumber()}`);
   setTimeout(() => {
     hideLoadingscreen();
   }, 500);
 }
 
 // Navbar
-initEL({ id: dbID("idDiv_navBar_Trash"), fn: resetAll });
-initEL({ id: dbID("idSel_globalValue"), fn: globalValueChanged });
-initEL({ id: dbID("idDiv_navBar_GlobalSettings"), fn: () => navClick("GlobalSettings") });
-initEL({ id: dbID("idDiv_navBar_Colormode"), fn: colToggleColormode });
-initEL({ id: dbID("idDiv_clearBackground"), fn: bgaClearBackground });
-initEL({ id: dbID("idLbl_navBar_KW") });
+initEL({ id: "idDiv_navBar_Trash", fn: resetAll });
+const Sel_globalValue = initEL({ id: "idSel_globalValue", fn: globalValueChanged });
+initEL({ id: "idDiv_navBar_GlobalSettings", fn: () => navClick("GlobalSettings") });
+initEL({ id: "idDiv_navBar_Colormode", fn: colToggleColormode });
+initEL({ id: "idDiv_clearBackground", fn: bgaClearBackground });
+const Lbl_navBar_KW = initEL({ id: "idLbl_navBar_KW" });
 
 export function resetAll() {
   createNewNuncDiscipuli();
@@ -73,9 +75,10 @@ export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" 
 }
 
 export function updateMasterSelect() {
-  dbID("idSel_globalValue").KadReset({ selStartValue: "Benkyou", selGroup: { Groups: contentGroupsMaincontent, ...contentLayout.namelistContent } });
+  Sel_globalValue.KadReset({ selStartValue: "Benkyou", selGroup: { Groups: contentGroupsMaincontent, ...contentLayout.namelistContent } });
+  Sel_globalValue.focus();
 }
 
 function globalValueChanged() {
-  navClick(dbID("idSel_globalValue").KadGet());
+  navClick(Sel_globalValue.KadGet());
 }

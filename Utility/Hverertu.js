@@ -1,95 +1,74 @@
-import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
-import { dbID, initEL, KadFile, KadTable } from "../KadUtils/KadUtils.js";
+import { Data_GetCountryByKey } from "../KadData/KadData_Countries.js";
+import { initEL, KadFile, KadLog, KadTable } from "../KadUtils/KadUtils.js";
 
 const hverertuOptions = {
   input: "",
-  inputTimer: null,
   dataCount: 0,
-  data: {
-    Alter: {
-      value: null,
-      description: "Alter (geschätzt)",
-      get data() {
-        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.agify.io/?name=${hverertuOptions.input}`, callback: hverertuAlter });
-      },
+  age: "...",
+  gender: "...",
+  origin: "...",
+  urls: {
+    get age() {
+      return `https://api.agify.io/?name=${hverertuOptions.input}`;
     },
-    Gender: {
-      value: null,
-      description: "Geschlecht",
-      get data() {
-        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.genderize.io?name=${hverertuOptions.input}`, callback: hverertuGender });
-      },
+    get gender() {
+      return `https://api.genderize.io/?name=${hverertuOptions.input}`;
     },
-    Herkunft: {
-      value: null,
-      description: "Herkunft (nach Wahrscheinlichkeit)",
-      get data() {
-        KadFile.loadUrlToJSON({ variable: "data", url: `https://api.nationalize.io?name=${hverertuOptions.input}`, callback: hverertuHerkunft });
-      },
+    get origin() {
+      return `https://api.nationalize.io/?name=${hverertuOptions.input}`;
     },
   },
 };
-initEL({ id: dbID("idVin_hverertuEntry"), fn: hverertuGetInput, resetValue: "Vorname eingeben" });
-initEL({ id: dbID("idBtn_hverertuEntry"), fn: hverertuGetInput });
+const Vin_hverertuEntry = initEL({ id: "idVin_hverertuEntry", fn: hverertuGetInput, resetValue: "Vorname eingeben" });
+initEL({ id: "idBtn_hverertuEntry", fn: hverertuGetInput });
 
 export function clear_cl_Hverertu() {
-  dbID("idVin_hverertuEntry").KadReset();
+  Vin_hverertuEntry.KadReset();
   hverertuOptions.input = "";
   createHverertuTable();
 }
 
 function hverertuGetInput() {
-  hverertuOptions.input = dbID("idVin_hverertuEntry").KadGet();
+  hverertuOptions.input = Vin_hverertuEntry.KadGet();
   if (hverertuOptions.input == "") return;
+  const URLS = [`https://api.agify.io/?name=${hverertuOptions.input}`, `https://api.genderize.io?name=${hverertuOptions.input}`, `https://api.nationalize.io?name=${hverertuOptions.input}`];
+  KadFile.loadUrlToJSON({ variableArray: ["age", "gender", "origin"], urlArray: URLS, callback: hverertuGetData, errorCallback: hverertuErrorData });
+}
 
-  if (hverertuOptions.inputTimer != null) {
-    clearTimeout(hverertuOptions.inputTimer);
-    hverertuOptions.inputTimer = null;
+function hverertuErrorData({ error }) {
+  KadLog.error("Could not load Hverertu!", error);
+}
+
+function hverertuGetData(data) {
+  KadLog.log(data);
+  const { age, gender, origin } = data;
+  hverertuAge(age);
+  hverertuOrigin(origin);
+  hverertuGender(gender);
+  createHverertuTable();
+}
+
+function hverertuAge(data) {
+  if (data.age == null) return;
+  hverertuOptions.age = data.age;
+}
+
+function hverertuOrigin(data) {
+  if (data.country.length == 0) return;
+  hverertuOptions.origin = "";
+  for (let country of data.country) {
+    hverertuOptions.origin += `${Data_GetCountryByKey(country.country_id, "cca2").nameDECommon}, `;
   }
-  hverertuOptions.inputTimer = setTimeout(hverertuGetData, 400);
+  hverertuOptions.origin = hverertuOptions.origin.slice(0, -2);
 }
 
-function hverertuGetData() {
-  for (let obj in hverertuOptions.data) {
-    hverertuOptions.data[obj].data;
-  }
-}
-
-function hverertuPassValue(key) {
-  const id = Object.keys(hverertuOptions.data).indexOf(key);
-  dbID(`idLbl_hverertu_value_${id}`).innerHTML = hverertuOptions.data[key].value;
-}
-
-function hverertuAlter({ data }) {
-  hverertuOptions.data.Alter.value = data.age == null ? "keine Daten gefunden" : data.age;
-  hverertuPassValue("Alter");
-}
-
-function hverertuHerkunft({ data }) {
-  if (data.country.length == 0) {
-    hverertuOptions.data.Herkunft.value = "keine Daten gefunden";
-  } else {
-    hverertuOptions.data.Herkunft.value = data.country.map((obj) => {
-      for (let item of Data_Country_CodesIso3166) {
-        if (item.cca2 == obj.country_id) return item.nameDE;
-      }
-    });
-  }
-  hverertuOptions.data.Herkunft.value = `${hverertuOptions.data.Herkunft.value}`.replace(/,/g, ", ");
-  hverertuPassValue("Herkunft");
-}
-
-function hverertuGender({ data }) {
-  if (data.gender == null) {
-    hverertuOptions.data.Gender.value = "keine Daten gefunden";
-  } else {
-    const gender = data.gender == "male" ? "männlich" : "weiblich";
-    hverertuOptions.data.Gender.value = `${gender} (${data.probability * 100}%)`;
-  }
-  hverertuPassValue("Gender");
+function hverertuGender(data) {
+  if (data.gender == null) return;
+  const type = data.gender == "male" ? "männlich" : "weiblich";
+  hverertuOptions.gender = `${type} (${data.probability * 100}%)`;
 }
 
 function createHverertuTable() {
-  const body = [{ data: Object.keys(hverertuOptions.data) }, { data: Object.keys(hverertuOptions.data).map((_) => "..."), settings: { names: ["hverertu", "value"] } }];
-  KadTable.createHTMLGrid({ id: dbID("idTab_hverertuTable"), body });
+  const body = [{ data: ["Alter", "Herkunft", "Gender"] }, { data: [hverertuOptions.age, hverertuOptions.origin, hverertuOptions.gender] }];
+  KadTable.createHTMLGrid({ id: "idTab_hverertuTable", body });
 }

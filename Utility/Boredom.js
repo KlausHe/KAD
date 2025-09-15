@@ -1,15 +1,15 @@
-import { dbID, initEL, KadRandom } from "../KadUtils/KadUtils.js";
+import { initEL, KadRandom } from "../KadUtils/KadUtils.js";
 
-initEL({ id: dbID("idBtn_boredomStart"), fn: boredomGetActivityindex });
+const Btn_boredomStart = initEL({ id: "idBtn_boredomStart", fn: boredomGetActivityindex });
 const boredomOptions = {
   index: 0,
 };
-initEL({ id: dbID("idArea_boredomAnswer"), resetValue: "Activitätengenerator..." });
+const Area_boredomAnswer = initEL({ id: "idArea_boredomAnswer", resetValue: "Activitätengenerator..." });
 
 export function clear_cl_Boredom() {
-  dbID("idArea_boredomAnswer").KadReset();
-  // dbID("idArea_boredomAnswer").value = "";
-  // dbID("idArea_boredomAnswer").placeholder = "Activitätengenerator...";
+  Area_boredomAnswer.KadReset();
+  // Area_boredomAnswer.value = "";
+  // Area_boredomAnswer.placeholder = "Activitätengenerator...";
   boredomGetActivityindex();
 }
 
@@ -19,7 +19,7 @@ function boredomGetActivityindex() {
 }
 
 function boredomStart() {
-  dbID("idArea_boredomAnswer").KadSetValue(`${boredomList[boredomOptions.index]}.`);
+  Area_boredomAnswer.KadSetValue(`${boredomList[boredomOptions.index]}.`);
 }
 const boredomList = [
   "Lernen Sie, jemanden in einer neuen Sprache zu begrüßen",

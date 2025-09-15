@@ -1,4 +1,4 @@
-import { dbID, initEL, KadDate, KadRandom } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadRandom } from "../KadUtils/KadUtils.js";
 const foodyOptions = {
   timerCount: 0,
   timeTotal: 0,
@@ -145,42 +145,42 @@ const foodyOptions = {
   ],
 };
 
-initEL({ id: dbID("idBtn_foodyStart"), fn: foodyStartChange, btnCallbacks: foodyOptions.startCallbacks });
-initEL({ id: dbID("idVin_foodyPreheat"), fn: foodyPreheatChange, resetValue: foodyOptions.preheatOrig });
-initEL({ id: dbID("idSel_foodyType"), fn: foodyChangeFood, selStartIndex: 0, selList: foodyOptions.data.map((f, i) => [`${f.name} (${f.time}min)`, i]) });
-initEL({ id: dbID("idLbl_foodyTime"), resetValue: "Foody" });
+const Btn_foodyStart = initEL({ id: "idBtn_foodyStart", fn: foodyStartChange, btnCallbacks: foodyOptions.startCallbacks });
+const Vin_foodyPreheat = initEL({ id: "idVin_foodyPreheat", fn: foodyPreheatChange, resetValue: foodyOptions.preheatOrig });
+const Sel_foodyType = initEL({ id: "idSel_foodyType", fn: foodyChangeFood, selStartIndex: 0, selList: foodyOptions.data.map((f, i) => [`${f.name} (${f.time}min)`, i]) });
+const Lbl_foodyTime = initEL({ id: "idLbl_foodyTime", resetValue: "Foody" });
+const Prog_foodyProgress = initEL({ id: "idProg_foodyProgress", domOpts: { max: 100 } });
 
 export function clear_cl_Foody() {
-  foodyOptions.timerState = dbID("idBtn_foodyStart").KadReset();
-  foodyOptions.preheat = dbID("idVin_foodyPreheat").KadReset();
-  dbID("idLbl_foodyTime").KadReset();
-  dbID("idSel_foodyType").KadReset({ selStartIndex: KadRandom.randomIndex(foodyOptions.data) });
+  foodyOptions.timerState = Btn_foodyStart.KadReset();
+  foodyOptions.preheat = Vin_foodyPreheat.KadReset();
+  Lbl_foodyTime.KadReset();
+  Sel_foodyType.KadReset({ selStartIndex: KadRandom.randomIndex(foodyOptions.data) });
   clearInterval(foodyOptions.timerCount);
   foodyCalculate();
 }
 
 function foodyPreheatChange() {
-  foodyOptions.preheat = dbID("idVin_foodyPreheat").KadGet();
+  foodyOptions.preheat = Vin_foodyPreheat.KadGet();
   foodyCalculate();
 }
 
 function foodyChangeFood() {
-  foodyOptions.foodIndex = dbID("idSel_foodyType").KadGet();
+  foodyOptions.foodIndex = Sel_foodyType.KadGet();
   foodyCalculate();
 }
 
 function foodyCalculate() {
   const preheatState = foodyOptions.chosenFood.temp != "Topf";
   let noTopfPreheat = preheatState ? foodyOptions.preheat : 0;
-  dbID("idVin_foodyPreheat").KadEnable(preheatState);
+  Vin_foodyPreheat.KadEnable(preheatState);
   foodyOptions.timeTotal = (foodyOptions.chosenFood.time + noTopfPreheat) * 60;
   foodyOptions.timeRemaining = foodyOptions.timeTotal;
   foodyShowTime();
 }
 
 function foodyStart() {
-  const bar = dbID("idProg_foodyProgress");
-  bar.setAttribute("max", foodyOptions.timeTotal);
+  Prog_foodyProgress.KadSetMax(foodyOptions.timeTotal);
   foodyOptions.timerCount = setInterval(foodyCountdown, 1000);
   foodyCountdown();
 }
@@ -188,20 +188,19 @@ function foodyStart() {
 function foodyStop() {
   clearInterval(foodyOptions.timerCount);
   let textStart = "Foody";
-  dbID("idLbl_foodyTime").KadSetText(textStart);
+  Lbl_foodyTime.KadSetText(textStart);
 }
 function foodyStartChange() {
   foodyOptions.timerState = !foodyOptions.timerState;
-  dbID("idVin_foodyPreheat").KadEnable(!foodyOptions.timerState);
-  dbID("idSel_foodyType").KadEnable(!foodyOptions.timerState);
+  Vin_foodyPreheat.KadEnable(!foodyOptions.timerState);
+  Sel_foodyType.KadEnable(!foodyOptions.timerState);
 }
 
 function foodyCountdown() {
   foodyOptions.timeRemaining--;
-  const bar = dbID("idProg_foodyProgress");
-  bar.setAttribute("value", foodyOptions.timeRemaining);
+  Prog_foodyProgress.KadSetValue(foodyOptions.timeRemaining);
   if (foodyOptions.timeRemaining <= 0) {
-    dbID("idLbl_foodyTime").KadSetText("Fertig!");
+    Lbl_foodyTime.KadSetText("Fertig!");
     clearInterval(foodyOptions.timerCount);
     setTimeout(foodyStartChange, 10000);
   } else {
@@ -212,5 +211,5 @@ function foodyCountdown() {
 function foodyShowTime() {
   let zubereitung = foodyOptions.chosenFood.temp === "Topf" ? " (im Topf)" : " (Ofen bei " + foodyOptions.chosenFood.temp + ")";
   let obj = KadDate.secondsToObj(foodyOptions.timeRemaining);
-  dbID("idLbl_foodyTime").KadSetText(`${obj.h}:${obj.m}:${obj.s} ${zubereitung}`);
+  Lbl_foodyTime.KadSetText(`${obj.h}:${obj.m}:${obj.s} ${zubereitung}`);
 }

@@ -29,24 +29,26 @@ const linahaOptions = {
   },
 };
 
-initEL({ id: dbID("idSel_linahaSelectQ"), fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 0 });
-initEL({ id: dbID("idSel_linahaSelectA"), fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 1 });
-initEL({ id: dbID("idBtn_linahaSelectSwitch"), fn: linahaSwitchSelect });
-initEL({ id: dbID("idSel_linahaChoices"), fn: linahaChoiceChange, selStartIndex: 1, selList: linahaOptions.setOptions });
-initEL({ id: dbID("idVin_linahaRounds"), fn: linahaRoundsChange, resetValue: 5, domOpts: { min: 1, max: 10 } });
-initEL({ id: dbID("idBtn_linahaMap"), fn: linahaOpenMap });
-initEL({ id: dbID("idBtn_linahaStart"), fn: linahaStart });
-initEL({ id: dbID("idLbl_linahaQuestion"), resetValue: "" });
+const Sel_linahaSelectQ = initEL({ id: "idSel_linahaSelectQ", fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 0 });
+const Sel_linahaSelectA = initEL({ id: "idSel_linahaSelectA", fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 1 });
+initEL({ id: "idBtn_linahaSelectSwitch", fn: linahaSwitchSelect });
+const Sel_linahaChoices = initEL({ id: "idSel_linahaChoices", fn: linahaChoiceChange, selStartIndex: 1, selList: linahaOptions.setOptions });
+const Vin_linahaRounds = initEL({ id: "idVin_linahaRounds", fn: linahaRoundsChange, resetValue: 5, domOpts: { min: 1, max: 10 } });
+const Btn_linahaMap = initEL({ id: "idBtn_linahaMap", fn: linahaOpenMap });
+const Btn_linahaStart = initEL({ id: "idBtn_linahaStart", fn: linahaStart });
+const Lbl_linahaQuestion = initEL({ id: "idLbl_linahaQuestion", resetValue: "" });
+const Lbl_linahaCurrentRound = initEL({ id: "idLbl_linahaCurrentRound", resetValue: "" });
+const Lbl_linahaCurrentScore = initEL({ id: "idLbl_linahaCurrentScore", resetValue: "" });
 
 export function clear_cl_Linaha() {
   linahaDisableEntries(false);
 
-  dbID("idSel_linahaSelectQ").KadReset();
-  dbID("idSel_linahaSelectA").KadReset();
-  dbID("idSel_linahaChoices").KadReset();
-  linahaOptions.selRounds = dbID("idVin_linahaRounds").KadReset();
-  dbID("idLbl_linahaQuestion").KadSetHTML(`Spiele <br>${linahaOptions.selRounds} Runden<br>Linaha!`);
-  dbID("idBtn_linahaMap").KadEnable(false);
+  Sel_linahaSelectQ.KadReset();
+  Sel_linahaSelectA.KadReset();
+  Sel_linahaChoices.KadReset();
+  linahaOptions.selRounds = Vin_linahaRounds.KadReset();
+  Lbl_linahaQuestion.KadSetHTML(`Spiele <br>${linahaOptions.selRounds} Runden<br>Linaha!`);
+  Btn_linahaMap.KadEnable(false);
   linahaCreateAvaible();
   linahaOptions.data = [];
   linahaOptions.currentRound = -1;
@@ -72,12 +74,12 @@ function linahaSelect(obj) {
     return;
   }
   if (tempIdent == "selQ") {
-    const objA = dbID("idSel_linahaSelectA");
+    const objA = Sel_linahaSelectA;
     objA.options[linahaOptions.selQ].selected = true;
     linahaOptions.selA = linahaOptions.selQ;
     linahaOptions.selQ = obj.selectedIndex;
   } else {
-    const objQ = dbID("idSel_linahaSelectQ");
+    const objQ = Sel_linahaSelectQ;
     objQ.options[linahaOptions.selA].selected = true;
     linahaOptions.selQ = linahaOptions.selA;
     linahaOptions.selA = obj.selectedIndex;
@@ -85,8 +87,8 @@ function linahaSelect(obj) {
 }
 
 function linahaSwitchSelect() {
-  const objQ = dbID("idSel_linahaSelectQ");
-  const objA = dbID("idSel_linahaSelectA");
+  const objQ = Sel_linahaSelectQ;
+  const objA = Sel_linahaSelectA;
   const objQIndex = objQ.selectedIndex;
   objQ.options[objA.selectedIndex].selected = true;
   objA.options[objQIndex].selected = true;
@@ -100,15 +102,15 @@ function linahaChoiceChange(obj) {
 
 function linahaRoundsChange(obj) {
   linahaOptions.selRounds = obj.target.value;
-  dbID("idLbl_linahaQuestion").KadSetHTML(`Spiele ${linahaOptions.selRounds} Runden<br>Linaha!`);
+  Lbl_linahaQuestion.KadSetHTML(`Spiele ${linahaOptions.selRounds} Runden<br>Linaha!`);
   linahaUpdateStats();
 }
 
 function linahaFinished() {
-  dbID("idLbl_linahaQuestion").removeAttribute("uiType");
-  dbID("idBtn_linahaStart").KadSetText("New Game");
-  dbID("idLbl_linahaQuestion").KadSetHTML(`Punkte:<br>${linahaOptions.score}`);
-  dbID("idBtn_linahaMap").KadEnable(true);
+  Lbl_linahaQuestion.removeAttribute("uiType");
+  Btn_linahaStart.KadSetText("New Game");
+  Lbl_linahaQuestion.KadSetHTML(`Punkte:<br>${linahaOptions.score}`);
+  Btn_linahaMap.KadEnable(true);
   linahaDisableEntries(false);
   linahaOptions.currentRound = -1;
 }
@@ -121,14 +123,14 @@ function linahaDisableEntries(lock) {
 }
 
 function linahaUpdateStats() {
-  dbID("idLbl_linahaCurrentRound").textContent = `${linahaOptions.currentRound + 1}/${linahaOptions.selRounds}`;
-  dbID("idLbl_linahaCurrentScore").textContent = linahaOptions.score || 0;
+  Lbl_linahaCurrentRound.KadSetText(`${linahaOptions.currentRound + 1}/${linahaOptions.selRounds}`);
+  Lbl_linahaCurrentScore.KadSetText(linahaOptions.score || 0);
 }
 
 function linahaStart() {
   linahaOptions.isPlaying = !linahaOptions.isPlaying;
   if (linahaOptions.isPlaying) {
-    dbID("idBtn_linahaStart").textContent = "Reset";
+    Btn_linahaStart.textContent = "Reset";
     linahaOptions.currentRound = 0;
     linahaUpdateStats();
     linahaGetData();
@@ -138,7 +140,7 @@ function linahaStart() {
     linahaOptions.correctRounds = 0;
     linahaOptions.answered = false;
   } else {
-    dbID("idBtn_linahaStart").textContent = "Start";
+    Btn_linahaStart.textContent = "Start";
     linahaDisableEntries(false);
   }
 }
@@ -155,21 +157,24 @@ async function linahaGetData() {
   for (const code of indexArr) {
     url += `${code},`;
   }
-  const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: url });
-  if (KadLog.errorChecked(error, "Could not receive data for 'Linaha'.", error)) return;
-  linahaOptions.data = data;
-  linahaCreateButtons();
+  KadFile.loadUrlToJSON({ variable: "data", url: url, callback: linahaCreateButtons, errorCallback: linahaError });
 }
 
-function linahaCreateButtons() {
+function linahaError({ error }) {
+  KadLog.error("Could not receive data for 'Linaha'.", error);
+}
+
+function linahaCreateButtons(data) {
+  linahaOptions.data = data.data;
+
   //select random countries
   const currArr = linahaOptions.data.slice(0, linahaOptions.btnCount);
   linahaOptions.answerIndex = KadRandom.randomObject(currArr.length);
-  dbID("idLbl_linahaQuestion").KadSetHTML(linahaShowData(linahaOptions.selQ, linahaOptions.answerIndex));
+  Lbl_linahaQuestion.KadSetHTML(linahaShowData(linahaOptions.selQ, linahaOptions.answerIndex));
   if (linahaOptions.selQ == 1) {
-    dbID("idLbl_linahaQuestion").setAttribute("uiType", "transparent");
+    Lbl_linahaQuestion.setAttribute("uiType", "transparent");
   } else {
-    dbID("idLbl_linahaQuestion").removeAttribute("uiType");
+    Lbl_linahaQuestion.removeAttribute("uiType");
   }
   const cols = linahaOptions.setLayout.cols[linahaOptions.setLength];
   const rows = linahaOptions.setLayout.rows[linahaOptions.setLength];
@@ -181,19 +186,19 @@ function linahaCreateButtons() {
     names: ["linahaAnswers"],
   };
 
-  let data = [];
+  let bodyData = [];
   let valueIndex = [];
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       const index = y * cols + x;
       valueIndex.push(index);
-      data.push(linahaShowData(linahaOptions.selA, index));
+      bodyData.push(linahaShowData(linahaOptions.selA, index));
     }
   }
   const type = linahaDataType(linahaOptions.selA);
-  const body = [{ type, data, multiColumn: cols, settings: { ...settings, onclick: [linahaAnswered, valueIndex] } }];
+  const body = [{ type, data: bodyData, multiColumn: cols, settings: { ...settings, onclick: [linahaAnswered, valueIndex] } }];
 
-  KadTable.createHTMLGrid({ id: dbID("idTab_linahaTable"), body });
+  KadTable.createHTMLGrid({ id: "idTab_linahaTable", body });
 }
 
 function linahaDataType(type) {
@@ -249,22 +254,20 @@ function linahaShowData(optionsID, dataIndex) {
   return retText;
 }
 
-function linahaAnswered(index) {
+function linahaAnswered(indexX, btn) {
   if (!linahaOptions.isPlaying) return;
   linahaOptions.answered = !linahaOptions.answered;
-  dbID("idBtn_linahaMap").KadEnable(linahaOptions.answered);
+  Btn_linahaMap.KadEnable(linahaOptions.answered);
   if (linahaOptions.answered) {
     // answer is chosen
-    dbID("idBtn_linahaMap").KadEnable(true);
-    const isCorrect = index == linahaOptions.answerIndex;
+    Btn_linahaMap.KadEnable(true);
+    const isCorrect = indexX == linahaOptions.answerIndex;
     linahaOptions.correctRounds += isCorrect ? 1 : 0;
-    const type = linahaDataType(linahaOptions.selA);
-    const idStyleText = `id${type}_linahaAnswers_`;
-    KadLog.log(idStyleText, linahaOptions.answerIndex, index);
+    // const type = linahaDataType(linahaOptions.selA);
     if (isCorrect) {
-      dbIDStyle(`${idStyleText}${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
+      dbIDStyle(btn).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
     } else {
-      dbIDStyle(`${idStyleText}${index}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnNegative, type: "HSL" });
+      dbIDStyle(btn).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnNegative, type: "HSL" });
       dbIDStyle(`${idStyleText}${linahaOptions.answerIndex}`).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
     }
   } else {
@@ -288,7 +291,6 @@ function linahaOpenMap() {
 }
 
 function linahaClearEntries() {
-  // dbID("idLbl_linahaQuestion").innerHTML = (null, null);
-  dbID("idLbl_linahaQuestion").KadReset();
-  KadTable.createHTMLGrid({ id: dbID("idTab_linahaTable") });
+  Lbl_linahaQuestion.KadReset();
+  KadTable.createHTMLGrid({ id: "idTab_linahaTable" });
 }

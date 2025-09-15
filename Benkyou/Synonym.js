@@ -1,53 +1,50 @@
-import { KadFile, KadLog, KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { KadFile, KadLog, KadTable, initEL } from "../KadUtils/KadUtils.js";
 const synonymOptions = {
   get URL() {
     return `https://www.openthesaurus.de/synonyme/search?q=${this.input}&format=application/json&similar=true&baseform=true`;
   },
-  inputTimer: null,
   input: "",
   data: {},
 };
 
-initEL({ id: dbID("idVin_synonymEntry"), fn: newSynonym, resetValue: "Search for synonyms" });
-initEL({ id: dbID("idLbl_synonymSearchWord") });
+const Vin_synonymEntry = initEL({ id: "idVin_synonymEntry", fn: newSynonym, resetValue: "Search for synonyms" });
+const Lbl_synonymSearchWord = initEL({ id: "idLbl_synonymSearchWord" });
 
 export function clear_cl_Synonym() {
-  dbID("idVin_synonymEntry").KadReset();
-  dbID("idTab_synonymTableSynonym").textContent = "";
+  Vin_synonymEntry.KadReset();
+  KadTable.createHTMLGrid({ id: "idTab_synonymTableSynonym" });
+  KadTable.createHTMLGrid({ id: "idTab_synonymTableSimilar" });
 }
 
 function newSynonym() {
-  synonymOptions.input = dbID("idVin_synonymEntry").KadGet();
+  synonymOptions.input = Vin_synonymEntry.KadGet();
   if (!synonymOptions.input) return;
-
-  if (synonymOptions.inputTimer != null) {
-    clearTimeout(synonymOptions.inputTimer);
-    synonymOptions.inputTimer = null;
-  }
-  synonymOptions.inputTimer = setTimeout(synonymGetData, 400);
+  KadFile.loadUrlToJSON({ variable: "data", url: synonymOptions.URL, callback: synonymGetData, errorCallback: synonymErrorData });
 }
 
-async function synonymGetData() {
-  synonymOptions.inputTimer = null;
-  const { data, error } = await KadFile.loadUrlToJSON({ variable: "data", url: synonymOptions.URL });
-  if (KadLog.errorChecked(error, "Could not receive data for 'Synonym'.", error)) {
-    dbID("idLbl_synonymSearchWord").KadSetText("---");
-  } else {
-    synonymOptions.data = data;
-    dbID("idLbl_synonymSearchWord").KadSetText(synonymOptions.input);
-    synonymCreateTable();
-  }
+function synonymErrorData({ error }) {
+  KadLog.error("Could not receive data for 'Synonym'.", error);
+  Lbl_synonymSearchWord.KadSetText("---");
+}
+
+function synonymGetData(data) {
+  synonymOptions.data = data.data;
+  Lbl_synonymSearchWord.KadSetText(synonymOptions.input);
+  synonymCreateTable();
 }
 
 function synonymCreateTable() {
-  const data = synonymOptions.data;
+  KadLog.log(synonymOptions.data);
   let header = [{ data: "Synonyme", colSpan: 3, settings: { align: "center" } }];
-  let body = [{ data: data.synsets[0].terms.map((item) => [item.term]), multiColumn: 3 }];
-  KadTable.createHTMLGrid({ id: dbID("idTab_synonymTableSynonym"), header, body });
+  let body = [];
+  if (synonymOptions.data.synsets.length > 0) {
+    body = [{ data: synonymOptions.data.synsets[0].terms.map((item) => [item.term]), multiColumn: 3 }];
+  }
+  KadTable.createHTMLGrid({ id: "idTab_synonymTableSynonym", header, body });
 
-  if (data.hasOwnProperty("similarterms")) {
+  if (synonymOptions.data.hasOwnProperty("similarterms")) {
     header = [{ data: "Ähnliche Befriffe", colSpan: 3, settings: { align: "center" } }];
-    body = [{ data: data.similarterms.map((item) => [item.term]), multiColumn: 3 }];
-    KadTable.createHTMLGrid({ id: dbID("idTab_synonymTableSimilar"), header, body });
+    body = [{ data: synonymOptions.data.similarterms.map((item) => [item.term]), multiColumn: 3 }];
+    KadTable.createHTMLGrid({ id: "idTab_synonymTableSimilar", header, body });
   }
 }

@@ -1,4 +1,4 @@
-import { dbID, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -24,13 +24,15 @@ const caMI = new p5((c) => {
   };
 }, "#idCanv_middle");
 
-initEL({ id: dbID("idVin_middleA"), fn: calcMiddle, resetValue: 5 });
-initEL({ id: dbID("idVin_middleB"), fn: calcMiddle, resetValue: 2 });
+const Vin_middleA = initEL({ id: "idVin_middleA", fn: calcMiddle, resetValue: 5 });
+const Vin_middleB = initEL({ id: "idVin_middleB", fn: calcMiddle, resetValue: 2 });
+const Lbl_middleMid = initEL({ id: "idLbl_middleMid" });
+const Lbl_middleDiff = initEL({ id: "idLbl_middleDiff" });
 
 export function clear_cl_Middle() {
-  KadInteraction.removeContextmenu(dbID("idCanv_middle"));
-  dbID("idVin_middleA").KadReset();
-  dbID("idVin_middleB").KadReset();
+  KadInteraction.removeContextmenu("idCanv_middle");
+  Vin_middleA.KadReset();
+  Vin_middleB.KadReset();
   middleOptions.barA = {
     hStart: 0,
     h: middleOptions.canvas.h * 0.5,
@@ -62,8 +64,8 @@ export function canvas_cl_Middle() {
 }
 
 function calcMiddle() {
-  const a = dbID("idVin_middleA").KadGet();
-  const b = dbID("idVin_middleB").KadGet();
+  const a = Vin_middleA.KadGet();
+  const b = Vin_middleB.KadGet();
   middleOptions.barA.val = a;
   middleOptions.barB.val = b;
   middleOptions.barA.text = `a: ${middleOptions.barA.val}`;
@@ -74,8 +76,8 @@ function calcMiddle() {
   middleOptions.dims.diff = Math.abs((a - b) * 0.5);
   middleOptions.dims.midText = KadValue.number(middleOptions.dims.mid, { decimals: 3 });
   middleOptions.dims.diffText = KadValue.number(middleOptions.dims.diff, { decimals: 3 });
-  dbID("idLbl_middleMid").textContent = `Mitte: ${middleOptions.dims.midText}`;
-  dbID("idLbl_middleDiff").textContent = `Differenz zur Mitte: ${middleOptions.dims.diffText}`;
+  Lbl_middleMid.KadSetText(`Mitte: ${middleOptions.dims.midText}`);
+  Lbl_middleDiff.KadSetText(`Differenz zur Mitte: ${middleOptions.dims.diffText}`);
   middleOptions.barA.w = caMI.map(middleOptions.barA.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
   middleOptions.barB.w = caMI.map(middleOptions.barB.val, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);
   middleOptions.dims.w = caMI.map(middleOptions.dims.mid, 0, middleOptions.dims.mappedMax, 0, middleOptions.middle);

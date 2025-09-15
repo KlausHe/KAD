@@ -7,12 +7,14 @@ const lottoOptions = {
   get canvas() {
     return { w: (globalValues.mediaSizes.canvasSize.w * 3) / 4, h: globalValues.mediaSizes.canvasSize.h };
   },
-  inputTimer: null,
   cells: [],
   selGame: "6aus49",
   randomiziation: 0,
   numberOfLatestGames: 4,
   numberOfLatestGamesOrig: 4,
+  get getGame() {
+    return lottoOptions.games[lottoOptions.selGame];
+  },
   games: {
     "6aus49": {
       cols: 7,
@@ -28,8 +30,8 @@ const lottoOptions = {
         tips: [],
         star: [],
       },
-      loadedSets: {},
       savedSet: {},
+      loadedSets: [],
     },
     // Eurojackpot: {
     // 	cols: 9,
@@ -45,25 +47,26 @@ const lottoOptions = {
     // 		tips: [],
     // 		star: [],
     // 	},
-    // 	loadedSets: {},
     // 	savedSet: {},
+    // 	loadedSets: [],
     // },
   },
 };
 
-initEL({ id: dbID("idBtn_lottoReset"), fn: lottoReset });
-initEL({ id: dbID("idBtn_lottoRandom"), fn: lottoRandom });
-initEL({ id: dbID("idSel_lottoGame"), fn: lottoGameSelect, selList: Object.keys(lottoOptions.games), selStartValue: "6aus49" });
-initEL({ id: dbID("idVin_lottoNumberOfGames"), fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
-initEL({ id: dbID("idLbl_lottoOverview"), resetValue: `...` });
+initEL({ id: "idBtn_lottoReset", fn: lottoReset });
+initEL({ id: "idBtn_lottoRandom", fn: lottoRandom });
+const Sel_lottoGame = initEL({ id: "idSel_lottoGame", fn: lottoGameSelect, selList: Object.keys(lottoOptions.games), selStartValue: "6aus49" });
+const Vin_lottoNumberOfGames = initEL({ id: "idVin_lottoNumberOfGames", fn: lottoGetGames, resetValue: lottoOptions.numberOfLatestGamesOrig });
+const Lbl_lottoOverview = initEL({ id: "idLbl_lottoOverview", resetValue: `...` });
+const Lbl_lottoShowSaved = initEL({ id: "idLbl_lottoShowSaved", resetValue: `...` });
 
 export function clear_cl_Lotto() {
-  dbID("idVin_lottoNumberOfGames").KadReset();
-  lottoOptions.selGame = dbID("idSel_lottoGame").KadReset();
+  Vin_lottoNumberOfGames.KadReset();
+  lottoOptions.selGame = Sel_lottoGame.KadReset();
   lottoOptions.randomiziation = 0;
   clearTimeout(lottoOptions.randomTimeout);
   createLotto(true);
-  dbID("idLbl_lottoOverview").KadReset();
+  Lbl_lottoOverview.KadReset();
   lottoUpdateSavegames();
   lottoGetGames();
 }
@@ -121,10 +124,10 @@ export const storage_cl_Lotto = {
 // UserSaves----------------------------------------------------------------------------------------------------------------------
 
 function lottoUpdateSavegames() {
-  if (lottoOptions.games[lottoOptions.selGame].savedSet.date == null) {
-    dbID("idLbl_lottoShowSaved").textContent = "Nichts gespeichert";
+  if (lottoOptions.getGame.savedSet.date == null) {
+    Lbl_lottoShowSaved.textContent = "Nichts gespeichert";
   } else {
-    dbID("idLbl_lottoShowSaved").textContent = KadDate.getDate(lottoOptions.games[lottoOptions.selGame].savedSet.date);
+    Lbl_lottoShowSaved.textContent = KadDate.getDate(lottoOptions.getGame.savedSet.date);
   }
 }
 
@@ -132,10 +135,10 @@ function lottoRandom() {
   lottoOptions.randomiziation = 10;
   function printRandom() {
     createLotto(true);
-    let tipArr = [...Array(lottoOptions.games[lottoOptions.selGame].tipLength).keys()];
-    lottoOptions.games[lottoOptions.selGame].savedSet.tips = KadRandom.randomSubset(tipArr, lottoOptions.games[lottoOptions.selGame].tipMax);
-    let starArr = [...Array(lottoOptions.games[lottoOptions.selGame].starLength).keys()];
-    lottoOptions.games[lottoOptions.selGame].savedSet.star = KadRandom.randomSubset(starArr, lottoOptions.games[lottoOptions.selGame].starMax);
+    let tipArr = [...Array(lottoOptions.getGame.tipLength).keys()];
+    lottoOptions.getGame.savedSet.tips = KadRandom.randomSubset(tipArr, lottoOptions.getGame.tipMax);
+    let starArr = [...Array(lottoOptions.getGame.starLength).keys()];
+    lottoOptions.getGame.savedSet.star = KadRandom.randomSubset(starArr, lottoOptions.getGame.starMax);
 
     lottoOptions.randomiziation--;
     caLO.redraw();
@@ -158,175 +161,94 @@ function lottoReset() {
 }
 
 function lottoGameSelect() {
-  lottoOptions.selGame = dbID("idSel_lottoGame").KadGet();
+  lottoOptions.selGame = Sel_lottoGame.KadGet();
   lottoGetGames();
 }
 
 function createLotto(clear = false) {
   //Clear on Start
   if (clear === true) {
-    lottoOptions.games[lottoOptions.selGame].draw.drawID = null;
-    lottoOptions.games[lottoOptions.selGame].draw.tips = [];
-    lottoOptions.games[lottoOptions.selGame].draw.star = [];
-    lottoOptions.games[lottoOptions.selGame].savedSet.tips = [];
-    lottoOptions.games[lottoOptions.selGame].savedSet.star = [];
-    lottoOptions.games[lottoOptions.selGame].savedSet.date = null;
+    lottoOptions.getGame.draw.drawID = null;
+    lottoOptions.getGame.draw.tips = [];
+    lottoOptions.getGame.draw.star = [];
+    lottoOptions.getGame.savedSet.tips = [];
+    lottoOptions.getGame.savedSet.star = [];
+    lottoOptions.getGame.savedSet.date = null;
   }
   lottoOptions.cells = [];
-  const cols = lottoOptions.games[lottoOptions.selGame].cols;
-  const rows = lottoOptions.games[lottoOptions.selGame].rows;
+  const cols = lottoOptions.getGame.cols;
+  const rows = lottoOptions.getGame.rows;
   const wCell = Math.floor(lottoOptions.canvas.w / cols);
   for (let j = 0; j < rows; j++) {
     for (let i = 0; i < cols; i++) {
       const index = i + j * cols;
-      if (index < lottoOptions.games[lottoOptions.selGame].tipLength) {
-        lottoOptions.cells.push(new LottoCell(index + lottoOptions.games[lottoOptions.selGame].tipStart, i, j, wCell, "tips"));
+      if (index < lottoOptions.getGame.tipLength) {
+        lottoOptions.cells.push(new LottoCell(index + lottoOptions.getGame.tipStart, i, j, wCell, "tips"));
       }
     }
   }
 
-  const colsStar = lottoOptions.games[lottoOptions.selGame].starLength;
+  const colsStar = lottoOptions.getGame.starLength;
   const wStar = Math.floor(lottoOptions.canvas.w / colsStar);
   for (let i = 0; i < colsStar; i++) {
-    lottoOptions.cells.push(new LottoCell(i + lottoOptions.games[lottoOptions.selGame].starStart, i, rows, wStar, "star", wCell));
+    lottoOptions.cells.push(new LottoCell(i + lottoOptions.getGame.starStart, i, rows, wStar, "star", wCell));
   }
   caLO.redraw();
 }
 
 async function lottoGetGames() {
-  lottoOptions.numberOfLatestGames = dbID("idVin_lottoNumberOfGames").KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
-  if (lottoOptions.inputTimer != null) {
-    clearTimeout(lottoOptions.inputTimer);
-    lottoOptions.inputTimer = null;
-  }
-  lottoOptions.inputTimer = setTimeout(() => {
-    lottoOptions.inputTimer = null;
-    KadFile.loadUrlToJSON({ variable: "data", url: lottoOptions.url, callback: lottoReturn });
-  }, 800);
+  lottoOptions.numberOfLatestGames = Vin_lottoNumberOfGames.KadGet({ failSafe: lottoOptions.numberOfLatestGamesOrig });
+  KadFile.loadUrlToJSON({ variable: "data", url: lottoOptions.url, callback: lottoReturn });
 }
 
 function lottoReturn(d) {
-  // KadLog.log(d.data.data);
-  lottoOptions.games[lottoOptions.selGame].loadedSets = {};
-  KadTable.clear("idTabHeader_Lotto");
-  KadTable.clear("idTabBody_Lotto");
-  const lottoData = d.data;
-  if (lottoData.length == 0) {
-    const rowTh = KadTable.createRow("idTabHeader_Lotto");
-    KadTable.addHeaderCell(rowTh, {
-      names: ["lottoTableHeader", "date"],
-      type: "Lbl",
-      text: `Keine Daten für ${lottoOptions.selGame} gefunden.`,
-      colSpan: 4,
-      cellStyle: {
-        textAlign: "center",
-      },
-    });
+  if (d.data.length == 0) {
+    const header = { data: "Keine Daten vorhanden!", multiColumn: 4 };
+    KadTable.createHTMLGrid({ id: "idTab_lottoTable", header });
     return;
   }
+  const lottoData = d.data.data;
+  lottoOptions.getGame.loadedSets = [];
 
-  const data = lottoData.data.reverse();
+  const data = lottoData.reverse();
   for (let i = 0; i < lottoOptions.numberOfLatestGames; i++) {
     let dateArr = data[i].date.split(".");
     const date = new Date(dateArr[2], dateArr[1] - 1, dateArr[0]);
-    lottoOptions.games[lottoOptions.selGame].loadedSets[i] = {
+    lottoOptions.getGame.loadedSets.push({
       drawDate: date,
       mainTable: data[i].Lottozahl,
       starTable: [data[i].Superzahl],
       winner: "-",
       drawID: data[i].id,
-    };
+    });
   }
 
-  //header
-  const rowTh = KadTable.createRow("idTabHeader_Lotto");
-  KadTable.addHeaderCell(rowTh, {
-    names: ["lottoTableHeader", "date"],
-    type: "Lbl",
-    text: "Date",
-    cellStyle: {
-      textAlign: "left",
-    },
-  });
-  KadTable.addHeaderCell(rowTh, {
-    names: ["lottoTableHeader", "numbers"],
-    type: "Lbl",
-    text: "Numbers",
-  });
-  KadTable.addHeaderCell(rowTh, {
-    names: ["lottoTableHeader", "star"],
-    type: "Lbl",
-    text: "Star",
-  });
-  KadTable.addHeaderCell(rowTh, {
-    names: ["lottoTableHeader", "winner"],
-    type: "Lbl",
-    text: "Winner",
-  });
-  // body
-  for (const [i, entry] of Object.entries(lottoOptions.games[lottoOptions.selGame].loadedSets)) {
-    let row = KadTable.createRow("idTabBody_Lotto");
-    //--  date
-    KadTable.addCell(row, {
-      names: ["lottoTable", "date", i],
-      type: "Lbl",
-      text: KadDate.getDate(entry.drawDate),
-      cellStyle: {
-        textAlign: "right",
-      },
-      onclick: () => {
-        lottoDrawDrawnData(entry);
-      },
-    });
-    //--  numbers
-    KadTable.addCell(row, {
-      names: ["lottoTable", "numbers", i],
-      type: "Lbl",
-      text: `${entry.mainTable.join(", ")}`,
-      cellStyle: {
-        textAlign: "center",
-      },
-      onclick: () => {
-        lottoDrawDrawnData(entry);
-      },
-    });
-    //--  star
-    KadTable.addCell(row, {
-      names: ["lottoTable", "star", i],
-      type: "Lbl",
-      text: `${entry.starTable.join(", ")}`,
-      copy: true,
-      cellStyle: {
-        textAlign: "center",
-      },
-      onclick: () => {
-        lottoDrawDrawnData(entry);
-      },
-    });
-    //--  winners
-    KadTable.addCell(row, {
-      names: ["lottoTable", "winners", i],
-      type: "Lbl",
-      text: entry.winner,
-      cellStyle: {
-        textAlign: "center",
-      },
-    });
-  }
+  const shortData = lottoOptions.getGame.loadedSets;
+  let header = [{ data: "Datum" }, { data: "Nummern" }, { data: "Stars" }, { data: "Gewinner" }];
+  let body = [
+    //
+    { data: shortData.map((item) => KadDate.getDate(item.drawDate)), settings: { onclick: lottoDrawDrawnData } },
+    { data: shortData.map((item) => `${item.mainTable.join(", ")}`), settings: { onclick: lottoDrawDrawnData } },
+    { data: shortData.map((item) => `${item.starTable.join(", ")}`), settings: { onclick: lottoDrawDrawnData } },
+    { data: shortData.map((item) => item.winner), settings: { onclick: lottoDrawDrawnData } },
+  ];
+
+  KadTable.createHTMLGrid({ id: "idTab_lottoTable", header, body });
 }
 
-function lottoDrawDrawnData(entry) {
-  if (lottoOptions.games[lottoOptions.selGame].draw.drawID != entry.drawID) {
-    lottoOptions.games[lottoOptions.selGame].draw.drawID = entry.drawID;
-    lottoOptions.games[lottoOptions.selGame].draw.tips = entry.mainTable;
-    lottoOptions.games[lottoOptions.selGame].draw.star = entry.starTable;
-    caLO.redraw();
+function lottoDrawDrawnData(index) {
+  const entry = lottoOptions.getGame.loadedSets[index];
+
+  if (lottoOptions.getGame.draw.drawID != entry.drawID) {
+    lottoOptions.getGame.draw.drawID = entry.drawID;
+    lottoOptions.getGame.draw.tips = entry.mainTable;
+    lottoOptions.getGame.draw.star = entry.starTable;
   } else {
-    lottoOptions.games[lottoOptions.selGame].draw.drawID = null;
-    lottoOptions.games[lottoOptions.selGame].draw.tips = [];
-    lottoOptions.games[lottoOptions.selGame].draw.star = [];
-    caLO.redraw();
+    lottoOptions.getGame.draw.drawID = null;
+    lottoOptions.getGame.draw.tips = [];
+    lottoOptions.getGame.draw.star = [];
   }
+  caLO.redraw();
   lottoCheckCorrect();
 }
 // CANVAS----------------------------------------------------------------------------------------------------------------------
@@ -377,7 +299,7 @@ function lottoCheckCorrect() {
       output[cell.type]++;
     }
   }
-  dbID("idLbl_lottoOverview").innerHTML = `Tips: ${output.tips} | Star: ${output.star}`;
+  Lbl_lottoOverview.innerHTML = `Tips: ${output.tips} | Star: ${output.star}`;
 }
 
 // CELL CLASS----------------------------------------------------------------------------------------------------------------------
@@ -393,11 +315,11 @@ class LottoCell {
   }
 
   selected() {
-    return (lottoOptions.games[lottoOptions.selGame].savedSet.tips.includes(this.num) && this.type === "tips") || (lottoOptions.games[lottoOptions.selGame].savedSet.star.includes(this.num) && this.type === "star");
+    return (lottoOptions.getGame.savedSet.tips.includes(this.num) && this.type === "tips") || (lottoOptions.getGame.savedSet.star.includes(this.num) && this.type === "star");
   }
 
   drawed() {
-    return (lottoOptions.games[lottoOptions.selGame].draw.tips.includes(this.num) && this.type === "tips") || (lottoOptions.games[lottoOptions.selGame].draw.star.includes(this.num) && this.type === "star");
+    return (lottoOptions.getGame.draw.tips.includes(this.num) && this.type === "tips") || (lottoOptions.getGame.draw.star.includes(this.num) && this.type === "star");
   }
 
   show() {
@@ -450,21 +372,21 @@ class LottoCell {
     const d = caLO.dist(this.x + this.w / 2, this.y + this.w / 2, mx, my);
     if (d < (this.w * 0.8) / 2) {
       if (!this.selected()) {
-        if (this.type === "tips" && lottoOptions.games[lottoOptions.selGame].savedSet.tips.length < lottoOptions.games[lottoOptions.selGame].tipMax) {
-          lottoOptions.games[lottoOptions.selGame].savedSet.tips.push(this.num);
-          lottoOptions.games[lottoOptions.selGame].savedSet.date = new Date();
-        } else if (this.type === "star" && lottoOptions.games[lottoOptions.selGame].savedSet.star.length < lottoOptions.games[lottoOptions.selGame].starMax) {
-          lottoOptions.games[lottoOptions.selGame].savedSet.star.push(this.num);
-          lottoOptions.games[lottoOptions.selGame].savedSet.date = new Date();
+        if (this.type === "tips" && lottoOptions.getGame.savedSet.tips.length < lottoOptions.getGame.tipMax) {
+          lottoOptions.getGame.savedSet.tips.push(this.num);
+          lottoOptions.getGame.savedSet.date = new Date();
+        } else if (this.type === "star" && lottoOptions.getGame.savedSet.star.length < lottoOptions.getGame.starMax) {
+          lottoOptions.getGame.savedSet.star.push(this.num);
+          lottoOptions.getGame.savedSet.date = new Date();
         }
         return;
       }
       if (this.type === "tips") {
-        lottoOptions.games[lottoOptions.selGame].savedSet.tips.splice(lottoOptions.games[lottoOptions.selGame].savedSet.tips.indexOf(this.num), 1);
+        lottoOptions.getGame.savedSet.tips.splice(lottoOptions.getGame.savedSet.tips.indexOf(this.num), 1);
         return;
       }
       if (this.type === "star") {
-        lottoOptions.games[lottoOptions.selGame].savedSet.star.splice(lottoOptions.games[lottoOptions.selGame].savedSet.star.indexOf(this.num), 1);
+        lottoOptions.getGame.savedSet.star.splice(lottoOptions.getGame.savedSet.star.indexOf(this.num), 1);
         return;
       }
     }

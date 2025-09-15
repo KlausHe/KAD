@@ -1,4 +1,4 @@
-import { KadInteraction, KadValue, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { KadInteraction, KadValue, initEL } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -23,13 +23,13 @@ const ibhaluniOptions = {
   ],
 };
 
-initEL({ id: dbID("idBtn_ibhaluniStart"), btnCallbacks: ibhaluniOptions.startCallbacks });
-initEL({ id: dbID("idCb_ibhaluniSoundOutput"), fn: ibhaluniToggleSound });
+const Btn_ibhaluniStart = initEL({ id: "idBtn_ibhaluniStart", btnCallbacks: ibhaluniOptions.startCallbacks });
+const Cb_ibhaluniSoundOutput = initEL({ id: "idCb_ibhaluniSoundOutput", fn: ibhaluniToggleSound });
 
 export function clear_cl_Ibhaluni() {
-  KadInteraction.removeContextmenu(dbID("idCanv_ibhaluni"));
-  dbID("idBtn_ibhaluniStart").KadReset();
-  dbID("idCb_ibhaluniSoundOutput").KadReset();
+  KadInteraction.removeContextmenu("idCanv_ibhaluni");
+  Btn_ibhaluniStart.KadReset();
+  Cb_ibhaluniSoundOutput.KadReset();
   ibhaluniOptions.balloons = [];
   caIB.noLoop();
   caIB.background(globalColors.elements.background);
@@ -99,7 +99,7 @@ function mousePushedIbhaluni() {
   }
 }
 function ibhaluniToggleSound() {
-  ibhaluniOptions.enableSound = dbID("idCb_ibhaluniSoundOutput").KadGet();
+  ibhaluniOptions.enableSound = Cb_ibhaluniSoundOutput.KadGet();
 }
 
 class IbhaluniObj {

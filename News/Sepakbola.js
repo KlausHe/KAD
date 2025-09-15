@@ -1,5 +1,5 @@
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
-import { KadArray, KadDate, KadFile, KadTable, dbID, deepClone, initEL, objectLength } from "../KadUtils/KadUtils.js";
+import { KadArray, KadDate, KadFile, KadTable, deepClone, initEL, objectLength } from "../KadUtils/KadUtils.js";
 import { globalValues } from "../Settings/General.js";
 
 const sepakbolaOptions = {
@@ -105,16 +105,16 @@ const sepakbolaOptions = {
   ],
 };
 
-initEL({ id: dbID("idSel_sepakbolaLiga"), fn: sepakbolaLigaChange, selStartIndex: sepakbolaOptions.selectedOrig.ligaIndex, selList: Object.values(sepakbolaOptions.liga).map((v) => v.name) });
-initEL({ id: dbID("idSel_sepakbolaSeason"), fn: sepakbolaSeasonChange, selStartIndex: 0 });
-initEL({ id: dbID("idSel_sepakbolaMatchday"), fn: sepakbolaMatchdayChange, selStartIndex: 0 });
+const Sel_sepakbolaLiga = initEL({ id: "idSel_sepakbolaLiga", fn: sepakbolaLigaChange, selStartIndex: sepakbolaOptions.selectedOrig.ligaIndex, selList: Object.values(sepakbolaOptions.liga).map((v) => v.name) });
+const Sel_sepakbolaSeason = initEL({ id: "idSel_sepakbolaSeason", fn: sepakbolaSeasonChange, selStartIndex: 0 });
+const Sel_sepakbolaMatchday = initEL({ id: "idSel_sepakbolaMatchday", fn: sepakbolaMatchdayChange, selStartIndex: 0 });
 
 export function clear_cl_Sepakbola() {
   sepakbolaOptions.selected = deepClone(sepakbolaOptions.selectedOrig);
-  sepakbolaOptions.selected.ligaIndex = dbID("idSel_sepakbolaLiga").KadReset();
+  sepakbolaOptions.selected.ligaIndex = Sel_sepakbolaLiga.KadReset();
   sepakbolaOptions.selected.season = sepakbolaDropdownSeasons();
   sepakbolaDropdownMatchdays();
-  sepakbolaGetData();
+  sepakbolaRequestData();
 }
 
 function sepakbolaDropdownSeasons() {
@@ -123,37 +123,46 @@ function sepakbolaDropdownSeasons() {
   for (let j = yearNow; j - sepakbolaOptions.selectedLiga.firstSeason >= 0; j--) {
     seasons.push([sepakbolaOptions.selectedLiga.format(j), j]);
   }
-  dbID("idSel_sepakbolaSeason").KadReset({ selList: seasons });
+  Sel_sepakbolaSeason.KadReset({ selList: seasons });
   return yearNow;
 }
 function sepakbolaDropdownMatchdays() {
   let list = KadArray.arrayFromNumber(sepakbolaOptions.selectedLiga.maxDays).map((d) => d + 1);
-  sepakbolaOptions.selected.matchday = dbID("idSel_sepakbolaMatchday").KadReset({ selList: list });
+  sepakbolaOptions.selected.matchday = Sel_sepakbolaMatchday.KadReset({ selList: list });
 }
 
 function sepakbolaLigaChange() {
-  sepakbolaOptions.selected.ligaIndex = dbID("idSel_sepakbolaLiga").selectedIndex;
+  sepakbolaOptions.selected.ligaIndex = Sel_sepakbolaLiga.selectedIndex;
   sepakbolaOptions.selected.season = sepakbolaDropdownSeasons();
   sepakbolaDropdownMatchdays();
-  sepakbolaGetData();
+  sepakbolaRequestData();
 }
 
 function sepakbolaSeasonChange() {
-  sepakbolaOptions.selected.season = dbID("idSel_sepakbolaSeason").KadGet();
-  sepakbolaGetData();
+  sepakbolaOptions.selected.season = Sel_sepakbolaSeason.KadGet();
+  sepakbolaRequestData();
 }
 
 function sepakbolaMatchdayChange() {
-  sepakbolaOptions.selected.matchday = dbID("idSel_sepakbolaMatchday").selectedIndex;
+  sepakbolaOptions.selected.matchday = Sel_sepakbolaMatchday.selectedIndex;
   sepakbolaMatchesReturn();
 }
 
-async function sepakbolaGetData() {
-  const { dataTable, dataDay, dataMatches, error } = await KadFile.loadUrlToJSON({
+function sepakbolaRequestData() {
+  KadFile.loadUrlToJSON({
     variableArray: ["dataTable", "dataDay", "dataMatches"],
     urlArray: [sepakbolaOptions.URLTable, sepakbolaOptions.URLLastday, sepakbolaOptions.URLMatches],
+    callback: sepakbolaGetData,
+    errorCallback: sepakbolaErrorData,
   });
+}
+
+function sepakbolaErrorData({ error }) {
   if (layoutCheckCORSandDisableModule(error, "Sepakbola")) return;
+}
+
+function sepakbolaGetData(data) {
+  const { dataTable, dataDay, dataMatches } = data;
   if (dataTable != null) sepakbolaTableReturn(dataTable);
   if (dataDay != null) sepakbolaLastdayReturn(dataDay);
   if (dataMatches != null) sepakbolaMatchesReturn(dataMatches);
@@ -161,7 +170,7 @@ async function sepakbolaGetData() {
 
 function sepakbolaLastdayReturn(data) {
   sepakbolaOptions.selected.matchday = data.groupOrderID - 1;
-  dbID("idSel_sepakbolaMatchday").selectedIndex = sepakbolaOptions.selected.matchday;
+  Sel_sepakbolaMatchday.selectedIndex = sepakbolaOptions.selected.matchday;
 }
 
 function sepakbolaMatchesReturn(data = null) {
@@ -223,7 +232,7 @@ function sepakbolaMatchesReturn(data = null) {
       ];
     }
   }
-  KadTable.createHTMLGrid({ id: dbID("idTab_SepakbolaMatches"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_SepakbolaMatches", header, body });
 }
 
 function sepakbolaTableReturn(data) {
@@ -277,7 +286,7 @@ function sepakbolaTableReturn(data) {
     },
   ];
 
-  KadTable.createHTMLGrid({ id: dbID("idTab_SepakbolaTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_SepakbolaTable", header, body });
 }
 
 function sepakbolaImageURL(url) {

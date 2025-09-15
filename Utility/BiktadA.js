@@ -73,7 +73,7 @@ const biktadaOptions = {
       value: null,
       description: "IP-Adresss",
       get data() {
-        KadFile.loadUrlToJSON({ variable: "data", url: "https://api.ipify.org?format=json", callback: biktadaIPAdresse, errorCallback: biktadaIPError });
+        biktadaLoadIpify();
       },
     },
     Platform: {
@@ -95,6 +95,10 @@ const biktadaOptions = {
   },
 };
 
+function biktadaLoadIpify() {
+  KadFile.loadUrlToJSON({ variable: "data", url: "https://api.ipify.org?format=json", callback: biktadaIPAdresse, errorCallback: biktadaIPError });
+}
+
 function biktadaGeoPos(data) {
   biktadaOptions.data.Location.value = `lat: ${data.coords.latitude.toFixed(6)}<br>lon: ${data.coords.longitude.toFixed(6)}`;
   biktadaPassValue("Location");
@@ -110,8 +114,8 @@ function biktadaIPAdresse(data) {
   biktadaPassValue("IPAdresse");
 }
 
-function biktadaIPError(data) {
-  biktadaOptions.data.IPAdresse.value = data.error;
+function biktadaIPError({ error }) {
+  biktadaOptions.data.IPAdresse.value = error;
   biktadaPassValue("IPAdresse");
 }
 
@@ -136,7 +140,8 @@ function createBiktadaTable() {
   const header = [{ data: "Info" }, { data: "Wert" }];
   // prettier-ignore
   const body = [
-    { data: Object.values(biktadaOptions.data).map((value) => value.description) }, { data: Object.keys(biktadaOptions.data).map((_) => "..."), settings: { names: ["biktadA", "value"] } }
+    { data: Object.values(biktadaOptions.data).map((value) => value.description) }, 
+    { data: Object.keys(biktadaOptions.data).map((_) => "..."), settings: { names: ["biktadA", "value"] } }
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_biktadATable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_biktadATable", header, body });
 }

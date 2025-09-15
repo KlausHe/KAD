@@ -59,7 +59,7 @@ function materialFilterBuildTable() {
     { data: Object.keys(Data_Materials.metadata).map((item) => Data_Materials.metadata[item].abbr) },
   ];
 
-  KadTable.createHTMLGrid({ id: dbID("idTab_materialFilterTable"), header, body });
+  KadTable.createHTMLGrid({ id: "idTab_materialFilterTable", header, body });
 }
 
 function materialFilterUpdateCB() {

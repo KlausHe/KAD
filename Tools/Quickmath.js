@@ -1,4 +1,4 @@
-import { dbID, initEL, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 const quickmathOptions = {
   values: { val: 12, i: 42 },
   objects: {
@@ -36,14 +36,14 @@ const quickmathOptions = {
   },
 };
 
-initEL({ id: dbID("idVin_quickkmathVal"), fn: calcQuickmath, resetValue: 25 });
-initEL({ id: dbID("idVin_quickkmathStart"), fn: calcQuickmath, resetValue: 1 });
-initEL({ id: dbID("idVin_quickkmathEnd"), fn: calcQuickmath, resetValue: 10 });
+const Vin_quickkmathVal = initEL({ id: "idVin_quickkmathVal", fn: calcQuickmath, resetValue: 25 });
+const Vin_quickkmathStart = initEL({ id: "idVin_quickkmathStart", fn: calcQuickmath, resetValue: 1 });
+const Vin_quickkmathEnd = initEL({ id: "idVin_quickkmathEnd", fn: calcQuickmath, resetValue: 10 });
 
 export function clear_cl_Quickmath() {
-  dbID("idVin_quickkmathVal").KadReset();
-  dbID("idVin_quickkmathStart").KadReset();
-  dbID("idVin_quickkmathEnd").KadReset();
+  Vin_quickkmathVal.KadReset();
+  Vin_quickkmathStart.KadReset();
+  Vin_quickkmathEnd.KadReset();
   calcQuickmath();
 }
 
@@ -54,11 +54,11 @@ function calcQuickmath() {
 }
 
 function tableQuickmathCalculate(op) {
-  const vinMin = dbID("idVin_quickkmathStart").KadGet();
-  const vinMax = dbID("idVin_quickkmathEnd").KadGet();
+  const vinMin = Vin_quickkmathStart.KadGet();
+  const vinMax = Vin_quickkmathEnd.KadGet();
   const start = Math.min(vinMin, vinMax);
   const end = Math.max(vinMin, vinMax) + 1;
-  quickmathOptions.values.val = dbID("idVin_quickkmathVal").KadGet();
+  quickmathOptions.values.val = Vin_quickkmathVal.KadGet();
 
   const operation = op;
   const obj = quickmathOptions.objects[operation];
@@ -79,5 +79,5 @@ function tableQuickmathCalculate(op) {
     { data: dataNum, settings: { align: "left" } },
   ];
 
-  KadTable.createHTMLGrid({ id: dbID(obj.tabID), header, body });
+  KadTable.createHTMLGrid({ id: obj.tabID, header, body });
 }

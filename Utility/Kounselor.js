@@ -10,13 +10,13 @@ const kounselorOptions = {
   RALObj: null,
 };
 
-initEL({ id: dbID("idVin_kounselorName"), fn: kounselorInput, resetValue: "Name", dataset: ["type", "Name"], dbList: Data_RALColors.map((d) => d.Name) });
-initEL({ id: dbID("idVin_kounselorRAL"), fn: kounselorInput, resetValue: "RAL", dataset: ["type", "RAL"], dbList: Data_RALColors.map((d) => d.RAL) });
-initEL({ id: dbID("idVin_kounselorHEX"), fn: kounselorInput, resetValue: "HEX", dataset: ["type", "HEX"], dbList: Data_RALColors.map((d) => d.HEX) });
-initEL({ id: dbID("idVin_kounselorRGB"), fn: kounselorInput, resetValue: "RGB", dataset: ["type", "RGB"], dbList: Data_RALColors.map((d) => d.RGB) });
-initEL({ id: dbID("idVin_kounselorHSL"), fn: kounselorInput, resetValue: "HSL", dataset: ["type", "HSL"], dbList: Data_RALColors.map((d) => d.HSL) });
-initEL({ id: dbID("idVin_kounselorHSB"), fn: kounselorInput, resetValue: "HSB", dataset: ["type", "HSB"], dbList: Data_RALColors.map((d) => d.HSB) });
-initEL({ id: dbID("idVin_kounselorCMYK"), fn: kounselorInput, resetValue: "CMYK", dataset: ["type", "CMYK"], dbList: Data_RALColors.map((d) => d.CMYK) });
+const Vin_kounselorName = initEL({ id: "idVin_kounselorName", fn: kounselorInput, resetValue: "Name", dataset: ["type", "Name"], dbList: Data_RALColors.map((d) => d.Name) });
+const Vin_kounselorRAL = initEL({ id: "idVin_kounselorRAL", fn: kounselorInput, resetValue: "RAL", dataset: ["type", "RAL"], dbList: Data_RALColors.map((d) => d.RAL) });
+const Vin_kounselorHEX = initEL({ id: "idVin_kounselorHEX", fn: kounselorInput, resetValue: "HEX", dataset: ["type", "HEX"], dbList: Data_RALColors.map((d) => d.HEX) });
+const Vin_kounselorRGB = initEL({ id: "idVin_kounselorRGB", fn: kounselorInput, resetValue: "RGB", dataset: ["type", "RGB"], dbList: Data_RALColors.map((d) => d.RGB) });
+const Vin_kounselorHSL = initEL({ id: "idVin_kounselorHSL", fn: kounselorInput, resetValue: "HSL", dataset: ["type", "HSL"], dbList: Data_RALColors.map((d) => d.HSL) });
+const Vin_kounselorHSB = initEL({ id: "idVin_kounselorHSB", fn: kounselorInput, resetValue: "HSB", dataset: ["type", "HSB"], dbList: Data_RALColors.map((d) => d.HSB) });
+const Vin_kounselorCMYK = initEL({ id: "idVin_kounselorCMYK", fn: kounselorInput, resetValue: "CMYK", dataset: ["type", "CMYK"], dbList: Data_RALColors.map((d) => d.CMYK) });
 
 export function clear_cl_Kounselor() {
   for (const name of kounselorOptions.types) {
@@ -39,36 +39,36 @@ function kounselorInput(obj) {
   let data = null;
   switch (kounselorOptions.type) {
     case "Name":
-      kounselorOptions.value = dbID("idVin_kounselorName").KadGet();
+      kounselorOptions.value = Vin_kounselorName.KadGet();
       kounselorOptions.value = KadString.firstLetterCap(kounselorOptions.value);
       break;
     case "RAL":
-      kounselorOptions.value = dbID("idVin_kounselorRAL").KadGet();
+      kounselorOptions.value = Vin_kounselorRAL.KadGet();
       break;
     case "HEX":
-      kounselorOptions.value = dbID("idVin_kounselorHEX").KadGet();
+      kounselorOptions.value = Vin_kounselorHEX.KadGet();
       kounselorOptions.value = kounselorOptions.value.charAt(0) === "#" ? kounselorOptions.value : `#${kounselorOptions.value}`;
       break;
     case "RGB":
-      kounselorOptions.value = dbID("idVin_kounselorRGB").KadGet();
+      kounselorOptions.value = Vin_kounselorRGB.KadGet();
       data = kounselorOptions.value.replace(/\s/g, "");
       data = data.split(/,|-|\s/g);
       kounselorOptions.value = data.map((n) => Number(n));
       break;
     case "HSL":
-      kounselorOptions.value = dbID("idVin_kounselorHSL").KadGet();
+      kounselorOptions.value = Vin_kounselorHSL.KadGet();
       data = kounselorOptions.value.replace(/%/g, "");
       data = data.split(/,|-|\s/g);
       kounselorOptions.value = data.map((n) => Number(n));
       break;
     case "HSB":
-      kounselorOptions.value = dbID("idVin_kounselorHSB").KadGet();
+      kounselorOptions.value = Vin_kounselorHSB.KadGet();
       data = kounselorOptions.value.replace(/%/g, "");
       data = data.split(/,|-|\s/g);
       kounselorOptions.value = data.map((n) => Number(n));
       break;
     case "CMYK":
-      kounselorOptions.value = dbID("idVin_kounselorCMYK").KadGet();
+      kounselorOptions.value = Vin_kounselorCMYK.KadGet();
       data = kounselorOptions.value.replace(/%/g, "");
       data = data.split(/,|-|\s/g);
       kounselorOptions.value = data.map((n) => Number(n));

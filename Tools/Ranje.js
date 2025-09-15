@@ -43,10 +43,10 @@ const ranjeChart = {
   canvas: null,
 };
 
-initEL({ id: dbID("idVin_ranjeVal"), fn: ranjeCalc, resetValue: 36 });
+const Vin_ranjeVal = initEL({ id: "idVin_ranjeVal", fn: ranjeCalc, resetValue: 36 });
 
 export function clear_cl_Ranje() {
-  dbID("idVin_ranjeVal").KadReset();
+  Vin_ranjeVal.KadReset();
   if (ranjeChart.canvas != null) {
     ranjeChart.canvas.destroy();
   }
@@ -58,7 +58,7 @@ export function clear_cl_Ranje() {
 
 function ranjeCalc() {
   ranjeOptions.results = [];
-  ranjeOptions.value = dbID("idVin_ranjeVal").KadGet();
+  ranjeOptions.value = Vin_ranjeVal.KadGet();
   for (let i = 2; i < ranjeOptions.value; i++) {
     if (ranjeOptions.value % i === 0) {
       ranjeOptions.results.push([i, Math.floor(ranjeOptions.value / i)]);
@@ -79,7 +79,7 @@ function ranjeCreateTable() {
     { data: "=", settings: { align: "center", noBorder: "right", onclick: ranjeSelect } },
     { data: ranjeOptions.results.map((item) => `${item[0]} x ${item[1]}`), settings: { align: "left", onclick: ranjeSelect } },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_ranjeTable"), body });
+  KadTable.createHTMLGrid({ id: "idTab_ranjeTable", body });
 }
 
 function ranjeSelect(index) {

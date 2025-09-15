@@ -1,5 +1,5 @@
 import { Data_SentimentListGerman } from "../KadData/KadData_SentimentListGerman.js";
-import { KadTable, dbID, initEL } from "../KadUtils/KadUtils.js";
+import { KadTable, initEL } from "../KadUtils/KadUtils.js";
 import { WikiSearchData } from "./WikiSearch.js";
 
 const analysisOptions = {
@@ -12,29 +12,30 @@ const analysisOptions = {
   ],
 };
 
-initEL({ id: dbID("idVin_analysisEntry"), fn: analysisInput, resetValue: "Type text to analyze" });
-initEL({ id: dbID("idBtn_analyseWiki"), fn: analysisWiki });
-initEL({ id: dbID("idLbl_analysisResult"), resetValue: "~Average score~" });
+const Vin_analysisEntry = initEL({ id: "idVin_analysisEntry", fn: analysisInput, resetValue: "Type text to analyze" });
+const Btn_analyseWiki = initEL({ id: "idBtn_analyseWiki", fn: analysisWiki });
+const Lbl_analysisResult = initEL({ id: "idLbl_analysisResult", resetValue: "~Average score~" });
+const Prog_analysisProgress = initEL({ id: "idProg_analysisProgress", domOpts: { max: 200 } });
 
 export function clear_cl_Analysis() {
-  dbID("idVin_analysisEntry").KadReset();
-  dbID("idLbl_analysisResult").KadReset();
-  KadTable.createHTMLGrid({ id: dbID("idTab_analysisTable"), header: analysisOptions.header });
+  Vin_analysisEntry.KadReset();
+  Lbl_analysisResult.KadReset();
+  KadTable.createHTMLGrid({ id: "idTab_analysisTable", header: analysisOptions.header });
 }
 
 function analysisWiki() {
   const data = WikiSearchData.data;
   if (data.content == null) return;
   let pagesID = Object.keys(data.content);
-  dbID("idVin_analysisEntry").KadReset({ resetValue: data.content[pagesID].extract });
+  Vin_analysisEntry.KadReset({ resetValue: data.content[pagesID].extract });
   analysisInput();
 }
 
 function analysisInput() {
-  analysisOptions.searchInput = dbID("idVin_analysisEntry").KadGet();
+  analysisOptions.searchInput = Vin_analysisEntry.KadGet();
   if (analysisOptions.searchInput == "") {
-    dbID("idLbl_analysisResult").KadReset();
-    KadTable.createHTMLGrid({ id: dbID("idTab_analysisTable"), header: analysisOptions.header });
+    Lbl_analysisResult.KadReset();
+    KadTable.createHTMLGrid({ id: "idTab_analysisTable", header: analysisOptions.header });
     return;
   }
   analysisOptions.results = analysisAnalyze();
@@ -80,15 +81,15 @@ function analysisAnalyze() {
 
 function analysisCreateOutput() {
   if (analysisOptions.results.totalScore === null) {
-    dbID("idLbl_analysisResult").KadSetText("~~~~~~~");
-    dbID("idProg_analysisProgress").setAttribute("value", 100);
-    KadTable.createHTMLGrid({ id: dbID("idTab_analysisTable"), header: analysisOptions.header });
+    Lbl_analysisResult.KadSetText("~~~~~~~");
+    Prog_analysisProgress.KadSetValue("100");
+    KadTable.createHTMLGrid({ id: "idTab_analysisTable", header: analysisOptions.header });
   } else {
     const score = convertScore(analysisOptions.results.totalScore);
     const plural = analysisOptions.results.wordCount == 1 ? "Wort" : "Wörter";
     const count = `(${analysisOptions.results.wordCount} ${plural})`;
-    dbID("idLbl_analysisResult").KadSetText(`Ø${score} ${count}`);
-    dbID("idProg_analysisProgress").setAttribute("value", score + 100);
+    Lbl_analysisResult.KadSetText(`Ø${score} ${count}`);
+    Prog_analysisProgress.KadSetValue(score + 100);
     analysisCreateTable();
   }
 }
@@ -114,7 +115,7 @@ function analysisCreateTable() {
     { data: negativeData.map((item) => (item.occurence > 1 ? `${item.word} (${item.occurence})` : item.word)), settings: { noBorder: "right" } },
     { data: negativeData.map((item) => convertScore(item.score)) },
   ];
-  KadTable.createHTMLGrid({ id: dbID("idTab_analysisTable"), header: analysisOptions.header, body });
+  KadTable.createHTMLGrid({ id: "idTab_analysisTable", header: analysisOptions.header, body });
 }
 
 function convertScore(score) {

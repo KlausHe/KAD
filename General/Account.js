@@ -151,14 +151,14 @@ export const AccData = {
 // ------------CLEAR-------------
 export function clear_cl_UserLogin() {
   nuncDiscipuli.logging = false;
-  nuncDiscipuli.cred.email = dbID("idVin_userLogin_email").KadReset();
-  nuncDiscipuli.cred.uid = dbID("idVin_userLogin_pass").KadReset();
+  nuncDiscipuli.cred.email = Vin_userLogin_email.KadReset();
+  nuncDiscipuli.cred.uid = Vin_userLogin_pass.KadReset();
 
-  dbID("idCb_userLogin_check").KadReset();
+  Cb_userLogin_check.KadReset();
   accountPersistanceChange();
-  dbID("idVin_userLogin_email").removeAttribute("disabled");
-  dbID("idBtn_userLogin_login").KadEnable(true);
-  dbID("idLbl_userLogin_alert").textContent = "";
+  Vin_userLogin_email.removeAttribute("disabled");
+  Btn_userLogin_login.KadEnable(true);
+  Lbl_userLogin_alert.textContent = "";
 }
 
 export function clear_cl_UserChange() {
@@ -201,16 +201,18 @@ export function createNewNuncDiscipuli() {
   }
 }
 
-initEL({ id: dbID("idVin_userLogin_email"), resetValue: "E-Mail" });
-initEL({ id: dbID("idVin_userLogin_pass"), resetValue: "Passwort" });
+const Vin_userLogin_email = initEL({ id: "idVin_userLogin_email", resetValue: "E-Mail" });
+const Vin_userLogin_pass = initEL({ id: "idVin_userLogin_pass", resetValue: "Passwort" });
 
-initEL({ id: dbID("idDiv_navBar_AccountLogin"), fn: openNavLogin });
-initEL({ id: dbID("idDiv_navBar_AccountChange"), fn: openNavChange });
+const Div_navBar_AccountLogin = initEL({ id: "idDiv_navBar_AccountLogin", fn: openNavLogin });
+const Div_navBar_AccountChange = initEL({ id: "idDiv_navBar_AccountChange", fn: openNavChange });
+const Lbl_userLogin_alert = initEL({ id: "idLbl_userLogin_alert" });
+const Lbl_userChange_user = initEL({ id: "idLbl_userChange_user" });
 
 function openNavLogin() {
   clear_cl_UserLogin();
   navClick("cl_UserLogin");
-  dbID("idVin_userLogin_email").focus();
+  Vin_userLogin_email.focus();
 }
 
 function openNavChange() {
@@ -219,16 +221,16 @@ function openNavChange() {
 }
 
 //-----------------------ACTIONS------------------------------------
-initEL({ id: dbID("idCb_userLogin_check"), fn: accountPersistanceChange, resetValue: true });
-initEL({ id: dbID("idBtn_userLogin_login"), fn: firebaseLogin });
-initEL({ id: dbID("idBtn_userLogin_register"), fn: firebaseRegister });
-initEL({ id: dbID("idBtn_userChange_logout"), fn: firebaseLogout });
-initEL({ id: dbID("idBtn_userChange_change"), fn: userChange });
-initEL({ id: dbID("idBtn_userLogin_cancel"), fn: loginCancel });
-initEL({ id: dbID("idBtn_userChange_cancel"), fn: changeCancel });
+const Cb_userLogin_check = initEL({ id: "idCb_userLogin_check", fn: accountPersistanceChange, resetValue: true });
+const Btn_userLogin_login = initEL({ id: "idBtn_userLogin_login", fn: firebaseLogin });
+const Btn_userLogin_register = initEL({ id: "idBtn_userLogin_register", fn: firebaseRegister });
+const Btn_userChange_logout = initEL({ id: "idBtn_userChange_logout", fn: firebaseLogout });
+const Btn_userChange_change = initEL({ id: "idBtn_userChange_change", fn: userChange });
+const Btn_userLogin_cancel = initEL({ id: "idBtn_userLogin_cancel", fn: loginCancel });
+const Btn_userChange_cancel = initEL({ id: "idBtn_userChange_cancel", fn: changeCancel });
 
 function accountPersistanceChange() {
-  nuncDiscipuli.cred.keepLogin = dbID("idCb_userLogin_check").checked ? browserLocalPersistence : browserSessionPersistence;
+  nuncDiscipuli.cred.keepLogin = Cb_userLogin_check.checked ? browserLocalPersistence : browserSessionPersistence;
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -237,7 +239,7 @@ onAuthStateChanged(auth, (user) => {
   nuncDiscipuli.cred.uid = state ? user.uid : null;
   dbIDStyle("idDiv_navBar_AccountLogin").display = state ? "none" : "block";
   dbIDStyle("idDiv_navBar_AccountChange").display = state ? "block" : "none";
-  dbID("idLbl_userChange_user").textContent = state ? nuncDiscipuli.cred.email : "User";
+  Lbl_userChange_user.KadSetText(state ? nuncDiscipuli.cred.email : "User");
   if (state && !nuncDiscipuli.registering) {
     nuncDiscipuli.logging = true;
     loadDiscipuli(null);
@@ -256,12 +258,12 @@ export function userLoggedIn() {
 function firebaseLogin() {
   nuncDiscipuli.logging = true;
   KadLog.log("log in");
-  const email = dbID("idVin_userLogin_email").KadGet();
-  const pass = dbID("idVin_userLogin_pass").KadGet();
+  const email = Vin_userLogin_email.KadGet();
+  const pass = Vin_userLogin_pass.KadGet();
   setPersistence(auth, nuncDiscipuli.cred.keepLogin);
   signInWithEmailAndPassword(auth, email, pass)
     .then(() => {
-      dbID("idBtn_userLogin_login").KadEnable(false);
+      Btn_userLogin_login.KadEnable(false);
     })
     .catch((error) => {
       userAccError(error);
@@ -270,8 +272,8 @@ function firebaseLogin() {
 
 function firebaseRegister() {
   nuncDiscipuli.registering = true;
-  const email = dbID("idVin_userLogin_email").KadGet();
-  const pass = dbID("idVin_userLogin_pass").KadGet();
+  const email = Vin_userLogin_email.KadGet();
+  const pass = Vin_userLogin_pass.KadGet();
   createUserWithEmailAndPassword(auth, email, pass)
     .then((user) => {
       nuncDiscipuli.registering = false;
@@ -285,7 +287,7 @@ function firebaseRegister() {
 function userRegister() {
   createNewDatabase();
   navClick("cl_UserChange");
-  dbID("idBtn_userLogin_login").KadEnable(false);
+  Btn_userLogin_login.KadEnable(false);
 }
 
 function firebaseLogout() {
@@ -310,7 +312,7 @@ function userChange() {
   if (nuncDiscipuli.short === null) {
     nuncDiscipuli.short = nuncDiscipuli.createShort();
   }
-  dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
+  Lbl_navBarLbl_User.textContent = nuncDiscipuli.short;
   saveDiscipuli("UserAcc");
 }
 
@@ -327,14 +329,14 @@ function changeCancel() {
 function userAccSetUserBtn() {
   dbIDStyle("idDiv_navBar_User").display = "initial";
   if (nuncDiscipuli.short == null) AccData.infos.shortName.data = nuncDiscipuli.createShort();
-  dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short;
-  dbID("idBtn_userLogin_login").KadEnable(true);
+  Lbl_navBarLbl_User.textContent = nuncDiscipuli.short;
+  Btn_userLogin_login.KadEnable(true);
 }
 
 function userAccError(err) {
-  dbID("idBtn_userLogin_login").KadEnable(true);
-  dbID("idBtn_userLogin_register").KadEnable(true);
-  dbID("idLbl_userLogin_alert").textContent = "E-Mail oder Passwort falsch!";
+  Btn_userLogin_login.KadEnable(true);
+  Btn_userLogin_register.KadEnable(true);
+  Lbl_userLogin_alert.textContent = "E-Mail oder Passwort falsch!";
   KadLog.error(err);
 }
 
@@ -420,5 +422,5 @@ function createUserInfos() {
     { type: "ButtonImage", data: "trash", settings: { onclick: accountClearInfo, noBorder: "bottom", uiRadius: "right", uiSize: "width1" } },
   ];
 
-  KadTable.createHTMLGrid({ id: dbID("idTab_userChangeTable"), body });
+  KadTable.createHTMLGrid({ id: "idTab_userChangeTable", body });
 }

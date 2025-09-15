@@ -1,4 +1,4 @@
-import { dbID, initEL, KadDate } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate } from "../KadUtils/KadUtils.js";
 
 const pelveleaOptions = {
   starttime: {
@@ -53,18 +53,21 @@ const pelveleaOptions = {
   maxWorktime: false,
 };
 
-initEL({ id: dbID("idVin_pelveleaStarttime"), fn: pelveleaStarttime, resetValue: pelveleaOptions.starttime.valOrig });
-initEL({ id: dbID("idVin_pelveleaBreaks"), fn: pelveleaBreaks, resetValue: pelveleaOptions.breaks.valOrig });
-initEL({ id: dbID("idVin_pelveleaWorktime"), fn: pelveleaWorktime, resetValue: pelveleaOptions.worktime.valOrig });
+const Vin_pelveleaStarttime = initEL({ id: "idVin_pelveleaStarttime", fn: pelveleaStarttime, resetValue: pelveleaOptions.starttime.valOrig });
+const Vin_pelveleaBreaks = initEL({ id: "idVin_pelveleaBreaks", fn: pelveleaBreaks, resetValue: pelveleaOptions.breaks.valOrig });
+const Vin_pelveleaWorktime = initEL({ id: "idVin_pelveleaWorktime", fn: pelveleaWorktime, resetValue: pelveleaOptions.worktime.valOrig });
+const Lbl_pelveleaResult = initEL({ id: "idLbl_pelveleaResult" });
+const Lbl_pelveleaBreaktime = initEL({ id: "idLbl_pelveleaBreaktime" });
+const Prog_pelveleaProgress = initEL({ id: "idProg_pelveleaProgress", domOpts: { max: 100 } });
 
 export function clear_cl_Pelvelea() {
   clearTimeout(pelveleaOptions.timer);
   pelveleaOptions.maxWorktime = false;
   pelveleaOptions.timer = null;
 
-  pelveleaOptions.starttime.val = dbID("idVin_pelveleaStarttime").KadReset();
-  pelveleaOptions.breaks.val = dbID("idVin_pelveleaBreaks").KadReset();
-  pelveleaOptions.worktime.val = dbID("idVin_pelveleaWorktime").KadReset();
+  pelveleaOptions.starttime.val = Vin_pelveleaStarttime.KadReset();
+  pelveleaOptions.breaks.val = Vin_pelveleaBreaks.KadReset();
+  pelveleaOptions.worktime.val = Vin_pelveleaWorktime.KadReset();
   pelveleaCalculate();
 }
 
@@ -87,7 +90,7 @@ function pelveleaCalculate() {
   let d = new Date();
   pelveleaOptions.endtime.val = d.setHours(0, pelveleaOptions.starttime.minutes + pelveleaOptions.breaks.minutes + pelveleaOptions.worktime.minutes);
   pelveleaOptions.endtime.val = new Date(pelveleaOptions.endtime.val);
-  dbID("idLbl_pelveleaResult").textContent = `Arbeitsende: ${pelveleaOptions.endtime.val.toTimeString().slice(0, 5)}`;
+  Lbl_pelveleaResult.KadSetText(`Arbeitsende: ${pelveleaOptions.endtime.val.toTimeString().slice(0, 5)}`);
   clearTimeout(pelveleaOptions.timer);
   pelveleaOptions.timer = null;
   pelveleaTimer();
@@ -97,7 +100,7 @@ function pelveleaCalculate() {
 function pelveleaTimer() {
   let end = (pelveleaOptions.endtime.val - pelveleaOptions.starttime.date) / 1000;
   if (pelveleaOptions.endtime.val - new Date() > 0) {
-    dbID("idProg_pelveleaProgress").setAttribute("max", end);
+    Prog_pelveleaProgress.KadSetMax(end);
     pelveleaProgress();
   } else {
     pelveleaOvertimer();
@@ -107,7 +110,7 @@ function pelveleaTimer() {
 
 function pelveleaProgress() {
   let distance = (pelveleaOptions.endtime.val - new Date()) / 1000;
-  dbID("idProg_pelveleaProgress").setAttribute("value", distance);
+  Prog_pelveleaProgress.KadSetValue(distance);
 }
 
 function pelveleaOvertimer() {
@@ -115,7 +118,7 @@ function pelveleaOvertimer() {
   let mins = (new Date() - pelveleaOptions.endtime.val) / 60000;
   pelveleaOptions.endtime.overtime = d.setHours(0, mins);
   pelveleaOptions.endtime.overtime = new Date(pelveleaOptions.endtime.overtime);
-  dbID("idLbl_pelveleaResult").textContent = `Überstunden: ${pelveleaOptions.endtime.overtime.toTimeString().slice(0, 5)}`;
+  Lbl_pelveleaResult.KadSetText(`Überstunden: ${pelveleaOptions.endtime.overtime.toTimeString().slice(0, 5)}`);
 }
 
 function pelveleaBreaktime() {
@@ -123,7 +126,7 @@ function pelveleaBreaktime() {
 
   function breaks(mins) {
     const obj = KadDate.minutesToObj(mins);
-    dbID("idLbl_pelveleaBreaktime").textContent = `${obj.h}:${obj.m}`;
+    Lbl_pelveleaBreaktime.KadSetText(`${obj.h}:${obj.m}`);
   }
   if (distance >= 600 + pelveleaOptions.breaks.minutes * 60) {
     // 10 Stunden

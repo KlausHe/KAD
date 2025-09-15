@@ -1,5 +1,5 @@
 import { resizeGrid } from "../General/Layout.js";
-import { dbID, initEL, KadCSS } from "../KadUtils/KadUtils.js";
+import { initEL, KadCSS } from "../KadUtils/KadUtils.js";
 import { colorUpdateCanvascolors } from "./Color.js";
 
 export const globalValues = {
@@ -37,12 +37,12 @@ export const globalValues = {
   decimalsArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 };
 
-initEL({ id: dbID("idSel_settingsFontsize"), fn: settingsFontsize, selList: globalValues.fontSizeArray });
-initEL({ id: dbID("idSel_settingsDecimals"), fn: settingsDecimals, selStartIndex: 4, selList: globalValues.decimalsArray });
+const Sel_settingsFontsize = initEL({ id: "idSel_settingsFontsize", fn: settingsFontsize, selList: globalValues.fontSizeArray });
+const Sel_settingsDecimals = initEL({ id: "idSel_settingsDecimals", fn: settingsDecimals, selStartIndex: 4, selList: globalValues.decimalsArray });
 
 export function clear_cl_GeneralSettings() {
-  dbID("idSel_settingsFontsize").KadReset();
-  dbID("idSel_settingsDecimals").KadReset();
+  Sel_settingsFontsize.KadReset();
+  Sel_settingsDecimals.KadReset();
 }
 
 export const storage_cl_GeneralSettings = {
@@ -73,7 +73,7 @@ function settingsFontsize(obj = null) {
   if (obj != null) {
     globalValues.settings.fontSize = obj.target.value;
   } else {
-    dbID("idSel_settingsFontsize").KadReset({ selStartValue: globalValues.settings.fontSize });
+    Sel_settingsFontsize.KadReset({ selStartValue: globalValues.settings.fontSize });
   }
   KadCSS.setRoot({ variable: "fontSize", value: globalValues.settings.fontSize, dim: "px" });
   colorUpdateCanvascolors();
@@ -83,7 +83,7 @@ function settingsFontsize(obj = null) {
 function settingsDecimals(obj = null) {
   if (obj === null) {
     const opt = globalValues.decimalsArray.indexOf(Number(globalValues.settings.decimals));
-    dbID("idSel_settingsDecimals").options[opt].selected = true; //set CB when loaded
+    Sel_settingsDecimals.options[opt].selected = true; //set CB when loaded
   } else {
     globalValues.settings.decimals = obj.target.value;
     alert("Änderung wird erst bei Neuberechnung übernommen!");
