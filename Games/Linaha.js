@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
-import { dbID, dbIDStyle, initEL, KadColor, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { dbIDStyle, initEL, KadColor, KadFile, KadLog, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const linahaOptions = {
@@ -31,7 +31,7 @@ const linahaOptions = {
 
 const Sel_linahaSelectQ = initEL({ id: "idSel_linahaSelectQ", fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 0 });
 const Sel_linahaSelectA = initEL({ id: "idSel_linahaSelectA", fn: linahaSelect, selList: linahaOptions.optionsDisplayed, selStartIndex: 1 });
-initEL({ id: "idBtn_linahaSelectSwitch", fn: linahaSwitchSelect });
+const Btn_linahaSelectSwitch = initEL({ id: "idBtn_linahaSelectSwitch", fn: linahaSwitchSelect });
 const Sel_linahaChoices = initEL({ id: "idSel_linahaChoices", fn: linahaChoiceChange, selStartIndex: 1, selList: linahaOptions.setOptions });
 const Vin_linahaRounds = initEL({ id: "idVin_linahaRounds", fn: linahaRoundsChange, resetValue: 5, domOpts: { min: 1, max: 10 } });
 const Btn_linahaMap = initEL({ id: "idBtn_linahaMap", fn: linahaOpenMap });
@@ -39,6 +39,7 @@ const Btn_linahaStart = initEL({ id: "idBtn_linahaStart", fn: linahaStart });
 const Lbl_linahaQuestion = initEL({ id: "idLbl_linahaQuestion", resetValue: "" });
 const Lbl_linahaCurrentRound = initEL({ id: "idLbl_linahaCurrentRound", resetValue: "" });
 const Lbl_linahaCurrentScore = initEL({ id: "idLbl_linahaCurrentScore", resetValue: "" });
+const inputArr = [Sel_linahaSelectQ, Btn_linahaSelectSwitch, Sel_linahaSelectA, Sel_linahaChoices, Vin_linahaRounds];
 
 export function clear_cl_Linaha() {
   linahaDisableEntries(false);
@@ -74,21 +75,19 @@ function linahaSelect(obj) {
     return;
   }
   if (tempIdent == "selQ") {
-    const objA = Sel_linahaSelectA;
-    objA.options[linahaOptions.selQ].selected = true;
+    Sel_linahaSelectA.HTML.options[linahaOptions.selQ].selected = true;
     linahaOptions.selA = linahaOptions.selQ;
     linahaOptions.selQ = obj.selectedIndex;
   } else {
-    const objQ = Sel_linahaSelectQ;
-    objQ.options[linahaOptions.selA].selected = true;
+    Sel_linahaSelectQ.HTML.options[linahaOptions.selA].selected = true;
     linahaOptions.selQ = linahaOptions.selA;
     linahaOptions.selA = obj.selectedIndex;
   }
 }
 
 function linahaSwitchSelect() {
-  const objQ = Sel_linahaSelectQ;
-  const objA = Sel_linahaSelectA;
+  const objQ = Sel_linahaSelectQ.HTML;
+  const objA = Sel_linahaSelectA.HTML;
   const objQIndex = objQ.selectedIndex;
   objQ.options[objA.selectedIndex].selected = true;
   objA.options[objQIndex].selected = true;
@@ -116,9 +115,8 @@ function linahaFinished() {
 }
 
 function linahaDisableEntries(lock) {
-  const inputArr = ["idSel_linahaSelectQ", "idBtn_linahaSelectSwitch", "idSel_linahaSelectA", "idSel_linahaChoices", "idVin_linahaRounds"];
   for (const id of inputArr) {
-    dbID(id).KadEnable(!lock);
+    id.KadEnable(!lock);
   }
 }
 

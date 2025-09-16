@@ -1,7 +1,7 @@
 //  https://de.wikipedia.org/wiki/Pyramide_(Geometrie)
 
 import { Data_Materials } from "../KadData/KadData_Material.js";
-import { dbID, initEL, KadInteraction, KadTable, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadInteraction, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 import { materialOptions } from "./Material.js";
@@ -556,12 +556,17 @@ let geoObjects = {
 const Vin_Area_0 = initEL({ id: "idVin_Area_0", fn: geoBerechnung });
 const Vin_Area_1 = initEL({ id: "idVin_Area_1", fn: geoBerechnung });
 const Vin_Area_2 = initEL({ id: "idVin_Area_2", fn: geoBerechnung });
-const Cb_geoRadius = initEL({ id: "idCb_geoRadius", fn: geoChangeDiameter });
+const Lbl_Area_0 = initEL({ id: "idLbl_Area_0", resetValue: "..." });
+const Lbl_Area_1 = initEL({ id: "idLbl_Area_1", resetValue: "..." });
+const Lbl_Area_2 = initEL({ id: "idLbl_Area_2", resetValue: "..." });
+const Cb_geoRadius = initEL({ id: "idCb_geoRadius", fn: geoChangeDiameter, resetValue: false });
 const Lbl_goeRadius = initEL({ id: "idLbl_goeRadius", resetValue: "Radius verwenden" });
+const Lbl_Areas = [Lbl_Area_0, Lbl_Area_1, Lbl_Area_2];
+const Vin_Areas = [Vin_Area_0, Vin_Area_1, Vin_Area_2];
 
 let Btn_GeometrieElements = [];
 for (let i = 0; i < geoObjects.elements.length; i++) {
-  Btn_GeometrieElements.push[
+  Btn_GeometrieElements.push(
     initEL({
       id: `idBtn_GeometrieElement_${i}`,
       fn: () => changeGeoObject(i),
@@ -569,27 +574,27 @@ for (let i = 0; i < geoObjects.elements.length; i++) {
       dataset: ["radio", "geometrieAreaSelect"],
       uiOpts: { uiSize: "width7" },
     })
-  ];
+  );
 }
 
 export function clear_cl_Geometrie() {
   KadInteraction.removeContextmenu("idCanv_geometire");
   geoObjects.elementIndex = geoObjects.elementIndexOrig;
-  changeGeoObject(geoObjects.elementIndex);
-  Cb_geoRadius.checked = false;
 
-  let num = document.getElementsByName("naDiv_Area").length;
-  for (let i = 0; i < num; i++) {
-    dbID(`idVin_Area_${i}`).value = "";
+  for (let i = 0; i < Vin_Areas.length; i++) {
+    Lbl_Areas[i].KadReset();
+    Vin_Areas[i].KadReset();
   }
+  Cb_geoRadius.KadReset();
+  changeGeoObject(geoObjects.elementIndex);
 }
 
 function geoChangeDiameter() {
-  geoObjects.radState = Cb_geoRadius.checked;
-  let num = document.getElementsByName("naDiv_Area").length;
-  for (let i = 0; i < num; i++) {
+  geoObjects.radState = Cb_geoRadius.KadGet();
+
+  for (let i = 0; i < Vin_Areas.length; i++) {
     if (geoObjects.selected.vals[i]) {
-      dbID(`idLbl_Vin_Area_${i}`).innerHTML = geoObjects.selected.lbl[i]; //LABEL
+      Lbl_Areas[i].KadSetHTML(geoObjects.selected.lbl[i]); //LABEL
     }
   }
   geoObjects.selected.show();
@@ -623,21 +628,18 @@ function patternText(text, v1, v2, posLR, posTB) {
 
 function changeGeoObject(index) {
   geoObjects.elementIndex = index;
-  dbID(`idBtn_GeometrieElement_${geoObjects.elementIndex}`).KadRadioColor();
-
+  Btn_GeometrieElements[index].KadRadioColor();
   geoObjects.selected.show();
 
-  let num = document.getElementsByName("naDiv_Area").length;
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < Vin_Areas.length; i++) {
     if (geoObjects.selected.vals[i]) {
-      dbID(`idVin_Area_${i}`).KadEnable(true);
-      dbID(`idLbl_Vin_Area_${i}`).textContent = geoObjects.selected.lbl[i]; //LABEL
-      dbID(`idVin_Area_${i}`).placeholder = geoObjects.selected.vals[i];
+      Vin_Areas[i].KadEnable(true);
+      Vin_Areas[i].KadReset({ resetValue: geoObjects.selected.vals[i] });
+      Lbl_Areas[i].KadSetText(geoObjects.selected.lbl[i]);
     } else {
-      dbID(`idVin_Area_${i}`).KadEnable(false);
-      dbID(`idVin_Area_${i}`).KadEnable(false);
-      dbID(`idLbl_Vin_Area_${i}`).textContent = ""; //LABEL
-      dbID(`idVin_Area_${i}`).placeholder = "";
+      Vin_Areas[i].KadEnable(false);
+      Vin_Areas[i].KadReset({ resetValue: "" });
+      Lbl_Areas[i].KadSetText("");
     }
   }
   Cb_geoRadius.KadEnable(geoObjects.selected.cbRadiusEnable);

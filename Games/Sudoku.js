@@ -1,5 +1,5 @@
 import { Data_Sudoku } from "../KadData/KadData_Sudoku.js";
-import { dbID, initEL, KadArray, KadDate, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
+import { initEL, KadArray, KadDate, KadInteraction, KadRandom } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
@@ -50,6 +50,8 @@ const Btn_sudokuNumOverview_6 = initEL({ id: "idBtn_sudokuNumOverview_6", fn: su
 const Btn_sudokuNumOverview_7 = initEL({ id: "idBtn_sudokuNumOverview_7", fn: sudokuGroupHighlight });
 const Btn_sudokuNumOverview_8 = initEL({ id: "idBtn_sudokuNumOverview_8", fn: sudokuGroupHighlight });
 const Btn_sudokuNumOverview_9 = initEL({ id: "idBtn_sudokuNumOverview_9", fn: sudokuGroupHighlight });
+const Btn_sudokuNumOverviews = [Btn_sudokuNumOverview_1, Btn_sudokuNumOverview_2, Btn_sudokuNumOverview_3, Btn_sudokuNumOverview_4, Btn_sudokuNumOverview_5, Btn_sudokuNumOverview_6, Btn_sudokuNumOverview_7, Btn_sudokuNumOverview_8, Btn_sudokuNumOverview_9];
+
 const Canv_sudoku = initEL({ id: "idCanv_sudoku", action: "keydown", fn: sudokuKeyPressed });
 
 export function clear_cl_Sudoku() {
@@ -282,12 +284,12 @@ function sudokuSetDoneNumbers() {
     }
   }
   for (let i = 1; i <= 9; i++) {
-    let btnObj = dbID(`idBtn_sudokuNumOverview_${i}`);
     let col = null;
     if (numCount[i] == 9) col = "positive";
     if (numCount[i] > 9) col = "negative";
-    btnObj.KadButtonColor(col);
-    btnObj.innerHTML = i + "<sup>" + numCount[i] + "</sup>";
+
+    Btn_sudokuNumOverviews[i - 1].KadButtonColor(col);
+    Btn_sudokuNumOverviews[i - 1].KadSetText(i + "<sup>" + numCount[i] + "</sup>");
   }
 }
 const caSU = new p5((c) => {

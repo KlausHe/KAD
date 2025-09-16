@@ -178,11 +178,12 @@ const pormulaChart = {
   canvas: null,
 };
 
-const Btn_pormulaTypeSelectLinear = initEL({ id: "idBtn_pormulaTypeSelectLinear", fn: () => pormulaGetType("idBtn_pormulaTypeSelectLinear", "Linear"), resetValue: "Linear", dataset: ["radio", "pormulaType"] });
-const Btn_pormulaTypeSelectExponential = initEL({ id: "idBtn_pormulaTypeSelectExponential", fn: () => pormulaGetType("idBtn_pormulaTypeSelectExponential", "Exponential"), resetValue: "Exponential", dataset: ["radio", "pormulaType"] });
-const Btn_pormulaTypeSelectLogarithmus = initEL({ id: "idBtn_pormulaTypeSelectLogarithmus", fn: () => pormulaGetType("idBtn_pormulaTypeSelectLogarithmus", "Logarithmus"), resetValue: "Logarithmus", dataset: ["radio", "pormulaType"] });
-const Btn_pormulaTypeSelectPotenz = initEL({ id: "idBtn_pormulaTypeSelectPotenz", fn: () => pormulaGetType("idBtn_pormulaTypeSelectPotenz", "Potenz"), resetValue: "Potenz", dataset: ["radio", "pormulaType"] });
-const Btn_pormulaTypeSelectPolynom = initEL({ id: "idBtn_pormulaTypeSelectPolynom", fn: () => pormulaGetType("idBtn_pormulaTypeSelectPolynom", "Polynom"), resetValue: "Polynom", dataset: ["radio", "pormulaType"] });
+const Btn_pormulaTypeSelectLinear = initEL({ id: "idBtn_pormulaTypeSelectLinear", fn: () => pormulaGetType(0, "Linear"), resetValue: "Linear", dataset: ["radio", "pormulaType"] });
+const Btn_pormulaTypeSelectExponential = initEL({ id: "idBtn_pormulaTypeSelectExponential", fn: () => pormulaGetType(1, "Exponential"), resetValue: "Exponential", dataset: ["radio", "pormulaType"] });
+const Btn_pormulaTypeSelectLogarithmus = initEL({ id: "idBtn_pormulaTypeSelectLogarithmus", fn: () => pormulaGetType(2, "Logarithmus"), resetValue: "Logarithmus", dataset: ["radio", "pormulaType"] });
+const Btn_pormulaTypeSelectPotenz = initEL({ id: "idBtn_pormulaTypeSelectPotenz", fn: () => pormulaGetType(3, "Potenz"), resetValue: "Potenz", dataset: ["radio", "pormulaType"] });
+const Btn_pormulaTypeSelectPolynom = initEL({ id: "idBtn_pormulaTypeSelectPolynom", fn: () => pormulaGetType(4, "Polynom"), resetValue: "Polynom", dataset: ["radio", "pormulaType"] });
+const Btn_pormulaTypeSelects = [Btn_pormulaTypeSelectLinear, Btn_pormulaTypeSelectExponential, Btn_pormulaTypeSelectLogarithmus, Btn_pormulaTypeSelectPotenz, Btn_pormulaTypeSelectPolynom];
 const Btn_pormulaBestFit = initEL({ id: "idBtn_pormulaBestFit", fn: pormulaBestFit, resetValue: "Fit Best" });
 const Btn_pormulaPolyFit = initEL({ id: "idBtn_pormulaPolyFit", fn: pormulaPolyFit, resetValue: "Fit Polynom" });
 const Vin_pormulaPrecision = initEL({ id: "idVin_pormulaPrecision", fn: pormulaCalculate, resetValue: pormulaOptions.regOptionsOrig.precision });
@@ -212,6 +213,8 @@ const Lbl_pormulaAccuracy = initEL({ id: "idLbl_pormulaAccuracy" });
 const Lbl_pormulaPointResultA = initEL({ id: "idLbl_pormulaPointResultA" });
 const Lbl_pormulaPointResultB = initEL({ id: "idLbl_pormulaPointResultB" });
 const Lbl_pormulaPointResultC = initEL({ id: "idLbl_pormulaPointResultC" });
+const Vin_Pormula_xs = [Vin_Pormula_x0, Vin_Pormula_x1, Vin_Pormula_x2, Vin_Pormula_x3, Vin_Pormula_x4, Vin_Pormula_x5, Vin_Pormula_x6, Vin_Pormula_x7];
+const Vin_Pormula_ys = [Vin_Pormula_y0, Vin_Pormula_y1, Vin_Pormula_y2, Vin_Pormula_y3, Vin_Pormula_y4, Vin_Pormula_y5, Vin_Pormula_y6, Vin_Pormula_y7];
 
 export function clear_cl_Pormula() {
   pormulaOptions.selType = Object.keys(pormulaOptions.types)[0];
@@ -222,12 +225,12 @@ export function clear_cl_Pormula() {
   Vin_pormulaPointEntryC.KadReset();
 
   pormulaOptions.data.size = pormulaOptions.valuesOrig.length;
-  const inputParent = dbCL("clDiv_pormulaInput", null);
-  for (let i = 0; i < inputParent.length; i++) {
+
+  for (let i = 0; i < Vin_Pormula_xs.length; i++) {
     const x = i < pormulaOptions.data.size ? i * 2 + 1 : "";
     const y = i < pormulaOptions.data.size ? pormulaOptions.valuesOrig[i] : "";
-    dbID(`idVin_Pormula_x${i}`).KadReset({ resetValue: x });
-    dbID(`idVin_Pormula_y${i}`).KadReset({ resetValue: y });
+    Vin_Pormula_xs[i].KadReset({ resetValue: x });
+    Vin_Pormula_xs[i].KadReset({ resetValue: y });
   }
 
   if (pormulaChart.canvas != null) {
@@ -248,19 +251,20 @@ function pormulaAddInput() {
 function pormulaDirInput(dir) {
   pormulaOptions.data.size += dir;
   pormulaOptions.data.size = KadValue.constrain(pormulaOptions.data.size, pormulaOptions.data.minSize, pormulaOptions.data.maxSize);
+
   const parent = dbCL("clDiv_pormulaInput", null);
   parent.forEach((p, i) => {
     p.style.display = i < pormulaOptions.data.size ? "block" : "none";
     if (dir == 1 && i == pormulaOptions.data.size - 1) {
-      dbID(`idVin_Pormula_x${i}`).value = dbID(`idVin_Pormula_x${i - 1}`).KadGet() + 1;
-      dbID(`idVin_Pormula_y${i}`).value = dbID(`idVin_Pormula_y${i - 1}`).KadGet() + 1;
+      Vin_Pormula_xs[i].KadSetValue(Vin_Pormula_xs[i - 1].KadGet() + 1);
+      Vin_Pormula_ys[i].KadSetValue(Vin_Pormula_ys[i - 1].KadGet() + 1);
     }
   });
   pormulaCalculate();
 }
 
-function pormulaGetType(id, type) {
-  dbID(id).KadRadioColor();
+function pormulaGetType(index, type) {
+  Btn_pormulaTypeSelects[index].KadRadioColor();
   pormulaOptions.selType = type;
   pormulaCalculate();
 }
@@ -272,8 +276,8 @@ function pormulaReadInputs() {
   pormulaOptions.data.uniquePoints = [];
   pormulaOptions.data.uniqueX = [];
   for (let i = 0; i < pormulaOptions.data.size; i++) {
-    const x = dbID(`idVin_Pormula_x${i}`).KadGet({ failSafe: i * 2 + 1, noPlaceholder: true });
-    const y = dbID(`idVin_Pormula_y${i}`).KadGet({ failSafe: pormulaOptions.valuesOrig[i], noPlaceholder: true });
+    const x = Vin_Pormula_xs[i].KadGet({ failSafe: i * 2 + 1, noPlaceholder: true });
+    const y = Vin_Pormula_ys[i].KadGet({ failSafe: pormulaOptions.valuesOrig[i], noPlaceholder: true });
     if (x != null && y != null) {
       pormulaOptions.data.userPoints.push([x, y]);
       if (!pormulaOptions.data.uniqueX.includes(x)) {
@@ -316,6 +320,7 @@ function pormulaBestFit() {
   const index = types.indexOf("Polynom");
   types.splice(index, 1);
   let bestType = null;
+  let bestIndex = 0;
   let bestR = 0;
   types.forEach((t, i) => {
     pormulaOptions.types[t].calc();
@@ -323,10 +328,11 @@ function pormulaBestFit() {
     if (bestR < cur) {
       bestR = cur;
       bestType = t;
+      bestIndex = i;
     }
   });
   if (bestType != null) {
-    pormulaGetType(`idBtn_pormulaTypeSelect${bestType}`, bestType);
+    pormulaGetType(bestIndex, bestType);
   }
 }
 
@@ -349,7 +355,7 @@ function pormulaPolyFit() {
     prevR = newR;
   }
   pormulaOptions.regOptions.order = Vin_pormulaOrder.KadReset();
-  pormulaGetType(`Btn_pormulaTypeSelectPolynom`, "Polynom");
+  pormulaGetType(4, "Polynom");
 }
 
 function pormulaPoint() {

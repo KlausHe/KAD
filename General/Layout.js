@@ -338,9 +338,7 @@ export function layoutCreateNavbar() {
   while (navElements.length > 0) {
     navElements[0].parentNode.removeChild(navElements[0]);
   }
-  let contentLength = 0;
   for (let i = contentGroupsNav.length - 1; i >= 0; i--) {
-    contentLength++;
     const obj = contentGroupsNav[i];
     const navParentDiv = KadTable.createCell({
       type: "Div",
@@ -354,13 +352,13 @@ export function layoutCreateNavbar() {
     });
     const navParentImg = KadTable.createCell({ type: "Img", names: ["navBarIcon", "parent", obj], subGroup: "navbar", img: `nav${obj}` });
     navParentDiv.appendChild(navParentImg);
-    const navParentLbl = KadTable.createCell({ type: "Lbl", names: ["navBarLbl", obj], createClass: ["cl_navNames"], idNoChild: true, text: obj });
+    const navParentLbl = KadTable.createCell({ type: "Lbl", names: ["navBar", obj], createClass: ["cl_navNames"], idNoChild: true, text: obj });
     navParentDiv.appendChild(navParentLbl);
     parent.insertBefore(navParentDiv, parent.children[0]);
   }
   dbID("idDiv_navBar_Universe").classList.add("navbarActive");
   dbIDStyle("idDiv_navBar_User").display = "none";
-  dbID("idLbl_navBarLbl_User").textContent = nuncDiscipuli.short || "User";
+  dbID("idLbl_navBar_User").textContent = nuncDiscipuli.short || "User";
 }
 
 export function layoutCreateFooter() {

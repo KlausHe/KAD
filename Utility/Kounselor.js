@@ -1,5 +1,5 @@
 import { Data_RALColors } from "../KadData/KadData_Color.js";
-import { dbID, dbIDStyle, initEL, KadColor, KadString } from "../KadUtils/KadUtils.js";
+import { dbIDStyle, initEL, KadColor, KadString } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const kounselorOptions = {
@@ -17,10 +17,10 @@ const Vin_kounselorRGB = initEL({ id: "idVin_kounselorRGB", fn: kounselorInput, 
 const Vin_kounselorHSL = initEL({ id: "idVin_kounselorHSL", fn: kounselorInput, resetValue: "HSL", dataset: ["type", "HSL"], dbList: Data_RALColors.map((d) => d.HSL) });
 const Vin_kounselorHSB = initEL({ id: "idVin_kounselorHSB", fn: kounselorInput, resetValue: "HSB", dataset: ["type", "HSB"], dbList: Data_RALColors.map((d) => d.HSB) });
 const Vin_kounselorCMYK = initEL({ id: "idVin_kounselorCMYK", fn: kounselorInput, resetValue: "CMYK", dataset: ["type", "CMYK"], dbList: Data_RALColors.map((d) => d.CMYK) });
-
+const Vin_kounselors = [Vin_kounselorName, Vin_kounselorRAL, Vin_kounselorHEX, Vin_kounselorRGB, Vin_kounselorHSL, Vin_kounselorHSB, Vin_kounselorCMYK];
 export function clear_cl_Kounselor() {
-  for (const name of kounselorOptions.types) {
-    dbID(`idVin_kounselor${name}`).KadReset();
+  for (let Vin_kon of Vin_kounselors) {
+    Vin_kon.KadReset();
   }
   kounselorOptions.type = kounselorOptions.typeOrig;
   kounselorOptions.value = globalColors.elements.baseColor;
@@ -106,10 +106,12 @@ function kounselorGenerateColorobject() {
 }
 
 function kounselorShowResults() {
-  for (const type of kounselorOptions.types) {
+  for (let i = 0; i < kounselorOptions.types.length; i++) {
+    const type = kounselorOptions.types[i];
+
     if (type == kounselorOptions.type) continue;
     const text = type == "Name" || type == "RAL" ? kounselorOptions.RALObj[type] : KadColor.formatAsString({ colorArray: kounselorOptions.RALObj[type], type });
-    dbID(`idVin_kounselor${type}`).KadReset({ resetValue: text });
+    Vin_kounselors[i].KadReset({ resetValue: text });
   }
   const colorCSS = KadColor.formatAsCSS({ colorArray: kounselorOptions.RALObj.HSL, type: "HSL" });
   dbIDStyle("idLbl_kounselorOutputA").background = colorCSS;

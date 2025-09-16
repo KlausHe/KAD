@@ -163,7 +163,7 @@ function howaCleanLocation() {
     } else {
       weatherMaps.district = "de";
     }
-    for (let node of Sel_howaMapsDistrict.options) {
+    for (let node of Sel_howaMapsDistrict.HTML.options) {
       if (node.value == weatherMaps.district) {
         node.selected = true;
         break;

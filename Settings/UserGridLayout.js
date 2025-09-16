@@ -28,6 +28,7 @@ const Sel_userGridSelect = initEL({ id: "idSel_userGridSelect", fn: userGridSele
 
 export function clear_cl_UserGridLayout() {
   Btn_userGridEnable.KadReset();
+  Btn_userGridEnable.KadRadioColor();
   Btn_userGridPrioritize.KadReset();
 
   KadInteraction.removeContextmenu("idCanv_userGrid");

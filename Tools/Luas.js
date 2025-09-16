@@ -116,8 +116,8 @@ function luasInputChange() {
   luasOptions.speedVin = Vin_luasVelAngular.KadGet();
   luasOptions.diameterVin = Vin_luasDiameter.KadGet();
   luasOptions.angularVin = Sel_luasAngularUnit.KadGet();
-  luasOptions.angularText = Sel_luasAngularUnit[Sel_luasAngularUnit.selectedIndex].text;
-  luasOptions.linearText = Sel_luasLinearUnit[Sel_luasLinearUnit.selectedIndex].text;
+  luasOptions.angularText = Sel_luasAngularUnit.HTML[Sel_luasAngularUnit.HTML.selectedIndex].text;
+  luasOptions.linearText = Sel_luasLinearUnit.HTML[Sel_luasLinearUnit.HTML.selectedIndex].text;
   luasOptions.speedAngular = (luasOptions.speedVin * 360) / luasOptions.angularVin;
   luasOptions.speedLinear = luasOptions.speedVin * Math.PI * luasOptions.diameterVin;
   Lbl_luasResult.KadSetHTML(`Linear: ${KadValue.number(luasOptions.speedLinear, { decimals: 3 })} ${luasOptions.angularText.replace("U", luasOptions.linearText)}`);

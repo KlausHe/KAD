@@ -83,7 +83,7 @@ function settingsFontsize(obj = null) {
 function settingsDecimals(obj = null) {
   if (obj === null) {
     const opt = globalValues.decimalsArray.indexOf(Number(globalValues.settings.decimals));
-    Sel_settingsDecimals.options[opt].selected = true; //set CB when loaded
+    Sel_settingsDecimals.HTML.options[opt].selected = true; //set CB when loaded
   } else {
     globalValues.settings.decimals = obj.target.value;
     alert("Änderung wird erst bei Neuberechnung übernommen!");

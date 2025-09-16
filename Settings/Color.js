@@ -96,10 +96,14 @@ export const globalColors = {
 };
 
 const Sel_colorSettingsDefault = initEL({ id: "idSel_colorSettingsDefault", fn: colorDefaultMode, selList: colorSettingsOptions.defaultMode.map((l) => [KadString.firstLetterCap(l), l]) });
-let Vin_colorSettings = [];
-for (let area of colorSettingsOptions.colorAreas) {
-  for (let mode of colorSettingsOptions.modeNames) {
-    initEL({
+
+let Vin_colorSettings = {};
+let Lbl_colorSettings = {};
+for (let mode of colorSettingsOptions.modeNames) {
+  Vin_colorSettings[mode] = {};
+  Lbl_colorSettings[mode] = {};
+  for (let area of colorSettingsOptions.colorAreas) {
+    Vin_colorSettings[mode][area] = initEL({
       id: `idVin_colorSetting_${mode}_${area}`,
       action: "input",
       fn: colorChange,
@@ -109,7 +113,7 @@ for (let area of colorSettingsOptions.colorAreas) {
       ],
       resetValue: KadColor.colAsString({ colorArray: colorSettingsOptions.modesOrig[mode][area], from: "HSL", to: "HEX" }),
     });
-    initEL({
+    Lbl_colorSettings[mode][area] = initEL({
       id: `idLbl_colorSetting_${mode}_${area}`,
       action: "input",
       fn: colorChange,
@@ -170,7 +174,7 @@ export function colorThemeChanged() {
   dbID("idImg_userNav_colormode").src = KadDOM.getImgPath(globalColors.darkmodeOn ? "sun" : "moon");
   for (let theme of colorSettingsOptions.modeNames) {
     for (let [name, col] of Object.entries(colorSettingsOptions[theme])) {
-      const selID = `idLbl_colorSetting_${theme}_${name}`;
+      const selID = Lbl_colorSettings[theme][name].HTML;
       dbIDStyle(selID).background = KadColor.formatAsCSS({ colorArray: col, type: "HSL" });
       dbIDStyle(selID).color = KadColor.stateAsCSS({ colorArray: col, type: "HSL" });
       if (colorSettingsOptions.currentMode == theme) {
@@ -203,8 +207,8 @@ function populateColorSelector() {
   for (let area of colorSettingsOptions.colorAreas) {
     for (let mode of colorSettingsOptions.modeNames) {
       const color = KadColor.colAsString({ colorArray: colorSettingsOptions[mode][area], from: "HSL", to: "HEX" });
-      dbID(`idVin_colorSetting_${mode}_${area}`).KadReset({ resetValue: color, dbList: optionStrings });
-      dbID(`idLbl_colorSetting_${mode}_${area}`).KadSetText(`${area} (${color})`);
+      Vin_colorSettings[mode][area].KadReset({ resetValue: color, dbList: optionStrings });
+      Lbl_colorSettings[mode][area].KadSetText(`${area} (${color})`);
     }
   }
 }
@@ -216,9 +220,10 @@ function colorChange(obj) {
 
   colorSettingsOptions[mode][area] = KadColor.colAsArray({ colorArray: hexColor, from: "HEX", to: "HSL" });
   const col = colorSettingsOptions[mode][area];
-  dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).background = KadColor.formatAsCSS({ colorArray: col, type: "HSL" });
-  dbIDStyle(`idLbl_colorSetting_${mode}_${area}`).color = KadColor.stateAsCSS({ colorArray: col, type: "HSL" });
-  dbID(`idLbl_colorSetting_${mode}_${area}`).KadSetText(`${area} (${hexColor})`);
+
+  Lbl_colorSettings[mode][area].HTML.style.background = KadColor.formatAsCSS({ colorArray: col, type: "HSL" });
+  Lbl_colorSettings[mode][area].HTML.style.color = KadColor.stateAsCSS({ colorArray: col, type: "HSL" });
+  Lbl_colorSettings[mode][area].KadSetText(`${area} (${hexColor})`);
 
   if (mode == colorSettingsOptions.currentMode) {
     KadCSS.setRoot({ variable: `bgc${area}`, value: KadColor.formatAsString({ colorArray: col, type: "HSL" }) });

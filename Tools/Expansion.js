@@ -68,18 +68,18 @@ export function expansionUpdateOptions() {
 }
 
 function expansionSwitch() {
-  const tempSelA = Sel_expansionMaterialA.selectedIndex;
-  const tempSelB = Sel_expansionMaterialB.selectedIndex;
-  Sel_expansionMaterialA.options[tempSelB].selected = true;
-  Sel_expansionMaterialB.options[tempSelA].selected = true;
+  const tempSelA = Sel_expansionMaterialA.HTML.selectedIndex;
+  const tempSelB = Sel_expansionMaterialB.HTML.selectedIndex;
+  Sel_expansionMaterialA.HTML.options[tempSelB].selected = true;
+  Sel_expansionMaterialB.HTML.options[tempSelA].selected = true;
   expansionEntryMaterial();
 }
 
 function expansionEntryMaterial() {
   expansionOptions.materials.matA = Sel_expansionMaterialA.KadGet();
   expansionOptions.materials.matB = Sel_expansionMaterialB.KadGet();
-  Sel_expansionCompare[1].textContent = `Berechne ${expansionOptions.materials.matA}`;
-  Sel_expansionCompare[2].textContent = `Berechne ${expansionOptions.materials.matB}`;
+  Sel_expansionCompare.HTML[1].textContent = `Berechne ${expansionOptions.materials.matA}`;
+  Sel_expansionCompare.HTML[2].textContent = `Berechne ${expansionOptions.materials.matB}`;
   expansionCalc();
 }
 

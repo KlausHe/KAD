@@ -1276,8 +1276,8 @@ function niskaCalc() {
   niskaOptions.pitch.val = Vin_niskaPitch.KadGet();
   niskaOptions.strengthClass.index0 = Sel_niskaStrengthClassA.selectedIndex;
   niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
-  niskaOptions.select.index = Sel_niskaSelect.selectedIndex;
-  let type = Sel_niskaSelect.options[niskaOptions.select.index].parentElement.label;
+  niskaOptions.select.index = Sel_niskaSelect.HTML.selectedIndex;
+  let type = Sel_niskaSelect.HTML.options[niskaOptions.select.index].parentElement.label;
   niskaOptions.select.type = niskaOptions.select.types[type];
 
   niskaOptions.select.index -= niskaOptions.select.offset;

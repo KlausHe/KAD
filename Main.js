@@ -76,7 +76,7 @@ export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" 
 
 export function updateMasterSelect() {
   Sel_globalValue.KadReset({ selStartValue: "Benkyou", selGroup: { Groups: contentGroupsMaincontent, ...contentLayout.namelistContent } });
-  Sel_globalValue.focus();
+  Sel_globalValue.HTML.focus();
 }
 
 function globalValueChanged() {

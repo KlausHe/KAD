@@ -156,7 +156,7 @@ export function clear_cl_UserLogin() {
 
   Cb_userLogin_check.KadReset();
   accountPersistanceChange();
-  Vin_userLogin_email.removeAttribute("disabled");
+  Vin_userLogin_email.HTML.removeAttribute("disabled");
   Btn_userLogin_login.KadEnable(true);
   Lbl_userLogin_alert.textContent = "";
 }
@@ -237,8 +237,8 @@ onAuthStateChanged(auth, (user) => {
   const state = user != null;
   nuncDiscipuli.cred.email = state ? user.email : null;
   nuncDiscipuli.cred.uid = state ? user.uid : null;
-  dbIDStyle("idDiv_navBar_AccountLogin").display = state ? "none" : "block";
-  dbIDStyle("idDiv_navBar_AccountChange").display = state ? "block" : "none";
+  Div_navBar_AccountLogin.HTML.style.display = state ? "none" : "block";
+  Div_navBar_AccountChange.HTML.style.display = state ? "block" : "none";
   Lbl_userChange_user.KadSetText(state ? nuncDiscipuli.cred.email : "User");
   if (state && !nuncDiscipuli.registering) {
     nuncDiscipuli.logging = true;
@@ -312,7 +312,8 @@ function userChange() {
   if (nuncDiscipuli.short === null) {
     nuncDiscipuli.short = nuncDiscipuli.createShort();
   }
-  Lbl_navBarLbl_User.textContent = nuncDiscipuli.short;
+  KadLog.log(nuncDiscipuli.short);
+  dbID("idLbl_navBar_User").textContent = nuncDiscipuli.short;
   saveDiscipuli("UserAcc");
 }
 
@@ -329,7 +330,7 @@ function changeCancel() {
 function userAccSetUserBtn() {
   dbIDStyle("idDiv_navBar_User").display = "initial";
   if (nuncDiscipuli.short == null) AccData.infos.shortName.data = nuncDiscipuli.createShort();
-  Lbl_navBarLbl_User.textContent = nuncDiscipuli.short;
+  dbID("idLbl_navBar_User").textContent = nuncDiscipuli.short;
   Btn_userLogin_login.KadEnable(true);
 }
 

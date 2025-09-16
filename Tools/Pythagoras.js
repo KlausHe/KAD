@@ -1,4 +1,4 @@
-import { dbID, dbIDStyle, deepClone, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { dbIDStyle, deepClone, initEL, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -24,13 +24,14 @@ const Vin_Pytho_1 = initEL({ id: "idVin_Pytho_1", fn: pythoNewEntry, resetValue:
 const Vin_Pytho_2 = initEL({ id: "idVin_Pytho_2", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[2] });
 const Vin_Pytho_3 = initEL({ id: "idVin_Pytho_3", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[3] });
 const Vin_Pytho_4 = initEL({ id: "idVin_Pytho_4", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
+const Vin_Pythos = [Vin_Pytho_0, Vin_Pytho_1, Vin_Pytho_2, Vin_Pytho_3, Vin_Pytho_4];
 const Lbl_pythagorasInfo = initEL({ id: "idLbl_pythagorasInfo" });
 
 export function clear_cl_Pythagoras() {
   KadInteraction.removeContextmenu("idCanv_pytho");
   pythoOptions.inputState = [...pythoOptions.inputStateOrig];
-  for (let i = 0; i < 5; i++) {
-    pythoOptions.vals[i] = dbID(`idVin_Pytho_${i}`).KadReset();
+  for (let i = 0; i < Vin_Pythos.length; i++) {
+    pythoOptions.vals[i] = Vin_Pythos[i].KadReset();
   }
   pythoShowError();
   pythoCalc();
@@ -89,8 +90,8 @@ function pythoCalc() {
   pythoOptions.vals = [];
   const A = pythoOptions.inputState[0];
   const B = pythoOptions.inputState[1];
-  pythoOptions.vals[A] = dbID(`idVin_Pytho_${A}`).KadGet();
-  pythoOptions.vals[B] = dbID(`idVin_Pytho_${B}`).KadGet();
+  pythoOptions.vals[A] = Vin_Pythos[A].KadGet();
+  pythoOptions.vals[B] = Vin_Pythos[B].KadGet();
 
   if (B > 2) pythoOptions.vals[B] *= caPY.PI / 180;
   if (A > 2) pythoOptions.vals[A] *= caPY.PI / 180;
@@ -171,7 +172,7 @@ function pythoCalc() {
   for (let i = 0; i < 5; i++) {
     if (!pythoOptions.inputState.includes(i)) {
       const val = i < 3 ? pythoOptions.vals[i].toFixed(3) : ((pythoOptions.vals[i] * 180) / caPY.PI).toFixed(3);
-      dbID(`idVin_Pytho_${i}`).KadReset({ resetValue: val });
+      Vin_Pythos[i].KadReset({ resetValue: val });
     }
   }
   drawPytho();

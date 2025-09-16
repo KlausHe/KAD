@@ -98,7 +98,7 @@ function newsPrintArticle({ data }) {
     .filter((obj) => obj.type == "text")
     .map((obj) => `${obj.value}<br><br>`)
     .join(" ");
-  KadDOM.scrollToTop(Div_News_Text);
+  KadDOM.scrollToTop(Div_News_Text.HTML);
   Div_News_Text.KadSetHTML(cleandContent);
 }
 
