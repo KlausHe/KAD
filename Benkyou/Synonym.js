@@ -1,9 +1,12 @@
-import { KadFile, KadLog, KadTable, initEL } from "../KadUtils/KadUtils.js";
+import { initEL, KadFile, KadLog, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
+import { netsaonaOptions } from "../Utility/Netsaona.js";
+
 const synonymOptions = {
   get URL() {
     return `https://www.openthesaurus.de/synonyme/search?q=${this.input}&format=application/json&similar=true&baseform=true`;
   },
   input: "",
+  initialValue: null,
   data: {},
 };
 
@@ -11,14 +14,21 @@ const Vin_synonymEntry = initEL({ id: "idVin_synonymEntry", fn: newSynonym, rese
 const Lbl_synonymSearchWord = initEL({ id: "idLbl_synonymSearchWord" });
 
 export function clear_cl_Synonym() {
-  Vin_synonymEntry.KadReset();
   KadTable.createHTMLGrid({ id: "idTab_synonymTableSynonym" });
   KadTable.createHTMLGrid({ id: "idTab_synonymTableSimilar" });
+  Vin_synonymEntry.KadReset();
+  if (synonymOptions.initialValue === null) {
+    newSynonym();
+  }
 }
 
 function newSynonym() {
   synonymOptions.input = Vin_synonymEntry.KadGet();
   if (!synonymOptions.input) return;
+  if (synonymOptions.initialValue === null) {
+    synonymOptions.initialValue = KadRandom.randomObject(netsaonaOptions.data.RandomWord);
+    synonymOptions.input = synonymOptions.initialValue;
+  }
   KadFile.loadUrlToJSON({ variable: "data", url: synonymOptions.URL, callback: synonymGetData, errorCallback: synonymErrorData });
 }
 
@@ -34,7 +44,6 @@ function synonymGetData(data) {
 }
 
 function synonymCreateTable() {
-  KadLog.log(synonymOptions.data);
   let header = [{ data: "Synonyme", colSpan: 3, settings: { align: "center" } }];
   let body = [];
   if (synonymOptions.data.synsets.length > 0) {

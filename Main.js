@@ -1,6 +1,6 @@
 import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground } from "./General/BackgroundAnimation.js";
-import { contentCheckActive, contentLayout, createContentlayoutList, layoutCreateFooter, layoutCreateGridTitles, layoutCreateNavbar, layoutCreateSubgrid, navClick, resizeGrid } from "./General/Layout.js";
+import { contentCheckActive, contentLayout, createContentlayoutList, layoutCreateFooter, layoutCreateGridTiles, layoutCreateNavbar, layoutCreateSubgrid, navClick, resizeGrid } from "./General/Layout.js";
 import { contentGroupsMaincontent } from "./General/MainContent.js";
 import { KadDOM, KadDate, dbCL, dbCLStyle, hostDebug, initEL } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
@@ -22,7 +22,7 @@ function mainSetup() {
   layoutCreateNavbar();
   layoutCreateFooter();
   layoutCreateSubgrid();
-  layoutCreateGridTitles();
+  layoutCreateGridTiles();
 
   contentLayout.prevNavContent = contentLayout.defaultPage;
   clearAllTiles();

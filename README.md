@@ -1,4 +1,4 @@
-# KAD-Universe
+# KAD
 
 <!-- Link to website\ `https://klaushe.github.io/KAD/`\ -->
 

@@ -1,5 +1,5 @@
 export const contentGroups = ["Global-Settings", "Account-Settings", "News", "Benkyou", "Utility", "Tools", "Games"];
-export const contentGroupsNav = ["Universe", "News", "Benkyou", "Utility", "Tools", "Games", "User"];
+export const contentGroupsNav = ["KAD", "News", "Benkyou", "Utility", "Tools", "Games", "User"];
 export const contentGroupsMaincontent = ["News", "Benkyou", "Utility", "Tools", "Games"];
 export const rawContentGrid = {
   //Benkyou

@@ -260,7 +260,7 @@ input[type="range"] {
 }
 
 /* WEBKIT BASED BROWSERS (CHROME, SAFARI, OPERA) */
-input[type="range"]::-webkit-slider-runnable-track {
+/* input[type="range"]::-webkit-slider-runnable-track {
   max-width: calc(var(--UIWidth6) - var(--padding));
   height: var(--rangeHeight);
   background-color: hsl(var(--bgcButton));
@@ -278,8 +278,7 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: var(--UIRadius);
   margin-top: -4px;
 }
-
-/* FIREFOX */
+FIREFOX 
 input[type="range"]::-moz-range-track {
   max-width: calc(var(--UIWidth6) - var(--padding));
   height: var(--rangeHeight);
@@ -296,6 +295,7 @@ input[type="range"]::-moz-range-thumb {
   border: var(--UIBorderThin);
   border-radius: var(--UIRadius);
 }
+   */
 
 input[type="checkbox"] {
   /* mox: none; because "Checkbox" does not work */

@@ -144,7 +144,7 @@ function sepakbolaSeasonChange() {
 }
 
 function sepakbolaMatchdayChange() {
-  sepakbolaOptions.selected.matchday = Sel_sepakbolaMatchday.selectedIndex;
+  sepakbolaOptions.selected.matchday = Sel_sepakbolaMatchday.KadGet();
   sepakbolaMatchesReturn();
 }
 
@@ -170,7 +170,7 @@ function sepakbolaGetData(data) {
 
 function sepakbolaLastdayReturn(data) {
   sepakbolaOptions.selected.matchday = data.groupOrderID - 1;
-  Sel_sepakbolaMatchday.selectedIndex = sepakbolaOptions.selected.matchday;
+  Sel_sepakbolaMatchday.KadSetIndex(sepakbolaOptions.selected.matchday);
 }
 
 function sepakbolaMatchesReturn(data = null) {

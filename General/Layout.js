@@ -11,12 +11,12 @@ import { contentFooter, contentGroups, contentGroupsNav, rawContentGrid } from "
 
 export let contentGrid = {};
 export const contentLayout = {
-  defaultPage: hostDebug() ? debugDefaultPage : "Universe",
+  defaultPage: hostDebug() ? debugDefaultPage : "KAD",
   AccountSettings: ["cl_UserLogin", "cl_UserChange"],
   prevNavContent: null,
   prevNavFullscreen: null,
   settingsNames: ["Account-Settings", "Global-Settings"],
-  origUniverse: [],
+  origKAD: [],
   navContent: {},
   namelistContent: {},
   gridRows: 3,
@@ -26,7 +26,7 @@ export const contentLayout = {
       return contentGrid[key].contentGroup == "Global-Settings";
     });
   },
-  get getUniverse() {
+  get getKAD() {
     const list = Object.keys(contentGrid).filter((key) => {
       const settings = contentLayout.settingsNames.includes(contentGrid[key].contentGroup);
       return !settings;
@@ -67,11 +67,11 @@ export function layoutCheckCORSandDisableModule(error, moduleName) {
 }
 
 export function createContentlayoutList() {
-  contentLayout.navContent = { Universe: [], User: [] };
-  contentLayout.navContent.Universe = contentLayout.getUniverse;
-  contentLayout.origUniverse = [...contentLayout.navContent.Universe];
+  contentLayout.navContent = { KAD: [], User: [] };
+  contentLayout.navContent.KAD = contentLayout.getKAD;
+  contentLayout.origKAD = [...contentLayout.navContent.KAD];
   contentLayout.namelistContent = {};
-  for (const objKey of contentLayout.navContent.Universe) {
+  for (const objKey of contentLayout.navContent.KAD) {
     const group = contentGrid[objKey].contentGroup;
     if (contentLayout.navContent[group] === undefined) {
       contentLayout.navContent[group] = [objKey];
@@ -81,7 +81,7 @@ export function createContentlayoutList() {
   }
   for (const [key, val] of Object.entries(contentLayout.navContent)) {
     contentLayout.namelistContent[key];
-    if (key != "Universe" && key != "User") {
+    if (key != "KAD" && key != "User") {
       contentLayout.navContent[key] = val.sort();
       contentLayout.namelistContent[key] = val.map((val) => [val.replace("cl_", ""), val]).sort();
     }
@@ -100,7 +100,7 @@ export function resizeGrid() {
     navClick(contentLayout.prevNavContent);
   }
   let navNames = dbCL("cl_navNames", null);
-  const sp = dbID("idDiv_navBar_Universe").offsetLeft;
+  const sp = dbID("idDiv_navBar_KAD").offsetLeft;
   const diff1 = sp <= 0;
   navNames.forEach((obj) => {
     obj.style.display = diff1 ? "none" : "initial";
@@ -116,8 +116,8 @@ export function resizeGrid() {
 
 export function navClick(layoutName = contentLayout.defaultPage) {
   if ([...Object.keys(contentLayout.navContent)].includes(layoutName)) {
-    if (layoutName === "Universe") {
-      contentLayout.navContent[layoutName] = [...contentLayout.origUniverse];
+    if (layoutName === "KAD") {
+      contentLayout.navContent[layoutName] = [...contentLayout.origKAD];
     } else if (layoutName === "User") {
       contentLayout.navContent[layoutName] = [...DBData.storage_cl_UserGridLayout.getData()];
     } else {
@@ -356,7 +356,7 @@ export function layoutCreateNavbar() {
     navParentDiv.appendChild(navParentLbl);
     parent.insertBefore(navParentDiv, parent.children[0]);
   }
-  dbID("idDiv_navBar_Universe").classList.add("navbarActive");
+  dbID("idDiv_navBar_KAD").classList.add("navbarActive");
   dbIDStyle("idDiv_navBar_User").display = "none";
   dbID("idLbl_navBar_User").textContent = nuncDiscipuli.short || "User";
 }
@@ -404,7 +404,7 @@ export function toggelFullscreen(gridKey) {
   }
 }
 
-export function layoutCreateGridTitles() {
+export function layoutCreateGridTiles() {
   const databaseList = Object.values(DBData).map((obj) => obj.contentName);
   for (const gridKey in contentGrid) {
     const parentGrid = dbCL(gridKey);

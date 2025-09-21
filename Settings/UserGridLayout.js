@@ -34,7 +34,7 @@ export function clear_cl_UserGridLayout() {
   KadInteraction.removeContextmenu("idCanv_userGrid");
   userGridOptions.groups = {};
   userGridOptions.enableGroupList = [...contentGroupsMaincontent];
-  userGridOptions.enabledList = [...contentLayout.navContent.Universe];
+  userGridOptions.enabledList = [...contentLayout.navContent.KAD];
   for (let groupKey of contentGroupsMaincontent) {
     userGridOptions.groups[groupKey] = contentLayout.navContent[groupKey];
   }
