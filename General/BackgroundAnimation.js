@@ -1,5 +1,5 @@
 import { contentLayout, navClick } from "../General/Layout.js";
-import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, dbID, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
+import { KadArray, KadCSS, KadDOM, KadDate, KadRandom, deepClone, hostDebug, initEL } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const Div_bgaToggle = initEL({ id: "idDiv_bgaToggle", fn: bgaToggle });
@@ -52,7 +52,7 @@ function bgaClearGrid() {
 function bgaStart() {
   bgaOptions.animations[bgaOptions.curr].reset();
   caBA.frameRate(bgaOptions.animations[bgaOptions.curr].Framerate);
-  dbID("idImg_bgaToggle").src = KadDOM.getImgPath("tStop");
+  Div_bgaToggle.FirstChild.src = KadDOM.getImgPath("tStop");
   bgaOptions.drawing = true;
   caBA.loop();
   if (hostDebug()) {
@@ -61,7 +61,7 @@ function bgaStart() {
 }
 
 function bgaStopp() {
-  dbID("idImg_bgaToggle").src = KadDOM.getImgPath("tPlay");
+  Div_bgaToggle.FirstChild.src = KadDOM.getImgPath("tPlay");
   caBA.noLoop();
 }
 
@@ -748,7 +748,7 @@ Flowfield.Particle = class {
     this.pos = caBA.createVector(caBA.random(caBA.width), caBA.random(caBA.height));
     this.vel = caBA.createVector(0, 0);
     this.acc = caBA.createVector(0, 0);
-    this.maxspeed = 4;
+    this.maxspeed = 2;
     this.prevPos = this.pos.copy();
   }
 

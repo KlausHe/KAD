@@ -1,4 +1,4 @@
-import { KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { KadLog, KadTable, KadValue, initEL } from "../KadUtils/KadUtils.js";
 //https://schraube-mutter.de/bohrtabelle-fuer-zylinderschrauben/
 const niskaOptions = {
   size: {
@@ -1133,15 +1133,14 @@ const niskaOptions = {
   ],
   strengthClass: {
     val: [5.6, 6.8, 8.8, 10.9, 12.9],
-    index0: 2,
-    index1: 3,
-    indexOrig: 2,
+    index: [2, 3],
+    indexOrig: [2, 3],
     re(id) {
-      let index = this[`index${id}`];
+      let index = niskaOptions.strengthClass.index[id];
       return Math.floor((this.val[index] % 1) * 10 * Math.floor(this.val[index]) * 10);
     },
     rm(id) {
-      let index = this[`index${id}`];
+      let index = niskaOptions.strengthClass.index[id];
       return Math.floor(this.val[index]) * 100;
     },
   },
@@ -1251,8 +1250,11 @@ const Sel_niskaSelect = initEL({
   },
   selStartIndex: niskaOptions.select.indexOrig,
 });
-const Sel_niskaStrengthClassA = initEL({ id: "idSel_niskaStrengthClassA", fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index0 });
-const Sel_niskaStrengthClassB = initEL({ id: "idSel_niskaStrengthClassB", fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.index1 });
+const Sel_niskaStrengthClassA = initEL(
+  //
+  { id: "idSel_niskaStrengthClassA", fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.indexOrig[0] }
+);
+const Sel_niskaStrengthClassB = initEL({ id: "idSel_niskaStrengthClassB", fn: niskaCalc, selList: niskaOptions.strengthClass.val.map((v) => [v, v]), selStartIndex: niskaOptions.strengthClass.indexOrig[1] });
 const Lbl_niskaRegelInfo = initEL({ id: "idLbl_niskaRegelInfo" });
 
 export function clear_cl_Niska() {
@@ -1260,30 +1262,31 @@ export function clear_cl_Niska() {
   niskaOptions.pitch.val = niskaOptions.pitch.valOrig;
   niskaOptions.select.index = niskaOptions.select.indexOrig;
   niskaOptions.select.type = niskaOptions.select.typeOrig;
-  niskaOptions.strengthClass.index0 = niskaOptions.strengthClass.indexOrig;
-  niskaOptions.strengthClass.index1 = niskaOptions.strengthClass.indexOrig;
+  niskaOptions.strengthClass.index[0] = Sel_niskaStrengthClassA.KadReset();
+  niskaOptions.strengthClass.index[1] = Sel_niskaStrengthClassB.KadReset();
   Vin_niskaSize.KadReset();
   Vin_niskaPitch.KadReset();
   Sel_niskaSelect.KadReset();
-  Sel_niskaStrengthClassA.KadReset();
-  Sel_niskaStrengthClassB.KadReset();
 
   niskaCalc();
 }
 
 function niskaCalc() {
+  // manual input
   niskaOptions.size.val = Vin_niskaSize.KadGet();
   niskaOptions.pitch.val = Vin_niskaPitch.KadGet();
-  niskaOptions.strengthClass.index0 = Sel_niskaStrengthClassA.selectedIndex;
+  niskaOptions.strengthClass.index[0] = Sel_niskaStrengthClassA.KadGet({ index: true });
   niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
-  niskaOptions.select.index = Sel_niskaSelect.HTML.selectedIndex;
+
+  //selectedInput
+  niskaOptions.select.index = Sel_niskaSelect.KadGet({ index: true });
   let type = Sel_niskaSelect.HTML.options[niskaOptions.select.index].parentElement.label;
   niskaOptions.select.type = niskaOptions.select.types[type];
-
   niskaOptions.select.index -= niskaOptions.select.offset;
-  niskaOptions.strengthClass.index1 = Sel_niskaStrengthClassB.selectedIndex;
+  niskaOptions.strengthClass.index[1] = Sel_niskaStrengthClassB.KadGet({ index: true });
   Lbl_niskaRegelInfo.KadSetText(niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde");
   niskaHelpCalculation(niskaOptions.select.size, niskaOptions.select.pitch, 1);
+
   niskaTable();
 }
 
@@ -1304,11 +1307,14 @@ function niskaHelpCalculation(d, P, index) {
   const tensionPermitted = niskaOptions.strengthClass.re(index) * niskaOptions.data.exploitRe; //σ zul = zul.Spannung
   const threadFrictionAngle = Math.atan(niskaOptions.data.frictionCoefShear / Math.cos(niskaOptions.data.flankAngle / 2)); //  ρ '   = Gewindereibwinkel (Grad)
 
+  // KadLog.log(index, niskaOptions.strengthClass.re(index));
+
   const preloadNum = tensionPermitted;
   const preloadDen1 = 1 / stressCrosssection ** 2;
   const preloadDen2 = 0.75 * flankDiameter ** 2 * Math.tan(pitchAngle + threadFrictionAngle) ** 2;
   const preloadDen3 = polarResistancemoment ** 2;
   const preloadMax = preloadNum / Math.sqrt(preloadDen1 + preloadDen2 / preloadDen3); // Vorspannkraft(N)
+  // KadLog.log(preloadNum, preloadDen1, preloadDen2, preloadDen3);
 
   // F_erf                              (niskaOptions.strengthClass.re * stressCrosssection)
   // F Q = Querkraft(N)
@@ -1342,8 +1348,16 @@ function niskaHelpCalculation(d, P, index) {
   // niskaOptions.results.strengthShearDynamic.val[index] = KadValue.number(strengthShearDynamic, niskaOptions.decimalOpts);
 }
 
+function niskaLog({ element, index, data }) {
+  KadLog.log(element, ...data);
+}
 function niskaTable() {
-  const header = [{ data: "Eigenschaft" }, { data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 2, settings: { align: "center" } }, { data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center" } }];
+  const header = [
+    //
+    { data: "Eigenschaft" },
+    { data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 2, settings: { align: "center" } },
+    { data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center" } },
+  ];
 
   const body = [
     { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].name) },
@@ -1353,5 +1367,23 @@ function niskaTable() {
     { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
   ];
 
+  // data for "KadNewTable"
+  const header1 = [
+    [
+      { type: "Checkbox", data: true, colSpan: 2, settings: { onclick: [niskaLog, "Helloo", 1, 2, 5], idName: "text", description: "AAAAA" } },
+      { type: "Lbl", data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 2, settings: { align: "center", idName: true, forLabel: "text_0" } },
+      { type: "H1", data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center", idName: false } },
+    ],
+    [{ data: "Eigenschaft" }, { data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 3, settings: { align: "center" } }, { data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center" } }],
+  ];
+  const body1 = [
+    { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].name), multiColumn: 2 },
+    { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].val[0]), settings: { align: "right", noBorder: "right" } },
+    { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
+    { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].val[1]), settings: { align: "right", noBorder: "right" } },
+    { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
+  ];
+
   KadTable.createHTMLGrid({ id: "idTab_niskaTable", header, body });
+  // KadNewTable.createGRID({ id: "idTab_niskaTable1", header: header1, body: body1 });
 }

@@ -145,7 +145,7 @@ body {
 }
 
 /* body>div  */
-.cl_Loading {
+#idDiv_Loading {
   position: fixed;
   display: grid;
   visibility: visible;
@@ -162,7 +162,7 @@ body {
   transition: none;
 }
 
-.cl_LoadingFinished {
+#idDiv_LoadingFinished {
   color: transparent;
   background-color: hsl(var(--bgcSubgrid) / 0);
   visibility: hidden;

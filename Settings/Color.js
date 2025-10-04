@@ -1,4 +1,5 @@
-import { dbID, dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM, KadString } from "../KadUtils/KadUtils.js";
+import { dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM, KadString } from "../KadUtils/KadUtils.js";
+import { Div_navBar_Colormode } from "../Main.js";
 import * as Canvas from "../MainModulesCanvas.js";
 
 const colorSettingsOptions = {
@@ -171,7 +172,7 @@ export const storage_cl_ColorSettings = {
 };
 
 export function colorThemeChanged() {
-  dbID("idImg_userNav_colormode").src = KadDOM.getImgPath(globalColors.darkmodeOn ? "sun" : "moon");
+  Div_navBar_Colormode.FirstChild.src = KadDOM.getImgPath(globalColors.darkmodeOn ? "sun" : "moon");
   for (let theme of colorSettingsOptions.modeNames) {
     for (let [name, col] of Object.entries(colorSettingsOptions[theme])) {
       const selID = Lbl_colorSettings[theme][name].HTML;

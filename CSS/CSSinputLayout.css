@@ -86,6 +86,10 @@ img[imgSize="olympiaImg"] {
   width: auto;
   height: var(--UIHeight1);
 }
+img[imgSize="tableImg"] {
+  width: auto;
+  height: var(--UIHeight1);
+}
 
 img[imgSize="suika"] {
   width: auto;
@@ -362,6 +366,7 @@ input[imgBtn="subgrid"] {
   color: hsl(var(--txtBackground));
   width: var(--UIWidth6);
   line-height: 150%;
+  white-space: nowrap;
   border: var(--UIBorderThin);
   border-radius: var(--UIRadius);
   text-align: center;

@@ -46,7 +46,7 @@
     <div class="cl_navUser" id="idDiv_navBar_Colormode"><img id="idImg_userNav_colormode" uiFilter="invNavbar" src="Data/Images/sun.svg"></img></div>
     <div class="cl_navUser" id="idDiv_navBar_Trash"><img class="img_trash" uiFilter="invNavbar"></img></div>
   </nav>
-  <section class="cl_Loading">KAD-UNIVERSE<br>LOADING...</section>
+  <section id="idDiv_Loading">KAD-UNIVERSE<br>LOADING...</section>
   <div class="cl_BackgroundAnimation" id="idCanv_backgroundAnimation"></div>
   <dialog id="idDia_materialSelect">
     <div class="cl_MaterialSearchOptions" id="idDiv_MaterialSearchOptions">
@@ -253,8 +253,8 @@
       <div class="cl_subGrid_Ibhaluni cl_subGrid">
         <div class="cl_IbhaluniInputs">
           <button id="idBtn_ibhaluniStart"></button>
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_ibhaluniSoundOutput"></input>
-          </label><label class="cl_info" for="idCb_ibhaluniSoundOutput" uiRadius="right">Play Sound</label>
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_ibhaluniSoundOutput"></input>
+            <label for="idCb_ibhaluniSoundOutput">Play Sound</label></label>
         </div>
         <div class="cl_IbhaluniCanvas">
           <div style="display:block;" id="idCanv_ibhaluni" tabindex="0"></div>
@@ -281,9 +281,9 @@
         <div class="cl_KontourCanvas">
           <div style="display:block;" id="idCanv_kontour" tabindex="0"></div>
         </div>
-        <div class="cl_KontourBorders" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_kontourBorders"></input>
-          </label><label class="cl_info" for="idCb_kontourBorders" uiSize="width11" uiRadius="right">Grenzen anzeigen</label>
+        <div class="cl_KontourBorders">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width12"><input type="checkbox" id="idCb_kontourBorders"></input>
+            <label for="idCb_kontourBorders">Grenzen anzeigen</label></label>
         </div>
       </div>
     </section>
@@ -351,12 +351,6 @@
         </div>
         <div class="cl_LottoTabGames">
           <div id="idTab_lottoTable"></div>
-          <!-- <table id="idTab_Lotto">
-            <thead id="idTabHeader_Lotto">
-            </thead>
-            <tbody id="idTabBody_Lotto">
-            </tbody>
-          </table> -->
         </div>
         <div class="cl_LottoCanvas">
           <div style="display:block;" id="idCanv_lotto" tabindex="0"></div>
@@ -413,21 +407,25 @@
           </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
-        <div class="cl_RayCasterMaze" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_rayDebug"></input>
-          </label><label class="cl_info" for="idCb_rayDebug" uiSize="width6" uiRadius="right">Show Maze</label>
+        <div class="cl_RayCasterMaze">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_rayDebug"></input>
+            <label for="idCb_rayDebug">Show Maze</label>
+          </label>
         </div>
-        <div class="cl_RayCasterPoly" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_rayPoly"></input>
-          </label><label class="cl_info" for="idCb_rayPoly" uiSize="width6" uiRadius="right">Polygon Mode</label>
+        <div class="cl_RayCasterPoly">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_rayPoly"></input>
+            <label for="idCb_rayPoly">Polygon Mode</label>
+          </label>
         </div>
-        <div class="cl_RayCasterSpider" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_raySpider"></input>
-          </label><label class="cl_info" for="idCb_raySpider" uiSize="width6" uiRadius="right">Spider Mode</label>
+        <div class="cl_RayCasterSpider">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_raySpider"></input>
+            <label for="idCb_raySpider">Spider Mode</label>
+          </label>
         </div>
-        <div class="cl_RayCasterTarget" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_rayTarget"></input>
-          </label><label class="cl_info" for="idCb_rayTarget" uiSize="width6" uiRadius="right">Show Target</label>
+        <div class="cl_RayCasterTarget">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_rayTarget"></input>
+            <label for="idCb_rayTarget">Show Target</label>
+          </label>
         </div>
         <div class="cl_RayCasterView" uiWrap="nowrap">
           <label class="cl_info" uiSize="width3" uiRadius="left">View</label><input type="number" id="idVin_rayMazeView" min="1" max="10" step="1" uiRadius="none"></input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
@@ -487,12 +485,12 @@
           <button id="idBtn_sudokuHint">Hint</button>
         </div>
         <div class="cl_SudokuAutoCheck">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_sudokuAutoCheck" checked></input>
-          </label><label class="cl_info" for="idCb_sudokuAutoCheck" uiSize="width5" uiRadius="right">Auto-Check</label><br>
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_sudokuAutoCheck" checked></input>
+            <label for="idCb_sudokuAutoCheck">Auto-Check</label><br></label>
         </div>
         <div class="cl_SudokuAutoErase">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_sudokuErasePencils" checked></input>
-          </label><label class="cl_info" for="idCb_sudokuErasePencils" uiSize="width5" uiRadius="right">Auto-Erase</label>
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_sudokuErasePencils" checked></input>
+            <label for="idCb_sudokuErasePencils">Auto-Erase</label></label>
         </div>
         <div class="cl_SudokuOverview">
           <div class="cl_SquareButtonFlex" uiFlex="horizontal">
@@ -743,13 +741,13 @@
             <img src="Data/Images/down.svg"></img>
           </button>
         </div>
-        <div class="cl_ExpansionCBDifference" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_expansionDifference"></input>
-          </label><label class="cl_info" id="idLbl_expansionDifference" for="idCb_expansionDifference" uiRadius="right"></label>
+        <div class="cl_ExpansionCBDifference">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_expansionDifference"></input>
+            <label id="idLbl_expansionDifference" for="idCb_expansionDifference"></label></label>
         </div>
-        <div class="cl_ExpansionCBCoefficient" uiWrap="nowrap">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_expansionCoefficient"></input>
-          </label><label class="cl_info" id="idLbl_expansionCoefficient" for="idCb_expansionCoefficient" uiRadius="right"></label>
+        <div class="cl_ExpansionCBCoefficient">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_expansionCoefficient"></input>
+            <label id="idLbl_expansionCoefficient" for="idCb_expansionCoefficient"></label></label>
         </div>
         <div class="cl_ExpansionCompare" uiWrap="nowrap">
           <select id="idSel_expansionCompare" uiSize="width7"></select>
@@ -794,9 +792,9 @@
           <div id="idTab_geometrieSelectTable"></div>
         </div>
         <div class="cl_GeometrieOptions" uiFlex="vertical" id="idDiv_GeometrieOptions">
-          <div uiWrap="nowrap">
-            <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_geoRadius"></input>
-            </label><label class="cl_info" id="idLbl_goeRadius" for="idCb_geoRadius" uiRadius="right"></label>
+          <div>
+            <label class="cl_infoCB" uiSize="width7" uiAlign="left"><input type="checkbox" id="idCb_geoRadius"></input>
+              <label id="idLbl_goeRadius" for="idCb_geoRadius"></label></label>
           </div>
           <div uiWrap="nowrap">
             <label class="cl_infoCB" id="idLbl_Area_0" uiRadius="left"></label><input type="number" id="idVin_Area_0" uiRadius="none" min="0"></input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
@@ -866,8 +864,8 @@
     <section class="cl_Material">
       <div class="cl_subGrid_Material cl_subGrid">
         <div class="cl_MaterialPropertyCb cl_DropdownParent">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_materialListFilter" checked>
-            </input></label><label class="cl_info" for="idCb_materialListFilter" uiRadius="right">Propertyfilter</label>
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_materialListFilter" checked></input><label for="idCb_materialListFilter">Propertyfilter</label>
+          </label>
           <label class="clDropdown cl_DropdownInfo">Login um Filter zu ändern</label>
         </div>
         <div class="cl_MaterialList">
@@ -938,6 +936,7 @@
         </div>
         <div class="cl_NiskaList">
           <div id="idTab_niskaTable"></div>
+          <div id="idTab_niskaTable1"></div>
         </div>
       </div>
     </section>
@@ -1625,9 +1624,8 @@
           </label><input type="password" id="idVin_userLogin_pass" uiRadius="right" uiSize="width8" required>
         </div>
         <div class="cl_UserLogin_check">
-          <label class="cl_infoCB" uiRadius="left"><input type="checkbox" id="idCb_userLogin_check"></input>
-          </label><label class="cl_info" uiSize="width11" for="idCb_userLogin_check" uiRadius="right">Keep me logged
-            in!</label>
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_userLogin_check"></input>
+            <label for="idCb_userLogin_check">Keep me logged in!</label></label>
         </div>
         <div class="cl_UserLogin_alert">
           <label id="idLbl_userLogin_alert"></label>

@@ -289,7 +289,7 @@ function sudokuSetDoneNumbers() {
     if (numCount[i] > 9) col = "negative";
 
     Btn_sudokuNumOverviews[i - 1].KadButtonColor(col);
-    Btn_sudokuNumOverviews[i - 1].KadSetText(i + "<sup>" + numCount[i] + "</sup>");
+    Btn_sudokuNumOverviews[i - 1].KadSetHTML(i + "<sup>" + numCount[i] + "</sup>");
   }
 }
 const caSU = new p5((c) => {

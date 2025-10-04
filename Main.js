@@ -2,7 +2,7 @@ import { createNewNuncDiscipuli } from "./General/Account.js";
 import { bgaClearBackground } from "./General/BackgroundAnimation.js";
 import { contentCheckActive, contentLayout, createContentlayoutList, layoutCreateFooter, layoutCreateGridTiles, layoutCreateNavbar, layoutCreateSubgrid, navClick, resizeGrid } from "./General/Layout.js";
 import { contentGroupsMaincontent } from "./General/MainContent.js";
-import { KadDOM, KadDate, dbCL, dbCLStyle, hostDebug, initEL } from "./KadUtils/KadUtils.js";
+import { KadDOM, KadDate, dbID, dbIDStyle, hostDebug, initEL } from "./KadUtils/KadUtils.js";
 import * as Clear from "./MainModulesClear.js";
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
@@ -10,7 +10,7 @@ import { globalValues } from "./Settings/General.js";
 window.onload = mainSetup;
 function mainSetup() {
   if (hostDebug()) {
-    dbCLStyle("cl_Loading").display = "none";
+    dbIDStyle("idDiv_Loading").display = "none";
     // console.clear();
   }
   contentLayout.createContentData();
@@ -39,7 +39,7 @@ function mainSetup() {
 initEL({ id: "idDiv_navBar_Trash", fn: resetAll });
 const Sel_globalValue = initEL({ id: "idSel_globalValue", fn: globalValueChanged });
 initEL({ id: "idDiv_navBar_GlobalSettings", fn: () => navClick("GlobalSettings") });
-initEL({ id: "idDiv_navBar_Colormode", fn: colToggleColormode });
+export const Div_navBar_Colormode = initEL({ id: "idDiv_navBar_Colormode", fn: colToggleColormode });
 initEL({ id: "idDiv_clearBackground", fn: bgaClearBackground });
 const Lbl_navBar_KW = initEL({ id: "idLbl_navBar_KW" });
 
@@ -57,7 +57,7 @@ function clearAllTiles() {
 }
 
 function hideLoadingscreen() {
-  dbCL("cl_Loading").classList.add("cl_LoadingFinished");
+  dbID("idDiv_Loading").classList.add("idDiv_LoadingFinished");
 }
 
 export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {

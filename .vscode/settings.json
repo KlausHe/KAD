@@ -1,9 +1,9 @@
 {
-        // "editor.fontWeight": "normal",
-        "editor.minimap.renderCharacters": false,
-        "workbench.editor.tabCloseButton": "left",
-        "liveServer.settings.port": 3002,
-        "liveServer.settings.CustomBrowser": "firefox",
-        "editor.snippetSuggestions": "inline",
-        "workbench.editor.tabActionLocation": "left"
+  // "editor.fontWeight": "normal",
+  "editor.minimap.renderCharacters": false,
+  "workbench.editor.tabCloseButton": "left",
+  "liveServer.settings.port": 3002,
+  "liveServer.settings.CustomBrowser": "firefox",
+  "editor.snippetSuggestions": "inline",
+  "workbench.editor.tabActionLocation": "left"
 }

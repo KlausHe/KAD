@@ -1,5 +1,5 @@
 import { Data_Leetspeak } from "../KadData/KadData.js";
-import { dbCL, dbID, initEL, KadRandom, KadString } from "../KadUtils/KadUtils.js";
+import { dbCL, initEL, KadRandom, KadString } from "../KadUtils/KadUtils.js";
 const thiontuData = {
   input: "",
   inputRaw: "",
@@ -208,7 +208,7 @@ export function clear_cl_Thiontu() {
   const clBtn = dbCL("clBtn_ThiontuOptions", null);
   Btn_ThiontuToTexts = [];
   for (let i = 0; i < clBtn.length; i++) {
-    const btn = dbID(clBtn[i]);
+    const btn = clBtn[i];
     btn.id = `idBtn_thiontuToText_${Object.keys(thiontuData.opts)[i]}`;
     Btn_ThiontuToTexts.push(initEL({ id: btn.id, fn: () => thiontuOptionChange(i), resetValue: Object.values(thiontuData.opts)[i].btnName, dataset: ["radio", "thiontuOption"] }));
     btn.value = Object.keys(thiontuData.opts)[i];
