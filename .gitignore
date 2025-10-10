@@ -1,4 +1,12 @@
-#Folder
+# temporary
+Passfedern.js
+Perlindungan.js
+*Tools/DataIPEX
+
+# Projectspecific files and folders
+.Collections
+
+# Folder
 node_modules
 .env
 jsconfig.json
@@ -22,6 +30,3 @@ jsconfig.json
 Network Trash Folder
 Temporary Items
 .apdisk
-
-# Projectspecific files and folders
-.Collections

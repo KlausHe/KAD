@@ -61,15 +61,17 @@ const barvoslepyOptions = {
     ["Ishihara", "./Benkyou/AssetsBarvoslepy/Ishihara.png"],
   ],
   showState: null,
-  showStates: {
-    Original: false,
-    Positive: false,
-    Negative: false,
-    Black: false,
+  showStates: [false, false, false, false, false],
+  showStateNames: {
+    Original: 0,
+    Positive: 1,
+    Negative: 2,
+    White: 3,
+    Black: 4,
   },
 };
 
-const File_barvoslepyUpload = initEL({ id: "idFile_barvoslepyUpload", action: "change", fn: barvoslepyLoadFile });
+initEL({ id: "idFile_barvoslepyUpload", action: "change", fn: barvoslepyLoadFile });
 const Sel_barvoslepySelectImage = initEL({
   id: "idSel_barvoslepySelectImage",
   fn: barvoslepyImagePreview,
@@ -102,13 +104,14 @@ const Vin_barvoslepyEpsilon = initEL({
     step: 1,
   },
 });
-const Btn_barvoslepyOriginal = initEL({ id: "idBtn_barvoslepyOriginal", fn: () => barvoslepyShow("Original"), resetValue: "Original" });
-const Btn_barvoslepyPositive = initEL({ id: "idBtn_barvoslepyPositive", fn: () => barvoslepyShow("Positive"), resetValue: "Max is black" });
-const Btn_barvoslepyNegative = initEL({ id: "idBtn_barvoslepyNegative", fn: () => barvoslepyShow("Negative"), resetValue: "Max is white" });
-const Btn_barvoslepyWhite = initEL({ id: "idBtn_barvoslepyWhite", fn: () => barvoslepyShow("White"), resetValue: "Diff is white" });
-const Btn_barvoslepyBlack = initEL({ id: "idBtn_barvoslepyBlack", fn: () => barvoslepyShow("Black"), resetValue: "Diff is black" });
-const Canv_barvoslepyCanvas = initEL({ id: "idCanv_barvoslepyCanvas", action: "click", fn: () => barvoslepyShow("Original") });
+const Btn_barvoslepyOriginal = initEL({ id: "idBtn_barvoslepyOriginal", fn: [barvoslepyShow, 0], resetValue: "Original", dataset: ["radio", "barvoslepy"] });
+const Btn_barvoslepyPositive = initEL({ id: "idBtn_barvoslepyPositive", fn: [barvoslepyShow, 1], resetValue: "Max is black", dataset: ["radio", "barvoslepy"] });
+const Btn_barvoslepyNegative = initEL({ id: "idBtn_barvoslepyNegative", fn: [barvoslepyShow, 2], resetValue: "Max is white", dataset: ["radio", "barvoslepy"] });
+const Btn_barvoslepyWhite = initEL({ id: "idBtn_barvoslepyWhite", fn: [barvoslepyShow, 3], resetValue: "Diff is white", dataset: ["radio", "barvoslepy"] });
+const Btn_barvoslepyBlack = initEL({ id: "idBtn_barvoslepyBlack", fn: [barvoslepyShow, 4], resetValue: "Diff is black", dataset: ["radio", "barvoslepy"] });
+const Canv_barvoslepyCanvas = initEL({ id: "idCanv_barvoslepyCanvas", action: "click", fn: [barvoslepyShow, 0], dataset: ["radio", "barvoslepy"] });
 const Lbl_barvoslepyApply = initEL({ id: "idLbl_barvoslepyApply" });
+const Btn_barvoslepyTypes = [Btn_barvoslepyOriginal, Btn_barvoslepyPositive, Btn_barvoslepyNegative, Btn_barvoslepyWhite, Btn_barvoslepyBlack];
 
 export function clear_cl_Barvoslepy() {
   Sel_barvoslepySelectImage.KadReset();
@@ -147,18 +150,12 @@ function barvoslepyEpsilon() {
   barvoslepyFilter();
 }
 
-function barvoslepyShow(t) {
-  const thisType = t;
-  const thisState = !barvoslepyOptions.showStates[thisType];
-  barvoslepyOptions.showState = thisState ? thisType : null;
-  for (let type of Object.keys(barvoslepyOptions.showStates)) {
-    if (type == thisType) {
-      barvoslepyOptions.showStates[type] = thisState;
-      dbID(`idBtn_barvoslepy${type}`).KadButtonColor(thisState ? "colored" : null);
-    } else {
-      barvoslepyOptions.showStates[type] = false;
-      dbID(`idBtn_barvoslepy${type}`).KadButtonColor(null);
-    }
+function barvoslepyShow({ Element, data }) {
+  const newIindex = data[0];
+  const newState = !barvoslepyOptions.showStates[newIindex];
+  barvoslepyOptions.showState = newState ? newIindex : null;
+  for (let index = 0; index < barvoslepyOptions.showStates.length; index++) {
+    barvoslepyOptions.showStates[index] = index == newIindex ? newState : false;
   }
   barvoslepyFilter();
 }
@@ -199,7 +196,7 @@ function barvoslepyFilter() {
   let pixelsFiltered = ctxFiltered.getImageData(0, 0, w, h);
   let maxDiffs = [0, 0, 0];
   let maxDiffArray = [];
-  if (barvoslepyOptions.showState != "Original") {
+  if (barvoslepyOptions.showState != barvoslepyOptions.showStateNames.Original) {
     for (let i = 0; i < pixelsFiltered.data.length; i += 4) {
       const pixelFiltered = [pixelsFiltered.data[i], pixelsFiltered.data[i + 1], pixelsFiltered.data[i + 2]];
       const filteredRGB = barvoslepyOptions.brettelFunctions[type](pixelFiltered);
@@ -207,24 +204,24 @@ function barvoslepyFilter() {
         for (let n = 0; n < 3; n++) {
           pixelsFiltered.data[i + n] = filteredRGB[n];
         }
-      } else if (["Positive", "Negative", "Test"].includes(barvoslepyOptions.showState)) {
+      } else if (barvoslepyOptions.showStateNames.Positive == barvoslepyOptions.showState || barvoslepyOptions.showStateNames.Negative == barvoslepyOptions.showState) {
         for (let n = 0; n < 3; n++) {
           maxDiffArray[i + n] = pixelFiltered[n] - filteredRGB[n];
           maxDiffs[n] = Math.max(maxDiffs[n], maxDiffArray[i + n]);
         }
-      } else if (["White", "Black"].includes(barvoslepyOptions.showState)) {
+      } else if (barvoslepyOptions.showStateNames.White == barvoslepyOptions.showState || barvoslepyOptions.showStateNames.Black == barvoslepyOptions.showState) {
         let diff = barvoslepyDifferencePixel(pixelFiltered, filteredRGB);
-        if (barvoslepyOptions.showState == "White") diff = !diff;
+        if (barvoslepyOptions.showState == barvoslepyOptions.showStateNames.White) diff = !diff;
         for (let n = 0; n < 3; n++) {
           pixelsFiltered.data[i + n] = diff ? 0 : 255;
         }
       }
     }
-    if (["Positive", "Negative"].includes(barvoslepyOptions.showState)) {
+    if (barvoslepyOptions.showStateNames.Positive == barvoslepyOptions.showState || barvoslepyOptions.showStateNames.Negative == barvoslepyOptions.showState) {
       let maxDiff = Math.max(...maxDiffs);
       for (let i = 0; i < pixelsFiltered.data.length; i += 4) {
         let color = 255 * (Math.max(maxDiffArray[i + 0], maxDiffArray[i + 1], maxDiffArray[i + 2]) / maxDiff);
-        if (barvoslepyOptions.showState == "Positive") {
+        if (barvoslepyOptions.showState == barvoslepyOptions.showStateNames.Positive) {
           color = 255 - color;
         }
         pixelsFiltered.data[i + 0] = color;

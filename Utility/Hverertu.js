@@ -40,7 +40,6 @@ function hverertuErrorData({ error }) {
 }
 
 function hverertuGetData(data) {
-  KadLog.log(data);
   const { age, gender, origin } = data;
   hverertuAge(age);
   hverertuOrigin(origin);

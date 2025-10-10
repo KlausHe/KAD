@@ -4,7 +4,7 @@ import { globalColors } from "../Settings/Color.js";
 
 const Div_bgaToggle = initEL({ id: "idDiv_bgaToggle", fn: bgaToggle });
 const Sel_bgaSelect = initEL({ id: "idSel_bgaSelect", fn: bgaSelectAnimation, selList: [1], selStartIndex: 0 });
-const Div_bgaClearGrid = initEL({ id: "idDiv_bgaClearGrid", fn: bgaClearGrid });
+initEL({ id: "idDiv_bgaClearGrid", fn: bgaClearGrid });
 
 export const bgaOptions = {
   curr: 0,
@@ -18,7 +18,7 @@ export const bgaOptions = {
 };
 
 export function clear_cl_BackgroundAnimation() {
-  bgaOptions.animations = [new Clock(), new SegmentClock(), new Time(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new Truchet(), new GameOfLife(), new PongAI()]; //new Cursordot(), new Trail(),
+  bgaOptions.animations = [new Time(), new Clock(), new SegmentClock(), new Hilbert(), new LanktonsAnt(), new Cardioid(), new AStar(), new Flowfield(), new PoissonDisc(), new Phyllotaxis(), new TenPrint(), new Truchet(), new GameOfLife(), new PongAI()]; //new Cursordot(), new Trail(),
   bgaOptions.curr = Sel_bgaSelect.KadReset({ selList: bgaOptions.animations.map((a) => a.constructor.name), selStartIndex: KadRandom.randomIndex(bgaOptions.animations) });
 }
 
@@ -74,7 +74,7 @@ function bgaToggle() {
 }
 
 function bgaSelectAnimation() {
-  bgaOptions.curr = Sel_bgaSelect.selectedIndex;
+  bgaOptions.curr = Sel_bgaSelect.KadGet({ index: true });
   bgaClearBackground();
   bgaStopp();
 }
@@ -110,6 +110,39 @@ const caBA = new p5((c) => {
 }, "#idCanv_backgroundAnimation");
 
 class Clock {
+  constructor() {
+    this.Framerate = 30;
+    this.size;
+    this.col;
+    this.starttime = null;
+    this.offset = 0;
+  }
+
+  reset() {
+    if (caBA.height / 4 < caBA.width / 6) {
+      // size based in height
+      this.size = caBA.height / 5;
+    } else {
+      // size based in width
+      this.size = caBA.width / 8;
+    }
+    this.col = caBA.color(globalColors.elements.baseColor);
+    this.col.setAlpha(bgaOptions.alpha);
+    caBA.fill(this.col);
+    caBA.noStroke();
+    caBA.textAlign(caBA.LEFT, caBA.CENTER);
+    caBA.textSize(this.size);
+    this.offset = caBA.textWidth("00:00:00:000") / 2;
+  }
+  draw() {
+    caBA.clear();
+    caBA.translate(caBA.width / 2, caBA.height / 2);
+    const time = KadDate.getDate(null, { format: "HH:mm:ss:ms" });
+    caBA.text(time, -this.offset, 0);
+  }
+}
+
+class Time {
   constructor() {
     this.Framerate = 4;
     this.size;
@@ -227,38 +260,6 @@ class SegmentClock {
   }
 }
 
-class Time {
-  constructor() {
-    this.Framerate = 30;
-    this.size;
-    this.col;
-    this.starttime = null;
-    this.offset = 0;
-  }
-
-  reset() {
-    if (caBA.height / 4 < caBA.width / 6) {
-      // size based in height
-      this.size = caBA.height / 5;
-    } else {
-      // size based in width
-      this.size = caBA.width / 8;
-    }
-    this.col = caBA.color(globalColors.elements.baseColor);
-    this.col.setAlpha(bgaOptions.alpha);
-    caBA.fill(this.col);
-    caBA.noStroke();
-    caBA.textAlign(caBA.LEFT, caBA.CENTER);
-    caBA.textSize(this.size);
-    this.offset = caBA.textWidth("00:00:00:000") / 2;
-  }
-  draw() {
-    caBA.clear();
-    caBA.translate(caBA.width / 2, caBA.height / 2);
-    const time = KadDate.getDate(null, { format: "HH:mm:ss-ms" });
-    caBA.text(time, -this.offset, 0);
-  }
-}
 /*
 class Cursordot {
   constructor() {
@@ -969,7 +970,7 @@ class TenPrint {
 
 class Truchet {
   constructor() {
-    this.Framerate = 10;
+    this.Framerate = 30;
     this.w = bgaOptions.pointDiameter * 8;
     this.grid = [];
     this.avaible = [];
@@ -977,6 +978,9 @@ class Truchet {
     this.cols = 1;
     this.rows = 1;
     this.col;
+    this.lifespan = 60;
+    this.numSpots = 5;
+    this.spotDrawn = [];
   }
   reset() {
     this.grid = [];
@@ -991,30 +995,50 @@ class Truchet {
           dir: KadRandom.randomIndex(2),
           x: i * this.w + this.w / 2,
           y: j * this.w + this.w / 2,
+          life: 0,
+          col: caBA.color(globalColors.elements.baseColor),
         };
       }
     }
-    this.col = caBA.color(globalColors.elements.baseColor);
-    caBA.stroke(this.col);
-    caBA.strokeWeight(4);
     caBA.noFill();
     caBA.rectMode(caBA.CENTER, caBA.CENTER);
     caBA.clear();
-  }
-  draw() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 2; i++) {
       const avaibleIndex = KadRandom.randomIndex(this.avaible);
       const index = this.avaible.splice(avaibleIndex, 1);
-      const spot = this.grid[index];
+      this.spotDrawn.push(this.grid[index]);
+    }
+  }
+  draw() {
+    caBA.clear();
+    let newSpots = 0;
+    for (let spot of this.spotDrawn) {
+      if (spot.life < this.lifespan) {
+        spot.col.setAlpha(spot.life / this.lifespan);
+        spot.life += 1;
+        if (spot.life == this.lifespan) {
+          newSpots++;
+        }
+      }
+      caBA.stroke(spot.col);
+      caBA.strokeWeight(4);
+
       caBA.push();
       caBA.translate(spot.x, spot.y);
       caBA.rotate((Math.PI / 2) * spot.dir);
       caBA.arc(-this.w / 2, -this.w / 2, this.w, this.w, 0, Math.PI / 2);
       caBA.arc(this.w / 2, this.w / 2, this.w, this.w, Math.PI, (Math.PI * 3) / 2);
       caBA.pop();
-      if (this.avaible.length <= 0) {
-        bgaQuit();
+    }
+    for (let i = 0; i < newSpots; i++) {
+      if (this.avaible.length > 0) {
+        const avaibleIndex = KadRandom.randomIndex(this.avaible);
+        const index = this.avaible.splice(avaibleIndex, 1);
+        this.spotDrawn.push(this.grid[index]);
       }
+    }
+    if (this.avaible.length <= 0) {
+      bgaQuit();
     }
   }
 }

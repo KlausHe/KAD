@@ -1239,6 +1239,11 @@ const niskaOptions = {
   },
 };
 
+function niskatest({ Element, data }) {
+  KadLog.log(Element, data);
+}
+
+const Btn_niska_test = initEL({ id: "idBtn_niska_test", fn: [niskatest, "Helloo", 1, 2, 5], domOpts: { disabled: 0 }, uiOpts: { uiSize: "width12" } });
 const Vin_niskaSize = initEL({ id: "idVin_niskaSize", fn: niskaCalc, resetValue: niskaOptions.size.valOrig, domOpts: { min: 0 } });
 const Vin_niskaPitch = initEL({ id: "idVin_niskaPitch", fn: niskaCalc, resetValue: niskaOptions.pitch.valOrig, domOpts: { min: 0 } });
 const Sel_niskaSelect = initEL({
@@ -1366,15 +1371,21 @@ function niskaTable() {
     { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].val[1]), settings: { align: "right", noBorder: "right" } },
     { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
   ];
+  KadTable.createHTMLGrid({ id: "idTab_niskaTable", header, body });
 
   // data for "KadNewTable"
   const header1 = [
     [
-      { type: "Checkbox", data: true, colSpan: 2, settings: { onclick: [niskaLog, "Helloo", 1, 2, 5], idName: "text", description: "AAAAA" } },
-      { type: "Lbl", data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 2, settings: { align: "center", idName: true, forLabel: "text_0" } },
-      { type: "H1", data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center", idName: false } },
+      { type: "Checkbox", data: true, colSpan: 2, idName: "text", onclick: [niskaLog, "Helloo", 1, 2, 5], settings: { description: "AAAAA" } },
+      { type: "Lbl", data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, idName: true, colSpan: 2, settings: { align: "center", forLabel: "text_0" } },
+      { type: "H1", data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, idName: false, colSpan: 2, settings: { align: "center" } },
     ],
-    [{ data: "Eigenschaft" }, { data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 3, settings: { align: "center" } }, { data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center" } }],
+    [
+      //
+      { data: "Eigenschaft" },
+      { data: `M${niskaOptions.size.val}x${niskaOptions.pitch.val}`, colSpan: 3, settings: { align: "center" } },
+      { data: `M${niskaOptions.select.size}x${niskaOptions.select.pitch}`, colSpan: 2, settings: { align: "center" } },
+    ],
   ];
   const body1 = [
     { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].name), multiColumn: 2 },
@@ -1384,6 +1395,5 @@ function niskaTable() {
     { data: Object.keys(niskaOptions.results).map((key) => niskaOptions.results[key].unit) },
   ];
 
-  KadTable.createHTMLGrid({ id: "idTab_niskaTable", header, body });
   // KadNewTable.createGRID({ id: "idTab_niskaTable1", header: header1, body: body1 });
 }
