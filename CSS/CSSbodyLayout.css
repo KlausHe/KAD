@@ -145,7 +145,7 @@ body {
 }
 
 /* body>div  */
-#idDiv_Loading {
+.cl_Loading {
   position: fixed;
   display: grid;
   visibility: visible;
@@ -162,7 +162,7 @@ body {
   transition: none;
 }
 
-#idDiv_LoadingFinished {
+.cl_LoadingFinished {
   color: transparent;
   background-color: hsl(var(--bgcSubgrid) / 0);
   visibility: hidden;
@@ -173,6 +173,7 @@ body {
 .cl_BackgroundAnimation {
   position: fixed;
   z-index: -1;
+  pointer-events: none;
 }
 
 main {

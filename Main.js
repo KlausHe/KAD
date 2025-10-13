@@ -57,7 +57,7 @@ function clearAllTiles() {
 }
 
 function hideLoadingscreen() {
-  dbID("idDiv_Loading").classList.add("idDiv_LoadingFinished");
+  dbID("idDiv_Loading").classList.add("cl_LoadingFinished");
 }
 
 export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
