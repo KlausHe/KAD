@@ -1,5 +1,5 @@
 import { nuncDiscipuli } from "../General/Account.js";
-import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadInteraction, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
+import { dbCL, dbID, initEL, KadArray, KadColor, KadCSS, KadDOM, KadInteraction, KadRandom, KadTable, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 
 const numberyOptions = {
@@ -48,7 +48,7 @@ const Vin_numberyPlayer = initEL({
   id: "idVin_numberyPlayer",
   fn: numberyPlayerChange,
   resetValue: 2,
-  domOpts: { min: 2, max: numberyOptions.maxPlayerCount },
+  settings: { min: 1, max: numberyOptions.maxPlayerCount },
 });
 const Sel_numberCategory = initEL({
   id: "idSel_numberCategory",
@@ -62,8 +62,8 @@ const Sel_numberyPairs = initEL({
   selList: numberyOptions.availiablePairs,
   selStartIndex: KadRandom.randomObject(numberyOptions.availiablePairs.length),
 });
-const Btn_startNumbery = initEL({ id: "idBtn_startNumbery", fn: numberyToggleStart, btnCallbacks: numberyOptions.btnCallback });
-const Div_numberyImages = initEL({ id: "idDiv_numberyImages" });
+const Btn_startNumbery = initEL({ id: "idBtn_startNumbery", fn: numberyToggleStart, radioBtnCallbacks: numberyOptions.btnCallback });
+initEL({ id: "idDiv_numberyImages" });
 const Lbl_numberyResult = initEL({ id: "idLbl_numberyResult" });
 
 export function clear_cl_Numbery() {
@@ -96,7 +96,8 @@ function numberyLayout() {
 }
 
 function numberyPlayerChange() {
-  let numPlayer = Vin_numberyPlayer.KadGet({ failSafe: numberyOptions.maxPlayerCount });
+  let numPlayer = Vin_numberyPlayer.KadGet();
+  numPlayer = KadValue.constrain({ value: numPlayer, min: 1, max: numberyOptions.maxPlayerCount });
   numberyMakePlayers(numPlayer);
   numberyScoreBoard();
 }

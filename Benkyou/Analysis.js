@@ -13,9 +13,9 @@ const analysisOptions = {
 };
 
 const Vin_analysisEntry = initEL({ id: "idVin_analysisEntry", fn: analysisInput, resetValue: "Type text to analyze" });
-const Btn_analyseWiki = initEL({ id: "idBtn_analyseWiki", fn: analysisWiki });
+initEL({ id: "idBtn_analyseWiki", fn: analysisWiki });
 const Lbl_analysisResult = initEL({ id: "idLbl_analysisResult", resetValue: "~Average score~" });
-const Prog_analysisProgress = initEL({ id: "idProg_analysisProgress", domOpts: { max: 200 } });
+const Prog_analysisProgress = initEL({ id: "idProg_analysisProgress", settings: { max: 200 } });
 
 export function clear_cl_Analysis() {
   Vin_analysisEntry.KadReset();

@@ -62,15 +62,15 @@ const eggOptions = {
   },
 };
 
-const Vin_EggMass = initEL({ id: "idVin_EggMass", fn: eggMassChange, resetValue: eggOptions.mass.valOrig, domOpts: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
-const Vin_EggTemp = initEL({ id: "idVin_EggTemp", fn: eggTempChange, resetValue: eggOptions.temp.valOrig, domOpts: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
-const Vin_EggYolk = initEL({ id: "idVin_EggYolk", fn: eggYolkChange, resetValue: eggOptions.yolk.valOrig, domOpts: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
-const Btn_EggStart = initEL({ id: "idBtn_EggStart", fn: eggStartChange, btnCallbacks: eggOptions.startCallbacks });
+const Vin_EggMass = initEL({ id: "idVin_EggMass", fn: eggMassChange, resetValue: eggOptions.mass.valOrig, settings: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
+const Vin_EggTemp = initEL({ id: "idVin_EggTemp", fn: eggTempChange, resetValue: eggOptions.temp.valOrig, settings: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
+const Vin_EggYolk = initEL({ id: "idVin_EggYolk", fn: eggYolkChange, resetValue: eggOptions.yolk.valOrig, settings: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
+const Btn_EggStart = initEL({ id: "idBtn_EggStart", fn: eggStartChange, radioBtnCallbacks: eggOptions.startCallbacks });
 const Lbl_EggTime = initEL({ id: "idLbl_EggTime", resetValue: "Eieruhr" });
 const Lbl_EggMass = initEL({ id: "idLbl_EggMass" });
 const Lbl_EggTemp = initEL({ id: "idLbl_EggTemp" });
 const Lbl_EggYolk = initEL({ id: "idLbl_EggYolk" });
-const Prog_eggProgress = initEL({ id: "idProg_eggProgress", domOpts: { max: 100 } });
+const Prog_eggProgress = initEL({ id: "idProg_eggProgress", settings: { max: 100 } });
 
 export function clear_cl_Egg() {
   eggOptions.mass.val = Vin_EggMass.KadReset();

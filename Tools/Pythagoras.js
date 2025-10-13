@@ -184,10 +184,10 @@ function drawPytho() {
 
   if (pythoOptions.vals[0] / pythoOptions.vals[1] > pythoOptions.canvas.h / pythoOptions.canvas.w) {
     //--> "Y" fixed length, Scale "X"
-    drawWidth = KadValue.constrain((pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, pythoOptions.canvas.w * 0.4, pythoOptions.canvas.w);
+    drawWidth = KadValue.constrain({ value: (pythoOptions.vals[1] / pythoOptions.vals[0]) * pythoOptions.canvas.h, min: pythoOptions.canvas.w * 0.4, max: pythoOptions.canvas.w });
   } else if (pythoOptions.vals[0] / pythoOptions.vals[1] < pythoOptions.canvas.h / pythoOptions.canvas.w) {
     //--> "X" fixed length
-    drawHeight = KadValue.constrain((pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, pythoOptions.canvas.h * 0.5, pythoOptions.canvas.h);
+    drawHeight = KadValue.constrain({ value: (pythoOptions.vals[0] / pythoOptions.vals[1]) * pythoOptions.canvas.w, min: pythoOptions.canvas.h * 0.5, max: pythoOptions.canvas.h });
   }
 
   drawWidth = drawWidth - 2 * pythoOptions.margin;

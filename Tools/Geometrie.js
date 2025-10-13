@@ -572,7 +572,7 @@ for (let i = 0; i < geoObjects.elements.length; i++) {
       fn: () => changeGeoObject(i),
       resetValue: geoObjects.elements[i],
       dataset: ["radio", "geometrieAreaSelect"],
-      uiOpts: { uiSize: "width7" },
+      settings: { uiSize: "width7" },
     })
   );
 }
@@ -650,9 +650,9 @@ function changeGeoObject(index) {
 //---------------------------
 function geoBerechnung() {
   let selectedObj = geoObjects.selected;
-  geoObjects.valA = Vin_Area_0.KadGet({ failSafe: selectedObj.vals[0] }) * selectedObj.radiusFactor[0];
-  geoObjects.valB = Vin_Area_1.KadGet({ failSafe: selectedObj.vals[1] }) * selectedObj.radiusFactor[1];
-  geoObjects.valC = Vin_Area_2.KadGet({ failSafe: selectedObj.vals[2] }) * selectedObj.radiusFactor[2];
+  geoObjects.valA = Vin_Area_0.KadGet() * selectedObj.radiusFactor[0];
+  geoObjects.valB = Vin_Area_1.KadGet() * selectedObj.radiusFactor[1];
+  geoObjects.valC = Vin_Area_2.KadGet() * selectedObj.radiusFactor[2];
   geometrieOptions.result[0] = KadValue.number(selectedObj.circumference, { decimals: 3 });
   geometrieOptions.result[1] = KadValue.number(selectedObj.basearea, { decimals: 3 });
   geometrieOptions.result[2] = KadValue.number(selectedObj.fullarea, { decimals: 3 });

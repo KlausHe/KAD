@@ -907,14 +907,14 @@
         </div>
         <div class="cl_NiskaSize" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Gewindegröße
-          </label><input type="number" id="idVin_niskaSize" min="1" step="1" uiRadius="none"></input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_niskaSize" uiRadius="none"></input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
           </button>
         </div>
         <div class="cl_NiskaPitch" uiWrap="nowrap">
           <label class="cl_info" uiRadius="left">Steigung
-          </label><input type="number" id="idVin_niskaPitch" min="1" step="1" uiRadius="none"></input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </label><input type="number" id="idVin_niskaPitch" uiRadius="none"></input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
           </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
           </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
           </button>
@@ -934,8 +934,23 @@
           <label class="cl_info" id="idLbl_niskaStrengthClassB" uiSize="width6" uiRadius="left">Festigkeitsklasse
           </label><select id="idSel_niskaStrengthClassB" uiRadius="right" uiSize="width6"></select>
         </div>
+        <div class="cl_NiskaPartingLineA">
+          <label class="cl_info" uiRadius="left">Trennfugen
+          </label><input type="number" id="idVin_niskaPartingLineA" uiRadius="none">
+          </input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_NiskaPartingLineB">
+          <label class="cl_info" uiRadius="left">Trennfugen
+          </label><input type="number" id="idVin_niskaPartingLineB" uiRadius="none">
+          </input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
         <div class="cl_NiskaList">
-          <button id="idBtn_niska_test"> Button</button>
           <div id="idTab_niskaTable"></div>
           <div id="idTab_niskaTable1"></div>
         </div>
@@ -1628,8 +1643,9 @@
           </label><input type="password" id="idVin_userLogin_pass" uiRadius="right" uiSize="width8" required>
         </div>
         <div class="cl_UserLogin_check">
-          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_userLogin_check"></input>
-            <label for="idCb_userLogin_check">Keep me logged in!</label></label>
+          <label class="cl_infoCB" uiAlign="left" uiSize="width12"><input type="checkbox" id="idCb_userLogin_check"></input>
+            <label for="idCb_userLogin_check">Keep me logged in!</label>
+          </label>
         </div>
         <div class="cl_UserLogin_alert">
           <label id="idLbl_userLogin_alert"></label>

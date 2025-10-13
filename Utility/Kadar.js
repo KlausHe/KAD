@@ -20,9 +20,9 @@ const kadarOptions = {
 
 const Vin_kadarDateA = initEL({ id: "idVin_kadarDateA", fn: kadarDateSelectedA, resetValue: kadarOptions.dateOrig(-7), dateOpts: { format: kadarOptions.format, dateObject: true } });
 const Vin_kadarDateB = initEL({ id: "idVin_kadarDateB", fn: kadarDateSelectedB, resetValue: kadarOptions.dateOrig(7), dateOpts: { format: kadarOptions.format, dateObject: true } });
-const Btn_kadarTrashA = initEL({ id: "idBtn_kadarTrashA", fn: clearKadarTableAnow });
-const Btn_kadarRefresh = initEL({ id: "idBtn_kadarRefresh", fn: kadarTable });
-const Btn_kadarTrashB = initEL({ id: "idBtn_kadarTrashB", fn: clearKadarTableBnow });
+initEL({ id: "idBtn_kadarTrashA", fn: clearKadarTableAnow });
+initEL({ id: "idBtn_kadarRefresh", fn: kadarTable });
+initEL({ id: "idBtn_kadarTrashB", fn: clearKadarTableBnow });
 const Lbl_kadarDateNow = initEL({ id: "idLbl_kadarDateNow" });
 
 export function clear_cl_Kadar() {

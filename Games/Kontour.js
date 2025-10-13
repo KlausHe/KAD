@@ -158,7 +158,7 @@ export function clear_cl_Kontour() {
 
 function limitLatitude(lat) {
   const maxLat = 85.051129;
-  return KadValue.constrain(lat, -maxLat, maxLat);
+  return KadValue.constrain({ value: lat, min: -maxLat, max: maxLat });
 }
 
 function filterCountries(array) {

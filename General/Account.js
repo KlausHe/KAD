@@ -212,7 +212,7 @@ const Lbl_userChange_user = initEL({ id: "idLbl_userChange_user" });
 function openNavLogin() {
   clear_cl_UserLogin();
   navClick("cl_UserLogin");
-  Vin_userLogin_email.focus();
+  Vin_userLogin_email.HTML.focus();
 }
 
 function openNavChange() {
@@ -224,10 +224,10 @@ function openNavChange() {
 const Cb_userLogin_check = initEL({ id: "idCb_userLogin_check", fn: accountPersistanceChange, resetValue: true });
 const Btn_userLogin_login = initEL({ id: "idBtn_userLogin_login", fn: firebaseLogin });
 const Btn_userLogin_register = initEL({ id: "idBtn_userLogin_register", fn: firebaseRegister });
-const Btn_userChange_logout = initEL({ id: "idBtn_userChange_logout", fn: firebaseLogout });
-const Btn_userChange_change = initEL({ id: "idBtn_userChange_change", fn: userChange });
-const Btn_userLogin_cancel = initEL({ id: "idBtn_userLogin_cancel", fn: loginCancel });
-const Btn_userChange_cancel = initEL({ id: "idBtn_userChange_cancel", fn: changeCancel });
+initEL({ id: "idBtn_userChange_logout", fn: firebaseLogout });
+initEL({ id: "idBtn_userChange_change", fn: userChange });
+initEL({ id: "idBtn_userLogin_cancel", fn: loginCancel });
+initEL({ id: "idBtn_userChange_cancel", fn: changeCancel });
 
 function accountPersistanceChange() {
   nuncDiscipuli.cred.keepLogin = Cb_userLogin_check.checked ? browserLocalPersistence : browserSessionPersistence;

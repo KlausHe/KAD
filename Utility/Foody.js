@@ -145,11 +145,11 @@ const foodyOptions = {
   ],
 };
 
-const Btn_foodyStart = initEL({ id: "idBtn_foodyStart", fn: foodyStartChange, btnCallbacks: foodyOptions.startCallbacks });
+const Btn_foodyStart = initEL({ id: "idBtn_foodyStart", fn: foodyStartChange, radioBtnCallbacks: foodyOptions.startCallbacks });
 const Vin_foodyPreheat = initEL({ id: "idVin_foodyPreheat", fn: foodyPreheatChange, resetValue: foodyOptions.preheatOrig });
 const Sel_foodyType = initEL({ id: "idSel_foodyType", fn: foodyChangeFood, selStartIndex: 0, selList: foodyOptions.data.map((f, i) => [`${f.name} (${f.time}min)`, i]) });
 const Lbl_foodyTime = initEL({ id: "idLbl_foodyTime", resetValue: "Foody" });
-const Prog_foodyProgress = initEL({ id: "idProg_foodyProgress", domOpts: { max: 100 } });
+const Prog_foodyProgress = initEL({ id: "idProg_foodyProgress", settings: { max: 100 } });
 
 export function clear_cl_Foody() {
   foodyOptions.timerState = Btn_foodyStart.KadReset();

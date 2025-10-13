@@ -88,30 +88,22 @@ const Vin_barvoslepySeverity = initEL({
   id: "idVin_barvoslepySeverity",
   fn: barvoslepySeverity,
   resetValue: 50,
-  domOpts: {
-    min: 0,
-    max: 95,
-    step: 5,
-  },
+  settings: { min: 0, max: 95, step: 5 },
 });
 const Vin_barvoslepyEpsilon = initEL({
   id: "idVin_barvoslepyEpsilon",
   fn: barvoslepyEpsilon,
   resetValue: 5,
-  domOpts: {
-    min: 0,
-    max: 15,
-    step: 1,
-  },
+  settings: { min: 0, max: 15, step: 1 },
 });
 const Btn_barvoslepyOriginal = initEL({ id: "idBtn_barvoslepyOriginal", fn: [barvoslepyShow, 0], resetValue: "Original", dataset: ["radio", "barvoslepy"] });
 const Btn_barvoslepyPositive = initEL({ id: "idBtn_barvoslepyPositive", fn: [barvoslepyShow, 1], resetValue: "Max is black", dataset: ["radio", "barvoslepy"] });
 const Btn_barvoslepyNegative = initEL({ id: "idBtn_barvoslepyNegative", fn: [barvoslepyShow, 2], resetValue: "Max is white", dataset: ["radio", "barvoslepy"] });
 const Btn_barvoslepyWhite = initEL({ id: "idBtn_barvoslepyWhite", fn: [barvoslepyShow, 3], resetValue: "Diff is white", dataset: ["radio", "barvoslepy"] });
 const Btn_barvoslepyBlack = initEL({ id: "idBtn_barvoslepyBlack", fn: [barvoslepyShow, 4], resetValue: "Diff is black", dataset: ["radio", "barvoslepy"] });
-const Canv_barvoslepyCanvas = initEL({ id: "idCanv_barvoslepyCanvas", action: "click", fn: [barvoslepyShow, 0], dataset: ["radio", "barvoslepy"] });
+initEL({ id: "idCanv_barvoslepyCanvas", action: "click", fn: [barvoslepyShow, 0], dataset: ["radio", "barvoslepy"] });
 const Lbl_barvoslepyApply = initEL({ id: "idLbl_barvoslepyApply" });
-const Btn_barvoslepyTypes = [Btn_barvoslepyOriginal, Btn_barvoslepyPositive, Btn_barvoslepyNegative, Btn_barvoslepyWhite, Btn_barvoslepyBlack];
+[Btn_barvoslepyOriginal, Btn_barvoslepyPositive, Btn_barvoslepyNegative, Btn_barvoslepyWhite, Btn_barvoslepyBlack];
 
 export function clear_cl_Barvoslepy() {
   Sel_barvoslepySelectImage.KadReset();

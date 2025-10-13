@@ -26,15 +26,15 @@ const patternOptions = {
 const Vin_patternLength = initEL({ id: "idVin_patternLength", fn: patternSize, resetValue: 300 });
 const Vin_patternSides = initEL({ id: "idVin_patternSides", fn: patternSide, resetValue: 20 });
 const Vin_patternAsymetry = initEL({ id: "idVin_patternAsymetry", fn: patternAsym, resetValue: 0 });
-const Vin_patternHoleCount = initEL({ id: "idVin_patternHoleCount", fn: patternHoles, resetValue: 3, domOpts: { min: 2 } });
+const Vin_patternHoleCount = initEL({ id: "idVin_patternHoleCount", fn: patternHoles, resetValue: 3, settings: { min: 2 } });
 
 const Btn_patternProposedHoleCount = initEL({ id: "idBtn_patternProposedHoleCount", fn: patternProp });
 
-const Lbl_patternLength = initEL({ id: "idLbl_patternLength", resetValue: patternOptions.names[0] });
-const Lbl_patternSides = initEL({ id: "idLbl_patternSides", resetValue: patternOptions.names[1] });
-const Lbl_patternAsymetry = initEL({ id: "idLbl_patternAsymetry", resetValue: patternOptions.names[2] });
-const Lbl_patternHoleCount = initEL({ id: "idLbl_patternHoleCount", resetValue: patternOptions.names[3] });
-const Lbl_patternProposedHoleCount = initEL({ id: "idLbl_patternProposedHoleCount", resetValue: patternOptions.names[4] });
+initEL({ id: "idLbl_patternLength", resetValue: patternOptions.names[0] });
+initEL({ id: "idLbl_patternSides", resetValue: patternOptions.names[1] });
+initEL({ id: "idLbl_patternAsymetry", resetValue: patternOptions.names[2] });
+initEL({ id: "idLbl_patternHoleCount", resetValue: patternOptions.names[3] });
+initEL({ id: "idLbl_patternProposedHoleCount", resetValue: patternOptions.names[4] });
 
 export function clear_cl_Pattern() {
   KadInteraction.removeContextmenu("idCanv_pattern");

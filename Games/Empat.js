@@ -30,7 +30,7 @@ const empatOptions = {
   ],
 };
 
-const Btn_empatStart = initEL({ id: "idBtn_empatStart", fn: empatStartChange, btnCallbacks: empatOptions.startCallbacks });
+const Btn_empatStart = initEL({ id: "idBtn_empatStart", fn: empatStartChange, radioBtnCallbacks: empatOptions.startCallbacks });
 const Canv_empat = initEL({ id: "idCanv_empat", fn: empatKeyPushed });
 
 export function clear_cl_Empat() {
@@ -246,7 +246,7 @@ function botLogic() {
     opts.cells[i].playerID = null;
   }
   if (nextPos == null) {
-    const randPos = Math.floor(KadValue.constrain(caEM.randomGaussian() + empatOptions.lastMove, 0, empatOptions.cols - 1));
+    const randPos = Math.floor(KadValue.constrain({ value: caEM.randomGaussian() + empatOptions.lastMove, min: 0, max: empatOptions.cols - 1 }));
     nextPos = KadArray.getNearestValueInArray(opts.arr, randPos);
   }
   empatOptions.players[empatOptions.curPlayer].setPosition(nextPos);

@@ -11,7 +11,7 @@ window.onload = mainSetup;
 function mainSetup() {
   if (hostDebug()) {
     dbIDStyle("idDiv_Loading").display = "none";
-    // console.clear();
+    console.clear();
   }
   contentLayout.createContentData();
   createContentlayoutList(); // First: create the LayoutLists

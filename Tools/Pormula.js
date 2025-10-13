@@ -242,7 +242,7 @@ export function clear_cl_Pormula() {
   pormulaOptions.regOptions.precision = Vin_pormulaPrecision.KadReset();
   pormulaOptions.data.size = pormulaOptions.valuesOrig.length;
 
-  let expNum = KadRandom.randomInt(6, 1);
+  let expNum = KadRandom.randomInt({ max: 6, min: 1 });
   let exp = KadRandom.randomBool(0.3) ? 1 / expNum : expNum;
 
   for (let i = 0; i < Vin_Pormula_xs.length; i++) {
@@ -275,7 +275,7 @@ function pormulaAddInput() {
 }
 function pormulaDirInput(dir) {
   pormulaOptions.data.size += dir;
-  pormulaOptions.data.size = KadValue.constrain(pormulaOptions.data.size, pormulaOptions.data.minSize, pormulaOptions.data.maxSize);
+  pormulaOptions.data.size = KadValue.constrain({ value: pormulaOptions.data.size, min: pormulaOptions.data.minSize, max: pormulaOptions.data.maxSize });
   for (let i = 0; i < Vin_Pormula_xs.length; i++) {
     const state = i < pormulaOptions.data.size;
     Vin_Pormula_xs[i].KadEnable(state);

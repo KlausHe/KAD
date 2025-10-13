@@ -58,7 +58,7 @@ const Vin_pelveleaBreaks = initEL({ id: "idVin_pelveleaBreaks", fn: pelveleaBrea
 const Vin_pelveleaWorktime = initEL({ id: "idVin_pelveleaWorktime", fn: pelveleaWorktime, resetValue: pelveleaOptions.worktime.valOrig });
 const Lbl_pelveleaResult = initEL({ id: "idLbl_pelveleaResult" });
 const Lbl_pelveleaBreaktime = initEL({ id: "idLbl_pelveleaBreaktime" });
-const Prog_pelveleaProgress = initEL({ id: "idProg_pelveleaProgress", domOpts: { max: 100 } });
+const Prog_pelveleaProgress = initEL({ id: "idProg_pelveleaProgress", settings: { max: 100 } });
 
 export function clear_cl_Pelvelea() {
   clearTimeout(pelveleaOptions.timer);

@@ -38,7 +38,7 @@ const Vin_IomlaidDate = initEL({
   id: "idVin_IomlaidDate",
   fn: iomlaidDateChange,
   resetValue: iomlaidOptions.minDate,
-  domOpts: { min: iomlaidOptions.dateDatabase },
+  settings: { min: iomlaidOptions.dateDatabase },
 });
 const Vin_IomlaidCur = initEL({ id: "idVin_IomlaidCur", fn: iomlaidValueChange, resetValue: iomlaidOptions.optionsOrig.value });
 

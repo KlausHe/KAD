@@ -1,4 +1,4 @@
-import { KadInteraction, KadValue, initEL } from "../KadUtils/KadUtils.js";
+import { KadInteraction, KadRandom, KadValue, initEL } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -23,7 +23,7 @@ const ibhaluniOptions = {
   ],
 };
 
-const Btn_ibhaluniStart = initEL({ id: "idBtn_ibhaluniStart", btnCallbacks: ibhaluniOptions.startCallbacks });
+const Btn_ibhaluniStart = initEL({ id: "idBtn_ibhaluniStart", radioBtnCallbacks: ibhaluniOptions.startCallbacks });
 const Cb_ibhaluniSoundOutput = initEL({ id: "idCb_ibhaluniSoundOutput", fn: ibhaluniToggleSound });
 
 export function clear_cl_Ibhaluni() {
@@ -115,8 +115,8 @@ class IbhaluniObj {
     this.poppingScl = 1;
     this.poppingSclLimits = [10, 25];
     this.falling = false;
-    this.speedX = KadValue.constrain(Math.random(), 0.2, 1);
-    this.speedY = KadValue.constrain(Math.random(), 0.2, 1) * 1.5;
+    this.speedX = KadRandom.random({ min: 0.2, max: 1 });
+    this.speedY = KadRandom.random({ min: 0.2, max: 1 }) * 1.5;
     this.noiseSeed = Math.random() * 1000;
     this.mirrored = Math.random() > 0.5;
     this.angle = 0;
