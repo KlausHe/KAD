@@ -243,8 +243,7 @@ export function clear_cl_Pormula() {
   pormulaOptions.data.size = pormulaOptions.valuesOrig.length;
 
   let expNum = KadRandom.randomInt({ max: 6, min: 1 });
-  let exp = KadRandom.randomBool(0.3) ? 1 / expNum : expNum;
-
+  let exp = KadRandom.randomBool(0.4) ? 1 / expNum : expNum;
   for (let i = 0; i < Vin_Pormula_xs.length; i++) {
     Vin_Pormula_xs[i].KadReset({ resetValue: i + 1 });
     Vin_Pormula_ys[i].KadReset({ resetValue: (i + 1) ** exp });
@@ -414,10 +413,14 @@ function pormulaInfo() {
 
 function pormulaUpdateChart() {
   if (pormulaChart.canvas == null) return;
-  pormulaOptions.data.xRange = [...pormulaOptions.data.uniquePoints.map((item) => item.x), ...pormulaOptions.data.resultPoints.map((points) => points[0])];
+  pormulaOptions.data.xRange = [
+    //
+    ...pormulaOptions.data.uniquePoints.map((item) => item.x),
+    ...pormulaOptions.data.resultPoints.filter((points) => points[2]).map((points) => points[0]),
+  ];
+
   let min = Math.floor(Math.min(...pormulaOptions.data.xRange));
   let max = Math.ceil(Math.max(...pormulaOptions.data.xRange));
-
   const resolution = 30;
   const step = (max - min) / resolution;
   min = Math.floor(min - 2 * step);
@@ -431,10 +434,11 @@ function pormulaUpdateChart() {
   }
 
   pormulaChart.config.data.datasets[0].data = pormulaOptions.data.uniquePoints;
-  pormulaChart.config.data.datasets[1].data = [{ x: pormulaOptions.data.resultPoints[0][0], y: pormulaOptions.data.resultPoints[0][1] }];
-  pormulaChart.config.data.datasets[2].data = [{ x: pormulaOptions.data.resultPoints[1][0], y: pormulaOptions.data.resultPoints[1][1] }];
-  pormulaChart.config.data.datasets[3].data = [{ x: pormulaOptions.data.resultPoints[2][0], y: pormulaOptions.data.resultPoints[2][1] }];
-  pormulaChart.config.data.datasets[4].data = pormulaOptions.data.curvePoints;
+  for (let i = 0; i < Vin_pormulaPointEntry.length; i++) {
+    const d = pormulaOptions.data.resultPoints[i][2] ? [{ x: pormulaOptions.data.resultPoints[i][0], y: pormulaOptions.data.resultPoints[i][1] }] : [];
+    pormulaChart.config.data.datasets[i + 1].data = d;
+  }
+  pormulaChart.config.data.datasets[Vin_pormulaPointEntry.length + 1].data = pormulaOptions.data.curvePoints;
 
   pormulaChart.canvas.update();
 }

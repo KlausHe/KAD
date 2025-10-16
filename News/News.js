@@ -75,7 +75,7 @@ function newsGetData({ data }) {
 function newsGetArticle(index) {
   newsData.currIndex = index;
   const date = KadDate.getDate(newsData.articles[newsData.currIndex].date, { format: "DD.MM.YY / HH:mm" });
-  Div_News_Title.textContent = `${newsData.articles[newsData.currIndex].title} (${date})`;
+  Div_News_Title.KadSetText(`${newsData.articles[newsData.currIndex].title} (${date})`);
 
   if (newsData.articles[newsData.currIndex].teaserImage) {
     dbID("idImg_News_Image").src = newsData.articles[newsData.currIndex].teaserImage.imageVariants["1x1-144"];

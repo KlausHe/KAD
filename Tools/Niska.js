@@ -1239,7 +1239,7 @@ const niskaOptions = {
 const Vin_niskaPartingLineA = initEL({ id: "idVin_niskaPartingLineA", fn: niskaCalc, resetValue: niskaOptions.partingline.valOrig[0], settings: { min: 1 } });
 const Vin_niskaPartingLineB = initEL({ id: "idVin_niskaPartingLineB", fn: niskaCalc, resetValue: niskaOptions.partingline.valOrig[1], settings: { min: 1 } });
 const Vin_niskaSize = initEL({ id: "idVin_niskaSize", fn: niskaCalc, resetValue: niskaOptions.size.valOrig, settings: { min: 1, step: 1 } });
-const Vin_niskaPitch = initEL({ id: "idVin_niskaPitch", fn: niskaCalc, resetValue: niskaOptions.pitch.valOrig, settings: { min: 1, step: 1 } });
+const Vin_niskaPitch = initEL({ id: "idVin_niskaPitch", fn: niskaCalc, resetValue: niskaOptions.pitch.valOrig, settings: { min: 1 } });
 const Sel_niskaSelect = initEL({
   id: "idSel_niskaSelect",
   fn: niskaCalc,
@@ -1312,7 +1312,7 @@ function niskaHelpCalculation(d, P, index) {
 
   const VorspannkraftNum = SpannungZul;
   const VorspannkraftDen1 = 1 / Spannungsquerschnitt ** 2;
-  const VorspannkraftDen2 = 0.75 * Flankendurchmesser ** 2 * Math.tan(niskaOptions.results.Steigungswinkel.val[index] + GewindeReibwinkel) ** 2;
+  const VorspannkraftDen2 = 0.75 * Flankendurchmesser ** 2 * Math.tan(Steigungswinkel + GewindeReibwinkel) ** 2;
   const VorspannkraftDen3 = WiderstandsmomentPolar ** 2;
   const VorspannkraftMax = VorspannkraftNum / Math.sqrt(VorspannkraftDen1 + VorspannkraftDen2 / VorspannkraftDen3); // Vorspannkraft(N)
 
@@ -1324,7 +1324,6 @@ function niskaHelpCalculation(d, P, index) {
 
   const strengthAxialStatic = SpannungZul / niskaOptions.data.safetyAxialStatic;
   const strengthAxialDynamic = SpannungZul / niskaOptions.data.safetyAxialDynamic;
-
   const strengthShearStatic = (VorspannkraftMax * niskaOptions.data.frictionCoefShear * niskaOptions.partingline.val[index]) / niskaOptions.data.safetyShearStatic;
   const strengthShearDynamic = (VorspannkraftMax * niskaOptions.data.frictionCoefShear * niskaOptions.partingline.val[index]) / niskaOptions.data.safetyShearDynamic;
 

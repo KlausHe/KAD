@@ -95,7 +95,6 @@ function iomlaidTable() {
     { data: `Kurs<br>${iomlaidOptions.date}`, settings: { align: "right" } },
     { data: `Betrag<br>${iomlaidOptions.date}`, settings: { align: "right" } },
   ];
-
   const body = [
     {
       data: Data_Currencies.map((item) => `${item.name} (${item.cc})`),
