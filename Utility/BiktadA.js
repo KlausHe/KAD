@@ -100,7 +100,11 @@ function biktadaLoadIpify() {
 }
 
 function biktadaGeoPos(data) {
-  biktadaOptions.data.Location.value = `lat: ${data.coords.latitude.toFixed(6)}<br>lon: ${data.coords.longitude.toFixed(6)}`;
+  if (data.coords.latitude) {
+    biktadaOptions.data.Location.value = `lat: ${data.coords.latitude.toFixed(6)}<br>lon: ${data.coords.longitude.toFixed(6)}`;
+  } else {
+    biktadaOptions.data.Location.value = `lat: -<br>lon: -`;
+  }
   biktadaPassValue("Location");
 }
 
