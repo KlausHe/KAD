@@ -1,1 +1,1 @@
-export const debugDefaultPage = "cl_Niska"; // cl_Kontour "KAD"
+export const debugDefaultPage = "cl_Pattern"; // cl_Kontour "KAD"

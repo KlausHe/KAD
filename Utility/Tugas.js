@@ -1,5 +1,5 @@
 import { saveDiscipuli } from "../General/Account.js";
-import { dbID, initEL, KadLog, KadTable } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadTable } from "../KadUtils/KadUtils.js";
 
 let tugasOptions = { data: [] };
 
@@ -24,7 +24,6 @@ export const storage_cl_Tugas = {
     tugasOptions.data = [];
     if (typeof data == "object") {
       for (let obj of data) {
-        KadLog.log(obj);
         tugasOptions.data.push(obj);
       }
     } else {
@@ -63,7 +62,6 @@ function checkboxClicked(index) {
 }
 
 function tugasCreateTable() {
-  KadLog.log(tugasOptions.data);
   const body = [
     { type: "KADImg", data: "trash", settings: { onclick: tugasClearRow } },
     { type: "KADImg", data: "edit", settings: { onclick: tugasEditRow } },

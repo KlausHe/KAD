@@ -4,16 +4,18 @@ import { initEL } from "../KadUtils/KadUtils.js";
 const Vin_simaCountry = initEL({
   id: "idVin_simaCountry",
   action: "focus",
+  resetValue: "Land eingeben",
   dbList: Data_Country_CodesIso3166.map((item) => item.nameDE).sort(),
 });
 
 const Vin_simaNumber = initEL({
   id: "idVin_simaNumber",
   action: "focus",
+  resetValue: "Telefonvorwahl",
   dbList: Data_Country_CodesIso3166.map((item) => item.phone[0]).sort((a, b) => a - b),
 });
-initEL({ id: "idVin_simaCountry", fn: simaCountryInput, resetValue: "Land eingeben" });
-initEL({ id: "idVin_simaNumber", fn: simaNumberInput, resetValue: "Telefonvorwahl" });
+initEL({ id: "idVin_simaCountry", fn: simaCountryInput });
+initEL({ id: "idVin_simaNumber", fn: simaNumberInput });
 const Lbl_simaResult = initEL({ id: "idLbl_simaResult", resetValue: "..." });
 
 export function clear_cl_Sima() {
