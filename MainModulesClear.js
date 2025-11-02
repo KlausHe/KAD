@@ -44,6 +44,7 @@ export { clear_cl_Material } from "./Tools/Material.js";
 export { clear_cl_Middle } from "./Tools/Middle.js";
 export { clear_cl_Niska } from "./Tools/Niska.js";
 export { clear_cl_Pattern } from "./Tools/Pattern.js";
+export { clear_cl_Perlindungan } from "./Tools/Perlindungan.js";
 export { clear_cl_Pormula } from "./Tools/Pormula.js";
 export { clear_cl_Pythagoras } from "./Tools/Pythagoras.js";
 export { clear_cl_Quickmath } from "./Tools/Quickmath.js";

@@ -525,6 +525,88 @@ input[imgBtn="subgrid"] {
 }
 
 [uiSize~="outputTable"] {
+  width: var(--UIWidth20);
+}
+
+/*  */
+[uiMaxSize~="width1"] {
+  max-width: var(--UIWidth1);
+}
+[uiMaxSize~="width2"] {
+  max-width: var(--UIWidth2);
+}
+[uiMaxSize~="width3"] {
+  max-width: var(--UIWidth3);
+}
+[uiMaxSize~="width4"] {
+  max-width: var(--UIWidth4);
+}
+[uiMaxSize~="width5"] {
+  max-width: var(--UIWidth5);
+}
+[uiMaxSize~="width6"] {
+  max-width: var(--UIWidth6);
+}
+[uiMaxSize~="width7"] {
+  max-width: var(--UIWidth7);
+}
+[uiMaxSize~="width8"] {
+  max-width: var(--UIWidth8);
+}
+[uiMaxSize~="width9"] {
+  max-width: var(--UIWidth9);
+}
+[uiMaxSize~="width10"] {
+  max-width: var(--UIWidth10);
+}
+[uiMaxSize~="width11"] {
+  max-width: var(--UIWidth11);
+}
+[uiMaxSize~="width12"] {
+  max-width: var(--UIWidth12);
+}
+[uiMaxSize~="width13"] {
+  max-width: var(--UIWidth13);
+}
+[uiMaxSize~="width14"] {
+  max-width: var(--UIWidth14);
+}
+[uiMaxSize~="width15"] {
+  max-width: var(--UIWidth15);
+}
+[uiMaxSize~="width16"] {
+  max-width: var(--UIWidth16);
+}
+[uiMaxSize~="width17"] {
+  max-width: var(--UIWidth17);
+}
+[uiMaxSize~="width18"] {
+  max-width: var(--UIWidth18);
+}
+[uiMaxSize~="width19"] {
+  max-width: var(--UIWidth19);
+}
+[uiMaxSize~="width20"] {
+  max-width: var(--UIWidth20);
+}
+[uiMaxSize~="width25"] {
+  max-width: var(--UIWidth25);
+}
+[uiMaxSize~="width30"] {
+  max-width: var(--UIWidth30);
+}
+[uiMaxSize~="height2"] {
+  max-height: var(--UIHeight2);
+}
+[uiMaxSize~="height3"] {
+  max-height: var(--UIHeight3);
+}
+[uiMaxSize~="height20"] {
+  max-height: var(--UIWidth20);
+}
+
+/*  */
+[uiSize~="outputTable"] {
   max-width: var(--UIWidth20);
 }
 

@@ -1216,28 +1216,9 @@ const niskaOptions = {
       info: ["max. Vorspannkraft", "N"],
       val: [],
     },
-    // strengthAxialStatic: {
-    //   info: ["max. Axialkraft statisch", "N"],
-    //   val: [],
-    // },
-    // strengthAxialDynamic: {
-    //   info: ["max. Axialkraft dynamisch", "N"],
-    //   val: [],
-    // },
-    // // strengthAussendurchmesserNut
-    // strengthShearStatic: {
-    //   info: ["max. Querkraft statisch", "N"],
-    //   val: [],
-    // },
-    // strengthShearDynamic: {
-    //   info: ["max. Querkraft dynamisch", "N"],
-    //   val: [],
-    // },
   },
 };
 
-// const Vin_niskaPartingLineA = initEL({ id: "idVin_niskaPartingLineA", fn: niskaCalc, resetValue: niskaOptions.partingline.valOrig[0], settings: { min: 1 } });
-// const Vin_niskaPartingLineB = initEL({ id: "idVin_niskaPartingLineB", fn: niskaCalc, resetValue: niskaOptions.partingline.valOrig[1], settings: { min: 1 } });
 const Vin_niskaSize = initEL({ id: "idVin_niskaSize", fn: niskaCalc, resetValue: niskaOptions.size.valOrig, settings: { min: 1, step: 1 } });
 const Vin_niskaPitch = initEL({ id: "idVin_niskaPitch", fn: niskaCalc, resetValue: niskaOptions.pitch.valOrig, settings: { min: 1 } });
 const Sel_niskaSelect = initEL({
@@ -1264,8 +1245,6 @@ export function clear_cl_Niska() {
   niskaOptions.strengthClass.index[1] = Sel_niskaStrengthClassB.KadReset();
   Vin_niskaSize.KadReset();
   Vin_niskaPitch.KadReset();
-  // Vin_niskaPartingLineA.KadReset();
-  // Vin_niskaPartingLineB.KadReset();
   Sel_niskaSelect.KadReset();
 
   niskaCalc();
@@ -1275,7 +1254,6 @@ function niskaCalc() {
   // manual input
   niskaOptions.size.val = Vin_niskaSize.KadGet();
   niskaOptions.pitch.val = Vin_niskaPitch.KadGet();
-  // niskaOptions.partingline.val[0] = Vin_niskaPartingLineA.KadGet();
   niskaOptions.strengthClass.index[0] = Sel_niskaStrengthClassA.KadGet({ index: true });
   niskaHelpCalculation(niskaOptions.size.val, niskaOptions.pitch.val, 0);
 
@@ -1285,7 +1263,6 @@ function niskaCalc() {
   niskaOptions.select.type = niskaOptions.select.types[type];
   niskaOptions.select.index -= niskaOptions.select.offset;
   niskaOptions.strengthClass.index[1] = Sel_niskaStrengthClassB.KadGet({ index: true });
-  // niskaOptions.partingline.val[1] = Vin_niskaPartingLineB.KadGet();
   Lbl_niskaRegelInfo.KadSetText(niskaOptions.select.type == niskaOptions.select.typeOrig ? "Regelgewinde" : "Feingewinde");
   niskaHelpCalculation(niskaOptions.select.size, niskaOptions.select.pitch, 1);
 
@@ -1298,10 +1275,6 @@ function niskaHelpCalculation(d, P, index) {
   const KerndurchmesserBolzengewinde = d - 1.22687 * P; // d3 Kerndurchmesser des Bolzengewindes
   const Aussendurchmesser = d - 1.2269 * P;
   const Flankendurchmesser = d - 0.6495 * P; //d2 = Flankendurchmesser
-  // const threadDepthBolt = 0.6134 * P; // Gewindetiefe des Bolzengewindes	h3 = 0,6134 * P = H * 17 / 24
-  // const threadDepthNut = 0.5413 * P; // Gewindetiefe des Muttergewindes	H1 = 0,5413 * P
-  // const rounding = 0.1443 * P; // Rundung	R = 0,1443 * P
-  // const Steigungswinkel = Math.atan(P / (Flankendurchmesser * Math.PI)); //  φ° = Steigungswinkel(Grad)
 
   const Steigungswinkel = (Math.atan(P / (Flankendurchmesser * Math.PI)) * 180) / Math.PI; //  φ° = Steigungswinkel(Grad)
   const Spannungsquerschnitt = (Math.PI / 4) * ((Flankendurchmesser + Aussendurchmesser) / 2) ** 2; //  AS = Spannungsquerschnitt
@@ -1330,15 +1303,6 @@ function niskaHelpCalculation(d, P, index) {
   niskaOptions.results.Steigungswinkel.val[index] = KadValue.number(Steigungswinkel, niskaOptions.decimalOpts);
   niskaOptions.results.Spannungsquerschnitt.val[index] = KadValue.number(Spannungsquerschnitt, niskaOptions.decimalOpts);
   niskaOptions.results.VorspannkraftMax.val[index] = KadValue.number(VorspannkraftMax, { decimals: 0 });
-
-  // const strengthAxialStatic = SpannungZul / niskaOptions.data.safetyAxialStatic;
-  // const strengthAxialDynamic = SpannungZul / niskaOptions.data.safetyAxialDynamic;
-  // const strengthShearStatic = (VorspannkraftMax * niskaOptions.data.frictionCoefShear * niskaOptions.partingline.val[index]) / niskaOptions.data.safetyShearStatic;
-  // const strengthShearDynamic = (VorspannkraftMax * niskaOptions.data.frictionCoefShear * niskaOptions.partingline.val[index]) / niskaOptions.data.safetyShearDynamic;
-  // niskaOptions.results.strengthAxialStatic.val[index] = KadValue.number(strengthAxialStatic, { decimals: 0 });
-  // niskaOptions.results.strengthAxialDynamic.val[index] = KadValue.number(strengthAxialDynamic, { decimals: 0 });
-  // niskaOptions.results.strengthShearStatic.val[index] = KadValue.number(strengthShearStatic, { decimals: 0 });
-  // niskaOptions.results.strengthShearDynamic.val[index] = KadValue.number(strengthShearDynamic, { decimals: 0 });
 }
 
 function niskaTable() {

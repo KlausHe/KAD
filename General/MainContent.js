@@ -786,8 +786,6 @@ export const rawContentGrid = {
       ["cl_NiskaHeaderSelect", "center"],
       ["cl_NiskaSize", "center"],
       ["cl_NiskaPitch", "center"],
-      // ["cl_NiskaPartingLineA", "center"],
-      // ["cl_NiskaPartingLineB", "center"],
       ["cl_NiskaSelect", "center"],
       ["cl_NiskaStrengthClassA", "center"],
       ["cl_NiskaStrengthClassB", "center"],
@@ -811,6 +809,32 @@ export const rawContentGrid = {
       ["cl_PatternInputD", "center"],
       ["cl_PatternInputE", "center"],
       ["cl_PatternCanvas", "center"],
+    ],
+  },
+  cl_Perlindungan: {
+    source: [
+      ["Daten", "https://de.wikipedia.org/wiki/Schutzart"],
+      ["Daten", "https://www.schweizer-fn.de/sonstiges/ip_ex_kennzeichnung/ip_ex_kennzeichnung.php"],
+    ],
+    contentGroup: "Tools",
+    name: "Perlindungan",
+    heritage: ["indonesisch", "Schutz"],
+    size: [2, 2],
+    maingrid: {
+      areas: [
+        //
+        ["cl_PerlindunganSelect"],
+        ["cl_PerlindunganOutput"],
+        ["cl_PerlindunganHideLists"],
+        ["cl_PerlindunganList"],
+      ],
+      rows: [1, 2, 1],
+    },
+    subgrid: [
+      ["cl_PerlindunganSelect", "center"],
+      ["cl_PerlindunganOutput", "center"],
+      ["cl_PerlindunganHideLists", "center"],
+      ["cl_PerlindunganList", "center"],
     ],
   },
   cl_Pormula: {
@@ -911,7 +935,7 @@ export const rawContentGrid = {
     contentGroup: "Tools",
     name: "Ranje",
     heritage: ["Haiti-Kreolisch", "anordnen"],
-    size: [1, 1],
+    size: [2, 1],
     maingrid: {
       areas: [
         //
