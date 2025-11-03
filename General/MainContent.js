@@ -824,16 +824,18 @@ export const rawContentGrid = {
       areas: [
         //
         ["cl_PerlindunganSelect"],
-        ["cl_PerlindunganOutput"],
+        ["cl_PerlindunganInput"],
         ["cl_PerlindunganHideLists"],
+        ["cl_PerlindunganDescriptionList"],
         ["cl_PerlindunganList"],
       ],
-      rows: [1, 2, 1],
+      rows: [1, 1, 1, 0],
     },
     subgrid: [
       ["cl_PerlindunganSelect", "center"],
-      ["cl_PerlindunganOutput", "center"],
+      ["cl_PerlindunganInput", "center"],
       ["cl_PerlindunganHideLists", "center"],
+      ["cl_PerlindunganDescriptionList", "center"],
       ["cl_PerlindunganList", "center"],
     ],
   },

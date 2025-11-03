@@ -1,17 +1,22 @@
 import { initEL, KadRandom, KadTable } from "../KadUtils/KadUtils.js";
 
 const perlindunganOptions = {
-  selected: 0,
+  selected: 1,
+  outputText: "",
   showLists: false,
   showListCallbacks: [
     ["Show Lists", perlindunganTable],
     ["Hide Lists", perlindunganTable],
   ],
+  get selectedTable() {
+    return this.data[this.selected];
+  },
   data: [
     {
       name: "IP (DIN-EN-60529)",
       info: "Die Schutzart gibt die Eignung von elektrischen Betriebsmitteln (zum Beispiel Geräten, Leuchten und Installationsmaterial) für verschiedene Umgebungsbedingungen an, zusätzlich den Schutz von Menschen gegen potentielle Gefährdung bei deren Benutzung.",
       selected: [0, 0, 0, 0],
+      selectedOrig: [0, 0, 0, 0],
       get text() {
         const Z0 = this.body[0][this.selected[0]][0];
         const Z1 = this.body[1][this.selected[1]][0];
@@ -68,15 +73,16 @@ const perlindunganOptions = {
     {
       name: "IP (ISO-20653)",
       info: "Die Schutzart gibt die Eignung von elektrischen Betriebsmitteln (zum Beispiel Geräten, Leuchten und Installationsmaterial) für verschiedene Umgebungsbedingungen an, zusätzlich den Schutz von Menschen gegen potentielle Gefährdung bei deren Benutzung.",
-      selected: [0, 0, 0, 0],
+      selected: [0, 0],
+      selectedOrig: [0, 0],
       get text() {
         const Z0 = this.body[0][this.selected[0]][0];
         const Z1 = this.body[1][this.selected[1]][0];
         return `IP${Z0}${Z1}`;
       },
       header: [
-        ["IP Klassifikation", "Schutz gegen Fremdkörper", "Schutz gegen Berührung"],
-        ["IP Klassifikation", "Schutz gegen Wasser"],
+        ["1. Ziffer", "Schutz gegen Fremdkörper", "Schutz gegen Berührung"],
+        ["2. Ziffer", "Schutz gegen Wasser"],
       ],
       body: [
         [
@@ -107,11 +113,12 @@ const perlindunganOptions = {
     {
       name: "IK",
       info: "Mit der IK-Schutzart wird die Stoßfestigkeit beziffert.",
-      selected: [0, 0, 0, 0],
+      selected: [0],
+      selectedOrig: [0],
       get text() {
         return `IK${this.body[0][this.selected[0]][0]}`;
       },
-      header: [["IK Klassifikation", "Schutz gegen einen Schlag bis zu "]],
+      header: [["IK Klassifikation", "Schutz gegen einen Schlag bis zu"]],
       body: [
         [
           ["00", "kein Schutz"],
@@ -138,22 +145,24 @@ const Sel_perlindunganSelect = initEL({
   selStartIndex: perlindunganOptions.selected,
 });
 const Btn_perlindunganHideLists = initEL({ id: "idBtn_perlindunganHideLists", fn: perlindunganHideLists, radioBtnCallbacks: perlindunganOptions.showListCallbacks });
-const Lbl_perlindunganOutput = initEL({ id: "idLbl_perlindunganOutput", resetValue: "Schutzart" });
+const Vin_perlindunganInput = initEL({ id: "idVin_perlindunganInput", fn: perlindunganInput, resetValue: "Schutzart eingeben" });
 
 const idTab_perlindunganTables = ["idTab_perlindunganTable0", "idTab_perlindunganTable1", "idTab_perlindunganTable2", "idTab_perlindunganTable3"];
 
 export function clear_cl_Perlindungan() {
-  Lbl_perlindunganOutput.KadReset();
+  perlindunganOptions.selected = Sel_perlindunganSelect.KadGet();
+  perlindunganOptions.selectedTable.selected = [...perlindunganOptions.selectedTable.selectedOrig];
   perlindunganTable();
-  for (let z = 0; z < perlindunganOptions.data[perlindunganOptions.selected].body.length; z++) {
-    const index = KadRandom.randomInt({ max: perlindunganOptions.data[perlindunganOptions.selected].body[z].length });
+  for (let z = 0; z < perlindunganOptions.selectedTable.body.length; z++) {
+    const index = KadRandom.randomInt({ max: perlindunganOptions.selectedTable.body[z].length });
+    perlindunganOptions.selectedTable.selected[z] = index;
     perlindunganAddValue(z, index);
   }
 }
 
 function perlindunganSelected() {
   perlindunganOptions.selected = Sel_perlindunganSelect.KadGet();
-  perlindunganOptions.data[perlindunganOptions.selected].selected = [0, 0, 0, 0];
+  perlindunganOptions.selectedTable.selected = [...perlindunganOptions.selectedTable.selectedOrig];
   if (!perlindunganOptions.showLists) {
     Btn_perlindunganHideLists.KadNext();
   }
@@ -165,14 +174,74 @@ function perlindunganHideLists() {
   perlindunganOptions.showLists = !perlindunganOptions.showLists;
 }
 
+function perlindunganInput() {
+  const searchInput = Vin_perlindunganInput.KadGet();
+  if (searchInput.length < 2) return;
+  let list = searchInput.slice(0, 2).toUpperCase();
+  let dataArray = searchInput.slice(2).split("");
+  switch (list) {
+    case "IK":
+      if (dataArray.length != 2) return;
+      perlindunganOptions.selected = 2;
+      const key = dataArray.join("");
+      let index = perlindunganOptions.selectedTable.body[0].findIndex((item) => item[0] == key);
+      if (index == -1) index = 0;
+      perlindunganOptions.selectedTable.selected[0] = index;
+      break;
+    case "IP":
+      if (dataArray.length < 2) return;
+      perlindunganOptions.selected = dataArray.includes("K") ? 1 : 0;
+      perlindunganOptions.selectedTable.selected = [];
+      if (perlindunganOptions.selected == 0) {
+        let index = [0, 0, 0, 0];
+        index[0] = perlindunganOptions.selectedTable.body[0].findIndex((item) => item[0] == dataArray[0]);
+        if (dataArray[1]) {
+          index[1] = perlindunganOptions.selectedTable.body[1].findIndex((item) => item[0] == dataArray[1]);
+        }
+        if (dataArray[2]) {
+          index[2] = perlindunganOptions.selectedTable.body[2].findIndex((item) => item[0] == dataArray[2]);
+          if (index[2] == -1) index[3] = perlindunganOptions.selectedTable.body[3].findIndex((item) => item[0] == dataArray[2]);
+        }
+        if (dataArray[3]) {
+          index[3] = perlindunganOptions.selectedTable.body[3].findIndex((item) => item[0] == dataArray[3]);
+        }
+        perlindunganOptions.selectedTable.selected = index.map((item) => (item == -1 ? 0 : item));
+      } else {
+        let index = [0, 0];
+        index[0] = perlindunganOptions.selectedTable.body[0].findIndex((item) => item[0][0] == dataArray[0]);
+        let i = 1;
+        if (dataArray[1] == "K") i = 2;
+        if (dataArray[i]) {
+          index[1] = perlindunganOptions.selectedTable.body[1].findIndex((item) => item[0][0] == dataArray[i]);
+        }
+        perlindunganOptions.selectedTable.selected = index.map((item) => (item == -1 ? 0 : item));
+      }
+      break;
+  }
+  perlindunganAddValue();
+}
+
+function perlindunganDescriptionTable() {
+  let selData = perlindunganOptions.selectedTable;
+  let header = null;
+  let body = null;
+  header = [{ type: "H2", data: perlindunganOptions.outputText, colSpan: 2, settings: { align: "center" } }];
+  body = [
+    //
+    { data: selData.selected.map((index, tab) => selData.body[tab][index][0]), settings: { uiMaxSize: "width16" } },
+    { data: selData.selected.map((index, tab) => `${selData.header[tab][1]} ${selData.body[tab][index][1]}`), settings: { uiMaxSize: "width16" } },
+  ];
+
+  KadTable.createHTMLGrid({ id: "idTab_perlindunganDescriptionTable", header, body });
+}
+
 function perlindunganTable() {
   for (let table of idTab_perlindunganTables) {
     KadTable.createHTMLGrid({ id: table, header: null, body: null });
   }
+  let selData = perlindunganOptions.selectedTable;
+
   if (!perlindunganOptions.showLists) return;
-
-  let selData = perlindunganOptions.data[perlindunganOptions.selected];
-
   for (let i = 0; i < selData.header.length; i++) {
     const header = selData.header[i].map((head) => ({ data: head }));
     const body = [];
@@ -184,8 +253,10 @@ function perlindunganTable() {
   }
 }
 
-function perlindunganAddValue(ziffer, index) {
-  perlindunganOptions.data[perlindunganOptions.selected].selected[ziffer] = index;
-  let text = perlindunganOptions.data[perlindunganOptions.selected].text;
-  Lbl_perlindunganOutput.KadSetText(text);
+function perlindunganAddValue(ziffer = null, index = null) {
+  if (ziffer != null && index != null) {
+    perlindunganOptions.selectedTable.selected[ziffer] = index;
+  }
+  perlindunganOptions.outputText = perlindunganOptions.selectedTable.text;
+  perlindunganDescriptionTable();
 }

@@ -473,7 +473,7 @@ section:hover > .cl_gridTitle {
 }
 
 .cl_gridTitle div,
-h1 {
+H1 {
   font-size: var(--fontSizeMedium);
 }
 

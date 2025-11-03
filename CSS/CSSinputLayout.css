@@ -41,8 +41,15 @@ label[for] {
   cursor: pointer;
 }
 
-h1 {
-  /* vertical-align: middle; */
+H1 {
+  font-weight: var(--fontWeight);
+  font-size: var(--fontSizeLarge);
+}
+H2 {
+  font-weight: var(--fontWeight);
+  font-size: var(--fontSizeMedium);
+}
+H3 {
   font-weight: var(--fontWeight);
 }
 
