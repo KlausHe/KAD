@@ -37,8 +37,8 @@ const Sel_luasLinearUnit = initEL({
   fn: luasInputChange,
   selList: ["mm", "cm", "dm", "m", "km"],
 });
-const Btn_luasChangeDirection = initEL({ id: "idBtn_luasChangeDirection", fn: luasChangeDirection });
-const Btn_luasChecker = initEL({ id: "idBtn_luasChecker", fn: luasStart });
+initEL({ id: "idBtn_luasChangeDirection", fn: luasChangeDirection });
+initEL({ id: "idBtn_luasChecker", fn: luasStart });
 const Lbl_luasResult = initEL({ id: "idLbl_luasResult" });
 //Canvas Stuff
 export function clear_cl_Luas() {

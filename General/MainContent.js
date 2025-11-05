@@ -701,6 +701,31 @@ export const rawContentGrid = {
       ["cl_GeometrieTable", "center"],
     ],
   },
+  cl_Kolid: {
+    logReqUser: true,
+    contentGroup: "Tools",
+    name: "Kolid",
+    heritage: ["persisch", "Passfeder"],
+    source: [["Bild", "http://maschinenbau-student.de/passfeder.php"]],
+    size: [2, 2],
+    maingrid: {
+      areas: [
+        //
+        ["cl_KolidImg", "cl_KolidImg"],
+        ["cl_KolidInput", "cl_KolidToggleListView"],
+        ["cl_KolidTableMeasures", "cl_KolidTableMeasures"],
+        ["cl_KolidTableTolerances", "cl_KolidTableTolerances"],
+      ],
+      rows: [0, 1, 0],
+    },
+    subgrid: [
+      ["cl_KolidImg", "center"],
+      ["cl_KolidInput", "center"],
+      ["cl_KolidToggleListView", "center"],
+      ["cl_KolidTableMeasures", "center"],
+      ["cl_KolidTableTolerances", "center"],
+    ],
+  },
   cl_Luas: {
     contentGroup: "Tools",
     name: "Luas",

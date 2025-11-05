@@ -89,6 +89,10 @@ img[imgSize="blech"] {
   width: 15rem;
   height: 6.5rem;
 }
+img[imgSize="kolid"] {
+  width: 22rem;
+  /* height: 6.5rem; */
+}
 img[imgSize="olympiaImg"] {
   width: auto;
   height: var(--UIHeight1);

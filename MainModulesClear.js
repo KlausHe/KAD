@@ -39,6 +39,7 @@ export { clear_cl_Sepakbola } from "./News/Sepakbola.js";
 export { clear_cl_Blechgeometrie } from "./Tools/Blechgeometrie.js";
 export { clear_cl_Expansion } from "./Tools/Expansion.js";
 export { clear_cl_Geometrie } from "./Tools/Geometrie.js";
+export { clear_cl_Kolid } from "./Tools/Kolid.js";
 export { clear_cl_Luas } from "./Tools/Luas.js";
 export { clear_cl_Material } from "./Tools/Material.js";
 export { clear_cl_Middle } from "./Tools/Middle.js";
