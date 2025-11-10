@@ -1,5 +1,6 @@
 import { dbCL, dbCLStyle, dbID, dbIDStyle, getFavicon, hostDebug, KadArray, KadDOM, KadLog, KadTable } from "../KadUtils/KadUtils.js";
 import { updateMasterSelect } from "../Main.js";
+import * as Canvas from "../MainModulesCanvas.js";
 import * as Clear from "../MainModulesClear.js";
 import * as DBData from "../MainModulesDBData.js";
 import { globalValues } from "../Settings/General.js";
@@ -406,10 +407,13 @@ export function toggelFullscreen(gridKey) {
 
 export function layoutCreateGridTiles() {
   const databaseList = Object.values(DBData).map((obj) => obj.contentName);
+  const resizeCanvasNames = Object.values(Canvas).map((item) => item.name);
+
   for (const gridKey in contentGrid) {
     const parentGrid = dbCL(gridKey);
     const contentObj = contentGrid[gridKey];
     const displayName = contentObj.name;
+    const hasCanvas = resizeCanvasNames.includes(`canvas_${gridKey}`);
 
     // CERATE Title-bar
     const parent = document.createElement("DIV");
@@ -549,6 +553,54 @@ export function layoutCreateGridTiles() {
         },
       });
       titleDownloadParent.appendChild(titleDownloadBtn);
+    }
+
+    // resize Canvas
+    if (false) {
+      // if (hasCanvas) {
+      const resizeParent = KadTable.createCell({ type: "Div", names: ["gridtitle", "canvasParent", gridKey] });
+      parent.appendChild(resizeParent);
+      const resizeCanvasMinus = KadTable.createCell({
+        type: "Btn",
+        names: ["gridtitle", "canvasMinus", gridKey],
+        subGroup: "gridtitle",
+        img: "oSub",
+        ui: {
+          uiSize: "width1",
+          uiType: "transparent",
+        },
+        onclick: () => {
+          KadLog.log("minus", `canvas_${gridKey}`);
+        },
+      });
+      const resizeCanvasOrig = KadTable.createCell({
+        type: "Lbl",
+        names: ["gridtitle", "canvasOrig", gridKey],
+        text: "1",
+        ui: {
+          uiSize: "width1",
+          uiType: "transparent",
+        },
+        onclick: () => {
+          KadLog.log("minus", `canvas_${gridKey}`);
+        },
+      });
+      const resizeCanvasPlus = KadTable.createCell({
+        type: "Btn",
+        names: ["gridtitle", "canvasPlus", gridKey],
+        subGroup: "gridtitle",
+        img: "oAdd",
+        ui: {
+          uiSize: "width1",
+          uiType: "transparent",
+        },
+        onclick: () => {
+          KadLog.log("plus", `canvas_${gridKey}`);
+        },
+      });
+      resizeParent.appendChild(resizeCanvasMinus);
+      resizeParent.appendChild(resizeCanvasOrig);
+      resizeParent.appendChild(resizeCanvasPlus);
     }
 
     //fullscreen this subgrid

@@ -10,14 +10,15 @@ const kounselorOptions = {
   RALObj: null,
 };
 
-const Vin_kounselorName = initEL({ id: "idVin_kounselorName", fn: kounselorInput, resetValue: "Name", dataset: ["type", "Name"], dbList: Data_RALColors.map((d) => d.Name) });
-const Vin_kounselorRAL = initEL({ id: "idVin_kounselorRAL", fn: kounselorInput, resetValue: "RAL", dataset: ["type", "RAL"], dbList: Data_RALColors.map((d) => d.RAL) });
-const Vin_kounselorHEX = initEL({ id: "idVin_kounselorHEX", fn: kounselorInput, resetValue: "HEX", dataset: ["type", "HEX"], dbList: Data_RALColors.map((d) => d.HEX) });
-const Vin_kounselorRGB = initEL({ id: "idVin_kounselorRGB", fn: kounselorInput, resetValue: "RGB", dataset: ["type", "RGB"], dbList: Data_RALColors.map((d) => d.RGB) });
-const Vin_kounselorHSL = initEL({ id: "idVin_kounselorHSL", fn: kounselorInput, resetValue: "HSL", dataset: ["type", "HSL"], dbList: Data_RALColors.map((d) => d.HSL) });
-const Vin_kounselorHSB = initEL({ id: "idVin_kounselorHSB", fn: kounselorInput, resetValue: "HSB", dataset: ["type", "HSB"], dbList: Data_RALColors.map((d) => d.HSB) });
-const Vin_kounselorCMYK = initEL({ id: "idVin_kounselorCMYK", fn: kounselorInput, resetValue: "CMYK", dataset: ["type", "CMYK"], dbList: Data_RALColors.map((d) => d.CMYK) });
+const Vin_kounselorName = initEL({ id: "idVin_kounselorName", fn: [kounselorInput, "Name"], resetValue: "Name", dbList: Data_RALColors.map((d) => d.Name) });
+const Vin_kounselorRAL = initEL({ id: "idVin_kounselorRAL", fn: [kounselorInput, "RAL"], resetValue: "RAL", dbList: Data_RALColors.map((d) => d.RAL) });
+const Vin_kounselorHEX = initEL({ id: "idVin_kounselorHEX", fn: [kounselorInput, "HEX"], resetValue: "HEX", dbList: Data_RALColors.map((d) => d.HEX) });
+const Vin_kounselorRGB = initEL({ id: "idVin_kounselorRGB", fn: [kounselorInput, "RGB"], resetValue: "RGB", dbList: Data_RALColors.map((d) => d.RGB) });
+const Vin_kounselorHSL = initEL({ id: "idVin_kounselorHSL", fn: [kounselorInput, "HSL"], resetValue: "HSL", dbList: Data_RALColors.map((d) => d.HSL) });
+const Vin_kounselorHSB = initEL({ id: "idVin_kounselorHSB", fn: [kounselorInput, "HSB"], resetValue: "HSB", dbList: Data_RALColors.map((d) => d.HSB) });
+const Vin_kounselorCMYK = initEL({ id: "idVin_kounselorCMYK", fn: [kounselorInput, "CMYK"], resetValue: "CMYK", dbList: Data_RALColors.map((d) => d.CMYK) });
 const Vin_kounselors = [Vin_kounselorName, Vin_kounselorRAL, Vin_kounselorHEX, Vin_kounselorRGB, Vin_kounselorHSL, Vin_kounselorHSB, Vin_kounselorCMYK];
+
 export function clear_cl_Kounselor() {
   for (let Vin_kon of Vin_kounselors) {
     Vin_kon.KadReset();
@@ -32,10 +33,11 @@ export function canvas_cl_Kounselor() {
   clear_cl_Kounselor();
 }
 
-function kounselorInput(obj) {
-  const input = obj.target.KadGet();
+function kounselorInput(element) {
+  const input = element.Element.KadGet();
   if (input === "") return;
-  kounselorOptions.type = obj.target.dataset.type;
+  kounselorOptions.type = element.data[0];
+
   let data = null;
   switch (kounselorOptions.type) {
     case "Name":

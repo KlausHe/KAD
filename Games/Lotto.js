@@ -33,23 +33,6 @@ const lottoOptions = {
       savedSet: {},
       loadedSets: [],
     },
-    // Eurojackpot: {
-    // 	cols: 9,
-    // 	rows: 6,
-    // 	tipLength: 50, //1 - 50
-    // 	tipStart: 1,
-    // 	tipMax: 5,
-    // 	starLength: 12, // 1-10
-    // 	starStart: 1,
-    // 	starMax: 2,
-    // 	draw: {
-    // 		drawID: null,
-    // 		tips: [],
-    // 		star: [],
-    // 	},
-    // 	savedSet: {},
-    // 	loadedSets: [],
-    // },
   },
 };
 
@@ -80,18 +63,9 @@ export const storage_cl_Lotto = {
   dbName: "Lotto",
   contentName: "cl_Lotto",
   clear() {
-    this.data = {
-      Eurojackpot: {
-        tips: [],
-        star: [],
-        date: null,
-      },
-      "6aus49": {
-        tips: [],
-        star: [],
-        date: null,
-      },
-    };
+    lottoOptions.games["6aus49"].tips = [];
+    lottoOptions.games["6aus49"].star = [];
+    lottoOptions.games["6aus49"].date = null;
   },
   getData() {
     let retData = {};

@@ -82,7 +82,7 @@ export const storage_cl_Howa = {
   dbName: "Howa",
   contentName: "cl_Howa",
   clear() {
-    this.data = "Berlin";
+    howaOptions.city = "Berlin";
   },
   getData() {
     return howaOptions.city;

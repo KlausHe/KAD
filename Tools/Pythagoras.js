@@ -19,11 +19,11 @@ const pythoOptions = {
   errorShown: false,
 };
 
-const Vin_Pytho_0 = initEL({ id: "idVin_Pytho_0", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[0] });
-const Vin_Pytho_1 = initEL({ id: "idVin_Pytho_1", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[1] });
-const Vin_Pytho_2 = initEL({ id: "idVin_Pytho_2", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[2] });
-const Vin_Pytho_3 = initEL({ id: "idVin_Pytho_3", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[3] });
-const Vin_Pytho_4 = initEL({ id: "idVin_Pytho_4", fn: pythoNewEntry, resetValue: pythoOptions.valsOrig[4] });
+const Vin_Pytho_0 = initEL({ id: "idVin_Pytho_0", fn: [pythoNewEntry, 0], resetValue: pythoOptions.valsOrig[0] });
+const Vin_Pytho_1 = initEL({ id: "idVin_Pytho_1", fn: [pythoNewEntry, 1], resetValue: pythoOptions.valsOrig[1] });
+const Vin_Pytho_2 = initEL({ id: "idVin_Pytho_2", fn: [pythoNewEntry, 2], resetValue: pythoOptions.valsOrig[2] });
+const Vin_Pytho_3 = initEL({ id: "idVin_Pytho_3", fn: [pythoNewEntry, 3], resetValue: pythoOptions.valsOrig[3] });
+const Vin_Pytho_4 = initEL({ id: "idVin_Pytho_4", fn: [pythoNewEntry, 4], resetValue: pythoOptions.valsOrig[4] });
 const Vin_Pythos = [Vin_Pytho_0, Vin_Pytho_1, Vin_Pytho_2, Vin_Pytho_3, Vin_Pytho_4];
 const Lbl_pythagorasInfo = initEL({ id: "idLbl_pythagorasInfo" });
 
@@ -70,17 +70,21 @@ function pythoShowError(text = null) {
   if (pythoOptions.errorShown) {
     dbIDStyle("idDiv_pythagorasInfo").display = "none";
   } else {
-    Lbl_pythagorasInfo.KadSetTet(text);
+    Lbl_pythagorasInfo.KadSetText(text);
     dbIDStyle("idDiv_pythagorasInfo").display = "initial";
   }
 }
 
 function pythoNewEntry(obj) {
-  const id = obj.target.id;
-  const i = Number(id.slice(-1));
-  if (!pythoOptions.inputState.includes(i)) {
-    pythoOptions.inputState.unshift(i);
+  const index = obj.data[0];
+  if (!pythoOptions.inputState.includes(index)) {
+    pythoOptions.inputState.unshift(index);
     pythoOptions.inputState.pop();
+  } else {
+    if (index != pythoOptions.inputState[0]) {
+      pythoOptions.inputState[1] = pythoOptions.inputState[0];
+      pythoOptions.inputState[0] = index;
+    }
   }
   pythoCalc();
 }

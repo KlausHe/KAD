@@ -74,7 +74,7 @@ const caLU = new p5((c) => {
   };
 
   c.draw = function () {
-    caLU.clear();
+    c.clear();
     c.stroke(globalColors.elements.line);
     c.push();
     c.translate(luasOptions.canvas.w * 0.5, luasOptions.canvas.h * 0.5);

@@ -25,7 +25,7 @@ export const globalValues = {
       return KadCSS.getRoot({ value: "imgSize", RemToPx: true });
     },
     get canvasSize() {
-      const val = KadCSS.getRoot({ value: "gridWidthGameCanvas", RemToPx: true });
+      const val = Number(KadCSS.getRoot({ value: "gridWidthGameCanvas", RemToPx: true }));
       return { w: val, h: val };
     },
   },
@@ -49,10 +49,8 @@ export const storage_cl_GeneralSettings = {
   dbName: "GeneralSettings",
   contentName: "cl_GeneralSettings",
   clear() {
-    this.data = {
-      decimals: 4,
-      fontSize: 12,
-    };
+    globalValues.settings.decimals = 4;
+    globalValues.settings.fontSize = 12;
   },
   getData() {
     return globalValues.settings;

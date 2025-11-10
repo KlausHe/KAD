@@ -702,17 +702,24 @@ export const rawContentGrid = {
     ],
   },
   cl_Kolid: {
-    logReqUser: true,
     contentGroup: "Tools",
     name: "Kolid",
     heritage: ["persisch", "Passfeder"],
-    source: [["Bild", "http://maschinenbau-student.de/passfeder.php"]],
+    source: [
+      ["Bild", "http://maschinenbau-student.de/passfeder.php"],
+      ["Formeln", "https://www.schweizer-fn.de/maschinenelemente/passfeder-bolzen/passfeder-bolzen.php#pzul"],
+      ["Daten", "https://www.eassistant.eu/fileadmin/dokumente/eassistant/etc/HTMLHandbuch/de/eAssistantHandbch16.html"],
+    ],
     size: [2, 2],
     maingrid: {
       areas: [
         //
         ["cl_KolidImg", "cl_KolidImg"],
-        ["cl_KolidInput", "cl_KolidToggleListView"],
+        ["cl_KolidInputDiameter", "cl_KolidInputAnzahl"],
+        ["cl_KolidInputLength", "cl_KolidInputMaterial"],
+        ["cl_KolidInputTorque", "cl_KolidInputLastfall"],
+        ["cl_KolidToggleListView", "cl_KolidToggleListView"],
+        ["cl_KolidResult", "cl_KolidResult"],
         ["cl_KolidTableMeasures", "cl_KolidTableMeasures"],
         ["cl_KolidTableTolerances", "cl_KolidTableTolerances"],
       ],
@@ -720,7 +727,13 @@ export const rawContentGrid = {
     },
     subgrid: [
       ["cl_KolidImg", "center"],
-      ["cl_KolidInput", "center"],
+      ["cl_KolidInputDiameter", "right"],
+      ["cl_KolidInputLength", "right"],
+      ["cl_KolidInputTorque", "right"],
+      ["cl_KolidInputAnzahl", "left"],
+      ["cl_KolidInputMaterial", "left"],
+      ["cl_KolidInputLastfall", "left"],
+      ["cl_KolidResult", "center"],
       ["cl_KolidToggleListView", "center"],
       ["cl_KolidTableMeasures", "center"],
       ["cl_KolidTableTolerances", "center"],
