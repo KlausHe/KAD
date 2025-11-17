@@ -63,11 +63,10 @@ function checkboxClicked(index) {
 
 function tugasCreateTable() {
   const body = [
-    { type: "KADImg", data: "trash", settings: { onclick: tugasClearRow } },
-    { type: "KADImg", data: "edit", settings: { onclick: tugasEditRow } },
-    { type: "Checkbox", data: tugasOptions.data.map((item) => item.state), settings: { names: ["tugas", "state"], onclick: checkboxClicked } },
+    { type: "KADImg", data: "trash", settings: { onclick: tugasClearRow, noBorder: ["right"] } },
+    { type: "KADImg", data: "edit", settings: { onclick: tugasEditRow, noBorder: ["right"] } },
+    { type: "Checkbox", data: tugasOptions.data.map((item) => item.state), settings: { noBorder: ["right"], names: ["tugas", "state"], onclick: checkboxClicked } },
     { data: tugasOptions.data.map((item) => item.text), settings: { names: ["tugas", "entry"], for: "tugas_state" } },
   ];
-
   KadTable.createHTMLGrid({ id: "idTab_tugasTable", body });
 }
