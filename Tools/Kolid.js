@@ -1,4 +1,4 @@
-import { dbID, initEL, KadTable } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadLog, KadTable } from "../KadUtils/KadUtils.js";
 
 const kolidOptions = {
   inputState: [0, 1],
@@ -122,6 +122,8 @@ function kolidInputAnzahl() {
   kolidCalc();
 }
 function kolidInputMaterial() {
+  KadLog.log(Sel_kolidInputMaterial);
+
   kolidOptions.grundpresswert = Sel_kolidInputMaterial.KadGet();
   kolidCalc();
 }

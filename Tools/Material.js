@@ -9,7 +9,7 @@ export const materialOptions = {
   matList: [],
   filterList: [],
   get headerList() {
-    return Cb_materialListFilter.checked ? [...storage_cl_MaterialFilterSettings.getData()] : Object.keys(Data_Materials.metadata);
+    return Cb_materialListFilter.HTML.checked ? [...storage_cl_MaterialFilterSettings.getData()] : Object.keys(Data_Materials.metadata);
   },
   optGroup: null,
   selMatGroup: "all",

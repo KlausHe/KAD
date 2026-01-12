@@ -25,6 +25,7 @@
 
   <link href="CSS/CSSbodyLayout.css" rel="stylesheet" type="text/css">
   <link href="CSS/CSSinputLayout.css" rel="stylesheet" type="text/css">
+  <link href="table.html" rel="html">
 
   <script src="Data/p5.min.js"></script>
   <script src="Data/matter.min.js"></script>
@@ -34,6 +35,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
   <script type="module" src="Main.js"></script>
+
 </head>
 
 <body id="id_body">
@@ -1275,6 +1277,71 @@
         </div>
         <div class="cl_RanjeCanvas" uiSize="width20">
           <canvas id="idCanv_ranje" style="width: max-content;"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl_Takala">
+      <div class="cl_subGrid_Takala cl_subGrid">
+        <div class="cl_TakalaMovedMass" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_takalaMovedMass" uiRadius="left"></label><input type="number" id="idVin_takalaMovedMass" uiRadius="none"></input><label class="cl_infoUnit" uiRadius="none">kg
+          </label><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_TakalaSpindleDiameter" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_takalaSpindleDiameter" uiRadius="left"></label><input type="number" id="idVin_takalaSpindleDiameter" uiRadius="none"></input><label class="cl_infoUnit" uiRadius="none">mm
+          </label><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_TakalaPitch" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_takalaPitch" uiRadius="left"></label><input type="number" id="idVin_takalaPitch" uiRadius="none"></input><label class="cl_infoUnit" uiRadius="none">mm
+          </label><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_TakalaAngle" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_takalaAngle" uiRadius="left"></label><input type="number" id="idVin_takalaAngle" uiRadius="none"></input><label class="cl_infoUnit" uiRadius="none">°
+          </label><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_TakalaBearingFriction" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_takalaBearingFriction" uiRadius="left"></label><input type="number" id="idVin_takalaBearingFriction" uiRadius="none"></input><label class="cl_infoUnit" uiRadius="none">-
+          </label><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_TakalaHoldingTorque" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_takalaHoldingTorque" uiRadius="left"></label><input type="number" id="idVin_takalaHoldingTorque" uiRadius="none"><label class="cl_infoUnit" uiRadius="none">Nm
+          </label></input><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_TakalaThreadAngle">
+          <label class="cl_info" id="idLbl_takalaThreadAngle" uiSize="width6" uiRadius="left">
+          </label><select id="idSel_takalaThreadAngle" uiRadius="right" uiSize="width8"></select>
+        </div>
+        <div class="cl_TakalaMaterialFriction">
+          <label class="cl_info" id="idLbl_takalaMaterialFriction" uiSize="width6" uiRadius="left">
+          </label><select id="idSel_takalaMaterialFriction" uiRadius="right" uiSize="width8"></select>
+        </div>
+        <div class="cl_TakalaDynamicAcceleration" uiWrap="nowrap">
+          <label class="cl_info" id="idLbl_takalaDynamicAcceleration" uiRadius="left"></label><input type="number" id="idVin_takalaDynamicAcceleration" uiRadius="none"></input><label class="cl_infoUnit" uiRadius="none">m/s<sup>2</sup>
+          </label><button uiSize="width1" uiRadius="none" class="vinChangeTrash">
+          </button><button uiSize="width1" uiRadius="none" class="vinChangeSub">
+          </button><button uiSize="width1" uiRadius="right" class="vinChangeAdd">
+          </button>
+        </div>
+        <div class="cl_TakalaTable ">
+          <div id="idTab_takalaTable"></div>
         </div>
       </div>
     </section>

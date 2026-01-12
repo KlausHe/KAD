@@ -336,6 +336,7 @@ export const rawContentGrid = {
     ],
   },
   cl_RayCaster: {
+    deactivated: true,
     contentGroup: "Games",
     name: "RayCaster",
     source: [
@@ -988,6 +989,43 @@ export const rawContentGrid = {
       ["cl_RanjeInput", "center"],
       ["cl_RanjeList", "center"],
       ["cl_RanjeCanvas", "left"],
+    ],
+  },
+  cl_Takala: {
+    logReqUser: false,
+    contentGroup: "Tools",
+    name: "Takala",
+    heritage: ["Patschu", "Spindel"],
+    source: ["Data", "URL"],
+    size: [2, 2],
+    maingrid: {
+      areas: [
+        //
+        ["cl_TakalaMovedMass"],
+        ["cl_TakalaSpindleDiameter"],
+        ["cl_TakalaPitch"],
+        ["cl_TakalaAngle"],
+        ["cl_TakalaBearingFriction"],
+        ["cl_TakalaHoldingTorque"],
+        ["cl_TakalaThreadAngle"],
+        ["cl_TakalaMaterialFriction"],
+        ["cl_TakalaDynamicAcceleration"],
+        ["cl_TakalaTable"],
+      ],
+      rows: [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    },
+    subgrid: [
+      //
+      ["cl_TakalaMovedMass", "center"],
+      ["cl_TakalaSpindleDiameter", "center"],
+      ["cl_TakalaPitch", "center"],
+      ["cl_TakalaAngle", "center"],
+      ["cl_TakalaBearingFriction", "center"],
+      ["cl_TakalaHoldingTorque", "center"],
+      ["cl_TakalaDynamicAcceleration", "center"],
+      ["cl_TakalaThreadAngle", "center"],
+      ["cl_TakalaMaterialFriction", "center"],
+      ["cl_TakalaTable", "center"],
     ],
   },
   //Utility

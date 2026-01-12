@@ -15,7 +15,7 @@ const raycasterOptions = {
   cellwidth: 1,
   cells: [],
   stack: [],
-  currCell: 0,
+  currCell: {},
   currDist: 0,
   longDist: 0,
   longCell: null,
@@ -39,7 +39,7 @@ const raycasterOptions = {
   raySegments: [],
 };
 
-const Btn_generateRayMaze = initEL({ id: "idBtn_generateRayMaze", fn: newRayMaze });
+initEL({ id: "idBtn_generateRayMaze", fn: newRayMaze });
 const Vin_rayMazeSize = initEL({ id: "idVin_rayMazeSize", fn: raySizeChange, resetValue: raycasterOptions.boardSizeOrig });
 const Vin_rayMazeSpeed = initEL({ id: "idVin_rayMazeSpeed", fn: raySpeedChange, resetValue: raycasterOptions.speedOrig });
 const Vin_rayMazeView = initEL({ id: "idVin_rayMazeView", fn: rayViewChange, resetValue: raycasterOptions.fovDOrig });
@@ -48,6 +48,7 @@ const Cb_rayTarget = initEL({ id: "idCb_rayTarget", fn: rayTargetChange, resetVa
 const Cb_rayPoly = initEL({ id: "idCb_rayPoly", fn: rayPolyChange, resetValue: raycasterOptions.modes.polyOrig });
 const Cb_raySpider = initEL({ id: "idCb_raySpider", fn: raySpiderChange, resetValue: raycasterOptions.modes.spiderOrig });
 const Canv_rayCaster = initEL({ id: "idCanv_rayCaster", action: "keydown", fn: keyPushedRayCaster });
+
 initEL({ id: "idCanv_rayCaster", action: "keyup", fn: keyPushedRayCaster });
 
 export function clear_cl_RayCaster() {
@@ -120,24 +121,24 @@ function rayViewChange() {
 }
 
 function rayDebugChange() {
-  raycasterOptions.modes.maze = Cb_rayDebug.checked;
+  raycasterOptions.modes.maze = Cb_rayDebug.HTML.checked;
   KadInteraction.focus("idCanv_rayCaster", caRC);
 }
 
 function rayPolyChange() {
-  raycasterOptions.modes.poly = Cb_rayPoly.checked;
+  raycasterOptions.modes.poly = Cb_rayPoly.HTML.checked;
   Cb_raySpider.KadEnable(!raycasterOptions.modes.poly);
   KadInteraction.focus("idCanv_rayCaster", caRC);
 }
 
 function raySpiderChange() {
-  raycasterOptions.modes.spider = Cb_raySpider.checked;
+  raycasterOptions.modes.spider = Cb_raySpider.HTML.checked;
   Cb_rayPoly.KadEnable(!raycasterOptions.modes.spider);
   KadInteraction.focus("idCanv_rayCaster", caRC);
 }
 
 function rayTargetChange() {
-  raycasterOptions.modes.target = Cb_rayTarget.checked;
+  raycasterOptions.modes.target = Cb_rayTarget.HTML.checked;
   KadInteraction.focus("idCanv_rayCaster", caRC);
 }
 
@@ -280,6 +281,7 @@ function mazeRayFinished() {
 
 function newRayMaze() {
   rayCasterReset();
+
   for (let i = 0; i < raycasterOptions.rows; i++) {
     for (let j = 0; j < raycasterOptions.cols; j++) {
       raycasterOptions.cells.push(new RaycasterCell(j, i, raycasterOptions.cols, raycasterOptions.rows, raycasterOptions.cellwidth));
@@ -288,10 +290,8 @@ function newRayMaze() {
   raycasterOptions.currCell = raycasterOptions.cells[0];
   raycasterOptions.longCell = raycasterOptions.currCell;
   raycasterOptions.currCell.visited = true;
-  let pending;
-  do {
-    pending = generateRayMaze();
-  } while (pending);
+  generateRayMaze();
+
   for (let i = 0; i < raycasterOptions.cells.length; i++) {
     for (let j = 0; j < 4; j++) {
       if (raycasterOptions.cells[i].walls[j].existing && raycasterOptions.cells[i].visited) {
@@ -302,6 +302,7 @@ function newRayMaze() {
   for (let i = 0; i < raycasterOptions.borders.length; i++) {
     raycasterOptions.raySegments.push(raycasterOptions.borders[i]);
   }
+
   KadInteraction.focus("idCanv_rayCaster", caRC);
 }
 

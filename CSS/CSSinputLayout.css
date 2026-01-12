@@ -368,6 +368,7 @@ input[imgBtn="subgrid"] {
 }
 
 .cl_infoCB,
+.cl_infoUnit,
 .cl_infoNav,
 .cl_info {
   display: inline-block;
@@ -386,6 +387,11 @@ input[imgBtn="subgrid"] {
 
 .cl_infoCB {
   width: var(--UIWidth1);
+  line-height: 125%;
+}
+
+.cl_infoUnit {
+  width: var(--UIWidth2);
   line-height: 125%;
 }
 

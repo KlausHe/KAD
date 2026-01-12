@@ -50,6 +50,7 @@ export { clear_cl_Pormula } from "./Tools/Pormula.js";
 export { clear_cl_Pythagoras } from "./Tools/Pythagoras.js";
 export { clear_cl_Quickmath } from "./Tools/Quickmath.js";
 export { clear_cl_Ranje } from "./Tools/Ranje.js";
+export { clear_cl_Takala } from "./Tools/Takala.js";
 //Utility
 export { clear_cl_BiktadA } from "./Utility/BiktadA.js";
 export { clear_cl_Boredom } from "./Utility/Boredom.js";

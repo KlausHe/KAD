@@ -118,8 +118,8 @@ function sudokuInputOptionChange() {
 }
 
 function sudokuOptionChange() {
-  sudokuOptions.errorChecked = Cb_sudokuAutoCheck.checked;
-  sudokuOptions.pencilErase = Cb_sudokuErasePencils.checked;
+  sudokuOptions.errorChecked = Cb_sudokuAutoCheck.HTML.checked;
+  sudokuOptions.pencilErase = Cb_sudokuErasePencils.HTML.checked;
   if (!sudokuOptions.errorChecked) {
     for (let index = 0; index < 9 * 9; index++) {
       const { i, j } = KadArray.indexTo2DxyPosition(index, 9);

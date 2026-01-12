@@ -1,1 +1,1 @@
-export const debugDefaultPage = "cl_Kolid"; // cl_Kontour "KAD"
+export const debugDefaultPage = "cl_Takala"; // cl_Kontour "KAD"

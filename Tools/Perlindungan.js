@@ -147,7 +147,7 @@ const Sel_perlindunganSelect = initEL({
 const Btn_perlindunganHideLists = initEL({ id: "idBtn_perlindunganHideLists", fn: perlindunganHideLists, radioBtnCallbacks: perlindunganOptions.showListCallbacks });
 const Vin_perlindunganInput = initEL({ id: "idVin_perlindunganInput", fn: perlindunganInput, resetValue: "Schutzart eingeben" });
 
-const idTab_perlindunganTables = ["idTab_perlindunganTable0", "idTab_perlindunganTable1", "idTab_perlindunganTable2", "idTab_perlindunganTable3"];
+const Tab_perlindunganTables = ["idTab_perlindunganTable0", "idTab_perlindunganTable1", "idTab_perlindunganTable2", "idTab_perlindunganTable3"];
 
 export function clear_cl_Perlindungan() {
   perlindunganOptions.selected = Sel_perlindunganSelect.KadGet();
@@ -236,7 +236,7 @@ function perlindunganDescriptionTable() {
 }
 
 function perlindunganTable() {
-  for (let table of idTab_perlindunganTables) {
+  for (let table of Tab_perlindunganTables) {
     KadTable.createHTMLGrid({ id: table, header: null, body: null });
   }
   let selData = perlindunganOptions.selectedTable;
@@ -249,7 +249,7 @@ function perlindunganTable() {
       const obj = { data: selData.body[i].map((item) => item[h]), settings: { onclick: [perlindunganAddValue, i], uiMaxSize: "width16" } };
       body.push(obj);
     }
-    KadTable.createHTMLGrid({ id: idTab_perlindunganTables[i], header, body });
+    KadTable.createHTMLGrid({ id: Tab_perlindunganTables[i], header, body });
   }
 }
 

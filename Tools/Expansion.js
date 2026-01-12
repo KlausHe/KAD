@@ -35,7 +35,7 @@ const Btn_expansionMaterialSwitch = initEL({ id: "idBtn_expansionMaterialSwitch"
 const Btn_expansionLength = initEL({ id: "idBtn_expansionLength", fn: expansionEntryLength });
 const Btn_expansionBaseTemperature = initEL({ id: "idBtn_expansionBaseTemperature", fn: expansionEntryBaseTemperature });
 const Btn_expansionTemperature = initEL({ id: "idBtn_expansionTemperature", fn: expansionEntryTemperature });
-const Cb_expansionDifference = initEL({ id: "idCb_expansionDifference", fn: expansionDifference });
+const Cb_expansionDifference = initEL({ id: "idCb_expansionDifference", fn: expansionDifference, resetValue: false });
 const Cb_expansionCoefficient = initEL({ id: "idCb_expansionCoefficient", fn: expansionCoefficient, resetValue: false });
 const Sel_expansionCompare = initEL({ id: "idSel_expansionCompare", fn: expansionToggelCompare, selList: expansionOptions.compareOptions, selStartIndex: 0 });
 const Vin_expansionLength = initEL({ id: "idVin_expansionLength", resetValue: expansionOptions.lengthOrig[0] });
@@ -144,13 +144,13 @@ function expansionCalc() {
       const alphaB = Number(Data_Materials.Materials[expansionOptions.materials.matB].expansion[selTempB]);
       let dLB = alphaB * dT * expansionOptions.exLength[l] * 0.000001;
 
-      if (Cb_expansionDifference.checked) {
+      if (Cb_expansionDifference.HTML.checked) {
         dLA += expansionOptions.exLength[l];
         dLB += expansionOptions.exLength[l];
       }
 
       let value = 0;
-      const showCoefficient = Cb_expansionCoefficient.checked;
+      const showCoefficient = Cb_expansionCoefficient.HTML.checked;
       switch (expansionOptions.compareIndex) {
         case 0:
           expansionEnableDelatLength(false);

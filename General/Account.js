@@ -230,7 +230,7 @@ initEL({ id: "idBtn_userLogin_cancel", fn: loginCancel });
 initEL({ id: "idBtn_userChange_cancel", fn: changeCancel });
 
 function accountPersistanceChange() {
-  nuncDiscipuli.cred.keepLogin = Cb_userLogin_check.checked ? browserLocalPersistence : browserSessionPersistence;
+  nuncDiscipuli.cred.keepLogin = Cb_userLogin_check.HTML.checked ? browserLocalPersistence : browserSessionPersistence;
 }
 
 onAuthStateChanged(auth, (user) => {
