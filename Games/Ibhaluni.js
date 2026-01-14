@@ -24,7 +24,7 @@ const ibhaluniOptions = {
 };
 
 const Btn_ibhaluniStart = initEL({ id: "idBtn_ibhaluniStart", radioBtnCallbacks: ibhaluniOptions.startCallbacks });
-const Cb_ibhaluniSoundOutput = initEL({ id: "idCb_ibhaluniSoundOutput", fn: ibhaluniToggleSound });
+const Cb_ibhaluniSoundOutput = initEL({ id: "idCb_ibhaluniSoundOutput", fn: ibhaluniToggleSound, resetValue: false });
 
 export function clear_cl_Ibhaluni() {
   KadInteraction.removeContextmenu("idCanv_ibhaluni");

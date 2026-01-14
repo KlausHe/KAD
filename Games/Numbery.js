@@ -54,27 +54,31 @@ const Sel_numberCategory = initEL({
   id: "idSel_numberCategory",
   fn: numberyCathegorySelect,
   selList: numberyOptions.cathegories.map((c) => c[0]),
-  selStartIndex: KadRandom.randomObject(numberyOptions.cathegories.length),
+  selStartIndex: 0,
 });
 const Sel_numberyPairs = initEL({
   id: "idSel_numberyPairs",
   fn: numberyPairsChange,
   selList: numberyOptions.availiablePairs,
-  selStartIndex: KadRandom.randomObject(numberyOptions.availiablePairs.length),
+  selStartIndex: 0,
+  // selStartIndex: KadRandom.randomObject(numberyOptions.availiablePairs.length),
 });
 const Btn_startNumbery = initEL({ id: "idBtn_startNumbery", fn: numberyToggleStart, radioBtnCallbacks: numberyOptions.btnCallback });
 initEL({ id: "idDiv_numberyImages" });
-const Lbl_numberyResult = initEL({ id: "idLbl_numberyResult" });
+const Lbl_numberyResult = initEL({ id: "idLbl_numberyResult", resetValue: "..." });
 
 export function clear_cl_Numbery() {
   KadInteraction.removeContextmenu("idDiv_numberyImages");
   numberyOptions.isPlaying = Btn_startNumbery.KadReset();
   numberyOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
   Vin_numberyPlayer.KadReset();
-  numberyOptions.cathegoryIndex = Sel_numberCategory.KadReset({ index: true });
-  numberyOptions.pairs = numberyOptions.availiablePairs[Sel_numberyPairs.KadReset()];
+
+  numberyOptions.cathegoryIndex = Sel_numberCategory.KadReset({ index: true, selStartIndex: KadRandom.randomObject(numberyOptions.cathegories.length) });
+  numberyCalculateAvailiablePairs();
+  const pairs = Sel_numberyPairs.KadReset({ selStartIndex: KadRandom.randomObject(numberyOptions.availiablePairs.length) });
+  numberyOptions.pairs = numberyOptions.availiablePairs[pairs];
   numberyOptions.delay = KadCSS.getRoot({ value: "transitionTimeHide" }) * 1000;
-  Lbl_numberyResult.KadSetText("---");
+  Lbl_numberyResult.KadReset();
   numberyMakePlayers(2);
   let inputImg = dbCL("cl_NumberyImages");
   KadDOM.clearFirstChild(inputImg);
@@ -104,6 +108,10 @@ function numberyPlayerChange() {
 
 function numberyCathegorySelect() {
   numberyOptions.cathegoryIndex = Sel_numberCategory.KadGet({ index: true });
+  numberyCalculateAvailiablePairs();
+}
+
+function numberyCalculateAvailiablePairs() {
   const index = Math.min(numberyOptions.pairsIndex, numberyOptions.availiablePairs.length - 1);
   numberyOptions.pairsIndex = Sel_numberyPairs.KadReset({
     selList: numberyOptions.availiablePairs,
@@ -131,16 +139,15 @@ function numberyStart() {
 }
 
 function numberyStop() {
-  Lbl_numberyResult.KadSetText(".-.");
+  Lbl_numberyResult.KadReset();
 }
 
 function numberyRestart() {
   numberyOptions.cells = [];
   numberyOptions.cellCurrSel = [];
-  const result = Lbl_numberyResult;
-  result.textContent = `${numberyOptions.player.name}`;
-  result.style.removeProperty("--bgcNavbar");
-  result.style.removeProperty("--txtNavbar");
+  Lbl_numberyResult.KadSetText(`${numberyOptions.player.name}`);
+  Lbl_numberyResult.HTML.style.removeProperty("--bgcNavbar");
+  Lbl_numberyResult.HTML.style.removeProperty("--txtNavbar");
 }
 
 function startNumbery() {
@@ -221,7 +228,7 @@ function numberyCheckTwo() {
 
 function numberyNextPlayer() {
   numberyOptions.playerID = (numberyOptions.playerID + 1) % numberyOptions.players.length;
-  Lbl_numberyResult.textContent = `${numberyOptions.player.name}`;
+  Lbl_numberyResult.KadSetText(`${numberyOptions.player.name}`);
 }
 
 function numberyCheckFinished() {
@@ -229,14 +236,13 @@ function numberyCheckFinished() {
     if (cell.free) return false;
   }
   numberyToggleStart();
-  const result = Lbl_numberyResult;
   let maxScored = KadArray.sortArrayByKey({ array: numberyOptions.players, key: "score", inverse: true });
   if (maxScored[0].score == maxScored[1].score) {
-    result.textContent = `Unentschieden mit ${maxScored[0].score} Punkten`;
+    Lbl_numberyResult.KadSetText(`Unentschieden mit ${maxScored[0].score} Punkten`);
   } else {
-    result.textContent = `Gewinner: ${maxScored[0].name}!`;
-    result.style.setProperty("--bgcNavbar", KadColor.formatAsString({ colorArray: maxScored[0].col, type: "HSL" }));
-    result.style.setProperty("--txtNavbar", KadColor.stateAsString({ colorArray: maxScored[0].col, type: "HSL" }));
+    Lbl_numberyResult.KadSetText(`Gewinner: ${maxScored[0].name}!`);
+    Lbl_numberyResult.HTML.style.setProperty("--bgcNavbar", KadColor.formatAsString({ colorArray: maxScored[0].col, type: "HSL" }));
+    Lbl_numberyResult.HTML.style.setProperty("--txtNavbar", KadColor.stateAsString({ colorArray: maxScored[0].col, type: "HSL" }));
   }
   return true;
 }

@@ -1,5 +1,5 @@
 import { Data_Country_CodesIso3166 } from "../KadData/KadData_Countries.js";
-import { dbID, initEL, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 
 const storreOptions = {
   data: Data_Country_CodesIso3166,
@@ -21,13 +21,14 @@ const storreOptions = {
   },
 };
 
-const Btn_storreStartArea = initEL({ id: "idBtn_storreStartArea", fn: storreStartArea, dataset: ["radio", "storreType"] });
-const Btn_storreStartPopulation = initEL({ id: "idBtn_storreStartPopulation", fn: storreStartPopulation, dataset: ["radio", "storreType"] });
-const Btn_storreQuestionA = initEL({ id: "idBtn_storreQuestionA", fn: storreQuestion, dataset: ["set", "A"] });
-const Btn_storreQuestionB = initEL({ id: "idBtn_storreQuestionB", fn: storreQuestion, dataset: ["set", "B"] });
+const Btn_storreStartArea = initEL({ id: "idBtn_storreStartArea", fn: [storreStart, "area"], dataset: ["radio", "storreType"] });
+const Btn_storreStartPopulation = initEL({ id: "idBtn_storreStartPopulation", fn: [storreStart, "population"], dataset: ["radio", "storreType"] });
+const Btn_storreQuestionA = initEL({ id: "idBtn_storreQuestionA", fn: storreQuestion, dataset: ["set", "0"], resetValue: "..." });
+const Btn_storreQuestionB = initEL({ id: "idBtn_storreQuestionB", fn: storreQuestion, dataset: ["set", "1"], resetValue: "..." });
 const Lbl_storreAnswerA = initEL({ id: "idLbl_storreAnswerA" });
 const Lbl_storreAnswerB = initEL({ id: "idLbl_storreAnswerB" });
-const Lbl_storreStreak = initEL({ id: "idLbl_storreStreak" });
+const Lbl_storreStreak = initEL({ id: "idLbl_storreStreak", resetValue: "streak" });
+const Btn_storreQuestions = [Btn_storreQuestionA, Btn_storreQuestionB];
 
 export function clear_cl_Storre() {
   Btn_storreQuestionA.KadEnable(false);
@@ -38,19 +39,13 @@ export function clear_cl_Storre() {
 function storreReset() {
   storreOptions.streak = 0;
   storreUpdateStreak();
-  Btn_storreQuestionA.KadReset({ resetValue: "..." });
-  Btn_storreQuestionB.KadReset({ resetValue: "..." });
+  Btn_storreQuestionA.KadReset();
+  Btn_storreQuestionB.KadReset();
   storreShowAnswers(true);
 }
 
-function storreStartArea() {
-  storreOptions.dataType = "area";
-  storreReset();
-  storreGetData();
-}
-
-function storreStartPopulation() {
-  storreOptions.dataType = "population";
+function storreStart(dataType) {
+  storreOptions.dataType = dataType.data[0];
   storreReset();
   storreGetData();
 }
@@ -80,16 +75,17 @@ function storreQuestion(obj) {
   }
   if (storreOptions.gameState == storreOptions.gameStates.QUESTION) {
     const set = obj.target.dataset.set;
-    if ((set == "A" && storreOptions.dataA < storreOptions.dataB) || (set == "B" && storreOptions.dataA > storreOptions.dataB)) {
+
+    if ((set == 0 && storreOptions.dataA < storreOptions.dataB) || (set == 1 && storreOptions.dataA > storreOptions.dataB)) {
       storreOptions.gameState == storreOptions.gameStates.LOST;
-      dbID(`idBtn_storreQuestion${set}`).KadButtonColor("negative");
+      Btn_storreQuestions[set].KadButtonColor("negative");
       storreUpdateStreak(true);
       storreShowAnswers();
       Btn_storreStartArea.KadButtonColor(null);
       Btn_storreStartPopulation.KadButtonColor(null);
       return;
     }
-    dbID(`idBtn_storreQuestion${set}`).KadButtonColor("positive");
+    Btn_storreQuestions[set].KadButtonColor("positive");
     storreShowAnswers();
     storreOptions.gameState = storreOptions.gameStates.ANSWERED;
     storreOptions.streak++;
@@ -99,8 +95,8 @@ function storreQuestion(obj) {
 
 function storreShowAnswers(clear = false) {
   const unit = storreOptions.dataType == "area" ? "km<sup>2</sup>" : " E";
-  Lbl_storreAnswerA.KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataA, { indicator: true }) + unit);
-  Lbl_storreAnswerB.KadSetHTML(clear ? "" : KadValue.number(storreOptions.dataB, { indicator: true }) + unit);
+  Lbl_storreAnswerA.KadSetHTML(clear ? "..." : KadValue.number(storreOptions.dataA, { indicator: true }) + unit);
+  Lbl_storreAnswerB.KadSetHTML(clear ? "..." : KadValue.number(storreOptions.dataB, { indicator: true }) + unit);
   if (clear) {
     Btn_storreQuestionA.KadButtonColor();
     Btn_storreQuestionB.KadButtonColor();
@@ -109,5 +105,5 @@ function storreShowAnswers(clear = false) {
 
 function storreUpdateStreak(lost = false) {
   const text = lost ? `Game Over!<br>Punkte: ${storreOptions.streak}` : `Punkte: ${storreOptions.streak}`;
-  Lbl_storreStreak.innerHTML = text;
+  Lbl_storreStreak.KadSetHTML(text);
 }

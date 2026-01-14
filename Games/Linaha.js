@@ -106,7 +106,7 @@ function linahaRoundsChange(obj) {
 }
 
 function linahaFinished() {
-  Lbl_linahaQuestion.removeAttribute("uiType");
+  Lbl_linahaQuestion.HTML.removeAttribute("uiType");
   Btn_linahaStart.KadSetText("New Game");
   Lbl_linahaQuestion.KadSetHTML(`Punkte:<br>${linahaOptions.score}`);
   Btn_linahaMap.KadEnable(true);
@@ -170,9 +170,9 @@ function linahaCreateButtons(data) {
   linahaOptions.answerIndex = KadRandom.randomObject(currArr.length);
   Lbl_linahaQuestion.KadSetHTML(linahaShowData(linahaOptions.selQ, linahaOptions.answerIndex));
   if (linahaOptions.selQ == 1) {
-    Lbl_linahaQuestion.setAttribute("uiType", "transparent");
+    Lbl_linahaQuestion.HTML.setAttribute("uiType", "transparent");
   } else {
-    Lbl_linahaQuestion.removeAttribute("uiType");
+    Lbl_linahaQuestion.HTML.removeAttribute("uiType");
   }
   const cols = linahaOptions.setLayout.cols[linahaOptions.setLength];
   const rows = linahaOptions.setLayout.rows[linahaOptions.setLength];
@@ -185,17 +185,20 @@ function linahaCreateButtons(data) {
   };
 
   let bodyData = [];
-  let valueIndex = [];
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
+  for (let x = 0; x < cols; x++) {
+    let data = [];
+    for (let y = 0; y < rows; y++) {
       const index = y * cols + x;
-      valueIndex.push(index);
-      bodyData.push(linahaShowData(linahaOptions.selA, index));
+      data.push(linahaShowData(linahaOptions.selA, index));
     }
+    bodyData.push(data);
   }
   const type = linahaDataType(linahaOptions.selA);
-  const body = [{ type, data: bodyData, multiColumn: cols, settings: { ...settings, onclick: [linahaAnswered, valueIndex] } }];
 
+  let body = [];
+  for (let x = 0; x < cols; x++) {
+    body.push({ type, data: bodyData[x], settings: { ...settings, onclick: [linahaAnswered, x] } });
+  }
   KadTable.createHTMLGrid({ id: "idTab_linahaTable", body });
 }
 
@@ -252,7 +255,9 @@ function linahaShowData(optionsID, dataIndex) {
   return retText;
 }
 
-function linahaAnswered(indexX, btn) {
+function linahaAnswered(indexX, indexY, btn) {
+  KadLog.log(indexX, indexY, btn);
+
   if (!linahaOptions.isPlaying) return;
   linahaOptions.answered = !linahaOptions.answered;
   Btn_linahaMap.KadEnable(linahaOptions.answered);
@@ -261,7 +266,6 @@ function linahaAnswered(indexX, btn) {
     Btn_linahaMap.KadEnable(true);
     const isCorrect = indexX == linahaOptions.answerIndex;
     linahaOptions.correctRounds += isCorrect ? 1 : 0;
-    // const type = linahaDataType(linahaOptions.selA);
     if (isCorrect) {
       dbIDStyle(btn).backgroundColor = KadColor.formatAsCSS({ colorArray: globalColors.elements.btnPositive, type: "HSL" });
     } else {

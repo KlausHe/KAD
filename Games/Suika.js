@@ -21,12 +21,12 @@ const suikaOptions = {
   imagesPath: "./Games/AssetsSuika/images",
   friction: {
     friction: 0.006,
-    frictionStatic: 0.01,
-    frictionAir: 0.01,
-    restitution: 0.6,
+    frictionStatic: 0.006,
+    frictionAir: 0.005,
+    restitution: 0.3,
   },
   mass: 20,
-  gravity: 0.7,
+  gravity: 0.3,
 };
 
 const Btn_suikaStart = initEL({ id: "idBtn_suikaStart", fn: suikaStart, resetValue: "Start" });
@@ -142,7 +142,7 @@ const Game = {
       Game.highscore = score;
       Game.showHighscore(`*${score}*`);
     }
-    Lbl_suikaScore.textContent = score;
+    Lbl_suikaHighscore.textContent = score;
   },
   get fruitSizes() {
     return [
