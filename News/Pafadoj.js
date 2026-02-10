@@ -7,13 +7,14 @@ const pafadojOptions = {
     return `https://www.wikitable2json.com/api/List_of_mass_shootings_in_the_United_States_in_${pafadojOptions.date}?lang=en&cleanRef=true&table=${table}&keyRows=1`;
   },
   headers: {
+    // [tabelIndex, [...headerdata]]
     2025: [1, ["2025 date", "Dead", "Injured", "Total", "State orterritory", "Location"]],
     2024: [1, ["2024 date", "Dead", "Injured", "Total", "State orterritory", "Location"]],
     2023: [0, ["2023 date", "Dead", "Injured", "Total", "State or territory", "Location"]],
     2022: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
     2021: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
     2020: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
-    // 2019: [0, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
+    2019: [1, ["Date", "Dead", "Injured", "Total", "State", "Community"]],
     2018: [0, ["Date", "Dead", "Injured", "Total", "Community"]],
     2017: [0, ["Date", "Dead", "Injured", "Total", "Location"]],
   },
@@ -25,20 +26,28 @@ const pafadojOptions = {
 };
 
 const Sel_pafadojSelect = initEL({ id: "idSel_pafadojSelect", fn: pafadojUpdateData, selStartValue: 2025, selList: Object.keys(pafadojOptions.headers).map((year) => [year, year]) });
+initEL({ id: "idBtn_pafadojLink", fn: pafadojLink });
 
 export function clear_cl_Pafadoj() {
-  pafadojOptions.date = Sel_pafadojSelect.KadGet();
   pafadojUpdateData();
 }
 
+function pafadojLink() {
+  const link = `https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States_in_${pafadojOptions.date}`;
+  window.open(link);
+}
+
 function pafadojUpdateData() {
-  KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL, callback: pafadojGetData, errorCallback: pafadojErrorData });
+  pafadojOptions.date = Sel_pafadojSelect.KadGet();
+  const header = pafadojGetHeader(pafadojOptions.dataTotal);
+  const body = [...pafadojOptions.headers[pafadojOptions.date][1].map((_) => ({ data: ["loading"] }))];
+  KadTable.createHTMLGrid({ id: "idTab_pafadojTable", header, body });
+  KadFile.loadUrlToJSON({ variable: "dataTable", url: pafadojOptions.URL, callback: pafadojGetData, errorCallback: pafadojErrorData, callbackDelay: 0 });
 }
 async function pafadojErrorData({ error }) {
   layoutCheckCORSandDisableModule(error, "Pafadoj");
 }
 async function pafadojGetData(data) {
-  pafadojOptions.date = Sel_pafadojSelect.KadGet();
   KadTable.createHTMLGrid({ id: "idTab_pafadojTable", header: pafadojGetHeader() });
   const { dataTable } = data;
   pafadojOptions.data = [];
@@ -65,7 +74,7 @@ async function pafadojGetData(data) {
 
 function pafadojSort(type) {
   pafadojOptions.sort[type] = !pafadojOptions.sort[type];
-  pafadojOptions.data = KadArray.sortArrayByKey({ array: pafadojOptions.data, keys: type, inverse: pafadojOptions.sort[type] });
+  pafadojOptions.data = KadArray.sortArrayByKey({ array: pafadojOptions.data, key: type, inverse: pafadojOptions.sort[type] });
   pafadojTableReturn();
 }
 

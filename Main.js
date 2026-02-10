@@ -13,6 +13,7 @@ function mainSetup() {
     dbIDStyle("idDiv_Loading").display = "none";
     // console.clear();
   }
+
   contentLayout.createContentData();
   createContentlayoutList(); // First: create the LayoutLists
   KadDOM.htmlSetVinChange();

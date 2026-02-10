@@ -42,21 +42,21 @@ const sepakbolaOptions = {
     // 	table: [],
     // 	matches: [],
     // },
-    {
-      name: "DFB-Pokal 2024",
-      urlName: "dfb",
-      firstSeason: 2023,
-      maxDays: 6,
-      format(year) {
-        return `${year}\/${year + 1}`;
-      },
-      get currentSeason() {
-        return new Date().getFullYear();
-      },
-      seasons: [],
-      table: [],
-      matches: [],
-    },
+    // {
+    //   name: "DFB-Pokal 2024",
+    //   urlName: "dfb",
+    //   firstSeason: 2023,
+    //   maxDays: 6,
+    //   format(year) {
+    //     return `${year}\/${year + 1}`;
+    //   },
+    //   get currentSeason() {
+    //     return new Date().getFullYear();
+    //   },
+    //   seasons: [],
+    //   table: [],
+    //   matches: [],
+    // },
     {
       name: "1. Bundesliga",
       urlName: "bl1",

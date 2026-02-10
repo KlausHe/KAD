@@ -31,8 +31,13 @@ export function clear_cl_Hverertu() {
 function hverertuGetInput() {
   hverertuOptions.input = Vin_hverertuEntry.KadGet();
   if (hverertuOptions.input == "") return;
-  const URLS = [`https://api.agify.io/?name=${hverertuOptions.input}`, `https://api.genderize.io?name=${hverertuOptions.input}`, `https://api.nationalize.io?name=${hverertuOptions.input}`];
-  KadFile.loadUrlToJSON({ variableArray: ["age", "gender", "origin"], urlArray: URLS, callback: hverertuGetData, errorCallback: hverertuErrorData });
+  const URLS = [
+    //
+    `https://api.agify.io/?name=${hverertuOptions.input}`,
+    `https://api.nationalize.io?name=${hverertuOptions.input}`,
+    `https://api.genderize.io?name=${hverertuOptions.input}`,
+  ];
+  KadFile.loadUrlToJSON({ variableArray: ["age", "origin", "gender"], urlArray: URLS, callback: hverertuGetData, errorCallback: hverertuErrorData });
 }
 
 function hverertuErrorData({ error }) {
@@ -41,6 +46,8 @@ function hverertuErrorData({ error }) {
 
 function hverertuGetData(data) {
   const { age, gender, origin } = data;
+  KadLog.log(age, gender, origin);
+
   hverertuAge(age);
   hverertuOrigin(origin);
   hverertuGender(gender);

@@ -166,7 +166,6 @@ function perlindunganSelected() {
   if (!perlindunganOptions.showLists) {
     Btn_perlindunganHideLists.KadNext();
   }
-  perlindunganOptions.showLists = true;
   perlindunganTable();
 }
 
