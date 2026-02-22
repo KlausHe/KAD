@@ -1,1 +1,1 @@
-export const debugDefaultPage = "cl_Hverertu"; // cl_Kontour "KAD"
+export const debugDefaultPage = "cl_Kolid"; // cl_Kontour "KAD"

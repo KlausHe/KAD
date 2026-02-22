@@ -1,11 +1,16 @@
-import { dbID, initEL, KadLog, KadTable } from "../KadUtils/KadUtils.js";
+import { dbID, deepClone, initEL, KadLog, KadTable } from "../KadUtils/KadUtils.js";
 
 const kolidOptions = {
   inputState: [0, 1],
   inputStateOrig: [0, 1],
+  showSpecificList: true,
+  showListCallbacks: [
+    ["spezifische Liste", kolidCalc],
+    ["Übersicht", kolidCalc],
+  ],
   diameter: 13,
   diameterIndex: 2,
-  length: 10,
+  size: 10,
   torque: 2,
   anzahl: 1,
   anzahlIndex: 0,
@@ -33,24 +38,26 @@ const kolidOptions = {
   listInputState: false,
   imgPath: "./Tools/AssetsKolid/Kolid.png",
   measures: {
-    headerData: ["d1 über-bis", "b", "h", "Welle t1", "Nabe t2", "Längen l von-bis"],
+    diameterIndex: [8, 10, 12, 17, 22, 30, 38, 44, 50, 58, 65, 75, 85, 95, 110, 130],
+    nennlength: [6, 8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 32, 36, 40, 45, 50, 56, 63, 70, 80, 90, 100, 110, 125, 140, 160, 180, 200, 220, 250, 280, 320, 360, 400],
+    headerData: ["d1 über", "d1 bis", "b", "h", "t1", "t2", "l min", "l max"],
     bodyData: [
-      ["6 - 8", 2, 2, 1, 2, "6 - 20"],
-      ["8 - 10", 3, 3, 1.8, 1.4, "6 - 36"],
-      ["10 - 12", 4, 4, 2.5, 1.8, "8 - 45"],
-      ["12 - 17", 5, 5, 3, 2.3, "10 - 56"],
-      ["17 - 22", 6, 6, 3.5, 2.8, "14 - 70"],
-      ["22 - 30", 8, 7, 4, 3.3, "18 - 90"],
-      ["30 - 38", 10, 8, 5, 3.3, "20 - 110"],
-      ["38 - 44", 12, 8, 5, 3.3, "28 - 140"],
-      ["44 - 50", 14, 9, 5.5, 3.8, "36 - 160"],
-      ["50 - 58", 16, 10, 6, 4.3, "45 - 180"],
-      ["58 - 65", 18, 11, 7, 4.4, "50 - 200"],
-      ["65 - 75", 20, 12, 7.5, 4.9, "56 - 220"],
-      ["75 - 85", 22, 14, 9, 5.4, "63 - 250"],
-      ["85 - 95", 25, 14, 9, 5.4, "70 - 280"],
-      ["95 - 110", 28, 16, 10, 6.4, "80 - 320"],
-      ["110 - 130", 32, 18, 11, 7.4, "90 - 360"],
+      [6, 8, 2, 2, 1, 2, 6, 20],
+      [8, 10, 3, 3, 1.8, 1.4, 6, 36],
+      [10, 12, 4, 4, 2.5, 1.8, 8, 45],
+      [12, 17, 5, 5, 3, 2.3, 10, 56],
+      [17, 22, 6, 6, 3.5, 2.8, 14, 70],
+      [22, 30, 8, 7, 4, 3.3, 18, 90],
+      [30, 38, 10, 8, 5, 3.3, 20, 110],
+      [38, 44, 12, 8, 5, 3.3, 28, 140],
+      [44, 50, 14, 9, 5.5, 3.8, 36, 160],
+      [50, 58, 16, 10, 6, 4.3, 45, 180],
+      [58, 65, 18, 11, 7, 4.4, 50, 200],
+      [65, 75, 20, 12, 7.5, 4.9, 56, 220],
+      [75, 85, 22, 14, 9, 5.4, 63, 250],
+      [85, 95, 25, 14, 9, 5.4, 70, 280],
+      [95, 110, 28, 16, 10, 6.4, 80, 320],
+      [110, 130, 32, 18, 11, 7.4, 90, 360],
     ],
   },
   tolerances: {
@@ -64,6 +71,12 @@ const kolidOptions = {
   },
 };
 
+function measureIndex(val) {
+  const num = kolidOptions.measures.headerData.indexOf(val);
+  KadLog.errorChecked(num == -1, "not found:", val);
+  return num;
+}
+
 const Vin_kolidInputDiameter = initEL({ id: "idVin_kolidInputDiameter", fn: [kolidInput, 0], resetValue: 13, settings: { min: 6, step: 1, max: 130 } });
 const Vin_kolidInputLength = initEL({ id: "idVin_kolidInputLength", fn: [kolidInput, 1], resetValue: 10, settings: { min: 1, step: 1, max: 400 } });
 const Vin_kolidInputTorque = initEL({ id: "idVin_kolidInputTorque", fn: [kolidInput, 2], resetValue: 2, settings: { min: 0 } });
@@ -76,7 +89,7 @@ const Lbl_kolidInputLength = initEL({ id: "idLbl_kolidInputLength", resetValue: 
 const Lbl_kolidInputTorque = initEL({ id: "idLbl_kolidInputTorque", resetValue: "M<sub>t</sub>" });
 const Lbl_kolidResult = initEL({ id: "idLbl_kolidResult", resetValue: "..." });
 
-initEL({ id: "idBtn_kolidToggleListVew", fn: kolidToggleListView, resetValue: "Toggle List" });
+const Btn_kolidToggleListVew = initEL({ id: "idBtn_kolidToggleListVew", fn: kolidToggleListView, radioBtnCallbacks: kolidOptions.showListCallbacks });
 
 export function clear_cl_Kolid() {
   Vin_kolidInputDiameter.KadReset();
@@ -85,6 +98,10 @@ export function clear_cl_Kolid() {
   Lbl_kolidInputDiameter.KadReset();
   Lbl_kolidInputLength.KadReset();
   Lbl_kolidInputTorque.KadReset();
+
+  if (!kolidOptions.showSpecificList) {
+    Btn_kolidToggleListVew.KadNext();
+  }
 
   kolidOptions.anzahlIndex = Sel_kolidInputAnzahl.KadReset();
   kolidOptions.anzahl = kolidOptions.anzahlList[kolidOptions.anzahlIndex];
@@ -96,6 +113,7 @@ export function clear_cl_Kolid() {
   kolidOptions.listInputState = false;
   dbID("idImg_Kolid").src = kolidOptions.imgPath;
   kolidCreateTableMeasures();
+  kolidCreateTableLength();
   kolidCreateTableTolerances();
 }
 
@@ -122,8 +140,6 @@ function kolidInputAnzahl() {
   kolidCalc();
 }
 function kolidInputMaterial() {
-  KadLog.log(Sel_kolidInputMaterial);
-
   kolidOptions.grundpresswert = Sel_kolidInputMaterial.KadGet();
   kolidCalc();
 }
@@ -143,7 +159,7 @@ function kolidCalc() {
     case "01": // d & l  ==> M
       {
         kolidOptions.diameter = Vin_kolidInputDiameter.KadGet();
-        kolidOptions.length = Vin_kolidInputLength.KadGet();
+        kolidOptions.size = Vin_kolidInputLength.KadGet();
         const result = `M = ${kolidCalcTorque(kolidOptions.diameter)}Nm`;
         Lbl_kolidResult.KadSetText(result);
       }
@@ -158,7 +174,7 @@ function kolidCalc() {
       break;
     case "12": // l & M ==> d
       {
-        kolidOptions.length = Vin_kolidInputDiameter.KadGet();
+        kolidOptions.size = Vin_kolidInputDiameter.KadGet();
         kolidOptions.torque = Vin_kolidInputTorque.KadGet();
         kolidCalcDiameter();
         const result = `d1 = ${kolidOptions.diameter}mm`;
@@ -168,12 +184,14 @@ function kolidCalc() {
   }
 
   kolidCreateTableMeasures();
+  kolidCreateTableLength();
+  kolidCreateTableLength();
 }
 
 function kolidCalcTorque(diameter) {
   const p = kolidOptions.grundpresswert * kolidOptions.pressfaktor;
   const { b, h, t1 } = kolidGetdiameterData(diameter);
-  const ltr = kolidOptions.length - b;
+  const ltr = kolidOptions.size - b;
   let result = (0.5 * p * diameter * ltr * (h - t1) * kolidOptions.anzahl * kolidOptions.traganteilList[kolidOptions.anzahlIndex]) / 1000;
   return Number(result.toFixed(3));
 }
@@ -188,7 +206,7 @@ function kolidCalcLength() {
 }
 
 function kolidCalcDiameter() {
-  let upperDia = kolidOptions.measures.bodyData.map((item) => Number(item[0].split(" - ")[1]));
+  let upperDia = kolidOptions.measures.diameterIndex.slice(1);
   const lowerBound = Number(kolidOptions.measures.bodyData[0][0][0]);
   const upperBound = upperDia[kolidOptions.measures.bodyData.length - 1];
   for (let d = lowerBound; d < upperBound; d++) {
@@ -202,23 +220,21 @@ function kolidCalcDiameter() {
 }
 
 function kolidToggleListView() {
-  kolidOptions.listInputState = !kolidOptions.listInputState;
-  kolidCreateTableMeasures();
+  kolidOptions.showSpecificList = !kolidOptions.showSpecificList;
 }
 
 function kolidGetdiameterData(diameter) {
-  let maxDia = kolidOptions.measures.bodyData.map((item) => Number(item[0].split(" - ")[1]));
-  kolidOptions.diameterIndex = maxDia.findIndex((item) => item >= diameter);
-  const b = kolidOptions.measures.bodyData[kolidOptions.diameterIndex][1];
-  const h = kolidOptions.measures.bodyData[kolidOptions.diameterIndex][2];
-  const t1 = kolidOptions.measures.bodyData[kolidOptions.diameterIndex][3];
+  kolidOptions.diameterIndex = kolidOptions.measures.diameterIndex.findIndex((maxDia) => maxDia >= diameter);
+  const b = kolidOptions.measures.bodyData[kolidOptions.diameterIndex][measureIndex("b")];
+  const h = kolidOptions.measures.bodyData[kolidOptions.diameterIndex][measureIndex("h")];
+  const t1 = kolidOptions.measures.bodyData[kolidOptions.diameterIndex][measureIndex("t1")];
   return { b, h, t1 };
 }
 
 function kolidCreateTableMeasures() {
   const header = kolidOptions.measures.headerData.map((head) => ({ data: head }));
   let body = [];
-  if (!kolidOptions.listInputState) {
+  if (kolidOptions.showSpecificList) {
     for (let i = 0; i < kolidOptions.measures.headerData.length; i++) {
       body.push({ data: kolidOptions.measures.bodyData.map((item) => item[i]) });
     }
@@ -229,6 +245,30 @@ function kolidCreateTableMeasures() {
     }
   }
   KadTable.createHTMLGrid({ id: "idTab_kolidTableMeasures", header, body });
+}
+
+function kolidCreateTableLength() {
+  const colNum = 8;
+  let filteredLength = [];
+  if (!kolidOptions.showSpecificList) {
+    filteredLength = kolidOptions.measures.nennlength.filter((len) => len >= kolidOptions.measures.bodyData[kolidOptions.diameterIndex][measureIndex("l min")] && len <= kolidOptions.measures.bodyData[kolidOptions.diameterIndex][measureIndex("l max")]);
+  } else {
+    filteredLength = deepClone(kolidOptions.measures.nennlength);
+  }
+  const header = [{ data: "Nennlängen", colSpan: colNum, settings: { align: "center" } }];
+
+  let bodyData = [];
+  const arrLength = filteredLength.length / colNum;
+  for (let i = 0; i < arrLength; i++) {
+    bodyData.push(filteredLength.splice(0, colNum));
+  }
+
+  let body = [];
+  for (let i = 0; i < kolidOptions.measures.headerData.length; i++) {
+    body.push({ data: bodyData.map((item) => item[i]) });
+  }
+
+  KadTable.createHTMLGrid({ id: "idTab_kolidTableLength", header, body });
 }
 
 function kolidCreateTableTolerances() {
