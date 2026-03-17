@@ -1315,6 +1315,28 @@ export const rawContentGrid = {
       ["cl_PlatLesenResult", "center"],
     ],
   },
+  cl_Texmenu: {
+    logReqUser: false,
+    contentGroup: "Utility",
+    name: "Texmenu",
+    source: ["URL", "Texeria"],
+    size: [1, 1],
+    maingrid: {
+      areas: [
+        //
+        ["cl_TexmenuBtn1"],
+        ["cl_TexmenuBtn2"],
+        ["cl_TexmenuImage"],
+      ],
+      rows: [0],
+    },
+    subgrid: [
+      //
+      ["cl_TexmenuBtn1", "center"],
+      ["cl_TexmenuBtn2", "center"],
+      ["cl_TexmenuImage", "center"],
+    ],
+  },
   cl_Sima: {
     contentGroup: "Utility",
     name: "Sima",

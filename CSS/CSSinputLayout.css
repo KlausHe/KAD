@@ -118,6 +118,12 @@ img[imgSize="howaImg"] {
   border: var(--UIBorderThin);
   border-radius: var(--UIRadius);
 }
+img[imgSize="texmenuImg"] {
+  width: calc(var(--gridWidthGameCanvas) * 0.7);
+  height: auto;
+  border: var(--UIBorderThin);
+  border-radius: var(--UIRadius);
+}
 
 img[imgSize="thumbnail"] {
   width: var(--UIHeight3);
