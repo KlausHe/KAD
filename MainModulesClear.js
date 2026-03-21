@@ -57,6 +57,7 @@ export { clear_cl_Boredom } from "./Utility/Boredom.js";
 export { clear_cl_Botanicals } from "./Utility/Botanicals.js";
 export { clear_cl_Egg } from "./Utility/Egg.js";
 export { clear_cl_Foody } from "./Utility/Foody.js";
+export { clear_cl_Holy } from "./Utility/Holy.js";
 export { clear_cl_Hverertu } from "./Utility/Hverertu.js";
 export { clear_cl_Iomlaid } from "./Utility/Iomlaid.js";
 export { clear_cl_Kadar } from "./Utility/Kadar.js";

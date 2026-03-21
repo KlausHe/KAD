@@ -1116,6 +1116,25 @@ export const rawContentGrid = {
       ["cl_FoodyTimeProgress", "center"],
     ],
   },
+  cl_Holy: {
+    logReqUser: false,
+    contentGroup: "Utility",
+    name: "Holy",
+    heritage: ["englisch", "heilig"],
+    source: ["Eisheilige Überischt", "https://de.wikipedia.org/wiki/Eisheilige"],
+    size: [1, 1],
+    maingrid: {
+      areas: [
+        //
+        ["cl_HolyTable"],
+      ],
+      rows: [0],
+    },
+    subgrid: [
+      //
+      ["cl_HolyTable", "center"],
+    ],
+  },
   cl_Hverertu: {
     contentGroup: "Utility",
     name: "Hver Ertu",
