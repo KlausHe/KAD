@@ -14,6 +14,7 @@ const holyOptions = {
     ["Sophia", "05-15", "https://de.wikipedia.org/wiki/Sophia_von_Rom"],
   ],
 };
+
 function holyGenerateTable() {
   const year = KadDate.getDate(null, { format: "YYYY" });
   const header = [{ data: "Eisheiliger" }, { data: "Datum" }, { data: "vor Tagen" }, { data: "in Tagen" }];

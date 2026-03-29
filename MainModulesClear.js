@@ -69,3 +69,4 @@ export { clear_cl_PlatLesen } from "./Utility/PlatLesen.js";
 export { clear_cl_Texmenu } from "./Utility/Texmenu.js";
 export { clear_cl_Thiontu } from "./Utility/Thiontu.js";
 export { clear_cl_Tugas } from "./Utility/Tugas.js";
+export { clear_cl_Waktu } from "./Utility/Waktu.js";

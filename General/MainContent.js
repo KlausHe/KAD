@@ -1121,7 +1121,7 @@ export const rawContentGrid = {
     contentGroup: "Utility",
     name: "Holy",
     heritage: ["englisch", "heilig"],
-    source: ["Eisheilige Überischt", "https://de.wikipedia.org/wiki/Eisheilige"],
+    source: [["Eisheilige Überischt", "https://de.wikipedia.org/wiki/Eisheilige"]],
     size: [1, 1],
     maingrid: {
       areas: [
@@ -1426,6 +1426,25 @@ export const rawContentGrid = {
       ["cl_TugasList", "left"],
     ],
   },
+  cl_Waktu: {
+    logReqUser: false,
+    contentGroup: "Utility",
+    name: "Waktu",
+    heritage: ["indonesisch", "Zeit"],
+    size: [1, 1],
+    maingrid: {
+      areas: [
+        //
+        ["cl_WaktuTable"],
+      ],
+      rows: [0],
+    },
+    subgrid: [
+      //
+      ["cl_WaktuTable", "center"],
+    ],
+  },
+
   //Setings
   cl_GeneralSettings: {
     contentGroup: "Global-Settings",

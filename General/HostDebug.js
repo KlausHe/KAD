@@ -1,1 +1,1 @@
-export const debugDefaultPage = "cl_Holy"; // cl_Kontour "KAD"
+export const debugDefaultPage = "cl_Waktu"; // cl_Kontour "KAD"
