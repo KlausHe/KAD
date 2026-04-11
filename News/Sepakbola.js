@@ -132,7 +132,7 @@ function sepakbolaDropdownMatchdays() {
 }
 
 function sepakbolaLigaChange() {
-  sepakbolaOptions.selected.ligaIndex = Sel_sepakbolaLiga.selectedIndex;
+  sepakbolaOptions.selected.ligaIndex = Sel_sepakbolaLiga.KadGet({ index: true });
   sepakbolaOptions.selected.season = sepakbolaDropdownSeasons();
   sepakbolaDropdownMatchdays();
   sepakbolaRequestData();
