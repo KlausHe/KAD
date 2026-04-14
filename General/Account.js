@@ -302,9 +302,12 @@ function firebaseLogout() {
 }
 
 function userChange() {
-  for (let key of Object.keys(AccData.infos)) {
-    const id = dbID(`idVin_child_uInfoVin_${key}`);
-    const vinUser = id.KadGet();
+  for (let i = 0; i < Object.keys(AccData.infos).length; i++) {
+    const key = Object.keys(AccData.infos)[i];
+    const id = dbID(`idInput_uInfoData_${i}`);
+    const vinUser = id.value;
+    KadLog.log(id, key, i, vinUser);
+
     if (vinUser != "") {
       AccData.infos[key].data = vinUser;
     }

@@ -55,10 +55,10 @@ const barvoslepyOptions = {
     },
   },
   severity: 0.5,
-  previewImagesSelected: null,
   previewImages: [
     ["Venedig", "./Benkyou/AssetsBarvoslepy/Venice.JPG"],
     ["Ishihara", "./Benkyou/AssetsBarvoslepy/Ishihara.png"],
+    ["OK", "./Benkyou/AssetsBarvoslepy/ok.jpeg"],
   ],
   showState: null,
   showStates: [false, false, false, false, false],
@@ -120,9 +120,8 @@ export function clear_cl_Barvoslepy() {
 }
 
 function barvoslepyImagePreview() {
-  barvoslepyOptions.previewImagesSelected = Sel_barvoslepySelectImage.KadGet();
   barvoslepyOptions.image = new Image();
-  barvoslepyOptions.image.src = barvoslepyOptions.previewImagesSelected;
+  barvoslepyOptions.image.src = Sel_barvoslepySelectImage.KadGet();
   barvoslepyOptions.image.onload = barvoslepyImageLoaded;
 }
 
@@ -258,7 +257,8 @@ function barvoslepyBrettel(color, type, severity) {
   for (let c of cvd) {
     if (c <= 0) sRGB.push(0);
     else if (c >= 1) sRGB.push(255);
-    else if (c < 0.0031308) sRGB.push(0.5 + c * 3294.6); // 12.92 * 255 = 3294.6
+    else if (c < 0.0031308)
+      sRGB.push(0.5 + c * 3294.6); // 12.92 * 255 = 3294.6
     else sRGB.push(255 * (Math.pow(c, 0.4166666667) * 1.055 - 0.055)); // 1/2.4 = 0,4166666667
   }
   return sRGB;

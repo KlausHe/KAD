@@ -1,4 +1,4 @@
-import { initEL, KadDate } from "../KadUtils/KadUtils.js";
+import { initEL, KadDate, KadLog } from "../KadUtils/KadUtils.js";
 
 const eggOptions = {
   timerEggCount: null,
@@ -62,9 +62,9 @@ const eggOptions = {
   },
 };
 
-const Vin_EggMass = initEL({ id: "idVin_EggMass", fn: eggMassChange, resetValue: eggOptions.mass.valOrig, settings: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
-const Vin_EggTemp = initEL({ id: "idVin_EggTemp", fn: eggTempChange, resetValue: eggOptions.temp.valOrig, settings: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
-const Vin_EggYolk = initEL({ id: "idVin_EggYolk", fn: eggYolkChange, resetValue: eggOptions.yolk.valOrig, settings: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
+const Vin_EggMass = initEL({ id: "idVin_EggMass", fn: [eggMassChange], resetValue: eggOptions.mass.valOrig, settings: { min: eggOptions.mass.min, max: eggOptions.mass.max } });
+const Vin_EggTemp = initEL({ id: "idVin_EggTemp", fn: [eggTempChange], resetValue: eggOptions.temp.valOrig, settings: { min: eggOptions.temp.min, max: eggOptions.temp.max } });
+const Vin_EggYolk = initEL({ id: "idVin_EggYolk", fn: [eggYolkChange], resetValue: eggOptions.yolk.valOrig, settings: { min: eggOptions.yolk.min, max: eggOptions.yolk.max } });
 const Btn_EggStart = initEL({ id: "idBtn_EggStart", fn: eggStartChange, radioBtnCallbacks: eggOptions.startCallbacks });
 const Lbl_EggTime = initEL({ id: "idLbl_EggTime", resetValue: "Eieruhr" });
 const Lbl_EggMass = initEL({ id: "idLbl_EggMass" });
@@ -85,19 +85,21 @@ export function clear_cl_Egg() {
 }
 
 function eggMassChange(obj) {
-  eggOptions.mass.val = obj.target.KadGet();
+  KadLog.log(obj);
+
+  eggOptions.mass.val = obj.Element.KadGet();
   Lbl_EggMass.KadSetText(eggOptions.mass.label);
   eggCalculate();
 }
 
 function eggTempChange(obj) {
-  eggOptions.temp.val = obj.target.KadGet();
+  eggOptions.temp.val = obj.Element.KadGet();
   Lbl_EggTemp.KadSetText(eggOptions.temp.label);
   eggCalculate();
 }
 
 function eggYolkChange(obj) {
-  eggOptions.yolk.val = obj.target.KadGet();
+  eggOptions.yolk.val = obj.Element.KadGet();
   Lbl_EggYolk.KadSetText(eggOptions.yolk.label);
   eggCalculate();
 }

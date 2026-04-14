@@ -51,13 +51,15 @@ let howaOptions = {
     return `https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current=temperature_2m,weather_code,is_day&timezone=auto`;
   },
   get urlDaily() {
+    // activate "uvInedx"
+    //uv_index_max
     return `https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&daily=temperature_2m_min,temperature_2m_max,weather_code,precipitation_sum,wind_speed_10m_min,wind_speed_10m_max&timezone=auto&forecast_days=${this.forecastDays}`;
   },
 };
 
 const Vin_howaEntry = initEL({ id: "idVin_howaEntry", action: "change", fn: howaGetLocation, resetValue: "Search", dbList: Data_Nummernschild.map((item) => item[1]).sort() });
-const Btn_getGeoLocation = initEL({ id: "idBtn_getGeoLocation", fn: howaGetCoordinates });
-const Btn_howaGetLocation = initEL({ id: "idBtn_howaGetLocation", fn: howaGetLocation });
+initEL({ id: "idBtn_getGeoLocation", fn: howaGetCoordinates });
+initEL({ id: "idBtn_howaGetLocation", fn: howaGetLocation });
 const Sel_howaMapsDistrict = initEL({
   id: "idSel_howaMapsDistrict",
   fn: howaChangeMap,
@@ -191,12 +193,15 @@ function howaGetData({ responseCurrent, responseForecast }) {
 function howaUpdateGraphData() {
   let data = [];
   let point = howaOptions.data.forecast.daily;
+  // let uvIndex = [];// activate "uvInedx"
   for (let i = 0; i < howaOptions.forecastDays; i++) {
     data.push([point.temperature_2m_min[i], point.temperature_2m_max[i]]);
+    // uvIndex.push(point.uv_index_max[i]); // activate "uvInedx"
   }
   howaOptions.graphData = {
     labels: point.time,
     weatherCode: point.weather_code,
+    // uvIndex: uvIndex, // activate "uvInedx"
     data: data,
     min: range(point.temperature_2m_min, 0),
     max: range(point.temperature_2m_max, 1),
@@ -243,8 +248,8 @@ function howaDrawData() {
   const offsetTop = rowHeight * 0.25;
   const barHeight = rowHeight - 2 * offsetTop;
   const dayWidth = howaOptions.canvas.w * 0.22;
-  const tempWidth = howaOptions.canvas.w * 0.1;
   const imgWidth = howaOptions.canvas.w * 0.1;
+  const tempWidth = howaOptions.canvas.w * 0.1;
 
   const canvasContext = caHO.drawingContext;
   let gradient = canvasContext.createLinearGradient(dayWidth + tempWidth + imgWidth, 0, howaOptions.canvas.w - tempWidth, 0);
@@ -261,10 +266,10 @@ function howaDrawData() {
     const point = graph.data[i];
     const y = offsetTop + rowHeight * i;
     //  //  debug lines
-    // caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
-    // caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
-    // caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
-    // caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
+    caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
+    caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
+    caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
+    caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
     caHO.fill(globalColors.elements.line);
     caHO.textSize(globalValues.mediaSizes.fontSize);
     caHO.text(KadDate.getDate(graph.labels[i], { format: "WD DD.MM" }), dayWidth / 2, y + rowHeight / 2);
@@ -275,7 +280,11 @@ function howaDrawData() {
     const x = howaMap(point[0]);
     const barWidth = howaMap(point[1]);
     canvasContext.fillStyle = gradient;
-    caHO.rect(x, y, barWidth - x, barHeight, 10);
+    caHO.rect(x, y - offsetTop / 2, barWidth - x, barHeight, offsetTop);
+
+    // activate "uvInedx"
+    // caHO.fill(globalColors.elements.line);
+    // caHO.text(`UV: ${graph.uvIndex[i]}`, x + (barWidth - x) / 2, y + rowHeight / 2);
   }
   function howaMap(p) {
     return KadValue.mapping(p, graph.min, graph.max, dayWidth + tempWidth + imgWidth, howaOptions.canvas.w - tempWidth);

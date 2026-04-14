@@ -14,7 +14,7 @@ const sweeperOptions = {
   cells: [],
 };
 
-const Btn_startSweeper = initEL({ id: "idBtn_startSweeper", fn: sweeperStart });
+initEL({ id: "idBtn_startSweeper", fn: sweeperStart });
 const Vin_sweeperGrid = initEL({ id: "idVin_sweeperGrid", fn: sweeperGridChange, resetValue: sweeperOptions.gridSizeOrig });
 const Vin_sweeperSweeps = initEL({ id: "idVin_sweeperSweeps", fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
 
@@ -35,13 +35,13 @@ function sweeperStartOver() {
   sweeperStart();
 }
 
-function sweeperGridChange(obj) {
-  sweeperOptions.gridSize = obj.target.KadGet();
+function sweeperGridChange() {
+  sweeperOptions.gridSize = Vin_sweeperGrid.KadGet();
   sweeperStartOver();
 }
 
-function sweeperCellsChange(obj) {
-  sweeperOptions.sweepCells = obj.target.KadGet();
+function sweeperCellsChange() {
+  sweeperOptions.sweepCells = Vin_sweeperSweeps.KadGet();
   sweeperStartOver();
 }
 
