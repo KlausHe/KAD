@@ -145,6 +145,7 @@ const Vin_kontourInput = initEL({
   dbList: kontourOptions.nameList.map((item) => item.nameDECommon).sort(),
 });
 const Lbl_kontourStreak = initEL({ id: "idLbl_kontourStreak" });
+const Canv_kontour = initEL({ id: "idCanv_kontour" });
 
 export function clear_cl_Kontour() {
   kontourOptions.gameRunning = false;
@@ -153,7 +154,7 @@ export function clear_cl_Kontour() {
   kontourOptions.projectionIndex = Sel_kontourProjection.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.projections) });
   Sel_kontourQuestionSet.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.questionSets) });
   kontourRestart();
-  KadInteraction.removeContextmenu("idCanv_kontour");
+  KadInteraction.removeContextmenu(Canv_kontour);
 }
 
 function limitLatitude(lat) {

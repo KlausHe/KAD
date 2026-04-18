@@ -35,9 +35,10 @@ initEL({ id: "idLbl_patternSides", resetValue: patternOptions.names[1] });
 initEL({ id: "idLbl_patternAsymetry", resetValue: patternOptions.names[2] });
 initEL({ id: "idLbl_patternHoleCount", resetValue: patternOptions.names[3] });
 initEL({ id: "idLbl_patternProposedHoleCount", resetValue: patternOptions.names[4] });
+const Canv_pattern = initEL({ id: "idCanv_pattern" });
 
 export function clear_cl_Pattern() {
-  KadInteraction.removeContextmenu("idCanv_pattern");
+  KadInteraction.removeContextmenu(Canv_pattern);
   patternOptions.size = Vin_patternLength.KadReset();
   patternOptions.side = Vin_patternSides.KadReset();
   patternOptions.asym = Vin_patternAsymetry.KadReset();

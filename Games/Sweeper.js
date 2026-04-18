@@ -17,9 +17,10 @@ const sweeperOptions = {
 initEL({ id: "idBtn_startSweeper", fn: sweeperStart });
 const Vin_sweeperGrid = initEL({ id: "idVin_sweeperGrid", fn: sweeperGridChange, resetValue: sweeperOptions.gridSizeOrig });
 const Vin_sweeperSweeps = initEL({ id: "idVin_sweeperSweeps", fn: sweeperCellsChange, resetValue: sweeperOptions.sweepCellsOrig });
+const Canv_sweeper = initEL({ id: "idCanv_sweeper" });
 
 export function clear_cl_Sweeper() {
-  KadInteraction.removeContextmenu("idCanv_sweeper");
+  KadInteraction.removeContextmenu(Canv_sweeper);
   sweeperOptions.cells = [];
   sweeperOptions.gridSize = Vin_sweeperGrid.KadReset();
   sweeperOptions.sweepCells = Vin_sweeperSweeps.KadReset();

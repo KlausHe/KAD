@@ -64,11 +64,11 @@ const Sel_numberyPairs = initEL({
   // selStartIndex: KadRandom.randomObject(numberyOptions.availiablePairs.length),
 });
 const Btn_startNumbery = initEL({ id: "idBtn_startNumbery", fn: numberyToggleStart, radioBtnCallbacks: numberyOptions.btnCallback });
-initEL({ id: "idDiv_numberyImages" });
 const Lbl_numberyResult = initEL({ id: "idLbl_numberyResult", resetValue: "..." });
+const Div_numberyImages = initEL({ id: "idDiv_numberyImages" });
 
 export function clear_cl_Numbery() {
-  KadInteraction.removeContextmenu("idDiv_numberyImages");
+  KadInteraction.removeContextmenu(Div_numberyImages);
   numberyOptions.isPlaying = Btn_startNumbery.KadReset();
   numberyOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
   Vin_numberyPlayer.KadReset();

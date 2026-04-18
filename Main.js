@@ -3,7 +3,9 @@ import { bgaClearBackground } from "./General/BackgroundAnimation.js";
 import { contentCheckActive, contentLayout, createContentlayoutList, layoutCreateFooter, layoutCreateGridTiles, layoutCreateNavbar, layoutCreateSubgrid, navClick, resizeGrid } from "./General/Layout.js";
 import { contentGroupsMaincontent } from "./General/MainContent.js";
 import { KadDOM, KadDate, dbID, dbIDStyle, hostDebug, initEL } from "./KadUtils/KadUtils.js";
+import * as Canvas from "./MainModulesCanvas.js";
 import * as Clear from "./MainModulesClear.js";
+
 import { colToggleColormode } from "./Settings/Color.js";
 import { globalValues } from "./Settings/General.js";
 
@@ -57,6 +59,12 @@ function clearAllTiles() {
   }
 }
 
+export function redrawAllCanvases() {
+  for (const canvasFunction of Object.values(Canvas)) {
+    canvasFunction();
+  }
+}
+
 function hideLoadingscreen() {
   dbID("idDiv_Loading").classList.add("cl_LoadingFinished");
 }
@@ -64,14 +72,17 @@ function hideLoadingscreen() {
 export function timeoutCanvasFinished(canv, txt = { textTop: "", textBottom: "" }) {
   canv.noLoop();
   setTimeout(() => {
-    canv.stroke(255, 0, 0);
+    const prevColormode = canv._colorMode.toUpperCase();
+    canv.colorMode(canv.HSL);
+    canv.stroke(0);
     canv.strokeWeight(2);
     canv.textSize(globalValues.mediaSizes.fontSize * 3);
-    canv.fill(0);
+    canv.fill(255);
     canv.textAlign(canv.CENTER, canv.BOTTOM);
     canv.text(txt.textTop, canv.width / 2, canv.height / 2);
     canv.textAlign(canv.CENTER, canv.TOP);
     canv.text(txt.textBottom, canv.width / 2, canv.height / 2);
+    canv.colorMode(prevColormode);
   }, 200);
 }
 

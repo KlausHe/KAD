@@ -563,6 +563,7 @@ const Cb_geoRadius = initEL({ id: "idCb_geoRadius", fn: geoChangeDiameter, reset
 const Lbl_goeRadius = initEL({ id: "idLbl_goeRadius", resetValue: "Radius verwenden" });
 const Lbl_Areas = [Lbl_Area_0, Lbl_Area_1, Lbl_Area_2];
 const Vin_Areas = [Vin_Area_0, Vin_Area_1, Vin_Area_2];
+const Canv_geometire = initEL({ id: "idCanv_geometire" });
 
 let Btn_GeometrieElements = [];
 for (let i = 0; i < geoObjects.elements.length; i++) {
@@ -573,12 +574,12 @@ for (let i = 0; i < geoObjects.elements.length; i++) {
       resetValue: geoObjects.elements[i],
       dataset: ["radio", "geometrieAreaSelect"],
       settings: { uiSize: "width7" },
-    })
+    }),
   );
 }
 
 export function clear_cl_Geometrie() {
-  KadInteraction.removeContextmenu("idCanv_geometire");
+  KadInteraction.removeContextmenu(Canv_geometire);
   geoObjects.elementIndex = geoObjects.elementIndexOrig;
 
   for (let i = 0; i < Vin_Areas.length; i++) {

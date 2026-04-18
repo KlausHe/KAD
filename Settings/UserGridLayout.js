@@ -25,13 +25,14 @@ const Btn_userGridEnable = initEL({ id: "idBtn_userGridEnable", fn: userGridCrea
 const Btn_userGridPrioritize = initEL({ id: "idBtn_userGridPrioritize", fn: userGridLayoutProiritize, resetValue: "Priorität", dataset: ["radio", "userGridBtn"] });
 const Btn_userGridSaveLayout = initEL({ id: "idBtn_userGridSaveLayout", fn: saveUsergridLayout });
 const Sel_userGridSelect = initEL({ id: "idSel_userGridSelect", fn: userGridSelectGroup, selStartValue: userGridOptions.usedGrid });
+const Canv_userGrid = initEL({ id: "idCanv_userGrid" });
 
 export function clear_cl_UserGridLayout() {
   Btn_userGridEnable.KadReset();
   Btn_userGridEnable.KadRadioColor();
   Btn_userGridPrioritize.KadReset();
 
-  KadInteraction.removeContextmenu("idCanv_userGrid");
+  KadInteraction.removeContextmenu(Canv_userGrid);
   userGridOptions.groups = {};
   userGridOptions.enableGroupList = [...contentGroupsMaincontent];
   userGridOptions.enabledList = [...contentLayout.navContent.KAD];

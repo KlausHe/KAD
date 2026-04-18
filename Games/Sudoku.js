@@ -55,7 +55,7 @@ const Btn_sudokuNumOverviews = [Btn_sudokuNumOverview_1, Btn_sudokuNumOverview_2
 const Canv_sudoku = initEL({ id: "idCanv_sudoku", action: "keydown", fn: sudokuKeyPressed });
 
 export function clear_cl_Sudoku() {
-  KadInteraction.removeContextmenu("idCanv_sudoku");
+  KadInteraction.removeContextmenu(Canv_sudoku);
   sudokuOptions.curHighlight = null;
   sudokuOptions.usedNums = [];
   sudokuOptions.cells = [];
@@ -67,7 +67,7 @@ export function clear_cl_Sudoku() {
   for (let i = 0; i < 9; i++) {
     sudokuOptions.cells[i] = [];
     for (let j = 0; j < 9; j++) {
-      sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, "", "");
+      sudokuOptions.cells[i][j] = new SudokuCell(i, j, "", "");
     }
   }
   sudokuSetDoneNumbers();
@@ -76,11 +76,16 @@ export function clear_cl_Sudoku() {
   caSU.clear();
   sudokuInputOptionChange();
   sudokuOptionChange();
-  KadInteraction.focus("idCanv_sudoku", caSU);
+  KadInteraction.focus(Canv_sudoku, caSU);
 }
 
 export function canvas_cl_Sudoku() {
   caSU.resizeCanvas(sudokuOptions.canvas.w, sudokuOptions.canvas.h);
+  sudokuOptions.cellWidth = Math.floor(sudokuOptions.canvas.w / 9);
+  for (let index = 0; index < 9 * 9; index++) {
+    const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
+    sudokuOptions.cells[i][j].resizeCells();
+  }
   caSU.redraw();
 }
 
@@ -104,17 +109,17 @@ function sudokuRequest() {
     const { i, j } = KadArray.indexTo2DxyPosition(index, 9);
     const puzzle = sudokuOptions.board[0][index];
     const solution = sudokuOptions.board[1][index];
-    sudokuOptions.cells[i][j] = new SudokuCell(i, j, sudokuOptions.cellWidth, puzzle, solution);
+    sudokuOptions.cells[i][j] = new SudokuCell(i, j, puzzle, solution);
   }
   sudokuStartTimer(true);
   sudokuSetDoneNumbers();
-  KadInteraction.focus("idCanv_sudoku", caSU);
+  KadInteraction.focus(Canv_sudoku, caSU);
 }
 
 function sudokuInputOptionChange() {
   sudokuOptions.mode = !sudokuOptions.mode;
   sudokuSetBtnColor();
-  KadInteraction.focus("idCanv_sudoku", caSU);
+  KadInteraction.focus(Canv_sudoku, caSU);
 }
 
 function sudokuOptionChange() {
@@ -128,7 +133,7 @@ function sudokuOptionChange() {
   } else {
     sudokuErrors();
   }
-  KadInteraction.focus("idCanv_sudoku", caSU);
+  KadInteraction.focus(Canv_sudoku, caSU);
 }
 
 function sudokuValidate() {
@@ -146,7 +151,7 @@ function sudokuValidate() {
     Cb_sudokuAutoCheck.checked = true;
     sudokuOptions.errorChecked = true;
   }
-  KadInteraction.focus("idCanv_sudoku", caSU);
+  KadInteraction.focus(Canv_sudoku, caSU);
 }
 
 function sudokuHint() {
@@ -189,7 +194,7 @@ function sudokuHint() {
     cell.solution = true;
     cell.colNum.drawn = cell.colNum.hinted;
   }
-  KadInteraction.focus("idCanv_sudoku", caSU);
+  KadInteraction.focus(Canv_sudoku, caSU);
 }
 
 function sudokuKeyPressed(event) {
@@ -261,7 +266,7 @@ function sudokuShiftPressed() {
 function sudokuGroupHighlight(obj) {
   sudokuOptions.curHighlight = obj.value;
   caSU.redraw();
-  KadInteraction.focus("idCanv_sudoku", caSU);
+  KadInteraction.focus(Canv_sudoku, caSU);
 }
 
 function sudokuSetBtnColor() {
@@ -394,14 +399,14 @@ function sudokuErrors() {
 }
 
 class SudokuCell {
-  constructor(i, j, w, quest, sol) {
+  constructor(i, j, quest, sol) {
     this.pos = {
       i: i,
       j: j,
     };
-    this.w = w;
-    this.x = i * w;
-    this.y = j * w;
+    this.w = sudokuOptions.cellWidth;
+    this.x = i * sudokuOptions.cellWidth;
+    this.y = j * sudokuOptions.cellWidth;
     this.solution = quest != 0;
     this.solutionNum = sol;
     this.num = quest == 0 ? "" : sol;
@@ -442,6 +447,11 @@ class SudokuCell {
     this.createPencils();
   }
 
+  resizeCells() {
+    this.w = sudokuOptions.cellWidth;
+    this.x = this.pos.i * sudokuOptions.cellWidth;
+    this.y = this.pos.j * sudokuOptions.cellWidth;
+  }
   createPencils() {
     this.pencils = [];
     this.clearPencils();

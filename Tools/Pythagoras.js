@@ -26,9 +26,10 @@ const Vin_Pytho_3 = initEL({ id: "idVin_Pytho_3", fn: [pythoNewEntry, 3], resetV
 const Vin_Pytho_4 = initEL({ id: "idVin_Pytho_4", fn: [pythoNewEntry, 4], resetValue: pythoOptions.valsOrig[4] });
 const Vin_Pythos = [Vin_Pytho_0, Vin_Pytho_1, Vin_Pytho_2, Vin_Pytho_3, Vin_Pytho_4];
 const Lbl_pythagorasInfo = initEL({ id: "idLbl_pythagorasInfo" });
+const Canv_pytho = initEL({ id: "idCanv_pytho" });
 
 export function clear_cl_Pythagoras() {
-  KadInteraction.removeContextmenu("idCanv_pytho");
+  KadInteraction.removeContextmenu(Canv_pytho);
   pythoOptions.inputState = [...pythoOptions.inputStateOrig];
   for (let i = 0; i < Vin_Pythos.length; i++) {
     pythoOptions.vals[i] = Vin_Pythos[i].KadReset();

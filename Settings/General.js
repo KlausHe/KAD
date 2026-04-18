@@ -1,6 +1,6 @@
 import { resizeGrid } from "../General/Layout.js";
 import { initEL, KadCSS } from "../KadUtils/KadUtils.js";
-import { colorUpdateCanvascolors } from "./Color.js";
+import { redrawAllCanvases } from "../Main.js";
 
 export const globalValues = {
   mediaSizes: {
@@ -74,7 +74,7 @@ function settingsFontsize(obj = null) {
     Sel_settingsFontsize.KadReset({ selStartValue: globalValues.settings.fontSize });
   }
   KadCSS.setRoot({ variable: "fontSize", value: globalValues.settings.fontSize, dim: "px" });
-  colorUpdateCanvascolors();
+  redrawAllCanvases();
   resizeGrid();
 }
 

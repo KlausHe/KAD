@@ -17,9 +17,10 @@ const kaihangaOptions = {
 const Vin_kaihangaEntry = initEL({ id: "idVin_kaihangaEntry", action: "change", fn: kaihangaEntrySubmit, resetValue: "Enter Options" });
 const Btn_kaihangaEntry = initEL({ id: "idBtn_kaihangaEntry", fn: kaihangaEntrySubmit });
 const Lbl_kaihangaResult = initEL({ id: "idLbl_kaihangaResult", resetValue: "Gewinner: ..." });
+const Canv_kaihanga = initEL({ id: "idCanv_kaihanga" });
 
 export function clear_cl_Kaihanga() {
-  KadInteraction.removeContextmenu("idCanv_kaihanga");
+  KadInteraction.removeContextmenu(Canv_kaihanga);
   kaihangaOptions.colStart = KadRandom.randomIndex(globalColors.colorOptions);
   kaihangaOptions.entries = [];
   kaihangaOptions.spinning = false;

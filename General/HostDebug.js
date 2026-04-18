@@ -1,1 +1,1 @@
-export const debugDefaultPage = "cl_Howa"; // cl_Kontour "KAD"
+export const debugDefaultPage = "cl_Sudoku"; // cl_Kontour "KAD"

@@ -35,9 +35,10 @@ const Btn_suikaRestart = initEL({ id: "idBtn_suikaRestart", fn: suikaRestart, re
 const Cb_suikaSoundOutput = initEL({ id: "idCb_suikaSoundOutput", fn: suikaToggleSound, resetValue: false });
 const Lbl_suikaGameOver = initEL({ id: "idLbl_suikaGameOver", resetValue: "" });
 const Lbl_suikaHighscore = initEL({ id: "idLbl_suikaHighscore" });
+const Canv_suika = initEL({ id: "idCanv_suika" });
 
 export function clear_cl_Suika() {
-  KadInteraction.removeContextmenu("idCanv_suika");
+  KadInteraction.removeContextmenu(Canv_suika);
   Btn_suikaStart.KadReset();
   Btn_suikaPause.KadReset();
   Btn_suikaRestart.KadReset();

@@ -1,6 +1,5 @@
 import { dbIDStyle, deepClone, initEL, KadColor, KadCSS, KadDOM, KadString } from "../KadUtils/KadUtils.js";
-import { Div_navBar_Colormode } from "../Main.js";
-import * as Canvas from "../MainModulesCanvas.js";
+import { Div_navBar_Colormode, redrawAllCanvases } from "../Main.js";
 
 const colorSettingsOptions = {
   modeNames: ["light", "dark"],
@@ -185,9 +184,12 @@ export function colorThemeChanged() {
       }
     }
   }
-  setTimeout(() => {
-    colorUpdateCanvascolors();
-  }, KadCSS.getRoot({ value: "transitionTimeName" }) * 500);
+  setTimeout(
+    () => {
+      redrawAllCanvases();
+    },
+    KadCSS.getRoot({ value: "transitionTimeName" }) * 500,
+  );
 }
 function colorDefaultMode() {
   colorSettingsOptions.selectedDefaultModeIndex = Sel_colorSettingsDefault.KadGet({ index: true });
@@ -230,12 +232,6 @@ function colorChange(obj) {
     KadCSS.setRoot({ variable: `bgc${area}`, value: KadColor.formatAsString({ colorArray: col, type: "HSL" }) });
     KadCSS.setRoot({ variable: `txt${area}`, value: KadColor.stateAsString({ colorArray: col, type: "HSL" }) });
     KadCSS.setRoot({ variable: `inv${area}`, value: KadColor.stateAsBool({ colorArray: col, type: "HSL" }) });
-    colorUpdateCanvascolors();
-  }
-}
-
-export function colorUpdateCanvascolors() {
-  for (const canvasFunction of Object.values(Canvas)) {
-    canvasFunction();
+    redrawAllCanvases();
   }
 }

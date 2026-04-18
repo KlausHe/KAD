@@ -245,7 +245,7 @@
           <button id="idBtn_empatStart">Start</button>
         </div>
         <div class="cl_EmpatCanvas">
-          <div style="display:block;" id="idCanv_empat" tabindex="0">
+          <div id="idCanv_empat" tabindex="0">
           </div>
         </div>
       </div>
@@ -258,7 +258,7 @@
             <label for="idCb_ibhaluniSoundOutput">Play Sound</label></label>
         </div>
         <div class="cl_IbhaluniCanvas">
-          <div style="display:block;" id="idCanv_ibhaluni" tabindex="0"></div>
+          <div id="idCanv_ibhaluni" tabindex="0"></div>
         </div>
       </div>
     </section>
@@ -280,7 +280,7 @@
           <input type="text" id="idVin_kontourInput" uiSize="width12"></input>
         </div>
         <div class="cl_KontourCanvas">
-          <div style="display:block;" id="idCanv_kontour" tabindex="0"></div>
+          <div id="idCanv_kontour" tabindex="0"></div>
         </div>
         <div class="cl_KontourBorders">
           <label class="cl_infoCB" uiAlign="left" uiSize="width12"><input type="checkbox" id="idCb_kontourBorders"></input>
@@ -354,7 +354,7 @@
           <div id="idTab_lottoTable"></div>
         </div>
         <div class="cl_LottoCanvas">
-          <div style="display:block;" id="idCanv_lotto" tabindex="0"></div>
+          <div id="idCanv_lotto" tabindex="0"></div>
         </div>
         <div class="cl_LottoOverview">
           <label class="cl_outputLbl" id="idLbl_lottoOverview">Lotto!</label>
@@ -435,7 +435,7 @@
           </button>
         </div>
         <div class="cl_RayCasterCanvas">
-          <div style="display:block;" id="idCanv_rayCaster" tabindex="0"></div>
+          <div id="idCanv_rayCaster" tabindex="0"></div>
         </div>
       </div>
     </section>
@@ -467,31 +467,25 @@
     <section class="cl_Sudoku">
       <div class="cl_subGrid_Sudoku cl_subGrid">
         <div class="cl_SudokuGetBoard">
-          <button id="idBtn_sudokuPuzzle" difficulty="puzzle" data-difficulty="puzzle">New Puzzle</button>
-        </div>
-        <div class="cl_SudokuClear">
+          <button id="idBtn_sudokuPuzzle" difficulty="puzzle" data-difficulty="puzzle">New Puzzle</button><br>
           <button id="idBtn_sudokuClear">Clear</button>
         </div>
         <div class="cl_SudokuTimer">
           <button id="idBtn_sudokuTimer">00:00</button>
         </div>
+        <div class="cl_SudokuValidateHint">
+          <button id="idBtn_sudokuValidate">Validate</button><br>
+          <button id="idBtn_sudokuHint">Hint</button>
+        </div>
+        <div class="cl_SudokuAuto">
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_sudokuAutoCheck" checked></input>
+            <label for="idCb_sudokuAutoCheck">Auto-Check</label></label><br>
+          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_sudokuErasePencils" checked></input>
+            <label for="idCb_sudokuErasePencils">Auto-Erase</label></label>
+        </div>
         <div class="cl_SudokuInput">
           <button name="na_Sudoku" uiSize="height2" id="idBtn_sudokuWrite">Write</button><br>
           <button name="na_Sudoku" uiSize="height2" id="idBtn_sudokuPencil">Pencil</button>
-        </div>
-        <div class="cl_SudokuValidate">
-          <button id="idBtn_sudokuValidate">Validate</button><br>
-        </div>
-        <div class="cl_SudokuHint">
-          <button id="idBtn_sudokuHint">Hint</button>
-        </div>
-        <div class="cl_SudokuAutoCheck">
-          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_sudokuAutoCheck" checked></input>
-            <label for="idCb_sudokuAutoCheck">Auto-Check</label><br></label>
-        </div>
-        <div class="cl_SudokuAutoErase">
-          <label class="cl_infoCB" uiAlign="left" uiSize="width6"><input type="checkbox" id="idCb_sudokuErasePencils" checked></input>
-            <label for="idCb_sudokuErasePencils">Auto-Erase</label></label>
         </div>
         <div class="cl_SudokuOverview">
           <div class="cl_SquareButtonFlex" uiFlex="horizontal">
@@ -511,7 +505,7 @@
           </div>
         </div>
         <div class="cl_SudokuCanvas">
-          <div style="display:block;" id="idCanv_sudoku" tabindex="0"></div>
+          <div id="idCanv_sudoku" tabindex="0"></div>
         </div>
       </div>
     </section>
@@ -537,7 +531,7 @@
           <label id="idLbl_suikaGameOver" uiSize="width10 height2"></label>
         </div>
         <div class="cl_SuikaCanvas">
-          <div style="display:block;" id="idCanv_suika" tabindex="0"></div>
+          <div id="idCanv_suika" tabindex="0"></div>
         </div>
       </div>
     </section>
@@ -561,7 +555,7 @@
           </button>
         </div>
         <div class="cl_SweeperCanvas">
-          <div style="display:block;" id="idCanv_sweeper" tabindex="0"></div>
+          <div id="idCanv_sweeper" tabindex="0"></div>
         </div>
       </div>
     </section>
@@ -912,7 +906,7 @@
           <label class="cl_outputLbl" id="idLbl_luasResult">...</label>
         </div>
         <div class="cl_LuasCanvas">
-          <div style="display:block;" id="idCanv_luas"></div>
+          <div id="idCanv_luas"></div>
         </div>
       </div>
     </section>
@@ -1166,7 +1160,7 @@
           <label class="cl_infoCB" uiRadius="left">y<sub>3</sub>:</label><label class="cl_info" id="idLbl_pormulaPointResultC" uiSize="width4" uiRadius="right"></label>
         </div>
         <div class="cl_PormulaInfo" id="idDiv_pormulaInfo">
-          <label id="idLbl_pormulaInfo" uiSize="width11" style="display:block;"></label>
+          <label id="idLbl_pormulaInfo" uiSize="width11"></label>
         </div>
         <div class="cl_PormulaLblResult">
           <label class="cl_outputLbl" id="idLbl_pormulaResult">
@@ -1219,7 +1213,7 @@
           </button>
         </div>
         <div class="cl_PythagorasInfo" id="idDiv_pythagorasInfo">
-          <label id="idLbl_pythagorasInfo" uiSize="width6" style="display:block;"></label>
+          <label id="idLbl_pythagorasInfo" uiSize="width6"></label>
         </div>
         <div class="cl_PythagorasCanvas">
           <div id="idCanv_pytho">
@@ -1518,7 +1512,7 @@
           <label class="cl_outputLbl" id="idLbl_kaihangaResult">...</label>
         </div>
         <div class="cl_KaihangaCanvas">
-          <div style="display:block;" id="idCanv_kaihanga"></div>
+          <div id="idCanv_kaihanga"></div>
         </div>
       </div>
     </section>
@@ -1770,7 +1764,7 @@
           <select id="idSel_userGridSelect" uiSize="width8"></select>
         </div>
         <div class="cl_UserGridCanvas">
-          <div style="display:block;" id="idCanv_userGrid" tabindex="0">
+          <div id="idCanv_userGrid" tabindex="0">
           </div>
         </div>
       </div>

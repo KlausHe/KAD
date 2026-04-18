@@ -40,9 +40,11 @@ const Sel_luasLinearUnit = initEL({
 initEL({ id: "idBtn_luasChangeDirection", fn: luasChangeDirection });
 initEL({ id: "idBtn_luasChecker", fn: luasStart });
 const Lbl_luasResult = initEL({ id: "idLbl_luasResult" });
+const Canv_luas = initEL({ id: "idCanv_luas" });
+
 //Canvas Stuff
 export function clear_cl_Luas() {
-  KadInteraction.removeContextmenu("idCanv_luas");
+  KadInteraction.removeContextmenu(Canv_luas);
   Vin_luasVelAngular.KadReset();
   Vin_luasDiameter.KadReset();
 

@@ -67,9 +67,10 @@ const Sel_howaMapsDistrict = initEL({
   selList: [["Deutschland", "de"], ...Data_Country_GermanDistrics.map((d) => [d.LandDE, d.abbr])],
 });
 const Sel_howaMapsCriteria = initEL({ id: "idSel_howaMapsCriteria", fn: howaChangeMap, selList: weatherMaps.criteriaList.map((d) => [d[1], d[0]]) });
+const Canv_howa = initEL({ id: "idCanv_howa" });
 
 export function clear_cl_Howa() {
-  KadInteraction.removeContextmenu("idCanv_howa");
+  KadInteraction.removeContextmenu(Canv_howa);
   Vin_howaEntry.KadReset();
   howaOptions.latitude = howaOptions.latOrig;
   howaOptions.longitude = howaOptions.lonOrig;

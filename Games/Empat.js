@@ -1,4 +1,4 @@
-import { initEL, KadArray, KadInteraction, KadValue } from "../KadUtils/KadUtils.js";
+import { initEL, KadArray, KadInteraction, KadLog, KadValue } from "../KadUtils/KadUtils.js";
 import { timeoutCanvasFinished } from "../Main.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
@@ -34,8 +34,8 @@ const Btn_empatStart = initEL({ id: "idBtn_empatStart", fn: empatStartChange, ra
 const Canv_empat = initEL({ id: "idCanv_empat", fn: empatKeyPushed });
 
 export function clear_cl_Empat() {
-  KadInteraction.removeContextmenu("idCanv_empat");
-  KadInteraction.unfocus("idCanv_empat", caEM);
+  KadInteraction.removeContextmenu(Canv_empat);
+  KadInteraction.unfocus(Canv_empat, caEM);
   empatOptions.playing = Btn_empatStart.KadReset();
   empatReset();
 }
@@ -70,13 +70,16 @@ function empatStartChange() {
 }
 
 function empatStart() {
+  KadLog.log(Canv_empat);
+
   empatOptions.won = false;
-  caEM.loop();
-  KadInteraction.focus(Canv_empat);
+  KadInteraction.focus(Canv_empat, caEM);
 }
 function empatStop() {
+  KadLog.log(Canv_empat);
   empatOptions.won = false;
   KadInteraction.unfocus(Canv_empat, caEM);
+  KadLog.log(Canv_empat);
 }
 
 const caEM = new p5((c) => {
@@ -173,7 +176,7 @@ function empatFinished() {
     caEM.stroke(empatOptions.players[empatOptions.curPlayer].color);
     caEM.line(empatOptions.winCells[0].x, empatOptions.winCells[0].y, empatOptions.winCells[1].x, empatOptions.winCells[1].y);
   }, 50);
-  KadInteraction.unfocus(Canv_empat);
+  KadInteraction.unfocus(Canv_empat, caEM);
   timeoutCanvasFinished(caEM, {
     textTop: `Player \"${empatOptions.players[empatOptions.curPlayer].name}\" won`,
     textBottom: `in round ${Math.floor(empatOptions.turns / 2) + 1}!`,

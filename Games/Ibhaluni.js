@@ -25,9 +25,10 @@ const ibhaluniOptions = {
 
 const Btn_ibhaluniStart = initEL({ id: "idBtn_ibhaluniStart", radioBtnCallbacks: ibhaluniOptions.startCallbacks });
 const Cb_ibhaluniSoundOutput = initEL({ id: "idCb_ibhaluniSoundOutput", fn: ibhaluniToggleSound, resetValue: false });
+const Canv_ibhaluni = initEL({ id: "idCanv_ibhaluni" });
 
 export function clear_cl_Ibhaluni() {
-  KadInteraction.removeContextmenu("idCanv_ibhaluni");
+  KadInteraction.removeContextmenu(Canv_ibhaluni);
   Btn_ibhaluniStart.KadReset();
   Cb_ibhaluniSoundOutput.KadReset();
   ibhaluniOptions.balloons = [];

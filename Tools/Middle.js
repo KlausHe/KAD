@@ -28,9 +28,10 @@ const Vin_middleA = initEL({ id: "idVin_middleA", fn: calcMiddle, resetValue: 5 
 const Vin_middleB = initEL({ id: "idVin_middleB", fn: calcMiddle, resetValue: 2 });
 const Lbl_middleMid = initEL({ id: "idLbl_middleMid" });
 const Lbl_middleDiff = initEL({ id: "idLbl_middleDiff" });
+const Canv_middle = initEL({ id: "idCanv_middle" });
 
 export function clear_cl_Middle() {
-  KadInteraction.removeContextmenu("idCanv_middle");
+  KadInteraction.removeContextmenu(Canv_middle);
   Vin_middleA.KadReset();
   Vin_middleB.KadReset();
   middleOptions.barA = {
