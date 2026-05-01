@@ -2,7 +2,7 @@
 // https://gist.github.com/gr8bit/172584afeb738fd864d572b7cfbcc14d
 // https://developers.google.com/maps/documentation/javascript/examples/map-projection-simple#maps_map_projection_simple-javascript
 
-import { Data_GetCountriesByProperty, Data_GetReducedCountryList } from "../KadData/KadData_Countries.js";
+import { Data_GetCountriesByProperty, Data_GetCountryByKey, Data_GetReducedCountryList } from "../KadData/KadData_Countries.js";
 import { Data_CountryOutlines } from "../KadData/KadData_CountryBoundaries.js";
 import { initEL, KadArray, KadInteraction, KadLog, KadRandom, KadValue } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
@@ -25,6 +25,31 @@ const kontourOptions = {
   nameList: Data_GetReducedCountryList(["cca3", "nameDECommon"]),
   projectionIndex: 1,
   projections: [
+    // {
+    //   name: "Equal Earth",
+    //   ratio: 2,
+    //   projection(lon, latRaw, mapWidth, mapHeight) {
+    //     const lat = limitLatitude(latRaw);
+
+    //     const A1 = 1.340264;
+    //     const A2 = -0.081106;
+    //     const A3 = 0.000893;
+    //     const A4 = 0.003796;
+    //     const A23 = A2 * 3;
+    //     const A37 = A3 * 7;
+    //     const A49 = A4 * 9;
+
+    //     const M = Math.sqrt(3) / 2;
+
+    //     const p = Math.asin(M * Math.sin(lat)); // parametric latitude
+    //     const p2 = p ** 2;
+    //     const p6 = p ** 6;
+    //     let x = (lon * Math.cos(p)) / (M * (A1 + A23 * p2 + p6 * (A37 + A49 * p2)));
+    //     let y = p * (A1 + A2 * p2 + p6 * (A3 + A4 * p2));
+    //     --> not working, not interested any more...
+    //     return { x, y };
+    //   },
+    // },
     {
       name: "Gall-Peterson",
       ratio: 2,
@@ -151,7 +176,7 @@ export function clear_cl_Kontour() {
   kontourOptions.gameRunning = false;
   Vin_kontourInput.KadReset();
   kontourOptions.bordersActive = Cb_kontourBorders.KadReset();
-  kontourOptions.projectionIndex = Sel_kontourProjection.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.projections) });
+  kontourOptions.projectionIndex = Sel_kontourProjection.KadReset({ selStartIndex: 0 }); //KadRandom.randomIndex(kontourOptions.projections)
   Sel_kontourQuestionSet.KadReset({ selStartIndex: KadRandom.randomIndex(kontourOptions.questionSets) });
   kontourRestart();
   KadInteraction.removeContextmenu(Canv_kontour);
@@ -263,7 +288,11 @@ function kontourInput() {
 
 function kontourUpdateOutput() {
   const lives = ["III", "II", "I"];
-  Lbl_kontourStreak.KadSetHTML(`Punkte: ${kontourOptions.points}<br>Versuche: ${lives[kontourOptions.guessCount]}`);
+  let text = `Punkte: ${kontourOptions.points}<br>Versuche: ${lives[kontourOptions.guessCount]}`;
+  if (kontourOptions.guessCount == kontourOptions.guessCountMax - 1) {
+    text += `<br>Hilfe: ${Data_GetCountryByKey(kontourOptions.current)?.nameDECommon[0]}`;
+  }
+  Lbl_kontourStreak.KadSetHTML(text);
 }
 
 function kontourGameOver() {
