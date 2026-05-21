@@ -173,7 +173,6 @@ function howaCleanLocation() {
       }
     }
     dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
-
     KadFile.loadUrlToJSON({
       variableArray: ["responseCurrent", "responseForecast"],
       urlArray: [howaOptions.urlCurrent, howaOptions.urlDaily],
