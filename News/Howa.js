@@ -2,10 +2,10 @@
 // https://gist.github.com/stellasphere/9490c195ed2b53c707087c8c2db4ec0c
 
 // https://docs.maptiler.com/sdk-js/examples/weather-layer-switcher/
-const reverseGeocoder = new BDCReverseGeocode();
+let reverseGeocoder = new BDCReverseGeocode("de");
 import { Data_Nummernschild } from "../KadData/KadData.js";
 import { Data_Country_GermanDistrics } from "../KadData/KadData_Countries.js";
-import { dbID, dbIDStyle, initEL, KadColor, KadDate, KadFile, KadInteraction, KadLog, KadValue, objectLength } from "../KadUtils/KadUtils.js";
+import { dbID, initEL, KadColor, KadDate, KadFile, KadInteraction, KadLog, KadValue, objectLength } from "../KadUtils/KadUtils.js";
 import { globalColors } from "../Settings/Color.js";
 import { globalValues } from "../Settings/General.js";
 
@@ -58,7 +58,7 @@ let howaOptions = {
 };
 
 const Vin_howaEntry = initEL({ id: "idVin_howaEntry", action: "change", fn: howaGetLocation, resetValue: "Search", dbList: Data_Nummernschild.map((item) => item[1]).sort() });
-initEL({ id: "idBtn_getGeoLocation", fn: howaGetCoordinates });
+const Btn_getGeoLocation = initEL({ id: "idBtn_getGeoLocation", fn: howaGetCoordinates });
 initEL({ id: "idBtn_howaGetLocation", fn: howaGetLocation });
 const Sel_howaMapsDistrict = initEL({
   id: "idSel_howaMapsDistrict",
@@ -70,12 +70,12 @@ const Sel_howaMapsCriteria = initEL({ id: "idSel_howaMapsCriteria", fn: howaChan
 const Canv_howa = initEL({ id: "idCanv_howa" });
 
 export function clear_cl_Howa() {
+  Btn_getGeoLocation.KadEnable();
   KadInteraction.removeContextmenu(Canv_howa);
   Vin_howaEntry.KadReset();
   howaOptions.latitude = howaOptions.latOrig;
   howaOptions.longitude = howaOptions.lonOrig;
   howaOptions.city = null;
-  reverseGeocoder.localityLanguage = "de";
   caHO.noLoop();
   howaChangeMap();
   howaGetCoordinates();
@@ -112,73 +112,61 @@ function howaChangeMap() {
 
 // Forecast stuff
 function howaGetCoordinates() {
-  if ("geolocation" in navigator) {
-    howaOptions.city = null;
-    Vin_howaEntry.KadReset({ resetValue: "Device-location used!" });
-    dbIDStyle("idBtn_getGeoLocation").display = "initial";
-    navigator.geolocation.getCurrentPosition(howaNavigatorPosition, howaNavigatorError);
-  } else {
-    howaNavigatorError();
-    dbIDStyle("idBtn_getGeoLocation").display = "none";
+  reverseGeocoder.getClientLocation(function (result) {
+    if (!result) {
+      console.error("Could not determine location");
+      Btn_getGeoLocation.KadEnable(false);
+      Vin_howaEntry.KadReset({ resetValue: "Device-location blocked!" });
+      return;
+    }
+    howaOptions.city = result.city;
+    Vin_howaEntry.KadReset();
+    howaGetLocation(false);
+  });
+}
+
+async function howaGetLocation(inputData = true) {
+  if (inputData) {
+    let input = Vin_howaEntry.KadGet();
+    if (input == "") return;
+    howaOptions.city = input;
   }
-}
-
-function howaNavigatorPosition(data) {
-  howaOptions.latitude = data.coords.latitude || howaOptions.latOrig;
-  howaOptions.longitude = data.coords.longitude || howaOptions.lonOrig;
-  howaCleanLocation();
-}
-
-function howaNavigatorError() {
-  dbID("idP_howaCurrentText").textContent = "No Geolocation";
-  howaOptions.latitude = howaOptions.latOrig;
-  howaOptions.longitude = howaOptions.lonOrig;
-  howaCleanLocation();
-}
-
-async function howaGetLocation() {
-  let input = Vin_howaEntry.KadGet();
-  if (input == "") return;
-  howaOptions.city = input;
   KadFile.loadUrlToJSON({ variable: "data", url: howaOptions.urlGeoCoding, callback: howaGeocodingCity, errorCallback: howaErrorCallback });
 }
+
 function howaErrorCallback(error) {
+  KadLog.error(error);
   KadLog.error("Could not load Geocoding!", error);
 }
 
 function howaGeocodingCity({ data }) {
-  let dataSorted = data.results.filter((d) => (d.country = "Deutschland"));
-  if (!dataSorted) {
+  let dataSelected = data.results.filter((d) => (d.country = "Deutschland"))[0];
+  if (!dataSelected) {
     dbID("idP_howaCurrentText").textContent = "Stadt nicht gefunden";
     return;
   }
-  howaOptions.latitude = dataSorted[0].latitude;
-  howaOptions.longitude = dataSorted[0].longitude;
-  howaCleanLocation();
-}
+  howaOptions.latitude = dataSelected.latitude;
+  howaOptions.longitude = dataSelected.longitude;
 
-function howaCleanLocation() {
-  reverseGeocoder.getClientLocation({ latitude: howaOptions.latitude, longitude: howaOptions.longitude }, (result) => {
-    howaOptions.city = result.city;
-    if (result.principalSubdivisionCode) {
-      weatherMaps.district = result.principalSubdivisionCode.split("-")[1].toLowerCase();
-      if (!Data_Country_GermanDistrics.map((d) => d.abbr).includes(weatherMaps.district)) weatherMaps.district = "de";
-    } else {
-      weatherMaps.district = "de";
+  weatherMaps.district = Data_Country_GermanDistrics.filter((d) => d.LandDE == dataSelected.admin1)[0];
+  if (!weatherMaps.district) {
+    weatherMaps.district = "de";
+  } else {
+    weatherMaps.district = weatherMaps.district.abbr;
+  }
+
+  for (let node of Sel_howaMapsDistrict.HTML.options) {
+    if (node.value == weatherMaps.district) {
+      node.selected = true;
+      break;
     }
-    for (let node of Sel_howaMapsDistrict.HTML.options) {
-      if (node.value == weatherMaps.district) {
-        node.selected = true;
-        break;
-      }
-    }
-    dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
-    KadFile.loadUrlToJSON({
-      variableArray: ["responseCurrent", "responseForecast"],
-      urlArray: [howaOptions.urlCurrent, howaOptions.urlDaily],
-      callback: howaGetData,
-      errorCallback: howaErrorCallback,
-    });
+  }
+  dbID("idImg_howaMapsImg").src = weatherMaps.dwdURL;
+  KadFile.loadUrlToJSON({
+    variableArray: ["responseCurrent", "responseForecast"],
+    urlArray: [howaOptions.urlCurrent, howaOptions.urlDaily],
+    callback: howaGetData,
+    errorCallback: howaErrorCallback,
   });
 }
 
@@ -266,10 +254,10 @@ function howaDrawData() {
     const point = graph.data[i];
     const y = offsetTop + rowHeight * i;
     //  //  debug lines
-    caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
-    caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
-    caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
-    caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
+    // caHO.line(dayWidth, 0, dayWidth, howaOptions.canvas.h);
+    // caHO.line(dayWidth + tempWidth, 0, dayWidth + tempWidth, howaOptions.canvas.h);
+    // caHO.line(dayWidth + tempWidth + imgWidth, 0, dayWidth + tempWidth + imgWidth, howaOptions.canvas.h);
+    // caHO.line(howaOptions.canvas.w - tempWidth, 0, howaOptions.canvas.w - tempWidth, howaOptions.canvas.h);
     caHO.fill(globalColors.elements.line);
     caHO.textSize(globalValues.mediaSizes.fontSize);
     caHO.text(KadDate.getDate(graph.labels[i], { format: "WD DD.MM" }), dayWidth / 2, y + rowHeight / 2);
