@@ -1,6 +1,6 @@
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
-import { KadArray, KadDate, KadFile, KadTable, deepClone, initEL, objectLength } from "../KadUtils/KadUtils.js";
-import { globalValues } from "../Settings/General.js";
+import { KadArray, KadDate, KadFile, KadTable, KadValue, deepClone, initEL, objectLength } from "../KadUtils/KadUtils.js";
+import { fifa } from "./AssetsSepakbola/fifa.js";
 
 const sepakbolaOptions = {
   get URLTable() {
@@ -27,21 +27,21 @@ const sepakbolaOptions = {
   },
   interval: null,
   liga: [
-    // {
-    // 	name: "EM 2024",
-    // 	urlName: "em",
-    // 	firstSeason: 2024,
-    // 	maxDays: 7,
-    // 	format(year) {
-    // 		return year;
-    // 	},
-    // 	get currentSeason() {
-    // 		return new Date().getFullYear();
-    // 	},
-    // 	seasons: [],
-    // 	table: [],
-    // 	matches: [],
-    // },
+    {
+      name: "WM 2026",
+      urlName: "wm26",
+      firstSeason: 2026,
+      maxDays: 7,
+      format(year) {
+        return year;
+      },
+      get currentSeason() {
+        return new Date().getFullYear();
+      },
+      seasons: [],
+      table: [],
+      matches: [],
+    },
     // {
     //   name: "DFB-Pokal 2024",
     //   urlName: "dfb",
@@ -105,7 +105,7 @@ const sepakbolaOptions = {
   ],
 };
 
-const Sel_sepakbolaLiga = initEL({ id: "idSel_sepakbolaLiga", fn: sepakbolaLigaChange, selStartIndex: sepakbolaOptions.selectedOrig.ligaIndex, selList: Object.values(sepakbolaOptions.liga).map((v) => v.name) });
+const Sel_sepakbolaLiga = initEL({ id: "idSel_sepakbolaLiga", fn: sepakbolaLigaChange, selStartIndex: 0, selList: Object.values(sepakbolaOptions.liga).map((v) => v.name) }); //KadRandom.randomIndex(sepakbolaOptions.liga)
 const Sel_sepakbolaSeason = initEL({ id: "idSel_sepakbolaSeason", fn: sepakbolaSeasonChange, selStartIndex: 0 });
 const Sel_sepakbolaMatchday = initEL({ id: "idSel_sepakbolaMatchday", fn: sepakbolaMatchdayChange, selStartIndex: 0 });
 
@@ -186,32 +186,67 @@ function sepakbolaMatchesReturn(data = null) {
   }
   let matches = sepakbolaOptions.selectedLiga.matches;
   const seasonSelected = matches[sepakbolaOptions.selected.matchday];
-
-  const body = [
+  let body = [
     {
-      data: seasonSelected.map((item) => (item.team1.shortName != null ? item.team1.shortName : item.team1.teamName)),
+      data: seasonSelected.map((item) => {
+        let ret = item.team1.shortName != null ? item.team1.shortName : item.team1.teamName;
+        if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+          ret += `(${fifa[item.team1.teamName].rang}|${fifa[item.team1.teamName].tendenz})`;
+        }
+        return ret;
+      }),
       settings: { description: "team1", title: seasonSelected.map((item) => item.team1.teamName), align: "right", noBorder: "right" },
     },
     {
       type: "URLImg",
-      data: seasonSelected.map((item) => sepakbolaImageURL(item.team1.teamIconUrl)),
+      data: seasonSelected.map((item) => item.team1.teamIconUrl),
       settings: { description: "logo1", title: seasonSelected.map((item) => item.team1.teamName), align: "center", noBorder: "right", imgSize: "olympiaImg" },
     },
     {
       data: seasonSelected.map((item) => {
-        if (!item.matchIsFinished) return "-:-";
-        if (item.goals.length <= 0) return "0:0";
-        return `${item.goals[item.goals.length - 1].scoreTeam1}:${item.goals[item.goals.length - 1].scoreTeam2}`;
+        let text = "";
+        if (!item.matchIsFinished) text = "-:-";
+        else if (item.goals.length <= 0) text = "0:0";
+        else text = `${item.goals[item.goals.length - 1].scoreTeam1}:${item.goals[item.goals.length - 1].scoreTeam2}`;
+        if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+          const RangA = fifa[item.team1.teamName].rang;
+          const RangB = fifa[item.team2.teamName].rang;
+          const PointsA = fifa[item.team1.teamName].punkte;
+          const PointsB = fifa[item.team2.teamName].punkte;
+
+          const offset = 0; // KadRandom.randomInt({ max: 1 });
+
+          let diff = Math.abs(RangA - RangB);
+          let map = KadValue.constrain({ value: Math.round(KadValue.mapping(diff, 1, 210, 0, 10)), min: 0, max: 3 });
+          if (PointsA > PointsB) text += `[${map + offset}:${offset}]`;
+          else text += `[${offset}:${map + offset}]`;
+
+          diff = Math.abs(PointsA - PointsB);
+          map = KadValue.constrain({ value: Math.round(KadValue.mapping(diff, 1, 1877, 0, 10)), min: 0, max: 3 });
+          if (PointsA > PointsB) text += `[${map + offset}:${offset}]`;
+          else text += ` [${offset}:${map + offset}]`;
+        }
+        return text;
+        // if (!item.matchIsFinished) return "-:-";
+        // if (item.goals.length <= 0) return "0:0";
+        // text = `${item.goals[item.goals.length - 1].scoreTeam1}:${item.goals[item.goals.length - 1].scoreTeam2}`;
       }),
       settings: { description: "goals", align: "center", noBorder: "right" },
     },
     {
       type: "URLImg",
-      data: seasonSelected.map((item) => sepakbolaImageURL(item.team2.teamIconUrl)),
+      data: seasonSelected.map((item) => item.team2.teamIconUrl),
       settings: { description: "logo2", title: seasonSelected.map((item) => item.team2.teamName), align: "center", noBorder: "right", imgSize: "olympiaImg" },
     },
     {
-      data: seasonSelected.map((item) => (item.team2.shortName != null ? item.team2.shortName : item.team2.teamName)),
+      data: seasonSelected.map((item) => {
+        let ret = item.team2.shortName != null ? item.team2.shortName : item.team2.teamName;
+        if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+          ret += `(${fifa[item.team2.teamName].rang}|${fifa[item.team2.teamName].tendenz})`;
+        }
+        return ret;
+      }),
+      // (item.team2.shortName != null ? item.team2.shortName : item.team2.teamName)),
       settings: { description: "team2", title: seasonSelected.map((item) => item.team2.teamName), align: "left", noBorder: "left" },
     },
   ];
@@ -238,7 +273,7 @@ function sepakbolaMatchesReturn(data = null) {
 function sepakbolaTableReturn(data) {
   if (data.length == 0) return;
   sepakbolaOptions.selectedLiga.table = data;
-  const header = [
+  let header = [
     { data: "SP", colSpan: 4, settings: { align: "right", noBorder: "right" } },
     { data: "S", settings: { align: "right", noBorder: "right" } },
     { data: "U", settings: { align: "right", noBorder: "right" } },
@@ -246,14 +281,17 @@ function sepakbolaTableReturn(data) {
     { data: "TD", settings: { align: "right", noBorder: "right" } },
     { data: "P", settings: { align: "right", noBorder: "right" } },
   ];
-  const body = [
+  if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+    header.push({ data: "R", settings: { align: "right", noBorder: "right" } });
+  }
+  let body = [
     {
       data: KadArray.arrayFromNumber(data.length).map((n) => n + 1),
       settings: { description: "place", align: "right", noBorder: "right" },
     },
     {
       type: "URLImg",
-      data: data.map((item) => sepakbolaImageURL(item.teamIconUrl)),
+      data: data.map((item) => item.teamIconUrl),
       settings: { description: "Logo", title: data.map((item) => item.teamName), align: "center", noBorder: "right", imgSize: "olympiaImg" },
     },
     {
@@ -285,19 +323,14 @@ function sepakbolaTableReturn(data) {
       settings: { description: "points" },
     },
   ];
+  if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+    body.push({
+      data: data.map((item) => {
+        return fifa[item.teamName].rang;
+      }),
+      settings: { description: "Rang", align: "right", noBorder: "right" },
+    });
+  }
 
   KadTable.createHTMLGrid({ id: "idTab_SepakbolaTable", header, body });
-}
-
-function sepakbolaImageURL(url) {
-  if (url == null) return;
-  const size = globalValues.mediaSizes.imgSize; //shrink URL-image-size
-  let urlArr = url;
-  if (urlArr.includes("px")) {
-    urlArr = url.split("px");
-    let index = urlArr[0].lastIndexOf("/");
-    urlArr[0] = urlArr[0].slice(0, index + 1);
-    urlArr = `${urlArr[0]}${size}px${urlArr[1]}`;
-  }
-  return urlArr;
 }

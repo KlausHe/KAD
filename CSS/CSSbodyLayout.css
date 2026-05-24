@@ -126,7 +126,10 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 300;
-  src: url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
+  src:
+    url("../Data/Fonts/roboto-v30-latin-300.woff") format("woff"),
+    url("../Data/Fonts/roboto-v30-latin-300.woff2") format("woff2"),
+    url("../Data/Fonts/roboto-v30-latin-300.ttf") format("truetype");
 }
 
 /* roboto-regular - latin */
@@ -134,7 +137,10 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  src: url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"), url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"), url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
+  src:
+    url("../Data/Fonts/roboto-v30-latin-regular.woff") format("woff"),
+    url("../Data/Fonts/roboto-v30-latin-regular.woff2") format("woff2"),
+    url("../Data/Fonts/roboto-v30-latin-regular.ttf") format("truetype");
 }
 
 body {
@@ -167,7 +173,11 @@ body {
   background-color: hsl(var(--bgcSubgrid) / 0);
   visibility: hidden;
   pointer-events: none;
-  transition: color var(--transitionTimeName) ease-out, background-color var(--transitionTimeName) ease-out, pointer-events 0s linear var(--transitionTimeHide), visibility 0s linear var(--transitionTimeHide);
+  transition:
+    color var(--transitionTimeName) ease-out,
+    background-color var(--transitionTimeName) ease-out,
+    pointer-events 0s linear var(--transitionTimeHide),
+    visibility 0s linear var(--transitionTimeHide);
 }
 
 .cl_BackgroundAnimation {
@@ -317,6 +327,12 @@ tbody tr:last-child td {
   overflow-y: auto;
   scrollbar-width: none;
   max-height: 12rem;
+}
+
+.clDiv_overviewTablesHigh {
+  overflow-y: auto;
+  scrollbar-width: none;
+  max-height: 34rem;
 }
 
 .clDiv_overviewTablesAuto::-webkit-scrollbar {
