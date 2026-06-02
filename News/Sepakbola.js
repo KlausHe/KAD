@@ -1,3 +1,4 @@
+import { userLoggedIn } from "../General/Account.js";
 import { layoutCheckCORSandDisableModule } from "../General/Layout.js";
 import { KadArray, KadDate, KadFile, KadTable, KadValue, deepClone, initEL, objectLength } from "../KadUtils/KadUtils.js";
 import { fifa } from "./AssetsSepakbola/fifa.js";
@@ -190,7 +191,7 @@ function sepakbolaMatchesReturn(data = null) {
     {
       data: seasonSelected.map((item) => {
         let ret = item.team1.shortName != null ? item.team1.shortName : item.team1.teamName;
-        if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+        if (userLoggedIn() && sepakbolaOptions.selectedLiga.urlName == "wm26") {
           ret += `(${fifa[item.team1.teamName].rang}|${fifa[item.team1.teamName].tendenz})`;
         }
         return ret;
@@ -208,7 +209,7 @@ function sepakbolaMatchesReturn(data = null) {
         if (!item.matchIsFinished) text = "-:-";
         else if (item.goals.length <= 0) text = "0:0";
         else text = `${item.goals[item.goals.length - 1].scoreTeam1}:${item.goals[item.goals.length - 1].scoreTeam2}`;
-        if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+        if (userLoggedIn() && sepakbolaOptions.selectedLiga.urlName == "wm26") {
           const RangA = fifa[item.team1.teamName].rang;
           const RangB = fifa[item.team2.teamName].rang;
           const PointsA = fifa[item.team1.teamName].punkte;
@@ -227,9 +228,6 @@ function sepakbolaMatchesReturn(data = null) {
           else text += ` [${offset}:${map + offset}]`;
         }
         return text;
-        // if (!item.matchIsFinished) return "-:-";
-        // if (item.goals.length <= 0) return "0:0";
-        // text = `${item.goals[item.goals.length - 1].scoreTeam1}:${item.goals[item.goals.length - 1].scoreTeam2}`;
       }),
       settings: { description: "goals", align: "center", noBorder: "right" },
     },
@@ -241,7 +239,7 @@ function sepakbolaMatchesReturn(data = null) {
     {
       data: seasonSelected.map((item) => {
         let ret = item.team2.shortName != null ? item.team2.shortName : item.team2.teamName;
-        if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+        if (userLoggedIn() && sepakbolaOptions.selectedLiga.urlName == "wm26") {
           ret += `(${fifa[item.team2.teamName].rang}|${fifa[item.team2.teamName].tendenz})`;
         }
         return ret;
@@ -281,7 +279,7 @@ function sepakbolaTableReturn(data) {
     { data: "TD", settings: { align: "right", noBorder: "right" } },
     { data: "P", settings: { align: "right", noBorder: "right" } },
   ];
-  if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+  if (userLoggedIn() && sepakbolaOptions.selectedLiga.urlName == "wm26") {
     header.push({ data: "R", settings: { align: "right", noBorder: "right" } });
   }
   let body = [
@@ -323,7 +321,7 @@ function sepakbolaTableReturn(data) {
       settings: { description: "points" },
     },
   ];
-  if (sepakbolaOptions.selectedLiga.urlName == "wm26") {
+  if (userLoggedIn() && sepakbolaOptions.selectedLiga.urlName == "wm26") {
     body.push({
       data: data.map((item) => {
         return fifa[item.teamName].rang;
